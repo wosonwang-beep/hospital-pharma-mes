@@ -1,0 +1,60 @@
+name: hospital-pharma-mes
+
+services:
+  mariadb:
+    image: mariadb:11.8.9-noble
+    environment:
+      MARIADB_DATABASE: ${MES_DB_NAME:-hospital_pharma_mes}
+      MARIADB_USER: ${MES_DB_USERNAME:-mes}
+      MARIADB_PASSWORD: ${MES_DB_PASSWORD:-mes_local_password}
+      MARIADB_ROOT_PASSWORD: ${MES_DB_ROOT_PASSWORD:-root_local_password}
+    ports: ["${MES_DB_PORT:-3306}:3306"]
+    volumes: [mariadb_data:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [mes]
+
+  redis:
+    image: redis:8.2.9-bookworm
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${MES_REDIS_PASSWORD:-redis_local_password}"]
+    ports: ["${MES_REDIS_PORT:-6379}:6379"]
+    volumes: [redis_data:/data]
+    environment:
+      MES_REDIS_PASSWORD: ${MES_REDIS_PASSWORD:-redis_local_password}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a '$${MES_REDIS_PASSWORD}' ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [mes]
+
+  minio:
+    image: quay.io/minio/aistor/minio:RELEASE.2026-02-02T23-40-11Z
+    command: ["server", "/data", "--console-address", ":9001", "--license", "/minio.license"]
+    environment:
+      MINIO_ROOT_USER: ${MES_MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MES_MINIO_SECRET_KEY:-minioadmin_local_password}
+    ports:
+      - "${MES_MINIO_API_PORT:-9000}:9000"
+      - "${MES_MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+      - ${MES_MINIO_LICENSE_FILE:-./deploy/docker/minio.license}:/minio.license:ro
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [mes]
+
+networks:
+  mes:
+    name: hospital-pharma-mes
+
+volumes:
+  mariadb_data:
+  redis_data:
+  minio_data:
