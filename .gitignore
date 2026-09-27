@@ -1,1 +1,9 @@
 .worktrees/
+target/
+node_modules/
+dist/
+.env
+.idea/
+.vscode/
+*.iml
+*.log
