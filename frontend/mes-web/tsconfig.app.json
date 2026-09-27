@@ -1,0 +1,1 @@
+{"extends":"@vue/tsconfig/tsconfig.dom.json","include":["src/**/*.ts","src/**/*.vue"],"compilerOptions":{"composite":true,"types":["vitest/globals"]}}

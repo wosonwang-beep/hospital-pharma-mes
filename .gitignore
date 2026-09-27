@@ -1,8 +1,10 @@
 .worktrees/
 target/
 node_modules/
+node_modules.broken/
 dist/
 .env
+deploy/docker/minio.license
 .idea/
 .vscode/
 *.iml
