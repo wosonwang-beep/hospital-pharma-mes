@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>com.hospital.mes</groupId><artifactId>hospital-pharma-mes</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
+  <artifactId>mes-backend</artifactId><packaging>pom</packaging>
+  <modules>
+    <module>mes-boot</module><module>mes-common</module><module>mes-security</module><module>mes-system</module><module>mes-masterdata</module><module>mes-product</module><module>mes-process</module><module>mes-form</module><module>mes-ebr</module><module>mes-wms</module><module>mes-production</module><module>mes-execution</module><module>mes-equipment</module><module>mes-qc</module><module>mes-qms</module><module>mes-release</module><module>mes-workflow</module><module>mes-traceability</module><module>mes-integration</module><module>mes-reporting</module>
+  </modules>
+  <dependencyManagement><dependencies><dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>${spring-boot.version}</version><type>pom</type><scope>import</scope></dependency></dependencies></dependencyManagement>
+</project>
