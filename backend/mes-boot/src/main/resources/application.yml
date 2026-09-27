@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: hospital-pharma-mes
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
+logging:
+  pattern:
+    level: "%5p [traceId:%X{traceId:-}]"

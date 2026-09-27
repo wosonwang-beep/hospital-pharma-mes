@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${MES_DB_URL}
+    username: ${MES_DB_USERNAME}
+    password: ${MES_DB_PASSWORD}
+  data:
+    redis:
+      host: ${MES_REDIS_HOST}
+      port: ${MES_REDIS_PORT:6379}
+mes:
+  storage:
+    endpoint: ${MES_MINIO_ENDPOINT}
+    access-key: ${MES_MINIO_ACCESS_KEY}
+    secret-key: ${MES_MINIO_SECRET_KEY}

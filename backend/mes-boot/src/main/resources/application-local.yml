@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${MES_DB_URL:jdbc:mariadb://localhost:3306/hospital_pharma_mes}
+    username: ${MES_DB_USERNAME:mes}
+    password: ${MES_DB_PASSWORD:mes_local_password}
+  data:
+    redis:
+      host: ${MES_REDIS_HOST:localhost}
+      port: ${MES_REDIS_PORT:6379}
+mes:
+  storage:
+    endpoint: ${MES_MINIO_ENDPOINT:http://localhost:9000}
+    access-key: ${MES_MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MES_MINIO_SECRET_KEY:minioadmin}
