@@ -6,5 +6,10 @@
   <modules>
     <module>mes-boot</module><module>mes-common</module><module>mes-security</module><module>mes-system</module><module>mes-masterdata</module><module>mes-product</module><module>mes-process</module><module>mes-form</module><module>mes-ebr</module><module>mes-wms</module><module>mes-production</module><module>mes-execution</module><module>mes-equipment</module><module>mes-qc</module><module>mes-qms</module><module>mes-release</module><module>mes-workflow</module><module>mes-traceability</module><module>mes-integration</module><module>mes-reporting</module>
   </modules>
-  <dependencyManagement><dependencies><dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>${spring-boot.version}</version><type>pom</type><scope>import</scope></dependency></dependencies></dependencyManagement>
+  <dependencyManagement><dependencies>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-dependencies</artifactId><version>${spring-boot.version}</version><type>pom</type><scope>import</scope></dependency>
+    <dependency><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId><version>1.21.0</version></dependency>
+    <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.18.0</version></dependency>
+    <dependency><groupId>org.jetbrains.kotlin</groupId><artifactId>kotlin-stdlib</artifactId><version>2.2.21</version></dependency>
+  </dependencies></dependencyManagement>
 </project>
