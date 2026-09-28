@@ -137,3 +137,6 @@ jobs:
       - name: Verify CI policy
         shell: pwsh
         run: pwsh -NoProfile -File scripts/verify-ci.ps1
+      - name: Check CI policy rejects unsafe changes
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/tests/verify-ci.Tests.ps1

@@ -26,6 +26,8 @@ try {
   Write-Host "`n== CI workflow verification =="
   & (Join-Path $PSScriptRoot 'verify-ci.ps1')
   if ($LASTEXITCODE -ne 0) { throw "CI workflow verification failed with exit code $LASTEXITCODE." }
+  & (Join-Path $PSScriptRoot 'tests/verify-ci.Tests.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "CI workflow negative tests failed with exit code $LASTEXITCODE." }
   Write-Host "`nFoundation verification: PASS"
 } finally {
   Pop-Location

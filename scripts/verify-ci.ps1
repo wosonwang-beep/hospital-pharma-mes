@@ -1,7 +1,12 @@
+param([string]$WorkflowSource)
 $ErrorActionPreference = 'Stop'
-$workflow = Join-Path (Split-Path -Parent $PSScriptRoot) '.github/workflows/ci.yml'
-if (-not (Test-Path -LiteralPath $workflow)) { throw 'CI workflow is missing.' }
-$source = Get-Content -LiteralPath $workflow -Raw
+if ($PSBoundParameters.ContainsKey('WorkflowSource')) {
+  $source = $WorkflowSource
+} else {
+  $workflow = Join-Path (Split-Path -Parent $PSScriptRoot) '.github/workflows/ci.yml'
+  if (-not (Test-Path -LiteralPath $workflow)) { throw 'CI workflow is missing.' }
+  $source = Get-Content -LiteralPath $workflow -Raw
+}
 
 $required = @{
   'pull request trigger' = '(?m)^  pull_request:'
@@ -28,13 +33,22 @@ $required = @{
 foreach ($entry in $required.GetEnumerator()) {
   if ($source -notmatch $entry.Value) { throw "CI contract is missing $($entry.Key)." }
 }
+$jobsSection = [regex]::Split($source, '(?m)^jobs:\s*$')
+if ($jobsSection.Count -ne 2) { throw 'CI must declare exactly one jobs section.' }
+$jobIds = @([regex]::Matches($jobsSection[1], '(?m)^  ([a-z][a-z-]*):\s*$') | ForEach-Object { $_.Groups[1].Value })
+$expectedJobIds = @('backend', 'frontend', 'infrastructure-integration', 'repository-contract')
+if (@(Compare-Object $expectedJobIds $jobIds).Count -ne 0) {
+  throw "CI jobs differ from the four approved jobs: $($jobIds -join ', ')."
+}
 if ($source -notmatch 'github\.event\.pull_request\.head\.ref' -or $source -notmatch 'github\.ref') {
   throw 'CI concurrency must distinguish pull-request heads and Git refs.'
 }
-if ($source -match '(?m)^\s+minio:|secrets\.|contents: write|packages: write') {
+if ($source -match '(?m)^\s+minio:|secrets\.|^\s*(?:permissions:\s*write-all|[a-z][a-z-]*:\s*write)\s*(?:#.*)?$|permissions:\s*\{[^}]*\bwrite\b') {
   throw 'CI must not request MinIO, secrets, or write permissions.'
 }
-foreach ($use in [regex]::Matches($source, '(?m)^\s+- uses:\s+([^\s#]+)')) {
+$uses = [regex]::Matches($source, '(?m)^\s+(?:-\s+)?uses:\s+([^\s#]+)')
+if ($uses.Count -eq 0) { throw 'CI workflow contains no pinned actions.' }
+foreach ($use in $uses) {
   if ($use.Groups[1].Value -notmatch '^actions/[a-z-]+@[0-9a-f]{40}$') {
     throw "Action is not pinned to a commit SHA: $($use.Groups[1].Value)"
   }
