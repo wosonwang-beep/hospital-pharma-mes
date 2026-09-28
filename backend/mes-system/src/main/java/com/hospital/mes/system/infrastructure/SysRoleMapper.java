@@ -2,10 +2,28 @@ package com.hospital.mes.system.infrastructure;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
+    @Update("""
+        UPDATE sys_role SET display_name = #{displayName}, version = version + 1,
+          updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int updateDisplayName(@Param("id") long id, @Param("version") long version,
+                          @Param("displayName") String displayName, @Param("actorId") long actorId);
+
+    @Update("""
+        UPDATE sys_role SET enabled = #{enabled}, version = version + 1,
+          updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int updateEnabled(@Param("id") long id, @Param("version") long version,
+                      @Param("enabled") boolean enabled, @Param("actorId") long actorId);
+
     @Select("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN' AND enabled = TRUE FOR UPDATE")
     Long lockAdministratorRole();
 
