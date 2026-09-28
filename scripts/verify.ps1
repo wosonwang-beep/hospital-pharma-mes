@@ -20,9 +20,9 @@ try {
   } finally {
     Pop-Location
   }
-  Write-Host "`n== Compose verification =="
-  & (Join-Path $PSScriptRoot 'verify-compose.ps1')
-  if ($LASTEXITCODE -ne 0) { throw "Compose verification failed with exit code $LASTEXITCODE." }
+  Write-Host "`n== Repository verification =="
+  & (Join-Path $PSScriptRoot 'verify-repository.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "Repository verification failed with exit code $LASTEXITCODE." }
   Write-Host "`nFoundation verification: PASS"
 } finally {
   Pop-Location
