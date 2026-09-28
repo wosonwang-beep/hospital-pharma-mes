@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${MES_DB_URL}
+    username: ${MES_DB_USERNAME}
+    password: ${MES_DB_PASSWORD}
+  data:
+    redis:
+      host: ${MES_REDIS_HOST}
+      port: ${MES_REDIS_PORT}
+      password: ${MES_REDIS_PASSWORD}
+mes:
+  storage:
+    endpoint: http://127.0.0.1:9000
+    access-key: ci-not-used
+    secret-key: ci-not-used
