@@ -23,6 +23,9 @@ try {
   Write-Host "`n== Repository verification =="
   & (Join-Path $PSScriptRoot 'verify-repository.ps1')
   if ($LASTEXITCODE -ne 0) { throw "Repository verification failed with exit code $LASTEXITCODE." }
+  Write-Host "`n== CI workflow verification =="
+  & (Join-Path $PSScriptRoot 'verify-ci.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "CI workflow verification failed with exit code $LASTEXITCODE." }
   Write-Host "`nFoundation verification: PASS"
 } finally {
   Pop-Location

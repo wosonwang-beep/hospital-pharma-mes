@@ -14,6 +14,7 @@
 12. Do not make the core production state machine depend on BPMN or workflow runtime availability.
 13. Dynamic form expressions must not execute arbitrary JavaScript, SQL, or SpEL.
 14. RELEASED means finished-product release, not production completion.
-15. Foundation work is limited to MES-001 through MES-011 and must not pre-implement later epics.
+15. Foundation work is limited to MES-001 through MES-011; MES-012 adds CI only. Do not pre-implement later business epics.
+16. Applicable CI jobs must pass before merging. Do not bypass a failing job or weaken its assertions without an explicit, reviewed change to the CI contract.
 
 Business modules use `api`, `application`, `domain`, and `infrastructure` boundaries. Cross-module notifications use domain events and complex cross-module reads use query services.
