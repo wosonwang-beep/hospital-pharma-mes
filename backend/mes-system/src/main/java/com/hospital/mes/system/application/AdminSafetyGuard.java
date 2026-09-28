@@ -15,12 +15,21 @@ public class AdminSafetyGuard {
     }
 
     public void runPreservingEffectiveAdmin(Runnable change) {
-        if (roles.lockAdministratorRole() == null) {
-            throw new ResourceConflictException("LAST_SYSTEM_ADMIN", "System administrator role is unavailable");
-        }
+        lock();
         change.run();
         if (roles.effectiveAdministratorCount() < 1) {
             throw new ResourceConflictException("LAST_SYSTEM_ADMIN", "The last system administrator must remain active");
+        }
+    }
+
+    public void runUnderAdministratorLock(Runnable change) {
+        lock();
+        change.run();
+    }
+
+    private void lock() {
+        if (roles.lockAdministratorRole() == null) {
+            throw new ResourceConflictException("LAST_SYSTEM_ADMIN", "System administrator role is unavailable");
         }
     }
 }

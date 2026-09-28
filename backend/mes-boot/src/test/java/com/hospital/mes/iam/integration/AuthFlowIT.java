@@ -75,7 +75,7 @@ class AuthFlowIT {
     @Test
     void bootstrapRemainsOneTimeAfterOriginalAdminAssignmentIsRevoked() {
         String login = bootstrap();
-        jdbc.update("UPDATE sys_user_role SET revoked_at = CURRENT_TIMESTAMP(6) WHERE user_id = "
+        jdbc.update("DELETE FROM sys_user_role WHERE user_id = "
             + "(SELECT id FROM sys_user WHERE login_name = ?)", login);
         assertThatThrownBy(() -> identities.bootstrapAdministrator("replacement", "Replacement",
             passwords.hash(TEMPORARY_PASSWORD), Instant.now()))

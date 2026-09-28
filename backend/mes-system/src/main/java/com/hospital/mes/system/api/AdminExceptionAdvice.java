@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice(basePackageClasses = UserAdminController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -28,7 +29,8 @@ public class AdminExceptionAdvice {
         return error(HttpStatus.NOT_FOUND, "NOT_FOUND", "Resource not found");
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class,
+                       MethodArgumentTypeMismatchException.class})
     ResponseEntity<ApiResponse<Void>> invalid(Exception ignored) {
         return error(HttpStatus.BAD_REQUEST, "INVALID_INPUT", "Invalid input");
     }

@@ -112,6 +112,7 @@ class UserAdministrationIT {
 
     @Test
     void profileAndStateChangesUseExpectedVersion() throws Exception {
+        effectiveAdmin();
         long userId = user("staff" + suffix());
         String token = administrator();
         mvc.perform(patch("/api/v1/admin/users/{userId}/profile", userId)
@@ -147,6 +148,10 @@ class UserAdministrationIT {
         mvc.perform(get("/api/v1/admin/users/999999999").header("Authorization", bearer(token)))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.traceId").isNotEmpty());
+        mvc.perform(get("/api/v1/admin/users/not-a-number").header("Authorization", bearer(token)))
+            .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/admin/users?page=bad").header("Authorization", bearer(token)))
+            .andExpect(status().isBadRequest());
         mvc.perform(post("/api/v1/admin/users").header("Authorization", bearer(token))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"loginName\":\" \",\"displayName\":\"Staff\"}"))
@@ -230,6 +235,12 @@ class UserAdministrationIT {
     private long user(String login) {
         jdbc.update("INSERT INTO sys_user (login_name, login_name_normalized, display_name, password_hash) VALUES (?, ?, 'Staff', 'test-hash')", login, login.toLowerCase());
         return jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name = ?", Long.class, login);
+    }
+
+    private void effectiveAdmin() {
+        long userId = user("admin" + suffix());
+        Long roleId = jdbc.queryForObject("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN'", Long.class);
+        jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, roleId);
     }
 
     private String administrator() {

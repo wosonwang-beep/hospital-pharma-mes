@@ -32,6 +32,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +75,7 @@ class AssignmentAdministrationIT {
 
     @Test
     void userRolePairIsCurrentStateAndEventsAreMinimal() throws Exception {
+        effectiveAdmin();
         long userId = user();
         long roleId = role();
         String token = administrator();
@@ -96,6 +98,7 @@ class AssignmentAdministrationIT {
 
     @Test
     void rolePermissionPairRequiresRegisteredCode() throws Exception {
+        effectiveAdmin();
         long roleId = role();
         String token = administrator();
         String code = "menu:iam:users";
@@ -161,8 +164,43 @@ class AssignmentAdministrationIT {
                 Integer.class, roleId, first, second)).isEqualTo(1);
         } finally {
             pool.shutdownNow();
+            jdbc.update("DELETE FROM sys_security_event WHERE trace_id = 'concurrent-test' AND target_user_id IN (?, ?)", first, second);
             jdbc.update("DELETE FROM sys_user_role WHERE user_id IN (?, ?)", first, second);
             jdbc.update("DELETE FROM sys_user WHERE id IN (?, ?)", first, second);
+        }
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void ordinaryRoleCarryingIamPermissionCannotBeRemovedFromLastAdministrator() throws Exception {
+        long userId = user();
+        long secondaryRoleId = role();
+        long adminRoleId = jdbc.queryForObject("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN'", Long.class);
+        long permissionId = jdbc.queryForObject("SELECT id FROM sys_permission WHERE permission_code = 'menu:iam:roles'", Long.class);
+        try {
+            jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, adminRoleId);
+            jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, secondaryRoleId);
+            jdbc.update("INSERT INTO sys_role_permission (role_id, permission_id) VALUES (?, ?)", secondaryRoleId, permissionId);
+            jdbc.update("DELETE FROM sys_role_permission WHERE role_id = ? AND permission_id = ?", adminRoleId, permissionId);
+            String token = administrator();
+            mvc.perform(delete("/api/v1/admin/users/{userId}/roles/{roleId}", userId, secondaryRoleId)
+                    .header("Authorization", bearer(token)))
+                .andExpect(status().isConflict());
+            mvc.perform(post("/api/v1/admin/roles/{roleId}/disable", secondaryRoleId)
+                    .header("Authorization", bearer(token)).contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"expectedVersion\":0}"))
+                .andExpect(status().isConflict());
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM sys_user_role WHERE user_id = ? AND role_id = ?",
+                Integer.class, userId, secondaryRoleId)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT enabled FROM sys_role WHERE id = ?", Boolean.class,
+                secondaryRoleId)).isTrue();
+        } finally {
+            jdbc.update("INSERT IGNORE INTO sys_role_permission (role_id, permission_id) VALUES (?, ?)", adminRoleId, permissionId);
+            jdbc.update("UPDATE sys_role SET enabled = TRUE WHERE id = ?", secondaryRoleId);
+            jdbc.update("DELETE FROM sys_user_role WHERE user_id = ?", userId);
+            jdbc.update("DELETE FROM sys_role_permission WHERE role_id = ?", secondaryRoleId);
+            jdbc.update("DELETE FROM sys_user WHERE id = ?", userId);
+            jdbc.update("DELETE FROM sys_role WHERE id = ?", secondaryRoleId);
         }
     }
 
@@ -180,6 +218,11 @@ class AssignmentAdministrationIT {
         String login = "staff" + suffix();
         jdbc.update("INSERT INTO sys_user (login_name, login_name_normalized, display_name, password_hash) VALUES (?, ?, 'Staff', 'hash')", login, login);
         return jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name = ?", Long.class, login);
+    }
+    private void effectiveAdmin() {
+        long userId = user();
+        long roleId = jdbc.queryForObject("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN'", Long.class);
+        jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, roleId);
     }
     private long role() {
         String code = "TEST_" + suffix().toUpperCase();

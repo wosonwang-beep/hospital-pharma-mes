@@ -4,7 +4,9 @@
 
 **Goal:** Deliver backend employee/role administration, current-state role assignments, module-level RBAC, and minimal security events without building the frontend or production business.
 
-**Architecture:** `mes-system` owns administration APIs, commands, MyBatis-Plus persistence, and security-event writes. `mes-security` continues to authenticate JWT/Redis sessions and explicitly authorizes the registered routes from the login-time permission snapshot. Flyway V003 converts assignment tables to current-state pairs; existing V001/V002 migrations remain immutable.
+**Architecture:** `mes-system` owns administration APIs, commands, MyBatis-Plus persistence, and security-event writes. `mes-security` continues to authenticate JWT/Redis sessions and explicitly authorizes the registered routes from the login-time permission snapshot. The original V003 upgrade plan below is superseded by the user's greenfield decision recorded next.
+
+Greenfield correction (2026-09-28): There is no legacy business data. Define current-state assignment pairs and IAM menu permissions directly in V002, remove V003 and the upgrade-only test/dependency, and reset only the dedicated local MES development database. Earlier V003-specific steps below remain as historical plan text, not current implementation instructions.
 
 **Tech Stack:** Java 21, Spring Boot 3.x, Spring Security, MyBatis-Plus, MariaDB, Flyway, Redis, Maven, JUnit 5, MockMvc.
 

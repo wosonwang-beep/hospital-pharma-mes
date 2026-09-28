@@ -1,5 +1,7 @@
 # EPIC-002 Slice 2: IAM Role Administration and API Authorization
 
+Greenfield correction (2026-09-28): The project has no legacy business data. The user's later decision supersedes the V002-to-V003 upgrade sections below: current-state assignment pairs and IAM menu permissions belong directly in the V002 baseline; V003 and old-row conversion are not required. Only the dedicated local MES development database is reset for this baseline change.
+
 ## Purpose and boundary
 
 This slice lets authorized hospital MES administrators manage employee accounts, roles, and functional permissions through backend APIs. It extends the completed identity/session core without building the production modules or frontend administration screens. Frontend IAM remains Slice 3. The first release uses system-managed staff accounts, multiple roles per user, and no per-user permission overrides or data scopes.

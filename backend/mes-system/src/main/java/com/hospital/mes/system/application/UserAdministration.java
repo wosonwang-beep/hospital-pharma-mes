@@ -100,7 +100,7 @@ public class UserAdministration {
         Runnable change = () -> {
             if (users.updateEnabled(userId, expectedVersion, enabled, actorId) != 1) throw conflict();
         };
-        if (!enabled && userRoles.systemAdminAssignmentCount(userId) > 0)
+        if (!enabled)
             safety.runPreservingEffectiveAdmin(change);
         else change.run();
         events.append(enabled ? "USER_ENABLED" : "USER_DISABLED", actorId, userId, null, null, traceId);

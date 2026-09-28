@@ -44,6 +44,7 @@ class RoleAdministrationIT {
 
     @Test
     void createsReadsRenamesAndTogglesRoleWithVersionChecks() throws Exception {
+        effectiveAdmin();
         String code = "TEST_" + suffix().toUpperCase();
         String token = administrator();
         var created = mvc.perform(post("/api/v1/admin/roles").header("Authorization", bearer(token))
@@ -126,6 +127,14 @@ class RoleAdministrationIT {
             Set.of("SYSTEM_ADMIN"), Set.of("menu:iam:roles", "action:iam:role.manage"), false));
         leases.add(lease.sessionId());
         return tokens.issue(998877L, lease.sessionId());
+    }
+
+    private void effectiveAdmin() {
+        String login = "admin" + suffix();
+        jdbc.update("INSERT INTO sys_user (login_name, login_name_normalized, display_name, password_hash) VALUES (?, ?, 'Admin', 'hash')", login, login);
+        long userId = jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name = ?", Long.class, login);
+        long roleId = jdbc.queryForObject("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN'", Long.class);
+        jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, roleId);
     }
 
     private static String bearer(String token) { return "Bearer " + token; }

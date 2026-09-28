@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml)
 
-Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository implements MES-001 through MES-012: project structure, application bootstrap, database migration, Redis and object-storage boundaries, API conventions, trace IDs, OpenAPI, security extension points, a Vue shell, local infrastructure, and continuous integration.
+Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository implements MES-001 through MES-012 and the first two backend IAM slices: managed employee login, Redis-backed sessions, role-based functional permissions, and administration APIs for current user-role and role-permission assignments.
 
-IAM/RBAC, audit trails and electronic signatures, master-data behavior, workflows, and production execution are intentionally deferred.
+Frontend IAM screens, complete GMP audit trails and electronic signatures, master-data behavior, workflows, and production execution are intentionally deferred.
 
 ## Technology baseline
 
@@ -43,6 +43,12 @@ The script runs backend tests, performs a clean frontend install followed by tes
 GitHub Actions runs four jobs on pull requests and pushes to `main`: backend tests, frontend tests/build/audit, real MariaDB and Redis integration tests, and repository contract checks. The integration job verifies Flyway migrations and MyBatis-Plus against MariaDB, plus a Redis round trip. CI validates the MinIO AIStor configuration contract but does not start the licensed service. See `docs/development/local-development.md` for the integration-test command and environment variables.
 
 More detail is available in `docs/development/local-development.md`, `docs/architecture/module-boundaries.md`, and `docs/api/foundation-api.md`.
+
+## IAM database baseline
+
+The current Flyway baseline creates user-role and role-permission relationships as unique current-state pairs. It does not retain assignment history in those tables. This project has no legacy business data to migrate. Minimal security events remain separate from the relationship tables; they are not a complete GMP audit trail.
+
+IAM administration APIs live under `/api/v1/admin/users`, `/api/v1/admin/roles`, and the read-only `/api/v1/admin/permissions` catalog. Menu permissions allow reads; the corresponding module action permission is also required for mutations. Routine role and permission edits become effective on a user's next login. Password reset explicitly revokes that user's sessions.
 
 ## License
 

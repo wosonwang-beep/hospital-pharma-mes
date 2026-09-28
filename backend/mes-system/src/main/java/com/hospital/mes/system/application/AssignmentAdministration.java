@@ -44,19 +44,18 @@ public class AssignmentAdministration {
         requireUser(userId);
         requireRole(roleId);
         if (userRoles.pairCount(userId, roleId) != 0) throw conflict();
-        userRoles.grant(userId, roleId);
+        safety.runUnderAdministratorLock(() -> userRoles.grant(userId, roleId));
         events.append("USER_ROLE_GRANTED", actorId, userId, roleId, null, traceId);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public void revokeUserRole(long userId, long roleId, long actorId, String traceId) {
         requireUser(userId);
-        SysRoleEntity role = requireRole(roleId);
+        requireRole(roleId);
         Runnable change = () -> {
             if (userRoles.revoke(userId, roleId) != 1) throw conflict();
         };
-        if ("SYSTEM_ADMIN".equals(role.getRoleCode())) safety.runPreservingEffectiveAdmin(change);
-        else change.run();
+        safety.runPreservingEffectiveAdmin(change);
         events.append("USER_ROLE_REVOKED", actorId, userId, roleId, null, traceId);
     }
 
@@ -76,9 +75,7 @@ public class AssignmentAdministration {
         Runnable change = () -> {
             if (rolePermissions.revoke(roleId, permission.getId()) != 1) throw conflict();
         };
-        if (isIamAdminPermission(permissionCode) && roles.effectiveAdministratorCount() > 0)
-            safety.runPreservingEffectiveAdmin(change);
-        else change.run();
+        safety.runPreservingEffectiveAdmin(change);
         events.append("ROLE_PERMISSION_REVOKED", actorId, null, roleId, permission.getId(), traceId);
     }
 
@@ -106,8 +103,4 @@ public class AssignmentAdministration {
         return new ResourceConflictException("ADMIN_CONFLICT", "Assignment conflicts with current state");
     }
 
-    private static boolean isIamAdminPermission(String code) {
-        return "menu:iam:users".equals(code) || "action:iam:user.manage".equals(code)
-            || "menu:iam:roles".equals(code) || "action:iam:role.manage".equals(code);
-    }
 }

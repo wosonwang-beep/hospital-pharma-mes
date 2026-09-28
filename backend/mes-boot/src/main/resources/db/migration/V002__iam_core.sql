@@ -53,34 +53,22 @@ CREATE TABLE sys_user_role (
     id BIGINT NOT NULL AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL,
-    granted_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-    granted_by BIGINT NULL,
-    revoked_at DATETIME(6) NULL,
-    revoked_by BIGINT NULL,
     PRIMARY KEY (id),
-    KEY ix_sys_user_role_user (user_id, revoked_at),
-    KEY ix_sys_user_role_role (role_id, revoked_at),
+    UNIQUE KEY uk_sys_user_role_pair (user_id, role_id),
+    KEY ix_sys_user_role_role_current (role_id),
     CONSTRAINT fk_sys_user_role_user FOREIGN KEY (user_id) REFERENCES sys_user (id),
-    CONSTRAINT fk_sys_user_role_role FOREIGN KEY (role_id) REFERENCES sys_role (id),
-    CONSTRAINT fk_sys_user_role_grantor FOREIGN KEY (granted_by) REFERENCES sys_user (id),
-    CONSTRAINT fk_sys_user_role_revoker FOREIGN KEY (revoked_by) REFERENCES sys_user (id)
+    CONSTRAINT fk_sys_user_role_role FOREIGN KEY (role_id) REFERENCES sys_role (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sys_role_permission (
     id BIGINT NOT NULL AUTO_INCREMENT,
     role_id BIGINT NOT NULL,
     permission_id BIGINT NOT NULL,
-    granted_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-    granted_by BIGINT NULL,
-    revoked_at DATETIME(6) NULL,
-    revoked_by BIGINT NULL,
     PRIMARY KEY (id),
-    KEY ix_sys_role_permission_role (role_id, revoked_at),
-    KEY ix_sys_role_permission_permission (permission_id, revoked_at),
+    UNIQUE KEY uk_sys_role_permission_pair (role_id, permission_id),
+    KEY ix_sys_role_permission_permission_current (permission_id),
     CONSTRAINT fk_sys_role_permission_role FOREIGN KEY (role_id) REFERENCES sys_role (id),
-    CONSTRAINT fk_sys_role_permission_permission FOREIGN KEY (permission_id) REFERENCES sys_permission (id),
-    CONSTRAINT fk_sys_role_permission_grantor FOREIGN KEY (granted_by) REFERENCES sys_user (id),
-    CONSTRAINT fk_sys_role_permission_revoker FOREIGN KEY (revoked_by) REFERENCES sys_user (id)
+    CONSTRAINT fk_sys_role_permission_permission FOREIGN KEY (permission_id) REFERENCES sys_permission (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sys_security_event (
@@ -90,13 +78,17 @@ CREATE TABLE sys_security_event (
     actor_user_id BIGINT NULL,
     target_user_id BIGINT NULL,
     target_role_id BIGINT NULL,
+    target_permission_id BIGINT NULL,
     trace_id VARCHAR(64) NULL,
     request_context VARCHAR(255) NULL,
     occurred_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     PRIMARY KEY (id),
     KEY ix_sys_security_event_actor (actor_user_id, occurred_at),
     KEY ix_sys_security_event_target (target_user_id, occurred_at),
-    KEY ix_sys_security_event_type (event_type, occurred_at)
+    KEY ix_sys_security_event_type (event_type, occurred_at),
+    KEY ix_sys_security_event_permission (target_permission_id, occurred_at),
+    CONSTRAINT fk_sys_security_event_permission FOREIGN KEY (target_permission_id)
+        REFERENCES sys_permission (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO sys_role (role_code, display_name) VALUES
@@ -104,6 +96,8 @@ INSERT INTO sys_role (role_code, display_name) VALUES
 
 INSERT INTO sys_permission (permission_code, permission_type, display_name, menu_route) VALUES
     ('menu:home', 'MENU', 'Home', '/'),
+    ('menu:iam:users', 'MENU', 'Employee administration', '/admin/users'),
+    ('menu:iam:roles', 'MENU', 'Role administration', '/admin/roles'),
     ('action:iam:user.manage', 'ACTION', 'Manage employee accounts', NULL),
     ('action:iam:role.manage', 'ACTION', 'Manage roles and permissions', NULL);
 

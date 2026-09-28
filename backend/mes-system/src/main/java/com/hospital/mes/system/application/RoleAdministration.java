@@ -90,12 +90,11 @@ public class RoleAdministration {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public RoleView setEnabled(long roleId, boolean enabled, long expectedVersion,
                                long actorId, String traceId) {
-        SysRoleEntity role = required(roleId);
+        required(roleId);
         Runnable change = () -> {
             if (roles.updateEnabled(roleId, expectedVersion, enabled, actorId) != 1) throw conflict();
         };
-        if (!enabled && "SYSTEM_ADMIN".equals(role.getRoleCode()))
-            safety.runPreservingEffectiveAdmin(change);
+        if (!enabled) safety.runPreservingEffectiveAdmin(change);
         else change.run();
         events.append(enabled ? "ROLE_ENABLED" : "ROLE_DISABLED", actorId, null, roleId, null, traceId);
         return view(required(roleId));
