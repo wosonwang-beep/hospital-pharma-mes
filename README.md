@@ -1,6 +1,8 @@
 # Hospital Pharmaceutical MES
 
-Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository currently implements MES-001 through MES-011 only: project structure, application bootstrap, database migration, Redis and object-storage boundaries, API conventions, trace IDs, OpenAPI, security extension points, a Vue shell, and local infrastructure.
+[![CI](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml)
+
+Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository implements MES-001 through MES-012: project structure, application bootstrap, database migration, Redis and object-storage boundaries, API conventions, trace IDs, OpenAPI, security extension points, a Vue shell, local infrastructure, and continuous integration.
 
 IAM/RBAC, audit trails and electronic signatures, master-data behavior, workflows, and production execution are intentionally deferred.
 
@@ -36,7 +38,9 @@ Run the full local verification from the repository root:
 pwsh -File scripts/verify.ps1
 ```
 
-The script runs backend tests, performs a clean frontend install followed by tests, type checking and production build, and validates the Compose contract. Docker-dependent checks are reported as unavailable when Docker is not installed.
+The script runs backend tests, performs a clean frontend install followed by tests, type checking and production build, and validates the Compose, repository, and CI workflow contracts. It does not start containers; real MariaDB and Redis checks run in GitHub Actions or through the separate local integration command.
+
+GitHub Actions runs four jobs on pull requests and pushes to `main`: backend tests, frontend tests/build/audit, real MariaDB and Redis integration tests, and repository contract checks. The integration job verifies Flyway migrations and MyBatis-Plus against MariaDB, plus a Redis round trip. CI validates the MinIO AIStor configuration contract but does not start the licensed service. See `docs/development/local-development.md` for the integration-test command and environment variables.
 
 More detail is available in `docs/development/local-development.md`, `docs/architecture/module-boundaries.md`, and `docs/api/foundation-api.md`.
 

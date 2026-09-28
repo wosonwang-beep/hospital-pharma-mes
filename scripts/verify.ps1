@@ -20,9 +20,14 @@ try {
   } finally {
     Pop-Location
   }
-  Write-Host "`n== Compose verification =="
-  & (Join-Path $PSScriptRoot 'verify-compose.ps1')
-  if ($LASTEXITCODE -ne 0) { throw "Compose verification failed with exit code $LASTEXITCODE." }
+  Write-Host "`n== Repository verification =="
+  & (Join-Path $PSScriptRoot 'verify-repository.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "Repository verification failed with exit code $LASTEXITCODE." }
+  Write-Host "`n== CI workflow verification =="
+  & (Join-Path $PSScriptRoot 'verify-ci.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "CI workflow verification failed with exit code $LASTEXITCODE." }
+  & (Join-Path $PSScriptRoot 'tests/verify-ci.Tests.ps1')
+  if ($LASTEXITCODE -ne 0) { throw "CI workflow negative tests failed with exit code $LASTEXITCODE." }
   Write-Host "`nFoundation verification: PASS"
 } finally {
   Pop-Location
