@@ -40,8 +40,10 @@ public class RoleAdminController {
 
     @GetMapping("/api/v1/admin/roles")
     public ApiResponse<PageResult<RoleView>> list(@RequestParam(name = "page", defaultValue = "0") int page,
-                                                  @RequestParam(name = "size", defaultValue = "20") int size) {
-        return ApiResponse.success(roles.list(page, size), traces.currentTraceId());
+                                                  @RequestParam(name = "size", defaultValue = "20") int size,
+                                                  @RequestParam(name = "keyword", required = false) String keyword,
+                                                  @RequestParam(name = "enabled", required = false) Boolean enabled) {
+        return ApiResponse.success(roles.list(page, size, keyword, enabled), traces.currentTraceId());
     }
 
     @GetMapping("/api/v1/admin/roles/{roleId}")

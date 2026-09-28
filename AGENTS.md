@@ -16,5 +16,6 @@
 14. RELEASED means finished-product release, not production completion.
 15. Foundation work is limited to MES-001 through MES-011; MES-012 adds CI only. Do not pre-implement later business epics.
 16. Applicable CI jobs must pass before merging. Do not bypass a failing job or weaken its assertions without an explicit, reviewed change to the CI contract.
+17. Administration list pages are strictly for query-condition inputs and results. Create, view, and edit each use separate routes/pages; never place create/edit data-entry fields above or inside a list. An "Add" button may only navigate to the separate create route.
 
 Business modules use `api`, `application`, `domain`, and `infrastructure` boundaries. Cross-module notifications use domain events and complex cross-module reads use query services.

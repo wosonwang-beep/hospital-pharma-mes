@@ -3,6 +3,7 @@ target/
 node_modules/
 node_modules.broken/
 dist/
+frontend/mes-web/test-results/
 *.tsbuildinfo
 frontend/mes-web/vite.config.js
 frontend/mes-web/vite.config.d.ts

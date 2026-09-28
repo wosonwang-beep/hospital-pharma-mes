@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/wosonwang-beep/hospital-pharma-mes/actions/workflows/ci.yml)
 
-Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository implements MES-001 through MES-012 and the first two backend IAM slices: managed employee login, Redis-backed sessions, role-based functional permissions, and administration APIs for current user-role and role-permission assignments.
+Hospital Pharmaceutical MES V2.0 is a modular-monolith foundation for hospital preparation manufacturing execution. This repository implements MES-001 through MES-012, backend IAM, and initial frontend IAM pages: managed employee login, Redis-backed sessions, role-based functional permissions, and separate query/create/view/edit pages for users and roles.
 
-Frontend IAM screens, complete GMP audit trails and electronic signatures, master-data behavior, workflows, and production execution are intentionally deferred.
+The IAM browser flow has been checked against a local MariaDB/Redis backend: first login, required password change, second login, and the user/role query pages. The repeatable default Playwright smoke test uses simulated IAM responses; a separate opt-in test exercises a freshly bootstrapped backend. Complete GMP audit trails and electronic signatures, master-data behavior, workflows, and production execution are intentionally deferred.
 
 ## Technology baseline
 

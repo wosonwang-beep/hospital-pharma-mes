@@ -91,6 +91,27 @@ class RoleAdministrationIT {
     }
 
     @Test
+    void listFiltersByCodeAndStatusAcrossTheDatabase() throws Exception {
+        String code = "LOOKUP_" + suffix().toUpperCase();
+        String token = administrator();
+        var created = mvc.perform(post("/api/v1/admin/roles").header("Authorization", bearer(token))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json.writeValueAsString(Map.of("roleCode", code, "displayName", "Search Role"))))
+            .andExpect(status().isOk()).andReturn().getResponse();
+        long id = json.readTree(created.getContentAsString()).at("/data/id").asLong();
+        jdbc.update("UPDATE sys_role SET enabled = 0 WHERE id = ?", id);
+        mvc.perform(get("/api/v1/admin/roles").param("keyword", code)
+                .param("enabled", "false").header("Authorization", bearer(token)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(1))
+            .andExpect(jsonPath("$.data.items[0].id").value(id));
+        mvc.perform(get("/api/v1/admin/roles").param("keyword", "Search Role")
+                .param("enabled", "true").header("Authorization", bearer(token)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(0));
+    }
+
+    @Test
     void duplicateMissingAndInvalidRolesHaveStableErrors() throws Exception {
         String code = "TEST_" + suffix().toUpperCase();
         String token = administrator();

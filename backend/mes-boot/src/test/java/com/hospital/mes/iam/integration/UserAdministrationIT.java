@@ -232,6 +232,23 @@ class UserAdministrationIT {
             .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void listFiltersByKeywordAndStatusAcrossTheDatabase() throws Exception {
+        String login = "lookup" + suffix();
+        long id = user(login);
+        jdbc.update("UPDATE sys_user SET display_name = ?, enabled = 0 WHERE id = ?", "Search Target", id);
+        String token = administrator();
+        mvc.perform(get("/api/v1/admin/users").param("keyword", "Search Target")
+                .param("enabled", "false").header("Authorization", bearer(token)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(1))
+            .andExpect(jsonPath("$.data.items[0].id").value(id));
+        mvc.perform(get("/api/v1/admin/users").param("keyword", login)
+                .param("enabled", "true").header("Authorization", bearer(token)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(0));
+    }
+
     private long user(String login) {
         jdbc.update("INSERT INTO sys_user (login_name, login_name_normalized, display_name, password_hash) VALUES (?, ?, 'Staff', 'test-hash')", login, login.toLowerCase());
         return jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name = ?", Long.class, login);

@@ -46,13 +46,19 @@ public class UserAdministration {
     }
 
     @Transactional(readOnly = true)
-    public PageResult<UserView> list(int page, int size) {
+    public PageResult<UserView> list(int page, int size, String keyword, Boolean enabled) {
         if (page < 0 || size < 1 || size > 100) throw new IllegalArgumentException("Invalid page");
+        String query = keyword == null ? "" : keyword.trim();
+        if (query.length() > 128) throw new IllegalArgumentException("Invalid keyword");
         long offset = Math.multiplyExact((long) page, size);
-        List<UserView> items = users.selectList(new LambdaQueryWrapper<SysUserEntity>()
+        LambdaQueryWrapper<SysUserEntity> filter = new LambdaQueryWrapper<SysUserEntity>()
+            .and(!query.isEmpty(), wrapper -> wrapper.like(SysUserEntity::getLoginName, query)
+                .or().like(SysUserEntity::getDisplayName, query))
+            .eq(enabled != null, SysUserEntity::getEnabled, enabled);
+        List<UserView> items = users.selectList(filter.clone()
                 .orderByAsc(SysUserEntity::getId).last("LIMIT " + size + " OFFSET " + offset))
             .stream().map(this::view).toList();
-        return new PageResult<>(items, users.selectCount(null), page, size);
+        return new PageResult<>(items, users.selectCount(filter), page, size);
     }
 
     @Transactional(readOnly = true)

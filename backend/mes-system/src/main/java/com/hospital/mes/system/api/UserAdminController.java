@@ -43,8 +43,10 @@ public class UserAdminController {
 
     @GetMapping
     public ApiResponse<PageResult<UserView>> list(@RequestParam(name = "page", defaultValue = "0") int page,
-                                                  @RequestParam(name = "size", defaultValue = "20") int size) {
-        return ApiResponse.success(users.list(page, size), traces.currentTraceId());
+                                                  @RequestParam(name = "size", defaultValue = "20") int size,
+                                                  @RequestParam(name = "keyword", required = false) String keyword,
+                                                  @RequestParam(name = "enabled", required = false) Boolean enabled) {
+        return ApiResponse.success(users.list(page, size, keyword, enabled), traces.currentTraceId());
     }
 
     @GetMapping("/{userId}")

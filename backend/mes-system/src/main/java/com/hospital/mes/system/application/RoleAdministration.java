@@ -40,13 +40,19 @@ public class RoleAdministration {
     }
 
     @Transactional(readOnly = true)
-    public PageResult<RoleView> list(int page, int size) {
+    public PageResult<RoleView> list(int page, int size, String keyword, Boolean enabled) {
         if (page < 0 || size < 1 || size > 100) throw new IllegalArgumentException("Invalid page");
+        String query = keyword == null ? "" : keyword.trim();
+        if (query.length() > 128) throw new IllegalArgumentException("Invalid keyword");
         long offset = Math.multiplyExact((long) page, size);
-        List<RoleView> items = roles.selectList(new LambdaQueryWrapper<SysRoleEntity>()
+        LambdaQueryWrapper<SysRoleEntity> filter = new LambdaQueryWrapper<SysRoleEntity>()
+            .and(!query.isEmpty(), wrapper -> wrapper.like(SysRoleEntity::getRoleCode, query)
+                .or().like(SysRoleEntity::getDisplayName, query))
+            .eq(enabled != null, SysRoleEntity::getEnabled, enabled);
+        List<RoleView> items = roles.selectList(filter.clone()
                 .orderByAsc(SysRoleEntity::getId).last("LIMIT " + size + " OFFSET " + offset))
             .stream().map(this::view).toList();
-        return new PageResult<>(items, roles.selectCount(null), page, size);
+        return new PageResult<>(items, roles.selectCount(filter), page, size);
     }
 
     @Transactional(readOnly = true)
