@@ -40,11 +40,24 @@ class IamSchemaIT {
     }
 
     @Test
-    void assignmentsPreserveGrantAndRevokeMetadata() {
-        assertThat(columns("sys_user_role")).contains("granted_at", "granted_by", "revoked_at", "revoked_by");
-        assertThat(columns("sys_role_permission")).contains("granted_at", "granted_by", "revoked_at", "revoked_by");
+    void currentAssignmentsAreUniqueAndHaveNoRevokeColumns() {
+        assertThat(columns("sys_user_role")).doesNotContain("revoked_at", "revoked_by", "granted_at", "granted_by");
+        assertThat(columns("sys_role_permission")).doesNotContain("revoked_at", "revoked_by", "granted_at", "granted_by");
+        assertThat(uniquePairs("sys_user_role")).contains(List.of("user_id", "role_id"));
+        assertThat(uniquePairs("sys_role_permission")).contains(List.of("role_id", "permission_id"));
         assertThat(columns("sys_security_event")).contains("event_type", "outcome", "actor_user_id",
-            "target_user_id", "trace_id", "occurred_at");
+            "target_user_id", "target_permission_id", "trace_id", "occurred_at");
+    }
+
+    @Test
+    void systemAdministratorReceivesBothIamMenus() {
+        List<String> codes = jdbc.queryForList("""
+            SELECT p.permission_code FROM sys_permission p
+            JOIN sys_role_permission rp ON rp.permission_id = p.id
+            JOIN sys_role r ON r.id = rp.role_id
+            WHERE r.role_code = 'SYSTEM_ADMIN'
+            """, String.class);
+        assertThat(codes).contains("menu:iam:users", "menu:iam:roles");
     }
 
     @Test
@@ -65,5 +78,17 @@ class IamSchemaIT {
             SELECT column_name FROM information_schema.statistics
              WHERE table_schema = DATABASE() AND table_name = ? AND non_unique = 0
             """, String.class, table);
+    }
+
+    private List<List<String>> uniquePairs(String table) {
+        return jdbc.queryForList("""
+            SELECT index_name FROM information_schema.statistics
+             WHERE table_schema = DATABASE() AND table_name = ? AND non_unique = 0
+             GROUP BY index_name HAVING COUNT(*) = 2
+            """, String.class, table).stream().map(index -> jdbc.queryForList("""
+                SELECT column_name FROM information_schema.statistics
+                 WHERE table_schema = DATABASE() AND table_name = ? AND index_name = ?
+                 ORDER BY seq_in_index
+                """, String.class, table, index)).toList();
     }
 }

@@ -66,7 +66,7 @@ class IdentityDirectoryIT {
     }
 
     @Test
-    void snapshotUnionsEnabledRolesAndPermissionsButExcludesRevokedGrants() {
+    void snapshotUnionsOnlyCurrentEnabledAssignments() {
         String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
         long id = user("staff" + suffix, true);
         long firstRole = role("R1_" + suffix, true);
@@ -75,15 +75,17 @@ class IdentityDirectoryIT {
         long firstPermission = permission("action:test:first:" + suffix, true);
         long secondPermission = permission("action:test:second:" + suffix, true);
         long disabledPermission = permission("action:test:disabled:" + suffix, false);
-        grantRole(id, firstRole, false);
-        grantRole(id, secondRole, false);
-        grantRole(id, disabledRole, false);
-        grantPermission(firstRole, firstPermission, false);
-        grantPermission(secondRole, secondPermission, false);
-        grantPermission(secondRole, firstPermission, false);
-        grantPermission(firstRole, disabledPermission, false);
-        grantPermission(disabledRole, disabledPermission, false);
-        grantPermission(firstRole, secondPermission, true);
+        grantRole(id, firstRole);
+        grantRole(id, secondRole);
+        grantRole(id, disabledRole);
+        grantPermission(firstRole, firstPermission);
+        grantPermission(secondRole, secondPermission);
+        grantPermission(secondRole, firstPermission);
+        grantPermission(firstRole, disabledPermission);
+        grantPermission(disabledRole, disabledPermission);
+        grantPermission(firstRole, secondPermission);
+        jdbc.update("DELETE FROM sys_role_permission WHERE role_id = ? AND permission_id = ?",
+            firstRole, secondPermission);
 
         LoginSnapshot snapshot = identities.loadLoginSnapshot(id);
         assertThat(snapshot.roleCodes()).containsExactlyInAnyOrder("R1_" + suffix, "R2_" + suffix);
@@ -124,13 +126,12 @@ class IdentityDirectoryIT {
         return jdbc.queryForObject("SELECT id FROM sys_permission WHERE permission_code = ?", Long.class, code);
     }
 
-    private void grantRole(long userId, long roleId, boolean revoked) {
-        jdbc.update("INSERT INTO sys_user_role (user_id, role_id, revoked_at) VALUES (?, ?, ?)",
-            userId, roleId, revoked ? java.sql.Timestamp.from(Instant.now()) : null);
+    private void grantRole(long userId, long roleId) {
+        jdbc.update("INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)", userId, roleId);
     }
 
-    private void grantPermission(long roleId, long permissionId, boolean revoked) {
-        jdbc.update("INSERT INTO sys_role_permission (role_id, permission_id, revoked_at) VALUES (?, ?, ?)",
-            roleId, permissionId, revoked ? java.sql.Timestamp.from(Instant.now()) : null);
+    private void grantPermission(long roleId, long permissionId) {
+        jdbc.update("INSERT INTO sys_role_permission (role_id, permission_id) VALUES (?, ?)",
+            roleId, permissionId);
     }
 }

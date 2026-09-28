@@ -12,7 +12,8 @@ public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
     @Select("""
         SELECT COUNT(*) FROM sys_user_role ur
         JOIN sys_role r ON r.id = ur.role_id
-        WHERE r.role_code = 'SYSTEM_ADMIN' AND ur.revoked_at IS NULL
+        JOIN sys_user u ON u.id = ur.user_id
+        WHERE r.role_code = 'SYSTEM_ADMIN' AND r.enabled = TRUE AND u.enabled = TRUE
         """)
     int administratorCount();
 }
