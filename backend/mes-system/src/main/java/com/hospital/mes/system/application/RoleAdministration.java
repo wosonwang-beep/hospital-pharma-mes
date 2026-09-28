@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 
 @Service
 @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
@@ -86,7 +87,7 @@ public class RoleAdministration {
         return view(required(roleId));
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public RoleView setEnabled(long roleId, boolean enabled, long expectedVersion,
                                long actorId, String traceId) {
         SysRoleEntity role = required(roleId);

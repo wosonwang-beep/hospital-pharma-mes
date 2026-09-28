@@ -2,11 +2,22 @@ package com.hospital.mes.system.infrastructure;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface SysRolePermissionMapper {
+    @Insert("INSERT INTO sys_role_permission (role_id, permission_id) VALUES (#{roleId}, #{permissionId})")
+    int grant(@Param("roleId") long roleId, @Param("permissionId") long permissionId);
+
+    @Delete("DELETE FROM sys_role_permission WHERE role_id = #{roleId} AND permission_id = #{permissionId}")
+    int revoke(@Param("roleId") long roleId, @Param("permissionId") long permissionId);
+
+    @Select("SELECT COUNT(*) FROM sys_role_permission WHERE role_id = #{roleId} AND permission_id = #{permissionId}")
+    int pairCount(@Param("roleId") long roleId, @Param("permissionId") long permissionId);
+
     @Select("""
         SELECT p.permission_code FROM sys_role_permission rp
         JOIN sys_permission p ON p.id = rp.permission_id

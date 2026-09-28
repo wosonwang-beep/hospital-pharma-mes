@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 
 @Service
 @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
@@ -92,7 +93,7 @@ public class UserAdministration {
         return view(required(userId));
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public UserView setEnabled(long userId, boolean enabled, long expectedVersion,
                                long actorId, String traceId) {
         required(userId);

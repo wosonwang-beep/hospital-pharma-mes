@@ -4,6 +4,7 @@ import com.hospital.mes.common.api.ApiResponse;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import com.hospital.mes.security.identity.LoginSnapshot;
 import com.hospital.mes.system.application.PageResult;
+import com.hospital.mes.system.application.AssignmentAdministration;
 import com.hospital.mes.system.application.RoleAdministration;
 import com.hospital.mes.system.application.RoleAdministration.PermissionView;
 import com.hospital.mes.system.application.RoleAdministration.RoleView;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +28,13 @@ public class RoleAdminController {
     public record VersionRequest(Long expectedVersion) { }
 
     private final RoleAdministration roles;
+    private final AssignmentAdministration assignments;
     private final TraceIdProvider traces;
 
-    public RoleAdminController(RoleAdministration roles, TraceIdProvider traces) {
+    public RoleAdminController(RoleAdministration roles, AssignmentAdministration assignments,
+                               TraceIdProvider traces) {
         this.roles = roles;
+        this.assignments = assignments;
         this.traces = traces;
     }
 
@@ -73,6 +78,22 @@ public class RoleAdminController {
     public ApiResponse<RoleView> disable(@PathVariable("roleId") long roleId,
                                          @RequestBody VersionRequest request, Authentication authentication) {
         return setEnabled(roleId, false, request, authentication);
+    }
+
+    @PostMapping("/api/v1/admin/roles/{roleId}/permissions/{permissionCode}")
+    public ApiResponse<Void> grantPermission(@PathVariable("roleId") long roleId,
+                                              @PathVariable("permissionCode") String permissionCode,
+                                              Authentication authentication) {
+        assignments.grantRolePermission(roleId, permissionCode, actorId(authentication), traces.currentTraceId());
+        return ApiResponse.success(null, traces.currentTraceId());
+    }
+
+    @DeleteMapping("/api/v1/admin/roles/{roleId}/permissions/{permissionCode}")
+    public ApiResponse<Void> revokePermission(@PathVariable("roleId") long roleId,
+                                               @PathVariable("permissionCode") String permissionCode,
+                                               Authentication authentication) {
+        assignments.revokeRolePermission(roleId, permissionCode, actorId(authentication), traces.currentTraceId());
+        return ApiResponse.success(null, traces.currentTraceId());
     }
 
     private ApiResponse<RoleView> setEnabled(long roleId, boolean enabled, VersionRequest request,

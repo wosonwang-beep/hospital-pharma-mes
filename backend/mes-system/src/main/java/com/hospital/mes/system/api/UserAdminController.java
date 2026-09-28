@@ -4,6 +4,7 @@ import com.hospital.mes.common.api.ApiResponse;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import com.hospital.mes.security.identity.LoginSnapshot;
 import com.hospital.mes.system.application.PageResult;
+import com.hospital.mes.system.application.AssignmentAdministration;
 import com.hospital.mes.system.application.UserAdministration;
 import com.hospital.mes.system.application.UserAdministration.CreatedUser;
 import com.hospital.mes.system.application.UserAdministration.TemporaryPassword;
@@ -13,6 +14,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +31,13 @@ public class UserAdminController {
     public record VersionRequest(Long expectedVersion) { }
 
     private final UserAdministration users;
+    private final AssignmentAdministration assignments;
     private final TraceIdProvider traces;
 
-    public UserAdminController(UserAdministration users, TraceIdProvider traces) {
+    public UserAdminController(UserAdministration users, AssignmentAdministration assignments,
+                               TraceIdProvider traces) {
         this.users = users;
+        this.assignments = assignments;
         this.traces = traces;
     }
 
@@ -80,6 +85,20 @@ public class UserAdminController {
         TemporaryPassword secret = users.resetPassword(userId, actorId(authentication), traces.currentTraceId());
         return ResponseEntity.ok().cacheControl(CacheControl.noStore())
             .body(ApiResponse.success(secret, traces.currentTraceId()));
+    }
+
+    @PostMapping("/{userId}/roles/{roleId}")
+    public ApiResponse<Void> grantRole(@PathVariable("userId") long userId,
+                                       @PathVariable("roleId") long roleId, Authentication authentication) {
+        assignments.grantUserRole(userId, roleId, actorId(authentication), traces.currentTraceId());
+        return ApiResponse.success(null, traces.currentTraceId());
+    }
+
+    @DeleteMapping("/{userId}/roles/{roleId}")
+    public ApiResponse<Void> revokeRole(@PathVariable("userId") long userId,
+                                        @PathVariable("roleId") long roleId, Authentication authentication) {
+        assignments.revokeUserRole(userId, roleId, actorId(authentication), traces.currentTraceId());
+        return ApiResponse.success(null, traces.currentTraceId());
     }
 
     private ApiResponse<UserView> setEnabled(long userId, boolean enabled, VersionRequest request,
