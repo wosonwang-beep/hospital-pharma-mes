@@ -8,8 +8,10 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.OncePerRequestFilter;
-@Component public class TraceIdFilter extends OncePerRequestFilter {
+@Component @Order(Ordered.HIGHEST_PRECEDENCE) public class TraceIdFilter extends OncePerRequestFilter {
     public static final String HEADER = "X-Trace-Id";
     private static final Pattern SAFE = Pattern.compile("[A-Za-z0-9._-]{1,64}");
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
