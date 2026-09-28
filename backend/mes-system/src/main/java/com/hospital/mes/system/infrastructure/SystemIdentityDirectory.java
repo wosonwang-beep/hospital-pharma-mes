@@ -5,11 +5,10 @@ import com.hospital.mes.security.identity.IdentityDirectory;
 import com.hospital.mes.security.identity.LoginIdentity;
 import com.hospital.mes.security.identity.LoginSnapshot;
 import com.hospital.mes.security.identity.SecurityEvent;
-import java.text.Normalizer;
+import com.hospital.mes.system.application.LoginNameNormalizer;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -39,7 +38,7 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     @Override
     public Optional<LoginIdentity> findForLogin(String loginName) {
         if (loginName == null || loginName.isBlank()) return Optional.empty();
-        String normalized = normalizeLogin(loginName);
+        String normalized = LoginNameNormalizer.normalize(loginName);
         SysUserEntity user = users.selectOne(new LambdaQueryWrapper<SysUserEntity>()
             .eq(SysUserEntity::getLoginNameNormalized, normalized));
         return Optional.ofNullable(user).map(this::toIdentity);
@@ -48,7 +47,7 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     @Override
     public Optional<LoginIdentity> findForLoginForUpdate(String loginName) {
         if (loginName == null || loginName.isBlank()) return Optional.empty();
-        return Optional.ofNullable(users.lockByNormalizedLogin(normalizeLogin(loginName)))
+        return Optional.ofNullable(users.lockByNormalizedLogin(LoginNameNormalizer.normalize(loginName)))
             .map(this::toIdentity);
     }
 
@@ -123,7 +122,7 @@ public class SystemIdentityDirectory implements IdentityDirectory {
             throw new IllegalStateException("Administrator bootstrap has already completed");
         SysUserEntity user = new SysUserEntity();
         user.setLoginName(loginName.strip());
-        user.setLoginNameNormalized(normalizeLogin(loginName));
+        user.setLoginNameNormalized(LoginNameNormalizer.normalize(loginName));
         user.setDisplayName(displayName.strip());
         user.setPasswordHash(passwordHash);
         user.setEnabled(true);
@@ -151,11 +150,6 @@ public class SystemIdentityDirectory implements IdentityDirectory {
         appendSecurityEvent(new SecurityEvent("PASSWORD_CHANGE", "SUCCESS", userId,
             userId, null, traceId, "self-service", now));
         return true;
-    }
-
-    private static String normalizeLogin(String loginName) {
-        return Normalizer.normalize(loginName.strip(), Normalizer.Form.NFKC)
-            .toLowerCase(Locale.ROOT);
     }
 
     private LoginIdentity toIdentity(SysUserEntity user) {

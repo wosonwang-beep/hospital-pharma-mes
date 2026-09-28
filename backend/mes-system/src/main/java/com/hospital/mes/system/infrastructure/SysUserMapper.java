@@ -46,4 +46,29 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
     int changeOwnPassword(@Param("id") long id, @Param("version") long version,
                           @Param("expectedHash") String expectedHash,
                           @Param("replacementHash") String replacementHash);
+
+    @Update("""
+        UPDATE sys_user SET display_name = #{displayName}, version = version + 1,
+          updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int updateDisplayName(@Param("id") long id, @Param("version") long version,
+                          @Param("displayName") String displayName, @Param("actorId") long actorId);
+
+    @Update("""
+        UPDATE sys_user SET enabled = #{enabled}, version = version + 1,
+          updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int updateEnabled(@Param("id") long id, @Param("version") long version,
+                      @Param("enabled") boolean enabled, @Param("actorId") long actorId);
+
+    @Update("""
+        UPDATE sys_user SET password_hash = #{passwordHash}, must_change_password = TRUE,
+          failed_login_count = 0, locked_until = NULL, version = version + 1,
+          updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int resetAdminPassword(@Param("id") long id, @Param("version") long version,
+                           @Param("passwordHash") String passwordHash, @Param("actorId") long actorId);
 }

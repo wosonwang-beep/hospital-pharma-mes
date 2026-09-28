@@ -13,6 +13,7 @@ public class SysSecurityEventEntity {
     private Long actorUserId;
     private Long targetUserId;
     private Long targetRoleId;
+    private Long targetPermissionId;
     private String traceId;
     private String requestContext;
     private LocalDateTime occurredAt;
@@ -29,6 +30,8 @@ public class SysSecurityEventEntity {
     public void setTargetUserId(Long value) { targetUserId = value; }
     public Long getTargetRoleId() { return targetRoleId; }
     public void setTargetRoleId(Long value) { targetRoleId = value; }
+    public Long getTargetPermissionId() { return targetPermissionId; }
+    public void setTargetPermissionId(Long value) { targetPermissionId = value; }
     public String getTraceId() { return traceId; }
     public void setTraceId(String value) { traceId = value; }
     public String getRequestContext() { return requestContext; }
