@@ -1,5 +1,5 @@
 mes:
   security:
     jwt:
-      active-kid: ci-test
-      keys: ci-test:dGVzdC1vbmx5LXNpZ25pbmcta2V5LXdpdGgtbW9yZS10aGFuLTMyLWJ5dGVz
+      active-kid: ${MES_JWT_KID:ci-test}
+      keys: ${MES_JWT_KEYS:ci-test:dGVzdC1vbmx5LXNpZ25pbmcta2V5LXdpdGgtbW9yZS10aGFuLTMyLWJ5dGVz}

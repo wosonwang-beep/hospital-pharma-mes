@@ -73,6 +73,8 @@ jobs:
       MES_REDIS_HOST: 127.0.0.1
       MES_REDIS_PORT: '6379'
       MES_REDIS_PASSWORD: ci_redis_password
+      MES_JWT_KID: ci-test
+      MES_JWT_KEYS: ci-test:dGVzdC1vbmx5LXNpZ25pbmcta2V5LXdpdGgtbW9yZS10aGFuLTMyLWJ5dGVz
     services:
       mariadb:
         image: mariadb:11.8.9-noble

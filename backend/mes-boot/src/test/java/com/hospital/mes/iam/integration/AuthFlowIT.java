@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,6 +44,7 @@ class AuthFlowIT {
     @Autowired private AccessTokenCodec tokens;
     @Autowired private SessionStore sessions;
     @Autowired private org.springframework.jdbc.core.JdbcTemplate jdbc;
+    @Autowired private StringRedisTemplate redis;
     private final List<String> sessionIds = new ArrayList<>();
 
     @AfterEach void removeSessions() { sessionIds.forEach(sessions::revoke); }
@@ -124,6 +126,52 @@ class AuthFlowIT {
             Integer.class)).isGreaterThanOrEqualTo(2);
         assertThat(jdbc.queryForList("SELECT request_context FROM sys_security_event WHERE event_type='LOGIN'", String.class)
             .toString()).doesNotContain("wrong passphrase", TEMPORARY_PASSWORD);
+    }
+
+    @Test
+    void refreshRejectsCrossOriginRequestWithoutConsumingCredential() throws Exception {
+        String login = bootstrap();
+        MockHttpServletResponse first = login(login, TEMPORARY_PASSWORD);
+        String value = cookieValue(first);
+        mvc.perform(post("/api/v1/auth/refresh").header("Origin", "https://other.example")
+                .cookie(new Cookie("MES_RENEWAL", value)))
+            .andExpect(status().isUnauthorized());
+        mvc.perform(post("/api/v1/auth/refresh").header("Origin", "http://localhost")
+                .cookie(new Cookie("MES_RENEWAL", value)))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void disableAndRoleChangesApplyOnlyOnNextLogin() throws Exception {
+        String login = bootstrap();
+        String first = accessToken(login(login, TEMPORARY_PASSWORD));
+        jdbc.update("UPDATE sys_role SET enabled = FALSE WHERE role_code = 'SYSTEM_ADMIN'");
+        mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + first))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.roleCodes[0]").value("SYSTEM_ADMIN"));
+        String second = accessToken(login(login, TEMPORARY_PASSWORD));
+        mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + second))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.roleCodes.length()").value(0));
+        jdbc.update("UPDATE sys_user SET enabled = FALSE WHERE login_name = ?", login);
+        mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + second))
+            .andExpect(status().isOk());
+        assertThat(login(login, TEMPORARY_PASSWORD).getStatus()).isEqualTo(401);
+    }
+
+    @Test
+    void expiredRedisDeadlinesInvalidateOtherwiseValidBearer() throws Exception {
+        String login = bootstrap();
+        String first = accessToken(login(login, TEMPORARY_PASSWORD));
+        String firstId = tokens.verify(first).sessionId();
+        redis.opsForHash().put("mes:iam:session:" + firstId, "idleExpiresAt", "1");
+        mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + first))
+            .andExpect(status().isUnauthorized());
+        String second = accessToken(login(login, TEMPORARY_PASSWORD));
+        String secondId = tokens.verify(second).sessionId();
+        redis.opsForHash().put("mes:iam:session:" + secondId, "absoluteExpiresAt", "1");
+        mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + second))
+            .andExpect(status().isUnauthorized());
     }
 
     private String bootstrap() {
