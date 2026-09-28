@@ -17,10 +17,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class HmacAccessTokenCodec implements AccessTokenCodec {
     private static final String ISSUER = "hospital-pharma-mes";
     private static final Pattern KID = Pattern.compile("[A-Za-z0-9._-]{1,64}");

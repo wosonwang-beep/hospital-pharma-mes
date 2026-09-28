@@ -20,6 +20,8 @@ The maintained MinIO AIStor image requires a free-tier or commercial license fil
 
 To run the backend, activate the `local` profile. There is deliberately no default profile and no embedded database fallback.
 
+The one-time first-administrator procedure and temporary-password handling are in [IAM bootstrap](iam-bootstrap.md).
+
 ## Infrastructure integration tests
 
 Start MariaDB and Redis, then set `MES_DB_URL`, `MES_DB_USERNAME`, `MES_DB_PASSWORD`, `MES_REDIS_HOST`, `MES_REDIS_PORT`, and `MES_REDIS_PASSWORD` in the process environment. Run `mvn -B -ntp -Pci-integration verify` from the repository root. The `ci` profile requires these values and fails when either service is absent; it does not substitute an embedded database or in-memory Redis. The database test uses a rollback and the Redis test deletes its namespaced key.

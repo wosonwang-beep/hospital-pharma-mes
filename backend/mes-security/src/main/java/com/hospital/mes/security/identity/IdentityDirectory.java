@@ -9,4 +9,7 @@ public interface IdentityDirectory {
     void recordLoginSuccess(long userId, Instant now);
     LoginSnapshot loadLoginSnapshot(long userId);
     void appendSecurityEvent(SecurityEvent event);
+    long bootstrapAdministrator(String loginName, String displayName, String passwordHash, Instant now);
+    boolean changeOwnPassword(long userId, String expectedHash, String replacementHash,
+                              String traceId, Instant now);
 }

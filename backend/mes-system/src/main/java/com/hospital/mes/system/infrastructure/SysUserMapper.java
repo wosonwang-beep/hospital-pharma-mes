@@ -32,4 +32,14 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
         """)
     int resetExpiredLock(@Param("id") long id, @Param("version") long version,
                          @Param("now") LocalDateTime now);
+
+    @Update("""
+        UPDATE sys_user SET password_hash = #{replacementHash}, must_change_password = FALSE,
+          failed_login_count = 0, locked_until = NULL,
+          version = version + 1, updated_at = CURRENT_TIMESTAMP(6)
+        WHERE id = #{id} AND version = #{version} AND password_hash = #{expectedHash}
+        """)
+    int changeOwnPassword(@Param("id") long id, @Param("version") long version,
+                          @Param("expectedHash") String expectedHash,
+                          @Param("replacementHash") String replacementHash);
 }

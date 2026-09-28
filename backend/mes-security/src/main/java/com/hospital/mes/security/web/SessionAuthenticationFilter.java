@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
     private final AccessTokenCodec tokens;
     private final SessionStore sessions;
@@ -50,6 +52,7 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
             if (identity.userId() != claims.userId()) throw new BadCredentialsException("Session mismatch");
             var authorities = identity.permissionCodes().stream().map(SimpleGrantedAuthority::new).toList();
             var authentication = UsernamePasswordAuthenticationToken.authenticated(identity, null, authorities);
+            authentication.setDetails(session.sessionId());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if (identity.mustChangePassword() && !allowedBeforePasswordChange(request)) {
                 errors.forbidden(response);

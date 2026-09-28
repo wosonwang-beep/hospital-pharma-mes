@@ -8,6 +8,9 @@ spring:
       host: ${MES_REDIS_HOST:localhost}
       port: ${MES_REDIS_PORT:6379}
 mes:
+  security:
+    cookie:
+      allow-insecure-local: true
   storage:
     endpoint: ${MES_MINIO_ENDPOINT:http://localhost:9000}
     access-key: ${MES_MINIO_ACCESS_KEY:minioadmin}

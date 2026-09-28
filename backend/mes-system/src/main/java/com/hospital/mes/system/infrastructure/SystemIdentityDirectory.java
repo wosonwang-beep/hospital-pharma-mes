@@ -23,19 +23,23 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     private final SysUserMapper users;
     private final SysRolePermissionMapper rolePermissions;
     private final SysSecurityEventMapper events;
+    private final SysRoleMapper roles;
+    private final SysUserRoleMapper userRoles;
 
     public SystemIdentityDirectory(SysUserMapper users, SysRolePermissionMapper rolePermissions,
-                                   SysSecurityEventMapper events) {
+                                   SysSecurityEventMapper events, SysRoleMapper roles,
+                                   SysUserRoleMapper userRoles) {
         this.users = users;
         this.rolePermissions = rolePermissions;
         this.events = events;
+        this.roles = roles;
+        this.userRoles = userRoles;
     }
 
     @Override
     public Optional<LoginIdentity> findForLogin(String loginName) {
         if (loginName == null || loginName.isBlank()) return Optional.empty();
-        String normalized = Normalizer.normalize(loginName.strip(), Normalizer.Form.NFKC)
-            .toLowerCase(Locale.ROOT);
+        String normalized = normalizeLogin(loginName);
         SysUserEntity user = users.selectOne(new LambdaQueryWrapper<SysUserEntity>()
             .eq(SysUserEntity::getLoginNameNormalized, normalized));
         return Optional.ofNullable(user).map(this::toIdentity);
@@ -96,6 +100,55 @@ public class SystemIdentityDirectory implements IdentityDirectory {
         entity.setRequestContext(event.requestContext());
         entity.setOccurredAt(LocalDateTime.ofInstant(event.occurredAt(), ZoneOffset.UTC));
         events.insert(entity);
+    }
+
+    @Override
+    @Transactional
+    public long bootstrapAdministrator(String loginName, String displayName,
+                                       String passwordHash, Instant now) {
+        if (loginName == null || loginName.isBlank() || loginName.length() > 128
+            || displayName == null || displayName.isBlank() || displayName.length() > 128
+            || passwordHash == null || passwordHash.isBlank())
+            throw new IllegalArgumentException("Invalid administrator identity");
+        Long roleId = roles.lockAdministratorRole();
+        if (roleId == null) throw new IllegalStateException("SYSTEM_ADMIN role is unavailable");
+        if (roles.administratorCount() != 0)
+            throw new IllegalStateException("Administrator bootstrap has already completed");
+        SysUserEntity user = new SysUserEntity();
+        user.setLoginName(loginName.strip());
+        user.setLoginNameNormalized(normalizeLogin(loginName));
+        user.setDisplayName(displayName.strip());
+        user.setPasswordHash(passwordHash);
+        user.setEnabled(true);
+        user.setFailedLoginCount(0);
+        user.setMustChangePassword(true);
+        user.setVersion(0L);
+        users.insert(user);
+        SysUserRoleEntity assignment = new SysUserRoleEntity();
+        assignment.setUserId(user.getId());
+        assignment.setRoleId(roleId);
+        userRoles.insert(assignment);
+        appendSecurityEvent(new SecurityEvent("BOOTSTRAP_ADMIN", "SUCCESS", user.getId(),
+            user.getId(), roleId, null, "operator bootstrap", now));
+        return user.getId();
+    }
+
+    @Override
+    @Transactional
+    public boolean changeOwnPassword(long userId, String expectedHash, String replacementHash,
+                                     String traceId, Instant now) {
+        SysUserEntity current = users.selectById(userId);
+        if (current == null) return false;
+        int changed = users.changeOwnPassword(userId, current.getVersion(), expectedHash, replacementHash);
+        if (changed != 1) return false;
+        appendSecurityEvent(new SecurityEvent("PASSWORD_CHANGE", "SUCCESS", userId,
+            userId, null, traceId, "self-service", now));
+        return true;
+    }
+
+    private static String normalizeLogin(String loginName) {
+        return Normalizer.normalize(loginName.strip(), Normalizer.Form.NFKC)
+            .toLowerCase(Locale.ROOT);
     }
 
     private LoginIdentity toIdentity(SysUserEntity user) {
