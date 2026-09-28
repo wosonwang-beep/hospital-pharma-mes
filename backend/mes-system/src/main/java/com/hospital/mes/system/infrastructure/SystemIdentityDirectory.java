@@ -46,6 +46,13 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     }
 
     @Override
+    public Optional<LoginIdentity> findForLoginForUpdate(String loginName) {
+        if (loginName == null || loginName.isBlank()) return Optional.empty();
+        return Optional.ofNullable(users.lockByNormalizedLogin(normalizeLogin(loginName)))
+            .map(this::toIdentity);
+    }
+
+    @Override
     @Transactional
     public void recordLoginFailure(long userId, Instant now) {
         updateCounter(userId, now, false);
@@ -112,7 +119,7 @@ public class SystemIdentityDirectory implements IdentityDirectory {
             throw new IllegalArgumentException("Invalid administrator identity");
         Long roleId = roles.lockAdministratorRole();
         if (roleId == null) throw new IllegalStateException("SYSTEM_ADMIN role is unavailable");
-        if (roles.administratorCount() != 0)
+        if (roles.administratorCount() != 0 || events.successfulBootstrapCount() != 0)
             throw new IllegalStateException("Administrator bootstrap has already completed");
         SysUserEntity user = new SysUserEntity();
         user.setLoginName(loginName.strip());

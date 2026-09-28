@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.hospital.mes.security.identity.LoginIdentity;
 import java.time.Instant;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 class PasswordServiceTest {
     private final PasswordService passwords = new PasswordService();
@@ -14,8 +15,8 @@ class PasswordServiceTest {
     void hashesUnicodeAndSpacesWithBcryptCostAtLeastTwelve() {
         String password = "院内 员工 passphrase";
         String hash = passwords.hash(password);
-        assertThat(hash).startsWith("$2");
-        assertThat(Integer.parseInt(hash.substring(4, 6))).isGreaterThanOrEqualTo(12);
+        assertThat(hash).startsWith("$mes1$$2");
+        assertThat(Integer.parseInt(hash.substring(10, 12))).isGreaterThanOrEqualTo(12);
         assertThat(passwords.matches(password, hash)).isTrue();
         assertThat(passwords.matches("wrong password", hash)).isFalse();
     }
@@ -41,5 +42,21 @@ class PasswordServiceTest {
         assertThat(passwords.canAuthenticate(disabled, "valid passphrase", now)).isFalse();
         assertThat(passwords.canAuthenticate(locked, "valid passphrase", now)).isFalse();
         assertThat(passwords.canAuthenticate(null, "valid passphrase", now)).isFalse();
+    }
+
+    @Test
+    void suffixBeyondBcryptByteBoundaryStillChangesCredential() {
+        String ascii = "a".repeat(72) + "A";
+        String unicode = "院".repeat(24) + "甲";
+        assertThat(passwords.matches("a".repeat(72) + "B", passwords.hash(ascii))).isFalse();
+        assertThat(passwords.matches("院".repeat(24) + "乙", passwords.hash(unicode))).isFalse();
+    }
+
+    @Test
+    void acceptsFullLengthUnicodeAndExistingUnversionedHash() {
+        String longUnicode = "院".repeat(128);
+        assertThat(passwords.matches(longUnicode, passwords.hash(longUnicode))).isTrue();
+        String legacy = new BCryptPasswordEncoder(12).encode("Existing passphrase 123");
+        assertThat(passwords.matches("Existing passphrase 123", legacy)).isTrue();
     }
 }

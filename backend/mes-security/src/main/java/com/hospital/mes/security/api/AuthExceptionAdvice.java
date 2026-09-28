@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 @RestControllerAdvice(basePackageClasses = AuthController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -27,6 +28,12 @@ public class AuthExceptionAdvice {
 
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseEntity<ApiResponse<Void>> invalidInput(IllegalArgumentException ignored) {
+        return ResponseEntity.badRequest()
+            .body(new ApiResponse<>("INVALID_INPUT", "Invalid input", null, traces.currentTraceId()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse<Void>> unreadableBody(HttpMessageNotReadableException ignored) {
         return ResponseEntity.badRequest()
             .body(new ApiResponse<>("INVALID_INPUT", "Invalid input", null, traces.currentTraceId()));
     }

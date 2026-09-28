@@ -73,6 +73,16 @@ class AuthFlowIT {
     }
 
     @Test
+    void bootstrapRemainsOneTimeAfterOriginalAdminAssignmentIsRevoked() {
+        String login = bootstrap();
+        jdbc.update("UPDATE sys_user_role SET revoked_at = CURRENT_TIMESTAMP(6) WHERE user_id = "
+            + "(SELECT id FROM sys_user WHERE login_name = ?)", login);
+        assertThatThrownBy(() -> identities.bootstrapAdministrator("replacement", "Replacement",
+            passwords.hash(TEMPORARY_PASSWORD), Instant.now()))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     void passwordChangeRevokesOldSessionAndNewLoginNoLongerNeedsChange() throws Exception {
         String login = bootstrap();
         String oldToken = accessToken(login(login, TEMPORARY_PASSWORD));
@@ -139,6 +149,30 @@ class AuthFlowIT {
         mvc.perform(post("/api/v1/auth/refresh").header("Origin", "http://localhost")
                 .cookie(new Cookie("MES_RENEWAL", value)))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    void refreshIgnoresExpiredBearerAndUsesOnlyCookieCredential() throws Exception {
+        String login = bootstrap();
+        MockHttpServletResponse first = login(login, TEMPORARY_PASSWORD);
+        mvc.perform(post("/api/v1/auth/refresh").header("Origin", "http://localhost")
+                .header("Authorization", "Bearer expired-or-altered-token")
+                .cookie(new Cookie("MES_RENEWAL", cookieValue(first))))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void malformedAuthenticationBodiesAreClientErrors() throws Exception {
+        mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content("{"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("INVALID_INPUT"));
+        String login = bootstrap();
+        String token = accessToken(login(login, TEMPORARY_PASSWORD));
+        mvc.perform(post("/api/v1/auth/change-password")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON).content("{"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("INVALID_INPUT"));
     }
 
     @Test

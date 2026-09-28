@@ -7,12 +7,14 @@ import com.hospital.mes.security.identity.SecurityEvent;
 import com.hospital.mes.security.jwt.AccessTokenCodec;
 import com.hospital.mes.security.password.PasswordService;
 import com.hospital.mes.security.session.SessionStore;
+import com.hospital.mes.common.exception.ResourceConflictException;
 import java.time.Clock;
 import java.time.Instant;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
@@ -35,13 +37,14 @@ public class AuthService {
         this.clock = clock;
     }
 
+    @Transactional(noRollbackFor = BadCredentialsException.class)
     public AuthResult login(String loginName, String plaintext, String traceId) {
         if (loginName == null || loginName.isBlank() || plaintext == null) {
             passwords.matches(plaintext, null);
             denied(null, traceId);
             throw badCredentials();
         }
-        LoginIdentity identity = identities.findForLogin(loginName).orElse(null);
+        LoginIdentity identity = identities.findForLoginForUpdate(loginName).orElse(null);
         Instant now = clock.instant();
         if (!passwords.canAuthenticate(identity, plaintext, now)) {
             if (identity != null && identity.enabled()
@@ -81,9 +84,10 @@ public class AuthService {
         sessions.revoke(sessionId);
     }
 
+    @Transactional
     public void changeOwnPassword(LoginSnapshot snapshot, String oldPassword,
                                   String newPassword, String traceId) {
-        LoginIdentity current = identities.findForLogin(snapshot.loginName())
+        LoginIdentity current = identities.findForLoginForUpdate(snapshot.loginName())
             .orElseThrow(AuthService::badCredentials);
         if (current.userId() != snapshot.userId() || !passwords.matches(oldPassword, current.passwordHash()))
             throw badCredentials();
@@ -93,7 +97,7 @@ public class AuthService {
         sessions.revokeAllForUser(snapshot.userId());
         if (!identities.changeOwnPassword(snapshot.userId(), current.passwordHash(),
             replacementHash, traceId, clock.instant()))
-            throw new IllegalStateException("Password changed concurrently; sign in again");
+            throw new ResourceConflictException("PASSWORD_CHANGE_CONFLICT", "Sign in again");
     }
 
     private void denied(LoginIdentity identity, String traceId) {

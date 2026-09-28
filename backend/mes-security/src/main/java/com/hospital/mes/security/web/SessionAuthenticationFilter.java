@@ -35,6 +35,12 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+        if ("POST".equals(request.getMethod())
+            && ("/api/v1/auth/login".equals(request.getRequestURI())
+                || "/api/v1/auth/refresh".equals(request.getRequestURI()))) {
+            chain.doFilter(request, response);
+            return;
+        }
         String authorization = request.getHeader("Authorization");
         if (authorization == null) {
             chain.doFilter(request, response);

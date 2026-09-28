@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.time.LocalDateTime;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+    @Select("SELECT * FROM sys_user WHERE login_name_normalized = #{normalized} FOR UPDATE")
+    SysUserEntity lockByNormalizedLogin(@Param("normalized") String normalized);
+
     @Update("""
         UPDATE sys_user SET
           locked_until = CASE WHEN failed_login_count + 1 >= 5 THEN #{lockUntil} ELSE locked_until END,

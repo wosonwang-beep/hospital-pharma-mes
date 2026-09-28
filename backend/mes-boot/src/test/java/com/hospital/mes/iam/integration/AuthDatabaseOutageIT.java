@@ -26,7 +26,7 @@ class AuthDatabaseOutageIT {
 
     @Test
     void databaseFailureDuringLoginReturnsAvailabilityErrorWithoutCredentials() throws Exception {
-        when(identities.findForLogin(anyString()))
+        when(identities.findForLoginForUpdate(anyString()))
             .thenThrow(new DataAccessResourceFailureException("database unavailable"));
         mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"loginName\":\"staff\",\"password\":\"Secret passphrase 123\"}"))
