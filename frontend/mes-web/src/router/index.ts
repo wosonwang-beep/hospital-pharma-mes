@@ -4,25 +4,20 @@ import { canUseAction, canUseRoute } from '../auth/permissions'
 import AppLayout from '../layouts/AppLayout.vue'
 import DashboardView from '../views/dashboard/DashboardView.vue'
 import LoginView from '../views/auth/LoginView.vue'
-import ChangePasswordView from '../views/auth/ChangePasswordView.vue'
-import UsersView from '../views/admin/UsersView.vue'
-import RolesView from '../views/admin/RolesView.vue'
-import UserFormView from '../views/admin/UserFormView.vue'
-import RoleFormView from '../views/admin/RoleFormView.vue'
 
 const router = createRouter({ history: createWebHistory(), routes: [
   { path: '/login', name: 'login', component: LoginView },
   { path: '/', component: AppLayout, children: [
     { path: '', name: 'dashboard', component: DashboardView },
-    { path: 'change-password', name: 'change-password', component: ChangePasswordView },
-    { path: 'admin/users', name: 'users', component: UsersView, meta: { permission: 'menu:iam:users' } },
-    { path: 'admin/users/new', name: 'user-new', component: UserFormView, meta: { permission: 'menu:iam:users', action: 'action:iam:user.manage' } },
-    { path: 'admin/users/:id/view', name: 'user-view', component: UserFormView, meta: { permission: 'menu:iam:users' } },
-    { path: 'admin/users/:id/edit', name: 'user-edit', component: UserFormView, meta: { permission: 'menu:iam:users', action: 'action:iam:user.manage' } },
-    { path: 'admin/roles', name: 'roles', component: RolesView, meta: { permission: 'menu:iam:roles' } },
-    { path: 'admin/roles/new', name: 'role-new', component: RoleFormView, meta: { permission: 'menu:iam:roles', action: 'action:iam:role.manage' } },
-    { path: 'admin/roles/:id/view', name: 'role-view', component: RoleFormView, meta: { permission: 'menu:iam:roles' } },
-    { path: 'admin/roles/:id/edit', name: 'role-edit', component: RoleFormView, meta: { permission: 'menu:iam:roles', action: 'action:iam:role.manage' } }
+    { path: 'change-password', name: 'change-password', component: () => import('../views/auth/ChangePasswordView.vue') },
+    { path: 'admin/users', name: 'users', component: () => import('../views/admin/UsersView.vue'), meta: { permission: 'menu:iam:users' } },
+    { path: 'admin/users/new', name: 'user-new', component: () => import('../views/admin/UserFormView.vue'), meta: { permission: 'menu:iam:users', action: 'action:iam:user.manage' } },
+    { path: 'admin/users/:id/view', name: 'user-view', component: () => import('../views/admin/UserFormView.vue'), meta: { permission: 'menu:iam:users' } },
+    { path: 'admin/users/:id/edit', name: 'user-edit', component: () => import('../views/admin/UserFormView.vue'), meta: { permission: 'menu:iam:users', action: 'action:iam:user.manage' } },
+    { path: 'admin/roles', name: 'roles', component: () => import('../views/admin/RolesView.vue'), meta: { permission: 'menu:iam:roles' } },
+    { path: 'admin/roles/new', name: 'role-new', component: () => import('../views/admin/RoleFormView.vue'), meta: { permission: 'menu:iam:roles', action: 'action:iam:role.manage' } },
+    { path: 'admin/roles/:id/view', name: 'role-view', component: () => import('../views/admin/RoleFormView.vue'), meta: { permission: 'menu:iam:roles' } },
+    { path: 'admin/roles/:id/edit', name: 'role-edit', component: () => import('../views/admin/RoleFormView.vue'), meta: { permission: 'menu:iam:roles', action: 'action:iam:role.manage' } }
   ] },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ] })
