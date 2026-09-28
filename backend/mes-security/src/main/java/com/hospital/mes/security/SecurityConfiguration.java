@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authorization.AuthorizationManagers;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,6 +34,42 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/change-password",
                     "/api/v1/auth/logout").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/users",
+                    "/api/v1/admin/users/{userId}").hasAuthority("menu:iam:users")
+                .requestMatchers(HttpMethod.POST, "/api/v1/admin/users",
+                    "/api/v1/admin/users/{userId}/enable",
+                    "/api/v1/admin/users/{userId}/disable",
+                    "/api/v1/admin/users/{userId}/password-reset",
+                    "/api/v1/admin/users/{userId}/roles/{roleId}")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:users"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:user.manage")))
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/admin/users/{userId}/profile")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:users"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:user.manage")))
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/admin/users/{userId}/roles/{roleId}")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:users"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:user.manage")))
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/roles",
+                    "/api/v1/admin/roles/{roleId}", "/api/v1/admin/permissions")
+                    .hasAuthority("menu:iam:roles")
+                .requestMatchers(HttpMethod.POST, "/api/v1/admin/roles",
+                    "/api/v1/admin/roles/{roleId}/enable",
+                    "/api/v1/admin/roles/{roleId}/disable",
+                    "/api/v1/admin/roles/{roleId}/permissions/{permissionCode}")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:roles"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:role.manage")))
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/admin/roles/{roleId}/name")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:roles"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:role.manage")))
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/admin/roles/{roleId}/permissions/{permissionCode}")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("menu:iam:roles"),
+                        AuthorityAuthorizationManager.hasAuthority("action:iam:role.manage")))
                 .anyRequest().denyAll())
             .addFilterBefore(sessions, UsernamePasswordAuthenticationFilter.class)
             .build();
