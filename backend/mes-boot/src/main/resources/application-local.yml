@@ -7,6 +7,7 @@ spring:
     redis:
       host: ${MES_REDIS_HOST:localhost}
       port: ${MES_REDIS_PORT:6379}
+      password: ${MES_REDIS_PASSWORD:}
 mes:
   security:
     cookie:
