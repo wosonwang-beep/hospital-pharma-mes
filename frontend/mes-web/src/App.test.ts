@@ -1,18 +1,15 @@
-import { fireEvent, render, screen } from '@testing-library/vue'
+import { render, screen } from '@testing-library/vue'
 import Antd from 'ant-design-vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-test('renders the Foundation application shell', async () => {
+test('requires the MES-002 login lifecycle before rendering the application shell', async () => {
   render(App, { global: { plugins: [createPinia(), router, Antd] } })
   await router.isReady()
 
-  expect(screen.getByText('医院制剂 MES')).toBeTruthy()
-  expect(screen.getByRole('heading', { name: '基础服务已就绪' })).toBeTruthy()
-  expect(screen.queryByText('登录')).toBeNull()
-
-  const collapseButton = screen.getByRole('button', { name: '折叠侧栏' })
-  await fireEvent.click(collapseButton)
-  expect(screen.getByRole('button', { name: '展开侧栏' }).getAttribute('aria-expanded')).toBe('false')
+  expect(screen.getByRole('heading', { name: '医院制剂 MES' })).toBeTruthy()
+  expect(screen.getByLabelText('账号')).toBeTruthy()
+  expect(screen.getByLabelText('密码')).toBeTruthy()
+  expect(screen.getByRole('button', { name: /登\s*录/ })).toBeTruthy()
 })

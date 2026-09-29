@@ -10,10 +10,14 @@ function sourceFiles(directory: string): string[] {
   })
 }
 
-test('registers only the two frozen MES-001 routes', () => {
+test('preserves MES-001 routes and adds only frozen MES-002 administration routes', () => {
   const paths = router.getRoutes().map(route => route.path)
   expect(paths).toContain('/audit')
   expect(paths).toContain('/integration/operations')
+  expect(paths).toEqual(expect.arrayContaining([
+    '/admin/users', '/admin/users/create', '/admin/users/:id', '/admin/users/:id/edit',
+    '/admin/roles', '/admin/roles/create', '/admin/roles/:id', '/admin/roles/:id/edit'
+  ]))
   expect(paths).not.toContain('/platform/operations')
 })
 

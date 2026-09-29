@@ -3,7 +3,32 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "scripts": {"dev":"vite","build":"vue-tsc -b && vite build","typecheck":"vue-tsc -b","test":"vitest"},
-  "dependencies": {"@ant-design/icons-vue":"^7.0.1","ant-design-vue":"^4.2.6","axios":"^1.12.2","echarts":"^6.0.0","pinia":"^3.0.3","vue":"^3.5.22","vue-router":"^4.6.3"},
-  "devDependencies": {"@testing-library/vue":"^8.1.0","@types/node":"^24.5.2","@vitejs/plugin-vue":"^6.0.1","@vue/tsconfig":"^0.8.1","jsdom":"^27.0.0","typescript":"^5.9.3","vite":"^7.1.7","vitest":"^5.0.2","vue-tsc":"^3.0.8"}
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "typecheck": "vue-tsc -b",
+    "test": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "^4.2.6",
+    "axios": "^1.12.2",
+    "echarts": "^6.0.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.22",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^24.5.2",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "jsdom": "^27.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7",
+    "vitest": "^5.0.2",
+    "vue-tsc": "^3.0.8"
+  }
 }
