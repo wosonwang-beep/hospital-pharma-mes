@@ -147,7 +147,7 @@ class UserAdministrationIT {
         String token = administrator();
         mvc.perform(get("/api/v1/admin/users/999999999").header("Authorization", bearer(token)))
             .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.traceId").isNotEmpty());
+            .andExpect(jsonPath("$.requestId").isNotEmpty());
         mvc.perform(get("/api/v1/admin/users/not-a-number").header("Authorization", bearer(token)))
             .andExpect(status().isBadRequest());
         mvc.perform(get("/api/v1/admin/users?page=bad").header("Authorization", bearer(token)))

@@ -69,7 +69,7 @@ class AdminAuthorizationIT {
     void missingAndInvalidTokensAreUnauthorized() throws Exception {
         mvc.perform(get("/api/v1/admin/users").header("X-Trace-Id", "admin-auth-trace"))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.traceId").value("admin-auth-trace"));
+            .andExpect(jsonPath("$.requestId").value("admin-auth-trace"));
         String token = issue(Set.of("menu:iam:users"), false);
         mvc.perform(get("/api/v1/admin/users").header("Authorization", "Bearer " + token + "x"))
             .andExpect(status().isUnauthorized());

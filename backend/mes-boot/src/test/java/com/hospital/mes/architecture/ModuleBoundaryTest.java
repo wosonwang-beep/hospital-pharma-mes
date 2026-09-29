@@ -15,14 +15,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
 
 class ModuleBoundaryTest {
-    private static final List<String> MODULES = List.of("mes-boot", "mes-common", "mes-security", "mes-system", "mes-masterdata", "mes-product", "mes-process", "mes-form", "mes-ebr", "mes-wms", "mes-production", "mes-execution", "mes-equipment", "mes-qc", "mes-qms", "mes-release", "mes-workflow", "mes-traceability", "mes-integration", "mes-reporting");
+    private static final List<String> MODULES = List.of("mes-boot", "mes-common", "mes-audit", "mes-security", "mes-system", "mes-masterdata", "mes-product", "mes-process", "mes-form", "mes-ebr", "mes-wms", "mes-production", "mes-execution", "mes-equipment", "mes-qc", "mes-qms", "mes-release", "mes-workflow", "mes-traceability", "mes-integration", "mes-reporting");
 
     @Test
     void reactorHasExactModuleSetAndOnlyBootIsExecutable() throws Exception {
         Path root = Path.of(System.getProperty("user.dir")).getParent().getParent();
         var backend = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(root.resolve("backend/pom.xml").toFile());
         var nodes = backend.getElementsByTagName("module");
-        assertEquals(20, nodes.getLength());
+        assertEquals(21, nodes.getLength());
         for (String module : MODULES) assertTrue(Files.exists(root.resolve("backend").resolve(module).resolve("pom.xml")));
         for (String module : MODULES) {
             String pom = Files.readString(root.resolve("backend").resolve(module).resolve("pom.xml"));

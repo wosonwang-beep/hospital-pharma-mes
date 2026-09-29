@@ -31,7 +31,7 @@ class AuthFilterIT {
     void missingAndAlteredBearerTokensAreUnauthorizedWithTrace() throws Exception {
         mvc.perform(get("/api/v1/auth/me").header("X-Trace-Id", "auth-test-trace"))
             .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.traceId").value("auth-test-trace"));
+            .andExpect(jsonPath("$.requestId").value("auth-test-trace"));
         String token = issue(7, Set.of("menu:home"));
         mvc.perform(get("/api/v1/auth/me").header("Authorization", "Bearer " + token + "x"))
             .andExpect(status().isUnauthorized())

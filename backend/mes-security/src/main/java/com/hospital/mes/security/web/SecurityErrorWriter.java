@@ -1,7 +1,7 @@
 package com.hospital.mes.security.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hospital.mes.common.api.ApiResponse;
+import com.hospital.mes.common.api.ApiError;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,6 +38,6 @@ public class SecurityErrorWriter {
         }
         response.setStatus(status.value());
         response.setContentType("application/json;charset=UTF-8");
-        json.writeValue(response.getOutputStream(), new ApiResponse<Void>(code, message, null, traceId));
+        json.writeValue(response.getOutputStream(), ApiError.of(traceId, code, message));
     }
 }
