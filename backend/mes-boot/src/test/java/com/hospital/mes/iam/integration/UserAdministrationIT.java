@@ -248,7 +248,7 @@ class UserAdministrationIT {
     }
 
     private String issue(long userId, Set<String> permissions, boolean mustChangePassword) {
-        var lease = sessions.create(new LoginSnapshot(userId, "admin", "Admin",
+        var lease = sessions.create(new LoginSnapshot(userId, 1L, "admin", "Admin",
             Set.of("SYSTEM_ADMIN"), permissions, mustChangePassword));
         leases.add(lease.sessionId());
         return tokens.issue(userId, lease.sessionId());

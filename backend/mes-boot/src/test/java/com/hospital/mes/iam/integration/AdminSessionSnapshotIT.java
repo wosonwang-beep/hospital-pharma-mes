@@ -66,7 +66,7 @@ class AdminSessionSnapshotIT {
     }
 
     private String administrator() {
-        var lease = sessions.create(new LoginSnapshot(998877L, "admin", "Admin", Set.of("SYSTEM_ADMIN"),
+        var lease = sessions.create(new LoginSnapshot(998877L, 1L, "admin", "Admin", Set.of("SYSTEM_ADMIN"),
             Set.of("menu:iam:users", "action:iam:user.manage"), false));
         leases.add(lease.sessionId());
         return tokens.issue(998877L, lease.sessionId());

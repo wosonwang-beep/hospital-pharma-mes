@@ -34,6 +34,14 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/change-password",
                     "/api/v1/auth/logout").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth/reauth",
+                    "/api/v1/records/{type}/{id}/sign").hasAuthority("ebr:sign")
+                .requestMatchers(HttpMethod.GET, "/api/v1/audit-events").hasAuthority("audit:view")
+                .requestMatchers(HttpMethod.GET, "/api/v1/integration/messages").hasAuthority("integration:view")
+                .requestMatchers(HttpMethod.POST, "/api/v1/integration/messages/{messageRef}/retry")
+                    .access(AuthorizationManagers.allOf(
+                        AuthorityAuthorizationManager.hasAuthority("integration:view"),
+                        AuthorityAuthorizationManager.hasAuthority("integration:retry")))
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/users",
                     "/api/v1/admin/users/{userId}").hasAuthority("menu:iam:users")
                 .requestMatchers(HttpMethod.POST, "/api/v1/admin/users",

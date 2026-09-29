@@ -9,6 +9,8 @@ spring:
       port: ${MES_REDIS_PORT}
       password: ${MES_REDIS_PASSWORD}
 mes:
+  platform:
+    organization-id: ${MES_PLATFORM_ORGANIZATION_ID:1}
   storage:
     endpoint: http://127.0.0.1:9000
     access-key: ci-not-used

@@ -3,11 +3,11 @@ package com.hospital.mes.integration.application;
 import com.hospital.mes.integration.domain.OutboxMessage;
 import java.time.Clock;
 import org.springframework.stereotype.Service;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service @ConditionalOnBean(IntegrationMessageStore.class) public class OutboxApplicationService{
+@Service @ConditionalOnProperty(prefix="spring.datasource",name="url") public class OutboxApplicationService{
     private final IntegrationMessageStore store;private final Clock clock;
     public OutboxApplicationService(IntegrationMessageStore store,Clock clock){this.store=store;this.clock=clock;}
     @Transactional(propagation=Propagation.MANDATORY)

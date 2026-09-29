@@ -5,6 +5,7 @@ import com.hospital.mes.security.identity.IdentityDirectory;
 import com.hospital.mes.security.identity.LoginIdentity;
 import com.hospital.mes.security.identity.LoginSnapshot;
 import com.hospital.mes.security.identity.SecurityEvent;
+import com.hospital.mes.security.context.PlatformOrganizationResolver;
 import com.hospital.mes.system.application.LoginNameNormalizer;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -24,15 +25,17 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     private final SysSecurityEventMapper events;
     private final SysRoleMapper roles;
     private final SysUserRoleMapper userRoles;
+    private final PlatformOrganizationResolver organizations;
 
     public SystemIdentityDirectory(SysUserMapper users, SysRolePermissionMapper rolePermissions,
                                    SysSecurityEventMapper events, SysRoleMapper roles,
-                                   SysUserRoleMapper userRoles) {
+                                   SysUserRoleMapper userRoles, PlatformOrganizationResolver organizations) {
         this.users = users;
         this.rolePermissions = rolePermissions;
         this.events = events;
         this.roles = roles;
         this.userRoles = userRoles;
+        this.organizations = organizations;
     }
 
     @Override
@@ -87,7 +90,7 @@ public class SystemIdentityDirectory implements IdentityDirectory {
     public LoginSnapshot loadLoginSnapshot(long userId) {
         SysUserEntity user = users.selectById(userId);
         if (user == null) throw new IllegalArgumentException("Unknown user");
-        return new LoginSnapshot(userId, user.getLoginName(), user.getDisplayName(),
+        return new LoginSnapshot(userId, organizations.organizationId(), user.getLoginName(), user.getDisplayName(),
             Set.copyOf(rolePermissions.activeRoleCodes(userId)),
             Set.copyOf(rolePermissions.activePermissionCodes(userId)),
             Boolean.TRUE.equals(user.getMustChangePassword()));

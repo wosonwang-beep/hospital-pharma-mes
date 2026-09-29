@@ -30,12 +30,12 @@ public class RedisSessionStore implements SessionStore {
 
     private static final DefaultRedisScript<Long> CREATE = script("""
         redis.call('HSET', KEYS[1],
-          'userId', ARGV[1], 'loginName', ARGV[2], 'displayName', ARGV[3],
-          'roleCodes', ARGV[4], 'permissionCodes', ARGV[5], 'mustChange', ARGV[6],
-          'createdAt', ARGV[7], 'absoluteExpiresAt', ARGV[8],
-          'idleExpiresAt', ARGV[9], 'renewDigest', ARGV[10])
-        redis.call('PEXPIRE', KEYS[1], ARGV[11])
-        redis.call('SADD', KEYS[2], ARGV[12])
+          'userId', ARGV[1], 'organizationId', ARGV[2], 'loginName', ARGV[3], 'displayName', ARGV[4],
+          'roleCodes', ARGV[5], 'permissionCodes', ARGV[6], 'mustChange', ARGV[7],
+          'createdAt', ARGV[8], 'absoluteExpiresAt', ARGV[9],
+          'idleExpiresAt', ARGV[10], 'renewDigest', ARGV[11])
+        redis.call('PEXPIRE', KEYS[1], ARGV[12])
+        redis.call('SADD', KEYS[2], ARGV[13])
         redis.call('PEXPIRE', KEYS[2], 28800000)
         return 1
         """);
@@ -87,7 +87,7 @@ public class RedisSessionStore implements SessionStore {
         String credential = newCredential();
         SessionSnapshot snapshot = SessionSnapshot.start(sessionId, identity, now);
         Long created = redis.execute(CREATE, List.of(sessionKey(sessionId), userKey(identity.userId())),
-            Long.toString(identity.userId()), identity.loginName(), identity.displayName(),
+            Long.toString(identity.userId()), Long.toString(identity.organizationId()), identity.loginName(), identity.displayName(),
             toJson(identity.roleCodes()), toJson(identity.permissionCodes()),
             Boolean.toString(identity.mustChangePassword()), Long.toString(now.toEpochMilli()),
             Long.toString(snapshot.absoluteExpiresAt().toEpochMilli()),
@@ -143,7 +143,7 @@ public class RedisSessionStore implements SessionStore {
     private SessionSnapshot fromHash(String sessionId, Map<Object, Object> fields) {
         try {
             long userId = Long.parseLong(value(fields, "userId"));
-            LoginSnapshot identity = new LoginSnapshot(userId, value(fields, "loginName"),
+            LoginSnapshot identity = new LoginSnapshot(userId, Long.parseLong(value(fields, "organizationId")), value(fields, "loginName"),
                 value(fields, "displayName"), json.readValue(value(fields, "roleCodes"), CODE_SET),
                 json.readValue(value(fields, "permissionCodes"), CODE_SET),
                 Boolean.parseBoolean(value(fields, "mustChange")));

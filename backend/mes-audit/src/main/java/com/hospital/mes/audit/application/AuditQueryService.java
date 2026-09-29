@@ -1,11 +1,11 @@
 package com.hospital.mes.audit.application;
 
 import org.springframework.stereotype.Service;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@ConditionalOnBean(AuditEventRepository.class)
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class AuditQueryService {
     private final AuditEventRepository repository;
 

@@ -8,6 +8,8 @@ spring:
       host: ${MES_REDIS_HOST:localhost}
       port: ${MES_REDIS_PORT:6379}
 mes:
+  platform:
+    organization-id: ${MES_PLATFORM_ORGANIZATION_ID:1}
   security:
     cookie:
       allow-insecure-local: true

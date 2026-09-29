@@ -15,12 +15,12 @@ import java.security.MessageDigest;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.HexFormat;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@ConditionalOnBean(SignatureRepository.class)
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class SignatureTransactionService {
     private final SignableObjectProviderRegistry providers; private final SignatureCanonicalizer canonicalizer;
     private final SignatureRepository signatures; private final PlatformIdempotencyService idempotency;

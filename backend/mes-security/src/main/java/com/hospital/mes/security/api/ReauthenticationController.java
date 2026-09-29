@@ -6,10 +6,11 @@ import com.hospital.mes.audit.signature.ReauthenticationRequest;
 import com.hospital.mes.common.api.ApiResponse;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController @RequestMapping("/api/v1/auth") @ConditionalOnBean(CurrentPlatformContextResolver.class)
+@RestController @RequestMapping("/api/v1/auth") @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class ReauthenticationController {
     private final ReauthenticationPort service;private final CurrentPlatformContextResolver contexts;private final TraceIdProvider traces;
     public ReauthenticationController(ReauthenticationPort service,CurrentPlatformContextResolver contexts,TraceIdProvider traces){this.service=service;this.contexts=contexts;this.traces=traces;}

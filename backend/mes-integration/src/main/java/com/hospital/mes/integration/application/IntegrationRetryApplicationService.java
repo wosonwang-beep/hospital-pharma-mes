@@ -1,9 +1,9 @@
 package com.hospital.mes.integration.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;import com.hospital.mes.audit.application.*;import com.hospital.mes.audit.domain.*;import com.hospital.mes.audit.idempotency.*;import com.hospital.mes.common.exception.*;import com.hospital.mes.integration.api.*;import com.hospital.mes.integration.domain.*;
-import java.nio.charset.StandardCharsets;import java.security.MessageDigest;import java.time.Clock;import java.util.HexFormat;import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
+import java.nio.charset.StandardCharsets;import java.security.MessageDigest;import java.time.Clock;import java.util.HexFormat;import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
 
-@Service @ConditionalOnBean(IntegrationMessageStore.class)
+@Service @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IntegrationRetryApplicationService{
  private final IntegrationMessageStore store;private final PlatformIdempotencyService idempotency;private final AuditApplicationService audit;private final ObjectMapper json;private final Clock clock;
  public IntegrationRetryApplicationService(IntegrationMessageStore s,PlatformIdempotencyService i,AuditApplicationService a,ObjectMapper j,Clock c){store=s;idempotency=i;audit=a;json=j;clock=c;}

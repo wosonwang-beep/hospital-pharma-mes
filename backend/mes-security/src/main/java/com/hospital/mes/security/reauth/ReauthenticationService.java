@@ -15,8 +15,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @Service
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class ReauthenticationService implements ReauthenticationPort {
     public static final Duration TTL = Duration.ofMinutes(5);
     private static final SecureRandom RANDOM = new SecureRandom();

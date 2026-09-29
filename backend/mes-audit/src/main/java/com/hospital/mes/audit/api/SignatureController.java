@@ -8,10 +8,11 @@ import com.hospital.mes.common.api.ApiResponse;
 import com.hospital.mes.common.exception.ValidationException;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController @ConditionalOnBean({SignatureApplicationService.class,CurrentPlatformContextResolver.class})
+@RestController @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class SignatureController {
     private final SignatureApplicationService service;private final CurrentPlatformContextResolver contexts;private final TraceIdProvider traces;
     public SignatureController(SignatureApplicationService service,CurrentPlatformContextResolver contexts,TraceIdProvider traces){this.service=service;this.contexts=contexts;this.traces=traces;}

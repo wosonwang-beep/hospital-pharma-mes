@@ -53,7 +53,7 @@ class ReauthenticationContractTest {
         private final String hash; IdentityDirectoryStub(String hash) { this.hash = hash; }
         public Optional<LoginIdentity> findForLogin(String name) { return Optional.of(new LoginIdentity(7, "user", "User", hash, true, 0, null, false, 0)); }
         public Optional<LoginIdentity> findForLoginForUpdate(String n){return findForLogin(n);} public void recordLoginFailure(long a, Instant b){}
-        public void recordLoginSuccess(long a, Instant b){} public com.hospital.mes.security.identity.LoginSnapshot loadLoginSnapshot(long a){return new com.hospital.mes.security.identity.LoginSnapshot(7,"user","User",Set.of("QA"),Set.of("ebr:sign"),false);}
+        public void recordLoginSuccess(long a, Instant b){} public com.hospital.mes.security.identity.LoginSnapshot loadLoginSnapshot(long a){return new com.hospital.mes.security.identity.LoginSnapshot(7,11,"user","User",Set.of("QA"),Set.of("ebr:sign"),false);}
         public void appendSecurityEvent(com.hospital.mes.security.identity.SecurityEvent e){} public long bootstrapAdministrator(String a,String b,String c,Instant d){return 0;}
         public boolean changeOwnPassword(long a,String b,String c,String d,Instant e){return false;}
     }

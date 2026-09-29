@@ -123,7 +123,7 @@ class RoleAdministrationIT {
     }
 
     private String administrator() {
-        var lease = sessions.create(new LoginSnapshot(998877L, "admin", "Admin",
+        var lease = sessions.create(new LoginSnapshot(998877L, 1L, "admin", "Admin",
             Set.of("SYSTEM_ADMIN"), Set.of("menu:iam:roles", "action:iam:role.manage"), false));
         leases.add(lease.sessionId());
         return tokens.issue(998877L, lease.sessionId());

@@ -230,7 +230,7 @@ class AssignmentAdministrationIT {
         return jdbc.queryForObject("SELECT id FROM sys_role WHERE role_code = ?", Long.class, code);
     }
     private String administrator() {
-        var lease = sessions.create(new LoginSnapshot(998877L, "admin", "Admin", Set.of("SYSTEM_ADMIN"),
+        var lease = sessions.create(new LoginSnapshot(998877L, 1L, "admin", "Admin", Set.of("SYSTEM_ADMIN"),
             Set.of("menu:iam:users", "action:iam:user.manage", "menu:iam:roles", "action:iam:role.manage"), false));
         leases.add(lease.sessionId());
         return tokens.issue(998877L, lease.sessionId());

@@ -1,4 +1,6 @@
 mes:
+  platform:
+    organization-id: 1
   security:
     jwt:
       active-kid: ${MES_JWT_KID:ci-test}

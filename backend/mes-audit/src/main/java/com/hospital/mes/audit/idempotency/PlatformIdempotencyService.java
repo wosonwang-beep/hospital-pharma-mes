@@ -7,12 +7,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HexFormat;
 import org.springframework.stereotype.Service;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@ConditionalOnBean(IdempotencyRepository.class)
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class PlatformIdempotencyService {
     private static final Duration RECORD_LIFETIME = Duration.ofHours(24);
     private final IdempotencyRepository repository;

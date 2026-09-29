@@ -1,9 +1,9 @@
 package com.hospital.mes.integration.api;
 
 import com.hospital.mes.audit.application.CurrentPlatformContextResolver;import com.hospital.mes.common.api.ApiResponse;import com.hospital.mes.common.exception.ValidationException;import com.hospital.mes.common.trace.TraceIdProvider;import com.hospital.mes.integration.application.*;import com.hospital.mes.integration.domain.IntegrationDirection;
-import java.time.Instant;import java.util.List;import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;import org.springframework.security.access.prepost.PreAuthorize;import org.springframework.web.bind.annotation.*;
+import java.time.Instant;import java.util.List;import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;import org.springframework.security.access.prepost.PreAuthorize;import org.springframework.web.bind.annotation.*;
 
-@RestController @ConditionalOnBean({IntegrationMessageQueryService.class,CurrentPlatformContextResolver.class})
+@RestController @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IntegrationMessageController{
  private final IntegrationMessageQueryService queries;private final IntegrationRetryApplicationService retries;private final CurrentPlatformContextResolver contexts;private final TraceIdProvider traces;
  public IntegrationMessageController(IntegrationMessageQueryService q,IntegrationRetryApplicationService r,CurrentPlatformContextResolver c,TraceIdProvider t){queries=q;retries=r;contexts=c;traces=t;}

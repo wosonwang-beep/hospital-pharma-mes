@@ -59,7 +59,7 @@ class AuthFilterIT {
     }
 
     private String issue(long userId, Set<String> permissions) {
-        var lease = sessions.create(new LoginSnapshot(userId, "staff", "Staff",
+        var lease = sessions.create(new LoginSnapshot(userId, 1L, "staff", "Staff",
             Set.of("STAFF"), permissions, false));
         sessionId = lease.sessionId();
         return tokens.issue(userId, sessionId);

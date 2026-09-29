@@ -1,10 +1,10 @@
 package com.hospital.mes.audit.signature;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnBean(SignatureTransactionService.class)
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class SignatureApplicationService {
     private final ReauthenticationPort reauthentication; private final SignatureTransactionService transactions;
     public SignatureApplicationService(ReauthenticationPort reauthentication,SignatureTransactionService transactions){

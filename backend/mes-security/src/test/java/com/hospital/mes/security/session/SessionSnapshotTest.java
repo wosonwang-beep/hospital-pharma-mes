@@ -8,7 +8,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class SessionSnapshotTest {
-    private final LoginSnapshot identity = new LoginSnapshot(7, "staff", "Staff",
+    private final LoginSnapshot identity = new LoginSnapshot(7, 1, "staff", "Staff",
         Set.of("ROLE_A"), Set.of("menu:home"), false);
 
     @Test

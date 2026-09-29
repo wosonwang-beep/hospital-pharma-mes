@@ -5,10 +5,10 @@ import com.hospital.mes.integration.domain.*;
 import com.hospital.mes.integration.policy.IntegrationRetryPolicy;
 import java.time.Clock;
 import org.springframework.stereotype.Service;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service @ConditionalOnBean(IntegrationMessageStore.class) public class IntegrationClaimService{
+@Service @ConditionalOnProperty(prefix="spring.datasource",name="url") public class IntegrationClaimService{
     private final IntegrationMessageStore store;private final IntegrationRetryPolicy policy;private final Clock clock;
     public IntegrationClaimService(IntegrationMessageStore store,IntegrationRetryPolicy policy,Clock clock){this.store=store;this.policy=policy;this.clock=clock;}
     @Transactional public InboxMessage claimInbox(long org,long id,long version){if(!store.claimInbox(org,id,version,clock.instant()))conflict();return store.findInbox(org,id);}

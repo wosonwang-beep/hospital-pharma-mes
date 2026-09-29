@@ -9,13 +9,14 @@ import com.hospital.mes.common.api.ApiResponse;
 import com.hospital.mes.common.trace.TraceIdProvider;
 import java.time.Instant;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@ConditionalOnBean(CurrentPlatformContextResolver.class)
+@ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class AuditEventController {
     private final AuditQueryService service;
     private final CurrentPlatformContextResolver contexts;

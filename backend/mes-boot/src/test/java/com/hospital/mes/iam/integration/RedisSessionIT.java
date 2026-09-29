@@ -118,6 +118,6 @@ class RedisSessionIT {
     }
 
     private LoginSnapshot identity(long id) {
-        return new LoginSnapshot(id, "staff", "Staff", Set.of("ROLE_A"), Set.of("menu:home"), false);
+        return new LoginSnapshot(id, 1L, "staff", "Staff", Set.of("ROLE_A"), Set.of("menu:home"), false);
     }
 }
