@@ -17,9 +17,14 @@ public class SignatureController {
     private final SignatureApplicationService service;private final CurrentPlatformContextResolver contexts;private final TraceIdProvider traces;
     public SignatureController(SignatureApplicationService service,CurrentPlatformContextResolver contexts,TraceIdProvider traces){this.service=service;this.contexts=contexts;this.traces=traces;}
     @PostMapping("/api/v1/records/{type}/{id}/sign") @PreAuthorize("hasAuthority('ebr:sign')")
-    public ApiResponse<SignatureResponseData> sign(@PathVariable String type,@PathVariable String id,
+    public ApiResponse<SignatureResponseData> signRecord(@PathVariable("type") String type,@PathVariable("id") String id,
         @RequestHeader("Idempotency-Key")String key,@RequestHeader("If-Match")String ifMatch,@RequestBody SignRecordRequest request){
         return ApiResponse.success(service.sign(new SignCommand(contexts.current(),type,id,request.getMeaning(),version(ifMatch),request.getReauthToken(),key,null)),traces.currentTraceId());
     }
-    private static long version(String value){try{return Long.parseLong(value.replace("\"", ""));}catch(Exception e){throw new ValidationException("INVALID_IF_MATCH","If-Match must be a record version");}}
+    static long version(String value){
+        if(value==null||!value.matches("^\\\"(?:0|[1-9][0-9]*)\\\"$"))
+            throw new ValidationException("INVALID_IF_MATCH","If-Match must be a quoted non-negative record version");
+        try{return Long.parseLong(value.substring(1,value.length()-1));}
+        catch(NumberFormatException e){throw new ValidationException("INVALID_IF_MATCH","If-Match must be a non-negative record version");}
+    }
 }

@@ -28,13 +28,18 @@ public class AuditEventController {
 
     @GetMapping("/api/v1/audit-events")
     @PreAuthorize("hasAuthority('audit:view')")
-    public ApiResponse<AuditEventPageResponse> query(
-        @RequestParam(required = false) Long actorId, @RequestParam(required = false) String action,
-        @RequestParam(required = false) String objectType, @RequestParam(required = false) String objectId,
-        @RequestParam(required = false) AuditSource source, @RequestParam(required = false) String transactionId,
-        @RequestParam(required = false) String requestId, @RequestParam(required = false) Instant occurredFrom,
-        @RequestParam(required = false) Instant occurredTo,
-        @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "50") int size) {
+    public ApiResponse<AuditEventPageResponse> queryAuditEvents(
+        @RequestParam(name = "actorId", required = false) Long actorId,
+        @RequestParam(name = "action", required = false) String action,
+        @RequestParam(name = "objectType", required = false) String objectType,
+        @RequestParam(name = "objectId", required = false) String objectId,
+        @RequestParam(name = "source", required = false) AuditSource source,
+        @RequestParam(name = "transactionId", required = false) String transactionId,
+        @RequestParam(name = "requestId", required = false) String requestId,
+        @RequestParam(name = "occurredFrom", required = false) Instant occurredFrom,
+        @RequestParam(name = "occurredTo", required = false) Instant occurredTo,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "50") int size) {
         var result = service.query(contexts.current().organizationId(), new AuditEventQuery(actorId, action,
             objectType, objectId, source, transactionId, requestId, occurredFrom, occurredTo, page, size));
         return ApiResponse.success(new AuditEventPageResponse(result.items().stream().map(AuditEventController::view).toList(),

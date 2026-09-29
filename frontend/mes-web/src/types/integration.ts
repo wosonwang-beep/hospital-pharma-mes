@@ -42,4 +42,3 @@ export interface RetryIntegrationMessageCommand {
   versionNo: number
   idempotencyKey: string
 }
-

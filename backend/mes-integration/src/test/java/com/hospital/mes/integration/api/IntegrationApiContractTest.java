@@ -20,4 +20,15 @@ class IntegrationApiContractTest {
         assertThatThrownBy(() -> IntegrationMessageRef.parse("INBOX:0")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> IntegrationMessageRef.parse("OTHER:1")).isInstanceOf(IllegalArgumentException.class);
     }
+    @Test
+    void ifMatchAcceptsOnlyQuotedNonNegativeVersions() {
+        assertThat(IntegrationMessageController.version("\"0\"")).isZero();
+        assertThat(IntegrationMessageController.version("\"12\"")).isEqualTo(12);
+        assertThatThrownBy(() -> IntegrationMessageController.version("12"))
+            .isInstanceOf(com.hospital.mes.common.exception.ValidationException.class);
+        assertThatThrownBy(() -> IntegrationMessageController.version("1\"2"))
+            .isInstanceOf(com.hospital.mes.common.exception.ValidationException.class);
+        assertThatThrownBy(() -> IntegrationMessageController.version("-1"))
+            .isInstanceOf(com.hospital.mes.common.exception.ValidationException.class);
+    }
 }

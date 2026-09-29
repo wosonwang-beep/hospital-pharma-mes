@@ -30,6 +30,6 @@ test('sends retry reason with mandatory idempotency and version headers', async 
 
   await retryIntegrationMessage({ messageRef: 'OUTBOX:7', reason: 'operator approved', versionNo: 4, idempotencyKey: 'idem-1' })
   expect(post).toHaveBeenCalledWith('/integration/messages/OUTBOX%3A7/retry', { reason: 'operator approved' }, {
-    headers: { 'Idempotency-Key': 'idem-1', 'If-Match': '4' }
+    headers: { 'Idempotency-Key': 'idem-1', 'If-Match': '"4"' }
   })
 })

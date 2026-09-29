@@ -14,7 +14,7 @@ export async function retryIntegrationMessage(command: RetryIntegrationMessageCo
   const response = await http.post<ApiResponse<IntegrationMessage>>(
     `/integration/messages/${encodeURIComponent(command.messageRef)}/retry`,
     { reason: command.reason },
-    { headers: { 'Idempotency-Key': command.idempotencyKey, 'If-Match': String(command.versionNo) } }
+    { headers: { 'Idempotency-Key': command.idempotencyKey, 'If-Match': `"${command.versionNo}"` } }
   )
   return response.data.data
 }

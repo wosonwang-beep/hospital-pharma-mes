@@ -38,4 +38,3 @@ export interface Page<T> {
   size: number
   total: number
 }
-

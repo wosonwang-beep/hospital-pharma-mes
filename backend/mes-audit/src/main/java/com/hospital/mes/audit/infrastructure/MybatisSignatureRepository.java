@@ -21,6 +21,20 @@ public class MybatisSignatureRepository implements SignatureRepository{
         SignatureEntity e=mapper.selectOne(new LambdaQueryWrapper<SignatureEntity>().eq(SignatureEntity::getOrgId,org).eq(SignatureEntity::getId,id));
         if(e==null)throw new com.hospital.mes.common.exception.ValidationException("SIGNATURE_NOT_FOUND","Signature not found");return domain(e);
     }
+    @Override public java.util.Optional<SignatureRecord> findLatest(long org,String objectType,String objectId,SignatureMeaning meaning){
+        SignatureEntity e=mapper.selectOne(new LambdaQueryWrapper<SignatureEntity>()
+            .eq(SignatureEntity::getOrgId,org).eq(SignatureEntity::getObjectType,objectType)
+            .eq(SignatureEntity::getObjectId,objectId).eq(SignatureEntity::getMeaning,meaning.name())
+            .orderByDesc(SignatureEntity::getId).last("LIMIT 1"));
+        return java.util.Optional.ofNullable(e).map(MybatisSignatureRepository::domain);
+    }
+    @Override public java.util.List<SignatureRecord> findValid(long org,String objectType,String objectId){
+        return mapper.selectList(new LambdaQueryWrapper<SignatureEntity>()
+                .eq(SignatureEntity::getOrgId,org).eq(SignatureEntity::getObjectType,objectType)
+                .eq(SignatureEntity::getObjectId,objectId).eq(SignatureEntity::getStatus,SignatureStatus.VALID.name())
+                .orderByAsc(SignatureEntity::getId))
+            .stream().map(MybatisSignatureRepository::domain).toList();
+    }
     @Override public boolean invalidate(long org,long id,long version,long actor,Instant at,String reason){return mapper.invalidate(org,id,version,actor,at.atOffset(ZoneOffset.UTC).toLocalDateTime(),reason)==1;}
     private static SignatureRecord domain(SignatureEntity e){return new SignatureRecord(e.getId(),e.getOrgId(),e.getSignerId(),SignatureMeaning.valueOf(e.getMeaning()),
         e.getObjectType(),e.getObjectId(),e.getRecordDigest(),e.getSignedAt().toInstant(ZoneOffset.UTC),SignatureStatus.valueOf(e.getStatus()),

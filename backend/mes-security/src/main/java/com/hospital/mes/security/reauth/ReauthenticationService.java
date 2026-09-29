@@ -45,7 +45,7 @@ public class ReauthenticationService implements ReauthenticationPort {
     @Override public ConsumedReauthentication consume(String token, ExpectedReauthenticationBinding expected) {
         StoredReauthentication stored = tokens.consume(token);
         if (stored == null || !stored.expiresAt().isAfter(clock.instant()) || !stored.binding().equals(expected))
-            throw new ReauthenticationFailedException();
+            throw new ReauthenticationTokenInvalidException();
         return new ConsumedReauthentication(stored.issuedAt(), stored.method());
     }
     private static String newToken(){byte[] b=new byte[32];RANDOM.nextBytes(b);return Base64.getUrlEncoder().withoutPadding().encodeToString(b);}

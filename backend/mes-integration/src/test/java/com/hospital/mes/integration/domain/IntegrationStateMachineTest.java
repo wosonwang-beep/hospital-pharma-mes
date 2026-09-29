@@ -47,4 +47,28 @@ class IntegrationStateMachineTest {
         assertThat(message.status()).isEqualTo(OutboxStatus.PENDING);
         assertThat(message.retryCount()).isEqualTo(1);
     }
+
+    @Test
+    void staleClaimsRecoverOnlyAtTheControlledFifteenMinuteThreshold() {
+        Instant claimedAt = Instant.parse("2026-09-29T00:00:00Z");
+        InboxMessage inbox = InboxMessage.received(1, 2, "LIMS", "m1", "{}", claimedAt)
+            .claim(claimedAt);
+        OutboxMessage outbox = OutboxMessage.pending(
+            1, 2, "stable-id", "ERP", "BATCH_RELEASED", "BATCH", "9", "{}", claimedAt)
+            .claim(claimedAt);
+
+        assertThatThrownBy(() -> inbox.recoverAbandoned(claimedAt.plus(policy.claimTimeout()).minusMillis(1), policy))
+            .isInstanceOf(com.hospital.mes.common.exception.StateTransitionException.class);
+        assertThatThrownBy(() -> outbox.recoverAbandoned(claimedAt.plus(policy.claimTimeout()).minusMillis(1), policy))
+            .isInstanceOf(com.hospital.mes.common.exception.StateTransitionException.class);
+
+        InboxMessage recoveredInbox = inbox.recoverAbandoned(claimedAt.plus(policy.claimTimeout()), policy);
+        OutboxMessage recoveredOutbox = outbox.recoverAbandoned(claimedAt.plus(policy.claimTimeout()), policy);
+        assertThat(recoveredInbox.status()).isEqualTo(InboxStatus.RETRY_WAIT);
+        assertThat(recoveredOutbox.status()).isEqualTo(OutboxStatus.RETRY_WAIT);
+        assertThat(recoveredInbox.retryCount()).isEqualTo(1);
+        assertThat(recoveredOutbox.retryCount()).isEqualTo(1);
+        assertThat(recoveredInbox.lastErrorCode()).isEqualTo("CLAIM_ABANDONED");
+        assertThat(recoveredOutbox.lastErrorCode()).isEqualTo("CLAIM_ABANDONED");
+    }
 }

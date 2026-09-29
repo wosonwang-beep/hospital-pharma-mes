@@ -3,6 +3,7 @@ package com.hospital.mes.audit.signature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospital.mes.audit.application.AuditApplicationService;
+import com.hospital.mes.audit.application.CurrentPlatformContext;
 import com.hospital.mes.audit.domain.AuditCommand;
 import com.hospital.mes.audit.domain.AuditSource;
 import com.hospital.mes.audit.idempotency.IdempotencyCommand;
@@ -42,8 +43,9 @@ public class SignatureTransactionService {
         if(object.recordVersion()!=c.recordVersion()) throw new ResourceConflictException("RECORD_CHANGED","Signable record changed");
         provider.validateSignable(new SignatureValidationContext(c.context(),c.meaning()),object);
         String digest=canonicalizer.digest(object); Instant now=clock.instant();
+        Long supersededSignatureId = resolveSupersededSignature(c);
         SignatureRecord record=signatures.insert(new NewSignature(c.context().organizationId(),c.context().actorId(),
-            c.meaning(),c.objectType(),c.objectId(),digest,now,authContext(c,reauth),c.revokedSignatureId()));
+            c.meaning(),c.objectType(),c.objectId(),digest,now,authContext(c,reauth),supersededSignatureId));
         String transactionId=c.context().requestId()==null?java.util.UUID.randomUUID().toString():c.context().requestId();
         audit.append(new AuditCommand(c.context().organizationId(),c.context().actorId(),c.context().roleSnapshot(),
             "SIGNATURE_APPLIED",c.objectType(),c.objectId(),null,digest,null,null,now,transactionId,
@@ -63,10 +65,62 @@ public class SignatureTransactionService {
     }
 
     @Transactional
-    public void invalidate(long organizationId,long signatureId,long expectedVersion,long actorId,String reason){
-        if(reason==null||reason.isBlank()||reason.length()>1000) throw new ComplianceException("INVALIDATION_REASON_REQUIRED","Invalidation reason is required");
-        if(!signatures.invalidate(organizationId,signatureId,expectedVersion,actorId,clock.instant(),reason))
-            throw new ResourceConflictException("SIGNATURE_CHANGED","Signature is not valid at the expected version");
+    public void invalidate(CurrentPlatformContext context, long signatureId, long expectedVersion, String reason) {
+        validateInvalidationReason(reason);
+        SignatureRecord existing = signatures.find(context.organizationId(), signatureId);
+        invalidateRecord(context, existing, expectedVersion, reason);
+    }
+
+    @Transactional
+    public int invalidateSignatures(CurrentPlatformContext context, String objectType, String objectId,
+                                    String reason) {
+        validateInvalidationReason(reason);
+        if (objectType == null || objectType.isBlank() || objectId == null || objectId.isBlank()) {
+            throw new ComplianceException(
+                "SIGNATURE_OBJECT_REQUIRED", "Signature object type and identifier are required");
+        }
+        java.util.List<SignatureRecord> current =
+            signatures.findValid(context.organizationId(), objectType, objectId);
+        for (SignatureRecord signature : current) {
+            invalidateRecord(context, signature, signature.versionNo(), reason);
+        }
+        return current.size();
+    }
+
+    private void invalidateRecord(CurrentPlatformContext context, SignatureRecord existing,
+                                  long expectedVersion, String reason) {
+        Instant invalidatedAt = clock.instant();
+        if (!signatures.invalidate(context.organizationId(), existing.id(), expectedVersion, context.actorId(),
+            invalidatedAt, reason)) {
+            throw new ResourceConflictException(
+                "SIGNATURE_CHANGED", "Signature is not valid at the expected version");
+        }
+
+        String transactionId = context.requestId() == null
+            ? java.util.UUID.randomUUID().toString()
+            : context.requestId();
+        audit.append(new AuditCommand(
+            context.organizationId(),
+            context.actorId(),
+            context.roleSnapshot(),
+            "SIGNATURE_INVALIDATED",
+            existing.objectType(),
+            existing.objectId(),
+            signatureStateDigest(existing.status(), existing.versionNo(), null, null),
+            signatureStateDigest(SignatureStatus.INVALIDATED, existing.versionNo() + 1, invalidatedAt, reason),
+            reason,
+            null,
+            invalidatedAt,
+            transactionId,
+            context.requestId(),
+            AuditSource.API,
+            null));
+    }
+
+    private static void validateInvalidationReason(String reason) {
+        if (reason == null || reason.isBlank() || reason.length() > 1000) {
+            throw new ComplianceException("INVALIDATION_REASON_REQUIRED", "Invalidation reason is required");
+        }
     }
 
     private String authContext(SignCommand c,ConsumedReauthentication r){
@@ -74,6 +128,24 @@ public class SignatureTransactionService {
         n.put("reauthenticatedAt",r.reauthenticatedAt().toString());n.put("sessionIdHash",sha(c.context().sessionId()));
         if(c.context().requestId()!=null)n.put("requestId",c.context().requestId());
         try{return json.writeValueAsString(n);}catch(JsonProcessingException e){throw new IllegalStateException(e);}
+    }
+    private Long resolveSupersededSignature(SignCommand command) {
+        if (command.revokedSignatureId() != null) {
+            SignatureRecord specified = signatures.find(command.context().organizationId(), command.revokedSignatureId());
+            if (specified.status() != SignatureStatus.INVALIDATED
+                || specified.meaning() != command.meaning()
+                || !specified.objectType().equals(command.objectType())
+                || !specified.objectId().equals(command.objectId())) {
+                throw new ResourceConflictException(
+                    "SIGNATURE_SUPERSEDED_MISMATCH", "Superseded signature does not match the signable object");
+            }
+            return specified.id();
+        }
+        return signatures.findLatest(command.context().organizationId(), command.objectType(), command.objectId(),
+                command.meaning())
+            .filter(signature -> signature.status() == SignatureStatus.INVALIDATED)
+            .map(SignatureRecord::id)
+            .orElse(null);
     }
     private String encode(SignatureResponseData v){
         var n=json.createObjectNode();n.put("id",v.id());n.put("signerId",v.signerId());n.put("meaning",v.meaning().name());
@@ -87,6 +159,11 @@ public class SignatureTransactionService {
         SignatureMeaning.valueOf(n.path("meaning").asText()),n.path("objectType").asText(),n.path("objectId").asText(),n.path("recordDigest").asText(),
         SignatureStatus.valueOf(n.path("status").asText()),Instant.parse(n.path("signedAt").asText()),n.path("revokedSignatureId").isNull()?null:n.path("revokedSignatureId").asText(),n.path("versionNo").asLong());
         }catch(Exception e){throw new IllegalStateException("Invalid replay",e);}}
+    private static String signatureStateDigest(SignatureStatus status, long version, Instant invalidatedAt,
+                                               String reason) {
+        return sha(status.name() + "|" + version + "|"
+            + (invalidatedAt == null ? "" : invalidatedAt) + "|" + (reason == null ? "" : reason));
+    }
     private static String sha(String v){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(v.getBytes(StandardCharsets.UTF_8)));}
         catch(java.security.NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}}
 }

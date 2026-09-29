@@ -40,7 +40,7 @@ class ReauthenticationContractTest {
         ConsumedReauthentication consumed = service.consume(challenge.token(), expected);
         assertThat(consumed.reauthenticatedAt()).isEqualTo(NOW);
         assertThatThrownBy(() -> service.consume(challenge.token(), expected))
-            .isInstanceOf(ReauthenticationFailedException.class);
+            .isInstanceOf(ReauthenticationTokenInvalidException.class);
     }
 
     private static final class MemoryTokenStore implements ReauthenticationTokenStore {

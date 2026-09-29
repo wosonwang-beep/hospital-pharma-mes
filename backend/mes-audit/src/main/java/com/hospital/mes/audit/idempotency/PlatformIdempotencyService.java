@@ -18,7 +18,6 @@ public class PlatformIdempotencyService {
     private final IdempotencyRepository repository;
     private final Clock clock;
 
-    public PlatformIdempotencyService(IdempotencyRepository repository) { this(repository, Clock.systemUTC()); }
     public PlatformIdempotencyService(IdempotencyRepository repository, Clock clock) {
         this.repository = repository; this.clock = clock;
     }

@@ -16,4 +16,3 @@ export interface ApiErrorBody {
 }
 
 export const http = axios.create({ baseURL: '/api/v1' })
-

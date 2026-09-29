@@ -17,6 +17,13 @@ public record InboxMessage(long id,long organizationId,long actorId,String sourc
         if(status!=InboxStatus.PROCESSING)invalid();int count=retryCount+1;
         if(count>=policy.maximumAttempts())return copy(InboxStatus.DEAD_LETTER,processedAt,count,null,code,message,versionNo+1,null);
         return copy(InboxStatus.RETRY_WAIT,processedAt,count,now.plus(policy.delayAfterFailure(count)),code,message,versionNo+1,null);}
+    public InboxMessage recoverAbandoned(Instant now, IntegrationRetryPolicy policy) {
+        if (status != InboxStatus.PROCESSING || claimedAt == null
+            || now.isBefore(claimedAt.plus(policy.claimTimeout()))) {
+            invalid();
+        }
+        return fail("CLAIM_ABANDONED", "Processing claim exceeded the controlled timeout", now, policy);
+    }
     public InboxMessage manualRetry(){if(status!=InboxStatus.RETRY_WAIT&&status!=InboxStatus.DEAD_LETTER)invalid();return copy(InboxStatus.RECEIVED,processedAt,retryCount,null,lastErrorCode,lastErrorMessage,versionNo+1,null);}
     private InboxMessage copy(InboxStatus s,Instant processed,int retry,Instant next,String code,String error,long version,Instant claimed){return new InboxMessage(id,organizationId,actorId,sourceSystem,messageId,payloadJson,s,receivedAt,processed,retry,next,code,error,version,claimed);}
     private static void invalid(){throw new StateTransitionException("INTEGRATION_STATE_INVALID","Integration inbox transition is not allowed");}

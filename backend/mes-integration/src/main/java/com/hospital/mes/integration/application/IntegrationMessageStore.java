@@ -9,8 +9,8 @@ public interface IntegrationMessageStore {
     InboxMessage findInbox(long organizationId,long id);
     OutboxMessage enqueue(OutboxMessage message);
     OutboxMessage findOutbox(long organizationId,long id);
-    boolean claimInbox(long organizationId,long id,long versionNo,Instant now);
-    boolean claimOutbox(long organizationId,long id,long versionNo,Instant now);
-    boolean saveInbox(InboxMessage message,long previousVersion);
-    boolean saveOutbox(OutboxMessage message,long previousVersion);
+    boolean claimInbox(long organizationId, long id, long versionNo, long actorId, Instant now);
+    boolean claimOutbox(long organizationId, long id, long versionNo, long actorId, Instant now);
+    boolean saveInbox(InboxMessage message, long previousVersion, long actorId, Instant now);
+    boolean saveOutbox(OutboxMessage message, long previousVersion, long actorId, Instant now);
 }

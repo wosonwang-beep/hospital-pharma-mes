@@ -15,7 +15,7 @@ public class ReauthenticationController {
     private final ReauthenticationPort service;private final CurrentPlatformContextResolver contexts;private final TraceIdProvider traces;
     public ReauthenticationController(ReauthenticationPort service,CurrentPlatformContextResolver contexts,TraceIdProvider traces){this.service=service;this.contexts=contexts;this.traces=traces;}
     @PostMapping("/reauth") @PreAuthorize("hasAuthority('ebr:sign')")
-    public ApiResponse<ReauthenticationResponse> reauthenticate(@RequestBody ReauthenticateForSignatureRequest request){
+    public ApiResponse<ReauthenticationResponse> reauthenticateForSignature(@RequestBody ReauthenticateForSignatureRequest request){
         var c=service.issue(new ReauthenticationRequest(request.getObjectType(),request.getObjectId(),request.getMeaning(),request.getRecordVersion(),request.getCredential()),contexts.current());
         return ApiResponse.success(new ReauthenticationResponse(c.token(),c.expiresAt()),traces.currentTraceId());
     }

@@ -11,6 +11,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import com.hospital.mes.security.reauth.ReauthenticationFailedException;
+import com.hospital.mes.security.reauth.ReauthenticationTokenInvalidException;
 
 @RestControllerAdvice(basePackageClasses = AuthController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -18,6 +20,19 @@ public class AuthExceptionAdvice {
     private final TraceIdProvider traces;
 
     public AuthExceptionAdvice(TraceIdProvider traces) { this.traces = traces; }
+
+    @ExceptionHandler(ReauthenticationTokenInvalidException.class)
+    ResponseEntity<ApiError> reauthenticationTokenInvalid(ReauthenticationTokenInvalidException ignored) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ApiError.of(traces.currentTraceId(), "REAUTH_TOKEN_INVALID",
+                "Reauthentication token is invalid"));
+    }
+
+    @ExceptionHandler(ReauthenticationFailedException.class)
+    ResponseEntity<ApiError> reauthenticationFailed(ReauthenticationFailedException ignored) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(ApiError.of(traces.currentTraceId(), "REAUTH_FAILED", "Reauthentication failed"));
+    }
 
     @ExceptionHandler(BadCredentialsException.class)
     ResponseEntity<ApiError> badCredentials(BadCredentialsException ignored) {

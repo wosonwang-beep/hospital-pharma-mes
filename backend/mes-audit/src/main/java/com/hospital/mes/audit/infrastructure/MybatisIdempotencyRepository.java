@@ -5,6 +5,7 @@ import com.hospital.mes.audit.idempotency.IdempotencyHandle;
 import com.hospital.mes.audit.idempotency.IdempotencyRecord;
 import com.hospital.mes.audit.idempotency.IdempotencyRepository;
 import com.hospital.mes.audit.idempotency.IdempotencyState;
+import java.time.Clock;
 import java.time.ZoneOffset;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.dao.DuplicateKeyException;
@@ -14,11 +15,15 @@ import org.springframework.stereotype.Repository;
 @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
 public class MybatisIdempotencyRepository implements IdempotencyRepository {
     private final IdempotencyMapper mapper;
-    public MybatisIdempotencyRepository(IdempotencyMapper mapper) { this.mapper = mapper; }
+    private final Clock clock;
+    public MybatisIdempotencyRepository(IdempotencyMapper mapper, Clock clock) {
+        this.mapper = mapper;
+        this.clock = clock;
+    }
 
     @Override public boolean claim(IdempotencyRecord r) {
         IdempotencyEntity e = new IdempotencyEntity();
-        var now = java.time.LocalDateTime.now(ZoneOffset.UTC);
+        var now = clock.instant().atOffset(ZoneOffset.UTC).toLocalDateTime();
         e.setOrgId(r.organizationId()); e.setCreatedBy(r.actorId()); e.setCreatedAt(now);
         e.setUpdatedBy(r.actorId()); e.setUpdatedAt(now); e.setVersionNo(0L); e.setActorId(r.actorId());
         e.setOperationCode(r.operationCode()); e.setIdempotencyKey(r.idempotencyKey());
