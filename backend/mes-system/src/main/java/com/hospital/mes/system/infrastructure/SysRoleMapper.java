@@ -24,6 +24,21 @@ public interface SysRoleMapper extends BaseMapper<SysRoleEntity> {
     int updateEnabled(@Param("id") long id, @Param("version") long version,
                       @Param("enabled") boolean enabled, @Param("actorId") long actorId);
 
+    @Update("""
+        UPDATE sys_role SET display_name = #{displayName}, enabled = #{enabled},
+          version = version + 1, updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int updateContract(@Param("id") long id, @Param("version") long version,
+                       @Param("displayName") String displayName, @Param("enabled") boolean enabled,
+                       @Param("actorId") long actorId);
+
+    @Update("""
+        UPDATE sys_role SET version = version + 1, updated_at = CURRENT_TIMESTAMP(6), updated_by = #{actorId}
+        WHERE id = #{id} AND version = #{version}
+        """)
+    int touchVersion(@Param("id") long id, @Param("version") long version, @Param("actorId") long actorId);
+
     @Select("SELECT id FROM sys_role WHERE role_code = 'SYSTEM_ADMIN' FOR UPDATE")
     Long lockAdministratorRole();
 

@@ -81,6 +81,18 @@ class IamSchemaIT {
     }
 
     @Test
+    void systemAdministratorReceivesFrozenIamNavigation() {
+        List<String> routes = jdbc.queryForList("""
+            SELECT m.route_path FROM sys_menu m
+            JOIN sys_role_menu rm ON rm.menu_id = m.id
+            JOIN sys_role r ON r.id = rm.role_id
+            WHERE r.role_code = 'SYSTEM_ADMIN' AND m.status = 'ACTIVE'
+            ORDER BY m.sort_no
+            """, String.class);
+        assertThat(routes).containsExactly("/admin/users", "/admin/roles");
+    }
+
+    @Test
     void migrationNeverSeedsAnAccount() {
         Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM sys_user", Integer.class);
         assertThat(count).isZero();

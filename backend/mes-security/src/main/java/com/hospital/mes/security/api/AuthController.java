@@ -8,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.time.Duration;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -34,6 +35,15 @@ public class AuthController {
     public record LoginRequest(String loginName, String password) {}
     public record PasswordChangeRequest(String oldPassword, String newPassword) {}
     public record TokenResponse(String accessToken, int expiresInSeconds) {}
+    public record CurrentUserResponse(String userId, String organizationId, String loginName,
+                                      String displayName, Set<String> roleCodes,
+                                      Set<String> permissionCodes, boolean mustChangePassword) {
+        static CurrentUserResponse from(LoginSnapshot value) {
+            return new CurrentUserResponse(Long.toString(value.userId()), Long.toString(value.organizationId()),
+                value.loginName(), value.displayName(), value.roleCodes(), value.permissionCodes(),
+                value.mustChangePassword());
+        }
+    }
 
     private final AuthService auth;
     private final TraceIdProvider traces;
@@ -71,8 +81,9 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ApiResponse<LoginSnapshot> me(Authentication authentication) {
-        return ApiResponse.success((LoginSnapshot) authentication.getPrincipal(), traces.currentTraceId());
+    public ApiResponse<CurrentUserResponse> me(Authentication authentication) {
+        return ApiResponse.success(CurrentUserResponse.from((LoginSnapshot) authentication.getPrincipal()),
+            traces.currentTraceId());
     }
 
     @PostMapping("/change-password")

@@ -13,6 +13,7 @@ public class SysPermissionEntity {
     private String menuRoute;
     private Long parentPermissionId;
     private Boolean enabled;
+    private Long version;
 
     public Long getId() { return id; }
     public void setId(Long value) { id = value; }
@@ -28,4 +29,6 @@ public class SysPermissionEntity {
     public void setParentPermissionId(Long value) { parentPermissionId = value; }
     public Boolean getEnabled() { return enabled; }
     public void setEnabled(Boolean value) { enabled = value; }
+    public Long getVersion() { return version; }
+    public void setVersion(Long value) { version = value; }
 }

@@ -78,6 +78,13 @@ INSERT INTO sys_permission (permission_code, permission_type, display_name, enab
 SELECT 'iam:menu:update', 'ACTION', 'Update menus', TRUE
 WHERE NOT EXISTS (SELECT 1 FROM sys_permission WHERE permission_code = 'iam:menu:update');
 
+INSERT INTO sys_menu (org_id, parent_id, menu_code, menu_name, route_path, sort_no, status, created_by, updated_by)
+SELECT 1, NULL, 'iam:user:view', 'User administration', '/admin/users', 100, 'ACTIVE', 1, 1
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE org_id = 1 AND menu_code = 'iam:user:view');
+INSERT INTO sys_menu (org_id, parent_id, menu_code, menu_name, route_path, sort_no, status, created_by, updated_by)
+SELECT 1, NULL, 'iam:role:view', 'Role administration', '/admin/roles', 110, 'ACTIVE', 1, 1
+WHERE NOT EXISTS (SELECT 1 FROM sys_menu WHERE org_id = 1 AND menu_code = 'iam:role:view');
+
 INSERT INTO sys_role_permission (role_id, permission_id)
 SELECT r.id, p.id
 FROM sys_role r
@@ -91,4 +98,13 @@ WHERE r.role_code = 'SYSTEM_ADMIN'
   AND NOT EXISTS (
       SELECT 1 FROM sys_role_permission rp
       WHERE rp.role_id = r.id AND rp.permission_id = p.id
+  );
+
+INSERT INTO sys_role_menu (org_id, role_id, menu_id, created_by)
+SELECT m.org_id, r.id, m.id, 1
+FROM sys_role r
+JOIN sys_menu m ON m.org_id = 1 AND m.menu_code IN ('iam:user:view', 'iam:role:view')
+WHERE r.role_code = 'SYSTEM_ADMIN'
+  AND NOT EXISTS (
+      SELECT 1 FROM sys_role_menu rm WHERE rm.role_id = r.id AND rm.menu_id = m.id
   );
