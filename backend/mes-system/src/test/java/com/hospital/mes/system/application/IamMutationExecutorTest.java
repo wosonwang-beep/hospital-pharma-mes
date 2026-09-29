@@ -60,6 +60,21 @@ class IamMutationExecutorTest {
             "createUsers", "key-1", new Request("alice"), "USER", () -> new Result("11"), Result::id));
     }
 
+    @Test
+    void returnsSensitiveOwnerResponseButPersistsOnlySanitizedReplay() {
+        when(idempotency.begin(any())).thenReturn(IdempotencyDecision.owner(new IdempotencyHandle(4, 0)));
+        IamMutationExecutor executor = new IamMutationExecutor(idempotency, json);
+
+        var result = executor.execute(context, "createUsers", "key-2", new Request("alice"),
+            "USER", () -> new SensitiveResult("11", "one-time-secret"), SensitiveResult::id,
+            value -> new SensitiveResult(value.id(), null));
+
+        assertThat(result.path("secret").asText()).isEqualTo("one-time-secret");
+        verify(idempotency).complete(new IdempotencyHandle(4, 0), 200,
+            "{\"id\":\"11\",\"secret\":null}", "USER", "11");
+    }
+
     private record Request(String loginName) { }
     private record Result(String id) { }
+    private record SensitiveResult(String id, String secret) { }
 }

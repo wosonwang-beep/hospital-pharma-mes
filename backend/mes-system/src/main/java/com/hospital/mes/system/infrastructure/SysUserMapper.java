@@ -86,4 +86,10 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
         WHERE id = #{id} AND version = #{version}
         """)
     int touchVersion(@Param("id") long id, @Param("version") long version, @Param("actorId") long actorId);
+
+    @Select("""
+        SELECT MAX(occurred_at) FROM sys_security_event
+        WHERE event_type = 'LOGIN' AND outcome = 'SUCCESS' AND target_user_id = #{userId}
+        """)
+    LocalDateTime lastSuccessfulLoginAt(@Param("userId") long userId);
 }

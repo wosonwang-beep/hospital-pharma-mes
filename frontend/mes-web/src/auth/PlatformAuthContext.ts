@@ -7,19 +7,7 @@ export interface PlatformAuthSnapshot {
   permissions: string[]
 }
 
-declare global {
-  interface Window {
-    __MES_PLATFORM_AUTH_CONTEXT__?: PlatformAuthSnapshot
-  }
-}
-
-export function injectedPlatformAuthSnapshot(): PlatformAuthSnapshot | null {
-  const value = window.__MES_PLATFORM_AUTH_CONTEXT__
-  if (!value || !Array.isArray(value.permissions)) return null
-  return { userId: value.userId, organizationId: value.organizationId, permissions: [...value.permissions] }
-}
-
-/** MES-001 boundary only. MES-002 owns populating this context from the real login lifecycle. */
+/** Compatibility adapter for MES-001 views; MES-002 populates it only from the authenticated identity. */
 export const usePlatformAuthContext = defineStore('platform-authorization', () => {
   const snapshot = ref<PlatformAuthSnapshot | null>(null)
   const permissions = computed(() => new Set(snapshot.value?.permissions ?? []))

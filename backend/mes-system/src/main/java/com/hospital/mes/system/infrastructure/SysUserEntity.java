@@ -18,6 +18,7 @@ public class SysUserEntity {
     private LocalDateTime lockedUntil;
     private Boolean mustChangePassword;
     private Long version;
+    private LocalDateTime updatedAt;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -39,4 +40,6 @@ public class SysUserEntity {
     public void setMustChangePassword(Boolean value) { this.mustChangePassword = value; }
     public Long getVersion() { return version; }
     public void setVersion(Long value) { this.version = value; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime value) { updatedAt = value; }
 }

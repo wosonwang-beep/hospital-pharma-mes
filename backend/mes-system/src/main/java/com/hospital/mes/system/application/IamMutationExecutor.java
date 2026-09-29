@@ -31,6 +31,16 @@ public class IamMutationExecutor {
                                 String idempotencyKey, Object canonicalRequest,
                                 String resourceType, Supplier<T> work,
                                 Function<T, String> resourceId) {
+        return execute(context, operationCode, idempotencyKey, canonicalRequest, resourceType,
+            work, resourceId, Function.identity());
+    }
+
+    @Transactional
+    public <T> JsonNode execute(CurrentPlatformContext context, String operationCode,
+                                String idempotencyKey, Object canonicalRequest,
+                                String resourceType, Supplier<T> work,
+                                Function<T, String> resourceId,
+                                Function<T, ?> storedReplay) {
         String requestJson = write(canonicalRequest);
         IdempotencyDecision decision = idempotency.begin(new IdempotencyCommand(
             context.organizationId(), context.actorId(), operationCode, idempotencyKey, requestJson));
@@ -45,9 +55,10 @@ public class IamMutationExecutor {
         if (decision.type() == IdempotencyDecisionType.REPLAY) return read(decision.responseJson());
 
         T result = work.get();
-        String responseJson = write(result);
-        idempotency.complete(decision.handle(), 200, responseJson, resourceType, resourceId.apply(result));
-        return read(responseJson);
+        String ownerResponseJson = write(result);
+        String replayResponseJson = write(storedReplay.apply(result));
+        idempotency.complete(decision.handle(), 200, replayResponseJson, resourceType, resourceId.apply(result));
+        return read(ownerResponseJson);
     }
 
     private String write(Object value) {

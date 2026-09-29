@@ -34,14 +34,15 @@ public class IamContractService {
     public record CreateUserRequest(String username, String displayName, List<String> roleIds, String reason) { }
     public record UpdateUserRequest(String displayName, String status, String reason) { }
     public record AssignUserRolesRequest(List<String> roleIds, String reason) { }
-    public record UserView(String id, String username, String displayName, String status,
-                           long version, List<String> roleIds) { }
-    public record CreatedUserView(UserView user, String temporaryPassword) { }
+    public record IamUserResponse(String id, String username, String displayName, String status,
+                           long version, List<String> roleIds, List<String> roleNames,
+                           String lastLoginAt, String updatedAt) { }
+    public record CreatedUserView(IamUserResponse user, String temporaryPassword) { }
 
     public record CreateRoleRequest(String roleCode, String roleName, String reason) { }
     public record UpdateRoleRequest(String roleName, String status, String reason) { }
     public record AssignRolePermissionsRequest(List<String> permissionCodes, String reason) { }
-    public record RoleView(String id, String roleCode, String roleName, String status,
+    public record IamRoleResponse(String id, String roleCode, String roleName, String status,
                            long version, List<String> permissionCodes, List<String> menuCodes) { }
 
     public record CreatePermissionRequest(String permissionCode, String permissionName,
@@ -49,14 +50,14 @@ public class IamContractService {
                                           String reason) { }
     public record UpdatePermissionRequest(String permissionName, String permissionType,
                                           String routePath, String status, String reason) { }
-    public record PermissionView(String id, String permissionCode, String permissionName,
+    public record IamPermissionResponse(String id, String permissionCode, String permissionName,
                                  String permissionType, String routePath, String status, long version) { }
 
     public record CreateMenuRequest(String menuCode, String menuName, String routePath,
                                     String parentId, Integer sortNo, String status, String reason) { }
     public record UpdateMenuRequest(String menuName, String routePath, String parentId,
                                     Integer sortNo, String status, String reason) { }
-    public record MenuView(String id, String menuCode, String menuName, String routePath,
+    public record IamMenuResponse(String id, String menuCode, String menuName, String routePath,
                            String parentId, int sortNo, String status, long version) { }
 
     private final SysUserMapper users;
@@ -83,12 +84,16 @@ public class IamContractService {
     }
 
     @Transactional(readOnly = true)
-    public PageResult<UserView> listUsers(int page, int size, String keyword, String status) {
+    public PageResult<IamUserResponse> listUsers(int page, int size, String keyword, String status, String roleId) {
         page(page, size);
+        Long selectedRole = optionalId(roleId);
         LambdaQueryWrapper<SysUserEntity> query = new LambdaQueryWrapper<SysUserEntity>()
             .and(text(keyword) != null, q -> q.like(SysUserEntity::getLoginName, text(keyword))
                 .or().like(SysUserEntity::getDisplayName, text(keyword)))
             .eq(status(status) != null, SysUserEntity::getEnabled, enabled(status))
+            .inSql(selectedRole != null, SysUserEntity::getId,
+                selectedRole == null ? "SELECT user_id FROM sys_user_role WHERE 1=0"
+                    : "SELECT user_id FROM sys_user_role WHERE role_id = " + selectedRole)
             .orderByAsc(SysUserEntity::getId);
         long total = users.selectCount(query);
         query.last("LIMIT " + size + " OFFSET " + Math.multiplyExact((long) page, size));
@@ -96,7 +101,7 @@ public class IamContractService {
     }
 
     @Transactional(readOnly = true)
-    public UserView getUser(long id) { return userView(requireUser(id)); }
+    public IamUserResponse getUser(long id) { return userView(requireUser(id)); }
 
     @Transactional
     public CreatedUserView createUser(CreateUserRequest request, CurrentPlatformContext context, String key) {
@@ -107,16 +112,16 @@ public class IamContractService {
             requireRole(roleId);
             userRoles.grant(created.user().id(), roleId);
         }
-        UserView view = userView(requireUser(created.user().id()));
+        IamUserResponse view = userView(requireUser(created.user().id()));
         audit.append(context, "IAM_USER_CREATED", "USER", view.id(), null, view, request.reason(), key);
         return new CreatedUserView(view, created.temporaryPassword());
     }
 
     @Transactional
-    public UserView updateUser(long id, long version, UpdateUserRequest request,
+    public IamUserResponse updateUser(long id, long version, UpdateUserRequest request,
                                CurrentPlatformContext context, String key) {
         require(request, "User request is required");
-        UserView before = getUser(id);
+        IamUserResponse before = getUser(id);
         String displayName = requiredText(request.displayName(), 128);
         boolean enabled = enabledRequired(request.status());
         Runnable update = () -> {
@@ -124,16 +129,16 @@ public class IamContractService {
         };
         if (!enabled) safety.runPreservingEffectiveAdmin(update); else update.run();
         if (!enabled) sessions.revokeAllForUser(id);
-        UserView after = getUser(id);
+        IamUserResponse after = getUser(id);
         audit.append(context, "IAM_USER_UPDATED", "USER", after.id(), before, after, request.reason(), key);
         return after;
     }
 
     @Transactional
-    public UserView assignUserRoles(long id, long version, AssignUserRolesRequest request,
+    public IamUserResponse assignUserRoles(long id, long version, AssignUserRolesRequest request,
                                     CurrentPlatformContext context, String key) {
         require(request, "Role assignment is required");
-        UserView before = getUser(id);
+        IamUserResponse before = getUser(id);
         Set<Long> roleIds = ids(request.roleIds());
         roleIds.forEach(this::requireRole);
         safety.runPreservingEffectiveAdmin(() -> {
@@ -141,13 +146,13 @@ public class IamContractService {
             userRoles.deleteForUser(id);
             roleIds.forEach(roleId -> userRoles.grant(id, roleId));
         });
-        UserView after = getUser(id);
+        IamUserResponse after = getUser(id);
         audit.append(context, "IAM_USER_ROLES_ASSIGNED", "USER", after.id(), before, after, request.reason(), key);
         return after;
     }
 
     @Transactional(readOnly = true)
-    public PageResult<RoleView> listRoles(int page, int size, String keyword, String status) {
+    public PageResult<IamRoleResponse> listRoles(int page, int size, String keyword, String status) {
         page(page, size);
         LambdaQueryWrapper<SysRoleEntity> query = new LambdaQueryWrapper<SysRoleEntity>()
             .and(text(keyword) != null, q -> q.like(SysRoleEntity::getRoleCode, text(keyword))
@@ -160,10 +165,10 @@ public class IamContractService {
     }
 
     @Transactional(readOnly = true)
-    public RoleView getRole(long id) { return roleView(requireRole(id)); }
+    public IamRoleResponse getRole(long id) { return roleView(requireRole(id)); }
 
     @Transactional
-    public RoleView createRole(CreateRoleRequest request, CurrentPlatformContext context, String key) {
+    public IamRoleResponse createRole(CreateRoleRequest request, CurrentPlatformContext context, String key) {
         require(request, "Role request is required");
         if (request.roleCode() == null || !ROLE_CODE.matcher(request.roleCode()).matches())
             throw new IllegalArgumentException("Invalid role code");
@@ -171,32 +176,32 @@ public class IamContractService {
         role.setRoleCode(request.roleCode()); role.setDisplayName(requiredText(request.roleName(), 128));
         role.setEnabled(true); role.setVersion(0L);
         roles.insert(role);
-        RoleView view = roleView(role);
+        IamRoleResponse view = roleView(role);
         audit.append(context, "IAM_ROLE_CREATED", "ROLE", view.id(), null, view, request.reason(), key);
         return view;
     }
 
     @Transactional
-    public RoleView updateRole(long id, long version, UpdateRoleRequest request,
+    public IamRoleResponse updateRole(long id, long version, UpdateRoleRequest request,
                                CurrentPlatformContext context, String key) {
         require(request, "Role request is required");
-        RoleView before = getRole(id);
+        IamRoleResponse before = getRole(id);
         boolean enabled = enabledRequired(request.status());
         Runnable update = () -> {
             if (roles.updateContract(id, version, requiredText(request.roleName(), 128), enabled,
                 context.actorId()) != 1) throw conflict();
         };
         if (!enabled) safety.runPreservingEffectiveAdmin(update); else update.run();
-        RoleView after = getRole(id);
+        IamRoleResponse after = getRole(id);
         audit.append(context, "IAM_ROLE_UPDATED", "ROLE", after.id(), before, after, request.reason(), key);
         return after;
     }
 
     @Transactional
-    public RoleView assignRolePermissions(long id, long version, AssignRolePermissionsRequest request,
+    public IamRoleResponse assignRolePermissions(long id, long version, AssignRolePermissionsRequest request,
                                           CurrentPlatformContext context, String key) {
         require(request, "Permission assignment is required");
-        RoleView before = getRole(id);
+        IamRoleResponse before = getRole(id);
         Set<String> codes = strings(request.permissionCodes(), 160);
         codes.forEach(this::requirePermission);
         safety.runPreservingEffectiveAdmin(() -> {
@@ -212,14 +217,14 @@ public class IamContractService {
                 }
             });
         });
-        RoleView after = getRole(id);
+        IamRoleResponse after = getRole(id);
         audit.append(context, "IAM_ROLE_PERMISSIONS_ASSIGNED", "ROLE", after.id(), before, after,
             request.reason(), key);
         return after;
     }
 
     @Transactional(readOnly = true)
-    public PageResult<PermissionView> listPermissions(int page, int size, String keyword, String status) {
+    public PageResult<IamPermissionResponse> listPermissions(int page, int size, String keyword, String status) {
         page(page, size);
         LambdaQueryWrapper<SysPermissionEntity> query = new LambdaQueryWrapper<SysPermissionEntity>()
             .and(text(keyword) != null, q -> q.like(SysPermissionEntity::getPermissionCode, text(keyword))
@@ -232,10 +237,10 @@ public class IamContractService {
     }
 
     @Transactional(readOnly = true)
-    public PermissionView getPermission(long id) { return permissionView(requirePermission(id)); }
+    public IamPermissionResponse getPermission(long id) { return permissionView(requirePermission(id)); }
 
     @Transactional
-    public PermissionView createPermission(CreatePermissionRequest request, CurrentPlatformContext context, String key) {
+    public IamPermissionResponse createPermission(CreatePermissionRequest request, CurrentPlatformContext context, String key) {
         require(request, "Permission request is required");
         validatePermissionCode(request.permissionCode());
         SysPermissionEntity permission = new SysPermissionEntity();
@@ -245,27 +250,27 @@ public class IamContractService {
         permission.setMenuRoute(route(request.routePath()));
         permission.setEnabled(enabledRequired(request.status())); permission.setVersion(0L);
         permissions.insert(permission);
-        PermissionView view = permissionView(permission);
+        IamPermissionResponse view = permissionView(permission);
         audit.append(context, "IAM_PERMISSION_CREATED", "PERMISSION", view.id(), null, view, request.reason(), key);
         return view;
     }
 
     @Transactional
-    public PermissionView updatePermission(long id, long version, UpdatePermissionRequest request,
+    public IamPermissionResponse updatePermission(long id, long version, UpdatePermissionRequest request,
                                            CurrentPlatformContext context, String key) {
         require(request, "Permission request is required");
-        PermissionView before = getPermission(id);
+        IamPermissionResponse before = getPermission(id);
         if (permissions.updateContract(id, version, permissionType(request.permissionType()),
             requiredText(request.permissionName(), 128), route(request.routePath()), null,
             enabledRequired(request.status())) != 1) throw conflict();
-        PermissionView after = getPermission(id);
+        IamPermissionResponse after = getPermission(id);
         audit.append(context, "IAM_PERMISSION_UPDATED", "PERMISSION", after.id(), before, after,
             request.reason(), key);
         return after;
     }
 
     @Transactional(readOnly = true)
-    public PageResult<MenuView> listMenus(int page, int size, String keyword, String status, long orgId) {
+    public PageResult<IamMenuResponse> listMenus(int page, int size, String keyword, String status, long orgId) {
         page(page, size);
         LambdaQueryWrapper<SysMenuEntity> query = new LambdaQueryWrapper<SysMenuEntity>()
             .eq(SysMenuEntity::getOrgId, orgId)
@@ -279,10 +284,10 @@ public class IamContractService {
     }
 
     @Transactional(readOnly = true)
-    public MenuView getMenu(long id, long orgId) { return menuView(requireMenu(id, orgId)); }
+    public IamMenuResponse getMenu(long id, long orgId) { return menuView(requireMenu(id, orgId)); }
 
     @Transactional
-    public MenuView createMenu(CreateMenuRequest request, CurrentPlatformContext context, String key) {
+    public IamMenuResponse createMenu(CreateMenuRequest request, CurrentPlatformContext context, String key) {
         require(request, "Menu request is required");
         SysMenuEntity menu = new SysMenuEntity();
         menu.setOrgId(context.organizationId()); menu.setParentId(optionalId(request.parentId()));
@@ -292,43 +297,45 @@ public class IamContractService {
         menu.setStatus(statusRequired(request.status())); menu.setCreatedBy(context.actorId());
         menu.setUpdatedBy(context.actorId()); menu.setVersionNo(0L);
         menus.insert(menu);
-        MenuView view = menuView(menu);
+        IamMenuResponse view = menuView(menu);
         audit.append(context, "IAM_MENU_CREATED", "MENU", view.id(), null, view, request.reason(), key);
         return view;
     }
 
     @Transactional
-    public MenuView updateMenu(long id, long version, UpdateMenuRequest request,
+    public IamMenuResponse updateMenu(long id, long version, UpdateMenuRequest request,
                                CurrentPlatformContext context, String key) {
         require(request, "Menu request is required");
-        MenuView before = getMenu(id, context.organizationId());
+        IamMenuResponse before = getMenu(id, context.organizationId());
         Long parentId = optionalId(request.parentId());
         validateParent(parentId, context.organizationId(), id);
         if (menus.updateContract(id, context.organizationId(), version, parentId,
             requiredText(request.menuName(), 100), route(request.routePath()), sort(request.sortNo()),
             statusRequired(request.status()), context.actorId()) != 1) throw conflict();
-        MenuView after = getMenu(id, context.organizationId());
+        IamMenuResponse after = getMenu(id, context.organizationId());
         audit.append(context, "IAM_MENU_UPDATED", "MENU", after.id(), before, after, request.reason(), key);
         return after;
     }
 
-    private UserView userView(SysUserEntity user) {
-        return new UserView(Long.toString(user.getId()), user.getLoginName(), user.getDisplayName(),
+    private IamUserResponse userView(SysUserEntity user) {
+        return new IamUserResponse(Long.toString(user.getId()), user.getLoginName(), user.getDisplayName(),
             state(Boolean.TRUE.equals(user.getEnabled())), value(user.getVersion()),
-            userRoles.activeRoleIds(user.getId()).stream().map(String::valueOf).toList());
+            userRoles.activeRoleIds(user.getId()).stream().map(String::valueOf).toList(),
+            userRoles.activeRoleNames(user.getId()), time(users.lastSuccessfulLoginAt(user.getId())),
+            time(user.getUpdatedAt()));
     }
-    private RoleView roleView(SysRoleEntity role) {
-        return new RoleView(Long.toString(role.getId()), role.getRoleCode(), role.getDisplayName(),
+    private IamRoleResponse roleView(SysRoleEntity role) {
+        return new IamRoleResponse(Long.toString(role.getId()), role.getRoleCode(), role.getDisplayName(),
             state(Boolean.TRUE.equals(role.getEnabled())), value(role.getVersion()),
             rolePermissions.permissionCodes(role.getId()), roleMenus.menuCodes(role.getId()));
     }
-    private PermissionView permissionView(SysPermissionEntity permission) {
-        return new PermissionView(Long.toString(permission.getId()), permission.getPermissionCode(),
+    private IamPermissionResponse permissionView(SysPermissionEntity permission) {
+        return new IamPermissionResponse(Long.toString(permission.getId()), permission.getPermissionCode(),
             permission.getDisplayName(), permission.getPermissionType(), permission.getMenuRoute(),
             state(Boolean.TRUE.equals(permission.getEnabled())), value(permission.getVersion()));
     }
-    private static MenuView menuView(SysMenuEntity menu) {
-        return new MenuView(Long.toString(menu.getId()), menu.getMenuCode(), menu.getMenuName(),
+    private static IamMenuResponse menuView(SysMenuEntity menu) {
+        return new IamMenuResponse(Long.toString(menu.getId()), menu.getMenuCode(), menu.getMenuName(),
             menu.getRoutePath(), menu.getParentId() == null ? null : Long.toString(menu.getParentId()),
             menu.getSortNo(), menu.getStatus(), value(menu.getVersionNo()));
     }
@@ -419,6 +426,7 @@ public class IamContractService {
     }
     private static int sort(Integer value) { if (value == null || value < 0) throw new IllegalArgumentException("Invalid sort number"); return value; }
     private static long value(Long value) { return value == null ? 0 : value; }
+    private static String time(java.time.LocalDateTime value) { return value == null ? null : value.toString(); }
     private static ResourceConflictException conflict() {
         return new ResourceConflictException("IAM_CONFLICT", "IAM resource conflicts with current state");
     }

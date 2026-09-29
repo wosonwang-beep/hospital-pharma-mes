@@ -17,7 +17,7 @@ export interface ApiErrorBody {
 
 export interface Page<T> { items: T[]; total: number; page: number; size: number }
 export interface Identity { userId: string; organizationId: string; loginName: string; displayName: string; roleCodes: string[]; permissionCodes: string[]; mustChangePassword: boolean }
-export interface User { id: string; username: string; displayName: string; status: 'ACTIVE' | 'INACTIVE'; version: number; roleIds: string[] }
+export interface User { id: string; username: string; displayName: string; status: 'ACTIVE' | 'INACTIVE'; version: number; roleIds: string[]; roleNames: string[]; lastLoginAt?: string; updatedAt: string }
 export interface Role { id: string; roleCode: string; roleName: string; status: 'ACTIVE' | 'INACTIVE'; version: number; permissionCodes: string[]; menuCodes: string[] }
 export interface Permission { id: string; permissionCode: string; permissionName: string; permissionType: 'MENU' | 'ACTION'; routePath?: string; status: string; version: number }
 

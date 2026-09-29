@@ -43,8 +43,20 @@ async function logout() { await auth.logout(); await router.replace('/login') }
       </a-menu>
     </a-layout-sider>
     <a-layout class="main-shell" :class="{ 'main-shell-collapsed': collapsed }">
-      <a-layout-header class="header">
+      <a-layout-header class="header" :class="{ 'header-collapsed': collapsed }">
         <div class="header-title">
+          <a-dropdown placement="bottomLeft" class="mobile-navigation">
+            <a-button type="text" aria-label="打开导航"><AppstoreOutlined /></a-button>
+            <template #overlay>
+              <a-menu @click="navigate">
+                <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
+                <a-menu-item v-if="auth.can('iam:user:view')" key="users"><UserOutlined />用户管理</a-menu-item>
+                <a-menu-item v-if="auth.can('iam:role:view')" key="roles"><AppstoreOutlined />角色与权限</a-menu-item>
+                <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
+                <a-menu-item v-if="authorization.can('integration:view')" key="integration-operations"><DesktopOutlined />Integration Operations</a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
           <a-button type="text" class="sidebar-trigger" :aria-label="collapsed ? '展开侧栏' : '折叠侧栏'" :aria-expanded="!collapsed" @click="collapsed = !collapsed">
             <MenuUnfoldOutlined v-if="collapsed" />
             <MenuFoldOutlined v-else />
