@@ -1,0 +1,94 @@
+# MES-002-R2 Acceptance Readiness Record
+
+## Status
+
+`MES-002-R2 = READY FOR ACCEPTANCE`
+
+- Readiness date: 2026-09-29 (Asia/Shanghai)
+- Scope: MES-002-R2 only; MES-003 not started
+- Branch: `codex/mes-002-r2`
+- Verified implementation checkpoint: `aed632a`
+- Baseline: `FINAL BASELINE COMPLETE v1.0.1`
+- Design trace: `DCP-MES-001-R2-001`
+- Upstream dependency: `MES-001-R2 = ACCEPTED`
+
+This record reports implementation readiness. It does not mark MES-002-R2 as human accepted.
+
+## Implementation Summary
+
+- Added physical Flyway V005 for the frozen RBAC contract: `sys_menu`, `sys_role_menu`, permission optimistic versioning, the 12 official `iam:*` permissions, and the two frozen IAM menu routes.
+- Preserved the accepted JWT/Redis session implementation and completed login, renewal, logout, password-change, session-revocation, and current-user identity flow.
+- Implemented frozen `/api/v1/users`, `/roles`, `/permissions`, and `/menus` query and mutation contracts with string IDs, quoted `If-Match`, optimistic locking, last-effective-administrator protection, and official permission enforcement.
+- Routed IAM mutations through platform idempotency and GxP AuditEvent in the same MariaDB transaction. One-time temporary passwords are returned only to the owning request and are not persisted in the idempotency replay record.
+- Added the frozen user/role query, create, view, and edit routes. Permission/menu assignment remains inside role detail/edit. Query state is retained in the URL and across navigation.
+- Added permission-filtered desktop and mobile navigation while retaining `/audit` and `/integration/operations`; `/platform/operations` and `PLAT-001` were not introduced.
+- Completed frozen user-list columns and controls, including role filter/display, last successful login, updated time, pagination, and sorting.
+- Retained existing `/api/v1/admin/**` endpoints only as compatibility surfaces; no MES-003 capability was implemented.
+
+## Migration Status
+
+| Check | Result |
+|---|---|
+| Physical history | V001, V002, V003, V004, V005; all successful |
+| V001/V002 history | Unmodified relative to MES-001 acceptance checkpoint |
+| V005 | Applied and validated on MariaDB 11.8 |
+| Official IAM permissions | 12 rows present |
+| Frozen IAM menus | 2 rows present; both linked to `SYSTEM_ADMIN` |
+| V001 SHA-256 | `0C9EFA2411A7ED5E6C87A3F2F036B6A960B812DED1AAC8F6DF894438E90C0EFD` |
+| V002 SHA-256 | `8E2E2B68BE8C9CDBFA7EBE08804509C62E43826845C16E5B7991EC719802C43A` |
+| V005 SHA-256 | `EF10E5B6E26BF1607551936B5D9D2C0C505D725F234EC5D86EB1A401C1E1860D` |
+
+## Test Report
+
+| Verification | Result |
+|---|---|
+| Targeted backend unit tests | 21 passed; 0 failures/errors/skips |
+| MES-002 migration contract tests | 2 passed; 0 failures/errors/skips |
+| Required and affected integration regression | 70 passed; 0 failures/errors/skips |
+| Final MES-002/IAM schema/MES-001 authorization recheck | PASS |
+| TC-IAM-001 through TC-IAM-004 | PASS |
+| Runtime OpenAPI operation/schema/header checks | PASS |
+| Idempotency, optimistic concurrency, audit, permission/menu and role assignment checks | PASS |
+| Frontend unit tests | 15 passed in 5 files |
+| TypeScript typecheck | PASS |
+| Production frontend build | PASS |
+| Production dependency audit | 0 vulnerabilities |
+| Playwright desktop/mobile checks | 4 passed; permission navigation, route guards, independent CRUD routes, URL query retention and frozen platform routes verified |
+| Source boundary scan | No MES-003 implementation; removed route/code absent except negative contract assertions |
+
+Browser verification used Playwright because no Browser plugin was available. Frontend browser tests mock the HTTP boundary; the matching backend HTTP contracts are independently exercised against real MariaDB and Redis.
+
+## Code Review Result
+
+| Severity | Remaining |
+|---|---:|
+| CRITICAL | 0 |
+| HIGH | 0 |
+| MEDIUM | 2 |
+| LOW | 4 |
+
+The review/fix cycle closed the material findings found during implementation: persistence of a one-time temporary password in idempotency data, Springdoc component-name collisions, production-only injected authorization bootstrap, incomplete frozen user-list fields/query persistence, missing assignment concurrency coverage, and unusable mobile navigation.
+
+Review was performed as an evidence-based self-review because the current execution policy did not authorize a separate review agent.
+
+## Remaining Technical Debt
+
+### MEDIUM
+
+1. User list enrichment currently performs bounded per-user role/last-login reads after the page query. Page size is capped at 100; optimize to a dedicated aggregation query only if measured latency requires it.
+2. Browser E2E uses a mocked HTTP boundary. Real backend contract, database, Redis, security and migration behavior are covered separately by integration tests; a single live-stack browser suite can be added under a future CI-contract task.
+
+### LOW
+
+1. The production frontend emits a roughly 1.62 MB main chunk and Vite's chunk-size warning; route/vendor code splitting remains an optimization task.
+2. Mockito currently self-attaches its inline mock agent and warns that future JDK releases will disable dynamic agent loading by default.
+3. The test database is MariaDB 11.8 while the pinned Flyway release reports tested support through MariaDB 11.2; migration execution and validation nevertheless pass.
+4. The early `/api/v1/admin/**` compatibility endpoints and legacy permission codes remain alongside frozen contracts until consumers are formally migrated.
+
+## Checkpoints
+
+- `4846d3b` — internal MES-002 implementation plan
+- `717dd78` — V005 RBAC migration contract
+- `e428857` — backend frozen IAM contracts
+- `75b7c8a` — frontend identity administration UI
+- `aed632a` — automatic review fixes and final verified business-code checkpoint
