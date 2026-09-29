@@ -18,8 +18,8 @@ Frontend IAM screens, complete GMP audit trails and electronic signatures, maste
 Prerequisites: Java 21, Maven 3.9+, Node.js 22+, npm, and optionally Docker Compose.
 
 1. Copy `.env.example` to `.env`, replace the sample passwords, and obtain the MinIO free-tier license described in `deploy/docker/README.md`.
-2. Start infrastructure with `docker compose up -d --wait` when Docker is available.
-3. Start the backend with `mvn -B -ntp -pl backend/mes-boot -am spring-boot:run -Dspring-boot.run.profiles=local`.
+2. Start persistent DEV MariaDB and Redis with `docker compose up -d --wait mariadb redis`. The default database is `hospital_pharma_mes_dev`; normal `docker compose down` keeps both DEV volumes.
+3. Build the backend with `mvn -B -ntp -pl backend/mes-boot -am -DskipTests package`, then start it with `java -jar backend/mes-boot/target/mes-boot-0.1.0-SNAPSHOT.jar --spring.profiles.active=local`.
 4. In `frontend/mes-web`, run `npm ci` and `npm run dev`.
 
 Useful endpoints:
@@ -42,7 +42,7 @@ The script runs backend tests, performs a clean frontend install followed by tes
 
 GitHub Actions runs four jobs on pull requests and pushes to `main`: backend tests, frontend tests/build/audit, real MariaDB and Redis integration tests, and repository contract checks. The integration job verifies Flyway migrations and MyBatis-Plus against MariaDB, plus a Redis round trip. CI validates the MinIO AIStor configuration contract but does not start the licensed service. See `docs/development/local-development.md` for the integration-test command and environment variables.
 
-More detail is available in `docs/development/local-development.md`, `docs/architecture/module-boundaries.md`, and `docs/api/foundation-api.md`.
+More detail is available in `docs/development/local-development.md`, [`docs/development/database-and-validation-strategy.md`](docs/development/database-and-validation-strategy.md), `docs/architecture/module-boundaries.md`, and `docs/api/foundation-api.md`.
 
 ## IAM database baseline
 

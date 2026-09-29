@@ -4,7 +4,7 @@ services:
   mariadb:
     image: mariadb:11.8.9-noble
     environment:
-      MARIADB_DATABASE: ${MES_DB_NAME:-hospital_pharma_mes}
+      MARIADB_DATABASE: ${MES_DB_NAME:-hospital_pharma_mes_dev}
       MARIADB_USER: ${MES_DB_USERNAME:-mes}
       MARIADB_PASSWORD: ${MES_DB_PASSWORD:-mes_local_password}
       MARIADB_ROOT_PASSWORD: ${MES_DB_ROOT_PASSWORD:-root_local_password}
@@ -25,7 +25,7 @@ services:
     environment:
       MES_REDIS_PASSWORD: ${MES_REDIS_PASSWORD:-redis_local_password}
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a '$${MES_REDIS_PASSWORD}' ping | grep PONG"]
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$${MES_REDIS_PASSWORD}\" ping | grep PONG"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -56,5 +56,7 @@ networks:
 
 volumes:
   mariadb_data:
+    name: hospital-pharma-mes-mariadb-dev
   redis_data:
+    name: hospital-pharma-mes-redis-dev
   minio_data:

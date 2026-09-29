@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${MES_DB_URL:jdbc:mariadb://localhost:3306/hospital_pharma_mes}
+    url: ${MES_DB_URL:jdbc:mariadb://localhost:3306/hospital_pharma_mes_dev}
     username: ${MES_DB_USERNAME:mes}
     password: ${MES_DB_PASSWORD:mes_local_password}
   data:
