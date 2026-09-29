@@ -15,13 +15,19 @@ class Mes001MigrationContractTest {
     private static final String V002_SHA = "8e2e2b68be8c9cdbfa7ebe08804509c62e43826845c16e5b7991ec719802c43a";
 
     @Test
-    void preservesHistoricalMigrationsAndAllocatesOnlyV003AndV004() throws Exception {
+    void preservesHistoricalMigrationsAndAllocatesV003AndV004BeforeLaterTasks() throws Exception {
         Path migrations = migrationDirectory();
         assertEquals(V001_SHA, sha256(migrations.resolve("V001__foundation_probe.sql")));
         assertEquals(V002_SHA, sha256(migrations.resolve("V002__iam_core.sql")));
         assertTrue(Files.exists(migrations.resolve("V003__mes_001_platform_base.sql")));
         assertTrue(Files.exists(migrations.resolve("V004__mes_001_platform_permissions.sql")));
-        assertEquals(4, Files.list(migrations).filter(Files::isRegularFile).count());
+        assertEquals(java.util.List.of(
+                "V001__foundation_probe.sql",
+                "V002__iam_core.sql",
+                "V003__mes_001_platform_base.sql",
+                "V004__mes_001_platform_permissions.sql"),
+            Files.list(migrations).filter(Files::isRegularFile)
+                .map(path -> path.getFileName().toString()).sorted().limit(4).toList());
     }
 
     @Test
