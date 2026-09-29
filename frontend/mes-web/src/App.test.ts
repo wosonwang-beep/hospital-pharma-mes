@@ -8,7 +8,7 @@ test('renders the Foundation application shell', async () => {
   render(App, { global: { plugins: [createPinia(), router, Antd] } })
   await router.isReady()
 
-  expect(screen.getByText('医院制剂生产管理系统')).toBeTruthy()
+  expect(screen.getByText('医院制剂 MES')).toBeTruthy()
   expect(screen.getByRole('heading', { name: '基础服务已就绪' })).toBeTruthy()
   expect(screen.queryByText('登录')).toBeNull()
 

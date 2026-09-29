@@ -5,4 +5,9 @@ import './styles.css'
 import App from './App.vue'
 import router from './router'
 import { createPinia } from 'pinia'
-createApp(App).use(createPinia()).use(router).use(Antd).mount('#app')
+import { injectedPlatformAuthSnapshot, usePlatformAuthContext } from './auth/PlatformAuthContext'
+
+const pinia = createPinia()
+const snapshot = injectedPlatformAuthSnapshot()
+if (snapshot) usePlatformAuthContext(pinia).setSnapshot(snapshot)
+createApp(App).use(pinia).use(router).use(Antd).mount('#app')
