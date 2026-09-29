@@ -1,0 +1,18 @@
+package com.hospital.mes.integration.infrastructure;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.hospital.mes.integration.api.*;import com.hospital.mes.integration.application.*;import com.hospital.mes.integration.domain.IntegrationDirection;
+import java.time.*;import java.util.*;import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;import org.springframework.stereotype.Repository;
+
+@Repository @ConditionalOnProperty(prefix="spring.datasource",name="url")
+public class MybatisIntegrationMessageQueryRepository implements IntegrationMessageQueryRepository{
+ private final InboxMapper inbox;private final OutboxMapper outbox;public MybatisIntegrationMessageQueryRepository(InboxMapper i,OutboxMapper o){inbox=i;outbox=o;}
+ @Override public IntegrationMessagePageResponse query(long org,IntegrationMessageQuery q){List<IntegrationMessageResponse> all=new ArrayList<>();
+  if(q.direction()==null||q.direction()==IntegrationDirection.INBOX){var w=new LambdaQueryWrapper<InboxEntity>().eq(InboxEntity::getOrgId,org).eq(q.system()!=null,InboxEntity::getSourceSystem,q.system()).eq(q.messageId()!=null,InboxEntity::getMessageId,q.messageId()).in(!q.status().isEmpty(),InboxEntity::getStatus,q.status()).ge(q.occurredFrom()!=null,InboxEntity::getReceivedAt,local(q.occurredFrom())).lt(q.occurredTo()!=null,InboxEntity::getReceivedAt,local(q.occurredTo()));inbox.selectList(w).stream().map(MybatisIntegrationMessageQueryRepository::view).forEach(all::add);}
+  if(q.direction()==null||q.direction()==IntegrationDirection.OUTBOX){var w=new LambdaQueryWrapper<OutboxEntity>().eq(OutboxEntity::getOrgId,org).eq(q.system()!=null,OutboxEntity::getTargetSystem,q.system()).eq(q.messageId()!=null,OutboxEntity::getMessageId,q.messageId()).eq(q.eventType()!=null,OutboxEntity::getEventType,q.eventType()).eq(q.aggregateType()!=null,OutboxEntity::getAggregateType,q.aggregateType()).eq(q.aggregateId()!=null,OutboxEntity::getAggregateId,q.aggregateId()).in(!q.status().isEmpty(),OutboxEntity::getStatus,q.status()).ge(q.occurredFrom()!=null,OutboxEntity::getCreatedAt,local(q.occurredFrom())).lt(q.occurredTo()!=null,OutboxEntity::getCreatedAt,local(q.occurredTo()));outbox.selectList(w).stream().map(MybatisIntegrationMessageQueryRepository::view).forEach(all::add);}
+  all.sort(Comparator.comparing(IntegrationMessageResponse::occurredAt).reversed().thenComparing(IntegrationMessageResponse::messageRef,Comparator.reverseOrder()));long total=all.size();int from=Math.min(q.page()*q.size(),all.size()),to=Math.min(from+q.size(),all.size());return new IntegrationMessagePageResponse(all.subList(from,to),q.page(),q.size(),total);
+ }
+ private static IntegrationMessageResponse view(InboxEntity e){return new IntegrationMessageResponse("INBOX:"+e.getId(),IntegrationDirection.INBOX,e.getMessageId(),e.getSourceSystem(),null,null,null,null,e.getStatus(),e.getRetryCount(),instant(e.getNextRetryAt()),e.getLastErrorCode(),e.getLastErrorMessage(),instant(e.getReceivedAt()),instant(e.getProcessedAt()),e.getVersionNo());}
+ private static IntegrationMessageResponse view(OutboxEntity e){return new IntegrationMessageResponse("OUTBOX:"+e.getId(),IntegrationDirection.OUTBOX,e.getMessageId(),null,e.getTargetSystem(),e.getEventType(),e.getAggregateType(),e.getAggregateId(),e.getStatus(),e.getRetryCount(),instant(e.getNextRetryAt()),e.getLastErrorCode(),e.getLastErrorMessage(),instant(e.getCreatedAt()),instant(e.getPublishedAt()),e.getVersionNo());}
+ private static LocalDateTime local(Instant i){return i==null?null:i.atOffset(ZoneOffset.UTC).toLocalDateTime();}private static Instant instant(LocalDateTime v){return v==null?null:v.toInstant(ZoneOffset.UTC);}
+}
