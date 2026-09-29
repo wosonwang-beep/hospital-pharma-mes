@@ -10,6 +10,15 @@ spring:
 mes:
   platform:
     organization-id: ${MES_PLATFORM_ORGANIZATION_ID}
+  continuity:
+    rpo: ${MES_CONTINUITY_RPO}
+    rto: ${MES_CONTINUITY_RTO}
+  compliance:
+    gxp-retention: ${MES_COMPLIANCE_GXP_RETENTION}
+  deployment:
+    site-id: ${MES_DEPLOYMENT_SITE_ID}
+  time:
+    approved-source: ${MES_TIME_APPROVED_SOURCE}
   storage:
     endpoint: ${MES_MINIO_ENDPOINT}
     access-key: ${MES_MINIO_ACCESS_KEY}
