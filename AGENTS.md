@@ -1,37 +1,76 @@
-# Hospital Pharmaceutical MES V2.0 Development Rules
+# Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-1. Use Java 21 only and remain on Spring Boot 3.x.
-2. Write MariaDB-compatible SQL only.
-3. Use MyBatis-Plus for ordinary CRUD. Explicit SQL/XML is allowed for traceability, lineage, eBR aggregation, and reporting.
-4. Never introduce Maven dependency cycles.
-5. Model business state changes with commands and domain methods; never expose a generic updateStatus API.
-6. Keep API response wrappers in the API layer; domain services must not return them.
-7. Persistence entities and domain models may be separate types.
-8. Never physically delete production or regulated records.
-9. Use optimistic locking for mutable regulated aggregates.
-10. Design critical operations for audit events and electronic signatures from the beginning.
-11. Treat shared Flyway migrations as append-only; fix history with new migrations.
-12. Do not make the core production state machine depend on BPMN or workflow runtime availability.
-13. Dynamic form expressions must not execute arbitrary JavaScript, SQL, or SpEL.
-14. RELEASED means finished-product release, not production completion.
-15. Foundation work is limited to MES-001 through MES-011; MES-012 adds CI only. Do not pre-implement later business epics.
-16. Applicable CI jobs must pass before merging. Do not bypass a failing job or weaken its assertions without an explicit, reviewed change to the CI contract.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.1` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
-Business modules use `api`, `application`, `domain`, and `infrastructure` boundaries. Cross-module notifications use domain events and complex cross-module reads use query services.
+## Low-token task startup
 
-## Development Database & Validation Strategy
+For a request such as `完成 MES-XXX`:
 
-The repository-wide default engineering strategy is defined in [`docs/development/database-and-validation-strategy.md`](docs/development/database-and-validation-strategy.md). It applies to MES-003-R2 through MES-013-R2 and all later maintenance unless a task-approved rule is stricter. It does not weaken FINAL FROZEN design, task scope, migration, design-change, GxP, or CI rules.
+1. Read this file and [`MES_TASKS.md`](MES_TASKS.md) only.
+2. Locate exactly one task. Do not reimplement an `ACCEPTED` task.
+3. Read that task's linked Task Card, then only the mandatory reference sections named by the card.
+4. Inspect only affected modules, direct integration contracts, migrations, and tests. Use `rg`/`rg --files` with scoped paths.
+5. Perform Dependency Check, Gap/Impact Analysis, and Integration Contract Review internally before editing.
+6. Implement only the current task's Write Scope, run targeted validation, update `MES_TASKS.md`, and report briefly.
 
-1. DEV is persistent: use database `hospital_pharma_mes_dev`, persistent Docker named volumes for MariaDB and Redis, and continuously upgrade it through real physical Flyway migrations. Normal `docker compose down` must retain volumes. Never run `docker compose down -v` or otherwise reset DEV unless the user explicitly requests `RESET DEVELOPMENT DATABASE`.
-2. Physical Flyway versions continue from the highest successful version in the target database's `flyway_schema_history`. Section 15 numbers are logical migration groups, not physical versions. Never modify, rename, reorder, repair, or checksum-change an executed migration, and never create formal business tables manually outside Flyway.
-3. TEST is ephemeral and physically/configurationally isolated from DEV: create task-scoped MariaDB and Redis, migrate, test, capture the result, and destroy them. Automated tests must not connect to `hospital_pharma_mes_dev` unless explicitly designated as a DEV smoke test, and must never connect to PROD.
-4. The normal loop is Code → Compile/Type Check → Unit Test → Targeted Test → Continue. Start a real TEST environment only for MariaDB, Redis, Flyway, repository SQL, transaction, constraint, concurrency, or idempotency behavior. Do not recreate it after every file change.
-5. Ordinary MES tasks use Fast Task Validation: backend build; affected frontend build/typecheck; required task cases; targeted integration; direct integration contracts; affected regression; `CRITICAL = 0`; `HIGH = 0`. Run the main ephemeral database gate once near task completion, then diagnose failures with minimal logs, make the smallest fix, run a targeted retest, and run affected regression.
-6. MES-006-R2, MES-009-R2, MES-011-R2, and MES-013-R2 are key integration gates and add clean/upgrade migration, cross-module integration, contract regression, and affected regression for the module chains defined in the detailed strategy. Do not copy system-wide full regression into ordinary tasks.
-7. After MES-013, run one Final System Validation covering clean and upgrade migration, full backend/frontend/integration/regression/security/GxP/E2E/UI/RTM/cross-module review as defined in the detailed strategy.
-8. On PASS, retain only suite counts, failures, skips, duration, and relevant migration version. On FAIL, inspect only the failed test, exception/root-cause neighborhood, relevant SQL, and relevant stack trace. Prefer targeted retest plus affected regression.
-9. Record MEDIUM/LOW findings as Technical Debt / Follow-up when they do not threaten the current requirement, integrity, security, required tests, integration contracts, migrations, or critical business rules. CRITICAL/HIGH findings block completion.
-10. Codex handles ordinary compile, type, test, wiring, MariaDB/Redis, Flyway syntax, frontend build, Testcontainers, Docker-development, and in-scope refactoring problems autonomously. Stop only for `DESIGN CHANGE REQUIRED`, `USER DECISION REQUIRED`, or `DESTRUCTIVE ACTION REQUIRED`.
-11. A task may read and test its integration scope but may write only its current Write Scope. No unrelated refactor, speculative feature, future-task implementation, temporary business model, duplicate platform infrastructure, or frozen-contract redesign.
-12. DEV, TEST, and PROD are distinct environments. PROD settings are never DEV/TEST defaults.
+Do not scan the whole repository or read all `docs/`/baseline artifacts by default. Expand context only when a discovered dependency, failure, or frozen contract requires it.
+
+## Mandatory engineering rules
+
+- Use Java 21 and Spring Boot 3.x. Keep the backend a Maven modular monolith; `mes-boot` is the only executable module and dependencies must remain acyclic.
+- Business modules use `api`, `application`, `domain`, and `infrastructure` boundaries. Cross-module notifications use domain events; complex cross-module reads use query services.
+- Use MariaDB-compatible SQL. Use MyBatis-Plus for ordinary CRUD; explicit SQL/XML is limited to traceability, lineage, eBR aggregation, and reporting.
+- Model business state changes with commands and domain methods. Never expose a generic `updateStatus` API.
+- API response wrappers belong to the API layer; domain services must not return HTTP envelopes. Persistence entities and domain models may be separate.
+- Never physically delete production or regulated records. Use optimistic locking for mutable regulated aggregates.
+- Critical operations must include audit and electronic-signature concerns from the start.
+- Do not make core production state machines depend on BPMN/workflow runtime availability.
+- Dynamic form expressions must never execute arbitrary JavaScript, SQL, or SpEL.
+- `RELEASED` means finished-product release, not production completion.
+- Do not pre-implement future MES tasks, introduce temporary business models, duplicate platform infrastructure, or perform unrelated refactoring.
+- Applicable CI contracts remain mandatory before merge; do not bypass failures or weaken assertions without an explicit reviewed CI-contract change.
+
+## Context and token control
+
+- Start from the task index, not repository history. Completed-task acceptance records are read only for an affected regression or consumed contract.
+- Read the smallest useful file section. Do not load entire large specifications when the Task Card identifies a section, table, schema, or operation.
+- Prefer targeted searches and focused diffs. Do not dump whole build logs, generated files, lockfiles, or large OpenAPI documents into context.
+- On PASS, retain suite/count/duration/migration summaries only. On FAIL, inspect the failed test, root-cause neighborhood, relevant SQL, and relevant stack frames.
+- Preserve user-owned and unrelated working-tree changes.
+
+## Frozen design and stop conditions
+
+Do not add or redesign business fields, tables, states, APIs, permissions, routes, or GxP controls outside the current frozen contract. Stop only for:
+
+- `DESIGN CHANGE REQUIRED`: a real conflict requires changing a frozen contract.
+- `USER DECISION REQUIRED`: multiple valid business choices require owner selection.
+- `DESTRUCTIVE ACTION REQUIRED`: irreversible deletion, persistent DEV rebuild, or large-scale removal is required.
+- `DEPENDENCY_NOT_READY`: a hard dependency or required produced contract is unavailable.
+
+The MES-012 scope conflict is recorded in `MES_TASKS.md`; agents must not resolve it implicitly.
+
+## Database and environments
+
+- All formal schema changes use a new physical Flyway migration. Executed migrations are append-only: never edit, rename, reorder, checksum-change, or conceal problems with `flyway repair`.
+- Physical versions continue from the highest successful value in `flyway_schema_history`; Section 15 logical migration groups are not physical versions.
+- Persistent DEV uses `hospital_pharma_mes_dev` and the named MariaDB/Redis volumes. Never delete, rebuild, clear, or run `docker compose down -v` unless the user explicitly requests `RESET DEVELOPMENT DATABASE`.
+- Automated TEST infrastructure is ephemeral and isolated from DEV/PROD. Automated tests never connect to PROD.
+- Full lifecycle details are in [`docs/development/database-and-validation-strategy.md`](docs/development/database-and-validation-strategy.md); read it only for database/environment/validation work.
+
+## Validation policy
+
+Default to the smallest gate that proves the change:
+
+1. Compile or typecheck affected modules.
+2. Run current-task unit and required test cases.
+3. Run targeted integration tests only when MariaDB, Redis, Flyway, SQL, transactions, constraints, concurrency, or idempotency are involved.
+4. Run direct contract and affected regression tests.
+5. Fix all CRITICAL/HIGH findings; record non-blocking MEDIUM/LOW debt.
+
+Do not run full regression by default. It is reserved for defined milestones/key integration gates, major cross-module changes, final system validation, or explicit user instruction.
+
+## Task status and completion report
+
+`MES_TASKS.md` is the only task-status index. Codex may move an authorized task from `NOT STARTED` to `IN PROGRESS` and, after required verification, to `READY FOR ACCEPTANCE`. Only explicit human approval may set `ACCEPTED`.
+
+After work, report only: implementation summary, migration status, targeted test result, review result, remaining technical debt, and task readiness/status. Never start the next MES task automatically.
