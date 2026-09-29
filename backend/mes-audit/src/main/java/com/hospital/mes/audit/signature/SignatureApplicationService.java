@@ -1,0 +1,19 @@
+package com.hospital.mes.audit.signature;
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.stereotype.Service;
+
+@Service
+@ConditionalOnBean(SignatureTransactionService.class)
+public class SignatureApplicationService {
+    private final ReauthenticationPort reauthentication; private final SignatureTransactionService transactions;
+    public SignatureApplicationService(ReauthenticationPort reauthentication,SignatureTransactionService transactions){
+        this.reauthentication=reauthentication;this.transactions=transactions;
+    }
+    public SignatureResponseData sign(SignCommand command){
+        var expected=new ExpectedReauthenticationBinding(command.context().actorId(),command.context().sessionId(),
+            command.context().organizationId(),command.objectType(),command.objectId(),command.meaning(),command.recordVersion());
+        ConsumedReauthentication consumed=reauthentication.consume(command.reauthToken(),expected);
+        return transactions.signInTransaction(command,consumed);
+    }
+}
