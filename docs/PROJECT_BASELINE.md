@@ -4,10 +4,10 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
-- Authoritative design: `FINAL BASELINE COMPLETE v1.0.1`.
-- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.1/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.1/).
-- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.1.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.1/00_MANIFEST_FINAL_FROZEN_V1.0.1.md).
-- Approved change trace: `DCP-MES-001-R2-001` → v1.0.1.
+- Authoritative design: `FINAL BASELINE COMPLETE v1.0.2`.
+- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/).
+- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.2.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/00_MANIFEST_FINAL_FROZEN_V1.0.2.md).
+- Approved change trace: `DCP-MES-002-R2-001` → v1.0.2 (cumulative over retained v1.0.1 / DCP-MES-001-R2-001).
 - Task state and next-task selection: [`MES_TASKS.md`](../MES_TASKS.md).
 
 Frozen requirements, data models, states, APIs, permissions, routes, integration contracts, and GxP controls may change only through approved design change and cross-consistency review.
@@ -47,7 +47,7 @@ Records and state transitions must preserve traceability, data integrity, attrib
 
 Start with `AGENTS.md` and `MES_TASKS.md`. After selecting one task, open its Task Card and only the referenced sections needed for that task:
 
-- Product and domain: PRD, Domain Model, and relevant state-machine sections in the v1.0.1 release.
+- Product and domain: PRD, Domain Model, and relevant state-machine sections in the v1.0.2 release.
 - Data and interfaces: Database Design, API Detailed Design, Full OpenAPI, and Section 15 contracts named by the Task Card.
 - Behavior and UI: Functional Design, UI/Page Design, Route Matrix, and prototype mapping only when the task touches them.
 - Compliance and tests: GMP/Audit/eSignature, required Test Cases, and RTM rows named by the Task Card.

@@ -1,0 +1,8 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "testCases": 97,
+  "rtmRows": 55,
+  "missingRtmTestReferences": 0,
+  "incomingQualityCases": 17
+}

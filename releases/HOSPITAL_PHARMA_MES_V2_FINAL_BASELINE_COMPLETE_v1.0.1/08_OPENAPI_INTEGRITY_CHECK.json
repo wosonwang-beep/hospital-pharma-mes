@@ -1,0 +1,14 @@
+{
+  "version": "1.0.1",
+  "paths": 121,
+  "operations": 172,
+  "catalogRows": 172,
+  "concreteOperations": [
+    "GET /audit-events",
+    "GET /integration/messages",
+    "POST /integration/messages/{messageRef}/retry",
+    "POST /records/{type}/{id}/sign",
+    "POST /auth/reauth"
+  ],
+  "status": "PASS"
+}

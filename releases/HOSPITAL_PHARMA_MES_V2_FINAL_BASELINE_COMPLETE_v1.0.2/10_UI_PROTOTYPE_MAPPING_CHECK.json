@@ -1,0 +1,8 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "routeRows": 73,
+  "prototypeMappingRows": 24,
+  "incomingQualityRoutes": 0,
+  "note": "New routes are frozen; representative v1.0.1 visual assets are reused until implementation produces task-specific screenshots."
+}

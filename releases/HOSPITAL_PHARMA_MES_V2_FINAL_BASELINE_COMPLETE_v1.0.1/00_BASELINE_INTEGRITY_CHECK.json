@@ -1,0 +1,107 @@
+{
+  "baselineVersion": "1.0.1",
+  "dcp": "DCP-MES-001-R2-001",
+  "sourceZipSha256": "9928d71d1326869cc3be8075040f6738c9b37eabf70787c79bc3012649065b8a",
+  "openapi": {
+    "version": "1.0.1",
+    "paths": 121,
+    "operations": 172,
+    "catalogRows": 172,
+    "concreteOperations": [
+      "GET /audit-events",
+      "GET /integration/messages",
+      "POST /integration/messages/{messageRef}/retry",
+      "POST /records/{type}/{id}/sign",
+      "POST /auth/reauth"
+    ],
+    "status": "PASS"
+  },
+  "rtm": {
+    "requirements": 47,
+    "rtmRows": 47,
+    "allRtmTestReferencesExist": true,
+    "status": "PASS"
+  },
+  "testCoverage": {
+    "testCases": 76,
+    "requirementsCovered": 47,
+    "requirementsTotal": 47,
+    "coveragePercent": 100.0,
+    "status": "PASS"
+  },
+  "taskReferences": {
+    "taskCards": 13,
+    "taskMatrixRows": 13,
+    "unassignedOpenApiOperations": 0,
+    "invalidReferences": [],
+    "status": "PASS"
+  },
+  "uiPrototype": {
+    "formalRoutes": 58,
+    "prototypeMappings": 17,
+    "screenshotScenarios": 14,
+    "screenshots": 14,
+    "obsoleteRoutePresent": false,
+    "unsupportedMetricsPresent": false,
+    "unresolvedMappings": [
+      "UI-WMS-REC-Q: frozen receipt-query API missing"
+    ],
+    "modelTests": "PASS",
+    "status": "PASS_WITH_OPEN_MEDIUM"
+  },
+  "migration": {
+    "existingPhysicalMigrations": [
+      "V001__foundation_probe.sql",
+      "V002__iam_core.sql"
+    ],
+    "highestPhysicalVersion": "V002",
+    "plannedNext": [
+      "V003",
+      "V004"
+    ],
+    "plannedFilesCreated": false,
+    "logicalGroups": 15,
+    "status": "PASS"
+  },
+  "docx": {
+    "documents": [
+      {
+        "file": "00_医院制剂_MES_V2.0_FINAL_BASELINE_COMPLETE_v1.0.1_最终正式版.docx",
+        "paragraphs": 19,
+        "tables": 2,
+        "package": "PASS"
+      },
+      {
+        "file": "00_医院制剂_MES_V2.0_FINAL_DEVELOPMENT_BASELINE说明_v1.0.1.docx",
+        "paragraphs": 17,
+        "tables": 2,
+        "package": "PASS"
+      },
+      {
+        "file": "15_医院制剂_MES_V2.0_模块依赖_Migration_Integration_Contract_V1.0.1_FROZEN.docx",
+        "paragraphs": 30,
+        "tables": 0,
+        "package": "PASS"
+      }
+    ],
+    "packagedRenderer": "UNAVAILABLE_NO_LIBREOFFICE",
+    "fallbackVisualReview": "PASS_ALL_8_PAGES",
+    "status": "PASS_WITH_DOCUMENTED_FALLBACK"
+  },
+  "crossConsistency": {
+    "critical": 0,
+    "high": 0,
+    "medium": 2,
+    "low": 0,
+    "gate": "PASS"
+  },
+  "dg008": {
+    "status": "REQUIRES ENTERPRISE INPUT",
+    "mes001ImplementationBlocking": false,
+    "productionValidationBlocking": true,
+    "goLiveBlocking": true
+  },
+  "businessCodeModified": false,
+  "migrationSqlCreated": false,
+  "status": "PASS"
+}

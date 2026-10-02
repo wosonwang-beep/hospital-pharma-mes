@@ -1,0 +1,8 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "routeRows": 73,
+  "mappingRows": 24,
+  "missingReferencedScreenshotFiles": 0,
+  "note": "Representative historical screenshots are reused and are not authoritative over v1.0.2 UI contracts."
+}

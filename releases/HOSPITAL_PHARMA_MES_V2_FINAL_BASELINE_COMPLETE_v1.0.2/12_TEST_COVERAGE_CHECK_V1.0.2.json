@@ -1,0 +1,16 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "coverageRows": 69,
+  "requiredIncomingRequirements": [
+    "MD-MAT-002",
+    "QMS-EXM-001",
+    "QMS-IN-001",
+    "QMS-SMP-001",
+    "QMS-TST-001",
+    "QMS-RPT-001",
+    "QMS-MREL-001",
+    "WMS-ELG-001"
+  ],
+  "missingTestReferences": 0
+}

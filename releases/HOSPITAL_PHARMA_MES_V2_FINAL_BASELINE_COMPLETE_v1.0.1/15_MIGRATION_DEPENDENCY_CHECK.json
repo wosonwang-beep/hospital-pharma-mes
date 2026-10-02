@@ -1,0 +1,14 @@
+{
+  "existingPhysicalMigrations": [
+    "V001__foundation_probe.sql",
+    "V002__iam_core.sql"
+  ],
+  "highestPhysicalVersion": "V002",
+  "plannedNext": [
+    "V003",
+    "V004"
+  ],
+  "plannedFilesCreated": false,
+  "logicalGroups": 15,
+  "status": "PASS"
+}

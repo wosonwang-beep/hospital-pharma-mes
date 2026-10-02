@@ -1,0 +1,18 @@
+UI_ID,Title,Route,Requirement,Task,Prototype,Screenshot,API,Permission,Type
+UI-AUD-Q,GMP Audit Trail,/audit,AUD-001,MES-001-R2,prototype/index.html#/audit,screens/UI-AUD-Q.png,GET /audit-events,audit:view,QUERY
+UI-INT-OPS,Integration Inbox / Outbox Operations,/integration/operations,INT-001,MES-001-R2,prototype/index.html#/integration/operations,screens/UI-INT-OPS.png,GET /integration/messages; POST /integration/messages/{messageRef}/retry,integration:view;integration:retry,OPERATIONS
+UI-IAM-USR-Q,用户与角色权限,/admin/users,IAM-001,MES-002-R2,prototype/index.html#/admin/users,screens/UI-IAM-USR-Q.png,GET /users,iam:user:view,QUERY
+UI-EQP-Q,设备与人员资格,/master/equipment,MD-EQP-001,MES-003-R2,prototype/index.html#/master/equipment,screens/UI-EQP-Q.png,GET /equipment,master:equipment:view,QUERY
+UI-MAT-Q,物料主数据,/master/materials,MD-MAT-001,MES-004-R2,prototype/index.html#/master/materials,screens/UI-MAT-Q.png,GET /materials,master:material:view,QUERY
+UI-MAT-C,新增物料,/master/materials/create,MD-MAT-001,MES-004-R2,prototype/index.html#/master/materials/create,,POST /materials,master:material:create,CREATE
+UI-MAT-V,物料详情,/master/materials/:id,MD-MAT-001,MES-004-R2,prototype/index.html#/master/materials/MAT-00028,,GET /materials/{id},master:material:view,VIEW
+UI-MAT-E,编辑物料,/master/materials/:id/edit,MD-MAT-001,MES-004-R2,prototype/index.html#/master/materials/MAT-00028/edit,,PUT /materials/{id},master:material:update,EDIT
+UI-SUP-Q,批准供应商,/master/suppliers,MD-SUP-001,MES-005-R2,prototype/index.html#/master/suppliers,screens/UI-SUP-Q.png,GET /suppliers,master:supplier:view,QUERY
+UI-PKG-V,产品与工艺包,/process/packages/:id,PROC-001,MES-006-R2,prototype/index.html#/process/packages/PP-2026-014,screens/UI-PKG-V.png,GET /process-packages/{id},process:package:view,VIEW
+UI-EBR-DESIGNER,eBR 模板设计器,/ebr/templates/:id/designer,EBR-001,MES-007-R2,prototype/index.html#/ebr/templates/EBR-014/designer,screens/UI-EBR-DESIGNER.png,GET /ebr/templates/{id},ebr:designer:edit,DESIGNER
+UI-WMS-REC-Q,收货单查询,/wms/receipts,WMS-001,MES-008-R2,prototype/index.html#/wms/receipts,screens/UI-WMS-REC-Q.png,UNRESOLVED: no frozen GET receipt-query operation,wms:receipt:view,QUERY
+UI-BATCH-V,生产批详情,/production/batches/:id,PRD-002,MES-009-R2,prototype/index.html#/production/batches/MB-20260928-006,screens/UI-BATCH-V.png,GET /main-batches/{id},production:batch:view,VIEW
+UI-EXEC-W,工序执行工作台,/mes/execution/:id,"PRD-004,MES-OP-001",MES-010-R2,prototype/index.html#/mes/execution/EU-240928-03,screens/UI-EXEC-W.png,GET /execution-units/{id}/operations,mes:operation:view,WORKBENCH
+UI-WGH-W,称量工作台,/mes/execution/:id/weighing,MES-WGH-001,MES-011-R2,prototype/index.html#/mes/execution/EU-240928-03/weighing,screens/UI-WGH-CHG-W.png,GET /execution-units/{id}/weighings; POST /weighings,mes:weigh:create,WORK
+UI-BAL-V,物料平衡与偏差,/production/batches/:id/balance,"BAL-001,BAL-002,BAL-003",MES-012-R2,prototype/index.html#/production/batches/MB-20260928-006/balance,screens/UI-BAL-V.png,GET /main-batches/{id}/material-balance,balance:view,VIEW
+UI-QA-RELEASE,QA 批放行审核,/qa/batches/:id/release,QA-REL-001,MES-013-R2,prototype/index.html#/qa/batches/MB-20260928-006/release,screens/UI-QA-RELEASE.png,GET /qa/batches/{id}/review-model,qa:batch-review,WORKBENCH

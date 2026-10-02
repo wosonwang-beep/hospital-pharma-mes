@@ -1,0 +1,9 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "logicalGroups": 16,
+  "matrixLedgerEqual": true,
+  "physicalMigrationsCreated": 0,
+  "executedMigrationsModified": 0,
+  "note": "Logical groups are not physical Flyway versions."
+}

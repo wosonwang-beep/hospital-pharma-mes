@@ -1,0 +1,12 @@
+{
+  "baseline": "v1.0.2",
+  "status": "PASS",
+  "parse": "PASS",
+  "paths": 158,
+  "operations": 214,
+  "schemas": 31,
+  "catalogRows": 214,
+  "duplicateOperationIds": 0,
+  "missingCatalogEndpoints": 0,
+  "designChange": "DCP-MES-002-R2-001"
+}

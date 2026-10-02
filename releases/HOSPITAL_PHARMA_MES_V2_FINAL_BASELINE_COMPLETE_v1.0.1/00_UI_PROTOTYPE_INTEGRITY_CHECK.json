@@ -1,0 +1,13 @@
+{
+  "formalRoutes": 58,
+  "prototypeMappings": 17,
+  "screenshotScenarios": 14,
+  "screenshots": 14,
+  "obsoleteRoutePresent": false,
+  "unsupportedMetricsPresent": false,
+  "unresolvedMappings": [
+    "UI-WMS-REC-Q: frozen receipt-query API missing"
+  ],
+  "modelTests": "PASS",
+  "status": "PASS_WITH_OPEN_MEDIUM"
+}

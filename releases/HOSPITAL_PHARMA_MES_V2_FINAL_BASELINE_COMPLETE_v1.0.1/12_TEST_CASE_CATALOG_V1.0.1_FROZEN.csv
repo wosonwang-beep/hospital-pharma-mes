@@ -1,0 +1,77 @@
+Test Case ID,Requirement ID,MES Task,Module,Title,Type,Preconditions,Steps,Expected Result,Evidence,Automation
+TC-IAM-001,IAM-001,MES-002-R2,IAM,有效用户登录,NORMAL,ACTIVE用户存在,提交正确用户名密码,200/JWT；身份正确,API+security log,API integration
+TC-IAM-002,IAM-001,MES-002-R2,IAM,禁用用户拒绝登录,NEGATIVE,DISABLED用户,登录,401/403；无token,API+security log,API integration
+TC-IAM-003,IAM-002,MES-002-R2,IAM,无权限API拒绝,PERMISSION,用户无master:material:view,GET /materials,403,API,API integration
+TC-IAM-004,IAM-002,MES-002-R2,IAM,菜单按钮权限一致,PERMISSION,不同角色,登录并访问菜单/直接URL/API,UI隐藏且API仍403,UI+API,E2E+API
+TC-MAT-001,MD-MAT-001,MES-004-R2,Material,创建完整物料Draft,NORMAL,单位存在,Create页填写完整字段保存,201；Draft；字段持久化,UI+API+DB+Audit,E2E+API
+TC-MAT-002,MD-MAT-001,MES-004-R2,Material,重复物料编码,NEGATIVE,编码已存在,再次创建,409/422 MATERIAL_CODE_EXISTS；不新增,API+DB,API integration
+TC-MAT-003,MD-MAT-001,MES-004-R2,Material,批准版本不可直接编辑,STATE,Approved版本,PUT普通编辑,409/422；提示创建新版本,API+DB+Audit,API integration
+TC-MAT-004,MD-MAT-001,MES-004-R2,Material,新版本不改变历史引用,GXP,历史批引用V1,创建并批准V2,历史批仍引用V1,DB+batch snapshot,Integration
+TC-MD-001,MD-002,MES-003-R2,Master,单位量纲不兼容,NEGATIVE,kg与L无物料专属换算,请求换算,422 UNIT_DIMENSION_MISMATCH,API,Unit
+TC-EQP-001,MD-EQP-001,MES-003-R2,Equipment,过校准设备阻断,GATE,设备校准过期,尝试开始受控工序,422；requiredActions包含设备处理,API+Audit,Integration
+TC-QUAL-001,MD-QUAL-001,MES-003-R2,Qualification,无资格人员阻断,GATE,操作员资格过期,开始工序/称量,422 QUALIFICATION_REQUIRED,API+Audit,Integration
+TC-PROC-001,PROC-001,MES-006-R2,Process,批准版不可变,GXP,ProcessVersion APPROVED,PUT formula/route,409/422,API+DB+Audit,Integration
+TC-PROC-002,PROC-ROUTE-001,MES-006-R2,Process,Route死循环Lint,NEGATIVE,构造循环路线,POST lint,422/Lint issue定位节点,API,Unit+Integration
+TC-PROC-003,PROC-BOM-001,MES-006-R2,Process,BOM单位量纲校验,NEGATIVE,物料质量单位,配置不兼容单位,422,API,Unit
+TC-EBR-001,EBR-001,MES-007-R2,eBR,稳定Field ID唯一,NEGATIVE,同Form已有fieldCode,Designer复制为相同ID并Lint,Lint失败且定位字段,UI+API,E2E
+TC-EBR-002,EBR-003,MES-007-R2,eBR,禁止任意脚本,SECURITY,Draft规则,输入JS/SQL/SpEL表达式,解析拒绝；不执行,API+log,Unit+Security
+TC-EBR-003,EBR-004,MES-007-R2,eBR,批次冻结Snapshot,GXP,模板V1 Effective,Release MainBatch后发布V2,运行批仍读取V1 hash/snapshot,API+DB,Integration
+TC-EBR-004,EBR-005,MES-007-R2,eBR,Renderer不读最新模板,GXP,批次冻结V1且V2已发布,GET render-model,字段来自V1,API,Integration
+TC-EBR-005,EBR-003,MES-007-R2,eBR,BLOCK规则阻断提交,GATE,字段违反BLOCK规则,POST form submit,422 EBR_RULE_BLOCKED；RuleExecution保留,API+DB+Audit,Integration
+TC-EBR-006,EBR-006,MES-007-R2,eBR,更正追加Revision,GXP,已有revision1,提交Correction,revision2创建；revision1不变；reason保留,DB+Audit,Integration
+TC-EBR-007,EBR-007,MES-007-R2,eBR,更正使签名失效,GXP,记录已Review+Sign,更正受签字段,旧Review/Signature INVALIDATED；要求重签,DB+Audit,Integration
+TC-EBR-008,EBR-007,MES-007-R2,eBR,独立复核禁止同人,PERMISSION,operator=A,A尝试verify,422 SELF_VERIFICATION_FORBIDDEN,API+Audit,Integration
+TC-EBR-009,EBR-005,MES-007-R2,eBR,并发Form Revision,CONCURRENCY,两个客户端revision=3,A保存成功；B随后保存,B=409 REVISION_CONFLICT；A数据不丢,API+DB,Concurrency
+TC-EBR-010,EBR-008,MES-013-R2,eBR,PDF版本不覆盖,GXP,已生成PDF v1,再次生成,生成v2 manifest；v1仍可取；hash记录,DB+file metadata,Integration
+TC-WMS-001,WMS-001,MES-008-R2,WMS,待验物料不可领用,GATE,MaterialLot QUARANTINE,预留/发料,422 MATERIAL_NOT_RELEASED,API,Integration
+TC-WMS-002,WMS-002,MES-008-R2,WMS,库存流水可重算,DATA,多次收发移退,按ledger汇总,结果等于查询库存；无历史UPDATE,DB query,Integration
+TC-WMS-003,WMS-002,MES-008-R2,WMS,库存幂等,IDEMPOTENCY,同Idempotency-Key,重复receive两次,仅一条业务movement,API+DB,Integration
+TC-WMS-004,WMS-003,MES-008-R2,WMS,FEFO预留,NORMAL,两个RELEASED批次不同效期,自动预留,优先较早效期且未过期,API+DB,Integration
+TC-WMS-005,WMS-004,MES-008-R2,WMS,发料不等于投料,DOMAIN,已发10kg未投料,查询Charge/Balance,Charge=0；不能计实际消耗,DB+API,Integration
+TC-BAT-001,PRD-002,MES-009-R2,Production,Release冻结定义,NORMAL,工艺/eBR有效,POST batch release,RELEASED；snapshot/ExecutionUnit/Audit同事务,API+DB+Audit,Integration
+TC-BAT-002,PRD-003,MES-009-R2,Production,SubBatch禁止放行,DOMAIN,SubBatch完成,尝试Release SubBatch,422 SUBBATCH_RELEASE_FORBIDDEN,API,Integration
+TC-BAT-003,PRD-004,MES-009-R2,Production,DIRECT执行单元无SubBatch,DOMAIN,不分亚批,Release batch,"ExecutionUnit unitType=DIRECT, subBatchId=null",DB,Integration
+TC-BAT-004,PRD-004,MES-009-R2,Production,SUB_BATCH执行单元必须有SubBatch,DOMAIN,配置亚批,Release batch,每个SUB_BATCH unit关联subBatch,DB,Integration
+TC-OP-001,MES-OP-001,MES-010-R2,MES,非法工序状态转换,STATE,Operation PENDING,直接complete,409 INVALID_OPERATION_STATE,API,Integration
+TC-OP-002,MES-OP-001,MES-010-R2,MES,IPC未完成阻断工序,GATE,required IPC pending,complete operation,422；Operation不变,API+DB,Integration
+TC-PAR-001,MES-PAR-001,MES-010-R2,MES,设备消息重发幂等,IDEMPOTENCY,相同sourceMessageId,提交两次参数消息,仅一个业务值,DB,Integration
+TC-WGH-001,MES-WGH-001,MES-011-R2,Weighing,正确物料称量,NORMAL,lot RELEASED/BOM匹配/秤有效,创建称量,201；actual/target/偏差正确,API+DB+Audit,E2E+Integration
+TC-WGH-002,MES-WGH-001,MES-011-R2,Weighing,错误物料阻断,NEGATIVE,lot不属于BOM,称量,422 MATERIAL_NOT_IN_BOM,API,Integration
+TC-WGH-003,MES-WGH-001,MES-011-R2,Weighing,超称量偏差阻断,GATE,actual超tolerance,确认,422 WEIGHING_OUT_OF_TOLERANCE,API+Audit,Integration
+TC-CHG-001,MES-CHG-001,MES-011-R2,Charge,投料原子事务,TRANSACTION,有效称量/lot/operation,POST material-charge,Charge+QuantityEvent+Ledger+Genealogy+Audit全部成功,DB+Audit,Integration
+TC-CHG-002,MES-CHG-001,MES-011-R2,Charge,投料事务回滚,TRANSACTION,模拟Genealogy写失败,POST material-charge,整个事务回滚；无部分消耗,DB,Integration
+TC-CHG-003,MES-CHG-001,MES-011-R2,Charge,重复提交幂等,IDEMPOTENCY,同key,POST两次,只有一次Charge/Consume,API+DB,Integration
+TC-TRC-001,TRC-001,MES-011-R2,Trace,正反向追溯,NORMAL,已有Charge/Genealogy,按成品批/物料批查询,双向链路一致,UI+API,E2E
+TC-BAL-001,BAL-002,MES-012-R2,Balance,从QuantityEvent计算,DATA,存在Charge/Return/Output/Loss,计算,Expected/Actual/Difference按冻结规则,API+DB,Unit+Integration
+TC-BAL-002,BAL-003,MES-012-R2,Balance,FAIL阻断结批,GATE,Balance FAIL未调查,Complete/Submit QA,422 BALANCE_GATE_FAILED,API,Integration
+TC-BAL-003,BAL-003,MES-012-R2,Balance,批准调查后Gate,NORMAL,FAIL调查已批准,重新计算/继续,按规则允许下一状态；调查证据保留,DB+Audit,Integration
+TC-QMS-001,QMS-001,MES-012-R2,QMS,检验结果不可覆盖,GXP,result revision1,修订结果,revision2新增；revision1保留,DB+Audit,Integration
+TC-QMS-002,QMS-DEV-001,MES-012-R2,QMS,关键偏差阻断Release,GATE,Critical Deviation OPEN,QA Release,422 RELEASE_GATE_FAILED,API,Integration
+TC-QMS-003,QMS-DEV-001,MES-012-R2,QMS,重测需审批,GXP,OOS结果,直接新增替代PASS,拒绝或进入批准流程；OOS不消失,API+DB,Integration
+TC-REL-001,REL-001,MES-013-R2,Release,所有Gate通过放行,NORMAL,PENDING_QA且eBR/QC/Balance/Deviation/Signature PASS,POST release decision RELEASED,immutable ReleaseDecision；finished lot可用；Audit/Signature,API+DB+Audit,E2E+Integration
+TC-REL-002,REL-001,MES-013-R2,Release,QC PASS不能直接放行,DOMAIN,QC PASS但无ReleaseDecision,查询库存/批次,仍非QA_RELEASED/不可正式可用,DB+API,Integration
+TC-REL-003,REL-001,MES-013-R2,Release,Gate变化阻断签名提交,CONCURRENCY,打开Release Dialog后偏差新建,提交Release,409/422；Dialog展示变化；无Decision,UI+API+DB,E2E
+TC-REL-004,REL-001,MES-013-R2,Release,ReleaseDecision不可修改,GXP,已有RELEASED decision,PUT/直接更新,禁止；需superseding decision,API+DB,Integration
+TC-AUD-001,AUD-001,MES-001-R2,Audit,业务与审计同事务,TRANSACTION,关键写操作,执行成功/失败,成功有Audit；业务回滚时不出现孤立Audit,DB,Integration
+TC-SIG-001,SIG-001,MES-001-R2,Signature,摘要篡改检测,SECURITY,已签名记录,改变受签内容/验证,digest不匹配；签名无效/阻断,DB+API,Security
+TC-INT-001,INT-001,MES-001-R2,Integration,Inbox消息幂等,IDEMPOTENCY,同source+messageId,接收两次,只处理一次,DB,Integration
+TC-INT-002,INT-001,MES-001-R2,Integration,Outbox失败重试,RESILIENCE,外部服务失败,发送/重试,业务已提交；outbox重试；不重复业务,DB+logs,Integration
+TC-UI-001,MD-MAT-001,MES-004-R2,UI,物料查询/新增/详情/修改独立路由,UI,有权限,从列表分别导航Create/View/Edit,路由独立；列表无CRUD Modal/Drawer,E2E screenshot/route,E2E
+TC-UI-002,PRD-002,MES-009-R2,UI,批次查询与详情分离,UI,批次存在,列表→详情,详情独立Route；复杂状态动作只在详情,E2E,E2E
+TC-SUP-001,MD-SUP-001,MES-005-R2,Supplier,合格供应商关系,NORMAL,物料/供应商有效,批准物料-供应商关系,关系有效并可用于收货校验,API+DB+Audit,Integration
+TC-SUP-002,MD-SUP-001,MES-005-R2,Supplier,过期供应商阻断,GATE,关系validTo已过期,收货该物料,422 SUPPLIER_NOT_APPROVED,API+Audit,Integration
+TC-MIG-001,NFR-001,MES-001-R2,Platform,Existing V001/V002升级与逻辑/物理Ledger,MIGRATION,真实仓库含物理V001/V002,验证历史checksum；从现有历史升级；检查逻辑/物理映射,历史不变；下一物理版本从V003开始；设计包无SQL,Flyway history+ledger,DB integration
+TC-AUD-002,AUD-001,MES-001-R2,Audit,Audit DTO过滤与追加保护,COMPLIANCE,存在多来源审计事件,组合过滤分页；尝试UPDATE/DELETE；检查敏感字段,固定排序；具体DTO；数据库拒绝修改/删除；无secret,API+DB,API+DB integration
+TC-SIG-002,SIG-001,MES-001-R2,Signature,五分钟单次绑定重认证,SECURITY,测试provider和用户session,重认证；测试TTL/七维绑定/首次消费/重放/脱敏,恰好5分钟；单次；绑定正确；重放401；无secret证据,API+session+logs,API integration
+TC-SIG-003,SIG-001,MES-001-R2,Signature,签名回滚后token不恢复与JCS摘要,TRANSACTION,测试provider可注入回滚,消费token后强制DB回滚；重放；重新认证并签名；独立计算digest,无签名提交；旧token仍失效；新签名digest一致,API+DB+digest vector,API+DB integration
+TC-INT-003,INT-001,MES-001-R2,Integration,八次重试与冻结退避,STATE,可控时钟和失败publisher,连续失败1至8；检查next_retry_at；手工重试,1m/5m/15m/1h/4h/12h/24h；第8次DEAD_LETTER；计数不重置,DB+policy clock,Integration
+TC-INT-004,INT-001,MES-001-R2,Integration,人工重试权限幂等并发与审计,PERMISSION,RETRY_WAIT/DEAD_LETTER消息,验证双权限/reason/If-Match/Idempotency-Key/并发claim/审计,单赢家；冲突409；非法状态422；审计同事务,API+DB+Audit,API+DB integration
+TC-UI-003,AUD-001;INT-001,MES-001-R2,UI,Audit与Integration正式Route拆分,UI,组件auth double,访问两正式route；检查权限/API状态；扫描移除route/metrics,无/platform/operations与PLAT-001；无无契约指标,UI+mapping,Component
+TC-NFR-001,NFR-001;NFR-002;NFR-003,MES-001-R2,NFR,企业参数配置与验证Gate,VALIDATION,production/non-production配置,缺少/非法production参数；省略non-prod参数,production校验失败；non-prod可启动；不验证虚构数值,Config test+register,Integration
+TC-MD-002,MD-001,MES-003-R2,Master Data,组织层级闭环与越级阻断,DOMAIN,组织树已配置,创建/移动/停用组织并验证父子关系,闭环禁止；历史引用保留；越级操作拒绝,API+DB+Audit,API integration
+TC-PROC-004,PROC-PARAM-001,MES-006-R2,Process,工艺参数定义与版本冻结,DOMAIN,工艺包Draft,定义参数限度并发布；尝试原位修改,参数完整；发布版本不可原位修改,API+DB,API integration
+TC-EBR-011,EBR-002,MES-007-R2,eBR,动态字段类型与稳定标识,DOMAIN,模板Draft,配置各字段类型；发布并生成实例,类型约束生效；稳定field code保留,API+DB+UI,Integration
+TC-BAT-005,PRD-001,MES-009-R2,Production,生产订单创建与批次引用,DOMAIN,已批准工艺与物料,创建生产订单并下达批次,订单约束通过；批次引用冻结版本,API+DB+Audit,Integration
+TC-EQP-002,MES-EQP-001,MES-010-R2,Execution,设备Usage/Run不可覆盖链,COMPLIANCE,执行单元READY,开始/暂停/恢复/结束设备运行,事件追加；资格/校准Gate；无覆盖更新,API+DB+Audit,Integration
+TC-BAL-004,BAL-001,MES-012-R2,Balance,数量事件驱动物料平衡,TRACEABILITY,存在领料/称量/投料事件,追加与冲销数量事件并重算,原事件不删；冲销反向追加；结果可追溯,DB+lineage,Integration
+TC-QMS-004,QMS-IPC-001,MES-012-R2,QMS,IPC实例与结果修订链,COMPLIANCE,工序触发IPC,记录结果；修订；检查偏差触发,原结果保留；修订可追溯；Gate正确,API+DB+Audit,Integration

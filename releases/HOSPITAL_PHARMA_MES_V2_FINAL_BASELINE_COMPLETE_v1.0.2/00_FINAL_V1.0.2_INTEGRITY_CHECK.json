@@ -1,0 +1,19 @@
+{
+  "baseline": "FINAL BASELINE COMPLETE v1.0.2",
+  "designChange": "DCP-MES-002-R2-001",
+  "status": "PASS",
+  "crossConsistency": "PASS",
+  "openApiParse": "PASS",
+  "openApiPaths": 158,
+  "openApiOperations": 214,
+  "testCases": 97,
+  "rtmRows": 55,
+  "taskCards": 14,
+  "dependencyAcyclic": true,
+  "obsoleteMaterialLotReferences": 0,
+  "executedFlywayMigrationsModified": 0,
+  "businessCodeModified": 0,
+  "priorBaselineDigest": "c10a42570c14d587955fe0782683633495c8bc2db4adde9a8c5221ee5c5985f3",
+  "priorBaselineUnchanged": true,
+  "fileCountBeforeChecksum": 85
+}
