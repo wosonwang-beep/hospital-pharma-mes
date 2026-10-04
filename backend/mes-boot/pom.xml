@@ -40,7 +40,14 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration><classesDirectory>${project.build.outputDirectory}</classesDirectory><workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory></configuration>
+            <configuration>
+              <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+              <workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
+              <systemPropertyVariables>
+                <!-- Evicted Spring contexts close their pools; keep cumulative ITs below MariaDB's connection limit. -->
+                <spring.test.context.cache.maxSize>4</spring.test.context.cache.maxSize>
+              </systemPropertyVariables>
+            </configuration>
             <executions>
               <execution>
                 <goals><goal>integration-test</goal><goal>verify</goal></goals>
