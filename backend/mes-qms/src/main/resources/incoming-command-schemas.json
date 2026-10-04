@@ -1,0 +1,833 @@
+{
+  "Reason": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "reason"
+    ]
+  },
+  "SignedCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "reason",
+      "reauthToken"
+    ]
+  },
+  "Assign": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "assignedTo": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "assignedTo",
+      "reason"
+    ]
+  },
+  "InspectionRequestCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "materialLotId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "qcSpecificationVersionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "requestType": {
+        "type": "string",
+        "enum": [
+          "INITIAL",
+          "RETEST",
+          "SUPPLEMENTARY",
+          "INVESTIGATION"
+        ]
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "requestedQuantity": {
+        "type": "string",
+        "pattern": "^[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "requestedUnitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "requestedPackageCount": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "requestedDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "priority": {
+        "type": "string",
+        "enum": [
+          "NORMAL",
+          "URGENT"
+        ]
+      },
+      "approvedInvestigationId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      }
+    },
+    "required": [
+      "materialLotId",
+      "qcSpecificationVersionId",
+      "requestType",
+      "reason",
+      "requestedQuantity",
+      "requestedUnitId",
+      "requestedPackageCount",
+      "requestedDate",
+      "priority"
+    ],
+    "description": "All new requests including RETEST require an APPROVED QC specification via requireSelectable. RETEST requires approvedInvestigationId and original frozen version/hash; retired versions may continue only within existing requests. Requested quantity/package count cannot exceed receipt facts."
+  },
+  "SamplingTaskCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "inspectionRequestId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "inspectionRequestItemId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "samplingPlan": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "requiredPackageCount": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "otherSampleName": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      },
+      "otherSampleReason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "inspectionRequestId",
+      "inspectionRequestItemId",
+      "samplingPlan",
+      "requiredPackageCount",
+      "reason"
+    ]
+  },
+  "SamplingDetailCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "containerNo": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "samplingPoint": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "sampleQuantity": {
+        "type": "string",
+        "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "unitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "sampledAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "packageResealed": {
+        "type": "boolean"
+      },
+      "samples": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SampleAllocation"
+        },
+        "minItems": 1
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "containerNo",
+      "sampleQuantity",
+      "unitId",
+      "sampledAt",
+      "packageResealed",
+      "samples",
+      "reason"
+    ],
+    "description": "Samples form 1..N allocations; quantity sum equals sampleQuantity in unitId. OTHER_APPROVED requires signed plan name/reason."
+  },
+  "SampleAllocation": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "sampleType": {
+        "type": "string",
+        "enum": [
+          "TEST_SAMPLE",
+          "RETENTION_SAMPLE",
+          "RETEST_SAMPLE",
+          "OTHER_APPROVED"
+        ]
+      },
+      "quantity": {
+        "type": "string",
+        "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "storageLocation": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "required": [
+      "sampleType",
+      "quantity"
+    ]
+  },
+  "ReceiveSample": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "receivedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "storageLocation": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "receivedAt",
+      "storageLocation",
+      "reason"
+    ]
+  },
+  "RetainSample": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "storageLocation": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "storageLocation",
+      "reason"
+    ]
+  },
+  "InspectionTaskCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "inspectionRequestId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "sampleId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "optionalSpecificationItemIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "inspectionRequestId",
+      "sampleId",
+      "reason"
+    ]
+  },
+  "TestExecutionCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "instrumentId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "rawData": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "observation": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "calculationInput": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "startedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "completedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "performedBy": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "rawData",
+      "calculationInput",
+      "startedAt",
+      "completedAt",
+      "performedBy",
+      "reason"
+    ]
+  },
+  "ApprovedRetestCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "instrumentId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "rawData": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "observation": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "calculationInput": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "startedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "completedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "performedBy": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "originalExecutionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "approvedInvestigationId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      }
+    },
+    "required": [
+      "rawData",
+      "calculationInput",
+      "startedAt",
+      "completedAt",
+      "performedBy",
+      "reason",
+      "originalExecutionId",
+      "approvedInvestigationId"
+    ]
+  },
+  "TestResultRevisionCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "testExecutionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "resultNumeric": {
+        "type": "string",
+        "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "resultText": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "resultUnitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "resultConclusion": {
+        "type": "string",
+        "enum": [
+          "PASS",
+          "FAIL",
+          "INCONCLUSIVE"
+        ]
+      },
+      "reasonForChange": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "testExecutionId",
+      "resultConclusion",
+      "reauthToken"
+    ],
+    "description": "NUMERIC requires resultNumeric/resultUnitId and forbids resultText; TEXT requires resultText and forbids numeric/unit. INCONCLUSIVE requires reasonForChange. INVALID is produced only by approved investigation disposition. Signature binds target execution/content/predecessor."
+  },
+  "ReviseResultCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "testExecutionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "resultNumeric": {
+        "type": "string",
+        "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "resultText": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "resultUnitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "resultConclusion": {
+        "type": "string",
+        "enum": [
+          "PASS",
+          "FAIL",
+          "INCONCLUSIVE"
+        ]
+      },
+      "reasonForChange": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "testExecutionId",
+      "resultConclusion",
+      "reauthToken",
+      "reasonForChange"
+    ],
+    "description": "NUMERIC requires resultNumeric/resultUnitId and forbids resultText; TEXT requires resultText and forbids numeric/unit. INCONCLUSIVE requires reasonForChange. INVALID is produced only by approved investigation disposition. Signature binds target execution/content/predecessor."
+  },
+  "ReviewTaskCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "resultRevisionIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "resultRevisionIds",
+      "reauthToken",
+      "reason"
+    ]
+  },
+  "InspectionReportCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "inspectionRequestId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "supersedesReportId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "inspectionRequestId",
+      "reason"
+    ]
+  },
+  "IncomingReleaseDecisionCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "decision": {
+        "type": "string",
+        "enum": [
+          "RELEASED",
+          "REJECTED",
+          "OTHER_DISPOSITION"
+        ]
+      },
+      "releaseBasis": {
+        "type": "string",
+        "enum": [
+          "FULL_INSPECTION",
+          "INSPECTION_EXEMPT",
+          "RETEST",
+          "OTHER_APPROVED_BASIS"
+        ]
+      },
+      "inspectionReportId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "supersedesDecisionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "decision",
+      "releaseBasis",
+      "reauthToken",
+      "reason"
+    ],
+    "description": "USER_QA is server-assigned. RELEASED requires valid approved report and closed accepted investigations; nonexempt lots cannot use INSPECTION_EXEMPT. No API caller can create SYSTEM_RULE evidence."
+  },
+  "IncomingDeviationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "investigationScope": {
+        "type": "string",
+        "enum": [
+          "INCOMING_MATERIAL"
+        ]
+      },
+      "investigationKind": {
+        "type": "string",
+        "enum": [
+          "OOS",
+          "DEVIATION"
+        ]
+      },
+      "materialLotId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "testExecutionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "originalResultRevisionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "severity": {
+        "type": "string",
+        "enum": [
+          "MINOR",
+          "MAJOR",
+          "CRITICAL"
+        ]
+      },
+      "description": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "investigationScope",
+      "investigationKind",
+      "materialLotId",
+      "severity",
+      "description",
+      "reason"
+    ]
+  },
+  "UpdateDeviationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "description": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      },
+      "investigationSummary": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "investigationScope": {
+        "type": "string",
+        "enum": [
+          "INCOMING_MATERIAL"
+        ]
+      }
+    },
+    "required": [
+      "description",
+      "reason",
+      "investigationScope"
+    ]
+  },
+  "InvestigateCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "investigationSummary": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "investigationScope": {
+        "type": "string",
+        "enum": [
+          "INCOMING_MATERIAL"
+        ]
+      }
+    },
+    "required": [
+      "investigationSummary",
+      "reason",
+      "investigationScope"
+    ]
+  },
+  "DecideDeviationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "decisionCode": {
+        "type": "string",
+        "enum": [
+          "REJECT",
+          "AUTHORIZE_RETEST",
+          "ACCEPT_WITH_JUSTIFICATION"
+        ]
+      },
+      "disposition": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 10000
+      },
+      "authorizedRetestCount": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      },
+      "investigationScope": {
+        "type": "string",
+        "enum": [
+          "INCOMING_MATERIAL"
+        ]
+      }
+    },
+    "required": [
+      "decisionCode",
+      "disposition",
+      "reauthToken",
+      "reason",
+      "investigationScope"
+    ]
+  },
+  "CloseDeviationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "selectedResultRevisionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "originalResultDisposition": {
+        "type": "string",
+        "enum": [
+          "VALID",
+          "INVALID"
+        ]
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reauthToken": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "writeOnly": true
+      },
+      "investigationScope": {
+        "type": "string",
+        "enum": [
+          "INCOMING_MATERIAL"
+        ]
+      }
+    },
+    "required": [
+      "reauthToken",
+      "reason",
+      "investigationScope"
+    ]
+  }
+}

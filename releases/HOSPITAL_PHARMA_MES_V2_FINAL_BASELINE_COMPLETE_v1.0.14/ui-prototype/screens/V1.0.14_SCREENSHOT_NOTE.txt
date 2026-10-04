@@ -1,0 +1,1 @@
+Inherited PNGs represent the original prototype and are historical visual references only. Current horizontal field layout is defined by DESIGN_SYSTEM.md, the runnable styles.css and DCP-MATERIAL-NAMES-UI-001. Current implementation screenshots are in docs/acceptance/material-ui-correction.

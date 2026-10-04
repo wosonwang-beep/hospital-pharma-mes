@@ -1,0 +1,18 @@
+{
+  "corrections" : [ {
+    "orderId" : "70",
+    "previousPlannedQty" : "20.000000",
+    "plannedQty" : "26.000000",
+    "newVersion" : 2,
+    "source" : "native-concurrency-470029abdd6e.json"
+  }, {
+    "orderId" : "69",
+    "previousPlannedQty" : "20.000000",
+    "plannedQty" : "26.000000",
+    "newVersion" : 2,
+    "source" : "native-concurrency-e7e48673ba0e.json"
+  } ],
+  "command" : "ProductionOrder:EDIT",
+  "regulatedHistoryPreserved" : true,
+  "recordedAt" : "2026-10-04T02:51:10.330859400Z"
+}

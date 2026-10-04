@@ -1,0 +1,1640 @@
+{
+  "paths": {
+    "/execution-units/{id}/forms": {
+      "get": {
+        "operationId": "listExecutionForms",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:form:view",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiRuntimeFormList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forms/{id}/render-model": {
+      "get": {
+        "operationId": "getFormRenderModel",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:form:view",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFormRenderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forms/{id}/draft-values": {
+      "put": {
+        "operationId": "saveDraftValues",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:form:edit",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "description": "Quoted current formRevision, matching body.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]*)\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFormRenderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveRuntimeValues"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forms/{id}/submit": {
+      "post": {
+        "operationId": "submitForm",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:form:submit",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "description": "Quoted current formRevision, matching body.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]*)\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFormRenderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RuntimeFormCommand"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/field-values/{id}/corrections": {
+      "post": {
+        "operationId": "correctFieldValue",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:record:correct",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "description": "Quoted current formRevision, matching body.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]*)\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFormRenderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorrectRuntimeValue"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forms/{id}/reviews": {
+      "post": {
+        "operationId": "reviewForm",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:review:verify",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "description": "Quoted current formRevision, matching body.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\"(0|[1-9][0-9]*)\"$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiFormRenderModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewRuntimeForm"
+              }
+            }
+          }
+        },
+        "x-permission-by-frozen-rule": {
+          "VERIFY": [
+            "ebr:review:verify",
+            "ebr:sign"
+          ],
+          "APPROVE": [
+            "ebr:review:approve",
+            "ebr:sign"
+          ]
+        },
+        "description": "Resolve server-side frozen reviewRuleId; select VERIFY or APPROVE permission plus ebr:sign. Scalar x-permission retains legacy VERIFY catalog identity, not an extra permission required for APPROVE."
+      }
+    },
+    "/main-batches/{id}/ebr": {
+      "get": {
+        "operationId": "getBatchEbr",
+        "tags": [
+          "eBR runtime"
+        ],
+        "x-permission": "ebr:form:view",
+        "x-mes-task": "MES-007-R2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiBatchEbrRuntime"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields, values or occurrence paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication or reauthentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Permission or required-role/independence rejected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Absent or other-organization reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "REVISION_CONFLICT / INVALID_FORM_STATE / idempotency conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "EBR_RULE_BLOCKED / EBR_REVIEW_REQUIRED / EBR_SIGNATURE_REQUIRED / EBR_SOURCE_REQUIRED / EBR_OPERATION_BINDING_REQUIRED / EBR_OPERATION_NOT_ACTIVE / EBR_DEVIATION_PRODUCER_REQUIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RuntimeValueInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "occurrencePath": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "nullable": true,
+            "description": "Exact numeric values are decimal strings. MULTI_ENUM uses string arrays; null is an explicit missing-value revision."
+          },
+          "unitId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceRef": {
+            "type": "string",
+            "maxLength": 128,
+            "nullable": true
+          }
+        },
+        "required": [
+          "fieldCode",
+          "occurrencePath",
+          "value",
+          "unitId",
+          "sourceRef"
+        ]
+      },
+      "SaveRuntimeValues": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeValueInput"
+            }
+          }
+        },
+        "required": [
+          "formRevision",
+          "reason",
+          "values"
+        ]
+      },
+      "RuntimeFormCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "formRevision",
+          "reason"
+        ]
+      },
+      "CorrectRuntimeValue": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "newValue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "nullable": true,
+            "description": "Exact numeric values are decimal strings. MULTI_ENUM uses string arrays; null is an explicit missing-value revision."
+          }
+        },
+        "required": [
+          "formRevision",
+          "reason",
+          "newValue"
+        ]
+      },
+      "ReviewRuntimeForm": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reviewRuleId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "REJECT"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 1000,
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "reauthToken": {
+            "type": "string",
+            "minLength": 1,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "formRevision",
+          "reviewRuleId",
+          "decision",
+          "comment",
+          "reason",
+          "reauthToken"
+        ]
+      },
+      "FormRuntimeSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "operationExecutionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formDefId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formCode": {
+            "type": "string"
+          },
+          "formName": {
+            "type": "string"
+          },
+          "occurrenceNo": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "VERIFIED",
+              "APPROVED"
+            ]
+          },
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "versionNo": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "submittedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "definitionHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "operationExecutionId",
+          "formDefId",
+          "formCode",
+          "formName",
+          "occurrenceNo",
+          "status",
+          "formRevision",
+          "versionNo",
+          "submittedBy",
+          "submittedAt",
+          "definitionHash"
+        ]
+      },
+      "RuntimeValueRevision": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formInstanceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "fieldDefId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "fieldCode": {
+            "type": "string"
+          },
+          "occurrencePath": {
+            "type": "string"
+          },
+          "revisionNo": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "previousRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "rawValueJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedValueJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceType": {
+            "type": "string",
+            "enum": [
+              "MANUAL",
+              "BARCODE",
+              "INSTRUMENT",
+              "SYSTEM",
+              "DERIVED"
+            ]
+          },
+          "sourceRef": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "changeReason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "nullable": true
+          },
+          "superseded": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "formInstanceId",
+          "fieldDefId",
+          "fieldCode",
+          "occurrencePath",
+          "revisionNo",
+          "previousRevisionId",
+          "rawValueJson",
+          "normalizedValueJson",
+          "unitId",
+          "sourceType",
+          "sourceRef",
+          "recordedBy",
+          "recordedAt",
+          "changeReason",
+          "superseded"
+        ]
+      },
+      "RuntimeRuleExecution": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formInstanceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "ruleCode": {
+            "type": "string"
+          },
+          "ruleVersion": {
+            "type": "string"
+          },
+          "triggerPoint": {
+            "type": "string"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "BLOCK",
+              "WARN"
+            ],
+            "nullable": true
+          },
+          "inputSnapshotJson": {
+            "type": "string"
+          },
+          "outputJson": {
+            "type": "string",
+            "nullable": true
+          },
+          "engineVersion": {
+            "type": "string"
+          },
+          "executedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "formInstanceId",
+          "ruleCode",
+          "ruleVersion",
+          "triggerPoint",
+          "passed",
+          "severity",
+          "inputSnapshotJson",
+          "outputJson",
+          "engineVersion",
+          "executedAt"
+        ]
+      },
+      "RuntimeReviewRequirement": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "reviewRuleId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "objectScope": {
+            "type": "string"
+          },
+          "objectCode": {
+            "type": "string"
+          },
+          "reviewType": {
+            "type": "string",
+            "enum": [
+              "VERIFY",
+              "APPROVE"
+            ]
+          },
+          "requiredRole": {
+            "type": "string"
+          },
+          "independentUserRequired": {
+            "type": "boolean"
+          },
+          "sequenceNo": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "reviewRuleId",
+          "objectScope",
+          "objectCode",
+          "reviewType",
+          "requiredRole",
+          "independentUserRequired",
+          "sequenceNo"
+        ]
+      },
+      "RuntimeReviewRecord": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formInstanceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "reviewRuleId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "reviewType": {
+            "type": "string",
+            "enum": [
+              "VERIFY",
+              "APPROVE"
+            ]
+          },
+          "reviewerId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "roleSnapshot": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "REJECT"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "reviewedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "signatureId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "invalidatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "invalidationReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "formInstanceId",
+          "formRevision",
+          "reviewRuleId",
+          "reviewType",
+          "reviewerId",
+          "roleSnapshot",
+          "decision",
+          "comment",
+          "reason",
+          "reviewedAt",
+          "signatureId",
+          "invalidatedAt",
+          "invalidationReason"
+        ]
+      },
+      "RuntimeRendererField": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldCode": {
+            "type": "string"
+          },
+          "occurrencePath": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "nullable": true,
+            "description": "Exact numeric values are decimal strings. MULTI_ENUM uses string arrays; null is an explicit missing-value revision."
+          },
+          "displayValue": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "readonly": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "validationState": {
+            "type": "string",
+            "enum": [
+              "VALID",
+              "MISSING",
+              "BLOCK",
+              "WARN"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "provenance": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "fieldCode",
+          "occurrencePath",
+          "label",
+          "type",
+          "value",
+          "displayValue",
+          "unitId",
+          "required",
+          "readonly",
+          "visible",
+          "validationState",
+          "source",
+          "provenance",
+          "allowedActions"
+        ]
+      },
+      "FormRenderModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "operationExecutionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formDefId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formCode": {
+            "type": "string"
+          },
+          "formName": {
+            "type": "string"
+          },
+          "occurrenceNo": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "VERIFIED",
+              "APPROVED"
+            ]
+          },
+          "formRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "versionNo": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "submittedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "definitionHash": {
+            "type": "string"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/EbrForm"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeRendererField"
+            }
+          },
+          "currentValues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeValueRevision"
+            }
+          },
+          "valueRevisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeValueRevision"
+            }
+          },
+          "ruleExecutions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeRuleExecution"
+            }
+          },
+          "reviewRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeReviewRequirement"
+            }
+          },
+          "signatureRequirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EbrSignatureRule"
+            }
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RuntimeReviewRecord"
+            }
+          },
+          "signatureIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "operationExecutionId",
+          "formDefId",
+          "formCode",
+          "formName",
+          "occurrenceNo",
+          "status",
+          "formRevision",
+          "versionNo",
+          "submittedBy",
+          "submittedAt",
+          "definitionHash",
+          "definition",
+          "fields",
+          "currentValues",
+          "valueRevisions",
+          "ruleExecutions",
+          "reviewRequirements",
+          "signatureRequirements",
+          "reviews",
+          "signatureIds",
+          "allowedActions"
+        ]
+      },
+      "BatchEbrRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mainBatchId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "templateVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "definitionHash": {
+            "type": "string"
+          },
+          "forms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormRenderModel"
+            }
+          }
+        },
+        "required": [
+          "mainBatchId",
+          "templateVersionId",
+          "definitionHash",
+          "forms"
+        ]
+      },
+      "ApiFormRenderModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FormRenderModel"
+          },
+          "traceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ]
+      },
+      "ApiBatchEbrRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BatchEbrRuntime"
+          },
+          "traceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ]
+      },
+      "ApiRuntimeFormList": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormRuntimeSummary"
+            }
+          },
+          "traceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ]
+      }
+    }
+  }
+}

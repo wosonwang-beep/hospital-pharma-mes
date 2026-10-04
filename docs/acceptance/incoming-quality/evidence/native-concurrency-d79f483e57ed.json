@@ -1,0 +1,21 @@
+{
+  "fixture" : "IT_RACE_d79f483e57ed",
+  "materialId" : "278",
+  "lotId" : "207",
+  "orderId" : "145",
+  "batchId" : "151",
+  "authorId" : 1122,
+  "qaId" : 1126,
+  "qualityStatus" : "REJECTED",
+  "inventoryStatus" : "BLOCKED",
+  "retained" : true,
+  "orders" : [ {
+    "id" : 145,
+    "order_no" : "IT_RACE_ORDER_d79f483e57ed"
+  } ],
+  "batches" : [ {
+    "id" : 151,
+    "batch_no" : "IT_RACE_BATCH_d79f483e57ed"
+  } ],
+  "recordedAt" : "2026-10-04T07:37:23.039012700Z"
+}

@@ -1,0 +1,57 @@
+# GMP数据完整性与审计
+
+禁止硬删除GxP记录；禁止覆盖历史值；更正追加revision并保留前后值、原因、人员、时间；必要时原复核失效并重签。签名绑定身份、含义、时间、对象和record_digest。
+
+# V1.0.10 Audit and eSignature Controls — DCP-MES-001-R2-001
+AuditEvent records the authenticated/registered technical actor, authorizing role snapshot, stable action/object, canonical old/new digests, reason, UTC millisecond timestamp, transaction ID, request ID, source and optional idempotency key. `created_by=actor_id` and `created_at=occurred_at`. Background jobs use a registered technical user. Credentials, tokens, payload bodies and secrets never enter AuditEvent or ordinary logs. Runtime database rights and MariaDB guards make the table append-only.
+
+Electronic signature is not an image. It uses a server-built RFC 8785 canonical envelope and lowercase SHA-256 digest. Reauthentication is exactly five minutes, single-use and bound to user/session/org/object/meaning/version. Consumption occurs on first sign attempt and is not restored on rollback. `auth_context_json` contains only schema version, method, reauthentication timestamp, SHA-256 session ID hash and request ID.
+
+Invalidation is a controlled `VALID → INVALIDATED` mutation of status/invalidation/update metadata/version only. Re-sign inserts a new row and links the immediately superseded invalidated signature. Existing signature digests are never recalculated in place.
+
+## DCP-MES-002-R2-001 — Incoming Material GxP Controls
+
+All six records use shared AuditEvent, ElectronicSignature, Attachment, Comment, Revision, and Lineage infrastructure. Audit covers create, submit, modify, review, approve, reject, cancel, resample, retest, result revision, QA release/reject, inspection-exempt evaluation, freeze/unfreeze, and supersession with who/when/what/before/after/reason/request/transaction identity.
+
+Signature-required meanings include sampling completion, result confirmation/correction, inspection review, report approval, user QA release/reject, and approved disposition. A signature binds business type/id, record version, canonical digest, signer, time, and meaning. `signed=true` is never sufficient.
+
+`SYSTEM_RULE` inspection-exempt decisions have no fictitious human signature or actor. They bind rule/version and qualification snapshots, technical actor, audit event, transaction, and deterministic decision digest. Human decisions use `USER_QA` and the applicable electronic signature. Existing decisions and result revisions are immutable; corrections supersede or append.
+
+
+
+
+## DCP-MES-003-R2-001 approved delta
+
+MES-003 mutation evidence, reason, version, isolation and idempotency requirements are defined by DCP-MES-003-R2-001. No additional signature-required business point is introduced.
+
+
+## DCP-MES-004-005-R2-001 approved contract completion
+
+Material creation 201, complete typed DTOs, explicit version target/root optimistic token, Material root DRAFT/APPROVED/INACTIVE and version DRAFT/SUBMITTED/APPROVED, Supplier UNAPPROVED/APPROVED/INACTIVE and named commands, historical relationship revocation, and LG-004 delayed conversion-material FK follow 00_DESIGN_CHANGE_PROPOSAL_DCP-MES-004-005-R2-001_APPROVED.md. No existing table/column/path/permission/task dependency is added or removed. All previous unrelated contracts remain applicable.
+
+
+## DCP-MATERIAL-BASIC-001 authoritative replacement
+
+Read 00_DESIGN_CHANGE_DCP-MATERIAL-BASIC-001_APPROVED.md. This delta supersedes earlier material business version/approval wording, including inherited v1.0.4 delta sections; unrelated versioned aggregates and supplier qualification remain unchanged. Material is directly editable basic master, root ACTIVE/INACTIVE; historical DRAFT/APPROVED rows remain evidence-compatible enabled records until audited maintenance. Basic unit/conversion and multiple suppliers with exactly one preferred are current scope. versionNo is only an optimistic-lock token. Legacy version/rule tables are retired, not dropped. Consumer snapshots freeze material values at use time.
+
+## DCP-MES-006-R2-001 current contract
+
+The approved 00_DESIGN_CHANGE_DCP-MES-006-R2-001_APPROVED.md is normative for MES-006 and supersedes prior contradictory process/product/eBR scope prose. Product is owned here; material has no business version; eBR is independently owned by MES-007. Process signature binds immutable business version and definition content. New physical V011 only. Test requirements include TC-PROC-004.
+
+
+## DCP-MATERIAL-NAMES-UI-001 current correction
+See `00_DESIGN_CHANGE_DCP-MATERIAL-NAMES-UI-001_APPROVED.md`. The three alternate material-name fields are retired from current API/UI/search/consumer snapshots; legacy physical values and audits are preserved. Labels and controls remain side by side on all viewport sizes. This supersedes inherited inconsistent descriptions within that boundary.
+
+
+## DCP-MES-007-008-SEQUENCING-001 authoritative delta
+
+Read `00_DESIGN_CHANGE_DCP-MES-007-008-SEQUENCING-001_APPROVED.md` and the stage contract appendices. Explicit human approval preserves the full MES-007/008 functionality and required tests, while separating current implementation from later real integration. LG-007A definition/Designer/DSL/published contracts is the current MES-007 gate; LG-007B remains MES-009 after LG-009A, with its operation_execution_id FK installed and validated by LG-010. LG-008 reservation/issue main_batch_id FKs are installed and validated by LG-009A. Before these physical producers exist, dependent writes fail closed; no placeholder batch/operation rows, bypassed qualification, or mutable regulated history. MES-008A owns actual MaterialEligibilityService/release evidence; no quantity-only eligibility.
+
+The existing independent receipt edit UI is retained. `PUT /wms/receipts/{id}` uses `wms:receipt:update`, edits only DRAFT authored receipt fields, requires optimistic version, reason, idempotency and same-transaction audit, and returns 200; Confirmed receipt facts (recordStatus APPROVED) cannot be edited. Formal contracts are the concrete OpenAPI and stage appendices. All current labels/control pairs stay horizontal on desktop/mobile.
+
+Current targeted tests prove only current-stage capabilities; deferred runtime/eligibility/batch tests remain required. MES-007 and MES-008 remain IN PROGRESS until every original applicable gate passes against real producer contracts. The approved stage does not authorize implementation of MES-008A/009/010 or marking tasks ACCEPTED.
+
+
+## DCP-MES-008A-CONTRACT-001 approved bounded delta
+
+Read `00_DESIGN_CHANGE_DCP-MES-008A-CONTRACT-001_APPROVED.md`. Its six independent create/execute routes, existing workbench mapping, nullable incoming MainBatch references, MES-009 delayed FK ownership and canonical finished_lot_id target supersede conflicting inherited wording only within this boundary. Existing fields, API/permissions, state machines and GxP requirements remain unchanged. Unresolved incoming implementation-map gaps are not resolved by this release.

@@ -8,42 +8,22 @@ The objective is `PERSISTENT DEV + ON-DEMAND TEST + TARGETED VALIDATION + KEY IN
 
 ## 2. Environment model
 
-| Environment | Purpose | Lifecycle | Data rule |
-|---|---|---|---|
-| DEV | Daily development, backend/frontend/API/page debugging, manual inspection, current-task functional checks, continuous Flyway upgrades | Persistent | Database `hospital_pharma_mes_dev`; MariaDB and Redis use Docker named volumes |
-| TEST | Automated integration, migration, failure, constraint, transaction, concurrency and idempotency tests | Ephemeral per gate | Create → Flyway → Test → Capture Result → Destroy |
-| PROD | Future validated production environment | Controlled deployment | Never used as a DEV/TEST default; automated tests never connect to it |
+The user's local-environment decision of 2026-10-02 is authoritative: local development and local database tests share the native Windows MariaDB database `hospital_pharma_mes_dev` at `localhost:3306`. All project tables and Flyway history belong to that database. Do not create another local TEST database or start a MariaDB container for this project.
 
-DEV, TEST, and PROD must be physically and configurationally isolated. `application-local.yml` is DEV, `application-ci.yml` is TEST/CI, and `application-prod.yml` is PROD. There is no embedded-database or in-memory Redis fallback.
+`application-local.yml` is the development profile; `application-ci.yml` is also used by local integration tests. Both load the ignored root `.env` when launched from `D:\codex\_project\gmp\hospital-pharma-mes`. Explicit environment/command-line overrides must not redirect local work to a different database.
 
-## 3. Persistent DEV database
+Hosted GitHub CI keeps its existing service-container configuration because it cannot reach this workstation's localhost. PROD is never a development or test target. There is no embedded-database or in-memory Redis fallback.
 
-DEV uses:
+## 3. Persistent local database
 
-- MariaDB database: `hospital_pharma_mes_dev`
-- MariaDB volume: `hospital-pharma-mes-mariadb-dev`
-- Redis volume: `hospital-pharma-mes-redis-dev`
-- Compose services: `mariadb` and `redis`
+- Native Windows service: `MariaDB`.
+- Host and port: `localhost:3306`.
+- Database: `hospital_pharma_mes_dev`.
+- Application account: `mes`; administrative credentials are used only for provisioning.
+- Credentials: ignored root `.env`; never commit passwords.
+- Local development and database tests share these tables. No alternate local database is provisioned.
 
-DEV is used for routine coding, backend debugging, frontend/API/page integration, manual data checks, current-task functional validation, and continuous Flyway upgrades. It is not deleted when a MES task ends.
-
-Allowed lifecycle:
-
-```text
-docker compose up -d mariadb redis
-docker compose down
-docker compose up -d mariadb redis
-```
-
-`docker compose down` stops and replaces containers while preserving named volumes. The following operations are forbidden unless the user explicitly requests the exact intent `RESET DEVELOPMENT DATABASE`:
-
-- `docker compose down -v`;
-- deleting either DEV named volume;
-- dropping or recreating `hospital_pharma_mes_dev`;
-- erasing its Flyway history.
-
-An explicitly authorized reset is a destructive action: resolve and report the exact volume/database targets before execution.
-
+Preserve existing data and Flyway history. Never drop, recreate, clear, reset, or repair this database without the user's explicit authorization. Existing Compose files remain available for hosted/optional infrastructure, but their MariaDB service is not the local project database.
 ## 4. DEV migration rule
 
 DEV follows the repository's real physical Flyway chain from V001 through the current version. For every new task:
@@ -65,12 +45,13 @@ Forbidden:
 
 If a database contains the same physical version with a different description/checksum, stop migration of that database. Do not repair or overwrite it. Preserve it for investigation and provision an isolated compatible database/volume unless destructive recovery is explicitly authorized.
 
-## 5. Ephemeral TEST rule
+## 5. Local test rule
 
-There is no fixed TEST database requiring manual upkeep. A test that requires MariaDB or Redis uses task-scoped infrastructure that is automatically created and destroyed. CI service containers already implement this model. A local task may use equivalent task-scoped Docker containers or future Testcontainers support, but must preserve the same isolation and cleanup contract.
+Local database tests connect to the same `hospital_pharma_mes_dev` database using the root `.env`. Do not create a second local test database, use Testcontainers for MariaDB, clear tables, reset migrations, or run Flyway clean.
 
-TEST may be cleared and may contain rollback, abnormal, concurrent, constraint-violation, transaction-failure, and migration scenarios. Automated tests must not connect to `hospital_pharma_mes_dev`, except for a test explicitly named and documented as a DEV smoke test. Such a smoke test must be non-destructive and is never a substitute for isolated TEST evidence.
+Use transactions with rollback or uniquely identified test records. Cleanup must target only records created by that test. Tests that modify shared seed roles, permissions, or existing users must be reviewed and made safe before running against this persistent database. Read-only checks are preferred for schema/history verification. Tests never connect to PROD.
 
+Hosted CI retains its existing isolated service containers; this is not an additional database on the user's workstation.
 ## 6. Default development loop
 
 ```text
@@ -81,7 +62,7 @@ Code
 → Continue
 ```
 
-Do not perform `Create TEST DB → V001..latest → Full Integration → Destroy` after every changed file. Start real TEST infrastructure only when the behavior genuinely depends on MariaDB, Redis, Flyway, repository SQL, transactions, database constraints, concurrency, or idempotency.
+Use the shared local database for targeted tests when behavior depends on MariaDB, Flyway, repository SQL, transactions, constraints, concurrency, or idempotency. Preserve data and migration history between tasks. Run Redis-dependent checks only when Redis is available.
 
 ## 7. Fast Task Validation
 
@@ -96,7 +77,7 @@ An ordinary MES task blocks completion on:
 7. Code review has `CRITICAL = 0`.
 8. Code review has `HIGH = 0`.
 
-Run the main ephemeral MariaDB/Redis integration gate once when ordinary task implementation is substantially complete. For a failure:
+Run the relevant safe MariaDB/Redis integration gate once when ordinary task implementation is substantially complete. For a failure:
 
 ```text
 FAIL

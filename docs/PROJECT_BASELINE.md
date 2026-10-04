@@ -4,13 +4,27 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
-- Authoritative design: `FINAL BASELINE COMPLETE v1.0.2`.
-- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/).
-- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.2.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.2/00_MANIFEST_FINAL_FROZEN_V1.0.2.md).
+- Approved bounded functional closure: user explicitly replied “批准方案” on 2026-10-04 for [DCP-MES-008-011-FUNCTIONAL-CLOSURE-001](development/DCP-MES-008-011-FUNCTIONAL-CLOSURE-001-PROPOSED.md). Inventory decisions, controlled clearance and only the staged MES-012 IPC producer are authorized. v1.0.15 is now the authoritative cumulative release after cross-document consistency review. The user separately approved the one-time failed V024 recovery; migration and scoped native verification passed. Original failure evidence and bounded approval are retained in [recovery/acceptance evidence](acceptance/functional-closure/RECOVERY-2026-10-04.md); no general authorization to rewrite migration history is implied.
+
+- Current approved completion: DCP-INCOMING-QUALITY-GAPS-001 plus referenced MES-009/010 decisions and full acceptance scope; explicit approval 2026-10-03. Reviewed v1.0.11 core, v1.0.12 runtime/return, v1.0.13 weighing producer and v1.0.14 frozen-standard trace contracts are current. Prior releases are preserved; verification is recorded in docs/acceptance/incoming-quality.
+
+- Current bounded incoming delta: DCP-MES-008A-CONTRACT-001 A/B, previously approved routes and staged QMS FKs; cross-consistency review PASS. v1.0.9 retained unchanged. That earlier gap register is superseded by the approved completion contracts.
+
+- Current approved bounded change: DCP-MES-007-008-SEQUENCING-001; explicit approval 2026-10-03, staged eBR/WMS, delayed FKs and receipt PUT; v1.0.8 preserved.
+
+- Authoritative design: `FINAL BASELINE COMPLETE v1.0.15`.
+- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/).
+- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.15.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/00_MANIFEST_FINAL_FROZEN_V1.0.15.md).
+- Current bounded correction: `DCP-MATERIAL-NAMES-UI-001` removes three material name fields from business use and enforces horizontal form labels; v1.0.7 retained, no physical migration.
+- Approved MES-006 bounded completion: `DCP-MES-006-R2-001` (explicit “确认授权”, 2026-10-03); original design retained, v1.0.6 immutable.
+- Approved MES-004/005 bounded change: `DCP-MES-004-005-R2-001` (human approval 2026-10-03); prior v1.0.3 retained.
+- Approved MES-003 bounded change: `DCP-MES-003-R2-001` (human approval 2026-10-03); prior v1.0.2 retained.
 - Approved change trace: `DCP-MES-002-R2-001` → v1.0.2 (cumulative over retained v1.0.1 / DCP-MES-001-R2-001).
 - Task state and next-task selection: [`MES_TASKS.md`](../MES_TASKS.md).
 
 Frozen requirements, data models, states, APIs, permissions, routes, integration contracts, and GxP controls may change only through approved design change and cross-consistency review.
+
+- Approved current presentation change: `DCP-UI-LIST-EDIT-001` (attached reference list/edit style, 2026-10-03); prior v1.0.5 retained.
 
 ## Product baseline
 
@@ -39,7 +53,7 @@ Records and state transitions must preserve traceability, data integrity, attrib
 
 - MariaDB is the production-compatible SQL target; formal schema evolution is Flyway-only and append-only.
 - Section 15 migration identifiers are logical groups, not physical Flyway versions. New physical versions follow the actual highest successful repository/database version.
-- DEV is persistent in `hospital_pharma_mes_dev`; TEST is ephemeral and isolated; PROD is a future validated environment. DEV, TEST, and PROD are never interchangeable.
+- Local development and local database tests share the persistent native `hospital_pharma_mes_dev` using unique rollback-owned fixtures. Hosted CI retains its isolated service container. Tests never connect to PROD.
 - Persistent DEV data is not deleted, rebuilt, or cleared without explicit destructive-action authorization.
 - Operational details: [`development/database-and-validation-strategy.md`](development/database-and-validation-strategy.md).
 
@@ -47,10 +61,12 @@ Records and state transitions must preserve traceability, data integrity, attrib
 
 Start with `AGENTS.md` and `MES_TASKS.md`. After selecting one task, open its Task Card and only the referenced sections needed for that task:
 
-- Product and domain: PRD, Domain Model, and relevant state-machine sections in the v1.0.2 release.
+- Product and domain: PRD, Domain Model, and relevant state-machine sections in the current authoritative release.
 - Data and interfaces: Database Design, API Detailed Design, Full OpenAPI, and Section 15 contracts named by the Task Card.
 - Behavior and UI: Functional Design, UI/Page Design, Route Matrix, and prototype mapping only when the task touches them.
 - Compliance and tests: GMP/Audit/eSignature, required Test Cases, and RTM rows named by the Task Card.
 - Repository implementation guidance: [`architecture/`](architecture/), [`api/`](api/), [`development/`](development/), and accepted evidence under [`acceptance/`](acceptance/) only when directly relevant.
 
 Do not read every baseline artifact or all repository documentation as a startup step. Detailed domain documents remain at their existing locations and are loaded on demand.
+
+Current approved material-only change: DCP-MATERIAL-BASIC-001, direct basic maintenance with multiple suppliers/one preferred and consumer snapshots; v1.0.4 retained as historical authority.

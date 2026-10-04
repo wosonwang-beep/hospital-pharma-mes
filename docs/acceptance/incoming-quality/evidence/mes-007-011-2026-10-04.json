@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-04",
+  "baseline": "v1.0.14",
+  "scope": "MES-007–011 continued implementation; whole tasks IN PROGRESS",
+  "newNativeDistinctPassed": 16,
+  "affectedUnitPassed": 14,
+  "finalHttpSnapshotGate": {
+    "errors": 0,
+    "seconds": 10.62,
+    "failures": 0,
+    "exitCode": 0,
+    "tests": 3
+  },
+  "finalAffectedRegression": [
+    {
+      "errors": 0,
+      "seconds": 12.83,
+      "failures": 0,
+      "suite": "EbrRuntimeIT",
+      "tests": 3
+    },
+    {
+      "errors": 0,
+      "seconds": 3.442,
+      "failures": 0,
+      "suite": "IncomingProductionIT",
+      "tests": 2
+    }
+  ],
+  "migration": {
+    "successful": 23,
+    "newVersion": "V023",
+    "snapshotGuards": 2,
+    "historicalMigrationsUnchanged": true,
+    "failed": 0,
+    "highest": 23
+  },
+  "testResidue": {
+    "materials": 0,
+    "actors": 0,
+    "roles": 0
+  },
+  "review": "Demonstrated HIGH required arrays and MEDIUM optional group corrected; HTTP binding and snapshot guards reviewed; no remaining demonstrated CRITICAL/HIGH in increment",
+  "frontend": "Unchanged; previous API-mocked UI evidence reused, no new browser-to-native E2E claim",
+  "remaining": [
+    "True concurrent transaction/release/eligibility scenarios",
+    "Full required negative/exemption matrices",
+    "MES-010 actual production IPC and clearance producers: DEPENDENCY_NOT_READY"
+  ],
+  "mapping": "../MES-007-011-2026-10-04.md",
+  "localDiagnosticLogs": [
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-010-completion-gate.log",
+      "sha256": "f26e3d1b4be805395ba526024d945e8f6cd9b8e080c941498827663275fa71f6"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes008-011-completion-retry.log",
+      "sha256": "1a9a77817c0c56b2ad4d889f12225a05aeeb76bc51303a8e05a1578150a23967"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-009-http-review-gate.log",
+      "sha256": "a25aa68fa88b8f53b833378d469637ae3e2619e1ec1089e08f5ee7ab5ebdcb2f"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-repeating-red.log",
+      "sha256": "69e408dc2c58622cfd68a320b76944c2e3b3178da1da9ec8a8491f175ca3c1cf"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-011-fix-green.log",
+      "sha256": "480c092ebccf12ce7df6c7bc05b2ed1e747b2e2ce93fac4cf333564057949e7d"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes009-011-final-http-snapshot-gate.log",
+      "sha256": "bfe147ef9901c41b846faf5e55d0622416a87766d8c4e0538856b049b984cfd3"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-011-affected-regression.log",
+      "sha256": "269feded9f1f77d43c8da14536d49f09d3dd166376d41624399111219a25df6d"
+    }
+  ]
+}

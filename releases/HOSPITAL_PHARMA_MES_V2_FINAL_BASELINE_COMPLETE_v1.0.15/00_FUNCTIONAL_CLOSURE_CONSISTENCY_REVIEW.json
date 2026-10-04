@@ -1,0 +1,20 @@
+{
+  "state": "PUBLISHED bounded approved contract",
+  "approval": "2026-10-04 user 批准方案; separate explicit V024 recovery approval",
+  "immutablePriorRelease": {
+    "version": "1.0.14",
+    "verifiedHashes": 98
+  },
+  "openapiReferences": {
+    "result": "PASS",
+    "count": 2054
+  },
+  "csvWidths": "PASS",
+  "migration": "24 successful; V024 recovered once; old successful history unchanged",
+  "databaseDomainStateApiUiPermissionAuditSignatureTestRtmIntegration": "PASS for approved inventory/IPC/clearance scope; six physical owner tables; exact single facts; frozen IPC and controlled Gates",
+  "trace": "INVENTORY_DECISION/INVENTORY_CONTROL/SIGNED_EVIDENCE, original identities",
+  "nativeAcceptance": "26 distinct scoped native scenarios PASS; other full-task RTM unwaived",
+  "review": "Independent increment review: HIGH=0 CRITICAL=0; MEDIUM one-time-tool target guard fixed",
+  "limitation": "mocked reauthentication port and prior mocked browser API; not full login/token-expiry browser E2E",
+  "taskScope": "MES-012 IPC stage only; no CAPA/balance/MES-013 expansion"
+}

@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-04",
+  "baseline": "v1.0.14",
+  "nativeDistinctPassed": 34,
+  "newNativeDistinctPassed": 9,
+  "nativeBreakdown": {
+    "EbrIT": 9,
+    "IncomingProductionIT": 5,
+    "EbrRuntimeIT": 13,
+    "WmsIT": 2,
+    "IncomingClosureIT": 5
+  },
+  "unitPassed": 30,
+  "browserPassed": 10,
+  "browserKind": "API-mocked desktop/mobile; native service/MVC integration separately",
+  "typecheck": "vue-tsc -b PASS",
+  "migration": {
+    "newMigration": false,
+    "successful": 23,
+    "failed": 0
+  },
+  "testResidue": {
+    "roles": 0,
+    "users": 0,
+    "materials": 0
+  },
+  "MES007": "READY FOR ACCEPTANCE",
+  "otherTasks": "IN PROGRESS",
+  "pendingDecision": "Native committed test-fixture retention exception; no such test run yet",
+  "review": "No remaining actionable CRITICAL/HIGH in scoped increment",
+  "redGreen": "Designer duplicate lint disabled RED; current field-path check GREEN",
+  "logs": [
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-closeout-and-boundary-retry.log",
+      "sha256": "5afca587c5b9c2ccf2a36417ae441ae087a1e63f3aa9c50ff1987616a97f5a01"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-lint-red.log",
+      "sha256": "10829811b791a29175e7715070d33f96a5d99763653b66995d342cf448816366"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-lint-green-browser.log",
+      "sha256": "4572bafbdd4e43794f636ca96b74021c2653b200f92ce3c0d8c637419df25047"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-lint-typecheck.log",
+      "sha256": "fb626227bfe271fdbd46b1d42c7369278d075557653793df54645128a56bce35"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes007-duplicate-native-api-retry.log",
+      "sha256": "3d1ca77e346857aa0e27fd3c7476bce92fdcb619439ad679cc80e70131e4eb8c"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes008-closeout-final-gate.log",
+      "sha256": "a77e9fb8f61d6927004dc052919692ff9ecc38b01bbb781e930957d9f0aaf079"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes008-exempt-final-retry.log",
+      "sha256": "ffdad1a02085ac548e30c6c02653b3d264338fb181b1429723eec81bfaca8015"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes009-010-closeout-gate.log",
+      "sha256": "a457612ef4e8de49d3c50ec5c49a799f52cd6404f38e2965a0d458b3ac8da38f"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes009-list-detail-browser.log",
+      "sha256": "9a977e173b3020068a02dd2dfa5bdebeaf6c32c28669e3f5120910f7368c63df"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes010-clearance-retry.log",
+      "sha256": "fb9aefcdd8700e3e30a64f49139f9e903cf9b43f8a83777bfc67441ffabb77b7"
+    }
+  ]
+}

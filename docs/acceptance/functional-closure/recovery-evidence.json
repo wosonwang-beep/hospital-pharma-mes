@@ -1,0 +1,210 @@
+{
+  "approval": "Explicit user approval for failed V024 only, preserved original evidence, one repair and normal migration",
+  "nativeDatabase": "localhost:3306/hospital_pharma_mes_dev",
+  "migration": {
+    "successful": 24,
+    "failed": 0,
+    "max": "024",
+    "newChecksum": 1378931061,
+    "successfulV001ThroughV023AllFieldsUnchanged": true,
+    "repairExecutions": 1,
+    "sixNewTables": 6,
+    "immutableGuards": 11,
+    "originalFailedScriptRetained": true
+  },
+  "distinctNativeScenarios": 26,
+  "functionalMethodsPASS": {
+    "requiredClearanceNeedsRealIndependentSignedEvidenceBeforeStart": "mes-v024-native-functional-retry.log",
+    "signedInventoryFreezeBlocksActualReservationAndUnfreezeRestoresEligibility": "mes-v024-native-functional-retry.log",
+    "pendingIpcBlocksCompletionThenOriginalFailRequiresSignedInvalidationAndNewResult": "mes-v024-ipc-signing-fix.log",
+    "inventoryPermissionSigningAuditRollbackReplayAndExpiryGate": "mes-v024-negative-gates.log",
+    "newlyBoundEquipmentAndNewFailureInvalidateEarlierClearanceBeforeStartAndResume": "mes-v024-negative-gates.log",
+    "ipcSignatureRejectionAndAuditFailureLeaveNoPartialFactThenExactReplay": "mes-v024-http-and-concurrency.log",
+    "frozenActionHttpContractsAuthorizeExactPermissionsAndReturnStringIds": "mes-v024-final-targeted-retry.log",
+    "publishedSecondIpcDefinitionDoesNotChangeExistingFirstBatchSnapshot": "mes-v024-final-matrix.log",
+    "chargedMaterialReverseTraceIncludesActualSignedInventoryDecisions": "mes-v024-trace-fix-contract-regression.log",
+    "clearanceRecordAndIndependentReviewAuditFailuresRollBackSignaturesVersionsAndKeys": "mes-v024-final-gxp-gates.log",
+    "exactPredecessorSelfReviewStaleVersionAndOtherOrganizationCannotChangeFrozenEvidence": "mes-v024-final-gxp-retry.log"
+  },
+  "nativeRaceInstancesPASS": {
+    "committedFreezeWinsAgainstWaitingReservationWithoutProductionFacts": "mes-v024-final-targeted-retry.log",
+    "committedIpcFailBlocksWaitingCompletionUsingCurrentResult": "mes-v024-final-targeted-retry.log",
+    "committedNewClearanceFailPreventsWaitingStartFromUsingOldPass": "mes-v024-http-and-concurrency.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[RESERVE,False]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[ISSUE,True]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[ISSUE,False]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[WEIGH,True]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[WEIGH,False]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[CHARGE,True]": "mes-v024-final-matrix.log",
+    "signedFreezeSerializesWithEveryActualFinalProductionGate[CHARGE,False]": "mes-v024-final-matrix.log"
+  },
+  "directRegressionsPASS": {
+    "realIncomingReleaseThroughSignedWeighChargeReturnAndReversePreservesTrace": "mes-v024-final-matrix.log",
+    "releaseAuditFailureRollsBackSnapshotsAndRuntimeThenDirectReleaseReplays": "mes-v024-final-matrix.log",
+    "actualFormCompletionDrivesProductionCompleteButCannotFabricateQa": "mes-v024-final-matrix.log",
+    "trustedDeviceReplayEquipmentSegmentsAndPredecessorStayConsistent": "mes-v024-final-matrix.log",
+    "productionHttpUsesClosedContractsPermissionAndImmutableSnapshot": "mes-v024-trace-fix-contract-regression.log"
+  },
+  "unitTests": {
+    "distinct": 3,
+    "status": "PASS",
+    "classes": [
+      "IpcRulesTest",
+      "IpcGateTest"
+    ]
+  },
+  "backendPackage": "PASS",
+  "frontendTypecheck": "PASS",
+  "browser": {
+    "priorMockedApiScenarios": 4,
+    "notRepeated": true,
+    "realBackendBrowserE2E": false
+  },
+  "review": {
+    "independentHigh": 0,
+    "independentCritical": 0,
+    "medium": "bounded recovery target/reuse protection fixed; no additional DB repair"
+  },
+  "authority": "FINAL BASELINE COMPLETE v1.0.15; previous v1.0.14 98 hashes retained",
+  "taskIndex": "MES_TASKS.md; four whole tasks remain IN PROGRESS; no human acceptance inferred",
+  "limits": [
+    "Reauthentication port and actor context are mocked; no claim of real password/Redis token expiry",
+    "Scoped functional closure does not waive other formal task RTM",
+    "Native MariaDB13/Flyway supported-version notice remains environment LOW debt",
+    "Own unique committed race fixtures retained and quality-rejected, BLOCKED/FROZEN; no physical deletion"
+  ],
+  "logEvidence": {
+    "mes-v024-native-functional-retry.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-native-functional-retry.log",
+      "sha256": "16f01ecb2f2ad772eaeb9728d4283ac29849ec610d17293d8180ea6681e75d7f",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.198 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[ERROR] Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 13.10 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-ipc-signing-fix.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-ipc-signing-fix.log",
+      "sha256": "1d39c5f49277109580b4f273c762a12bb9074c8c2a9a26eb97685e9ccdeccf00",
+      "overallBuild": "PASS",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.249 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.49 s -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-negative-gates.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-negative-gates.log",
+      "sha256": "86a6af2d7c26a1eab8f3d945737944883f693651b8987cb959eb1dd0315c7d3a",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.226 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[ERROR] Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 12.70 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-http-and-concurrency.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-http-and-concurrency.log",
+      "sha256": "0ec7d95c69c7df3ce90a4036c592ae235b2f903929eb3cd735861b17a0cb01a1",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.237 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[ERROR] Tests run: 3, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 13.51 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureConcurrencyIT",
+        "[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.294 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-http-concurrency-fix.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-http-concurrency-fix.log",
+      "sha256": "3b8b044551ece7c8e57d9a229deddcc978ea0b7671c9dc8c644edc03fed86501",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.249 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 12.54 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureConcurrencyIT",
+        "[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.876 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-final-targeted-retry.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-final-targeted-retry.log",
+      "sha256": "9f843c17de9c0f801688b81ecfdd2c04ed0a70abd4a0adbe3625e0beb0c8e96f",
+      "overallBuild": "PASS",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.239 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.58 s -- in com.hospital.mes.production.FunctionalClosureConcurrencyIT",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.928 s -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-final-matrix.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-final-matrix.log",
+      "sha256": "ff1d811ac5b6d8aa94f5c69636b5876dbea134c3aaeb50e4f52db0366523f2fa",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.228 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.43 s -- in com.hospital.mes.production.FunctionalClosureConcurrencyIT",
+        "[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.041 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT",
+        "[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.387 s -- in com.hospital.mes.production.IncomingProductionIT"
+      ]
+    },
+    "mes-v024-trace-fix-contract-regression.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-trace-fix-contract-regression.log",
+      "sha256": "9057f395908720fee949f4e16eb9efd05397d6a0267a3fe48cea207bb421ed0f",
+      "overallBuild": "PASS",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.191 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.69 s -- in com.hospital.mes.production.FunctionalClosureIT",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.537 s -- in com.hospital.mes.production.IncomingProductionIT"
+      ]
+    },
+    "mes-v024-final-gxp-gates.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-final-gxp-gates.log",
+      "sha256": "9d1e336c61266ebbed87b091aa850efd5b9d4df8e2e11ff7996c3d0eda64c5b5",
+      "overallBuild": "FAIL",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.224 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 10.66 s <<< FAILURE! -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-final-gxp-retry.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-final-gxp-retry.log",
+      "sha256": "4553727fae789322b224488e6791d5521eab88715d2c2a6ff05b87585ce4341e",
+      "overallBuild": "PASS",
+      "suiteSummaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.205 s -- in com.hospital.mes.qms.application.IpcGateTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in com.hospital.mes.qms.domain.IpcRulesTest",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.30 s -- in com.hospital.mes.production.FunctionalClosureIT"
+      ]
+    },
+    "mes-v024-frontend-typecheck.log": {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-v024-frontend-typecheck.log",
+      "sha256": "fb626227bfe271fdbd46b1d42c7369278d075557653793df54645128a56bce35",
+      "overallBuild": "typecheck exit 0",
+      "suiteSummaries": []
+    }
+  },
+  "artifactSha256": {
+    "evidence.json": "9e76e754e9238c8d001712d9d83a203e1b2c7ada9b2b7d4bd65a913405a0c00b",
+    "IMPLEMENTATION-2026-10-04.md": "debdafaff631adc8624d5f3682a7cbdd4db0fe9534a5f0f57f07a78f31ee3079",
+    "RECOVERY-2026-10-04.md": "2e91877fd6a140bcfc02d6406c202348b555de91a1a854cc4fbf173985f6f8d9",
+    "migration-failure/column-precheck.txt": "9dd8975d607fc83e6cf0e57c308380cad313f5bbda854d8612d33b57d0a63967",
+    "migration-failure/flyway-history-after-migrate.jsonl": "0cb0f0baf3524f56d2994e4954a11dcac15c93bcc01751f9689f7895e1a07144",
+    "migration-failure/flyway-history-after-repair.jsonl": "1bba5bb9e130d85e6113e6804e793bc3eb15293f740d37f882d44f6a280b30a8",
+    "migration-failure/flyway-history-before-recovery.jsonl": "057dd32e8b575f9991149f258a2cb050041a4c6cb7e9eecba9d85e12d84d47b7",
+    "migration-failure/flyway-history-recovery-precheck.jsonl": "057dd32e8b575f9991149f258a2cb050041a4c6cb7e9eecba9d85e12d84d47b7",
+    "migration-failure/recovered-schema-verification.json": "4ffc25e89a36a74c3c992c27037548aae922fae432d0a376b7f6712602d2d393",
+    "migration-failure/retained-freeze-trials.json": "786d3f29e68bbc74673853c5124796bb1819bc9c633b23822c8040eca8cf0c8f",
+    "migration-failure/v024-migrate.log": "9262926eea67164e86700fc2da298b269af2682f6cb60893ac8d619c1491c535",
+    "migration-failure/V024-original-failed.sha256": "dd236f4adb3e3c4e0d3816c41c82223f8e0c7e169e8a5fb05da4e45bbdb54f93",
+    "migration-failure/V024-original-failed.sql": "e3b360207bf2530866d4fe57416e9d5292a8774662d6e3934d69a5f1a25d357c",
+    "migration-failure/v024-repair.log": "196352a5626313e3c1cf1320203df542c153754ebd7c248cb641d00957b4f84d",
+    "ui/functional-closure-executi-21af1-ith-exact-signature-binding-chromium-desktop-ipc-controls.png": "380236c4c38212572798008158ce58c8eec03299a13516a5bb89de4e0cb6e207",
+    "ui/functional-closure-executi-21af1-ith-exact-signature-binding-chromium-mobile-ipc-controls.png": "890e3716a0ebefaf9e6b77b411014480a3619647136e6bfde0b8f57f072be7c2",
+    "ui/functional-closure-signed--d77cf--page-and-horizontal-fields-chromium-desktop-inventory-controls.png": "72df85dbde777764d62fbe0e980d214bffdbca472915072bc2abdfa7a091b430",
+    "ui/functional-closure-signed--d77cf--page-and-horizontal-fields-chromium-mobile-inventory-controls.png": "92be08debec2c883e3b00d0eaae5d0b76650495a0043e89450593c53a1a45b94"
+  }
+}

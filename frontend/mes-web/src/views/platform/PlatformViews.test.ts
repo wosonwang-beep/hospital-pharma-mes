@@ -10,6 +10,8 @@ import type { AuditEvent, Page } from '../../types/audit'
 
 vi.mock('../../api/audit')
 vi.mock('../../api/integration')
+const auditRoute = vi.hoisted(() => ({ query: {} as Record<string, string> }))
+vi.mock('vue-router', () => ({ useRoute: () => auditRoute }))
 
 const page = <T,>(items: T[], total = items.length) => ({ items, page: 0, size: 50, total })
 
@@ -19,9 +21,18 @@ beforeEach(() => {
   pinia = createPinia()
   setActivePinia(pinia)
   vi.resetAllMocks()
+  auditRoute.query = {}
 })
 
 describe('GMP Audit Trail', () => {
+  test('master detail audit link scopes queries by object type and ID', async () => {
+    usePlatformAuthContext().setPermissions(['audit:view'])
+    auditRoute.query = { objectType: 'Equipment', objectId: '21' }
+    vi.mocked(auditApi.queryAuditEvents).mockResolvedValue(page([]))
+    render(AuditTrailView, { global: { plugins: [pinia] } })
+    await screen.findByText('暂无审计事件')
+    expect(auditApi.queryAuditEvents).toHaveBeenCalledWith({ objectType: 'Equipment', objectId: '21', page: 0, size: 50 })
+  })
   test('shows 403 without audit:view and never queries the API', async () => {
     render(AuditTrailView, { global: { plugins: [pinia] } })
 
@@ -89,7 +100,7 @@ describe('Integration Inbox / Outbox Operations', () => {
 
     expect(await screen.findByText('OUTBOX:7')).toBeTruthy()
     expect(screen.queryByRole('button', { name: '人工重试 OUTBOX:7' })).toBeNull()
-    expect(screen.queryByText(/payload/i)).toBeNull()
+    expect(screen.queryByText(/commandBody/i)).toBeNull()
   })
 
   test('submits reason, version and idempotency key for manual retry', async () => {

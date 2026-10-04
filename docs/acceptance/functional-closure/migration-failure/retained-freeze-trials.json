@@ -1,0 +1,82 @@
+[
+  {
+    "lotId": 195,
+    "createdBy": 1062,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "FROZEN",
+    "reason": "Retained real freeze race",
+    "decidedAt": "2026-10-04 07:29:47.467"
+  },
+  {
+    "lotId": 200,
+    "createdBy": 1087,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "Retained real freeze race",
+    "decidedAt": "2026-10-04 07:31:47.506"
+  },
+  {
+    "lotId": 203,
+    "createdBy": 1102,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "Retained real freeze race",
+    "decidedAt": "2026-10-04 07:33:22.846"
+  },
+  {
+    "lotId": 205,
+    "createdBy": 1112,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:20.880"
+  },
+  {
+    "lotId": 206,
+    "createdBy": 1117,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:22.008"
+  },
+  {
+    "lotId": 207,
+    "createdBy": 1122,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:22.924"
+  },
+  {
+    "lotId": 208,
+    "createdBy": 1127,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:23.792"
+  },
+  {
+    "lotId": 209,
+    "createdBy": 1132,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:24.584"
+  },
+  {
+    "lotId": 210,
+    "createdBy": 1137,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:25.433"
+  },
+  {
+    "lotId": 211,
+    "createdBy": 1142,
+    "qualityStatus": "REJECTED",
+    "inventoryStatus": "BLOCKED",
+    "reason": "IT_RACE freeze all final gates",
+    "decidedAt": "2026-10-04 07:37:26.287"
+  }
+]

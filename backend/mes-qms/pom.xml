@@ -3,5 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent><groupId>com.hospital.mes</groupId><artifactId>mes-backend</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
   <artifactId>mes-qms</artifactId>
+  <dependencies>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-execution</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-equipment</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-masterdata</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qc</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+  </dependencies>
 </project>
-

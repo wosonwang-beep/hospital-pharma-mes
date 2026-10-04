@@ -1,0 +1,144 @@
+{
+  "components": {
+    "schemas": {
+      "FrozenMaterialWeighingPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organizationId",
+          "materialId",
+          "baseUnitId",
+          "required",
+          "precision",
+          "tolerancePct",
+          "policyVersion",
+          "configurationHash"
+        ],
+        "properties": {
+          "materialId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "tolerancePct": {
+            "type": "string",
+            "description": "Nonnegative inclusive percentage.",
+            "pattern": "^[0-9]+(\\.[0-9]{1,6})?$"
+          },
+          "configurationHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "baseUnitId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "organizationId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "precision": {
+            "type": "string",
+            "description": "Positive exact quantity in frozen baseUnitId.",
+            "pattern": "^[0-9]+(\\.[0-9]{1,6})?$"
+          },
+          "policyVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "ProcessSnapshot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "packageVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "formulaVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "routeVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "ebrTemplateVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "snapshotHash": {
+            "type": "string",
+            "minLength": 1
+          },
+          "snapshot": {
+            "type": "object",
+            "required": [
+              "organizationId",
+              "process",
+              "ebr",
+              "materials"
+            ],
+            "properties": {
+              "process": {
+                "type": "object"
+              },
+              "materials": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "baseUnitId",
+                    "weighingPolicy"
+                  ],
+                  "description": "Retains exact basic material producer snapshot; adds only immutable consumed weighingPolicy.",
+                  "properties": {
+                    "weighingPolicy": {
+                      "$ref": "#/components/schemas/FrozenMaterialWeighingPolicy"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "baseUnitId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "ebr": {
+                "type": "object"
+              },
+              "organizationId": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "packageVersionId",
+          "formulaVersionId",
+          "routeVersionId",
+          "ebrTemplateVersionId",
+          "snapshotHash",
+          "snapshot"
+        ]
+      }
+    }
+  },
+  "openapi": "3.1.0",
+  "info": {
+    "version": "publication-input",
+    "title": "Incoming frozen material weighing policy completion"
+  },
+  "paths": {}
+}

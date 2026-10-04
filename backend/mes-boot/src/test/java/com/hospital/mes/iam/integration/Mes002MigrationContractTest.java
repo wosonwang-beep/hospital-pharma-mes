@@ -20,7 +20,16 @@ class Mes002MigrationContractTest {
         assertEquals(V001_SHA, sha256(migrations.resolve("V001__foundation_probe.sql")));
         assertEquals(V002_SHA, sha256(migrations.resolve("V002__iam_core.sql")));
         assertTrue(Files.exists(migrations.resolve("V005__mes_002_rbac_contract.sql")));
-        assertEquals(5, Files.list(migrations).filter(Files::isRegularFile).count());
+        // Approved cumulative baseline v1.0.15 adds physical V006..V024.
+        // Keep an exact count and contiguous identities; original hashes above remain frozen.
+        try (var files = Files.list(migrations)) {
+            var versions = files.filter(Files::isRegularFile)
+                .map(path -> path.getFileName().toString())
+                .peek(name -> assertTrue(name.matches("V[0-9]{3}__.+\\.sql"), name))
+                .map(name -> Integer.parseInt(name.substring(1, 4))).sorted().toList();
+            assertEquals(java.util.stream.IntStream.rangeClosed(1, 24).boxed().toList(), versions);
+            assertEquals(5, versions.stream().filter(version -> version <= 5).count());
+        }
     }
 
     @Test

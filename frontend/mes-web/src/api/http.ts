@@ -46,7 +46,9 @@ async function refreshToken() {
 http.interceptors.response.use(response => response, async (error: AxiosError) => {
   const original = error.config as (AxiosRequestConfig & { _retried?: boolean }) | undefined
   const authEndpoint = original?.url?.startsWith('/auth/login') || original?.url?.startsWith('/auth/refresh')
-  if (error.response?.status === 401 && original && !original._retried && !authEndpoint) {
+  const code = (error.response?.data as Partial<ApiErrorBody> | undefined)?.code
+  const reauthenticationError = code === 'REAUTH_TOKEN_INVALID' || code === 'REAUTH_FAILED'
+  if (!reauthenticationError && error.response?.status === 401 && original && !original._retried && !authEndpoint) {
     original._retried = true
     try {
       const token = await refreshToken()

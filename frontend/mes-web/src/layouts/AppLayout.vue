@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { resources } from '../master/resources'
 import { useRoute, useRouter } from 'vue-router'
 import { usePlatformAuthContext } from '../auth/PlatformAuthContext'
 import { useAuthStore } from '../stores/auth'
@@ -38,6 +39,22 @@ async function logout() { await auth.logout(); await router.replace('/login') }
         <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
         <a-menu-item v-if="auth.can('iam:user:view')" key="users" aria-label="用户管理" :class="{ 'ant-menu-item-selected': usersSelected }"><UserOutlined />用户管理</a-menu-item>
         <a-menu-item v-if="auth.can('iam:role:view')" key="roles" aria-label="角色与权限" :class="{ 'ant-menu-item-selected': rolesSelected }"><AppstoreOutlined />角色与权限</a-menu-item>
+        <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
+        <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
+        <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />来料调查</a-menu-item>
+        <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
+        <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
+        <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>
+        <a-menu-item v-if="auth.can('ebr:template:view')" key="ebr-templates" :class="{'ant-menu-item-selected':route.path.startsWith('/ebr/templates')}"><AppstoreOutlined />eBR 模板</a-menu-item>
+        <a-menu-item v-if="auth.can('wms:receipt:view')" key="wms-receipts" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/receipts')}"><AppstoreOutlined />收货单</a-menu-item>
+        <a-menu-item v-if="auth.can('wms:issue:view')" key="wms-issues" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/issues')}"><AppstoreOutlined />发料单</a-menu-item>
         <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
         <a-menu-item v-if="authorization.can('integration:view')" key="integration-operations"><DesktopOutlined />Integration Operations</a-menu-item>
       </a-menu>
@@ -52,7 +69,23 @@ async function logout() { await auth.logout(); await router.replace('/login') }
                 <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
                 <a-menu-item v-if="auth.can('iam:user:view')" key="users"><UserOutlined />用户管理</a-menu-item>
                 <a-menu-item v-if="auth.can('iam:role:view')" key="roles"><AppstoreOutlined />角色与权限</a-menu-item>
-                <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
+                <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
+        <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
+        <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />来料调查</a-menu-item>
+        <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
+        <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
+        <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>
+        <a-menu-item v-if="auth.can('ebr:template:view')" key="ebr-templates" :class="{'ant-menu-item-selected':route.path.startsWith('/ebr/templates')}"><AppstoreOutlined />eBR 模板</a-menu-item>
+        <a-menu-item v-if="auth.can('wms:receipt:view')" key="wms-receipts" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/receipts')}"><AppstoreOutlined />收货单</a-menu-item>
+        <a-menu-item v-if="auth.can('wms:issue:view')" key="wms-issues" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/issues')}"><AppstoreOutlined />发料单</a-menu-item>
+        <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
                 <a-menu-item v-if="authorization.can('integration:view')" key="integration-operations"><DesktopOutlined />Integration Operations</a-menu-item>
               </a-menu>
             </template>

@@ -26,10 +26,11 @@ public class SignatureTransactionService {
     private final SignableObjectProviderRegistry providers; private final SignatureCanonicalizer canonicalizer;
     private final SignatureRepository signatures; private final PlatformIdempotencyService idempotency;
     private final AuditApplicationService audit; private final ObjectMapper json; private final Clock clock;
+    private final org.springframework.context.ApplicationEventPublisher events;
     public SignatureTransactionService(SignableObjectProviderRegistry providers,SignatureCanonicalizer canonicalizer,
         SignatureRepository signatures,PlatformIdempotencyService idempotency,AuditApplicationService audit,
-        ObjectMapper json,Clock clock){this.providers=providers;this.canonicalizer=canonicalizer;this.signatures=signatures;
-        this.idempotency=idempotency;this.audit=audit;this.json=json;this.clock=clock;}
+        ObjectMapper json,Clock clock,org.springframework.context.ApplicationEventPublisher events){this.providers=providers;this.canonicalizer=canonicalizer;this.signatures=signatures;
+        this.idempotency=idempotency;this.audit=audit;this.json=json;this.clock=clock;this.events=events;}
 
     @Transactional
     public SignatureResponseData signInTransaction(SignCommand c,ConsumedReauthentication reauth){
@@ -46,6 +47,7 @@ public class SignatureTransactionService {
         Long supersededSignatureId = resolveSupersededSignature(c);
         SignatureRecord record=signatures.insert(new NewSignature(c.context().organizationId(),c.context().actorId(),
             c.meaning(),c.objectType(),c.objectId(),digest,now,authContext(c,reauth),supersededSignatureId));
+        events.publishEvent(new SignatureAppliedEvent(c.context(),record));
         String transactionId=c.context().requestId()==null?java.util.UUID.randomUUID().toString():c.context().requestId();
         audit.append(new AuditCommand(c.context().organizationId(),c.context().actorId(),c.context().roleSnapshot(),
             "SIGNATURE_APPLIED",c.objectType(),c.objectId(),null,digest,null,null,now,transactionId,
@@ -130,19 +132,22 @@ public class SignatureTransactionService {
         try{return json.writeValueAsString(n);}catch(JsonProcessingException e){throw new IllegalStateException(e);}
     }
     private Long resolveSupersededSignature(SignCommand command) {
+        var latest = signatures.findLatest(command.context().organizationId(), command.objectType(),
+            command.objectId(), command.meaning());
         if (command.revokedSignatureId() != null) {
             SignatureRecord specified = signatures.find(command.context().organizationId(), command.revokedSignatureId());
             if (specified.status() != SignatureStatus.INVALIDATED
                 || specified.meaning() != command.meaning()
                 || !specified.objectType().equals(command.objectType())
-                || !specified.objectId().equals(command.objectId())) {
+                || !specified.objectId().equals(command.objectId())
+                || latest.isEmpty()
+                || latest.get().id() != specified.id()) {
                 throw new ResourceConflictException(
                     "SIGNATURE_SUPERSEDED_MISMATCH", "Superseded signature does not match the signable object");
             }
             return specified.id();
         }
-        return signatures.findLatest(command.context().organizationId(), command.objectType(), command.objectId(),
-                command.meaning())
+        return latest
             .filter(signature -> signature.status() == SignatureStatus.INVALIDATED)
             .map(SignatureRecord::id)
             .orElse(null);

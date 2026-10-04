@@ -1,0 +1,25 @@
+longtext|NO|'[]'
+proc_operation_def	CREATE TABLE `proc_operation_def` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `org_id` bigint(20) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `created_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `updated_by` bigint(20) NOT NULL,
+  `updated_at` datetime(3) NOT NULL DEFAULT current_timestamp(3),
+  `version_no` bigint(20) NOT NULL DEFAULT 0,
+  `route_version_id` bigint(20) NOT NULL,
+  `operation_code` varchar(64) NOT NULL,
+  `operation_name` varchar(200) NOT NULL,
+  `sequence_no` int(11) NOT NULL CHECK (`sequence_no` > 0),
+  `required_role` varchar(64) DEFAULT NULL,
+  `completion_rule` text DEFAULT NULL CHECK (`completion_rule` is null or json_valid(`completion_rule`)),
+  `predecessor_codes_json` longtext NOT NULL CHECK (json_valid(`predecessor_codes_json`)),
+  `required_equipment_type` varchar(64) DEFAULT NULL,
+  `clearance_required` tinyint(1) NOT NULL DEFAULT 0,
+  `ipc_definitions_json` longtext NOT NULL DEFAULT '[]' CHECK (json_valid(`ipc_definitions_json`)),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_route_operation` (`org_id`,`route_version_id`,`operation_code`),
+  KEY `idx_operation_sequence` (`org_id`,`route_version_id`,`sequence_no`),
+  KEY `route_version_id` (`route_version_id`),
+  CONSTRAINT `1` FOREIGN KEY (`route_version_id`) REFERENCES `proc_route_version` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci

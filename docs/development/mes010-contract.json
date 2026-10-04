@@ -1,0 +1,28 @@
+{
+  "task": "MES-010-R2",
+  "sourceBaseline": "FINAL BASELINE COMPLETE v1.0.9",
+  "authority": "DEVELOPMENT_HANDOFF_PENDING_DESIGN_RECONCILIATION",
+  "migrationAllocation": "V017; V001-V013 immutable; parent owns V016 eBR runtime",
+  "operations": [
+    {"method":"GET","path":"/execution-units/{id}/operations","permission":"mes:operation:view","request":null,"response":"OperationList"},
+    {"method":"POST","path":"/operations/{id}/start","permission":"mes:operation:start","request":"OperationCommand","response":"OperationDetail"},
+    {"method":"POST","path":"/operations/{id}/pause","permission":"mes:operation:pause","request":"OperationCommand","response":"OperationDetail"},
+    {"method":"POST","path":"/operations/{id}/resume","permission":"mes:operation:start","request":"OperationCommand","response":"OperationDetail"},
+    {"method":"POST","path":"/operations/{id}/complete","permission":"mes:operation:complete","request":"OperationCommand","response":"OperationDetail"},
+    {"method":"POST","path":"/operations/{id}/equipment-usages","permission":"mes:equipment:bind","request":"EquipmentBind","response":"OperationDetail"},
+    {"method":"POST","path":"/operations/{id}/parameter-values","permission":"mes:param:record","request":"ParameterRecord","response":"ParameterValue"}
+  ],
+  "proposedDtoFieldsFromExistingModel": {
+    "OperationCommand":{"versionNo":"integer optimistic operation token; header alternative","reason":"required nonblank string"},
+    "EquipmentBind":{"versionNo":"integer optimistic operation token; header alternative","reason":"required nonblank string","equipmentId":"string ID","usageRole":"string <=30; vocabulary pending","clearanceStatus":"existing nullable field; authority and enum pending ruling"},
+    "ParameterRecord":{"versionNo":"integer optimistic operation token; header alternative","reason":"required nonblank string","parameterDefId":"string ID in exact operation snapshot","sourceMode":"MANUAL/AUTO/HYBRID definition consumption; precise value modes pending reconciliation","rawValue":"nullable decimal string representable in decimal(24,8)","textValue":"nullable string <=1000","unitId":"nullable string ID","sourceMessageId":"nullable string <=100; required for device source","capturedAt":"UTC ISO timestamp for authorized device source; manual timestamp server-owned"},
+    "OperationList":{"executionUnitId":"string ID","items":"ordered OperationDetail[]"},
+    "OperationDetail":{"id":"string ID","executionUnitId":"string ID","operationDefId":"string ID","operationSeq":"integer","status":"frozen Operation state","startedAt":"nullable timestamp","completedAt":"nullable timestamp","operatorId":"nullable string ID","versionNo":"integer","operationDefinition":"exact frozen snapshot","equipmentUsages":"EquipmentUsage[] with runs","parameterValues":"ParameterValue[]","gateIssues":"actual failed gate codes/evidence","allowedActions":"state and permission-filtered actions"},
+    "ParameterValue":{"id":"string ID","operationExecutionId":"string ID","parameterDefId":"string ID","sourceMode":"string","rawValue":"nullable decimal string","textValue":"nullable string","unitId":"nullable string ID","sourceMessageId":"nullable string","capturedAt":"UTC timestamp"}
+  },
+  "ui":{"page":"UI-EXEC-W","route":"/mes/execution/:id","permission":"mes:operation:view","prototype":"ui-prototype/screens/UI-EXEC-W.png","labels":"horizontal desktop/mobile"},
+  "unresolvedRulings":["gate rejection state unchanged versus BLOCKED","clearance fact authority","equipment run lifecycle under existing commands","role to qualification selection","source message uniqueness scope"],
+  "futureEvidencePolicy":"Required unavailable IPC/balance/production evidence fails closed. No permissive gate, new API, temporary producer, or MES-011/012/013 business implementation.",
+  "requiredTests":["TC-OP-001","TC-OP-002","TC-EQP-002","TC-PAR-001","organization isolation","permission","audit rollback","optimistic concurrency","idempotency","snapshot immutability"],
+  "statusIndex":"MES_TASKS.md"
+}

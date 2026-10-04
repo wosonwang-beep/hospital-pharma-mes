@@ -1,0 +1,3237 @@
+{
+  "schemas": {
+    "TraceEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "targetType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targetId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "relation": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sourceType",
+        "sourceId",
+        "targetType",
+        "targetId",
+        "relation"
+      ]
+    },
+    "ProductionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reauthToken": {
+          "type": "string",
+          "writeOnly": true,
+          "description": "Required only when the frozen signature policy requires immediate authenticated signing; never logged."
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    },
+    "IssueItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issuedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "materialLotId",
+        "formulaItemId",
+        "issuedQty",
+        "unitId",
+        "issueId"
+      ]
+    },
+    "ProductionSignatureEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "objectType",
+        "objectId",
+        "recordVersion",
+        "canonicalRecord",
+        "evidenceIds",
+        "signatureId"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "objectType": {
+          "type": "string"
+        },
+        "objectId": {
+          "type": "string",
+          "description": "Stable action-specific ID including source fact ID, action and signed root version."
+        },
+        "recordVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonicalRecord": {
+          "type": "object",
+          "readOnly": true,
+          "description": "Exact immutable canonical business record passed to the signing platform; excludes its own signatureId."
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[^:]+:.+$"
+          }
+        },
+        "signatureId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      }
+    },
+    "ApiOrderPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/OrderPage"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiExecutionUnitList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ExecutionUnit"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiParameterValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/ParameterValue"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiMaterialIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/MaterialIssue"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiOrder": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/Order"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "WeighingCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "targetQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "actualQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "scaleEquipmentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "executionUnitId",
+        "materialLotId",
+        "formulaItemId",
+        "targetQty",
+        "actualQty",
+        "unitId",
+        "scaleEquipmentId",
+        "versionNo",
+        "reason"
+      ],
+      "description": "versionNo refers to execution aggregate; target and all gates are server validated."
+    },
+    "ProductionQualificationEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "versionNo",
+        "code",
+        "userId",
+        "status",
+        "validFrom",
+        "validTo"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "code": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "status": {
+          "type": "string"
+        },
+        "validFrom": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "validTo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "ReservationItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reservedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "formulaItemId",
+        "reservedQty",
+        "unitId"
+      ]
+    },
+    "EquipmentBind": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "equipmentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "usageRole": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "equipmentId",
+        "usageRole"
+      ]
+    },
+    "ParameterRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "parameterDefId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sourceMode": {
+          "type": "string",
+          "enum": [
+            "MANUAL",
+            "DEVICE"
+          ]
+        },
+        "rawValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "textValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "unitId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "equipmentId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceMessageId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "parameterDefId",
+        "sourceMode",
+        "versionNo",
+        "reason"
+      ],
+      "description": "Exactly one rawValue/textValue. DEVICE requires equipmentId, sourceMessageId and capturedAt, accepted only from authorized device ingress; MANUAL capturedAt is server-owned. Frozen definition acquisitionMode MANUAL permits MANUAL, AUTO permits DEVICE, HYBRID permits both."
+    },
+    "BatchCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "batchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionOrderId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "subBatchPlan": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SubBatchPlan"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "batchNo",
+        "productionOrderId",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "reason"
+      ]
+    },
+    "ParameterValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "parameterDefId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sourceMode": {
+          "type": "string",
+          "enum": [
+            "MANUAL",
+            "DEVICE"
+          ]
+        },
+        "rawValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "textValue": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "unitId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "equipmentId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceMessageId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "capturedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "parameterDefId",
+        "sourceMode",
+        "rawValue",
+        "textValue",
+        "unitId",
+        "equipmentId",
+        "sourceMessageId",
+        "capturedAt",
+        "operationExecutionId"
+      ]
+    },
+    "BatchEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "batchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionOrderId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "batchNo",
+        "productionOrderId",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "ApiMainBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/MainBatch"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "IssueReturn": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ReturnItem"
+          }
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "items"
+      ]
+    },
+    "ExecutionUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "subBatchId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unitType": {
+          "type": "string",
+          "enum": [
+            "DIRECT",
+            "SUB_BATCH"
+          ]
+        },
+        "executionNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "READY",
+            "IN_PROGRESS",
+            "PAUSED",
+            "COMPLETED",
+            "BLOCKED"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "mainBatchId",
+        "subBatchId",
+        "unitType",
+        "executionNo",
+        "status"
+      ]
+    },
+    "OrderPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Order"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "items",
+        "total",
+        "page",
+        "size"
+      ]
+    },
+    "ApiSubBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SubBatch"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "EquipmentEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "equipmentId",
+        "versionNo",
+        "equipmentType",
+        "status",
+        "calibrationDueDate",
+        "checkedAt",
+        "policy"
+      ],
+      "properties": {
+        "equipmentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "equipmentType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "calibrationDueDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "checkedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "policy": {
+          "$ref": "#/components/schemas/WeighingPolicyEvidence"
+        }
+      }
+    },
+    "ApiOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/Operation"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ProductionGateEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "checkedAt",
+        "actorId",
+        "configurationHash",
+        "qualifications"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "checkedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "actorId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "configurationHash": {
+          "type": "string"
+        },
+        "qualifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ProductionQualificationEvidence"
+          }
+        }
+      }
+    },
+    "IssueItemInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issuedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "materialLotId",
+        "formulaItemId",
+        "issuedQty",
+        "unitId"
+      ]
+    },
+    "ApiMainBatchPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/MainBatchPage"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "MaterialIssuePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/MaterialIssue"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "items",
+        "total",
+        "page",
+        "size"
+      ]
+    },
+    "GateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "failureCode": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "allowed",
+        "failureCode",
+        "message",
+        "requiredActions"
+      ]
+    },
+    "SubBatchCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subBatchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "plannedQty": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "subBatchNo",
+        "sequenceNo",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "ApiReservationList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Reservation"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ReturnItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "issueItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "quantity": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "issueItemId",
+        "quantity",
+        "unitId"
+      ]
+    },
+    "IssueEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssueItemInput"
+          }
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mainBatchId",
+        "issueNo",
+        "items",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "MainBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "batchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionOrderId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "processSnapshotId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "processSnapshot": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/ProcessSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "RELEASED",
+            "IN_PROGRESS",
+            "PRODUCTION_COMPLETED",
+            "PENDING_QA",
+            "QA_RELEASED",
+            "REJECTED"
+          ]
+        },
+        "releasedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "subBatches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SubBatch"
+          }
+        },
+        "executionUnits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ExecutionUnit"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "batchNo",
+        "productionOrderId",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "plannedDate",
+        "processSnapshotId",
+        "processSnapshot",
+        "status",
+        "releasedAt",
+        "startedAt",
+        "completedAt",
+        "subBatches",
+        "executionUnits"
+      ]
+    },
+    "EquipmentRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "equipmentUsageId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "runNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "RUNNING",
+            "ENDED"
+          ]
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "sourceMessageId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "equipmentUsageId",
+        "runNo",
+        "status",
+        "startedAt",
+        "endedAt",
+        "sourceMessageId"
+      ]
+    },
+    "MainBatchPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/MainBatch"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "items",
+        "total",
+        "page",
+        "size"
+      ]
+    },
+    "ChargeCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "weighingRecordId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chargedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "executionUnitId",
+        "operationExecutionId",
+        "materialLotId",
+        "chargedQty",
+        "unitId",
+        "versionNo",
+        "reason"
+      ],
+      "description": "versionNo refers to operation; weighing reference is mandatory whenever frozen material policy requires weighing."
+    },
+    "WeighingVerifyCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reauthToken": {
+          "type": "string",
+          "writeOnly": true,
+          "description": "Required only when the frozen signature policy requires immediate authenticated signing; never logged."
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "reauthToken"
+      ]
+    },
+    "SubBatchPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subBatchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "plannedQty": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "subBatchNo",
+        "sequenceNo"
+      ]
+    },
+    "MaterialCharge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "weighingRecordId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chargedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "chargedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "verifiedBy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "chargedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CONFIRMED",
+            "REVERSED"
+          ]
+        },
+        "gateEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ProductionGateEvidence"
+          }
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/components/schemas/ProductionSignatureEnvelope"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "executionUnitId",
+        "operationExecutionId",
+        "materialLotId",
+        "weighingRecordId",
+        "chargedQty",
+        "unitId",
+        "chargedBy",
+        "verifiedBy",
+        "chargedAt",
+        "status",
+        "gateEvidence",
+        "signatureEvidence"
+      ]
+    },
+    "TraceNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "MAIN_BATCH",
+            "EXECUTION_UNIT",
+            "OPERATION",
+            "CHARGE",
+            "WEIGHING",
+            "MATERIAL_LOT",
+            "RECEIPT_ITEM",
+            "RECEIPT",
+            "ATTACHMENT",
+            "INSPECTION_REQUEST",
+            "SAMPLING_TASK",
+            "SAMPLING_DETAIL",
+            "SAMPLE",
+            "TEST_EXECUTION",
+            "RESULT_REVISION",
+            "REPORT",
+            "RELEASE_DECISION",
+            "SIGNATURE",
+            "INVESTIGATION",
+            "INSPECTION_TASK",
+            "INSPECTION_ITEM",
+            "QC_SPECIFICATION_VERSION"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "revision": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "label",
+        "status",
+        "revision"
+      ]
+    },
+    "ReservationCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ReservationItem"
+          }
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "items"
+      ]
+    },
+    "Weighing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "targetQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "actualQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "weighedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "verifiedBy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "CONFIRMED",
+            "VERIFIED"
+          ]
+        },
+        "scaleEquipmentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "equipmentEvidence": {
+          "$ref": "#/components/schemas/EquipmentEvidence"
+        },
+        "gateEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ProductionGateEvidence"
+          }
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/components/schemas/ProductionSignatureEnvelope"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "executionUnitId",
+        "materialLotId",
+        "formulaItemId",
+        "targetQty",
+        "actualQty",
+        "unitId",
+        "weighedBy",
+        "verifiedBy",
+        "status",
+        "scaleEquipmentId",
+        "equipmentEvidence",
+        "gateEvidence",
+        "signatureEvidence"
+      ]
+    },
+    "ApiEquipmentUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/EquipmentUsage"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "OrderEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orderNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "orderNo",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "ApiMaterialIssuePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/MaterialIssuePage"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "IssueReturnFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "returnedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "quantity": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]{1,6})?$"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "returnedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "issueId",
+        "issueItemId",
+        "quantity",
+        "unitId",
+        "reason",
+        "returnedBy",
+        "returnedAt",
+        "recordVersion"
+      ]
+    },
+    "TraceGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TraceNode"
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TraceEdge"
+          }
+        }
+      },
+      "required": [
+        "nodes",
+        "edges"
+      ]
+    },
+    "ApiWeighing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/Weighing"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiMaterialCharge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/MaterialCharge"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SubBatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "subBatchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "plannedQty": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "READY",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "subBatchNo",
+        "sequenceNo",
+        "plannedQty",
+        "mainBatchId",
+        "status"
+      ]
+    },
+    "ApiMaterialChargeList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/MaterialCharge"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiWeighingList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Weighing"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiOperationList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Operation"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "WeighingPolicyEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policyVersion": {
+          "type": "string",
+          "enum": [
+            "INCOMING-WEIGH-1"
+          ]
+        },
+        "independentVerificationRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "signatureRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "scaleEquipmentTypes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "configurationHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "policyVersion",
+        "independentVerificationRequired",
+        "signatureRequired",
+        "scaleEquipmentTypes",
+        "configurationHash"
+      ]
+    },
+    "ApiTraceGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/TraceGraph"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ApiSubBatchList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SubBatch"
+          }
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "Order": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "orderNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "IN_PROGRESS",
+            "COMPLETED"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "orderNo",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "plannedDate",
+        "status"
+      ]
+    },
+    "IssueCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssueItemInput"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mainBatchId",
+        "issueNo",
+        "items",
+        "reason"
+      ]
+    },
+    "EquipmentUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "equipmentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "usageRole": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clearanceStatus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "qualificationStatus": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boundAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EquipmentRun"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "executionUnitId",
+        "operationExecutionId",
+        "equipmentId",
+        "usageRole",
+        "clearanceStatus",
+        "qualificationStatus",
+        "boundAt",
+        "runs"
+      ]
+    },
+    "OrderCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "orderNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "orderNo",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "reason"
+      ]
+    },
+    "ProcessSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "packageVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "routeVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "ebrTemplateVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "snapshotHash": {
+          "type": "string",
+          "minLength": 1
+        },
+        "snapshot": {
+          "type": "object",
+          "description": "Immutable identity-bearing process, eBR and material snapshots; exact source schemas are retained."
+        }
+      },
+      "required": [
+        "id",
+        "packageVersionId",
+        "formulaVersionId",
+        "routeVersionId",
+        "ebrTemplateVersionId",
+        "snapshotHash",
+        "snapshot"
+      ]
+    },
+    "Reservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "formulaItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reservedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "CONSUMED",
+            "RELEASED"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "formulaItemId",
+        "materialLotId",
+        "reservedQty",
+        "unitId",
+        "mainBatchId",
+        "status"
+      ]
+    },
+    "MaterialIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "issueNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssueItem"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "CONFIRMED",
+            "CLOSED"
+          ]
+        },
+        "issuedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "returns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/IssueReturnFact"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "mainBatchId",
+        "issueNo",
+        "items",
+        "status",
+        "issuedAt",
+        "returns"
+      ]
+    },
+    "ApiExecutionUnit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/ExecutionUnit"
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "BatchRelease": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packageVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "ebrTemplateVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "packageVersionId",
+        "ebrTemplateVersionId"
+      ]
+    },
+    "Operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "executionUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationDefId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationSeq": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "READY",
+            "IN_PROGRESS",
+            "PAUSED",
+            "COMPLETED",
+            "BLOCKED"
+          ]
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "operatorId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "equipmentUsages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EquipmentUsage"
+          }
+        },
+        "parameterValues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ParameterValue"
+          }
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/GateResult"
+          }
+        },
+        "gateEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ProductionGateEvidence"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "versionNo",
+        "createdAt",
+        "updatedAt",
+        "allowedActions",
+        "executionUnitId",
+        "operationDefId",
+        "operationSeq",
+        "status",
+        "startedAt",
+        "completedAt",
+        "operatorId",
+        "equipmentUsages",
+        "parameterValues",
+        "gates",
+        "gateEvidence"
+      ]
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fieldErrors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "requestId",
+        "code",
+        "message",
+        "fieldErrors",
+        "allowedActions"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "path": "/main-batches",
+      "method": "POST",
+      "permission": "production:batch:create",
+      "schema": "BatchCreate"
+    },
+    {
+      "path": "/main-batches/{id}",
+      "method": "PUT",
+      "permission": "production:batch:update",
+      "schema": "BatchEdit"
+    },
+    {
+      "path": "/main-batches/{id}/complete-production",
+      "method": "POST",
+      "permission": "production:batch:complete",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/main-batches/{id}/release",
+      "method": "POST",
+      "permission": "production:batch:release",
+      "schema": "BatchRelease"
+    },
+    {
+      "path": "/main-batches/{id}/reservations",
+      "method": "POST",
+      "permission": "wms:reservation:create",
+      "schema": "ReservationCreate"
+    },
+    {
+      "path": "/main-batches/{id}/start",
+      "method": "POST",
+      "permission": "production:batch:start",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/main-batches/{id}/sub-batches",
+      "method": "POST",
+      "permission": "production:subbatch:create",
+      "schema": "SubBatchCreate"
+    },
+    {
+      "path": "/main-batches/{id}/submit-qa",
+      "method": "POST",
+      "permission": "qa:batch-review",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/material-charges",
+      "method": "POST",
+      "permission": "mes:charge:create",
+      "schema": "ChargeCreate"
+    },
+    {
+      "path": "/material-charges/{id}/reverse",
+      "method": "POST",
+      "permission": "mes:charge:reverse",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/material-issues",
+      "method": "POST",
+      "permission": "wms:issue:create",
+      "schema": "IssueCreate"
+    },
+    {
+      "path": "/material-issues/{id}",
+      "method": "PUT",
+      "permission": "wms:issue:update",
+      "schema": "IssueEdit"
+    },
+    {
+      "path": "/material-issues/{id}/confirm",
+      "method": "POST",
+      "permission": "wms:issue:confirm",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/material-issues/{id}/returns",
+      "method": "POST",
+      "permission": "wms:issue:return",
+      "schema": "IssueReturn"
+    },
+    {
+      "path": "/operations/{id}/complete",
+      "method": "POST",
+      "permission": "mes:operation:complete",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/operations/{id}/equipment-usages",
+      "method": "POST",
+      "permission": "mes:equipment:bind",
+      "schema": "EquipmentBind"
+    },
+    {
+      "path": "/operations/{id}/parameter-values",
+      "method": "POST",
+      "permission": "mes:param:record",
+      "schema": "ParameterRecord"
+    },
+    {
+      "path": "/operations/{id}/pause",
+      "method": "POST",
+      "permission": "mes:operation:pause",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/operations/{id}/resume",
+      "method": "POST",
+      "permission": "mes:operation:start",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/operations/{id}/start",
+      "method": "POST",
+      "permission": "mes:operation:start",
+      "schema": "ProductionCommand"
+    },
+    {
+      "path": "/production-orders",
+      "method": "POST",
+      "permission": "production:order:create",
+      "schema": "OrderCreate"
+    },
+    {
+      "path": "/production-orders/{id}",
+      "method": "PUT",
+      "permission": "production:order:update",
+      "schema": "OrderEdit"
+    },
+    {
+      "path": "/weighings",
+      "method": "POST",
+      "permission": "mes:weigh:create",
+      "schema": "WeighingCreate"
+    },
+    {
+      "path": "/weighings/{id}/verify",
+      "method": "POST",
+      "permission": "mes:weigh:verify",
+      "schema": "WeighingVerifyCommand"
+    }
+  ]
+}
