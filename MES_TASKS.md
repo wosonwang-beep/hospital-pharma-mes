@@ -27,7 +27,7 @@ This is the sole task-status index for future Codex sessions. It records status 
 | MES-007-R2 | `ACCEPTED` | 动态eBR定义与运行引擎 | Hard: MES-001, MES-002, MES-006; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-007-R2.md) |
 | MES-008-R2 | `ACCEPTED` | WMS收货、库存、预留与发退料 | Hard: MES-003, MES-004, MES-005; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-008-R2.md) |
 | MES-008A-R2 | `ACCEPTED` | Incoming Material Quality & Material Release | Hard: MES-001, MES-002, MES-003, MES-004, MES-005, MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-008A-R2.md) |
-| MES-009-R2 | `READY FOR ACCEPTANCE` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-009-R2.md) |
+| MES-009-R2 | `ACCEPTED` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-009-R2.md) |
 | MES-010-R2 | `ACCEPTED` | 工序、设备运行与参数采集 | Hard: MES-003, MES-006, MES-007, MES-009; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-010-R2.md) |
 | MES-011-R2 | `ACCEPTED` | 称量、投料与Genealogy | Hard: MES-004, MES-006, MES-008, MES-008A, MES-009, MES-010; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-011-R2.md) |
 | MES-012-R2 | `IN PROGRESS` | IPC、生产质量调查与物料平衡 | Hard: MES-008A, MES-009, MES-010, MES-011; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-012-R2.md) |
@@ -290,3 +290,10 @@ Statuses unchanged: MES-007 ACCEPTED, MES-009 READY FOR ACCEPTANCE, MES-008/008A
 - Accepted scope and existing validation evidence: [final closeout](docs/acceptance/incoming-quality/FINAL-CLOSEOUT-2026-10-04.md).
 - Administrative acceptance only: no product code, baseline, migration or database change; no repeat tests. Prior readiness entries remain historical evidence.
 - MES-009 remains `READY FOR ACCEPTANCE`; MES-012 remains its approved IPC stage `IN PROGRESS`; MES-013 remains `NOT STARTED`. No next task started.
+
+## MES-009 human acceptance — 2026-10-04
+
+- Explicit human approval: user replied “mes009验收” after the task-status report confirming MES-009 was READY FOR ACCEPTANCE.
+- MES-009-R2 (订单与正式批模型) is `ACCEPTED`. Scope and existing verification evidence: [MES-009 closeout](docs/acceptance/mes-009/CLOSEOUT-2026-10-04.md), including TC-BAT-001..004, TC-UI-002 and PRD-001..004. Earlier readiness entries remain historical evidence.
+- Administrative acceptance only: no product code, frozen baseline, migration or database change; no repeat tests.
+- MES-012 remains `IN PROGRESS` within its approved scope; MES-013 remains `NOT STARTED`. No next task started.
