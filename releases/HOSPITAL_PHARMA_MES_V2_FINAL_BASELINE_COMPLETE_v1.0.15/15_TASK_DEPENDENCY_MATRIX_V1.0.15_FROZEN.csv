@@ -1,0 +1,17 @@
+Task,Capability,Hard Dependency,Soft Dependency,Produces Contract For,Primary Contract
+MES-001-R2,平台/Audit/Integration,—,—,MES-002..013,Profile A/M; Audit; Signature; Idempotency; Inbox/Outbox; controlled retry; protected UI contract
+MES-002-R2,RBAC,MES-001,—,MES-003..013,Identity/RBAC plus MES-001 route/auth/navigation handoff
+MES-003-R2,组织/单位/设备/资格,"MES-001,MES-002",—,"MES-004,006,008,009,010,011",Org/UOM/Equipment/Qualification
+MES-004-R2,物料,"MES-001,MES-003",MES-005,"MES-005,006,008,008A,011,012",Material/MaterialVersion including incoming-inspection policy
+MES-005-R2,供应商,"MES-001,MES-003,MES-004",—,MES-008,Approved Supplier
+MES-006-R2,产品/BOM/工艺,"MES-003,MES-004",MES-007,"MES-007,009,010,011,012",ProcessSnapshot inputs/BOM/Route
+MES-007-R2,eBR引擎,"MES-001,MES-002,MES-006",MES-009,"MES-009,010,012,013",eBR Definition/Runtime Contract; current LG-007A gate; full runtime acceptance after MES-009/010
+MES-008-R2,WMS收货/库存,"MES-003,MES-004,MES-005",MES-009,"MES-008A,011,012",MaterialReceipt/MaterialLot/InventoryLedger; receipt/ledger stage first; full reservation/issue acceptance after MES-008A/009
+MES-008A-R2,来料质量/物料放行,"MES-001,MES-002,MES-003,MES-004,MES-005,MES-008",—,"MES-011,012,013",Incoming QMS evidence/ReleaseDecision/MaterialEligibilityService
+MES-009-R2,订单/正式批,"MES-003,MES-004,MES-006,MES-007",MES-008,"MES-010,011,012,013",MainBatch/ProcessSnapshot/ExecutionUnit; install validated QMS batch FKs per DCP-MES-008A-CONTRACT-001
+MES-010-R2,工序/设备/参数,"MES-003,MES-006,MES-007,MES-009",MES-008,"MES-011,012,013",OperationExecution/EquipmentRun
+MES-011-R2,称量/投料/追溯,"MES-004,MES-006,MES-008,MES-008A,MES-009,MES-010",MES-007,"MES-012,013",MaterialCharge/QuantityEvent/Genealogy
+MES-012-R2,IPC/调查/平衡,"MES-008A,MES-009,MES-010,MES-011",MES-007,MES-013,IPC/OOS/OOT/Deviation/CAPA/Balance evidence
+MES-013-R2,成品QA Release/归档,"MES-007,MES-008A,MES-009,MES-011,MES-012",—,—,Finished-product ReleaseDecision/Final eBR
+MES-012-INCOMING,Approved incoming investigation subset,"MES-001,MES-002,MES-003,MES-008,MES-008A",—,"MES-008A,MES-011",Shared qms_deviation incoming evidence; production subset remains later
+MES-012-R2 (approved IPC producer stage),Only IPC instance/result/review producer,Physically available MES-008A/009 Operation/011/eBR contracts;full task dependencies unchanged,MES-007,MES-010,ExecutionQualityPort;no expansion to CAPA/balance/finished QA

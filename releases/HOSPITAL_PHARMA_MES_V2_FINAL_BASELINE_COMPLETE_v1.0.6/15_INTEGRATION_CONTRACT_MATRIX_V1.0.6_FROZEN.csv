@@ -1,0 +1,38 @@
+Producer,Contract,Consumer,Source of Truth,Transaction/Event,Failure Behavior,Regression Scope
+Material,MaterialSnapshot,Process/BOM; WMS; Weighing,md_material; consumer-owned immutable snapshot,同步读取,使用时快照不可变,物料基本维护不改变既有批次快照
+Supplier,ApprovedSupplier,WMS Receipt,md_material_supplier,同步读取,过期/未批准422,收货资格
+Process,FormulaItem/BOM,WMS; Weighing; Charge,proc_formula_item + ProcessSnapshot,批次冻结,BOM mismatch 422,物料用量/匹配
+Process,Route/OperationDef,Execution,proc_operation_def snapshot,批次冻结,定义未批准阻断Release,工序执行
+eBR Definition,Published Template,MainBatch/eBR Runtime,ebr_template_version,Snapshot,未批准阻断Batch Release,运行批稳定性
+MainBatch,ProcessSnapshot,Execution/eBR/Balance/Release,prd_process_snapshot,同Release事务,快照失败整批Release回滚,批次定义真源
+MainBatch,Execution Context,Operation/WMS/Charge/QMS,prd_main_batch + prd_execution_unit,同步,非法状态409,跨模块批次上下文
+WMS,MaterialLot,Weighing/Charge/QC,md_material_lot,同步,非RELEASED/过期/冻结422,物料资格
+WMS,InventoryLedger,Balance/Inventory Query,wms_inventory_ledger,本地事务,重复key幂等,库存事实账
+Weighing,WeighingRecord,MaterialCharge/eBR,mes_weighing_record,同步,未确认/未复核阻断Charge,称量证据
+MaterialCharge,Actual Charge,Inventory/Balance/Genealogy/eBR,mes_material_charge,单本地事务,任一副作用失败全回滚,实际投料真源
+MaterialCharge,QuantityEvent(CHARGE),MaterialBalance,mes_quantity_event,同Charge事务,禁止缺sourceRef,平衡输入
+MaterialCharge,Genealogy Edge,Traceability/Release,mes_genealogy,同Charge事务,缺链路视数据完整性异常,正反向追溯
+Operation,OperationExecution,eBR/IPC/Balance,mes_operation_execution,同步,Gate失败BLOCKED,执行状态
+QC,TestResult Evidence,QA Release,qms_test_result_revision,同步读取,QC PASS不触发Release,质量证据
+Deviation,Deviation Status,Operation/QA Release,qms_deviation,同步读取,关键开放偏差阻断,异常Gate
+Balance,BalanceResult,Batch Complete/QA Release,mes_balance_result,同步读取,FAIL未批准阻断,平衡Gate
+eBR Runtime,Record Completeness/Signatures,QA Release,ebr runtime + gxp_signature,同步读取,缺失/失效签名阻断,批记录证据
+QA Release,ReleaseDecision,Finished Inventory/ERP,qms_release_decision,本地事务+Outbox,Gate变化409/422,正式放行真源
+MES-001 Platform,AuditEvent append/query,MES-002..013,gxp_audit_event + concrete OpenAPI,same local transaction,business change and audit both roll back,actor/role/action/object/digest/correlation/append-only
+MES-001 Signature,SignableObjectProvider/canonicalization/reauth/sign,MES-007;MES-013,gxp_signature + provider registry,token consumption then local sign transaction,consumed token is never restored; failed DB transaction commits no signature,"JCS/SHA-256, binding, invalidation, re-sign"
+MES-007 eBR,EBR_FORM_INSTANCE/EBR_REVIEW_RECORD providers,MES-001 Signature; MES-013 gates,eBR runtime + gxp_signature,same correction transaction for invalidation,invalid signature blocks review,TC-EBR-007/008 + platform signature regression
+MES-013 Release,QA_RELEASE_DECISION provider,MES-001 Signature; release orchestration,release decision + signature + audit + inventory + outbox,single local transaction,any failed gate/effect rolls back all DB effects,TC-REL-001..004 + platform signature regression
+MES-001 Integration,Inbox/Outbox operations + controlled retry policy,MES-004..013,integration tables + platform policy,outbox with origin transaction; worker claims separately,8th failure DEAD_LETTER; manual retry audited,TC-INT-001..004
+MES-001 Idempotency,Generic Idempotency-Key,all mutating REST producers,platform_idempotency_record,operation transaction,different digest 409; completed same request replay,no module generic duplicate table
+Material,Incoming inspection policy,WMS receipt,md_material_version,synchronous version read,invalid or non-effective version 422,TC-MAT-005;TC-WMS-008
+WMS,MaterialReceipt and MaterialLot,QMS incoming quality,wms_material_receipt + md_material_lot,local transaction then domain event,missing qualification/check blocks confirmation,TC-WMS-006..008
+QMS,Inspection evidence,QA incoming release,qms inspection/report/result tables,synchronous review projection,incomplete/unapproved evidence 422,TC-QMS-IN-001;TC-QMS-SMP-001..003;TC-QMS-TST-001..003;TC-QMS-RPT-001..002
+QA,Scoped ReleaseDecision,WMS and production,qms_release_decision,atomic decision + lot status + audit/outbox,gate/signature/version failure rolls back,TC-QMS-MREL-001..004
+Eligibility,MaterialEligibilityService,Reservation/Issue/Weighing/Charge,qms_release_decision + md_material_lot + wms_inventory_ledger,synchronous final-boundary evaluation,ineligible 422 MATERIAL_NOT_ELIGIBLE,TC-ELG-001..004
+WMS,Inventory fact ledger,all quantity consumers,wms_inventory_ledger,append-only quantity transaction,no direct balance mutation,existing WMS regression
+MES,Actual material charge,Genealogy/eBR/Balance,mes_material_charge,atomic charge transaction,failed eligibility creates no charge,TC-CHG-001..003;TC-ELG-004
+
+Master,Org/UOM/Conversion,Material; Process; WMS,md_organization + md_unit + md_unit_conversion,same-org query,invalid hierarchy/dimension 422,UOM + org isolation
+Equipment,Equipment Gate,Execution; Weighing,md_equipment,execution UTC instant,expired/inactive/maintenance 422,resource gates
+Master,Qualification Gate,Execution; Weighing,md_qualification,execution UTC instant,missing/expired 422,qualification gates
+MaterialSupplier,PreferredSupplier,Material maintenance,md_material_supplier,同步读取,每物料最多一个有效首选且非空有效关系必须一个,首选资格/有效期失效时不自动替换

@@ -1,0 +1,13 @@
+{
+  "fixture" : "IT_RACE_6f3e4f77826a",
+  "materialId" : "205",
+  "lotId" : "128",
+  "orderId" : "84",
+  "batchId" : "89",
+  "authorId" : 770,
+  "qaId" : 774,
+  "qualityStatus" : "REJECTED",
+  "inventoryStatus" : "BLOCKED",
+  "retained" : true,
+  "recordedAt" : "2026-10-04T02:42:44.967153Z"
+}

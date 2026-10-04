@@ -1,6 +1,6 @@
 # Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.2` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.15` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
 ## Low-token task startup
 
@@ -80,8 +80,10 @@ After the user or Design Authority explicitly approves a Design Change, Codex ma
 
 - All formal schema changes use a new physical Flyway migration. Executed migrations are append-only: never edit, rename, reorder, checksum-change, or conceal problems with `flyway repair`.
 - Physical versions continue from the highest successful value in `flyway_schema_history`; Section 15 logical migration groups are not physical versions.
-- Persistent DEV uses `hospital_pharma_mes_dev` and the named MariaDB/Redis volumes. Never delete, rebuild, clear, or run `docker compose down -v` unless the user explicitly requests `RESET DEVELOPMENT DATABASE`.
-- Automated TEST infrastructure is ephemeral and isolated from DEV/PROD. Automated tests never connect to PROD.
+- Local development and local database tests use the same native MariaDB at `localhost:3306`, database `hospital_pharma_mes_dev`. Run from `D:\codex\_project\gmp\hospital-pharma-mes`; the local and ci profiles load the ignored root `.env`. Do not create another local database or start a Docker database for this project.
+- Keep local database configuration files and credentials on this workstation. Do not stage, commit, or push `.env` or local changes to database configuration files, including `application-local.yml` and `application-ci.yml`, unless the user explicitly changes this instruction. Existing tracked configuration files must not be removed from GitHub implicitly.
+- Keep all project tables and Flyway history in this database. Local tests must preserve existing data, use uniquely identified test records, and roll back or remove only records created by that test. Review tests that modify shared seed records before running them against this persistent database. Never delete, rebuild, clear, or reset the database without explicit user authorization.
+- Automated tests never connect to PROD. Hosted CI retains its existing service-container configuration; it cannot connect to this workstation's localhost database.
 - Full lifecycle details are in [`docs/development/database-and-validation-strategy.md`](docs/development/database-and-validation-strategy.md); read it only for database/environment/validation work.
 
 ## Validation policy

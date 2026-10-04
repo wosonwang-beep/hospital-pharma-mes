@@ -3,6 +3,9 @@ package com.hospital.mes.iam.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.io.IOException;
+import java.util.regex.Pattern;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +15,11 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @ActiveProfiles("ci")
 class IamSchemaIT {
+    static final Pattern ACCOUNT_SEED = Pattern.compile(
+        "(?is)\\b(?:INSERT\\s+(?:(?:LOW_PRIORITY|DELAYED|HIGH_PRIORITY|IGNORE)\\s+)*(?:INTO\\s+)?"
+        + "|REPLACE\\s+(?:(?:LOW_PRIORITY|DELAYED)\\s+)*(?:INTO\\s+)?"
+        + "|LOAD\\s+DATA\\b[^;]*?\\bINTO\\s+TABLE\\s+)"
+        + "(?:(?:`[^`]+`|[a-z0-9_]+)\\s*\\.\\s*)?`?sys_user`?(?![a-z0-9_])");
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -87,15 +95,26 @@ class IamSchemaIT {
             JOIN sys_role_menu rm ON rm.menu_id = m.id
             JOIN sys_role r ON r.id = rm.role_id
             WHERE r.role_code = 'SYSTEM_ADMIN' AND m.status = 'ACTIVE'
+              AND m.menu_code LIKE 'iam:%'
             ORDER BY m.sort_no
             """, String.class);
         assertThat(routes).containsExactly("/admin/users", "/admin/roles");
     }
 
     @Test
-    void migrationNeverSeedsAnAccount() {
-        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM sys_user", Integer.class);
-        assertThat(count).isZero();
+    void migrationNeverSeedsAnAccount() throws IOException {
+        // Other integration tests legitimately create accounts in the shared database.
+        // Check every executed migration source rather than counting their live fixtures.
+        var migrations = new PathMatchingResourcePatternResolver()
+            .getResources("classpath:db/migration/V*.sql");
+        assertThat(migrations).hasSize(24);
+        for (var migration : migrations) {
+            String sql;
+            try (var stream = migration.getInputStream()) {
+                sql = new String(stream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+            }
+            assertThat(ACCOUNT_SEED.matcher(sql).find()).as(migration.getFilename()).isFalse();
+        }
     }
 
     private List<String> columns(String table) {

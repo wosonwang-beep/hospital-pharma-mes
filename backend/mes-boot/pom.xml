@@ -4,6 +4,16 @@
   <parent><groupId>com.hospital.mes</groupId><artifactId>mes-backend</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
   <artifactId>mes-boot</artifactId>
   <dependencies>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qc</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qms</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-production</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-execution</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-traceability</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-ebr</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-wms</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-process</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-masterdata</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-equipment</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-common</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-audit</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-integration</artifactId><version>${project.version}</version></dependency>
@@ -30,7 +40,14 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration><classesDirectory>${project.build.outputDirectory}</classesDirectory></configuration>
+            <configuration>
+              <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+              <workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
+              <systemPropertyVariables>
+                <!-- Evicted Spring contexts close their pools; keep cumulative ITs below MariaDB's connection limit. -->
+                <spring.test.context.cache.maxSize>4</spring.test.context.cache.maxSize>
+              </systemPropertyVariables>
+            </configuration>
             <executions>
               <execution>
                 <goals><goal>integration-test</goal><goal>verify</goal></goals>

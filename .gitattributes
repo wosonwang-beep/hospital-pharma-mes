@@ -1,3 +1,8 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 *.ps1 text eol=crlf
+
+# Preserve immutable release, migration and acceptance evidence bytes.
+/releases/** -text
+/backend/mes-boot/src/main/resources/db/migration/*.sql -text
+/docs/acceptance/** -text

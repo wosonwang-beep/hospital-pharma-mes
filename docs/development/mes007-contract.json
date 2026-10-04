@@ -1,0 +1,1225 @@
+{
+  "operations": [
+    {
+      "method": "get",
+      "path": "/ebr/templates",
+      "permission": "ebr:template:view",
+      "requestSchema": null,
+      "responseSchema": "EbrPage",
+      "queryParameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        {
+          "name": "size",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        {
+          "name": "keyword",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "SUBMITTED",
+              "APPROVED",
+              "EFFECTIVE",
+              "WITHDRAWN"
+            ]
+          }
+        },
+        {
+          "name": "packageVersionId",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 64
+          }
+        }
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/ebr/templates",
+      "permission": "ebr:template:create",
+      "requestSchema": "EbrCreate",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "get",
+      "path": "/ebr/templates/{id}",
+      "permission": "ebr:template:view",
+      "requestSchema": null,
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "put",
+      "path": "/ebr/templates/{id}",
+      "permission": "ebr:template:update",
+      "requestSchema": "EbrSave",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "post",
+      "path": "/ebr/templates/{id}/versions",
+      "permission": "ebr:designer:edit",
+      "requestSchema": "EbrVersionCreate",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "post",
+      "path": "/ebr/versions/{id}/approve",
+      "permission": "ebr:template:approve",
+      "requestSchema": "EbrCommand",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "get",
+      "path": "/ebr/versions/{id}/compare",
+      "permission": "ebr:template:view",
+      "requestSchema": null,
+      "responseSchema": "EbrComparison",
+      "queryParameters": [
+        {
+          "name": "otherVersionId",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        }
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/ebr/versions/{id}/lint",
+      "permission": "ebr:designer:edit",
+      "requestSchema": "EbrCommand",
+      "responseSchema": "EbrLint",
+      "queryParameters": []
+    },
+    {
+      "method": "post",
+      "path": "/ebr/versions/{id}/publish",
+      "permission": "ebr:template:publish",
+      "requestSchema": "EbrCommand",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    },
+    {
+      "method": "post",
+      "path": "/ebr/versions/{id}/simulate",
+      "permission": "ebr:designer:edit",
+      "requestSchema": "EbrSimulation",
+      "responseSchema": "EbrSimulationResult",
+      "queryParameters": []
+    },
+    {
+      "method": "post",
+      "path": "/ebr/versions/{id}/submit",
+      "permission": "ebr:template:submit",
+      "requestSchema": "EbrCommand",
+      "responseSchema": "EbrDetail",
+      "queryParameters": []
+    }
+  ],
+  "schemas": {
+    "EbrOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "optionCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "optionLabel": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "optionValue": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "activeFlag": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "optionCode",
+        "optionLabel",
+        "optionValue",
+        "sequenceNo",
+        "activeFlag"
+      ]
+    },
+    "EbrField": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fieldCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "groupCode": {
+          "type": "string",
+          "maxLength": 64,
+          "nullable": true
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "fieldType": {
+          "type": "string",
+          "enum": [
+            "NUMBER",
+            "TEXT",
+            "TEXTAREA",
+            "ENUM",
+            "MULTI_ENUM",
+            "BOOLEAN",
+            "DATE",
+            "TIME",
+            "DATETIME",
+            "BARCODE",
+            "MATERIAL_LOT",
+            "CONTAINER",
+            "EQUIPMENT",
+            "PERSON",
+            "ATTACHMENT",
+            "IMAGE",
+            "TIMER",
+            "CALCULATED",
+            "INSTRUMENT_VALUE",
+            "SIGNATURE_PLACEHOLDER"
+          ]
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": [
+            "MANUAL",
+            "BARCODE",
+            "INSTRUMENT",
+            "SYSTEM",
+            "DERIVED"
+          ]
+        },
+        "dataType": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "precisionScale": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12,
+          "nullable": true
+        },
+        "requiredFlag": {
+          "type": "boolean"
+        },
+        "readonlyFlag": {
+          "type": "boolean"
+        },
+        "defaultExpr": {
+          "type": "string",
+          "maxLength": 4000,
+          "nullable": true
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 500,
+          "nullable": true
+        },
+        "helpText": {
+          "type": "string",
+          "maxLength": 1000,
+          "nullable": true
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "validationJson": {
+          "type": "string",
+          "maxLength": 16000,
+          "nullable": true
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrOption"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "fieldCode",
+        "groupCode",
+        "label",
+        "fieldType",
+        "sourceType",
+        "dataType",
+        "unitId",
+        "precisionScale",
+        "requiredFlag",
+        "readonlyFlag",
+        "defaultExpr",
+        "placeholder",
+        "helpText",
+        "sequenceNo",
+        "validationJson",
+        "options"
+      ]
+    },
+    "EbrGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "groupCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200,
+          "nullable": true
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "layoutColumns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "repeatMode": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "LIST"
+          ]
+        },
+        "minOccurs": {
+          "type": "integer",
+          "minimum": 0,
+          "nullable": true
+        },
+        "maxOccurs": {
+          "type": "integer",
+          "minimum": 0,
+          "nullable": true
+        }
+      },
+      "required": [
+        "groupCode",
+        "title",
+        "sequenceNo",
+        "layoutColumns",
+        "repeatMode",
+        "minOccurs",
+        "maxOccurs"
+      ]
+    },
+    "EbrSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sectionCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repeatMode": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "LIST"
+          ]
+        },
+        "visibilityRuleCode": {
+          "type": "string",
+          "maxLength": 64,
+          "nullable": true
+        },
+        "pageBreakFlag": {
+          "type": "boolean"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrGroup"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "sectionCode",
+        "title",
+        "sequenceNo",
+        "repeatMode",
+        "visibilityRuleCode",
+        "pageBreakFlag",
+        "groups"
+      ]
+    },
+    "EbrForm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "formCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "formName": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "operationDefId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "schemaVersion": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrField"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "formCode",
+        "formName",
+        "operationDefId",
+        "schemaVersion",
+        "sequenceNo",
+        "fields"
+      ]
+    },
+    "EbrRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ruleCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "formCode": {
+          "type": "string",
+          "maxLength": 64,
+          "nullable": true
+        },
+        "fieldCode": {
+          "type": "string",
+          "maxLength": 64,
+          "nullable": true
+        },
+        "ruleType": {
+          "type": "string",
+          "enum": [
+            "VALIDATION",
+            "CALCULATION",
+            "VISIBILITY",
+            "BRANCH",
+            "COMPLETION",
+            "SIGNATURE",
+            "REVIEW",
+            "DEVIATION"
+          ]
+        },
+        "triggerPoint": {
+          "type": "string",
+          "enum": [
+            "ON_CHANGE",
+            "ON_SAVE",
+            "ON_SUBMIT",
+            "ON_OPERATION_COMPLETE",
+            "ON_BATCH_CLOSE"
+          ]
+        },
+        "expression": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "BLOCK",
+            "WARN"
+          ],
+          "nullable": true
+        },
+        "errorCode": {
+          "type": "string",
+          "maxLength": 64,
+          "nullable": true
+        },
+        "messageTemplate": {
+          "type": "string",
+          "maxLength": 1000,
+          "nullable": true
+        },
+        "deviationTrigger": {
+          "type": "boolean"
+        },
+        "activeFlag": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "ruleCode",
+        "formCode",
+        "fieldCode",
+        "ruleType",
+        "triggerPoint",
+        "expression",
+        "severity",
+        "errorCode",
+        "messageTemplate",
+        "deviationTrigger",
+        "activeFlag"
+      ]
+    },
+    "EbrSignatureRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "objectScope": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "objectCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "meaning": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "requiredRole": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reauthRequired": {
+          "type": "boolean"
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "invalidateOnChange": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "objectScope",
+        "objectCode",
+        "meaning",
+        "requiredRole",
+        "reauthRequired",
+        "sequenceNo",
+        "invalidateOnChange"
+      ]
+    },
+    "EbrReviewRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "objectScope": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "objectCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "reviewType": {
+          "type": "string",
+          "enum": [
+            "VERIFY",
+            "APPROVE"
+          ]
+        },
+        "requiredRole": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "independentUserRequired": {
+          "type": "boolean"
+        },
+        "sequenceNo": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "objectScope",
+        "objectCode",
+        "reviewType",
+        "requiredRole",
+        "independentUserRequired",
+        "sequenceNo"
+      ]
+    },
+    "EbrDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrSection"
+          },
+          "maxItems": 500
+        },
+        "forms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrForm"
+          },
+          "maxItems": 500
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrRule"
+          },
+          "maxItems": 500
+        },
+        "signatureRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrSignatureRule"
+          },
+          "maxItems": 500
+        },
+        "reviewRules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrReviewRule"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "sections",
+        "forms",
+        "rules",
+        "signatureRules",
+        "reviewRules"
+      ]
+    },
+    "EbrCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "packageVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "templateCode": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "packageVersionId",
+        "templateCode"
+      ]
+    },
+    "EbrSave": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "definition": {
+          "$ref": "#/components/schemas/EbrDefinition"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "definition"
+      ]
+    },
+    "EbrVersionCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "copyDefinition": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "copyDefinition"
+      ]
+    },
+    "EbrCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    },
+    "EbrInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fieldCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "fieldCode",
+        "values"
+      ]
+    },
+    "EbrSimulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "triggerPoint": {
+          "type": "string",
+          "enum": [
+            "ON_CHANGE",
+            "ON_SAVE",
+            "ON_SUBMIT",
+            "ON_OPERATION_COMPLETE",
+            "ON_BATCH_CLOSE"
+          ]
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrInput"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "triggerPoint",
+        "inputs"
+      ]
+    },
+    "EbrSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "packageVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "templateCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "EFFECTIVE",
+            "WITHDRAWN"
+          ]
+        },
+        "contentHash": {
+          "type": "string",
+          "maxLength": 128,
+          "nullable": true
+        },
+        "effectiveFrom": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "approvedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32
+          }
+        }
+      },
+      "required": [
+        "id",
+        "packageVersionId",
+        "templateCode",
+        "version",
+        "status",
+        "contentHash",
+        "effectiveFrom",
+        "approvedBy",
+        "approvedAt",
+        "versionNo",
+        "allowedActions"
+      ]
+    },
+    "EbrDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "packageVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "templateCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "EFFECTIVE",
+            "WITHDRAWN"
+          ]
+        },
+        "contentHash": {
+          "type": "string",
+          "maxLength": 128,
+          "nullable": true
+        },
+        "effectiveFrom": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "approvedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 32
+          }
+        },
+        "definition": {
+          "$ref": "#/components/schemas/EbrDefinition"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrSummary"
+          },
+          "maxItems": 500
+        },
+        "operationChoices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrOperationChoice"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "packageVersionId",
+        "templateCode",
+        "version",
+        "status",
+        "contentHash",
+        "effectiveFrom",
+        "approvedBy",
+        "approvedAt",
+        "versionNo",
+        "allowedActions",
+        "definition",
+        "versions",
+        "operationChoices"
+      ]
+    },
+    "EbrPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrSummary"
+          },
+          "maxItems": 500
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "total",
+        "page",
+        "size"
+      ]
+    },
+    "EbrIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "path",
+        "code",
+        "message"
+      ]
+    },
+    "EbrLint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "valid": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrIssue"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "valid",
+        "issues"
+      ]
+    },
+    "EbrRuleResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ruleCode": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "severity": {
+          "type": "string",
+          "maxLength": 20,
+          "nullable": true
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 1000,
+          "nullable": true
+        },
+        "inputSnapshot": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrInput"
+          },
+          "maxItems": 500
+        },
+        "outputValue": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "nullable": true
+        },
+        "executedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "engineVersion": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "ruleVersion": {
+          "type": "string",
+          "maxLength": 128
+        }
+      },
+      "required": [
+        "ruleCode",
+        "passed",
+        "severity",
+        "message",
+        "inputSnapshot",
+        "outputValue",
+        "executedAt",
+        "engineVersion",
+        "ruleVersion"
+      ]
+    },
+    "EbrSimulationResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrRuleResult"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "allowed",
+        "results"
+      ]
+    },
+    "EbrDifference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "before": {
+          "type": "string",
+          "maxLength": 16000,
+          "nullable": true
+        },
+        "after": {
+          "type": "string",
+          "maxLength": 16000,
+          "nullable": true
+        }
+      },
+      "required": [
+        "path",
+        "before",
+        "after"
+      ]
+    },
+    "EbrComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "leftId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "rightId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "differences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/EbrDifference"
+          },
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "leftId",
+        "rightId",
+        "differences"
+      ]
+    },
+    "EbrOperationChoice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "operationCode": {
+          "type": "string"
+        },
+        "operationName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "operationCode",
+        "operationName"
+      ]
+    }
+  }
+}

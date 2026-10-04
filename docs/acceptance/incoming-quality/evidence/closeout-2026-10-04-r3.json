@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-04",
+  "baseline": "v1.0.14",
+  "newPassingMethods": 7,
+  "methods": [
+    "IncomingClosureIT.numericAndTextRequiredItemsRequireExactReviewAndAggregateOriginalSnapshots",
+    "IncomingClosureIT.retentionSampleStorageLabelAndSignedDisposalPreserveSourceLineage",
+    "NativeConcurrencyIT.concurrentSignedReleaseSuccessorsHaveOnlyOneWinnerAndRetainOriginalSignature",
+    "NativeConcurrencyIT.concurrentChargesCannotConsumeSameVerifiedWeighingTwice",
+    "QcSpecificationIT.approvalPermissionVersionBindingSignerFailureAndChangedReplayPreserveDraft",
+    "QcSpecificationIT.approvingNextVersionDoesNotRetireOrChangeExistingApprovedStandard",
+    "AttachmentIT.emptyAndOversizedDeliveryDocumentsLeaveNoAttachmentOrIdempotencyFacts"
+  ],
+  "passedByGate": {
+    "incomingFinal": 2,
+    "qaSuccessorInMixedGate": 1,
+    "chargeFailureOnlyRetry": 1,
+    "qcNextVersionAndAttachmentInMixedGate": 2,
+    "qcApprovalFailureOnlyRetry": 1
+  },
+  "review": "Independent scoped review no concrete CRITICAL/HIGH; final PASS confirmed by root",
+  "productChanged": false,
+  "uiChanged": false,
+  "migration": {
+    "new": false,
+    "validated": 23,
+    "successful": 23,
+    "failed": 0,
+    "max": "023"
+  },
+  "retainedFixtures": {
+    "count": 35,
+    "allRejectedBlocked": true,
+    "includesFailedTrials": true,
+    "priorCount": 32,
+    "additionalTrials": 3
+  },
+  "limits": [
+    "Controlled thread scheduling around real native locks, distinct connections; no PROD",
+    "QC reauthentication mock failure injection is not real token expiration",
+    "Attachment service size gate is not HTTP multipart or content recognition",
+    "No freeze business command, IPC or clearance producer invented"
+  ],
+  "tasks": {
+    "MES008": "IN PROGRESS",
+    "MES008A": "IN PROGRESS",
+    "MES010": "IN PROGRESS",
+    "MES011": "IN PROGRESS"
+  },
+  "logs": [
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008a-multi-item-retention-final.log",
+      "sha256": "a049afe8937d3f16b1e790aa21c6fd3970b6dfe0ebb9031bdde30f59fb455827"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008a-011-competing-facts.log",
+      "sha256": "c47302e9fc96b0ed2ba1f81569330438454e99c25db5fa9e55ce964849aa04c9"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes011-competing-charge-retry.log",
+      "sha256": "17a93deb1d0512585590f73782f6981180413c7a75790da5452467c0c8dfcbe1"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008-qc-attachment-gaps.log",
+      "sha256": "7446079c8dec8179d10e83b23e3b243009f8180a2ea677f10cb58db3856467cc"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008a-qc-signing-retry.log",
+      "sha256": "03d7792d308e01aa5341fe2d1d937f9d3967815b3f331cbc60269cbf6258b796"
+    }
+  ],
+  "incoming": {
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "time": "8.724"
+  },
+  "charge": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "time": "10.141"
+  },
+  "qcApproval": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "time": "7.934"
+  },
+  "attachment": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "time": "1.657"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-04",
+  "baseline": "v1.0.14",
+  "approval": "User reply 批准; bounded retained native DEV fixtures",
+  "nativeConcurrency": {
+    "cases": 11,
+    "failures": 0,
+    "errors": 0,
+    "durationSeconds": 5.589,
+    "independentConnections": true,
+    "nativeRowLockWaitObserved": true,
+    "tests": [
+      "concurrentOrderAllocationHasOneWinnerAndNoRejectedCommandFacts",
+      "firstConcurrentAllocationPreventsChangingOrderProduct",
+      "concurrentOrderPlanReductionPreventsStaleBatchAllocation",
+      "finalGateSerializesWithActualSignedQualitySupersession: RESERVE/ISSUE/WEIGH/CHARGE × QA-first/command-first"
+    ]
+  },
+  "directProductionRegressions": {
+    "cases": 2,
+    "failures": 0,
+    "durationSeconds": 9.995
+  },
+  "rules": {
+    "cases": 3,
+    "failures": 0,
+    "durationSeconds": 0.037
+  },
+  "retainedFixtures": {
+    "count": 32,
+    "allRejectedBlocked": true,
+    "zeroResidueClaim": false,
+    "redTrialsPreserved": true,
+    "reconciledDraftOrders": [
+      69,
+      70
+    ]
+  },
+  "migration": {
+    "new": false,
+    "successful": 23,
+    "failed": 0,
+    "maxVersion": "023"
+  },
+  "review": "Three related HIGH stale reads fixed; scoped increment review no remaining CRITICAL/HIGH",
+  "MES009": "READY FOR ACCEPTANCE",
+  "remaining": "MES008/008A/010/011 IN PROGRESS; unclosed required RTM cases and unavailable IPC/clearance producers",
+  "logs": [
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes007-011-concurrency-final.log",
+      "sha256": "766147f02f7e6cbfa005f1194d9d6323ada4291f4342d3bd228aeae453b6ab96"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes-order-stale-red.log",
+      "sha256": "9575d4804168efbe234a9d9d7162df6b1692c98ad21f16bd04fd2fe85479a369"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes-native-red-reconciliation.log",
+      "sha256": "237510b4d08fa83da66d8df6c5d312b3ec39241aadbce6eab5f78940fe2675ea"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes009-sub-batch-contract.log",
+      "sha256": "de751db250128f82b93a5bffd5778c3e6034020a7202ff915b706692ef96bd9a"
+    }
+  ],
+  "subBatchRouteAbsenceGate": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "time": "8.78"
+  }
+}

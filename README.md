@@ -17,8 +17,8 @@ Frontend IAM screens, complete GMP audit trails and electronic signatures, maste
 
 Prerequisites: Java 21, Maven 3.9+, Node.js 22+, npm, and optionally Docker Compose.
 
-1. Copy `.env.example` to `.env`, replace the sample passwords, and obtain the MinIO free-tier license described in `deploy/docker/README.md`.
-2. Start persistent DEV MariaDB and Redis with `docker compose up -d --wait mariadb redis`. The default database is `hospital_pharma_mes_dev`; normal `docker compose down` keeps both DEV volumes.
+1. Work from `D:\codex\_project\gmp\hospital-pharma-mes`. Keep local credentials in the ignored root `.env`; local and ci profiles load this file from the project root.
+2. Use the native Windows MariaDB service at `localhost:3306`, database `hospital_pharma_mes_dev`, for both local development and local database tests. Do not create another local database or start the Compose MariaDB service. Configure Redis and, when needed, licensed MinIO separately.
 3. Build the backend with `mvn -B -ntp -pl backend/mes-boot -am -DskipTests package`, then start it with `java -jar backend/mes-boot/target/mes-boot-0.1.0-SNAPSHOT.jar --spring.profiles.active=local`.
 4. In `frontend/mes-web`, run `npm ci` and `npm run dev`.
 

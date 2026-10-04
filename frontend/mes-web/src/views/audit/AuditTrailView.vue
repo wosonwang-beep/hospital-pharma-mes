@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, watch, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { queryAuditEvents } from '../../api/audit'
 import { usePlatformAuthContext } from '../../auth/PlatformAuthContext'
 import type { AuditEvent } from '../../types/audit'
 
 const authorization = usePlatformAuthContext()
+const route = useRoute()
+const objectFilter = computed(() => ({
+  objectId: typeof route.query.objectId === 'string' ? route.query.objectId : undefined,
+  objectType: typeof route.query.objectType === 'string' ? route.query.objectType : undefined
+}))
 const permitted = computed(() => authorization.can('audit:view'))
 const events = ref<AuditEvent[]>([])
 const todayTotal = ref(0)
@@ -24,8 +30,8 @@ async function load() {
   failed.value = false
   try {
     const [today, page] = await Promise.all([
-      queryAuditEvents({ ...utcDayRange(), page: 0, size: 1 }),
-      queryAuditEvents({ page: 0, size: 50 })
+      queryAuditEvents({ ...utcDayRange(), ...objectFilter.value, page: 0, size: 1 }),
+      queryAuditEvents({ ...objectFilter.value, page: 0, size: 50 })
     ])
     todayTotal.value = today.total
     events.value = page.items
@@ -36,7 +42,7 @@ async function load() {
   }
 }
 
-onMounted(load)
+watch(() => route.query, load, { immediate: true })
 </script>
 
 <template>

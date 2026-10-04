@@ -1,0 +1,30 @@
+# Incoming issue return evidence completion
+
+2026-10-03. Bounded completion under human approval “确认批准其中的契约补齐及完整验收所需任务范围”. This resolves the approved requirement to append return evidence while issue confirmation does not consume physical stock. Effective in v1.0.15. Previous frozen releases remain unchanged.
+
+## Database and domain
+
+Add immutable `wms_issue_return_item` in new physical V021 after V020: id BIGINT PK AUTO_INCREMENT; org_id BIGINT NN; issue_id BIGINT NN FK wms_material_issue; issue_item_id BIGINT NN FK wms_material_issue_item; returned_qty DECIMAL(18,6) NN CHECK >0; unit_id BIGINT NN FK md_unit; reason VARCHAR(1000) NN nonblank; returned_by BIGINT NN FK sys_user; returned_at DATETIME(3) NN; record_version BIGINT NN DEFAULT 1 CHECK =1. Index(org_id,issue_id,issue_item_id). Reject UPDATE and DELETE with append-only triggers. No second stock ledger, mutable returned counter, or redundant material/batch identity: derive them through the immutable confirmed issue item. References must share organization and parent issue.
+
+An existing CONFIRMED issue accepts `returnIssue`; no new lifecycle state. Lock order batch → issue → lot, reject stale issue version, validate all submitted items before persisting them, and increment the issue optimistic token once. Original issued quantity/items and issuedAt remain unchanged. Append one return fact per submitted line with current actor/time and controlled reason. Duplicate issueItemId in a single request is invalid. Same idempotency key replays exactly without extra rows; conflicting body rejects. All returns, issue token, audit and idempotency response are atomic.
+
+Return is withdrawal of unconsumed issue entitlement. It does not change on-hand quantity because issue did not decrease it. Do not create artificial opposite ledger movements in the same stock bucket. Only an actual charge consumes inventory and only an actual charge reversal restores that consumption. For each issue item, cumulative returned quantity (converted exactly into its issued unit) cannot exceed issued quantity. Additionally the aggregate remaining issued entitlement for the batch/lot across all confirmed issue items, minus all prior/current returns, must remain at least actual unreversed charge quantity. This conservatively protects charges without inventing a per-charge issue-item assignment. Reject precision loss. Multiple issued formula lines sharing a lot retain item-specific return bounds and aggregate charge bounds. Recheck these under batch/lot locks.
+
+Reservation remains its existing state; return does not invent a partially-released reservation state or pretend quantity was consumed. Original reservations continue to represent allocation until their existing explicit state transition. Future reissue cannot exceed current unconsumed reservation entitlement after issued-minus-returned quantities. Recheck the same return-adjusted entitlement in issue confirmation and charge consumption.
+
+## API, UI, permissions, audit
+
+Existing POST `/material-issues/{id}/returns`, `wms:issue:return`, IssueReturn body `{versionNo,reason,items:[{issueItemId,quantity,unitId}]}`, Idempotency-Key and matching quoted If-Match. No new write route or permission. Existing MaterialIssue read gains `returns:[IssueReturnFact]`, where each fact contains id, issueId, issueItemId, quantity (returned_qty decimal string), unitId, reason, returnedBy, returnedAt and recordVersion. No client author/time/version injection. Existing list/detail use this same schema.
+
+Existing issue View/Create/Edit style remains. Detail shows retained return rows (明细、退料数量、单位、原因、操作人、时间) and a permission-gated return action choosing actual issue items, exact quantity/unit and required reason. Labels and controls remain inline. No editable original issue facts after confirmation. 409/422 retains input. UI availability never replaces server entitlement validation. Existing MaterialIssue audit records before/after including new immutable return facts; action MaterialIssue:RETURN. No new signature requirement at return.
+
+## Tests, RTM, task and integration
+
+MES-008 consumes actual MES-011 unreversed charge producer. Add TC-WMS-RET-001 return original issue unchanged/on-hand unchanged; TC-WMS-RET-002 cumulative item and batch/lot limits; TC-WMS-RET-003 concurrent charge versus return, only one compatible outcome; TC-WMS-RET-004 same-key replay/conflicting/stale/cross-org/unknown fields; TC-WMS-RET-005 audit rollback and SQL append-only guards; TC-WMS-RET-006 reissue/consume use return-adjusted entitlement and exact unit conversion. Map to original WMS issue/return RTM and real incoming E2E. No future task or unrelated production quality scope is authorized. Task readiness remains IN PROGRESS until required tests pass.
+
+Trace API also exposes actual INSPECTION_TASK and INSPECTION_ITEM node types already present in the approved incoming chain. Add these two read-only TraceNode enum values; no new fact, route or write permission. TC-TRC-001 verifies their IDs and edges join sample to test execution without losing intermediate identity.
+
+
+## Approved functional closure delta — v1.0.15
+
+DCP-MES-008-011-FUNCTIONAL-CLOSURE-001 approved by the user on 2026-10-04. Mandatory authoritative sections: [00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md](00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md) §§3–8. Inventory freezing is independent of QA disposition; IPC producer stage is bounded within MES-012; clearance/IPC Gate share current production-root/Operation locks. No arbitrary status API. This additive contract supersedes older statements that these producers are unavailable. Incoming six-record facts and completionRule grammar remain unchanged.

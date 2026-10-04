@@ -12,3 +12,12 @@ deploy/docker/minio.license
 .vscode/
 *.iml
 *.log
+
+# Generated local browser traces/screenshots (review evidence copied separately)
+frontend/mes-web/test-results/
+frontend/mes-web/playwright-report/
+
+# Local Python cache and root browser output
+__pycache__/
+*.pyc
+/test-results/

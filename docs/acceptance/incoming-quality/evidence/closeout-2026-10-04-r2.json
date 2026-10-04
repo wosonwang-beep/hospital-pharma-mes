@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-04",
+  "baseline": "v1.0.14",
+  "newPassingCases": 10,
+  "dateBoundary": {
+    "cases": 8,
+    "firstGate": {
+      "cases": 8,
+      "passed": 6,
+      "errors": 2,
+      "cause": "Test postcondition queried record_status instead of existing issue.status; all eight eligibility refusals passed"
+    },
+    "failureOnlyRetry": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "time": "10.164"
+    },
+    "methods": [
+      "releasedLotAtDateBoundaryCannotCreateProductionFacts: RESERVE/WEIGH/CHARGE × EXPIRY/RETEST",
+      "releasedLotAtDateBoundaryCannotConfirmIssue: EXPIRY/RETEST"
+    ],
+    "kind": "Native real command/database with thread-local controlled Instant.now; not real cross-day E2E or concurrent clock race",
+    "productionFactsMocked": false,
+    "committedNewFixtures": false
+  },
+  "incomingClosure": {
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "time": "8.714",
+    "methods": [
+      "missingRequiredResultCannotSubmitReviewAndPreservesTaskVersion",
+      "exhaustedRetestQuotaAndValidOriginalFailRemainBlockingAfterSignedClosure"
+    ]
+  },
+  "migration": {
+    "new": false,
+    "successful": 23,
+    "failed": 0,
+    "max": "023"
+  },
+  "review": "Read-only independent increment review: no concrete remaining CRITICAL/HIGH",
+  "productOrUiChanged": false,
+  "tasks": {
+    "MES007": "ACCEPTED",
+    "MES008": "IN PROGRESS",
+    "MES008A": "IN PROGRESS",
+    "MES009": "READY FOR ACCEPTANCE",
+    "MES010": "IN PROGRESS",
+    "MES011": "IN PROGRESS"
+  },
+  "remaining": [
+    "Frozen-inventory business command/API/permission/signature contract unavailable; do not invent generic status writes",
+    "Actual production IPC/clearance producer integration unavailable; no fake pending IPC facts or implicit MES012 expansion",
+    "Other unclosed formal incoming RTM assertions remain visible"
+  ],
+  "logs": [
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008-011-date-boundary.log",
+      "sha256": "9000553d9c87efdfcad1e03c9e332fa40b6b28901bb6cddb1e67131ad2417cfa"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008-date-issue-retry.log",
+      "sha256": "80f75a32dd14e6bcf2b4609efb530bb73963aa24ef2a7142b7cd978ec719fd0d"
+    },
+    {
+      "path": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes008a-required-result-and-oos.log",
+      "sha256": "3024b145bf6d4f8cf7444f9b61e12e79f14046868e796831e507c62baa29f5a7"
+    }
+  ]
+}

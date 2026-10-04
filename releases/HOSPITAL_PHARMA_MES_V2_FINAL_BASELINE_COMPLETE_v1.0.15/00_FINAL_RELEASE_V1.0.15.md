@@ -1,0 +1,8 @@
+# FINAL BASELINE COMPLETE v1.0.15
+
+Cumulative successor of immutable v1.0.13. Authorization: 确认批准其中的契约补齐及完整验收所需任务范围. Bounded completion of already-required frozen QC standard trace projection. No task acceptance inferred.
+
+
+## Approved functional closure delta — v1.0.15
+
+DCP-MES-008-011-FUNCTIONAL-CLOSURE-001 approved by the user on 2026-10-04. Mandatory authoritative sections: [00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md](00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md) §§3–8. Inventory freezing is independent of QA disposition; IPC producer stage is bounded within MES-012; clearance/IPC Gate share current production-root/Operation locks. No arbitrary status API. This additive contract supersedes older statements that these producers are unavailable. Incoming six-record facts and completionRule grammar remain unchanged.

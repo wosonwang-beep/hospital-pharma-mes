@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-03",
+  "database": "localhost:3306/hospital_pharma_mes_dev",
+  "native_migrations_success": [
+    "006",
+    "007",
+    "008",
+    "009"
+  ],
+  "test_fixture_residue": 0,
+  "backend_distinct_domain_cases": 13,
+  "backend_distinct_integration_cases": 23,
+  "gate_strategy": "task gate, failure-specific retest, one new required relationship/index case; no full regression",
+  "latest_frontend_unit_cases": 15,
+  "browser_distinct_cases": 10,
+  "browser_apis": "mocked; native API/DB/audit verified separately",
+  "review": {
+    "CRITICAL": 0,
+    "HIGH": 0,
+    "necessary_MEDIUM": 0
+  },
+  "migration_sha256": {
+    "V006__mes_003_master_resources.sql": "01ef955c40a0864f961e8a54fa43f3ef517b49e91f2363cdf1774646ffafc4e5",
+    "V007__mes_004_material.sql": "08c82278eab0ee873f17af10b4972a39ba377e684d6397b4f6c89c3d1b8c0a6f",
+    "V008__mes_005_supplier.sql": "ada1ed724045551405f0360247668deed5fe66633133c70cd1fc812d12be5de2",
+    "V009__mes_004_005_frozen_query_indexes.sql": "3c61d70c879dab67bc510d4738899213347aa2e98db56963ca428ce313da418d"
+  }
+}

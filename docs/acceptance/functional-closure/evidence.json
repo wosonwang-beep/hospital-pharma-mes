@@ -1,0 +1,21 @@
+{
+  "approval": "2026-10-04 user 批准方案",
+  "backendCompile": "PASS",
+  "ipcUnitMethods": 3,
+  "frontendTypecheck": "PASS",
+  "mockedBrowserCases": 4,
+  "nativeMigration": "V024 FAILED; no repair/rewrite",
+  "nativeAcceptance": "BLOCKED",
+  "taskStatus": "IN PROGRESS",
+  "baseline": "v1.0.14 authoritative; approved v1.0.15 candidate not switched",
+  "evidenceHashes": {
+    "IMPLEMENTATION-2026-10-04.md": "debdafaff631adc8624d5f3682a7cbdd4db0fe9534a5f0f57f07a78f31ee3079",
+    "migration-failure\\flyway-history-before-recovery.jsonl": "057dd32e8b575f9991149f258a2cb050041a4c6cb7e9eecba9d85e12d84d47b7",
+    "migration-failure\\V024-original-failed.sha256": "dd236f4adb3e3c4e0d3816c41c82223f8e0c7e169e8a5fb05da4e45bbdb54f93",
+    "migration-failure\\V024-original-failed.sql": "e3b360207bf2530866d4fe57416e9d5292a8774662d6e3934d69a5f1a25d357c",
+    "ui\\functional-closure-executi-21af1-ith-exact-signature-binding-chromium-desktop-ipc-controls.png": "380236c4c38212572798008158ce58c8eec03299a13516a5bb89de4e0cb6e207",
+    "ui\\functional-closure-executi-21af1-ith-exact-signature-binding-chromium-mobile-ipc-controls.png": "890e3716a0ebefaf9e6b77b411014480a3619647136e6bfde0b8f57f072be7c2",
+    "ui\\functional-closure-signed--d77cf--page-and-horizontal-fields-chromium-desktop-inventory-controls.png": "72df85dbde777764d62fbe0e980d214bffdbca472915072bc2abdfa7a091b430",
+    "ui\\functional-closure-signed--d77cf--page-and-horizontal-fields-chromium-mobile-inventory-controls.png": "92be08debec2c883e3b00d0eaae5d0b76650495a0043e89450593c53a1a45b94"
+  }
+}

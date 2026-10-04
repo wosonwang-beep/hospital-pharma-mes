@@ -1,0 +1,608 @@
+# 医院制剂 MES V2.0 产品需求规格说明书 PRD V1.0 — FROZEN CANDIDATE
+
+## 1. 文档定位
+本PRD是 hospital-pharma-mes 的上位需求基线。核心领域规则来自已确认V2.0方案；现场SOP、法规市场、接口协议、RPO/RTO等仍标记为待企业确认。通过GPT-5.6 Sol High Design Freeze Review及用户确认后升级为FROZEN。
+
+## 2. 产品目标
+订单到批次、物料、生产执行、eBR、IPC/QC、物料平衡、QA放行、成品库存和追溯形成闭环；所有关键GxP操作可归属、同期、保留原始值并可审计。
+
+## 3. 角色
+主数据管理员、工艺工程师、计划员、仓库人员、生产操作员、独立复核员、QC、QA、设备/工程、系统管理员、审计员。
+
+## 4. 端到端流程
+主数据批准 → 生产订单 → MainBatch与工艺快照 → 齐套/预留 → 收发料/称量 → ExecutionUnit工序执行 → 设备/参数/IPC → 投料与Genealogy → 产出/物料平衡 → eBR生产复核 → QC → QA ReleaseDecision → 成品库存可用 → 正反向追溯。
+
+## 5. 关键不可违反规则
+- MainBatch 是唯一正式成品批、正式批记录、QA放行和成品出库主体。
+- SubBatch 仅用于分批执行。
+- MaterialCharge 是实际投料 Source of Truth；发料量不能替代投料量。
+- InventoryLedger 是库存变化事实账。
+- QC PASS 不等于 QA RELEASE。
+- eBR运行批只读自己的冻结Snapshot。
+- GxP历史值不得覆盖；更正使用Revision。
+- 签名绑定record digest，受签数据改变后按规则失效重签。
+- 物料平衡阈值和口径受控，不写死程序。
+
+
+## 6. 编号化需求目录
+
+### IAM-001 — 认证与账户状态
+**模块：** IAM  
+**需求/业务规则：** JWT认证；锁定/停用用户拒绝  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 有效用户登录；无效用户拒绝  
+**优先级：** P0
+
+### IAM-002 — RBAC授权
+**模块：** IAM  
+**需求/业务规则：** User-Role-Permission-Menu；API/按钮/菜单统一权限码  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 全部越权用例403  
+**优先级：** P0
+
+### MD-001 — 组织层级
+**模块：** 主数据  
+**需求/业务规则：** 企业/工厂/车间/产线编码唯一；停用不删历史  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 层级与数据隔离正确  
+**优先级：** P0
+
+### MD-002 — 单位与换算
+**模块：** 主数据  
+**需求/业务规则：** 量纲、精度、换算因子受控  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 换算保留原值/因子/结果  
+**优先级：** P0
+
+### MD-MAT-001 — 完整物料主数据
+**模块：** 主数据  
+**需求/业务规则：** 不得三字段简化；覆盖名称/通用名/类别/规格/等级纯度/性状/单位/包装/厂家/质量标准/储存/效期复验/批号/取样检验放行/称量/关键物料/精度偏差/特殊管理/状态  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 完整字段、状态、版本规则通过  
+**优先级：** P0
+
+### MD-SUP-001 — 供应商与合格关系
+**模块：** 主数据  
+**需求/业务规则：** 物料-供应商批准关系及有效期  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 未批准/过期关系被识别  
+**优先级：** P0
+
+### MD-EQP-001 — 设备与校准
+**模块：** 主数据  
+**需求/业务规则：** 停用/校准过期设备不得用于受控工序  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 执行前Gate生效  
+**优先级：** P0
+
+### MD-QUAL-001 — 人员资格
+**模块：** 主数据  
+**需求/业务规则：** 资格按执行时点校验  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 无资格人员不能执行受限动作  
+**优先级：** P0
+
+### PROC-001 — 工艺包版本
+**模块：** 工艺  
+**需求/业务规则：** DRAFT→SUBMITTED→APPROVED；批准版不可原地修改  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 旧版本可复现  
+**优先级：** P0
+
+### PROC-BOM-001 — 处方/BOM
+**模块：** 工艺  
+**需求/业务规则：** 基准批量、物料、理论量、单位、超量、关键项受控  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 批次冻结后不随新版改变  
+**优先级：** P0
+
+### PROC-ROUTE-001 — 路线与工序
+**模块：** 工艺  
+**需求/业务规则：** 前置依赖、角色、设备/清场、完成条件；发布前lint  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 无死循环/不可达  
+**优先级：** P0
+
+### PROC-PARAM-001 — 工艺参数
+**模块：** 工艺  
+**需求/业务规则：** MANUAL/AUTO/HYBRID；单位/上下限  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 三种采集模式正确  
+**优先级：** P0
+
+### EBR-001 — 动态Designer
+**模块：** eBR  
+**需求/业务规则：** Section/Group/Form/Field/Rule无代码配置；只编辑Draft  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 不同工艺可配置发布  
+**优先级：** P0
+
+### EBR-002 — 动态字段
+**模块：** eBR  
+**需求/业务规则：** 支持数值文本枚举时间条码物料批容器设备人员附件图片计时器计算设备值  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** Renderer正确渲染  
+**优先级：** P0
+
+### EBR-003 — 规则引擎
+**模块：** eBR  
+**需求/业务规则：** 白名单DSL；VALIDATION/CALCULATION/VISIBILITY/BRANCH/COMPLETION/SIGNATURE/REVIEW/DEVIATION  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** BLOCK/WARN/计算/分支确定性  
+**优先级：** P0
+
+### EBR-004 — 批次版本冻结
+**模块：** eBR  
+**需求/业务规则：** 下达时原子冻结Product/Formula/Route/eBR/Rules+hash  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 新模板不影响在制/历史批  
+**优先级：** P0
+
+### EBR-005 — Renderer
+**模块：** eBR  
+**需求/业务规则：** 只读Batch Snapshot+Runtime Data+Allowed Actions；不读最新模板  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 并发冲突409  
+**优先级：** P0
+
+### EBR-006 — 更正修订链
+**模块：** eBR  
+**需求/业务规则：** FieldValue只追加revision；必须原因；禁止覆盖  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 完整历史可重建  
+**优先级：** P0
+
+### EBR-007 — 电子签名/复核
+**模块：** eBR  
+**需求/业务规则：** 重认证+record_digest；独立复核；数据变化使签名失效  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 重签机制正确  
+**优先级：** P0
+
+### EBR-008 — PDF归档
+**模块：** eBR  
+**需求/业务规则：** 从结构化记录生成受控副本；重生新版本不覆盖  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 历史PDF可复现  
+**优先级：** P0
+
+### WMS-001 — 收货待验上架
+**模块：** WMS  
+**需求/业务规则：** 收货→QUARANTINE→取样/检验→放行；未放行不可生产领用  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 状态Gate正确  
+**优先级：** P0
+
+### WMS-002 — 库存流水
+**模块：** WMS  
+**需求/业务规则：** 所有变化追加InventoryLedger并带source/idempotency  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 流水可重算库存  
+**优先级：** P0
+
+### WMS-003 — 预留齐套
+**模块：** WMS  
+**需求/业务规则：** 按BOM、质量、效期、FEFO预留  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 不足/未放行阻断  
+**优先级：** P0
+
+### WMS-004 — 发料退料
+**模块：** WMS  
+**需求/业务规则：** 扫码收发退；冻结/过期/未放行拒绝；发料量≠实际投料  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 与称量投料可对账  
+**优先级：** P0
+
+### PRD-001 — 生产订单
+**模块：** 生产  
+**需求/业务规则：** 订单可拆正式MainBatch  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 订单状态正确  
+**优先级：** P0
+
+### PRD-002 — MainBatch
+**模块：** 生产  
+**需求/业务规则：** 唯一正式成品批、正式批记录、QA放行、成品出库主体  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 正式批号唯一  
+**优先级：** P0
+
+### PRD-003 — SubBatch
+**模块：** 生产  
+**需求/业务规则：** 仅分批执行，不得独立QA放行/出库  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** Release接口拒绝SubBatch  
+**优先级：** P0
+
+### PRD-004 — ExecutionUnit
+**模块：** 生产  
+**需求/业务规则：** DIRECT/SUB_BATCH统一执行入口  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 所有工序挂ExecutionUnit  
+**优先级：** P0
+
+### MES-OP-001 — 工序状态机
+**模块：** MES  
+**需求/业务规则：** PENDING→READY→IN_PROGRESS/PAUSED→COMPLETED；Gate失败BLOCKED  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 非法转换409  
+**优先级：** P0
+
+### MES-EQP-001 — 设备Usage/Run
+**模块：** MES  
+**需求/业务规则：** EquipmentUsage与EquipmentRun分离  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 设备谱系可追溯  
+**优先级：** P0
+
+### MES-PAR-001 — 参数采集
+**模块：** MES  
+**需求/业务规则：** 保留source/time/message；设备重发幂等  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 重复消息不重复写  
+**优先级：** P0
+
+### MES-WGH-001 — 称量
+**模块：** MES  
+**需求/业务规则：** BOM/MaterialLot/质量/数量/资格/精度校验；必要复核  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 错误物料/未放行被阻断  
+**优先级：** P0
+
+### MES-CHG-001 — 投料
+**模块：** MES  
+**需求/业务规则：** MaterialCharge为实际投料真源→QuantityEvent→库存CONSUME→Genealogy  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 发料量不能冒充投料量  
+**优先级：** P0
+
+### BAL-001 — 数量事件
+**模块：** 物料平衡  
+**需求/业务规则：** Issue/Charge/Return/Output/Sample/Loss/Scrap/WIP均有source_ref  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 禁止手工覆盖汇总  
+**优先级：** P0
+
+### BAL-002 — 规则计算
+**模块：** 物料平衡  
+**需求/业务规则：** 工序/整批/包装；干燥浓缩配液支持专属口径；阈值不可写死  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 重算可复现  
+**优先级：** P0
+
+### BAL-003 — 超限调查
+**模块：** 物料平衡  
+**需求/业务规则：** FAIL自动阻断结批；调查/批准后处理  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** UI不可绕过Gate  
+**优先级：** P0
+
+### QMS-IPC-001 — IPC
+**模块：** QMS  
+**需求/业务规则：** 过程检验驱动工序Gate  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 未完成/失败按规则阻断  
+**优先级：** P0
+
+### QMS-001 — 取样检验
+**模块：** QMS  
+**需求/业务规则：** QC原始结果保留，结果修订不可覆盖  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 完整修订链  
+**优先级：** P0
+
+### QMS-DEV-001 — Deviation/OOS/OOT/CAPA
+**模块：** QMS  
+**需求/业务规则：** 异常调查、重测审批、处置、关闭  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 开放关键异常阻断  
+**优先级：** P0
+
+### REL-001 — QA放行
+**模块：** Release  
+**需求/业务规则：** Production Complete≠QC PASS≠QA RELEASE；仅ReleaseDecision使成品可用  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 所有Gate满足才可放行  
+**优先级：** P0
+
+### TRC-001 — Genealogy
+**模块：** 追溯  
+**需求/业务规则：** 成品批→MainBatch→ExecutionUnit→Charge→MaterialLot→SupplierLot并支持反向  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 每个投入批次可定位  
+**优先级：** P0
+
+### AUD-001 — Audit Trail
+**模块：** GMP  
+**需求/业务规则：** 关键业务写入与AuditEvent同事务；记录actor/action/object/old-new/reason/time/transaction  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 抽样可重建事件  
+**优先级：** P0
+
+### SIG-001 — 电子签名
+**模块：** GMP  
+**需求/业务规则：** 签名绑定身份/含义/时间/对象摘要；不是图片  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 篡改受签数据可检测  
+**优先级：** P0
+
+### INT-001 — ERP/LIMS/设备集成
+**模块：** 集成  
+**需求/业务规则：** 外部ID/版本/消息ID/幂等/失败重试/人工对账  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 重复消息不重复执行业务  
+**优先级：** P0
+
+### NFR-001 — 安全
+**模块：** 非功能  
+**需求/业务规则：** 最小权限、加密、时间同步、依赖治理  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 安全测试通过  
+**优先级：** P0
+
+### NFR-002 — 备份恢复与连续性
+**模块：** 非功能  
+**需求/业务规则：** RPO/RTO由企业确认；备份恢复演练  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 恢复证据可审计  
+**优先级：** P0
+
+### NFR-003 — 数据保留
+**模块：** 非功能  
+**需求/业务规则：** GxP保留期由法规市场/SOP确认；历史可检索  
+**角色与前置：** 由对应模块授权角色执行；所有状态、资格、组织隔离及上游数据在服务端校验。  
+**主流程：** 按该业务对象状态机执行并写入其Source of Truth。  
+**异常流程：** 权限失败403；状态/并发冲突409；业务规则失败422；不得以前端确认绕过。  
+**数据与审计：** 对应数据库设计中的模块表；GxP关键变更生成AuditEvent，签名点按详细设计执行。  
+**验收标准：** 归档检索可用  
+**优先级：** P0
+
+## 7. 页面需求
+工作台；RBAC；组织/单位/物料/产品/供应商/设备/资格；工艺包/BOM/路线/参数；eBR Designer；WMS收货/待验/库存/预留/领退/盘点/追溯；生产订单/MainBatch/SubBatch/ExecutionUnit；车间工序/表单/称量/投料/设备/参数；IPC/QC/Deviation/CAPA；物料平衡；QA批审/放行；eBR阅读/PDF；审计/接口/看板。
+
+## 8. 集成
+ERP：产品/订单导入、完工/消耗回传。LIMS/QMS：检验委托/结果/偏差状态。SCADA/PLC/电子秤：参数、重量、状态。扫码：物料、容器、设备、库位。所有集成必须幂等并保留原始消息身份与时间。
+
+## 9. 非功能与验证
+需求→风险→设计→测试→偏差→RTM闭环。性能、保留期、RPO/RTO、部署地点需企业确认后冻结。业务上线与GxP验证放行是不同门槛。
+
+## 10. 待企业确认
+产品剂型与法规市场；ERP/LIMS/QMS/设备协议；批号、包装层级、仓库策略；签名/复核/偏差/放行SOP；性能、保留期、RPO/RTO。
+
+## 11. DCP-MES-002-R2-001 — 来料质量闭环（FROZEN）
+
+### MD-MAT-002 — Incoming Inspection Policy
+
+物料基本主数据必须维护 Boolean `requiresIncomingInspection`（是否入库必验），默认 `true`。该值属于 `Material` 基本属性，可经审计直接维护；收货/批次使用时持久化独立快照。收货时必须把 `materialId` 和 `requiresIncomingInspectionSnapshot` 写入 `MaterialLot`，后续主数据变化不得改变历史批次路径。
+
+### WMS-001 — Incoming Material Receipt
+
+收货必须验证 MaterialSnapshot、Supplier、批准的 Material-Supplier 关系、批号/数量、包装、标签、密封、污染/破损以及效期/复验期。确认后原子创建 `MaterialReceipt`、`MaterialReceiptItem`、`MaterialLot` 与 `InventoryLedger(RECEIVE)`。新批次库存先记事实账；可用性由质量放行决定。
+
+### QMS-IN-001 / QMS-SMP-001 / QMS-TST-001 / QMS-RPT-001
+
+- 请验是 WMS 到 QMS 的正式业务交接；`InspectionRequest != InspectionTask`。
+- 取样必须采用 `SamplingTask → SamplingDetail → Sample`，每个明细追溯到实际容器或取样点。
+- 检验必须采用 `InspectionTask → InspectionItem → TestExecution → TestResultRevision`；原始结果禁止覆盖，更正必须追加 Revision。
+- `InspectionReport` 独立于原始检验记录；每个报告项目引用最终批准的 `TestResultRevision`。
+
+### QMS-MREL-001 — Incoming Material Release
+
+必验物料在 `QC_PASSED` 后仍为 `inventoryStatus=BLOCKED`；只有 QA 建立有效 `ReleaseDecision(releaseScope=INCOMING_MATERIAL)` 后才允许 `qualityStatus=RELEASED` 与 `inventoryStatus=AVAILABLE`。
+
+### QMS-EXM-001 — Inspection Exemption
+
+当快照为 `false` 时，系统不得伪造 InspectionRequest、SamplingTask、SamplingDetail、Sample、InspectionTask、InspectionItem、TestExecution 或 InspectionReport。系统必须重新验证物料基本快照、供应商、批准的物料-供应商关系、收货检查和免验策略，随后创建不可变决定：
+
+`ReleaseDecision(releaseScope=INCOMING_MATERIAL, decision=RELEASED, releaseBasis=INSPECTION_EXEMPT, decisionSource=SYSTEM_RULE)`。
+
+只有该决定与审计证据提交成功后才能设置 `qualityStatus=RELEASED`、`inventoryStatus=AVAILABLE`。
+
+### WMS-ELG-001 — Material Eligibility
+
+Reservation、Issue、Weighing、Charge 必须统一消费 `MaterialEligibilityService`。有效 Gate 同时要求：有效 RELEASED 决定、`qualityStatus=RELEASED`、`inventoryStatus=AVAILABLE`、未过期/未到复验阻断点、未冻结，且业务上下文要求的 BOM/批次约束通过。失败返回 `422 MATERIAL_NOT_ELIGIBLE` 和稳定 reason code。
+
+
+## DCP-MES-003-R2-001 approved delta
+
+MD-001/MD-002/MD-EQP-001/MD-QUAL-001 implement the approved hierarchy, deterministic conversion, UTC execution-time gates and equipment location in DCP-MES-003-R2-001.
+
+
+## DCP-MES-004-005-R2-001 approved contract completion
+
+Material creation 201, complete typed DTOs, explicit version target/root optimistic token, Material root DRAFT/APPROVED/INACTIVE and version DRAFT/SUBMITTED/APPROVED, Supplier UNAPPROVED/APPROVED/INACTIVE and named commands, historical relationship revocation, and LG-004 delayed conversion-material FK follow 00_DESIGN_CHANGE_PROPOSAL_DCP-MES-004-005-R2-001_APPROVED.md. No existing table/column/path/permission/task dependency is added or removed. All previous unrelated contracts remain applicable.
+
+
+## DCP-MATERIAL-BASIC-001 authoritative replacement
+
+Read 00_DESIGN_CHANGE_DCP-MATERIAL-BASIC-001_APPROVED.md. This delta supersedes earlier material business version/approval wording, including inherited v1.0.4 delta sections; unrelated versioned aggregates and supplier qualification remain unchanged. Material is directly editable basic master, root ACTIVE/INACTIVE; historical DRAFT/APPROVED rows remain evidence-compatible enabled records until audited maintenance. Basic unit/conversion and multiple suppliers with exactly one preferred are current scope. versionNo is only an optimistic-lock token. Legacy version/rule tables are retired, not dropped. Consumer snapshots freeze material values at use time.
+
+## DCP-MES-006-R2-001 current contract
+
+The approved 00_DESIGN_CHANGE_DCP-MES-006-R2-001_APPROVED.md is normative for MES-006 and supersedes prior contradictory process/product/eBR scope prose. Product is owned here; material has no business version; eBR is independently owned by MES-007. Process signature binds immutable business version and definition content. New physical V011 only. Test requirements include TC-PROC-004.
+
+
+## DCP-MATERIAL-NAMES-UI-001 current correction
+See `00_DESIGN_CHANGE_DCP-MATERIAL-NAMES-UI-001_APPROVED.md`. The three alternate material-name fields are retired from current API/UI/search/consumer snapshots; legacy physical values and audits are preserved. Labels and controls remain side by side on all viewport sizes. This supersedes inherited inconsistent descriptions within that boundary.
+
+
+## DCP-MES-007-008-SEQUENCING-001 authoritative delta
+
+Read `00_DESIGN_CHANGE_DCP-MES-007-008-SEQUENCING-001_APPROVED.md` and the stage contract appendices. Explicit human approval preserves the full MES-007/008 functionality and required tests, while separating current implementation from later real integration. LG-007A definition/Designer/DSL/published contracts is the current MES-007 gate; LG-007B remains MES-009 after LG-009A, with its operation_execution_id FK installed and validated by LG-010. LG-008 reservation/issue main_batch_id FKs are installed and validated by LG-009A. Before these physical producers exist, dependent writes fail closed; no placeholder batch/operation rows, bypassed qualification, or mutable regulated history. MES-008A owns actual MaterialEligibilityService/release evidence; no quantity-only eligibility.
+
+The existing independent receipt edit UI is retained. `PUT /wms/receipts/{id}` uses `wms:receipt:update`, edits only DRAFT authored receipt fields, requires optimistic version, reason, idempotency and same-transaction audit, and returns 200; Confirmed receipt facts (recordStatus APPROVED) cannot be edited. Formal contracts are the concrete OpenAPI and stage appendices. All current labels/control pairs stay horizontal on desktop/mobile.
+
+Current targeted tests prove only current-stage capabilities; deferred runtime/eligibility/batch tests remain required. MES-007 and MES-008 remain IN PROGRESS until every original applicable gate passes against real producer contracts. The approved stage does not authorize implementation of MES-008A/009/010 or marking tasks ACCEPTED.
+
+
+## DCP-MES-008A-CONTRACT-001 approved bounded delta
+
+Read `00_DESIGN_CHANGE_DCP-MES-008A-CONTRACT-001_APPROVED.md`. Its six independent create/execute routes, existing workbench mapping, nullable incoming MainBatch references, MES-009 delayed FK ownership and canonical finished_lot_id target supersede conflicting inherited wording only within this boundary. Existing fields, API/permissions, state machines and GxP requirements remain unchanged. Unresolved incoming implementation-map gaps are not resolved by this release.
+
+
+## Approved incoming full-chain completion in v1.0.15
+
+Read `00_DESIGN_CHANGE_DCP-INCOMING-QUALITY-GAPS-001_APPROVED.md` and the four `00_INCOMING_*_CONTRACT_V1.0.15.md` appendices. Their explicit columns, state guards, API schemas, permissions, signing envelopes, UI fields, tests and dependency ownership supersede contradictory inherited text within the approved scope only. Former DG-01..08 and BC-01/02 now have implementation contracts; delivery is still subject to actual code and required validation. No full workflow PASS follows from publication.
+
+
+## Authorized v1.0.15 incoming completion supplement
+
+Human approval covers the bounded contract completion and full incoming acceptance tasks. For eBR runtime, issue returns, weighing verification and actual trace identities, the following precise supplements supersede generic or conflicting clauses in this chapter; unaffected contracts remain unchanged.
+
+- [00_INCOMING_EBR_RUNTIME_SUPPLEMENT_V1.0.15.md](00_INCOMING_EBR_RUNTIME_SUPPLEMENT_V1.0.15.md)
+- [00_INCOMING_WEIGH_POLICY_SUPPLEMENT_V1.0.15.md](00_INCOMING_WEIGH_POLICY_SUPPLEMENT_V1.0.15.md)
+- [00_INCOMING_ISSUE_RETURN_SUPPLEMENT_V1.0.15.md](00_INCOMING_ISSUE_RETURN_SUPPLEMENT_V1.0.15.md)
+
+
+## Authorized v1.0.15 material weighing policy producer
+
+The approved full incoming acceptance scope includes this missing producer. [00_INCOMING_MATERIAL_WEIGH_POLICY_V1.0.15.md](00_INCOMING_MATERIAL_WEIGH_POLICY_V1.0.15.md) governs deployment configuration, immutable production snapshot, consumers and required tests. It does not restore retired material master fields or change material APIs. It supersedes earlier references to nullable legacy material weighing fields. No new table, permission, route or status.
+
+
+## v1.0.15 approved trace-read completion
+
+See [00_INCOMING_TRACE_STANDARD_V1.0.15.md](00_INCOMING_TRACE_STANDARD_V1.0.15.md) for exact frozen QC standard node and immutable signature-policy identity evidence. Unaffected contracts remain unchanged.
+
+
+## Approved functional closure delta — v1.0.15
+
+DCP-MES-008-011-FUNCTIONAL-CLOSURE-001 approved by the user on 2026-10-04. Mandatory authoritative sections: [00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md](00_FUNCTIONAL_CLOSURE_CONTRACT_V1.0.15.md) §§3–8. Inventory freezing is independent of QA disposition; IPC producer stage is bounded within MES-012; clearance/IPC Gate share current production-root/Operation locks. No arbitrary status API. This additive contract supersedes older statements that these producers are unavailable. Incoming six-record facts and completionRule grammar remain unchanged.

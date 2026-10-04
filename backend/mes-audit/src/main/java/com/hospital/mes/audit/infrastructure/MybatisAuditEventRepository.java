@@ -1,7 +1,6 @@
 package com.hospital.mes.audit.infrastructure;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hospital.mes.audit.application.AuditEventPage;
 import com.hospital.mes.audit.application.AuditEventQuery;
 import com.hospital.mes.audit.application.AuditEventRepository;
@@ -45,11 +44,12 @@ public class MybatisAuditEventRepository implements AuditEventRepository {
             .ge(q.occurredFrom() != null, AuditEventEntity::getOccurredAt,
                 q.occurredFrom() == null ? null : q.occurredFrom().atOffset(ZoneOffset.UTC).toLocalDateTime())
             .lt(q.occurredTo() != null, AuditEventEntity::getOccurredAt,
-                q.occurredTo() == null ? null : q.occurredTo().atOffset(ZoneOffset.UTC).toLocalDateTime())
-            .orderByDesc(AuditEventEntity::getOccurredAt).orderByDesc(AuditEventEntity::getId);
-        Page<AuditEventEntity> p = mapper.selectPage(Page.of(q.page() + 1L, q.size()), w);
-        return new AuditEventPage(p.getRecords().stream().map(MybatisAuditEventRepository::domain).toList(),
-            q.page(), q.size(), p.getTotal());
+                q.occurredTo() == null ? null : q.occurredTo().atOffset(ZoneOffset.UTC).toLocalDateTime());
+        long total = mapper.selectCount(w);
+        w.orderByDesc(AuditEventEntity::getOccurredAt).orderByDesc(AuditEventEntity::getId)
+            .last("LIMIT " + q.size() + " OFFSET " + ((long)q.page() * q.size()));
+        return new AuditEventPage(mapper.selectList(w).stream().map(MybatisAuditEventRepository::domain).toList(),
+            q.page(), q.size(), total);
     }
 
     private static AuditEvent domain(AuditEventEntity e) {

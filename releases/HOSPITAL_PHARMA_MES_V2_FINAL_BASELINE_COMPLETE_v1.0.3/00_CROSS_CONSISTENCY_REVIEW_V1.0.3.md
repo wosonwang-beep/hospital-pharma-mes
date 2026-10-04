@@ -1,0 +1,4 @@
+# v1.0.3 bounded cross-document consistency review
+Approval DCP-MES-003-R2-001 recorded from human “授权”, 2026-10-03.
+PASS: PRD, Domain, Database/Profile M, named State Machine commands, API/OpenAPI typed schemas, UI/routes/permissions, GxP, Test/Acceptance, RTM, migration ownership and Integration/Task Dependency reference the same approved delta. Existing MES-004/005 business contracts and all other tasks are retained. No executed migration changed. No additional signature provider introduced. v1.0.2 history is unchanged. Equipment location is explicitly owned by md_equipment. Material FK handoff is explicitly assigned to LG-004. Schema-reference and added MES-003 route uniqueness checks passed; inherited UI-WMS-REC duplicate IDs remain unchanged outside scope before pointer switch.
+Implementation readiness/evidence remains tracked solely in MES_TASKS.md; this review does not claim product tests passed.

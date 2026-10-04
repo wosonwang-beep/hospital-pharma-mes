@@ -1,0 +1,8 @@
+package com.hospital.mes.masterdata.application;
+/** Basic material maintenance. versionNo is concurrency only, never a business version. */
+public final class MaterialCommands {
+ private MaterialCommands(){}
+ public record Create(String materialCode,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection){@com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}}
+ public record Update(Long versionNo,String reason,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection){@com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}}
+ public record Disable(Long versionNo,String reason){@com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}}
+}

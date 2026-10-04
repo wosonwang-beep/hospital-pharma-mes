@@ -1,0 +1,1684 @@
+{
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/containers",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "ContainerPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/containers",
+      "permission": "wms:inventory:create",
+      "requestSchema": "ContainerCreate",
+      "responseSchema": "Container",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/containers/{id}",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "Container",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/containers/{id}",
+      "permission": "wms:inventory:update",
+      "requestSchema": "ContainerUpdate",
+      "responseSchema": "Container",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/inventory",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "InventoryPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/adjust",
+      "permission": "wms:inventory:adjust",
+      "requestSchema": "InventoryAdjust",
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/move",
+      "permission": "wms:inventory:move",
+      "requestSchema": "InventoryMove",
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/inventory/receive",
+      "permission": "wms:receipt:create",
+      "requestSchema": "ReceiptCreate",
+      "responseSchema": "Receipt",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/locations",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "LocationPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/locations",
+      "permission": "wms:inventory:create",
+      "requestSchema": "LocationCreate",
+      "responseSchema": "Location",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/locations/{id}",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "Location",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/locations/{id}",
+      "permission": "wms:inventory:update",
+      "requestSchema": "LocationUpdate",
+      "responseSchema": "Location",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/material-issues",
+      "permission": "wms:issue:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialIssuePage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/material-issues",
+      "permission": "wms:issue:create",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialIssue",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/material-issues/{id}",
+      "permission": "wms:issue:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialIssue",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/material-issues/{id}",
+      "permission": "wms:issue:update",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialIssue",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/material-issues/{id}/confirm",
+      "permission": "wms:issue:confirm",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialIssue",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "POST",
+      "path": "/material-issues/{id}/returns",
+      "permission": "wms:issue:return",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialIssue",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/material-lots",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialLotPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/material-lots",
+      "permission": "wms:inventory:create",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/material-lots/{id}",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/material-lots/{id}",
+      "permission": "wms:inventory:update",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "WarehousePage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/warehouses",
+      "permission": "wms:inventory:create",
+      "requestSchema": "WarehouseCreate",
+      "responseSchema": "Warehouse",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/warehouses/{id}",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "Warehouse",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/warehouses/{id}",
+      "permission": "wms:inventory:update",
+      "requestSchema": "WarehouseUpdate",
+      "responseSchema": "Warehouse",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/wms/receipts",
+      "permission": "wms:receipt:view",
+      "requestSchema": null,
+      "responseSchema": "ReceiptPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/wms/receipts",
+      "permission": "wms:receipt:create",
+      "requestSchema": "ReceiptCreate",
+      "responseSchema": "Receipt",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/wms/receipts/{id}",
+      "permission": "wms:receipt:view",
+      "requestSchema": null,
+      "responseSchema": "Receipt",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/wms/receipts/{id}/confirm",
+      "permission": "wms:receipt:confirm",
+      "requestSchema": "Command",
+      "responseSchema": "Receipt",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/wms/material-lots",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialLotPage",
+      "queryParameters": [
+        "page",
+        "size",
+        "keyword",
+        "sort",
+        "status",
+        "recordStatus",
+        "warehouseId",
+        "supplierId",
+        "materialId",
+        "qualityStatus",
+        "inventoryStatus",
+        "locationId",
+        "materialLotId"
+      ],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/wms/material-lots/{id}",
+      "permission": "wms:inventory:view",
+      "requestSchema": null,
+      "responseSchema": "MaterialLot",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "PUT",
+      "path": "/wms/receipts/{id}",
+      "permission": "wms:receipt:update",
+      "requestSchema": "ReceiptUpdate",
+      "responseSchema": "Receipt",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "GET",
+      "path": "/main-batches/{id}/reservations",
+      "permission": "wms:reservation:view",
+      "requestSchema": null,
+      "responseSchema": "ReservationList",
+      "queryParameters": [],
+      "stage": "AVAILABLE"
+    },
+    {
+      "method": "POST",
+      "path": "/main-batches/{id}/reservations",
+      "permission": "wms:reservation:create",
+      "requestSchema": "DependencyCommand",
+      "responseSchema": "Reservation",
+      "queryParameters": [],
+      "stage": "FAIL_CLOSED"
+    }
+  ],
+  "schemas": {
+    "Warehouse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warehouseCode": {
+          "type": "string"
+        },
+        "warehouseName": {
+          "type": "string"
+        },
+        "warehouseType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        }
+      },
+      "required": []
+    },
+    "WarehouseCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "warehouseCode": {
+          "type": "string"
+        },
+        "warehouseName": {
+          "type": "string"
+        },
+        "warehouseType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "warehouseCode",
+        "warehouseName",
+        "warehouseType"
+      ]
+    },
+    "WarehouseUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "warehouseCode": {
+          "type": "string"
+        },
+        "warehouseName": {
+          "type": "string"
+        },
+        "warehouseType": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "UPDATE",
+            "ENABLE",
+            "DISABLE"
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "versionNo",
+        "action"
+      ]
+    },
+    "Location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warehouseId": {
+          "type": "string"
+        },
+        "locationCode": {
+          "type": "string"
+        },
+        "locationName": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        }
+      },
+      "required": []
+    },
+    "LocationCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "warehouseId": {
+          "type": "string"
+        },
+        "locationCode": {
+          "type": "string"
+        },
+        "locationName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "warehouseId",
+        "locationCode",
+        "locationName"
+      ]
+    },
+    "LocationUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "warehouseId": {
+          "type": "string"
+        },
+        "locationCode": {
+          "type": "string"
+        },
+        "locationName": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "UPDATE",
+            "ENABLE",
+            "DISABLE"
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "versionNo",
+        "action"
+      ]
+    },
+    "Container": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "containerCode": {
+          "type": "string"
+        },
+        "containerType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        }
+      },
+      "required": []
+    },
+    "ContainerCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "containerCode": {
+          "type": "string"
+        },
+        "containerType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "containerCode",
+        "containerType"
+      ]
+    },
+    "ContainerUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "containerCode": {
+          "type": "string"
+        },
+        "containerType": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "UPDATE",
+            "ENABLE",
+            "DISABLE"
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "versionNo",
+        "action"
+      ]
+    },
+    "ReceiptItemInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialId": {
+          "type": "string"
+        },
+        "lotNo": {
+          "type": "string"
+        },
+        "supplierLotNo": {
+          "type": "string"
+        },
+        "manufacturerLotNo": {
+          "type": "string"
+        },
+        "manufactureDate": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "type": "string"
+        },
+        "retestDate": {
+          "type": "string"
+        },
+        "receivedQty": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "packageSpec": {
+          "type": "string"
+        },
+        "packageCount": {
+          "type": "integer"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "packageCheckPassed": {
+          "type": "boolean"
+        },
+        "sealCheckPassed": {
+          "type": "boolean"
+        },
+        "labelCheckPassed": {
+          "type": "boolean"
+        },
+        "damageCheckPassed": {
+          "type": "boolean"
+        },
+        "contaminationCheckPassed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "materialId",
+        "lotNo",
+        "receivedQty",
+        "unitId",
+        "locationId",
+        "packageCount",
+        "packageCheckPassed",
+        "sealCheckPassed",
+        "labelCheckPassed",
+        "damageCheckPassed",
+        "contaminationCheckPassed",
+        "supplierLotNo"
+      ]
+    },
+    "ReceiptItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "materialId": {
+          "type": "string"
+        },
+        "lotNo": {
+          "type": "string"
+        },
+        "supplierLotNo": {
+          "type": "string"
+        },
+        "manufacturerLotNo": {
+          "type": "string"
+        },
+        "manufactureDate": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "type": "string"
+        },
+        "retestDate": {
+          "type": "string"
+        },
+        "receivedQty": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "packageSpec": {
+          "type": "string"
+        },
+        "packageCount": {
+          "type": "integer"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "packageCheckPassed": {
+          "type": "boolean"
+        },
+        "sealCheckPassed": {
+          "type": "boolean"
+        },
+        "labelCheckPassed": {
+          "type": "boolean"
+        },
+        "damageCheckPassed": {
+          "type": "boolean"
+        },
+        "contaminationCheckPassed": {
+          "type": "boolean"
+        },
+        "receiptId": {
+          "type": "string"
+        },
+        "materialSnapshot": {
+          "type": "object"
+        },
+        "requiresIncomingInspectionSnapshot": {
+          "type": "boolean"
+        },
+        "materialLotId": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "ReceiptCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "receiptNo": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "purchaseOrderNo": {
+          "type": "string"
+        },
+        "deliveryNoteNo": {
+          "type": "string"
+        },
+        "warehouseId": {
+          "type": "string"
+        },
+        "transportCheckPassed": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/components/schemas/ReceiptItemInput"
+          }
+        }
+      },
+      "required": [
+        "receiptNo",
+        "supplierId",
+        "warehouseId",
+        "transportCheckPassed",
+        "items"
+      ]
+    },
+    "ReceiptUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "receiptNo": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "purchaseOrderNo": {
+          "type": "string"
+        },
+        "deliveryNoteNo": {
+          "type": "string"
+        },
+        "warehouseId": {
+          "type": "string"
+        },
+        "transportCheckPassed": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/components/schemas/ReceiptItemInput"
+          }
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "receiptNo",
+        "supplierId",
+        "warehouseId",
+        "transportCheckPassed",
+        "items",
+        "reason",
+        "versionNo"
+      ]
+    },
+    "Command": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    },
+    "Receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "receiptNo": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "purchaseOrderNo": {
+          "type": "string"
+        },
+        "deliveryNoteNo": {
+          "type": "string"
+        },
+        "warehouseId": {
+          "type": "string"
+        },
+        "transportCheckPassed": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ReceiptItem"
+          }
+        },
+        "recordStatus": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "APPROVED"
+          ]
+        },
+        "receivedBy": {
+          "type": "string"
+        },
+        "receivedAt": {
+          "type": "string"
+        },
+        "confirmedBy": {
+          "type": "string"
+        },
+        "confirmedAt": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "MaterialLot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "materialId": {
+          "type": "string"
+        },
+        "lotNo": {
+          "type": "string"
+        },
+        "supplierLotNo": {
+          "type": "string"
+        },
+        "manufactureDate": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "type": "string"
+        },
+        "retestDate": {
+          "type": "string"
+        },
+        "receiptItemId": {
+          "type": "string"
+        },
+        "materialSnapshot": {
+          "type": "object"
+        },
+        "requiresIncomingInspectionSnapshot": {
+          "type": "boolean"
+        },
+        "qualityStatus": {
+          "type": "string",
+          "enum": [
+            "QUARANTINE",
+            "PENDING_SAMPLING",
+            "SAMPLING",
+            "SAMPLED",
+            "TESTING",
+            "PENDING_QC_REVIEW",
+            "QC_PASSED",
+            "QC_FAILED",
+            "PENDING_QA_RELEASE",
+            "PENDING_DISPOSITION",
+            "RELEASED",
+            "REJECTED"
+          ]
+        },
+        "inventoryStatus": {
+          "type": "string",
+          "enum": [
+            "BLOCKED",
+            "AVAILABLE",
+            "FROZEN"
+          ]
+        }
+      },
+      "required": []
+    },
+    "Ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "materialLotId": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "RECEIVE",
+            "MOVE_OUT",
+            "MOVE_IN",
+            "ADJUST"
+          ]
+        },
+        "deltaQty": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "sourceType": {
+          "type": "string"
+        },
+        "sourceRef": {
+          "type": "string"
+        },
+        "idempotencyKey": {
+          "type": "string"
+        },
+        "occurredAt": {
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "Inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string"
+        },
+        "lotNo": {
+          "type": "string"
+        },
+        "materialId": {
+          "type": "string"
+        },
+        "materialName": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string"
+        },
+        "qualityStatus": {
+          "type": "string"
+        },
+        "inventoryStatus": {
+          "type": "string"
+        },
+        "expiryDate": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "InventoryReceive": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "receiptId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "receiptId",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "InventoryMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string"
+        },
+        "fromLocationId": {
+          "type": "string"
+        },
+        "fromContainerId": {
+          "type": "string"
+        },
+        "toLocationId": {
+          "type": "string"
+        },
+        "toContainerId": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "materialLotId",
+        "fromLocationId",
+        "toLocationId",
+        "quantity",
+        "unitId",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "InventoryAdjust": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "containerId": {
+          "type": "string"
+        },
+        "deltaQty": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "materialLotId",
+        "locationId",
+        "deltaQty",
+        "unitId",
+        "versionNo",
+        "reason"
+      ]
+    },
+    "Eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "failureCode": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "requiredActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": []
+    },
+    "MaterialIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mainBatchId": {
+          "type": "string"
+        },
+        "issueNo": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "CONFIRMED",
+            "CLOSED"
+          ]
+        },
+        "issuedAt": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": []
+    },
+    "DependencyCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string"
+        },
+        "issueNo": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": []
+    },
+    "WarehousePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Warehouse"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "LocationPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "ContainerPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Container"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "ReceiptPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Receipt"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "MaterialLotPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/MaterialLot"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "InventoryPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Inventory"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "MaterialIssuePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/MaterialIssue"
+          }
+        },
+        "total": {
+          "type": "integer"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "integer"
+        }
+      },
+      "required": []
+    },
+    "LedgerList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Ledger"
+      }
+    },
+    "Reservation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "orgId": {
+          "type": "string"
+        },
+        "versionNo": {
+          "type": "integer"
+        },
+        "mainBatchId": {
+          "type": "string"
+        },
+        "formulaItemId": {
+          "type": "string"
+        },
+        "materialLotId": {
+          "type": "string"
+        },
+        "reservedQty": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "ReservationList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Reservation"
+      }
+    }
+  }
+}

@@ -1,0 +1,3620 @@
+{
+  "schemas": {
+    "Reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "reason"
+      ]
+    },
+    "SignedCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "reason",
+        "reauthToken"
+      ]
+    },
+    "Assign": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "assignedTo": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "assignedTo",
+        "reason"
+      ]
+    },
+    "InspectionRequestCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "requestType": {
+          "type": "string",
+          "enum": [
+            "INITIAL",
+            "RETEST",
+            "SUPPLEMENTARY",
+            "INVESTIGATION"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "requestedQuantity": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "requestedUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "requestedPackageCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "NORMAL",
+            "URGENT"
+          ]
+        },
+        "approvedInvestigationId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "materialLotId",
+        "qcSpecificationVersionId",
+        "requestType",
+        "reason",
+        "requestedQuantity",
+        "requestedUnitId",
+        "requestedPackageCount",
+        "requestedDate",
+        "priority"
+      ],
+      "description": "All new requests including RETEST require an APPROVED QC specification via requireSelectable. RETEST requires approvedInvestigationId and original frozen version/hash; retired versions may continue only within existing requests. Requested quantity/package count cannot exceed receipt facts."
+    },
+    "SamplingTaskCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionRequestItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "samplingPlan": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "requiredPackageCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "otherSampleName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "otherSampleReason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "inspectionRequestId",
+        "inspectionRequestItemId",
+        "samplingPlan",
+        "requiredPackageCount",
+        "reason"
+      ]
+    },
+    "SampleAllocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampleType": {
+          "type": "string",
+          "enum": [
+            "TEST_SAMPLE",
+            "RETENTION_SAMPLE",
+            "RETEST_SAMPLE",
+            "OTHER_APPROVED"
+          ]
+        },
+        "quantity": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "storageLocation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "sampleType",
+        "quantity"
+      ]
+    },
+    "SamplingDetailCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "containerNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "samplingPoint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "sampleQuantity": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampledAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "packageResealed": {
+          "type": "boolean"
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SampleAllocation"
+          },
+          "minItems": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "containerNo",
+        "sampleQuantity",
+        "unitId",
+        "sampledAt",
+        "packageResealed",
+        "samples",
+        "reason"
+      ],
+      "description": "Samples form 1..N allocations; quantity sum equals sampleQuantity in unitId. OTHER_APPROVED requires signed plan name/reason."
+    },
+    "ReceiveSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "storageLocation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "receivedAt",
+        "storageLocation",
+        "reason"
+      ]
+    },
+    "RetainSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "storageLocation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "storageLocation",
+        "reason"
+      ]
+    },
+    "InspectionTaskCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "optionalSpecificationItemIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "inspectionRequestId",
+        "sampleId",
+        "reason"
+      ]
+    },
+    "TestExecutionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instrumentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "rawData": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "calculationInput": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "performedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "rawData",
+        "calculationInput",
+        "startedAt",
+        "completedAt",
+        "performedBy",
+        "reason"
+      ]
+    },
+    "ApprovedRetestCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instrumentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "rawData": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "calculationInput": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "performedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "originalExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "approvedInvestigationId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "rawData",
+        "calculationInput",
+        "startedAt",
+        "completedAt",
+        "performedBy",
+        "reason",
+        "originalExecutionId",
+        "approvedInvestigationId"
+      ]
+    },
+    "TestResultRevisionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "testExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "resultNumeric": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "resultText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "resultUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "resultConclusion": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE"
+          ]
+        },
+        "reasonForChange": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "testExecutionId",
+        "resultConclusion",
+        "reauthToken"
+      ],
+      "description": "NUMERIC requires resultNumeric/resultUnitId and forbids resultText; TEXT requires resultText and forbids numeric/unit. INCONCLUSIVE requires reasonForChange. INVALID is produced only by approved investigation disposition. Signature binds target execution/content/predecessor."
+    },
+    "ReviseResultCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "testExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "resultNumeric": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "resultText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "resultUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "resultConclusion": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE"
+          ]
+        },
+        "reasonForChange": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "testExecutionId",
+        "resultConclusion",
+        "reauthToken",
+        "reasonForChange"
+      ],
+      "description": "NUMERIC requires resultNumeric/resultUnitId and forbids resultText; TEXT requires resultText and forbids numeric/unit. INCONCLUSIVE requires reasonForChange. INVALID is produced only by approved investigation disposition. Signature binds target execution/content/predecessor."
+    },
+    "ReviewTaskCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resultRevisionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "resultRevisionIds",
+        "reauthToken",
+        "reason"
+      ]
+    },
+    "InspectionReportCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "supersedesReportId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "inspectionRequestId",
+        "reason"
+      ]
+    },
+    "IncomingDeviationCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        },
+        "investigationKind": {
+          "type": "string",
+          "enum": [
+            "OOS",
+            "DEVIATION"
+          ]
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "testExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "originalResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "MINOR",
+            "MAJOR",
+            "CRITICAL"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "investigationScope",
+        "investigationKind",
+        "materialLotId",
+        "severity",
+        "description",
+        "reason"
+      ]
+    },
+    "UpdateDeviationCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "investigationSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        }
+      },
+      "required": [
+        "description",
+        "reason",
+        "investigationScope"
+      ]
+    },
+    "InvestigateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "investigationSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        }
+      },
+      "required": [
+        "investigationSummary",
+        "reason",
+        "investigationScope"
+      ]
+    },
+    "DecideDeviationCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decisionCode": {
+          "type": "string",
+          "enum": [
+            "REJECT",
+            "AUTHORIZE_RETEST",
+            "ACCEPT_WITH_JUSTIFICATION"
+          ]
+        },
+        "disposition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "authorizedRetestCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        }
+      },
+      "required": [
+        "decisionCode",
+        "disposition",
+        "reauthToken",
+        "reason",
+        "investigationScope"
+      ]
+    },
+    "CloseDeviationCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selectedResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "originalResultDisposition": {
+          "type": "string",
+          "enum": [
+            "VALID",
+            "INVALID"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        }
+      },
+      "required": [
+        "reauthToken",
+        "reason",
+        "investigationScope"
+      ]
+    },
+    "RequestItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "itemNo": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "inspectionRequestId",
+        "materialLotId",
+        "itemNo"
+      ]
+    },
+    "InspectionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "requestType": {
+          "type": "string",
+          "enum": [
+            "INITIAL",
+            "RETEST",
+            "SUPPLEMENTARY",
+            "INVESTIGATION"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "requestNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "SUBMITTED",
+            "ACCEPTED",
+            "IN_PROGRESS",
+            "COMPLETED"
+          ]
+        },
+        "recordStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/RequestItem"
+          }
+        },
+        "requestedQuantity": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "requestedUnitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "requestedPackageCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "requestedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "NORMAL",
+            "URGENT"
+          ]
+        },
+        "specificationContentHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "requestedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "receiptItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "receiptId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "approvedInvestigationId": {
+          "type": "string",
+          "nullable": true
+        },
+        "submittedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "acceptedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "acceptedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "materialLotId",
+        "qcSpecificationVersionId",
+        "requestType",
+        "reason",
+        "requestNo",
+        "status",
+        "recordStatus",
+        "items",
+        "requestedQuantity",
+        "requestedUnitId",
+        "requestedPackageCount",
+        "requestedDate",
+        "priority",
+        "specificationContentHash",
+        "requestedBy",
+        "receiptItemId",
+        "receiptId",
+        "approvedInvestigationId",
+        "submittedBy",
+        "acceptedBy",
+        "submittedAt",
+        "acceptedAt"
+      ]
+    },
+    "Sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sampleNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sampleScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "samplingTaskId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "samplingDetailId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionRequestItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleType": {
+          "type": "string",
+          "enum": [
+            "TEST_SAMPLE",
+            "RETENTION_SAMPLE",
+            "RETEST_SAMPLE",
+            "OTHER_APPROVED"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "COLLECTED",
+            "RECEIVED",
+            "IN_TEST",
+            "TEST_COMPLETED",
+            "RETAINED",
+            "DISPOSED"
+          ]
+        },
+        "quantity": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampledAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "storageLocation": {
+          "type": "string",
+          "nullable": true
+        },
+        "receivedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        },
+        "receivedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        },
+        "disposalSignatureId": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "sampleNo",
+        "sampleScope",
+        "materialLotId",
+        "samplingTaskId",
+        "samplingDetailId",
+        "inspectionRequestItemId",
+        "sampleType",
+        "status",
+        "quantity",
+        "unitId",
+        "sampledAt",
+        "storageLocation",
+        "receivedAt",
+        "signingTargets",
+        "receivedBy",
+        "signatureEvidence",
+        "disposalSignatureId"
+      ]
+    },
+    "SamplingDetail": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "samplingTaskId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "detailNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "containerNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "samplingPoint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "sampleQuantity": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampledAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "packageResealed": {
+          "type": "boolean"
+        },
+        "sampledBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Sample"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "samplingTaskId",
+        "detailNo",
+        "containerNo",
+        "sampleQuantity",
+        "unitId",
+        "sampledAt",
+        "packageResealed",
+        "sampledBy",
+        "samples"
+      ]
+    },
+    "SamplingTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionRequestItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "samplingPlan": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "requiredPackageCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "otherSampleName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "otherSampleReason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "samplingTaskNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PLANNED",
+            "ASSIGNED",
+            "IN_PROGRESS",
+            "COMPLETED"
+          ]
+        },
+        "recordStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "assignedTo": {
+          "type": "string",
+          "nullable": true
+        },
+        "planSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "completionSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SamplingDetail"
+          }
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "inspectionRequestId",
+        "inspectionRequestItemId",
+        "samplingPlan",
+        "requiredPackageCount",
+        "samplingTaskNo",
+        "status",
+        "recordStatus",
+        "assignedTo",
+        "planSignatureId",
+        "completionSignatureId",
+        "details",
+        "signingTargets",
+        "startedAt",
+        "completedAt",
+        "signatureEvidence"
+      ]
+    },
+    "TestResultRevision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "testExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "testCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "revisionNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "previousRevisionId": {
+          "type": "string",
+          "nullable": true
+        },
+        "resultNumeric": {
+          "type": "string",
+          "nullable": true
+        },
+        "resultText": {
+          "type": "string",
+          "nullable": true
+        },
+        "resultUnitId": {
+          "type": "string",
+          "nullable": true
+        },
+        "resultConclusion": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE",
+            "INVALID"
+          ]
+        },
+        "effectiveConclusion": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE",
+            "INVALID"
+          ]
+        },
+        "dispositionInvestigationId": {
+          "type": "string",
+          "nullable": true
+        },
+        "reasonForChange": {
+          "type": "string",
+          "nullable": true
+        },
+        "recordedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "recordedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signatureId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "sampleId",
+        "inspectionItemId",
+        "testExecutionId",
+        "testCode",
+        "revisionNo",
+        "previousRevisionId",
+        "resultNumeric",
+        "resultText",
+        "resultUnitId",
+        "resultConclusion",
+        "effectiveConclusion",
+        "dispositionInvestigationId",
+        "reasonForChange",
+        "recordedBy",
+        "recordedAt",
+        "signatureId",
+        "signatureEvidence"
+      ]
+    },
+    "TestExecution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "instrumentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "rawData": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "observation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "calculationInput": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "performedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "attemptNo": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "originalExecutionId": {
+          "type": "string",
+          "nullable": true
+        },
+        "approvedInvestigationId": {
+          "type": "string",
+          "nullable": true
+        },
+        "revisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TestResultRevision"
+          }
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "rawData",
+        "calculationInput",
+        "startedAt",
+        "completedAt",
+        "performedBy",
+        "inspectionItemId",
+        "attemptNo",
+        "originalExecutionId",
+        "approvedInvestigationId",
+        "revisions",
+        "signingTargets"
+      ]
+    },
+    "InspectionItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "inspectionTaskId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "itemCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "itemName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "resultType": {
+          "type": "string",
+          "enum": [
+            "NUMERIC",
+            "TEXT"
+          ]
+        },
+        "lowerLimit": {
+          "type": "string",
+          "nullable": true,
+          "pattern": "^-?[0-9]{1,12}(\\.[0-9]{1,6})?$"
+        },
+        "upperLimit": {
+          "type": "string",
+          "nullable": true,
+          "pattern": "^-?[0-9]{1,12}(\\.[0-9]{1,6})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "nullable": true
+        },
+        "textAcceptanceCriteria": {
+          "type": "string",
+          "nullable": true
+        },
+        "methodCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "methodVersion": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "executions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/TestExecution"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "inspectionTaskId",
+        "qcSpecificationItemId",
+        "itemCode",
+        "itemName",
+        "required",
+        "resultType",
+        "lowerLimit",
+        "upperLimit",
+        "unitId",
+        "textAcceptanceCriteria",
+        "methodCode",
+        "methodVersion",
+        "executions"
+      ]
+    },
+    "InspectionTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inspectionTaskNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CREATED",
+            "ASSIGNED",
+            "IN_PROGRESS",
+            "PENDING_REVIEW",
+            "QC_PASSED",
+            "QC_FAILED"
+          ]
+        },
+        "recordStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "assignedTo": {
+          "type": "string",
+          "nullable": true
+        },
+        "reviewSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "reviewedResultIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InspectionItem"
+          }
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        },
+        "reviewedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "inspectionTaskNo",
+        "inspectionRequestId",
+        "sampleId",
+        "status",
+        "recordStatus",
+        "assignedTo",
+        "reviewSignatureId",
+        "reviewedResultIds",
+        "items",
+        "signingTargets",
+        "reviewedBy",
+        "startedAt",
+        "submittedAt",
+        "reviewedAt",
+        "signatureEvidence"
+      ]
+    },
+    "ReportItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "inspectionReportId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "resultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "originalResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "investigationId": {
+          "type": "string",
+          "nullable": true
+        },
+        "result": {
+          "$ref": "#/components/schemas/TestResultRevision"
+        },
+        "originalResult": {
+          "$ref": "#/components/schemas/TestResultRevision"
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "inspectionReportId",
+        "qcSpecificationItemId",
+        "inspectionItemId",
+        "resultRevisionId",
+        "originalResultRevisionId",
+        "investigationId",
+        "result",
+        "originalResult"
+      ]
+    },
+    "InspectionReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reportNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "inspectionRequestId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "DRAFT",
+            "REVIEWED",
+            "APPROVED"
+          ]
+        },
+        "recordStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "overallResult": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE",
+            "INVALID"
+          ]
+        },
+        "evidenceDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "supersedesReportId": {
+          "type": "string",
+          "nullable": true
+        },
+        "approvalSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ReportItem"
+          }
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        },
+        "reviewedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "approvedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "reviewedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "approvedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "reportNo",
+        "inspectionRequestId",
+        "status",
+        "recordStatus",
+        "overallResult",
+        "evidenceDigest",
+        "supersedesReportId",
+        "approvalSignatureId",
+        "items",
+        "signingTargets",
+        "reviewedBy",
+        "approvedBy",
+        "reviewedAt",
+        "approvedAt",
+        "signatureEvidence"
+      ]
+    },
+    "Deviation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        },
+        "investigationKind": {
+          "type": "string",
+          "enum": [
+            "OOS",
+            "DEVIATION"
+          ]
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "testExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "originalResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "MINOR",
+            "MAJOR",
+            "CRITICAL"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "deviationNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "INVESTIGATING",
+            "DECIDED",
+            "CLOSED"
+          ]
+        },
+        "investigationSummary": {
+          "type": "string",
+          "nullable": true
+        },
+        "decisionCode": {
+          "type": "string",
+          "nullable": true
+        },
+        "disposition": {
+          "type": "string",
+          "nullable": true
+        },
+        "authorizedRetestCount": {
+          "type": "integer",
+          "nullable": true
+        },
+        "decisionSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "selectedResultRevisionId": {
+          "type": "string",
+          "nullable": true
+        },
+        "originalResultDisposition": {
+          "type": "string",
+          "nullable": true
+        },
+        "closeSignatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "closeReason": {
+          "type": "string",
+          "nullable": true
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        },
+        "decidedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "closedBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "decidedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "closedAt": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "updatedBy",
+        "updatedAt",
+        "versionNo",
+        "investigationScope",
+        "investigationKind",
+        "materialLotId",
+        "severity",
+        "description",
+        "deviationNo",
+        "status",
+        "investigationSummary",
+        "decisionCode",
+        "disposition",
+        "authorizedRetestCount",
+        "decisionSignatureId",
+        "selectedResultRevisionId",
+        "originalResultDisposition",
+        "closeSignatureId",
+        "closeReason",
+        "signingTargets",
+        "decidedBy",
+        "closedBy",
+        "decidedAt",
+        "closedAt",
+        "signatureEvidence"
+      ]
+    },
+    "ReleaseDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "orgId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdBy": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "releaseScope": {
+          "type": "string",
+          "enum": [
+            "INCOMING_MATERIAL"
+          ]
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "inspectionReportId": {
+          "type": "string",
+          "nullable": true
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "RELEASED",
+            "REJECTED",
+            "OTHER_DISPOSITION"
+          ]
+        },
+        "releaseBasis": {
+          "type": "string",
+          "enum": [
+            "FULL_INSPECTION",
+            "INSPECTION_EXEMPT",
+            "RETEST",
+            "OTHER_APPROVED_BASIS"
+          ]
+        },
+        "decisionSource": {
+          "type": "string",
+          "enum": [
+            "USER_QA",
+            "SYSTEM_RULE"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "decisionBy": {
+          "type": "string",
+          "nullable": true
+        },
+        "decisionAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signatureId": {
+          "type": "string",
+          "nullable": true
+        },
+        "supersedesDecisionId": {
+          "type": "string",
+          "nullable": true
+        },
+        "ruleEvidence": {
+          "nullable": true,
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/RuleEvidence"
+            }
+          ]
+        },
+        "evidenceDigest": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "signatureEvidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SignatureEvidenceMetadata"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "orgId",
+        "createdBy",
+        "createdAt",
+        "releaseScope",
+        "materialLotId",
+        "inspectionReportId",
+        "decision",
+        "releaseBasis",
+        "decisionSource",
+        "reason",
+        "decisionBy",
+        "decisionAt",
+        "signatureId",
+        "supersedesDecisionId",
+        "ruleEvidence",
+        "evidenceDigest",
+        "signatureEvidence"
+      ]
+    },
+    "GateReason": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "evidenceIds"
+      ]
+    },
+    "ReleaseReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "qualityStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "inventoryStatus": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "eligibleForRelease": {
+          "type": "boolean"
+        },
+        "gateReasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/GateReason"
+          }
+        },
+        "reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InspectionReport"
+          }
+        },
+        "investigations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Deviation"
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/ReleaseDecision"
+          }
+        },
+        "evidenceDigest": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "signingTargets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SigningTarget"
+          }
+        }
+      },
+      "required": [
+        "materialLotId",
+        "versionNo",
+        "qualityStatus",
+        "inventoryStatus",
+        "eligibleForRelease",
+        "gateReasons",
+        "reports",
+        "investigations",
+        "decisions",
+        "evidenceDigest",
+        "signingTargets"
+      ]
+    },
+    "SampleLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "containerNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "storageLocation": {
+          "type": "string",
+          "nullable": true
+        }
+      },
+      "required": [
+        "sampleId",
+        "sampleNo",
+        "materialLotId",
+        "sampleType",
+        "containerNo",
+        "storageLocation"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "traceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/GateReason"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "traceId",
+        "details"
+      ]
+    },
+    "InspectionRequestPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InspectionRequest"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "InspectionRequestPageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionRequestPage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "InspectionRequestResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionRequest"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SamplingTaskPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/SamplingTask"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "SamplingTaskPageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SamplingTaskPage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SamplingTaskResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SamplingTask"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "InspectionTaskPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InspectionTask"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "InspectionTaskPageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionTaskPage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "InspectionTaskResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionTask"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "InspectionReportPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/InspectionReport"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "InspectionReportPageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionReportPage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "InspectionReportResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/InspectionReport"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SamplePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Sample"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "SamplePageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SamplePage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SampleResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/Sample"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SampleLabelResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SampleLabel"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "TestExecutionResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/TestExecution"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "TestResultRevisionResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/TestResultRevision"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ReleaseReviewResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/ReleaseReview"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "ReleaseDecisionResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/ReleaseDecision"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "DeviationPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Deviation"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "items",
+        "page",
+        "size",
+        "total"
+      ]
+    },
+    "DeviationPageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/DeviationPage"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "DeviationResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/Deviation"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ]
+    },
+    "SigningTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action",
+        "objectType",
+        "recordId",
+        "recordVersion",
+        "meaning"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "objectType": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "string"
+        },
+        "recordVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "VERIFY",
+            "APPROVE",
+            "RELEASE",
+            "REJECT"
+          ]
+        }
+      }
+    },
+    "IncomingReleaseDecisionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": [
+            "RELEASED",
+            "REJECTED",
+            "OTHER_DISPOSITION"
+          ]
+        },
+        "releaseBasis": {
+          "type": "string",
+          "enum": [
+            "FULL_INSPECTION",
+            "INSPECTION_EXEMPT",
+            "RETEST",
+            "OTHER_APPROVED_BASIS"
+          ]
+        },
+        "inspectionReportId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "supersedesDecisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reauthToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "decision",
+        "releaseBasis",
+        "reauthToken",
+        "reason"
+      ],
+      "description": "USER_QA is server-assigned. RELEASED requires valid approved report and closed accepted investigations; nonexempt lots cannot use INSPECTION_EXEMPT. No API caller can create SYSTEM_RULE evidence."
+    },
+    "RuleEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruleCode",
+        "ruleVersion",
+        "materialLotId",
+        "receiptItemId",
+        "supplierId",
+        "materialSupplierId",
+        "requiresIncomingInspectionSnapshot",
+        "receiptChecksPassed",
+        "evaluatedAt",
+        "evidenceDigest"
+      ],
+      "properties": {
+        "ruleCode": {
+          "type": "string"
+        },
+        "ruleVersion": {
+          "type": "string"
+        },
+        "materialLotId": {
+          "type": "string"
+        },
+        "receiptItemId": {
+          "type": "string"
+        },
+        "supplierId": {
+          "type": "string"
+        },
+        "materialSupplierId": {
+          "type": "string"
+        },
+        "requiresIncomingInspectionSnapshot": {
+          "type": "boolean",
+          "enum": [
+            false
+          ]
+        },
+        "receiptChecksPassed": {
+          "type": "boolean",
+          "enum": [
+            true
+          ]
+        },
+        "evaluatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evidenceDigest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "SignatureEvidenceMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot",
+        "signatureId",
+        "objectType",
+        "objectId",
+        "recordVersion",
+        "meaning"
+      ],
+      "properties": {
+        "slot": {
+          "type": "string"
+        },
+        "signatureId": {
+          "type": "string"
+        },
+        "objectType": {
+          "type": "string"
+        },
+        "objectId": {
+          "type": "string"
+        },
+        "recordVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "meaning": {
+          "type": "string",
+          "enum": [
+            "VERIFY",
+            "APPROVE",
+            "RELEASE",
+            "REJECT"
+          ]
+        }
+      }
+    },
+    "SignatureEvidenceEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objectType",
+        "objectId",
+        "recordVersion",
+        "canonicalRecord",
+        "evidenceIds"
+      ],
+      "properties": {
+        "objectType": {
+          "type": "string"
+        },
+        "objectId": {
+          "type": "string"
+        },
+        "recordVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonicalRecord": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Exact immutable server-built canonical signing record; never an editable input."
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "SignatureEvidenceResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message",
+        "data",
+        "traceId"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "$ref": "#/components/schemas/SignatureEvidenceEnvelope"
+        },
+        "traceId": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "operations": [
+    {
+      "path": "/quality/inspection-requests",
+      "method": "GET",
+      "permission": "qms:inspection-request:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-requests",
+      "method": "POST",
+      "permission": "qms:inspection-request:create",
+      "schema": "InspectionRequestCommand"
+    },
+    {
+      "path": "/quality/inspection-requests/{id}",
+      "method": "GET",
+      "permission": "qms:inspection-request:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/sampling-tasks",
+      "method": "GET",
+      "permission": "qms:sampling:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/sampling-tasks",
+      "method": "POST",
+      "permission": "qms:sampling:create",
+      "schema": "SamplingTaskCommand"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}",
+      "method": "GET",
+      "permission": "qms:sampling:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-tasks",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-tasks",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "InspectionTaskCommand"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-reports",
+      "method": "GET",
+      "permission": "qms:report:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-reports",
+      "method": "POST",
+      "permission": "qms:report:create",
+      "schema": "InspectionReportCommand"
+    },
+    {
+      "path": "/quality/inspection-reports/{id}",
+      "method": "GET",
+      "permission": "qms:report:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/inspection-requests/{id}/submit",
+      "method": "POST",
+      "permission": "qms:inspection-request:submit",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/inspection-requests/{id}/accept",
+      "method": "POST",
+      "permission": "qms:inspection-request:accept",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/approve-plan",
+      "method": "POST",
+      "permission": "qms:sampling:approve-plan",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/assign",
+      "method": "POST",
+      "permission": "qms:sampling:assign",
+      "schema": "Assign"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/start",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/details",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "SamplingDetailCommand"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/complete",
+      "method": "POST",
+      "permission": "qms:sampling:complete",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}/assign",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "Assign"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}/start",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}/submit-review",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}/review",
+      "method": "POST",
+      "permission": "qms:test:review",
+      "schema": "ReviewTaskCommand"
+    },
+    {
+      "path": "/quality/inspection-reports/{id}/review",
+      "method": "POST",
+      "permission": "qms:report:review",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/inspection-reports/{id}/approve",
+      "method": "POST",
+      "permission": "qms:report:approve",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/samples",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/samples/{id}",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/samples/{id}/label",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "Reason"
+    },
+    {
+      "path": "/quality/samples/{id}/receive",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "ReceiveSample"
+    },
+    {
+      "path": "/quality/samples/{id}/retain",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "RetainSample"
+    },
+    {
+      "path": "/quality/samples/{id}/dispose",
+      "method": "POST",
+      "permission": "qms:sampling:complete",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/inspection-items/{id}/executions",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "TestExecutionCommand"
+    },
+    {
+      "path": "/quality/inspection-items/{id}/approved-retests",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "ApprovedRetestCommand"
+    },
+    {
+      "path": "/quality/inspection-items/{id}/results",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "TestResultRevisionCommand"
+    },
+    {
+      "path": "/quality/test-results/{revisionId}/revisions",
+      "method": "POST",
+      "permission": "qms:test:correct",
+      "schema": "ReviseResultCommand"
+    },
+    {
+      "path": "/qa/material-lots/{lotId}/release-review",
+      "method": "GET",
+      "permission": "qa:material-release:view",
+      "schema": ""
+    },
+    {
+      "path": "/qa/material-lots/{lotId}/release-decisions",
+      "method": "POST",
+      "permission": "qa:material-release:decide",
+      "schema": "IncomingReleaseDecisionCommand"
+    },
+    {
+      "path": "/deviations",
+      "method": "GET",
+      "permission": "qms:deviation:view",
+      "schema": ""
+    },
+    {
+      "path": "/deviations",
+      "method": "POST",
+      "permission": "qms:deviation:create",
+      "schema": "IncomingDeviationCommand"
+    },
+    {
+      "path": "/deviations/{id}",
+      "method": "GET",
+      "permission": "qms:deviation:view",
+      "schema": ""
+    },
+    {
+      "path": "/deviations/{id}",
+      "method": "PUT",
+      "permission": "qms:deviation:update",
+      "schema": "UpdateDeviationCommand"
+    },
+    {
+      "path": "/deviations/{id}/investigate",
+      "method": "POST",
+      "permission": "qms:deviation:investigate",
+      "schema": "InvestigateCommand"
+    },
+    {
+      "path": "/deviations/{id}/decide",
+      "method": "POST",
+      "permission": "qms:deviation:decide",
+      "schema": "DecideDeviationCommand"
+    },
+    {
+      "path": "/deviations/{id}/close",
+      "method": "POST",
+      "permission": "qms:deviation:close",
+      "schema": "CloseDeviationCommand"
+    },
+    {
+      "path": "/quality/signature-evidence/{signatureId}",
+      "method": "GET",
+      "permission": "audit:view",
+      "schema": ""
+    }
+  ]
+}

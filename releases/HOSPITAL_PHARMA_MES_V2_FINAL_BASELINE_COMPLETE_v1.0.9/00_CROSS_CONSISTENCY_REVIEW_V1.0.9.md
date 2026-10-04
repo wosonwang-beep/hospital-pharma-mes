@@ -1,0 +1,9 @@
+# v1.0.9 cross-document consistency review — PASS before implementation
+
+Explicit owner approval: “批准按该方案补齐契约并继续开发”, 2026-10-03. Review includes Database/Domain/State/API/OpenAPI/UI/Permission/Test/RTM/Migration/Integration/Task Dependency and the concrete MES007/MES008 stage appendices. Only new REST operation is authorized PUT /wms/receipts/{id}; existing paths/permissions preserved. OpenAPI 1,558 local refs resolve. MES007 current scope has 11 operations; WMS35 includes original34 plus PUT, no 008A timeline/eligibility route implementation. Confirmed receipt uses existing recordStatus APPROVED. Read-only Process operation and enabled global IAM role queries support existing eBR references without changing upstream business APIs.
+
+Stage decisions: runtime migration remains LG007B/MES009, operation FK added by LG010; WMS batch FK added by LG009A. No nonexistent producer reference may be written before dependency availability. Original required tests remain mandatory; phase-only evidence cannot make complete tasks READY. Current receipt/ledger and definition/DSL phases can proceed. No production/release stand-in or new signature infrastructure.
+
+Material root snapshot/no business version/no retired names, one preferred supplier and current horizontal UI rules remain unchanged. Existing UI routes/prototype structure retained. Normalized eBR definitions are authoritative; published schema server-generated. Non-DRAFT definitions and confirmed receipts immutable; commands require audit/optimistic lock/idempotency.
+
+Native DEV highest successful physical migration was read-only verified as 011; V012/V013 planned, no migration executed in this document check. Prior v1.0.8 manifest verifies 80/80 files. No old release or executed SQL changed. Task status belongs only to root MES_TASKS.md.

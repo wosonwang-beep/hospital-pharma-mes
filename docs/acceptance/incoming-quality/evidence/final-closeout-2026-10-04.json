@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-04",
+  "baseline": "FINAL BASELINE COMPLETE v1.0.15",
+  "additionalNativeDistinctCases": 13,
+  "qcUnitTests": 11,
+  "uiCases": 4,
+  "uiBackend": "Mocked API; actual native MVC/database verified separately",
+  "migration": "V001..V024 validated; current024; no migration necessary; no repair/reset",
+  "logs": [
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-final-contract.log",
+      "sha256": "34fc3f64d4e7172cba0858d37a64ce77e846d573aa1853b839c719ac0b1a6798",
+      "buildSuccess": false,
+      "summaries": [
+        "[ERROR] Tests run: 4, Failures: 1, Errors: 1, Skipped: 0, Time elapsed: 10.86 s <<< FAILURE! -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.053 s -- in com.hospital.mes.wms.integration.AttachmentIT",
+        "[ERROR] Tests run: 5, Failures: 1, Errors: 1, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-final-contract-retry.log",
+      "sha256": "f104b5e0db57ecffa445042d837bad99d98ce7ff5c04185bce375a082d50fd0b",
+      "buildSuccess": true,
+      "summaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.45 s -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-races.log",
+      "sha256": "575fa45fc805197d705018f1ac527fc5489ab7b9aab2bc7dba2a9e708c4d418f",
+      "buildSuccess": true,
+      "summaries": [
+        "[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.86 s -- in com.hospital.mes.production.QcProducerConcurrencyIT",
+        "[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-permissions.log",
+      "sha256": "5dcd7a9d33ebc75aab448abb484c1f57ce51394d8ec6332a1ae43ad71924c7ec",
+      "buildSuccess": false,
+      "summaries": [
+        "[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.350 s -- in com.hospital.mes.qc.application.QcSpecificationEvidenceTest",
+        "[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.104 s -- in com.hospital.mes.qc.domain.QcSpecificationRulesTest",
+        "[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0",
+        "[ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 11.24 s <<< FAILURE! -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-permissions-retry.log",
+      "sha256": "7b88d09a0280ab3b2430db48bbc05aca0010cccda7e100d306a9a48151450f2a",
+      "buildSuccess": true,
+      "summaries": [
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.21 s -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-expired-http-red.log",
+      "sha256": "8656927454d5d883cb14cb6f5d975f1c7f73f0be5bb523ef23ce90958d007810",
+      "buildSuccess": false,
+      "summaries": [
+        "[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 11.89 s <<< FAILURE! -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-expired-http-green.log",
+      "sha256": "15dd3a5f04661a7bf5a4215e17ccb729fbeed42ecaa717430762d3b7e7bda528",
+      "buildSuccess": false,
+      "summaries": [
+        "[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 13.00 s <<< FAILURE! -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-expired-http-final.log",
+      "sha256": "1f0debfe819053800fc45f60474c2f31cf6db63dae6410a6c9c9aece0600cfd9",
+      "buildSuccess": true,
+      "summaries": [
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.73 s -- in com.hospital.mes.qc.integration.QcFinalContractIT",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-handoff.log",
+      "sha256": "3e618814485f3fab6d16dcc0fda011184bdf5dc083a95f80e37c2bb534819738",
+      "buildSuccess": true,
+      "summaries": [
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.97 s -- in com.hospital.mes.incoming.IncomingFinalContractIT",
+        "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-ui-retry.log",
+      "sha256": "846f4e9718ea9f8244fe26aa1ff43ba3328fe2bb6d090c072bd15057ec78da8a",
+      "buildSuccess": false,
+      "summaries": [
+        "2 passed (15.8s)"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-create-ui-final.log",
+      "sha256": "832eb70c4722ed1cda1eac6689a51922a648eaa7fc2fd2f167a18177bf43171d",
+      "buildSuccess": false,
+      "summaries": [
+        "2 passed (13.6s)"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-typecheck.log",
+      "sha256": "fb626227bfe271fdbd46b1d42c7369278d075557653793df54645128a56bce35",
+      "buildSuccess": false,
+      "summaries": [],
+      "typecheck": true
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-401-ui-red.log",
+      "sha256": "4da45e50085e0a2c98448dca5dbb56be92d1acf168437d2385d3720c8d267728",
+      "summaries": [],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-qc-401-ui-green.log",
+      "sha256": "150b0e57770548e1d39be0dcb231c48f9ebd2c6cc6d470c70921aa4d1ff014dc",
+      "summaries": [
+        "2 passed (11.3s)"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-http-units-final.log",
+      "sha256": "ce64e1925d320528a270134179b11380ad44bdd767947e525179eefd985a478d",
+      "summaries": [
+        "Test Files  1 passed (1)",
+        "Tests  3 passed (3)"
+      ],
+      "typecheck": false
+    },
+    {
+      "file": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\mes-four-final-typecheck.log",
+      "sha256": "fb626227bfe271fdbd46b1d42c7369278d075557653793df54645128a56bce35",
+      "summaries": [],
+      "typecheck": true
+    }
+  ],
+  "limitations": [
+    "Native business chains usually mock authenticated current context and reauthentication port; additional tests use real password hashing/login directory and Redis token service, not a full browser login",
+    "Retained native concurrency fixture lots rejected/BLOCKED using existing audited QA command; original regulated history preserved",
+    "MariaDB13/Flyway support warning and existing low pagination/N+1 remain"
+  ],
+  "frontendUnitTests": 3,
+  "review": {
+    "critical": 0,
+    "highFound": 1,
+    "highRemaining": 0,
+    "high": "401 reauthentication was treated as expired login; interceptor now preserves signed form and requires fresh token",
+    "verification": "Desktop/mobile 401 red->green and3 interceptor units including normal-login renewal",
+    "low": "TC-EQP-002 label added to existing mapping; existing LOW N+1 and MariaDB13/Flyway compatibility warning retained"
+  }
+}

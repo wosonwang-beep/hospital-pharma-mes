@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-03",
+  "baseline": "v1.0.14",
+  "verifiedManifestFiles": 98,
+  "finalTargetedGate": [
+    {
+      "name": "com.hospital.mes.production.IncomingProductionIT",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "11.423",
+      "cases": [
+        {
+          "name": "realIncomingReleaseThroughSignedWeighChargeReturnAndReversePreservesTrace",
+          "time": "2.747"
+        }
+      ]
+    }
+  ],
+  "nativeDistinctPassed": 26,
+  "nativeCounts": {
+    "QC": 4,
+    "attachment": 3,
+    "incoming": 6,
+    "incomingSupplement": 3,
+    "WMSAffected": 3,
+    "production": 2,
+    "eBR": 5
+  },
+  "browserDistinctPassed": 18,
+  "browserBackend": "API mocks; not native browser E2E",
+  "frontendTypecheck": "npm run typecheck (vue-tsc -b): PASS",
+  "dbReadOnlyCheck": [
+    "migration_history\t22\t22\t0",
+    "incoming_test_users\t0",
+    "test_quality_records\t0"
+  ],
+  "localDiagnosticLogs": [
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\incoming-trace-final-gate.log",
+      "sha256": "2e2c4f4840258a74f182889bf7912c5a9fd6ca81df24f69586adbdd99bb1cc32"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\incoming-signature-final-gate.log",
+      "sha256": "008dd807f23369ebb9da0a17e565ed6fc95e35e9f9cf1e47f29dc205ac022908"
+    },
+    {
+      "path": "C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\incoming-final-boundary-gate.log",
+      "sha256": "0305974010aa7559a325061fb1926c05434bbc3577c46410472a3cc8c495fbe0"
+    }
+  ],
+  "scope": "Incoming chain and user A–E verified; broader MES task RTM gaps remain, no ACCEPTED change."
+}

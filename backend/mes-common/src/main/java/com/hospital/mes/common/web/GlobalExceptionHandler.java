@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.*;
         return ResponseEntity.badRequest().body(
             ApiError.of(traces.currentTraceId(), "INVALID_REQUEST", ex.getMessage()));
     }
+    @ExceptionHandler(java.util.NoSuchElementException.class) ResponseEntity<ApiError> notFound(java.util.NoSuchElementException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiError.of(traces.currentTraceId(),"NOT_FOUND","Resource not found"));
+    }
+    @ExceptionHandler(org.springframework.web.bind.MissingRequestHeaderException.class)
+    ResponseEntity<ApiError> missingHeader(org.springframework.web.bind.MissingRequestHeaderException ex) {
+        return ResponseEntity.badRequest().body(ApiError.of(traces.currentTraceId(),"INVALID_REQUEST","Required header: "+ex.getHeaderName()));
+    }
     @ExceptionHandler(Exception.class) ResponseEntity<ApiError> unexpected(Exception ex) {
         return ResponseEntity.internalServerError().body(ApiError.of(traces.currentTraceId(),"INTERNAL_ERROR","Internal server error"));
     }
