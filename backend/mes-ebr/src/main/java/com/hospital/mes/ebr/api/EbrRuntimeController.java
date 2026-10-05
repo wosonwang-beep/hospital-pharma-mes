@@ -16,5 +16,4 @@ public class EbrRuntimeController {
  @PostMapping("/forms/{id}/submit")public ApiResponse<JsonNode> submit(@PathVariable("id")String id,@RequestBody Command body,@RequestHeader("If-Match")String match,@RequestHeader("Idempotency-Key")String key){return response(service.command("SUBMIT",id,body,match,key));}
  @PostMapping("/field-values/{id}/corrections")public ApiResponse<JsonNode> correct(@PathVariable("id")String id,@RequestBody Correction body,@RequestHeader("If-Match")String match,@RequestHeader("Idempotency-Key")String key){return response(service.command("CORRECT",id,body,match,key));}
  @PostMapping("/forms/{id}/reviews")public ApiResponse<JsonNode> review(@PathVariable("id")String id,@RequestBody Review body,@RequestHeader("If-Match")String match,@RequestHeader("Idempotency-Key")String key){return response(service.command("REVIEW",id,body,match,key));}
- @GetMapping("/main-batches/{id}/ebr")public ApiResponse<JsonNode> batch(@PathVariable("id")String id){return response(service.batch(id));}
 }

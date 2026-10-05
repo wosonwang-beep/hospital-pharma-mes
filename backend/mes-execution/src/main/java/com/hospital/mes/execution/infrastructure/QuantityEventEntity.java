@@ -4,6 +4,14 @@ import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 import java.math.BigDecimal;
 import java.time.*;
 @TableName("mes_quantity_event") public class QuantityEventEntity extends ScopedEntity {
+ private Long reversalOfId;
+ public Long getReversalOfId(){return reversalOfId;} public void setReversalOfId(Long value){reversalOfId=value;}
+ private String reason;
+ public String getReason(){return reason;} public void setReason(String value){reason=value;}
+ private Long signatureId;
+ public Long getSignatureId(){return signatureId;} public void setSignatureId(Long value){signatureId=value;}
+ private String signatureEvidenceJson;
+ public String getSignatureEvidenceJson(){return signatureEvidenceJson;} public void setSignatureEvidenceJson(String value){signatureEvidenceJson=value;}
  private Long mainBatchId;
  public Long getMainBatchId(){return mainBatchId;} public void setMainBatchId(Long value){mainBatchId=value;}
  private Long executionUnitId;

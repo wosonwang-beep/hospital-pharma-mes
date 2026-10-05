@@ -42,13 +42,15 @@ async function logout() { await auth.logout(); await router.replace('/login') }
         <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
         <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
         <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:plan:view')" key="production-plans-list"><AppstoreOutlined />生产质量计划</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="production-tests-list"><AppstoreOutlined />生产检验</a-menu-item>
         <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
         <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
         <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
         <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
         <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
         <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />来料调查</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />质量调查</a-menu-item>
         <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
         <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
         <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>
@@ -72,13 +74,15 @@ async function logout() { await auth.logout(); await router.replace('/login') }
                 <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
         <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
         <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:plan:view')" key="production-plans-list"><AppstoreOutlined />生产质量计划</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:test:view')" key="production-tests-list"><AppstoreOutlined />生产检验</a-menu-item>
         <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
         <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
         <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
         <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
         <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
         <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />来料调查</a-menu-item>
+        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />质量调查</a-menu-item>
         <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
         <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
         <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>

@@ -6,7 +6,7 @@ const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;dis
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
-const contextKey=computed(()=>JSON.stringify([props.context.materialLotId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot]))
+const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot]))
 async function list(url:string,params:Record<string,unknown>={}){const result=await api<Page<IncomingRow>>({url,params:{page:page.value,size:50,keyword:search.value||undefined,...params}});hasMore.value=(page.value+1)*50<result.total;return result.items}
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
@@ -14,22 +14,27 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   const f=props.field,c=props.context;let rows:IncomingRow[]=[];let request:IncomingRow|undefined
   if(c.inspectionRequestId)request=await api<IncomingRow>({url:`/quality/inspection-requests/${c.inspectionRequestId}`})
   const lotId=c.materialLotId??request?.materialLotId
-  if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
+  if(f==='mainBatchId')rows=await list('/main-batches')
+  else if(['finishedMaterialId','materialId'].includes(f))rows=await list('/materials',f==='finishedMaterialId'?{materialType:'FINISHED',status:'ACTIVE'}:{status:'ACTIVE'})
+  else if(['qcSpecificationItemId','specificationItemId'].includes(f)){if(c.sampleId){const sample=await api<IncomingRow>({url:`/samples/${c.sampleId}`});const spec=await api<IncomingRow>({url:`/quality/specification-versions/${sample.qcSpecificationVersionId}`});rows=((spec.items??[]) as IncomingRow[]).map(i=>({...i,id:i.specificationItemId??i.id}))}}
+  else if(f==='productionTestInstanceId')rows=await list('/quality/production-tests',{mainBatchId:c.mainBatchId})
+  else if(f==='locationId')rows=await list('/locations')
+  else if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
   else if(f==='productionOrderId')rows=await list('/production-orders')
   else if(f==='packageVersionId'){
    const roots=await list('/process-packages',{productId:c.productId,status:'ACTIVE'})
    const packages=await Promise.all(roots.map(root=>api<IncomingRow>({url:`/process-packages/${root.id}`})))
    rows=packages.flatMap(root=>((root.versions??[]) as IncomingRow[]).filter(v=>['APPROVED','EFFECTIVE'].includes(String(v.status))).map(v=>({...v,displayName:`${root.packageCode} · V${v.businessVersion}`})))
   }else if(f==='ebrTemplateVersionId')rows=await list('/ebr/templates',{packageVersionId:c.packageVersionId,status:'EFFECTIVE'})
-  else if(f==='operationExecutionId')rows=(c.operations??[]) as IncomingRow[]
+  else if(f==='operationExecutionId'){rows=(c.operations??[]) as IncomingRow[];if(!rows.length&&c.mainBatchId){const units=await api<IncomingRow[]>({url:`/main-batches/${c.mainBatchId}/execution-units`});rows=(await Promise.all(units.map(u=>api<IncomingRow[]>({url:`/execution-units/${u.id}/operations`})))).flat()}}
   else if(f==='weighingRecordId')rows=((c.weighings??[]) as IncomingRow[]).filter(w=>w.status==='VERIFIED')
   else if(f==='formulaItemId')rows=((c.formulaItems??[]) as IncomingRow[]).map(i=>({...i,id:i.formulaItemId,displayName:`${i.materialName??i.materialId} · ${i.quantity??i.targetQty??''}`}))
   else if(f==='parameterDefId')rows=((c.parameters??[]) as IncomingRow[]).map(i=>({...i,id:i.parameterDefId}))
   else if(['equipmentId','scaleEquipmentId'].includes(f))rows=await list('/equipment',{status:'ACTIVE'})
   else if(f==='materialLotId')rows=await list('/wms/material-lots')
   else if(f==='qcSpecificationVersionId'){
-   if(!lotId){options.value=[];return}
-   const lot=await api<IncomingRow>({url:`/wms/material-lots/${lotId}`});const roots=await list('/quality/specifications',{materialId:lot.materialId})
+   if(!lotId&&!c.finishedMaterialId){options.value=[];return}
+   const material=c.finishedMaterialId??(await api<IncomingRow>({url:`/wms/material-lots/${lotId}`})).materialId;const roots=await list('/quality/specifications',{materialId:material})
    const details=await Promise.all(roots.map(root=>api<IncomingRow>({url:`/quality/specifications/${root.id}`})))
    rows=details.flatMap(root=>((root.versions??[]) as IncomingRow[]).filter(v=>v.status==='APPROVED').map(v=>({...v,displayName:`${root.specificationCode} · V${v.versionNoBusiness}`})))
   }else if(['unitId','requestedUnitId','resultUnitId'].includes(f))rows=await list('/units')
@@ -38,10 +43,11 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='inspectionRequestId')rows=await list('/quality/inspection-requests',{materialLotId:lotId})
   else if(f==='inspectionRequestItemId')rows=(request?.items??[]) as IncomingRow[]
   else if(f==='sampleId'){
-   rows=await list('/quality/samples',{materialLotId:lotId})
+   if(c.investigationScope==='PRODUCTION'||c.mainBatchId){rows=await list('/samples',{mainBatchId:c.mainBatchId,investigationScope:'PRODUCTION'});rows=rows.filter(s=>['RECEIVED','IN_TEST'].includes(String(s.status)))}else rows=await list('/quality/samples',{materialLotId:lotId})
    const ids=((request?.items??[]) as IncomingRow[]).map(x=>String(x.id))
-   rows=rows.filter(s=>ids.includes(String(s.inspectionRequestItemId))&&['TEST_SAMPLE','RETEST_SAMPLE'].includes(String(s.sampleType))&&['RECEIVED','TEST_COMPLETED'].includes(String(s.status)))
-  }else if(f==='approvedInvestigationId')rows=(await list('/deviations',{investigationScope:'INCOMING_MATERIAL',status:'DECIDED',materialLotId:lotId})).filter(d=>d.decisionCode==='AUTHORIZE_RETEST')
+   if(c.investigationScope!=='PRODUCTION'&&!c.mainBatchId)rows=rows.filter(s=>ids.includes(String(s.inspectionRequestItemId))&&['TEST_SAMPLE','RETEST_SAMPLE'].includes(String(s.sampleType))&&['RECEIVED','TEST_COMPLETED'].includes(String(s.status)))
+  }else if(['originalResultRevisionId','selectedResultRevisionId','resultRevisionId'].includes(f)&&c.investigationScope==='PRODUCTION'){const tests=await list('/quality/production-tests',{mainBatchId:c.mainBatchId});const details=await Promise.all(tests.map(t=>api<IncomingRow>({url:`/quality/production-tests/${t.id}`})));rows=details.flatMap(t=>(t.results??[]) as IncomingRow[]);if(f==='originalResultRevisionId')rows=rows.filter(r=>Number(r.revisionNo)===1)}
+  else if(f==='approvedInvestigationId'||f==='investigationId'&&c.investigationScope==='PRODUCTION'){const batch=c.mainBatchId??(c.investigationScope==='PRODUCTION'&&c.sampleId?(await api<IncomingRow>({url:`/samples/${c.sampleId}`})).mainBatchId:undefined);rows=(await list('/deviations',{investigationScope:c.investigationScope??'INCOMING_MATERIAL',status:'DECIDED',materialLotId:lotId,mainBatchId:batch})).filter(d=>d.decisionCode==='AUTHORIZE_RETEST'&&(f!=='investigationId'||String(d.productionTestInstanceId)===String(c.id)&&String(d.mainBatchId)===String(batch)&&d.status==='DECIDED'))}
   else if(['inspectionReportId','supersedesReportId'].includes(f))rows=Array.isArray(c.reports)?c.reports as IncomingRow[]:await list('/quality/inspection-reports',{inspectionRequestId:c.inspectionRequestId,materialLotId:lotId})
   else if(f==='supersedesDecisionId')rows=(c.decisions??[]) as IncomingRow[]
   else if(f==='optionalSpecificationItemIds'){

@@ -1,0 +1,16 @@
+<script setup lang="ts">
+import {computed,ref,watch} from 'vue'
+import {useRoute,useRouter} from 'vue-router'
+import {api,type Page} from '../../api/http'
+import {useControlledRequest} from '../../api/controlled'
+import {useAuthStore} from '../../stores/auth'
+import {display,label,type IncomingRow} from './incomingModel'
+import IncomingReferencePicker from './IncomingReferencePicker.vue'
+import './productionQualityModel'
+const route=useRoute(),router=useRouter(),auth=useAuthStore(),request=useControlledRequest(),{busy,error}=request
+const plan=computed(()=>route.meta.resource==='production-plans'),base=computed(()=>`/quality/${route.meta.resource}`),title=computed(()=>plan.value?'生产质量计划':'生产检验'),mainBatchId=ref(String(route.query.mainBatchId??'')),sampleId=ref(''),status=ref(''),page=ref(1),rows=ref<IncomingRow[]>([]),total=ref(0)
+const columns=computed(()=>[...(plan.value?['mainBatchId','finishedMaterialId','qcSpecificationVersionId','status']:['testCode','sampleId','attemptNo','status']).map(k=>({title:label(k),dataIndex:k,key:k})),{title:'操作',key:'actions'}])
+async function load(){busy.value=true;try{const data=await api<Page<IncomingRow>>({url:base.value,params:{mainBatchId:mainBatchId.value||undefined,sampleId:sampleId.value||undefined,status:status.value||undefined,page:page.value-1,size:20}});rows.value=data.items;total.value=data.total}catch(e){await request.failure(e)}finally{busy.value=false}}
+watch(base,()=>{page.value=1;void load()},{immediate:true})
+</script>
+<template><main class="admin-page master-page"><header class="admin-page-header"><h1>{{title}}</h1><a-button v-if="auth.can(plan?'qms:plan:create':'qms:test:record')" type="primary" @click="router.push({path:base+'/create',query:{mainBatchId}})">新增{{title}}</a-button></header><a-alert v-if="error" type="error" :message="error"/><a-card class="form-section"><form class="master-form" @submit.prevent="page=1;load()"><label><span class="form-field-label">生产批</span><IncomingReferencePicker field="mainBatchId" v-model="mainBatchId" :context="{}"/></label><label v-if="!plan"><span class="form-field-label">样品</span><IncomingReferencePicker field="sampleId" v-model="sampleId" :context="{mainBatchId,investigationScope:'PRODUCTION'}"/></label><label><span class="form-field-label">状态</span><select v-model="status" class="master-native-input"><option value="">全部状态</option><option v-for="s in plan?['DRAFT','APPROVED']:['READY','TESTING','COMPLETED']" :key="s" :value="s">{{display(s)}}</option></select></label><a-space><a-button type="primary" html-type="submit" :loading="busy">查询</a-button><a-button @click="mainBatchId='';sampleId='';status='';page=1;load()">重置</a-button></a-space></form></a-card><a-card><a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:800}" :pagination="{current:page,total,pageSize:20,showSizeChanger:false}" @change="(p:{current?:number})=>{page=p.current??1;load()}"><template #bodyCell="{column,record}"><a-button v-if="column.key==='actions'" type="link" @click="router.push(base+'/'+record.id)">查看</a-button><span v-else>{{display(record[column.key])}}</span></template></a-table></a-card></main></template>

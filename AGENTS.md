@@ -1,6 +1,6 @@
 # Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.15` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.16` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
 ## Low-token task startup
 

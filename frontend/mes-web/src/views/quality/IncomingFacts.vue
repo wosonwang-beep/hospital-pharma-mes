@@ -2,7 +2,7 @@
 import {computed} from 'vue'
 import {label,display} from './incomingModel'
 const props=defineProps<{value:Record<string,unknown>}>()
-const fields=computed(()=>Object.entries(props.value).filter(([key])=>!['signingTargets','signatureEvidence','orgId'].includes(key)))
+const fields=computed(()=>Object.entries(props.value).filter(([key])=>!['signingTargets','signatureEvidence','orgId','allowedActions','signatureEvidenceJson','dslVersion'].includes(key)))
 function object(v:unknown){return v!==null&&typeof v==='object'&&!Array.isArray(v)}
 </script>
 <template><div class="master-form">

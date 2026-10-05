@@ -11,6 +11,14 @@ public class MasterQueryService {
  private final UnitStore units;private final UnitConversionMapper conversions;private final QualificationMapper qualifications;
  public MasterQueryService(UnitStore units,UnitConversionMapper conversions,QualificationMapper qualifications){this.units=units;this.conversions=conversions;this.qualifications=qualifications;}
  public record UnitReference(String id,String unitCode,String dimension,int scale,long versionNo){}
+ public record ConversionEvidence(Long conversionId,MasterRules.Conversion conversion){}
+ public ConversionEvidence conversionEvidence(long org,long from,long to,Long material,BigDecimal amount){
+  var a=units.get(org,from);var b=units.get(org,to);if(from==to)return new ConversionEvidence(null,MasterRules.convert(amount,a.getDimension(),b.getDimension(),BigDecimal.ONE,null,b.getScale()));
+  UnitConversionEntity row=null;
+  if(material!=null)row=conversions.selectOne(new QueryWrapper<UnitConversionEntity>().eq("org_id",org).eq("from_unit_id",from).eq("to_unit_id",to).eq("material_id",material));
+  if(row==null)row=conversions.selectOne(new QueryWrapper<UnitConversionEntity>().eq("org_id",org).eq("from_unit_id",from).eq("to_unit_id",to).isNull("material_id"));
+  return new ConversionEvidence(row==null?null:row.getId(),MasterRules.convert(amount,a.getDimension(),b.getDimension(),row==null?null:row.getFactor(),row==null?null:row.getMaterialId(),b.getScale()));
+ }
  public UnitReference unit(long org,long id){var e=units.get(org,id);return new UnitReference(e.getId().toString(),e.getUnitCode(),e.getDimension(),e.getScale(),e.getVersionNo());}
  public MasterRules.Conversion convert(long org,long from,long to,Long material,BigDecimal amount){
   var a=units.get(org,from);var b=units.get(org,to);if(from==to)return MasterRules.convert(amount,a.getDimension(),b.getDimension(),BigDecimal.ONE,null,b.getScale());

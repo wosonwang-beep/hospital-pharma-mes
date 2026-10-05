@@ -1,0 +1,12 @@
+package com.hospital.mes.ebr.integration;
+import com.hospital.mes.release.application.EbrArchiveService;
+import com.hospital.mes.release.domain.ArchiveCommand;
+import com.hospital.mes.audit.signature.*;
+import com.hospital.mes.ebr.domain.EbrRuntimeCommands;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.*;
+class EbrRuntimeArchiveIT extends EbrRuntimeIT {
+ @Autowired EbrArchiveService archive;
+ @Test void originalFormSignatureAndInvalidatedReviewRemainInArchivedCorrectionHistory(){initialized(true);save(formId,"A","2.000",unit,0);submit(formId,1);asRuntime(reviewer);var signed=signing.sign(new SignCommand(contexts.current(),"EBR_FORM_INSTANCE",formId,SignatureMeaning.VERIFY,1,"token",key(),null));var form=runtime.render(formId);String rule=form.path("reviewRequirements").get(0).path("reviewRuleId").asText();form=runtime.command("REVIEW",formId,new EbrRuntimeCommands.Review(1L,rule,"PASS","Actual independent review","Review actual original","token"),"\"1\"",key());String value=form.path("currentValues").get(0).path("id").asText();asRuntime(author);runtime.command("CORRECT",value,new EbrRuntimeCommands.Correction(1L,"Controlled original value correction",json.getNodeFactory().textNode("2.500")),"\"1\"",key());long batchId=productionQuery.execution(1,Long.parseLong(executionId)).mainBatchId();var model=archive.get(batchId+"");var original=model.path("forms").get(0);assertThat(original.path("values")).hasSize(2);assertThat(original.path("reviews").get(0).path("invalidatedAt").isNull()).isFalse();var formsignatures=new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();for(var envelope:original.path("signatures"))if(envelope.path("objectType").asText().equals("EBR_FORM_INSTANCE"))formsignatures.add(envelope);assertThat(formsignatures).hasSize(1);assertThat(formsignatures.getFirst().path("recordVersion").asInt()).isEqualTo(1);assertThat(formsignatures.getFirst().path("canonicalRecord").path("values").get(0).path("normalizedValueJson").asText()).contains("2.000");com.hospital.mes.production.FrozenSchemaAssertions.assertSchema(json,"BatchEbrReadModel",model);assertThat(verifier.verify(1,Long.parseLong(signed.id()))).isFalse();String source=archive.sourceEvidence(1,batchId).toString();assertThat(source).contains("INVALIDATED","2.000","2.500");assertThat(source).doesNotContain("reauthToken","password");}
+}

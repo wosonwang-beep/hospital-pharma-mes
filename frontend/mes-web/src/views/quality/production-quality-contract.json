@@ -1,0 +1,1172 @@
+{
+  "schemas": {
+    "BalanceInvestigateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "investigationText"
+      ]
+    },
+    "BalanceInvestigationCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "investigationText"
+      ]
+    },
+    "ProductionTestReviewCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "resultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "disposition": {
+          "type": "string",
+          "enum": [
+            "CONFIRMED",
+            "INVALIDATED"
+          ]
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature",
+        "resultRevisionId",
+        "disposition"
+      ]
+    },
+    "ControlledActionSignature": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reauthToken": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "reauthToken"
+      ]
+    },
+    "ProductionPlanUpdateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "finishedMaterialId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "balanceRules": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/components/schemas/ProductionBalanceDefinition"
+          },
+          "minItems": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "mainBatchId",
+        "finishedMaterialId",
+        "qcSpecificationVersionId",
+        "balanceRules",
+        "reason",
+        "versionNo"
+      ]
+    },
+    "ProductionBalanceDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "balanceCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "BATCH",
+            "OPERATION",
+            "PACKAGING"
+          ]
+        },
+        "operationCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "nullable": true
+        },
+        "materialId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "formulaExpr": {
+          "$ref": "#/components/schemas/BalanceFormula"
+        },
+        "toleranceLow": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]{0,15})(?:\\.[0-9]{1,8})?$"
+        },
+        "toleranceHigh": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]{0,15})(?:\\.[0-9]{1,8})?$"
+        },
+        "checkPoint": {
+          "type": "string",
+          "enum": [
+            "OPERATION_COMPLETE",
+            "BATCH_COMPLETE",
+            "QA_RELEASE"
+          ]
+        }
+      },
+      "required": [
+        "balanceCode",
+        "basis",
+        "unitId",
+        "formulaExpr",
+        "toleranceLow",
+        "toleranceHigh",
+        "checkPoint"
+      ]
+    },
+    "BalanceFormula": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dslVersion": {
+          "type": "integer",
+          "enum": [
+            1
+          ]
+        },
+        "expected": {
+          "$ref": "#/components/schemas/BalanceExpression"
+        },
+        "actual": {
+          "$ref": "#/components/schemas/BalanceExpression"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "DIFFERENCE_PCT",
+            "YIELD_PCT"
+          ]
+        }
+      },
+      "required": [
+        "dslVersion",
+        "expected",
+        "actual",
+        "metric"
+      ]
+    },
+    "BalanceExpression": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sum": {
+              "type": "array",
+              "maxItems": 1000,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "CHARGE",
+                  "ISSUE",
+                  "RETURN",
+                  "OUTPUT",
+                  "SAMPLE",
+                  "LOSS",
+                  "SCRAP",
+                  "WIP"
+                ]
+              }
+            }
+          },
+          "required": [
+            "sum"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "constant": {
+              "type": "string",
+              "pattern": "^-?(?:0|[1-9][0-9]{0,23})(?:\\.[0-9]{1,8})?$"
+            }
+          },
+          "required": [
+            "constant"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "ADD",
+                "SUBTRACT",
+                "MULTIPLY",
+                "DIVIDE"
+              ]
+            },
+            "left": {
+              "$ref": "#/components/schemas/BalanceExpression"
+            },
+            "right": {
+              "$ref": "#/components/schemas/BalanceExpression"
+            }
+          },
+          "required": [
+            "op",
+            "left",
+            "right"
+          ]
+        }
+      ]
+    },
+    "ProductionDeviationCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        },
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "investigationKind": {
+          "type": "string",
+          "enum": [
+            "DEVIATION",
+            "OOS",
+            "OOT"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "MINOR",
+            "MAJOR",
+            "CRITICAL"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "productionTestInstanceId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "originalResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "investigationScope",
+        "mainBatchId",
+        "investigationKind",
+        "severity",
+        "description",
+        "reason"
+      ]
+    },
+    "ProductionDeviationCloseCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        },
+        "selectedResultRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature",
+        "investigationScope"
+      ]
+    },
+    "ProductionDeviationInvestigateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        },
+        "investigationSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "investigationScope",
+        "investigationSummary"
+      ]
+    },
+    "ProductionTestCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampleId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "specificationItemId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "instrumentId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "sampleId",
+        "specificationItemId",
+        "reason"
+      ]
+    },
+    "ProductionPlanCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "finishedMaterialId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "qcSpecificationVersionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "balanceRules": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/components/schemas/ProductionBalanceDefinition"
+          },
+          "minItems": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "mainBatchId",
+        "finishedMaterialId",
+        "qcSpecificationVersionId",
+        "balanceRules",
+        "reason"
+      ]
+    },
+    "ProductionTestResultCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "previousRevisionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "resultNumeric": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]{0,15})(?:\\.[0-9]{1,8})?$",
+          "nullable": true
+        },
+        "resultText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "nullable": true
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature"
+      ]
+    },
+    "ProductionPlanApproveCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature"
+      ]
+    },
+    "CapaCompleteCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "completionText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "completionText"
+      ]
+    },
+    "CapaVerifyCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "VERIFIED",
+            "REOPEN"
+          ]
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature",
+        "decision"
+      ]
+    },
+    "BalanceApproveCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "ACCEPT_EXCEPTION",
+            "REQUIRE_RECALCULATION"
+          ]
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature",
+        "decision"
+      ]
+    },
+    "ProductionSampleCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mainBatchId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sampleNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sampleType": {
+          "type": "string",
+          "enum": [
+            "TEST_SAMPLE",
+            "RETENTION_SAMPLE",
+            "RETEST_SAMPLE",
+            "OTHER_APPROVED"
+          ]
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "quantity": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]{0,15})(?:\\.[0-9]{1,8})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sourceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        }
+      },
+      "required": [
+        "mainBatchId",
+        "sampleNo",
+        "sampleType",
+        "quantity",
+        "unitId",
+        "sourceRef",
+        "reason",
+        "investigationScope"
+      ]
+    },
+    "ProductionDeviationDecideCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        },
+        "decisionCode": {
+          "type": "string",
+          "enum": [
+            "REJECT",
+            "AUTHORIZE_RETEST",
+            "ACCEPT_WITH_JUSTIFICATION"
+          ]
+        },
+        "disposition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "authorizedRetestCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "nullable": true
+        },
+        "originalResultDisposition": {
+          "type": "string",
+          "enum": [
+            "VALID",
+            "INVALID"
+          ],
+          "nullable": true
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature",
+        "investigationScope",
+        "decisionCode",
+        "disposition"
+      ]
+    },
+    "QuantityReversalCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "signature"
+      ]
+    },
+    "CapaCreateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "capaNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "actionText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "capaNo",
+        "actionText",
+        "reason"
+      ]
+    },
+    "ProductionQuantityCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "OUTPUT",
+            "SAMPLE",
+            "LOSS",
+            "SCRAP",
+            "WIP"
+          ]
+        },
+        "operationExecutionId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "materialLotId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "amount": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,6})?$"
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "sourceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "signature": {
+          "$ref": "#/components/schemas/ControlledActionSignature"
+        },
+        "lotNo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "nullable": true
+        },
+        "locationId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "nullable": true
+        },
+        "productionDate": {
+          "type": "string",
+          "format": "date",
+          "nullable": true
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date",
+          "nullable": true
+        }
+      },
+      "required": [
+        "versionNo",
+        "eventType",
+        "amount",
+        "unitId",
+        "sourceRef",
+        "reason",
+        "signature"
+      ]
+    },
+    "CapaStartCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    },
+    "ProductionRetestCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "investigationId"
+      ]
+    },
+    "ProductionDeviationUpdateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "investigationScope": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason",
+        "investigationScope",
+        "description"
+      ]
+    },
+    "ProductionSampleReceiveCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    },
+    "BalanceRecalculateCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "versionNo",
+        "reason"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "path": "/balance-investigations/{id}/approve",
+      "method": "POST",
+      "permission": "balance:approve",
+      "schema": "BalanceApproveCommand"
+    },
+    {
+      "path": "/balances/{id}/investigations",
+      "method": "POST",
+      "permission": "balance:investigate",
+      "schema": "BalanceInvestigationCreateCommand"
+    },
+    {
+      "path": "/main-batches/{id}/material-balance",
+      "method": "GET",
+      "permission": "balance:view",
+      "schema": ""
+    },
+    {
+      "path": "/main-batches/{id}/material-balance/recalculate",
+      "method": "POST",
+      "permission": "balance:view",
+      "schema": "BalanceRecalculateCommand"
+    },
+    {
+      "path": "/quality/production-plans",
+      "method": "GET",
+      "permission": "qms:plan:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/production-plans",
+      "method": "POST",
+      "permission": "qms:plan:create",
+      "schema": "ProductionPlanCreateCommand"
+    },
+    {
+      "path": "/quality/production-plans/{id}",
+      "method": "GET",
+      "permission": "qms:plan:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/production-plans/{id}",
+      "method": "PUT",
+      "permission": "qms:plan:update",
+      "schema": "ProductionPlanUpdateCommand"
+    },
+    {
+      "path": "/quality/production-tests",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/production-tests",
+      "method": "POST",
+      "permission": "qms:test:record",
+      "schema": "ProductionTestCreateCommand"
+    },
+    {
+      "path": "/quality/production-tests/{id}",
+      "method": "GET",
+      "permission": "qms:test:view",
+      "schema": ""
+    },
+    {
+      "path": "/quality/production-plans/{id}/approve",
+      "method": "POST",
+      "permission": "qms:plan:approve",
+      "schema": "ProductionPlanApproveCommand"
+    },
+    {
+      "path": "/quality/production-tests/{id}/results",
+      "method": "POST",
+      "permission": "qms:test:record",
+      "schema": "ProductionTestResultCommand"
+    },
+    {
+      "path": "/quality/production-tests/{id}/revisions",
+      "method": "POST",
+      "permission": "qms:test:record",
+      "schema": "ProductionTestResultCommand"
+    },
+    {
+      "path": "/quality/production-tests/{id}/review",
+      "method": "POST",
+      "permission": "qms:test:review",
+      "schema": "ProductionTestReviewCommand"
+    },
+    {
+      "path": "/quality/production-tests/{id}/retest",
+      "method": "POST",
+      "permission": "qms:test:retest",
+      "schema": "ProductionRetestCommand"
+    },
+    {
+      "path": "/capas/{id}/start",
+      "method": "POST",
+      "permission": "qms:capa:update",
+      "schema": "CapaStartCommand"
+    },
+    {
+      "path": "/capas/{id}/complete",
+      "method": "POST",
+      "permission": "qms:capa:update",
+      "schema": "CapaCompleteCommand"
+    },
+    {
+      "path": "/capas/{id}/verify",
+      "method": "POST",
+      "permission": "qms:capa:verify",
+      "schema": "CapaVerifyCommand"
+    },
+    {
+      "path": "/deviations/{id}/capas",
+      "method": "GET",
+      "permission": "qms:capa:view",
+      "schema": ""
+    },
+    {
+      "path": "/deviations/{id}/capas",
+      "method": "POST",
+      "permission": "qms:capa:create",
+      "schema": "CapaCreateCommand"
+    },
+    {
+      "path": "/main-batches/{id}/quantity-events",
+      "method": "GET",
+      "permission": "balance:view",
+      "schema": ""
+    },
+    {
+      "path": "/main-batches/{id}/quantity-events",
+      "method": "POST",
+      "permission": "mes:quantity:record",
+      "schema": "ProductionQuantityCommand"
+    },
+    {
+      "path": "/quantity-events/{id}/reverse",
+      "method": "POST",
+      "permission": "mes:quantity:reverse",
+      "schema": "QuantityReversalCommand"
+    },
+    {
+      "path": "/balance-investigations/{id}/investigate",
+      "method": "POST",
+      "permission": "balance:investigate",
+      "schema": "BalanceInvestigateCommand"
+    }
+  ]
+}

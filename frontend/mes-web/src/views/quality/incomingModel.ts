@@ -1,6 +1,8 @@
 import contract from './incoming-contract.json'
+import productionContract from './production-quality-contract.json'
 export interface Schema{$ref?:string;type?:string|string[];format?:string;enum?:Array<string|number|boolean>;properties?:Record<string,Schema>;required?:string[];items?:Schema;minimum?:number;maximum?:number;maxLength?:number;minItems?:number;additionalProperties?:boolean|Schema}
 export const schemas=contract.schemas as unknown as Record<string,Schema>
+Object.assign(schemas,productionContract.schemas)
 export const operations=contract.operations
 export function resolve(schema:Schema):Schema{return schema.$ref?schemas[schema.$ref.split('/').pop()!]!:schema}
 export function scalarType(schema:Schema){const s=resolve(schema);return Array.isArray(s.type)?s.type.find(x=>x!=='null'):s.type}

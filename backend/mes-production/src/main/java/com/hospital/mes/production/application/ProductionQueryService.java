@@ -7,7 +7,11 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class ProductionQueryService {
  private final ProductionStore db;private final ObjectMapper json;
  public ProductionQueryService(ProductionStore db,ObjectMapper json){this.db=db;this.json=json;}
+ public JsonNode batchFact(long org,long id){var b=db.batches.get(org,id);var views=new ProductionViews(json);var n=views.view(b);var subs=n.putArray("subBatches");db.subs(org,id).forEach(x->subs.add(views.view(x)));var executions=n.putArray("executionUnits");db.executions(org,id).forEach(x->executions.add(views.view(x)));n.set("processSnapshot",b.getProcessSnapshotId()==null?json.nullNode():views.view(db.snapshots.get(org,b.getProcessSnapshotId())));return n;}
  public record BatchContext(long mainBatchId,String status,JsonNode snapshot,long versionNo){}
+ public record QualityIdentity(long mainBatchId,long productId,long unitId,Long processSnapshotId,Long finishedLotId,String status,long versionNo){}
+ public QualityIdentity qualityIdentity(long org,long id){var row=db.batches.get(org,id);return new QualityIdentity(row.getId(),row.getProductId(),row.getUnitId(),row.getProcessSnapshotId(),row.getFinishedLotId(),row.getStatus(),row.getVersionNo());}
+ public String batchNumber(long org,long id){return db.batches.get(org,id).getBatchNo();}
  public record ExecutionContext(long mainBatchId,long executionUnitId,Long subBatchId,String batchStatus,String executionStatus,JsonNode snapshot,long versionNo){}
  public BatchContext batch(long org,long id){var b=db.batches.get(org,id);return context(b);}
  public BatchContext lockBatch(long org,long id){requireTransaction();var b=db.batches.get(org,id);db.orders.lock(org,b.getProductionOrderId());return context(db.batches.lock(org,id));}

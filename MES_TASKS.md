@@ -1,8 +1,8 @@
 # MES Task Status Index
 
-Latest verified increment (2026-10-04): [approved V024 recovery and scoped functional closure](docs/acceptance/functional-closure/RECOVERY-2026-10-04.md). V024/24 migration validation PASS; 26 distinct native cases plus 3 IPC units PASS. Inventory freeze/unfreeze, production IPC and controlled clearance produced contracts are verified and available. MES-008/008A/010/011 are ACCEPTED following explicit human acceptance on 2026-10-04 after the [current full-task RTM closure](docs/acceptance/incoming-quality/FINAL-CLOSEOUT-2026-10-04.md); MES-012 remains only its approved IPC stage. No human acceptance inferred. v1.0.15 is the reviewed authoritative design release.
+Latest verified increment (2026-10-05): [MES-012 closeout](docs/acceptance/mes-012/CLOSEOUT-2026-10-05.md) and [MES-013 closeout](docs/acceptance/mes-013/CLOSEOUT-2026-10-05.md) are ACCEPTED following explicit human confirmation “确认验收” on 2026-10-05. Native V001..V026 validated/schema026; MES-01315 distinct native business methods and required targeted gates PASS, independent CRITICAL0/HIGH0/MEDIUM0. Earlier MES-001..011 human acceptance remains unchanged. FINAL BASELINE COMPLETE v1.0.16 is authoritative. Acceptance is explicitly authorized by the user.
 
-This is the sole task-status index for future Codex sessions. It records status and navigation only; requirements remain in `FINAL BASELINE COMPLETE v1.0.15`. Update status here when a task starts or reaches a verified gate. Only human approval may set `ACCEPTED`.
+This is the sole task-status index for future Codex sessions. It records status and navigation only; requirements remain in `FINAL BASELINE COMPLETE v1.0.16`. Update status here when a task starts or reaches a verified gate. Only human approval may set `ACCEPTED`.
 
 ## Completed
 
@@ -20,18 +20,18 @@ This is the sole task-status index for future Codex sessions. It records status 
 
 | Task | Status | Title | Dependencies | Task Card |
 |---|---|---|---|---|
-| MES-003-R2 | `ACCEPTED` | 组织、单位、设备与人员资格 | Hard: MES-001, MES-002 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-003-R2.md) |
-| MES-004-R2 | `ACCEPTED` | 物料基本信息与单位换算 | Hard: MES-001, MES-003; Soft: MES-005 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-004-R2.md) |
-| MES-005-R2 | `ACCEPTED` | 多供应商关系与唯一首选供应商 | Hard: MES-001, MES-003, MES-004 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-005-R2.md) |
-| MES-006-R2 | `ACCEPTED` | BOM处方、工艺路线与参数版本 | Hard: MES-003, MES-004; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-006-R2.md) |
-| MES-007-R2 | `ACCEPTED` | 动态eBR定义与运行引擎 | Hard: MES-001, MES-002, MES-006; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-007-R2.md) |
-| MES-008-R2 | `ACCEPTED` | WMS收货、库存、预留与发退料 | Hard: MES-003, MES-004, MES-005; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-008-R2.md) |
-| MES-008A-R2 | `ACCEPTED` | Incoming Material Quality & Material Release | Hard: MES-001, MES-002, MES-003, MES-004, MES-005, MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-008A-R2.md) |
-| MES-009-R2 | `ACCEPTED` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-009-R2.md) |
-| MES-010-R2 | `ACCEPTED` | 工序、设备运行与参数采集 | Hard: MES-003, MES-006, MES-007, MES-009; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-010-R2.md) |
-| MES-011-R2 | `ACCEPTED` | 称量、投料与Genealogy | Hard: MES-004, MES-006, MES-008, MES-008A, MES-009, MES-010; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-011-R2.md) |
-| MES-012-R2 | `IN PROGRESS` | IPC、生产质量调查与物料平衡 | Hard: MES-008A, MES-009, MES-010, MES-011; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-012-R2.md) |
-| MES-013-R2 | `NOT STARTED` | QA放行与eBR归档 | Hard: MES-007, MES-008A, MES-009, MES-011, MES-012 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.15/tasks/MES-013-R2.md) |
+| MES-003-R2 | `ACCEPTED` | 组织、单位、设备与人员资格 | Hard: MES-001, MES-002 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-003-R2.md) |
+| MES-004-R2 | `ACCEPTED` | 物料基本信息与单位换算 | Hard: MES-001, MES-003; Soft: MES-005 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-004-R2.md) |
+| MES-005-R2 | `ACCEPTED` | 多供应商关系与唯一首选供应商 | Hard: MES-001, MES-003, MES-004 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-005-R2.md) |
+| MES-006-R2 | `ACCEPTED` | BOM处方、工艺路线与参数版本 | Hard: MES-003, MES-004; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-006-R2.md) |
+| MES-007-R2 | `ACCEPTED` | 动态eBR定义与运行引擎 | Hard: MES-001, MES-002, MES-006; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-007-R2.md) |
+| MES-008-R2 | `ACCEPTED` | WMS收货、库存、预留与发退料 | Hard: MES-003, MES-004, MES-005; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-008-R2.md) |
+| MES-008A-R2 | `ACCEPTED` | Incoming Material Quality & Material Release | Hard: MES-001, MES-002, MES-003, MES-004, MES-005, MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-008A-R2.md) |
+| MES-009-R2 | `ACCEPTED` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-009-R2.md) |
+| MES-010-R2 | `ACCEPTED` | 工序、设备运行与参数采集 | Hard: MES-003, MES-006, MES-007, MES-009; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-010-R2.md) |
+| MES-011-R2 | `ACCEPTED` | 称量、投料与Genealogy | Hard: MES-004, MES-006, MES-008, MES-008A, MES-009, MES-010; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-011-R2.md) |
+| MES-012-R2 | `ACCEPTED` | IPC、生产质量调查与物料平衡 | Hard: MES-008A, MES-009, MES-010, MES-011; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-012-R2.md) |
+| MES-013-R2 | `ACCEPTED` | QA放行与eBR归档 | Hard: MES-007, MES-008A, MES-009, MES-011, MES-012 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/tasks/MES-013-R2.md) |
 
 DCP-MES-002-R2-001 resolves the former MES-012 ambiguity. Incoming material request/sampling/testing/report/release belongs to MES-008A; MES-012 owns production IPC, OOS/OOT, Deviation, CAPA, investigation, and material balance.
 
@@ -297,3 +297,31 @@ Statuses unchanged: MES-007 ACCEPTED, MES-009 READY FOR ACCEPTANCE, MES-008/008A
 - MES-009-R2 (订单与正式批模型) is `ACCEPTED`. Scope and existing verification evidence: [MES-009 closeout](docs/acceptance/mes-009/CLOSEOUT-2026-10-04.md), including TC-BAT-001..004, TC-UI-002 and PRD-001..004. Earlier readiness entries remain historical evidence.
 - Administrative acceptance only: no product code, frozen baseline, migration or database change; no repeat tests.
 - MES-012 remains `IN PROGRESS` within its approved scope; MES-013 remains `NOT STARTED`. No next task started.
+
+## MES-012/013 continued-development baseline review — 2026-10-04
+
+User requests continued development of both tasks. MES-012 hard dependencies are ACCEPTED; MES-013 needs the remaining actual MES-012 producers. Scoped review found missing material-balance grammar/approval, production investigation/CAPA contracts and typed finished QA/PDF contracts, plus conflicting inherited balance state names. DESIGN CHANGE REQUIRED for these portions; existing accepted incoming and staged IPC contracts are preserved. Concrete findings and bounded approval proposal: [DCP-MES-012-013-CONTRACT-001-PROPOSED](docs/development/DCP-MES-012-013-CONTRACT-001-PROPOSED.md). No frozen redesign authorization inferred from the implementation request. No product-code change, migration, database operation or tests; statuses remain MES-012 IN PROGRESS / MES-013 NOT STARTED.
+
+## MES-012/013 bounded contract completion approval — 2026-10-04
+
+User explicitly approved “批准该范围，补齐正式契约后依次完成 MES-012、013”. DCP-MES-012-013-CONTRACT-001 is authorized within the proposal's listed balance, production quality/CAPA, finished release/PDF and consistency boundaries. The prior approval stop is superseded. [Execution ledger](docs/development/mes-012-013-approved-execution-plan.md) records contract-first implementation and validation. MES-012 stays IN PROGRESS; MES-013 starts after its real producer dependencies are available. Neither task is accepted by this design/development authorization.
+
+## Reviewed MES-012/013 contract publication — 2026-10-05
+
+v1.0.16 is the reviewed authoritative cumulative release under explicit DCP-MES-012-013-CONTRACT-001 approval. OpenAPI references resolve,35 added/typed operation entries checked, scoped independent HIGH findings closed, v1.0.15 remains unchanged. Native physical history24 successes/0 failures, highest24; planned V025 is not yet applied. Design publication does not imply runtime completion. MES-012 IN PROGRESS, MES-013 NOT STARTED until actual producer contracts are available.
+
+## MES-012 readiness and authorized MES-013 handoff — 2026-10-05
+
+MES-012-R2 READY FOR ACCEPTANCE after scoped plan/quantity/balance/production QC/OOS/CAPA implementation, native required producer/gate tests, direct IPC/incoming regressions, original UI targeted checks and independent CRITICAL0/HIGH0 review. No human acceptance inferred. Evidence: [MES-012 closeout](docs/acceptance/mes-012/CLOSEOUT-2026-10-05.md). Native V025 applied; latest read-only highest25/success25/fail0. User explicitly requested MES-012 then MES-013 and had approved the bounded completion contract; real MES-012 consumed producers are now physically available. MES-013 moves to IN PROGRESS for finished release/PDF/final lifecycle only. Its scoped Task Card and mandatory contract/reference sections were reviewed; append-only next physical allocation V026, no executed migration edits. Existing accepted tasks and local configuration exclusions remain preserved.
+
+## MES-013 readiness — 2026-10-05
+
+MES-013-R2 READY FOR ACCEPTANCE after finished QA/inventory/audit/signature/outbox atomicity, actual late OOS/original FAIL, explicit immutable supersession, locked source evidence, deterministic immutable eBR/PDF and original desktop/mobile UI were verified. Runtime RTM and15 distinct new native business methods (QA10/archive4/form-history1), schema2, focused backend4 units/platform signature13 regressions, frontend5 units/14 mock-browser cases/typecheck and CRITICAL0/HIGH0/MEDIUM0 scoped review: [closeout](docs/acceptance/mes-013/CLOSEOUT-2026-10-05.md). V026 append-only applied, latest26 validated/schema026; no failed migration or repair/reset. MES-012 public QC item projection corrected to its existing frozen contract and checked through actual downstream full-schema/native OOS chain; original source/signature facts unchanged. No design baseline change, no future task start, no automatic ACCEPTED. Remaining inherited LOW pagination/N+1 debt; native local configurations preserved/excluded.
+
+## Human acceptance — MES-012 / MES-013 — 2026-10-05
+
+The user explicitly replied “确认验收” to the joint MES-012 / MES-013 closeout. Both MES-012-R2 and MES-013-R2 are now ACCEPTED. Prior verification and readiness records remain historical evidence; no new test result or baseline change is implied. No subsequent MES task started.
+
+## QA page presentation refinement — 2026-10-05
+
+User supplied the selected screenshot and requested “调整 QA 批放行审核页面”. Scoped UI-QA-V / UI-REL-W presentation updated: compact checklist, batch/Gate banner, summary/actions, PDF history and derived evidence directory. No fields/API/permission/state/migration change; FINAL remains after QA decision. Typecheck and14 existing direct mock-browser cases PASS; final2 responsive/filter/original-fact cases PASS. [UI refinement review](docs/acceptance/mes-013/ui-refinement-2026-10-05/REVIEW.md). MES-012/013 ACCEPTED remains unchanged; no new human acceptance inferred, no next task started.

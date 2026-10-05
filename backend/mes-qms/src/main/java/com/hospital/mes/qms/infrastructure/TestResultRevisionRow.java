@@ -2,6 +2,9 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.*;
 @TableName("qms_test_result_revision")
 public class TestResultRevisionRow extends IncomingRow {
+ private Long productionTestInstanceId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+ public Long getProductionTestInstanceId(){return productionTestInstanceId;} public void setProductionTestInstanceId(Long value){productionTestInstanceId=value;}
  private Long sampleId;
  public Long getSampleId(){return sampleId;} public void setSampleId(Long value){sampleId=value;}
  private Long inspectionItemId;
