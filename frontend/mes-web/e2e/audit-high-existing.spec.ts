@@ -16,8 +16,8 @@ async function fixture(page:Page,withTrace=true){
    queries.push(url);return reply({items:[{id:'41',orderNo:'PO-41',batchNo:'MB-41',plannedQty:100,productId:'21',status:'DRAFT',allowedActions:['UPDATE']}],total:21,page:Number(url.searchParams.get('page')??0),size:20})
   }
   if(path==='/production-orders/41'||path==='/main-batches/41')return reply({id:'41',orderNo:'PO-41',batchNo:'MB-41',status:'DRAFT',allowedActions:[]})
-  if(path==='/wms/material-lots/201')return reply({id:'201',lotNo:'LOT-201',qualityStatus:'RELEASED',inventoryStatus:'AVAILABLE',materialSnapshot:{materialName:'原辅料'},allowedActions:[]})
-  if(path==='/trace'){traceQueries.push(url);return reply({nodes:types.map((type,i)=>({type,id:String(i+1),label:type,status:'COMPLETED',revision:null})),edges:[]})}
+  if(path==='/wms/material-lots/201')return reply({id:'201',lotNo:'LOT-201',qualityStatus:'RELEASED',inventoryStatus:'AVAILABLE',materialId:'20',supplierLotNo:'SUP-20261005',manufactureDate:'2026-10-05',expiryDate:'2028-10-05',materialSnapshot:{materialName:'原料A',materialCode:'MAT-0001',materialType:'原料',baseUnitId:'11',baseUnitName:'千克',specification:'25 kg/桶'},allowedActions:[]})
+  if(path==='/trace'){traceQueries.push(url);return reply({nodes:types.map((type,i)=>({type,id:String(i+1),label:({RECEIPT:'GR-20261005-001',INSPECTION_REQUEST:'IR-20261005-001',SAMPLING_TASK:'SM-20261005-001',INSPECTION_TASK:'IT-20261005-001',REPORT:'TR-20261005-001',RELEASE_DECISION:'质量决定 7'} as Record<string,string>)[type]??type,status:type==='INSPECTION_TASK'?'QC_FAILED':type==='REPORT'?'APPROVED':type==='RELEASE_DECISION'?'RELEASED':'COMPLETED',revision:null})),edges:[]})}
   if(path==='/inventory'||path==='/material-issues')return reply({items:[],total:0,page:0,size:20})
   return reply({items:[],total:0,page:0,size:20})
  });return {errors,queries,traceQueries}
@@ -42,9 +42,14 @@ for(const resource of ['orders','batches'])test(`frozen ${resource} query and na
  expect(errors).toEqual([])
 })
 test('MaterialLot T4 read chain and valid eligibility guidance',async({page,isMobile})=>{
+ if(!isMobile)await page.setViewportSize({width:1280,height:853})
  const {errors}=await fixture(page);await page.goto('/wms/material-lots/201')
+ await expect(page.locator('.flow-cards article')).toHaveCount(6)
+ await expect(page.locator('.flow-cards').getByText('IT-20261005-001',{exact:true})).toBeVisible()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+ await page.screenshot({path:resolve(output,"lot-overview-"+test.info().project.name+".png"),fullPage:true,scale:'css'})
  await expect(page.getByText(/生产使用资格由物料质量放行/)).toBeVisible();await expect(page.getByText(/后续质量模块|本阶段物料批不能/)).toHaveCount(0)
- await page.getByRole('tab',{name:'收货',exact:true}).click();await expect(page.locator('.ant-tabs-tabpane-active .lot-lineage .ant-table-row td').first()).toHaveText('收货记录');await expect(page.locator('.lot-lineage').getByRole('button',{name:'查看来源记录'})).toBeVisible()
+ await page.getByRole('tab',{name:'收货',exact:true}).click();await expect(page.locator('.ant-tabs-tabpane-active .lot-lineage .ant-table-row td').first()).toHaveText('收货记录');await expect(page.locator('.ant-tabs-tabpane-active .lot-lineage').getByRole('button',{name:'查看来源记录'})).toBeVisible()
  if(!isMobile)for(const name of ['请验','取样','样品','检验','检验报告','质量放行','生产使用','审计 / 追溯']){await page.getByRole('tab',{name,exact:true}).click();await expect(page.locator('.ant-tabs-tabpane-active .lot-lineage .ant-table')).toBeVisible()}
  await expect(page.locator('.ant-tabs-tabpane-active .ant-spin-spinning')).toHaveCount(0)
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
@@ -56,5 +61,5 @@ test('implemented issue flow is no longer described as unavailable',async({page}
 })
 
 test('MaterialLot aggregation respects trace permission',async({page})=>{
- const {errors,traceQueries}=await fixture(page,false);await page.goto('/wms/material-lots/201');await page.getByRole('tab',{name:'收货',exact:true}).click();await expect(page.getByText('完整关联记录需要追溯查询权限，请联系管理员。')).toBeVisible();expect(traceQueries).toHaveLength(0);expect(errors).toEqual([])
+ const {errors,traceQueries}=await fixture(page,false);await page.goto('/wms/material-lots/201');await page.getByRole('tab',{name:'收货',exact:true}).click();await expect(page.locator('.ant-tabs-tabpane-active').getByText('完整关联记录需要追溯查询权限，请联系管理员。')).toBeVisible();expect(traceQueries).toHaveLength(0);expect(errors).toEqual([])
 })

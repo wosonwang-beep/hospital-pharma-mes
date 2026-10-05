@@ -1,7 +1,4 @@
 import {test,expect} from '@playwright/test'
-import {mkdirSync} from 'node:fs'
-import {resolve} from 'node:path'
-const out=resolve(process.env.TEMP??'C:/Windows/Temp','mes-audit-incoming-actions');mkdirSync(out,{recursive:true})
 const records=[
  ['quality/inspection-requests','qms:inspection-request','submit','提交请验'],
  ['quality/sampling-tasks','qms:sampling','assign','指派'],
@@ -18,14 +15,15 @@ for(const [path,permission,action,label] of records)test(`server actions govern 
  const command=action==='receive'?'qms:sampling:execute':permission+':'+(action==='submit-review'?'execute':action==='release-decisions'?'decide':action)
  await page.route('**/api/v1/**',r=>{
   const p=new URL(r.request().url()).pathname.replace('/api/v1','')
-  const data=p==='/auth/me'?{userId:'8',organizationId:'1',displayName:'动作验证',permissionCodes:[permission+':view',...(canAct?[command]:[])],mustChangePassword:false}:{id:'201',status:'DRAFT',versionNo:0,allowedActions:actions}
+  // Deliberately minimal action-policy probe, not a complete detail fixture or visual acceptance evidence.
+  const status=path.includes('inspection-tasks')?'IN_PROGRESS':path.includes('sampling-tasks')?'PLANNED':path.includes('samples')?'COLLECTED':path==='deviations'?'OPEN':'DRAFT'
+  const data=p==='/auth/me'?{userId:'8',organizationId:'1',displayName:'动作验证',permissionCodes:[permission+':view',...(canAct?[command]:[])],mustChangePassword:false}:{id:'201',status,versionNo:0,allowedActions:actions}
   return r.fulfill({json:{code:'OK',data,message:'success',traceId:'actions'}})
  })
  await page.goto(`/${path}/201${path==='qa/material-lots'?'/review':''}`);await expect(page.locator('main h1')).toBeVisible()
  await expect(page.locator('main').getByRole('button',{name:labelPattern})).toHaveCount(0)
  actions=[action];await page.reload();await expect(page.locator('main').getByRole('button',{name:labelPattern})).toBeVisible()
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
- await page.screenshot({path:resolve(out,`${path.split('/').pop()}-${test.info().project.name}.png`),fullPage:true})
  canAct=false;await page.reload();await expect(page.locator('main').getByRole('button',{name:labelPattern})).toHaveCount(0)
  expect(errors).toEqual([])
 })
