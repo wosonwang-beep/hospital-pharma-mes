@@ -3,5 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent><groupId>com.hospital.mes</groupId><artifactId>mes-backend</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
   <artifactId>mes-release</artifactId>
+  <dependencies>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qms</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-wms</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-integration</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>org.apache.pdfbox</groupId><artifactId>pdfbox</artifactId><version>3.0.8</version></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+  </dependencies>
 </project>
-

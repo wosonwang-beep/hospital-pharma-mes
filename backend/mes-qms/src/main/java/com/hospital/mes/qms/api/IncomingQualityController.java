@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import java.util.*;
 @RestController @RequestMapping("/api/v1") @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IncomingQualityController {
- private final IncomingQualityService service;private final TraceIdProvider traces;
- public IncomingQualityController(IncomingQualityService service,TraceIdProvider traces){this.service=service;this.traces=traces;}
+ private final IncomingQualityService service;private final TraceIdProvider traces;private final com.hospital.mes.qms.application.ProductionQualityService production;
+ public IncomingQualityController(IncomingQualityService service,TraceIdProvider traces,com.hospital.mes.qms.application.ProductionQualityService production){this.service=service;this.traces=traces;this.production=production;}
  @GetMapping("/quality/inspection-requests")
  public ApiResponse<?> listInspectionRequests(@RequestParam(defaultValue="0",name="page") int page,@RequestParam(defaultValue="20",name="size") int size,@RequestParam(required=false,name="keyword") String keyword,@RequestParam Map<String,String> filters){return ApiResponse.success(service.list("qms_inspection_request","qms:inspection-request:view",page,size,keyword,filters),traces.currentTraceId());}
  @PostMapping("/quality/inspection-requests")
@@ -96,20 +96,20 @@ public class IncomingQualityController {
  @ResponseStatus(HttpStatus.CREATED)
  public ApiResponse<?> decideIncomingMaterialRelease(@PathVariable("lotId") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.decideRelease(target,body,version,key),traces.currentTraceId());}
  @GetMapping("/deviations")
- public ApiResponse<?> listDeviations(@RequestParam(defaultValue="0",name="page") int page,@RequestParam(defaultValue="20",name="size") int size,@RequestParam(required=false,name="keyword") String keyword,@RequestParam Map<String,String> filters){return ApiResponse.success(service.list("qms_deviation","qms:deviation:view",page,size,keyword,filters),traces.currentTraceId());}
+ public ApiResponse<?> listDeviations(@RequestParam(defaultValue="0",name="page") int page,@RequestParam(defaultValue="20",name="size") int size,@RequestParam(required=false,name="keyword") String keyword,@RequestParam Map<String,String> filters){return ApiResponse.success(("INCOMING_MATERIAL".equals(filters.get("investigationScope"))?service.list("qms_deviation","qms:deviation:view",page,size,keyword,filters):production.list("qms_deviation",page,size,filters)),traces.currentTraceId());}
  @PostMapping("/deviations")
  @ResponseStatus(HttpStatus.CREATED)
- public ApiResponse<?> createDeviations(@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.createDeviation(body,key),traces.currentTraceId());}
+ public ApiResponse<?> createDeviations(@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(("INCOMING_MATERIAL".equals(body.path("investigationScope").asText())?service.createDeviation(body,key):production.createDeviation(body,key)),traces.currentTraceId());}
  @GetMapping("/deviations/{id}")
- public ApiResponse<?> getDeviations(@PathVariable("id") String target){return ApiResponse.success(service.get("qms_deviation","qms:deviation:view",target),traces.currentTraceId());}
+ public ApiResponse<?> getDeviations(@PathVariable("id") String target){return ApiResponse.success((production.productionDeviation(target)?production.get("qms_deviation",target):service.get("qms_deviation","qms:deviation:view",target)),traces.currentTraceId());}
  @PutMapping("/deviations/{id}")
- public ApiResponse<?> updateDeviations(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.deviationAction(target,"update",body,version,key),traces.currentTraceId());}
+ public ApiResponse<?> updateDeviations(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success((production.productionDeviation(target,"qms:deviation:update")?production.deviationAction(target,"update",body,version,key):service.deviationAction(target,"update",body,version,key)),traces.currentTraceId());}
  @PostMapping("/deviations/{id}/investigate")
- public ApiResponse<?> investigateDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.deviationAction(target,"investigate",body,version,key),traces.currentTraceId());}
+ public ApiResponse<?> investigateDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success((production.productionDeviation(target,"qms:deviation:investigate")?production.deviationAction(target,"investigate",body,version,key):service.deviationAction(target,"investigate",body,version,key)),traces.currentTraceId());}
  @PostMapping("/deviations/{id}/decide")
- public ApiResponse<?> decideDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.deviationAction(target,"decide",body,version,key),traces.currentTraceId());}
+ public ApiResponse<?> decideDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success((production.productionDeviation(target,"qms:deviation:decide")?production.deviationAction(target,"decide",body,version,key):service.deviationAction(target,"decide",body,version,key)),traces.currentTraceId());}
  @PostMapping("/deviations/{id}/close")
- public ApiResponse<?> closeDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.deviationAction(target,"close",body,version,key),traces.currentTraceId());}
+ public ApiResponse<?> closeDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success((production.productionDeviation(target,"qms:deviation:close")?production.deviationAction(target,"close",body,version,key):service.deviationAction(target,"close",body,version,key)),traces.currentTraceId());}
  @GetMapping("/quality/signature-evidence/{signatureId}")
  public ApiResponse<?> getIncomingSignatureEvidence(@PathVariable("signatureId") String target){return ApiResponse.success(service.signatureEvidence(target),traces.currentTraceId());}
 }

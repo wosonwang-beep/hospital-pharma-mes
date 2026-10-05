@@ -28,6 +28,8 @@ public class AttachmentService {
     private final PlatformIdempotencyService keys;
     private final AuditApplicationService audit;
     private final ObjectMapper json;
+    @org.springframework.beans.factory.annotation.Autowired
+    private org.springframework.beans.factory.ObjectProvider<AttachmentAccessPolicy> accessPolicies;
     public AttachmentService(AttachmentMapper mapper,CurrentPlatformContextResolver contexts,
         PlatformIdempotencyService keys,AuditApplicationService audit,ObjectMapper json){
         this.mapper=mapper;this.contexts=contexts;this.keys=keys;this.audit=audit;this.json=json;
@@ -56,8 +58,31 @@ public class AttachmentService {
             UUID.randomUUID().toString(),c.requestId(),AuditSource.API,key));
         keys.complete(decision.handle(),200,body,"Attachment",result.id());return result;
     }
-    public Metadata get(String id){var c=require("attachment:view");return readMetadata(c.organizationId(),id(id));}
-    public Download download(String id){var c=require("attachment:view");return readContent(c.organizationId(),id(id));}
+    public Metadata get(String id){long fileId=id(id);var c=readContext(fileId);return readMetadata(c.organizationId(),fileId);}
+    /** Business-generated evidence participates in its owner's transaction; it is never an upload permission bypass. */
+    @Transactional(propagation=org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public Metadata createGenerated(CurrentPlatformContext owner,String submittedName,String submittedType,byte[] content){
+        var c=require("ebr:pdf:generate");
+        if(c.organizationId()!=owner.organizationId()||c.actorId()!=owner.actorId())
+            throw new PermissionException("PERMISSION_DENIED","Generated evidence must belong to the authenticated owner");
+        Objects.requireNonNull(content,"file");AttachmentRules.validateSize(content.length);
+        var row=new AttachmentEntity();row.setOrgId(c.organizationId());row.setUploadedBy(c.actorId());
+        row.setUploadedAt(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MILLIS));
+        row.setFileName(AttachmentRules.fileName(submittedName));row.setMediaType(AttachmentRules.mediaType(submittedType));
+        row.setByteLength((long)content.length);row.setSha256(AttachmentRules.digest(content));row.setContent(content.clone());
+        row.setRecordVersion(1L);row.setRetentionStatus("RETAINED");mapper.insert(row);
+        Metadata result=metadata(row);
+        audit.append(new AuditCommand(c.organizationId(),c.actorId(),c.roleSnapshot(),"ATTACHMENT_GENERATED",
+            "Attachment",result.id(),null,PlatformIdempotencyService.digest(encode(result)),"eBR evidence archive",null,
+            result.uploadedAt(),UUID.randomUUID().toString(),c.requestId(),AuditSource.API,null));
+        return result;
+    }
+    public Download download(String id){long fileId=id(id);var c=readContext(fileId);return readContent(c.organizationId(),fileId);}
+    private CurrentPlatformContext readContext(long fileId){
+        var c=contexts.current();
+        if(c.hasPermission("attachment:view")||(accessPolicies!=null&&accessPolicies.orderedStream().anyMatch(p->p.mayRead(c,fileId))))return c;
+        throw new PermissionException("PERMISSION_DENIED","Permission required for the source attachment");
+    }
     /** Internal query contract: the owning consumer verifies its resource permission/association. */
     public Metadata readMetadata(long org,long id){return metadata(find(org,id));}
     public Metadata requireLinkable(CurrentPlatformContext c,long id){

@@ -15,4 +15,5 @@ public final class ProductionRules {
  }
  public static String release(String state){requireDraft(state);return "RELEASED";}
  public static String startBatch(String state){if(!"RELEASED".equals(state))throw new StateTransitionException("INVALID_BATCH_STATE","Batch is not released");return "IN_PROGRESS";}
+ public static String finishedQaDecision(String state,String decision,boolean superseding){gate(java.util.Set.of("RELEASED","REJECTED").contains(decision),"FINISHED_DECISION_INVALID","Controlled QA decision required");gate(superseding?java.util.Set.of("QA_RELEASED","REJECTED").contains(state):"PENDING_QA".equals(state),"FINISHED_RELEASE_STATE_CONFLICT","Pending QA or explicit predecessor required");return decision.equals("RELEASED")?"QA_RELEASED":"REJECTED";}
 }

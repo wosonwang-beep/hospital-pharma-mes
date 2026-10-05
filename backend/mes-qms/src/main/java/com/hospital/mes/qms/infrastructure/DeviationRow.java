@@ -2,6 +2,9 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.*;
 @TableName("qms_deviation")
 public class DeviationRow extends MutableIncomingRow {
+ private Long productionTestInstanceId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+ public Long getProductionTestInstanceId(){return productionTestInstanceId;} public void setProductionTestInstanceId(Long value){productionTestInstanceId=value;}
  private String deviationNo;
  public String getDeviationNo(){return deviationNo;} public void setDeviationNo(String value){deviationNo=value;}
  private Long mainBatchId;

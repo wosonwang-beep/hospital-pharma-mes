@@ -17,6 +17,7 @@
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-common</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-audit</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-integration</artifactId><version>${project.version}</version></dependency>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-release</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-security</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-system</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>

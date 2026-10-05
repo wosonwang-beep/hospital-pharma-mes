@@ -4,6 +4,8 @@ import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 import java.math.BigDecimal;
 import java.time.*;
 @TableName("prd_main_batch") public class BatchEntity extends ScopedEntity {
+ private Long finishedLotId;
+ public Long getFinishedLotId(){return finishedLotId;} public void setFinishedLotId(Long value){finishedLotId=value;}
  private String batchNo;
  public String getBatchNo(){return batchNo;} public void setBatchNo(String value){batchNo=value;}
  private Long productionOrderId;

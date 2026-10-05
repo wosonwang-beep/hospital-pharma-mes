@@ -20,7 +20,7 @@ public class ScopedStore<E extends ScopedEntity> {
         }
     }
     public static RuntimeException translateConcurrency(RuntimeException ex){
-        for(Throwable cause=ex;cause!=null;cause=cause.getCause())if(cause instanceof java.sql.SQLException sql && (sql.getErrorCode()==1020 || "40001".equals(sql.getSQLState())))return new ResourceConflictException("CONCURRENT_MODIFICATION","Concurrent record change; reload and retry");
+        for(Throwable cause=ex;cause!=null;cause=cause.getCause())if(cause instanceof java.sql.SQLException sql && (sql.getErrorCode()==1020 || sql.getErrorCode()==1205 || "40001".equals(sql.getSQLState())))return new ResourceConflictException("CONCURRENT_MODIFICATION","Concurrent record change; reload and retry");
         return ex;
     }
     public record PageData<T>(List<T> items,long total,int page,int size){}

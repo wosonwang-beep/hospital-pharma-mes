@@ -2,6 +2,15 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.*;
 @TableName("qms_sample")
 public class SampleRow extends MutableIncomingRow {
+ private Long productionPlanId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+ public Long getProductionPlanId(){return productionPlanId;} public void setProductionPlanId(Long value){productionPlanId=value;}
+ private Long qcSpecificationVersionId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+ public Long getQcSpecificationVersionId(){return qcSpecificationVersionId;} public void setQcSpecificationVersionId(Long value){qcSpecificationVersionId=value;}
+ private String sourceRef;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+ public String getSourceRef(){return sourceRef;} public void setSourceRef(String value){sourceRef=value;}
  private String sampleNo;
  public String getSampleNo(){return sampleNo;} public void setSampleNo(String value){sampleNo=value;}
  private String sampleScope;
