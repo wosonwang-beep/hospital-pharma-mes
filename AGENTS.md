@@ -1,6 +1,6 @@
 # Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.16` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.17` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
 ## Low-token task startup
 
@@ -34,7 +34,7 @@ Do not scan the whole repository or read all `docs/`/baseline artifacts by defau
 
 - The approved global visual baseline is [`docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`](docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md), and approved business page structures are [`docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md`](docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md).
 - Every new or substantially modified Vue business page must inherit the Global UI Design System and explicitly select exactly one T1–T6 page template. Do not invent a new business page structure, module-specific visual language, font/color/spacing system, or ad-hoc CRUD layout. If T1–T6 cannot represent the page without changing business meaning, stop with `DESIGN CHANGE REQUIRED`.
-- The UI baseline is subordinate to FINAL BASELINE v1.0.15 and approved DCPs for business fields, states, permissions, routes, APIs, workflows and GxP controls. Visual work must never change those contracts implicitly.
+- The UI baseline is subordinate to FINAL BASELINE v1.0.17 and approved DCPs for business fields, states, permissions, routes, APIs, workflows and GxP controls. Visual work must never change those contracts implicitly.
 
 ## Context and token control
 

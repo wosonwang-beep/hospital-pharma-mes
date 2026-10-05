@@ -1,6 +1,12 @@
 import {describe,it,expect} from 'vitest'
-import {commandBody,schemas,initial,selectSigningTarget,reviewResultIds,referenceRows} from './incomingModel'
+import {commandBody,schemas,initial,selectSigningTarget,reviewResultIds,referenceRows,serverAllows} from './incomingModel'
 describe('Incoming controlled command forms',()=>{
+ it('fails closed without server actions and never infers actions from status',()=>{
+  expect(serverAllows({status:'DRAFT'},'submit')).toBe(false)
+  expect(serverAllows({allowedActions:[]},'submit')).toBe(false)
+  expect(serverAllows({allowedActions:['submit']},'submit')).toBe(true)
+  expect(serverAllows({allowedActions:['submit']},'accept')).toBe(false)
+ })
  it('preserves inert original JSON data and rejects executable expressions or arrays',()=>{
   expect(commandBody({type:'object',additionalProperties:true},'{"readings":[1,2],"note":"original"}')).toEqual({readings:[1,2],note:'original'})
   expect(()=>commandBody({type:'object',additionalProperties:true},'window.alert(1)')).toThrow()
@@ -21,6 +27,12 @@ describe('Incoming controlled command forms',()=>{
   expect(selectSigningTarget(targets,'release-decisions','REJECTED')?.meaning).toBe('REJECT')
   expect(selectSigningTarget(targets,'results')).toBeUndefined()
   expect(reviewResultIds({items:[{executions:[{revisions:[{id:'10'},{id:'11'}]},{revisions:[{id:'12'}]}]}]})).toEqual(['11','12'])
+ })
+ it('shows order/batch numbers while submitting exact source identities',()=>{
+  const order={id:'41',orderNo:'PO-2026-041',status:'DRAFT'}
+  const option=referenceRows('productionOrderId',[order])[0]!
+  expect(option.value).toBe('41');expect(option.label).toBe('PO-2026-041 · 草稿');expect(option.record).toBe(order)
+  expect(referenceRows('mainBatchId',[{id:'42',batchNo:'MB-2026-042'}])[0]!.label).toBe('MB-2026-042')
  })
  it('builds references from controlled facts rather than free-form IDs',()=>{
   expect(referenceRows('resultRevisionIds',[{items:[{executions:[{revisions:[{id:'10',resultConclusion:'FAIL'},{id:'11',resultConclusion:'FAIL'}]}]}]}]).map(x=>x.value)).toEqual(['11'])

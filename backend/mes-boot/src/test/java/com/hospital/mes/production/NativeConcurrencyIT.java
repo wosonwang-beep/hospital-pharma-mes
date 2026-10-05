@@ -121,6 +121,39 @@ class NativeConcurrencyIT extends IncomingProductionIT {
             return new Race(a,b,ae,be);
         }finally{proceed.countDown();pool.shutdownNow();assertThat(pool.awaitTermination(5,TimeUnit.SECONDS)).isTrue();}
     }
+    @Test void equipmentIdentityIsExclusiveAcrossDifferentOrdersAndResume() throws Exception {
+        var firstBatch=startActualBatch(releasedBatch());batchId=id(firstBatch);
+        String firstUnit=firstBatch.path("executionUnits").get(0).path("id").asText();
+        suffix=UUID.randomUUID().toString().replace("-", "").substring(0,12);
+        var secondBatch=releasedBatch();
+        String formula=productionQuery.batch(1,Long.parseLong(id(secondBatch))).snapshot().path("process").path("formula").path("items").get(0).path("formulaItemId").asText();
+        stock.reserve(id(secondBatch),body("items",List.of(Map.of("formulaItemId",formula,"materialLotId",lot,"reservedQty","3","unitId",unit)),"reason","Unique occupancy reservation"),token(secondBatch),key());
+        var issue=stock.createIssue(body("mainBatchId",id(secondBatch),"issueNo","EQ_ISSUE_"+suffix,"items",List.of(Map.of("formulaItemId",formula,"materialLotId",lot,"issuedQty","3","unitId",unit)),"reason","Unique occupancy issue"),key());
+        stock.confirmIssue(id(issue),body("reason","Fixture issue"),token(issue),key());
+        secondBatch=production.startBatch(id(secondBatch),body("reason","Fixture start"),token(secondBatch),key());
+        String secondUnit=secondBatch.path("executionUnits").get(0).path("id").asText();
+        var a=executionService.operations(firstUnit).getFirst();var b=executionService.operations(secondUnit).getFirst();
+        var equipmentRow=equipment.create(new EquipmentCommands.Create("EXCLUSIVE"+suffix,"Exclusive occupancy fixture","PRODUCTION_IT_SCALE",LocalDate.now(ZoneOffset.UTC).plusDays(30),"Production"),key());
+        for(var op:List.of(a,b))executionService.bindEquipment(id(op),body("equipmentId",id(equipmentRow),"usageRole","PROCESS","reason","Shared equipment identity"),token(op),key());
+        var readyA=executionService.operation(1,Long.parseLong(id(a)));var readyB=executionService.operation(1,Long.parseLong(id(b)));
+        commitFixture();as(author);var actor=actorContext.get();
+        var result=race("SELECT id FROM md_equipment WHERE id=? FOR UPDATE",id(equipmentRow),actor,()->executionService.start(id(a),body("reason","Concurrent first start"),token(readyA),key()),actor,()->executionService.start(id(b),body("reason","Concurrent second start"),token(readyB),key()));
+        assertThat(result.firstError()).isNull();
+        // MariaDB snapshot isolation may reject a current locking read with error 1020.
+        // Both outcomes must fail closed, and a fresh transaction must report the business occupancy gate.
+        assertThat(result.secondError()).isInstanceOfSatisfying(MesException.class,e->assertThat(e.code()).isIn("EQUIPMENT_OCCUPIED","CONCURRENT_MODIFICATION"));
+        as(author);var tx=new TransactionTemplate(transactions);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_equipment_run r JOIN mes_equipment_usage u ON u.id=r.equipment_usage_id WHERE u.equipment_id=? AND r.status='RUNNING'",Long.class,id(equipmentRow))).isEqualTo(1);
+        assertThatThrownBy(()->tx.execute(t->executionService.start(id(b),body("reason","Fresh transaction verifies occupancy gate"),token(readyB),key()))).isInstanceOfSatisfying(MesException.class,e->assertThat(e.code()).isEqualTo("EQUIPMENT_OCCUPIED"));
+        var paused=tx.execute(t->executionService.pause(id(a),body("reason","Release occupancy on pause"),token(result.first()),key()));
+        var other=tx.execute(t->executionService.start(id(b),body("reason","Use released equipment"),token(readyB),key()));
+        assertThatThrownBy(()->tx.execute(t->executionService.resume(id(a),body("reason","Cannot resume while occupied"),token(paused),key()))).isInstanceOfSatisfying(MesException.class,e->assertThat(e.code()).isEqualTo("EQUIPMENT_OCCUPIED"));
+        tx.execute(t->{recordAndSubmitOperationForm(secondUnit);return executionService.complete(id(b),body("reason","Completion releases occupancy"),token(other),key());});
+        var resumed=tx.execute(t->executionService.resume(id(a),body("reason","Resume after completion"),token(paused),key()));
+        tx.execute(t->{recordAndSubmitOperationForm(firstUnit);return executionService.complete(id(a),body("reason","Preserve completed segments"),token(resumed),key());});
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_equipment_run r JOIN mes_equipment_usage u ON u.id=r.equipment_usage_id WHERE u.equipment_id=? AND r.status='RUNNING'",Long.class,id(equipmentRow))).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_equipment_run r JOIN mes_equipment_usage u ON u.id=r.equipment_usage_id WHERE u.equipment_id=? AND r.status='ENDED'",Long.class,id(equipmentRow))).isEqualTo(3);
+    }
     @Test void concurrentOrderAllocationHasOneWinnerAndNoRejectedCommandFacts() throws Exception {
         var draft=namedDraft("20");batchId=id(draft);commitFixture();as(author);var actor=actorContext.get();
         String firstKey=key(),secondKey=key();

@@ -1,0 +1,4 @@
+Requirement,Owner,Producer,Consumer,Test,UI
+WMS-ELG-001,MES-008,wms_material_lot_inventory_decision,MES-008A/011,TC-CLOSURE-FREEZE,UI-WMS-LOT-V
+QMS-IPC-001,MES-012 staged IPC,qms_ipc_instance;qms_ipc_result_revision;qms_ipc_review,MES-010,TC-OP-002/TC-QMS-004,UI-EXEC-W
+MES-OP-001,MES-010,mes_clearance_record;mes_clearance_review,START/RESUME,TC-CLOSURE-CLEARANCE,UI-EXEC-W

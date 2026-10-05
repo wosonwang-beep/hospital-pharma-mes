@@ -585,6 +585,16 @@
               "type": "string",
               "format": "date"
             }
+          },
+          {
+            "name": "productionOrderId",
+            "in": "query",
+            "required": false,
+            "description": "Existing production-order identity filter; approved audit HIGH-05 publication",
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
           }
         ]
       },

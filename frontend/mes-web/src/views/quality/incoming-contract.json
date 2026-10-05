@@ -945,26 +945,44 @@
           "pattern": "^[1-9][0-9]*$"
         },
         "approvedInvestigationId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "submittedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "acceptedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "submittedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "acceptedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -996,7 +1014,8 @@
         "submittedBy",
         "acceptedBy",
         "submittedAt",
-        "acceptedAt"
+        "acceptedAt",
+        "allowedActions"
       ]
     },
     "Sample": {
@@ -1092,13 +1111,17 @@
           "format": "date-time"
         },
         "storageLocation": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "receivedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "signingTargets": {
           "type": "array",
@@ -1107,8 +1130,10 @@
           }
         },
         "receivedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "signatureEvidence": {
           "type": "array",
@@ -1117,8 +1142,18 @@
           }
         },
         "disposalSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1145,7 +1180,8 @@
         "signingTargets",
         "receivedBy",
         "signatureEvidence",
-        "disposalSignatureId"
+        "disposalSignatureId",
+        "allowedActions"
       ]
     },
     "SamplingDetail": {
@@ -1210,6 +1246,14 @@
           "items": {
             "$ref": "#/components/schemas/Sample"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1225,7 +1269,8 @@
         "sampledAt",
         "packageResealed",
         "sampledBy",
-        "samples"
+        "samples",
+        "allowedActions"
       ]
     },
     "SamplingTask": {
@@ -1307,16 +1352,22 @@
           "maxLength": 30
         },
         "assignedTo": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "planSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "completionSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "details": {
           "type": "array",
@@ -1331,20 +1382,32 @@
           }
         },
         "startedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "completedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "signatureEvidence": {
           "type": "array",
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1369,7 +1432,8 @@
         "signingTargets",
         "startedAt",
         "completedAt",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "TestResultRevision": {
@@ -1414,20 +1478,28 @@
           "minimum": 1
         },
         "previousRevisionId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "resultNumeric": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "resultText": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "resultUnitId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "resultConclusion": {
           "type": "string",
@@ -1448,12 +1520,16 @@
           ]
         },
         "dispositionInvestigationId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "reasonForChange": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "recordedBy": {
           "type": "string",
@@ -1472,6 +1548,14 @@
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1495,7 +1579,8 @@
         "recordedBy",
         "recordedAt",
         "signatureId",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "TestExecution": {
@@ -1556,12 +1641,16 @@
           "minimum": 1
         },
         "originalExecutionId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "approvedInvestigationId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "revisions": {
           "type": "array",
@@ -1574,6 +1663,14 @@
           "items": {
             "$ref": "#/components/schemas/SigningTarget"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1591,7 +1688,8 @@
         "originalExecutionId",
         "approvedInvestigationId",
         "revisions",
-        "signingTargets"
+        "signingTargets",
+        "allowedActions"
       ]
     },
     "InspectionItem": {
@@ -1643,22 +1741,30 @@
           ]
         },
         "lowerLimit": {
-          "type": "string",
-          "nullable": true,
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^-?[0-9]{1,12}(\\.[0-9]{1,6})?$"
         },
         "upperLimit": {
-          "type": "string",
-          "nullable": true,
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^-?[0-9]{1,12}(\\.[0-9]{1,6})?$"
         },
         "unitId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "textAcceptanceCriteria": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "methodCode": {
           "type": "string",
@@ -1675,6 +1781,14 @@
           "items": {
             "$ref": "#/components/schemas/TestExecution"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1694,7 +1808,8 @@
         "textAcceptanceCriteria",
         "methodCode",
         "methodVersion",
-        "executions"
+        "executions",
+        "allowedActions"
       ]
     },
     "InspectionTask": {
@@ -1759,12 +1874,16 @@
           "maxLength": 30
         },
         "assignedTo": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "reviewSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "reviewedResultIds": {
           "type": "array",
@@ -1786,29 +1905,45 @@
           }
         },
         "reviewedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "startedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "submittedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "reviewedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "signatureEvidence": {
           "type": "array",
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -1833,7 +1968,8 @@
         "startedAt",
         "submittedAt",
         "reviewedAt",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "ReportItem": {
@@ -1970,12 +2106,16 @@
           "pattern": "^[a-f0-9]{64}$"
         },
         "supersedesReportId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "approvalSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "items": {
           "type": "array",
@@ -1990,28 +2130,44 @@
           }
         },
         "reviewedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "approvedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "reviewedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "approvedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "signatureEvidence": {
           "type": "array",
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -2036,7 +2192,8 @@
         "approvedBy",
         "reviewedAt",
         "approvedAt",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "Deviation": {
@@ -2124,40 +2281,58 @@
           ]
         },
         "investigationSummary": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "decisionCode": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "disposition": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "authorizedRetestCount": {
-          "type": "integer",
-          "nullable": true
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "decisionSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "selectedResultRevisionId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "originalResultDisposition": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "closeSignatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "closeReason": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "signingTargets": {
           "type": "array",
@@ -2166,28 +2341,44 @@
           }
         },
         "decidedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "closedBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "decidedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "closedAt": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
         },
         "signatureEvidence": {
           "type": "array",
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -2219,7 +2410,8 @@
         "closedBy",
         "decidedAt",
         "closedAt",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "ReleaseDecision": {
@@ -2253,8 +2445,10 @@
           "pattern": "^[1-9][0-9]*$"
         },
         "inspectionReportId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "decision": {
           "type": "string",
@@ -2286,26 +2480,38 @@
           "maxLength": 1000
         },
         "decisionBy": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "decisionAt": {
           "type": "string",
           "format": "date-time"
         },
         "signatureId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "supersedesDecisionId": {
-          "type": "string",
-          "nullable": true
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "ruleEvidence": {
-          "nullable": true,
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/components/schemas/RuleEvidence"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/RuleEvidence"
+                }
+              ]
+            },
+            {
+              "type": "null"
             }
           ]
         },
@@ -2319,6 +2525,14 @@
           "items": {
             "$ref": "#/components/schemas/SignatureEvidenceMetadata"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -2339,7 +2553,8 @@
         "supersedesDecisionId",
         "ruleEvidence",
         "evidenceDigest",
-        "signatureEvidence"
+        "signatureEvidence",
+        "allowedActions"
       ]
     },
     "GateReason": {
@@ -2429,6 +2644,14 @@
           "items": {
             "$ref": "#/components/schemas/SigningTarget"
           }
+        },
+        "allowedActions": {
+          "type": "array",
+          "readOnly": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Server-derived existing command availability; intersect with existing permission and revalidate on command. Missing/empty fail closed."
         }
       },
       "required": [
@@ -2442,7 +2665,8 @@
         "investigations",
         "decisions",
         "evidenceDigest",
-        "signingTargets"
+        "signingTargets",
+        "allowedActions"
       ]
     },
     "SampleLabel": {

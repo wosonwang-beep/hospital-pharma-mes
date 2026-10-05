@@ -4,6 +4,8 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
+- Current approved audit HIGH closure: user explicitly approved DCP-AUDIT-HIGH-QUERY-ACTIONS-OCCUPANCY-001 on 2026-10-05. Cumulative v1.0.17 is authoritative after cross-document consistency PASS. Scope: existing productionOrderId query, incoming read allowedActions and exclusive active equipment occupancy. [Current contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/00_AUDIT_HIGH_CONTRACT_V1.0.17.md). No schema/migration, new permission/route/state, signature or QA release-rule change. Global UI V2 and T1–T6 are unchanged. All earlier entries below are preserved approval history; the current authoritative pointer takes precedence.
+
 - Current authorized completion: user approved DCP-MES-012-013-CONTRACT-001 on 2026-10-04; reviewed cumulative v1.0.16 is authoritative after 2026-10-05 consistency review. Production quality, material balance, finished QA/archive and narrow producer/consumer extensions are authorized. v1.0.15 remains immutable historical authority; runtime completion is not inferred. Read [current contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/00_MES_012_013_COMPLETION_CONTRACT_V1.0.16.md).
 
 - Approved bounded functional closure: user explicitly replied “批准方案” on 2026-10-04 for [DCP-MES-008-011-FUNCTIONAL-CLOSURE-001](development/DCP-MES-008-011-FUNCTIONAL-CLOSURE-001-PROPOSED.md). Inventory decisions, controlled clearance and only the staged MES-012 IPC producer are authorized. v1.0.15 is now the authoritative cumulative release after cross-document consistency review. The user separately approved the one-time failed V024 recovery; migration and scoped native verification passed. Original failure evidence and bounded approval are retained in [recovery/acceptance evidence](acceptance/functional-closure/RECOVERY-2026-10-04.md); no general authorization to rewrite migration history is implied.
@@ -14,9 +16,9 @@ This document is the compact, stable entry point for product and engineering con
 
 - Current approved bounded change: DCP-MES-007-008-SEQUENCING-001; explicit approval 2026-10-03, staged eBR/WMS, delayed FKs and receipt PUT; v1.0.8 preserved.
 
-- Authoritative design: `FINAL BASELINE COMPLETE v1.0.16`.
-- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/).
-- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.16.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/00_MANIFEST_FINAL_FROZEN_V1.0.16.md).
+- Authoritative design: `FINAL BASELINE COMPLETE v1.0.17`.
+- Release directory: [`releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/).
+- Frozen manifest: [`00_MANIFEST_FINAL_FROZEN_V1.0.17.md`](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/00_MANIFEST_FINAL_FROZEN_V1.0.17.md).
 - Current bounded correction: `DCP-MATERIAL-NAMES-UI-001` removes three material name fields from business use and enforces horizontal form labels; v1.0.7 retained, no physical migration.
 - Approved MES-006 bounded completion: `DCP-MES-006-R2-001` (explicit “确认授权”, 2026-10-03); original design retained, v1.0.6 immutable.
 - Approved MES-004/005 bounded change: `DCP-MES-004-005-R2-001` (human approval 2026-10-03); prior v1.0.3 retained.
