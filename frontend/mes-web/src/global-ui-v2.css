@@ -1,0 +1,149 @@
+/* Global UI Design System V2 — Phase 1 visual foundation.
+ * T1–T6 keep their own business structure. No routes/actions/contracts change.
+ * Last global layer also aligns existing scoped views; portal selectors cover dialogs.
+ */
+:root {
+  --mes-ui-font: Inter, system-ui, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --mes-ui-primary: #1677ff;
+  --mes-ui-success: #279b62;
+  --mes-ui-warning: #d48806;
+  --mes-ui-danger: #cf3444;
+  --mes-ui-text: #20324d;
+  --mes-ui-secondary: #617189;
+  --mes-ui-border: #e2e8f0;
+  --mes-ui-background: #f3f6fa;
+  --mes-ui-surface: #ffffff;
+  --mes-ui-radius: 8px;
+  --mes-ui-body-size: 14px;
+  --mes-ui-control-height: 34px;
+  --mes-ui-sidebar-width: 228px;
+  --mes-ui-header-height: 56px;
+  --mes-ui-space-1: 4px;
+  --mes-ui-space-2: 8px;
+  --mes-ui-space-3: 12px;
+  --mes-ui-space-4: 16px;
+  --mes-ui-space-5: 20px;
+  --mes-ui-space-6: 24px;
+  --mes-ui-space-8: 32px;
+  font-family: var(--mes-ui-font);
+  color: var(--mes-ui-text);
+  background: var(--mes-ui-background);
+}
+#app { font-family: var(--mes-ui-font); color: var(--mes-ui-text); }
+#app .shell { padding-top: var(--mes-ui-header-height); }
+#app .sidebar {
+  top: var(--mes-ui-header-height);
+  background: #f9fbfe !important;
+  border-right: 1px solid var(--mes-ui-border);
+}
+#app .brand {
+  width: var(--mes-ui-sidebar-width); height: var(--mes-ui-header-height);
+  background: var(--mes-ui-surface); color: var(--mes-ui-text);
+  padding: 0 var(--mes-ui-space-5); font-size: 17px;
+  border-right: 1px solid var(--mes-ui-border);
+  border-bottom: 1px solid var(--mes-ui-border);
+}
+#app .brand-mark { background: var(--mes-ui-primary); color: #fff; border-radius: var(--mes-ui-radius); }
+#app .brand-collapsed { width: 80px; padding: 0; }
+#app .nav { background: #f9fbfe !important; padding: var(--mes-ui-space-4) var(--mes-ui-space-2) 0; }
+#app .nav .ant-menu-item { color: var(--mes-ui-text); border-radius: var(--mes-ui-radius); font-size: 14px; height: 40px; line-height: 40px; }
+#app .nav .ant-menu-item:hover { color: var(--mes-ui-primary) !important; background: #eaf2ff !important; }
+#app .nav .ant-menu-item-selected { background: var(--mes-ui-primary) !important; color: #fff !important; }
+#app .nav .ant-menu-item-selected:hover { color: #fff !important; }
+#app .sidebar.ant-layout-sider-collapsed .ant-menu-title-content { display: block; font-size: 0; }
+#app .sidebar.ant-layout-sider-collapsed .ant-menu-item { padding-inline: 0 !important; text-align: center; }
+#app .sidebar.ant-layout-sider-collapsed .ant-menu-title-content .anticon { font-size: 16px; margin: 0; }
+#app .main-shell { margin-left: var(--mes-ui-sidebar-width); }
+#app .main-shell-collapsed { margin-left: 80px; }
+#app .header {
+  left: var(--mes-ui-sidebar-width); height: var(--mes-ui-header-height);
+  line-height: normal; background: var(--mes-ui-surface) !important;
+  color: var(--mes-ui-text); padding: 0 var(--mes-ui-space-6) !important;
+  border-bottom: 1px solid var(--mes-ui-border);
+}
+#app .header-collapsed { left: 80px; }
+#app .header-title { color: var(--mes-ui-text); gap: var(--mes-ui-space-3); }
+#app .sidebar-trigger, #app .mobile-navigation { color: var(--mes-ui-text) !important; }
+#app .environment-chip { color: var(--mes-ui-secondary); border-color: var(--mes-ui-border); font-size: 12px; line-height: 20px; padding: 2px 8px; }
+#app .user { color: var(--mes-ui-secondary); font-size: 13px; }
+#app .user .ant-avatar { color: var(--mes-ui-primary); background: #eaf2ff; }
+#app .header-link { color: var(--mes-ui-secondary); font: inherit; padding: 4px; }
+#app .header-link:hover { color: var(--mes-ui-primary); }
+#app .status-dot { background: var(--mes-ui-success); box-shadow: none; }
+#app .content { padding: var(--mes-ui-space-6); background: var(--mes-ui-background); min-width: 0; }
+#app .ant-breadcrumb { font-size: 12px; color: var(--mes-ui-secondary); margin-bottom: var(--mes-ui-space-3); }
+#app :is(.admin-page,.platform-page) { color: var(--mes-ui-text); font-size: var(--mes-ui-body-size); }
+#app :is(.admin-page-header,.page-heading) {
+  border: 1px solid var(--mes-ui-border); border-radius: var(--mes-ui-radius);
+  padding: var(--mes-ui-space-4) var(--mes-ui-space-5); margin-bottom: var(--mes-ui-space-4);
+  background: var(--mes-ui-surface); box-shadow: none;
+}
+#app :is(.admin-page-header,.page-heading,.master-page) h1 { font-size: 22px; line-height: 30px; font-weight: 650; color: var(--mes-ui-text); }
+#app :is(.admin-page-header,.page-heading) p { font-size: 13px; line-height: 20px; color: var(--mes-ui-secondary); }
+#app :is(.query-card,.result-card,.form-section,.admin-card,.data-card,.metric-card,.state-card,.service-panel,.hero-panel,.ant-card) {
+  border-color: var(--mes-ui-border); border-radius: var(--mes-ui-radius);
+  box-shadow: none; background: var(--mes-ui-surface);
+}
+#app .ant-card-head { padding-inline: var(--mes-ui-space-5); min-height: 48px; color: var(--mes-ui-text); border-bottom-color: var(--mes-ui-border); }
+#app .ant-card-head-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--mes-ui-text); }
+#app .ant-card-head-title::before { background: var(--mes-ui-primary); }
+#app .ant-card-body { padding: var(--mes-ui-space-4) var(--mes-ui-space-5); }
+#app :is(.ant-btn,.secondary-button,.primary-button) { min-height: 32px; font-size: 14px; border-radius: 6px; box-shadow: none; }
+#app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous) { background: var(--mes-ui-primary); border-color: var(--mes-ui-primary); }
+#app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous):hover { background: #4096ff; border-color: #4096ff; }
+#app .ant-btn-link { color: var(--mes-ui-primary); }
+#app .ant-btn-dangerous:not(.ant-btn-primary) { color: var(--mes-ui-danger); }
+#app :is(.query-form,.master-form,.detail-form) { gap: var(--mes-ui-space-4) var(--mes-ui-space-6); }
+#app :is(.query-form label,.master-form>label,.form-inline-row) { color: var(--mes-ui-secondary); font-size: 14px; }
+#app .query-form label { flex-direction: row; flex-wrap: nowrap; align-items: center; }
+#app .master-form>label, #app .form-inline-row { align-items: center; }
+#app :is(.master-native-input,.ant-input,.ant-input-affix-wrapper,.ant-select-selector) { border-radius: 6px !important; border-color: var(--mes-ui-border); font-size: 14px; color: var(--mes-ui-text); }
+#app .master-native-input { min-height: var(--mes-ui-control-height); margin-top: 0; }
+#app .master-native-input:focus { outline: 2px solid #91caff; outline-offset: 1px; border-color: var(--mes-ui-primary); box-shadow: none; }
+#app .form-field-label { font-size: 14px; color: var(--mes-ui-secondary); }
+#app .master-read-value { color: var(--mes-ui-text); }
+#app .ant-table { color: var(--mes-ui-text); font-size: 14px; }
+#app .ant-table-thead>tr>th { color: var(--mes-ui-secondary); background: #f7f9fc; font-size: 13px; padding: 10px 12px; border-color: var(--mes-ui-border); }
+#app .ant-table-tbody>tr>td { font-size: 13px; padding: 10px 12px; border-color: var(--mes-ui-border); }
+#app .ant-table-tbody .ant-btn { font-size: 13px; }
+#app .table-footer { color: var(--mes-ui-secondary); font-size: 12px; }
+#app .contract-strip :is(span,strong) { font-size: 12px; }
+#app .ant-alert { border-radius: var(--mes-ui-radius); }
+#app :is(.section-hint,.action-hint,.gate-description p,.digest,.hash,.gate-card>.ant-tag,.gate-card>.ant-btn,.evidence-tabs button,.evidence-link) { font-size: 12px; line-height: 18px; }
+#app .gate-description strong { font-size: 14px; line-height: 20px; }
+#app .qa-page .ant-descriptions-item-label { font-size: 13px; color: var(--mes-ui-secondary); }
+#app .qa-page .ant-descriptions-item-content { font-size: 13px; color: var(--mes-ui-text); }
+#app .gate-progress strong { color: var(--mes-ui-success); }
+#app .gate-card .pass { color: var(--mes-ui-success); }
+#app .gate-card .blocked { color: var(--mes-ui-warning); }
+#app .evidence-tabs button.active { border-bottom-color: var(--mes-ui-primary); color: var(--mes-ui-primary); }
+/* Portaled regulated forms retain horizontal labels and the same tokens. */
+.ant-modal, .ant-drawer { font-family: var(--mes-ui-font); color: var(--mes-ui-text); }
+.ant-drawer-content-wrapper { max-width: 100vw; }
+.ant-modal :is(.form-field-label,.master-native-input) { font-size: 14px; color: var(--mes-ui-text); }
+.ant-modal .master-form>label { align-items: center; }
+.ant-modal .master-native-input { margin-top: 0; min-height: var(--mes-ui-control-height); }
+.ant-modal .master-form>label:has(textarea) { align-items: start; }
+.ant-modal :is(.master-form,.detail-form) { gap: var(--mes-ui-space-4); }
+@media(max-width:1100px) {
+  #app .header .user { gap: 8px; }
+  #app .header .environment-chip { display: none; }
+}
+@media(max-width:900px) {
+  #app .main-shell, #app .main-shell-collapsed { margin-left: 0; }
+  #app .header, #app .header-collapsed { left: 0; padding-inline: var(--mes-ui-space-4) !important; }
+  #app .brand { display: none; }
+  #app .content { padding: var(--mes-ui-space-4); }
+  #app .master-form>label, #app .form-inline-row { grid-template-columns:110px minmax(0,1fr); gap:12px; }
+  #app .master-form, #app .detail-form { grid-template-columns:1fr; }
+}
+@media(max-width:560px) {
+  #app .content { padding: var(--mes-ui-space-3); }
+  #app :is(.admin-page-header,.page-heading) { padding:16px; }
+  #app :is(.admin-page-header,.page-heading,.master-page) h1 { font-size:20px; line-height:28px; }
+  #app .ant-card-head { padding-inline:16px; }
+  #app .ant-card-body { padding:16px; }
+  #app .form-field-label { font-size:13px; }
+  .ant-modal .master-form>label { grid-template-columns:110px minmax(0,1fr); gap:12px; }
+  .ant-modal .form-field-label { font-size:13px; }
+}

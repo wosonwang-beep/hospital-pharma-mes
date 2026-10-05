@@ -31,7 +31,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
 
 <template>
   <a-layout class="shell">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible width="268" theme="light" class="sidebar">
+    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible width="228" theme="light" class="sidebar">
       <div class="brand" :class="{ 'brand-collapsed': collapsed }">
         <span class="brand-mark">+</span><span>{{ collapsed ? '' : '医院制剂 MES' }}</span>
       </div>

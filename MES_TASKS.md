@@ -325,3 +325,13 @@ The user explicitly replied “确认验收” to the joint MES-012 / MES-013 cl
 ## QA page presentation refinement — 2026-10-05
 
 User supplied the selected screenshot and requested “调整 QA 批放行审核页面”. Scoped UI-QA-V / UI-REL-W presentation updated: compact checklist, batch/Gate banner, summary/actions, PDF history and derived evidence directory. No fields/API/permission/state/migration change; FINAL remains after QA decision. Typecheck and14 existing direct mock-browser cases PASS; final2 responsive/filter/original-fact cases PASS. [UI refinement review](docs/acceptance/mes-013/ui-refinement-2026-10-05/REVIEW.md). MES-012/013 ACCEPTED remains unchanged; no new human acceptance inferred, no next task started.
+
+
+## Global UI V2 Phase 1 readiness — 2026-10-05
+
+User explicitly approved global visual foundations only: Shell, typography, palette, spacing, cards and forms; preserve business layouts. Phase 1 is READY FOR ACCEPTANCE after frontend build/typecheck,20 existing targeted desktop/mobile browser cases and4 final new foundation cases PASS. Actual Vue pages were rendered in Chromium with API fixtures;11 final screenshots saved. Expanded sidebar228px/header56px, horizontal labels, mobile evidence drawer and collapsed icons verified. No business/database/API/permission/GxP contract change, no migration, no native database writes, no commit/push. [Phase 1 report](docs/acceptance/ui-v2-phase-1/REPORT.md). Inherited LOW bundle-size warning remains. Existing accepted MES statuses remain unchanged. Phase 2 NOT STARTED; STOP after this phase.
+
+
+## Global UI V2 Phase 1 human acceptance — 2026-10-05
+
+The user replied “确认” to the Phase 1 readiness report. Global UI V2 Phase 1 is ACCEPTED. Previous verification and screenshots remain evidence; no new test result, product-code change or commit/push is implied. Phase 2 NOT STARTED.
