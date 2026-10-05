@@ -335,3 +335,18 @@ User explicitly approved global visual foundations only: Shell, typography, pale
 ## Global UI V2 Phase 1 human acceptance — 2026-10-05
 
 The user replied “确认” to the Phase 1 readiness report. Global UI V2 Phase 1 is ACCEPTED. Previous verification and screenshots remain evidence; no new test result, product-code change or commit/push is implied. Phase 2 NOT STARTED.
+
+
+## Global UI V2 Phase 1.1 visual refinement readiness — 2026-10-05
+
+User explicitly scoped FIX-01..04 only. Phase 1.1 READY FOR ACCEPTANCE: Material T1 query120px/natural responsive height, compact empty table; T2 form max1100px/mobile labels95px; Chinese recursive QA evidence labels retain original facts; FINAL PDF separated as post-decision archive per v1.0.16/DCP §5, server Gate count/progress unchanged. Typecheck,15 affected frontend tests,24 targeted Chromium cases and build PASS; current-run before/after screenshots saved and inspected. [Report](docs/acceptance/ui-v2-phase-1.1/REPORT.md). Business/API/DTO/state/permission/signature/database/baseline unchanged; no migration, no native business write, no commit/push. Scoped CRITICAL0/HIGH0; inherited LOW bundle warning. Phase 1 and existing MES ACCEPTED statuses unchanged. Phase 2 NOT STARTED; no new MES task. STOP.
+
+
+## QA screenshot reference refinement readiness — 2026-10-05
+
+User requested QA page follow the newly attached image. T6 presentation READY FOR ACCEPTANCE: compact header/checklist, summary/actions, parallel PDF history/evidence, Chinese status and category icons. Final PDF remains a labelled post-decision step inside PDF history under v1.0.16/DCP; no fictitious seventh Gate, product facts/photo or unauthorized Edit action. Typecheck/7 related frontend tests/build PASS;18 related desktop/mobile browser cases PASS,6 affected status/icon and4 final column-width cases PASS. [Latest QA visual report/screenshots](docs/acceptance/qa-reference-refinement/REPORT.md). Existing business script unchanged except visual imports; no backend/database/API/DTO/permission/state/signature/baseline change. Scoped CRITICAL0/HIGH0; inherited LOW bundle warning. Prior Phase1.1 evidence and user-owned configurations retained, no commit/push, no Phase2/new MES task or implicit acceptance.
+
+
+## QA batch summary border refinement — 2026-10-05
+
+User scoped batch-summary border only. Light1px outer/header border; remove inherited duplicate table rules, retain one light separator per row and none after final row. CSS only; no business/schema changes.2 targeted desktop/mobile Chromium cases PASS,14.2s; screenshots and note in docs/acceptance/qa-reference-refinement/REPORT.md. READY FOR ACCEPTANCE; prior accepted MES tasks unchanged, no Phase2/commit/push.

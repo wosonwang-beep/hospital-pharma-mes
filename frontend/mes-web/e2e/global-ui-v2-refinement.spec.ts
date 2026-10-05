@@ -1,9 +1,9 @@
 import {test,expect,type Page} from '@playwright/test'
-import {mkdirSync} from 'node:fs'
+import {mkdirSync,writeFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 // Browser plugin not available: use repository Chromium to render the real Vue app.
 // Only API responses are mocked; no runtime/auth bypass or business writes are introduced.
-const output=resolve('../../docs/acceptance/ui-v2-phase-1/screens')
+const output=resolve('../../docs/acceptance/ui-v2-phase-1.1/screens/after')
 mkdirSync(output,{recursive:true})
 const perms=['master:material:view','master:material:create','master:material:update','qa:release','qa:batch-review','ebr:form:view','ebr:pdf:generate']
 async function fixture(page:Page){
@@ -22,15 +22,25 @@ test('V2 shell and independent T1/T2 visual foundation',async({page,isMobile})=>
  const errors=await fixture(page);await page.goto('/master/materials');await expect(page.getByRole('heading',{name:'物料主数据'})).toBeVisible();await noOverflow(page)
  const metrics=await page.evaluate(()=>{const header=document.querySelector('.header')!,title=document.querySelector('h1')!,card=document.querySelector('.query-card')!;return {header:header.getBoundingClientRect().height,title:getComputedStyle(title).fontSize,radius:getComputedStyle(card).borderRadius,background:getComputedStyle(header).backgroundColor}})
  expect(metrics.header).toBe(56);expect(metrics.title).toBe(isMobile?'20px':'22px');expect(metrics.radius).toBe('8px');expect(metrics.background).toBe('rgb(255, 255, 255)')
+ const density=await page.evaluate(()=>({queryHeight:document.querySelector('.query-card')!.getBoundingClientRect().height,emptyHeight:document.querySelector('.ant-table-placeholder')!.getBoundingClientRect().height,columns:getComputedStyle(document.querySelector('.query-form')!).gridTemplateColumns.split(' ').length}))
+ if(!isMobile){expect(density.queryHeight).toBeGreaterThanOrEqual(110);expect(density.queryHeight).toBeLessThanOrEqual(125);expect(density.columns).toBe(4)}else expect(density.columns).toBe(1)
+ expect(density.emptyHeight).toBeLessThan(120)
+ writeFileSync(resolve(output,`metrics-${test.info().project.name}.json`),JSON.stringify(density,null,2))
  await capture(page,'t1-material-query')
  if(!isMobile){await expect(page.locator('.sidebar')).toHaveCSS('width','228px');await page.getByRole('button',{name:'折叠侧栏'}).click();await expect(page.locator('.main-shell')).toHaveCSS('margin-left','80px');await noOverflow(page);await expect(page.locator('.sidebar .ant-menu-item-selected .anticon')).toBeVisible();await capture(page,'shell-collapsed');await page.getByRole('button',{name:'展开侧栏'}).click();await expect(page.locator('.main-shell')).toHaveCSS('margin-left','228px')}
  else {await page.getByRole('button',{name:'打开导航'}).click();await expect(page.getByRole('menuitem',{name:/物料主数据/})).toBeVisible();await page.getByRole('menuitem',{name:/物料主数据/}).click();await expect(page.locator('.query-form')).toBeVisible()}
  await page.locator('.query-form input').first().fill('UI核对');await page.getByRole('button',{name:/查\s*询/}).click();await expect(page.locator('.query-form input').first()).toHaveValue('UI核对');await page.getByRole('button',{name:/重\s*置/}).click();await expect(page.locator('.query-form input').first()).toHaveValue('')
- await page.goto('/master/materials/create');await expect(page.locator('.master-form')).toBeVisible();await page.getByLabel('物料名称').fill('视觉基础验证');await pairs(page);await noOverflow(page);await capture(page,'t2-material-form');expect(errors).toEqual([])
+ await page.goto('/master/materials/create');await expect(page.locator('.master-form')).toBeVisible();await page.getByLabel('物料名称').fill('视觉基础验证');await pairs(page);await noOverflow(page);const formMetrics=await page.locator('.form-section>.ant-card-body>.master-form').evaluate(form=>({maxWidth:getComputedStyle(form).maxWidth,columns:getComputedStyle(form).gridTemplateColumns.split(' ').length,labelWidth:form.querySelector('.form-field-label')!.getBoundingClientRect().width}))
+ expect(formMetrics.maxWidth).toBe('1100px');expect(formMetrics.columns).toBe(isMobile?1:2);if(isMobile)expect(formMetrics.labelWidth).toBe(95)
+ const alignment=await page.locator('.master-form>label').evaluateAll(labels=>labels.map(label=>{const control=label.querySelector('input,textarea,.ant-select');return control?.getBoundingClientRect().left}));if(isMobile)expect(new Set(alignment).size).toBe(1)
+ await capture(page,'t2-material-form')
+ if(!isMobile){await page.setViewportSize({width:1680,height:900});await expect(page.locator('.form-section>.ant-card-body>.master-form')).toHaveCSS('max-width','1100px');expect((await page.locator('.form-section>.ant-card-body>.master-form').boundingBox())!.width).toBe(1100);await noOverflow(page);await capture(page,'t2-material-form-wide')}
+ writeFileSync(resolve(output,`form-metrics-${test.info().project.name}.json`),JSON.stringify(formMetrics,null,2));expect(errors).toEqual([])
 })
 test('T6 remains a decision workbench; readable evidence and signed form',async({page})=>{
  const errors=await fixture(page);await page.goto('/qa/batches/41/release');await expect(page.getByRole('heading',{name:'QA 批放行审核'})).toBeVisible();await expect(page.locator('.gate-card')).toHaveCount(6);await noOverflow(page)
+ await expect(page.locator('.gate-progress strong')).toHaveText('6 / 6');await expect(page.locator('.qa-checklist').getByText('最终 eBR PDF',{exact:true})).toHaveCount(0);await expect(page.locator('.post-decision-archive').getByText('最终 eBR PDF',{exact:true})).toBeVisible();await expect(page.getByText('以下为质量决定后的归档工作，不计入放行前 Gate。',{exact:true})).toBeVisible()
  const text=await page.locator('.gate-description p').evaluateAll(nodes=>nodes.map(node=>parseFloat(getComputedStyle(node).fontSize)));expect(text.every(size=>size>=12)).toBe(true);await capture(page,'t6-qa-review')
- await page.getByText('eBR 表单与原始修订（1）',{exact:true}).click();await expect(page.getByText('原始记录',{exact:true})).toBeVisible();await expect.poll(()=>page.locator('.ant-drawer-content-wrapper').evaluate(node=>{const b=node.getBoundingClientRect();return b.left>=0&&b.right<=innerWidth})).toBe(true);await capture(page,'evidence-drawer',false);await page.getByRole('button',{name:'Close',exact:true}).click()
+ await page.getByText('eBR 表单与原始修订（1）',{exact:true}).click();await expect(page.getByText('原始记录',{exact:true})).toBeVisible();await expect(page.getByText('电子批记录表单与原始修订',{exact:true})).toBeVisible();for(const title of ['基本信息','原始记录与修订','复核记录','规则执行记录','电子签名记录'])await expect(page.getByRole('heading',{name:title,exact:true})).toBeVisible();for(const raw of ['form','values','reviews','ruleExecutions','signatures','value'])await expect(page.locator('.qa-evidence-drawer').getByText(raw,{exact:true})).toHaveCount(0);await expect.poll(()=>page.locator('.ant-drawer-content-wrapper').evaluate(node=>{const b=node.getBoundingClientRect();return b.left>=0&&b.right<=innerWidth})).toBe(true);await capture(page,'evidence-drawer',false);await page.getByRole('button',{name:'Close',exact:true}).click()
  await page.getByRole('button',{name:'签名并放行',exact:true}).click();await page.getByLabel('操作原因',{exact:true}).fill('核对展示，不提交业务决定');await page.getByRole('button',{name:'核对并签名'}).click();await expect(page.getByRole('dialog')).toBeVisible();await page.getByLabel('签名密码',{exact:true}).fill('not-submitted');await capture(page,'signature-dialog',false);await page.getByRole('button',{name:/取\s*消/,exact:true}).last().click();await expect(page.getByRole('dialog')).toHaveCount(0);expect(errors).toEqual([])
 })
