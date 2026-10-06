@@ -30,7 +30,8 @@ const navigationGroups=computed(()=>[
  {title:'质量管理',items:[{key:'production-plans-list',title:'生产质量计划',path:'/quality/production-plans',permission:'qms:plan:view'},{key:'production-tests-list',title:'生产检验',path:'/quality/production-tests',permission:'qms:test:view'},{key:'qc-specifications',title:'QC质量标准',path:'/quality/specifications',permission:'qms:specification:view'},{key:'incoming-inspection-requests-list',title:'请验单',path:'/quality/inspection-requests',permission:'qms:inspection-request:view'},{key:'incoming-sampling-tasks-list',title:'取样记录',path:'/quality/sampling-tasks',permission:'qms:sampling:view'},{key:'incoming-samples-list',title:'样品',path:'/quality/samples',permission:'qms:test:view'},{key:'incoming-inspection-tasks-list',title:'检验记录',path:'/quality/inspection-tasks',permission:'qms:test:view'},{key:'incoming-inspection-reports-list',title:'检验报告',path:'/quality/inspection-reports',permission:'qms:report:view'},{key:'incoming-deviations-list',title:'质量调查',path:'/deviations',permission:'qms:deviation:view'}].filter(i=>auth.can(i.permission))},
  {title:'系统管理',items:[{key:'users',title:'用户管理',path:'/admin/users',permission:'iam:user:view'},{key:'roles',title:'角色与权限',path:'/admin/roles',permission:'iam:role:view'},{key:'trace',title:'完整追溯',path:'/trace',permission:'trace:view'},{key:'audit',title:'GMP Audit Trail',path:'/audit',permission:'audit:view'},{key:'integration-operations',title:'Integration Operations',path:'/integration/operations',permission:'integration:view'}].filter(i=>authorization.can(i.permission))}
 ].filter(g=>g.items.length))
-const executionWorkbench = computed(() => route.name === 'execution-execution')
+const batchReference = computed(()=>route.name==='production-batches-view')
+const executionWorkbench = computed(() => route.name === 'execution-execution'||batchReference.value)
 
 function navigate({ key }: { key: string }) {
   void router.push({ name: key })
@@ -39,7 +40,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
 </script>
 
 <template>
-  <a-layout class="shell" :class="{'execution-desktop-shell':executionWorkbench}">
+  <a-layout class="shell" :class="{'execution-desktop-shell':executionWorkbench,'batch-reference-shell':batchReference}">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible :width="executionWorkbench?180:228" theme="light" class="sidebar">
       <div class="brand" :class="{ 'brand-collapsed': collapsed }">
         <span class="brand-mark">+</span><span>{{ collapsed ? '' : '医院制剂 MES' }}</span>
@@ -66,7 +67,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
             <MenuUnfoldOutlined v-if="collapsed" />
             <MenuFoldOutlined v-else />
           </a-button>
-          <a-breadcrumb v-if="executionWorkbench" class="execution-header-breadcrumb"><a-breadcrumb-item>首页</a-breadcrumb-item><a-breadcrumb-item>生产管理</a-breadcrumb-item><a-breadcrumb-item>生产执行</a-breadcrumb-item></a-breadcrumb>
+          <a-breadcrumb v-if="executionWorkbench" class="execution-header-breadcrumb"><a-breadcrumb-item>首页</a-breadcrumb-item><a-breadcrumb-item>生产管理</a-breadcrumb-item><a-breadcrumb-item>{{batchReference?'生产批次':'生产执行'}}</a-breadcrumb-item></a-breadcrumb>
           <span>{{ title }}</span><span class="environment-chip">GMP · 验证环境</span>
         </div>
         <div v-if="executionWorkbench" class="execution-header-tools"><a-tooltip title="当前契约未提供全局搜索"><a-input disabled placeholder="搜索工单、批号、物料…" class="execution-header-search"><template #prefix><SearchOutlined/></template></a-input></a-tooltip><a-tooltip title="系统运行正常"><BellOutlined class="execution-system-icon"/></a-tooltip><a-dropdown><a-button type="text" class="execution-user"><a-avatar size="small"><UserOutlined/></a-avatar>{{auth.identity?.displayName}}<DownOutlined/></a-button><template #overlay><a-menu><a-menu-item @click="router.push('/change-password')">改密</a-menu-item><a-menu-item @click="logout">退出</a-menu-item></a-menu></template></a-dropdown></div>
@@ -103,4 +104,5 @@ async function logout() { await auth.logout(); await router.replace('/login') }
  #app .execution-desktop-shell>.main-shell>.content>:deep(.ant-breadcrumb){display:none}
  #app .execution-desktop-shell :deep(.execution-workbench){margin-top:0}
 }
+@media(min-width:901px){#app .batch-reference-shell>.main-shell>.content{padding:12px 14px 12px 18px}}
 </style>

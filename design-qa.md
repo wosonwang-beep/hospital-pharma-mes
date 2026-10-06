@@ -169,3 +169,28 @@ final result: passed (existing-contract PC layout scope; full-image100% fidelity
 T5 direct regression: existing frozen IPC result/signature binding Chromium desktop case PASS9.7s. No full regression.
 
 Pre-commit validation2026-10-06: fresh typecheck PASS; five affected Chromium desktop cases PASS14.3s (MaterialLot chain/trace permission, signed inventory freeze in Inventory tab, T5 selected-record/evidence/commands, frozen IPC signature binding). Existing inventory test navigation updated for owning tab, assertions unchanged. No full regression.
+
+
+## Production Batch T4 reference — 2026-10-06
+
+Target: user attachment700456C0-FBBC-46F7-8059-6E9CBB346C0A; actual Vue route /production/batches/{id}. Both source and capture1280×853, deviceScaleFactor1. Production-in-progress, production-admin context, Basic Information Tab. Actual records differ from illustrative source figures; no pixel-error percentage or identical business-state claim.
+
+**Findings and iteration**
+- [P2, fixed] First capture pushed lifecycle/module cards and the bottom information panel down by roughly30–95px. Replaced inherited broad padding with scoped card/heading/row dimensions. Recapture aligns summary147px, lifecycle296px, modules442px and lower panel622px to the reference region rhythm.
+- [P2, fixed] Additional source-evidence Tabs plus inherited tab gaps hid the reference Related Batch Tab. Kept exactly nine business Tabs; moved frozen snapshot/QA evidence to existing source navigation and a More drawer; corrected sibling-gap selector. Final Chromium proves Related Batch visible.
+- [P1, fixed] Generic OPEN dictionary labelled an unfinished production order as 待调查. Contextual 未完成 presentation now preserves its source status and does not fabricate a completed lifecycle node.
+- [P3, remaining] Reference sidebar182px versus reused approved compact Shell180px; font rasterization and nearest installed library icon forms differ. No unrelated Shell redesign/new font system.
+
+**Five required fidelity surfaces**
+- Typography: inherited V2 system/Segoe UI/Microsoft YaHei stack;22px/700 heading,16px product name,12px small business text; normal and emphasized facts checked in paired crops. Original screenshot font binary unavailable; exact glyph identity not claimed.
+- Layout rhythm: original and rendered images opened; reference and implementation joined in the same full comparison input, plus a focused paired summary/lifecycle/modules input. Three summary columns, connected six nodes, six cards, two-to-one lower split, nine Tabs and compact basic rows inspected. No clipping, overlapping card tracks or page-level horizontal overflow at the target PC viewport.
+- Colors/tokens: quiet white cards, neutral blue-gray canvas, thin borders,8px corners, blue primary and source-driven green/neutral/orange states. Library arrows and completion marks follow source truth. No false green QA release or copied sample progress.
+- Image quality/assets: existing supplied hospital mark and installed icons reused. Reference product photograph is catalogued but excluded from runtime because no approved batch product-image contract exists; the document icon denotes the record, not a photographic substitute. No generated/fake manufacturing or product evidence. Saved reference image is comparison-only.
+- Copy/content: matches aggregate heading and section/Tab hierarchy. Actual COMPLETED operations yield4/6 (67%) instead of illustrative3/5 (60%); reservation record count is not converted into fabricated8/10 fulfillment; balance is current-rule pass count, not invented98.5% yield. Unsupported plan finish/workshop/person/remarks/upload fields explicitly excluded under v1.0.17. Core source actions work and remain permission/state controlled.
+
+**Implementation and interaction checks**
+Reference case final PASS13.5s; Batch T4 source/operation-time/snapshot regression final PASS11.7s; T5 shared navigation/command ownership regression PASS in the focused20.3s group. New case checks counts/latest versions, all nine Tabs, quality source, permitted command owner, permission-filtered read APIs, no console/page errors or overflow. Typecheck and final build PASS11.43s. API fixtures validate presentation; no live database acceptance inferred. PC only. Scope excludes new business contracts and full-image identity; no remaining actionable P0/P1/P2 within that scope.
+
+Evidence: docs/acceptance/batch-reference-2026-10-06/reference.png, batch-pc-1280x853.png, comparison.png, comparison-detail.png, REPORT.md / REPORT.html. The overview capture is unchanged by restoring date columns in the inactive Execution Tab; that Tab was separately verified in the last regression.
+
+final result: passed (existing-contract PC presentation scope; full-image100% identity not claimed)

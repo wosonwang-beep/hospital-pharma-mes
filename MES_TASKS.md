@@ -1,5 +1,9 @@
 # MES Task Status Index
 
+## Production Batch T4 reference — 2026-10-06
+
+User explicitly invokes Product Design image-to-code + design-qa for the attached1280×853 Production Batch reference. Existing-contract PC presentation is `READY FOR ACCEPTANCE`: summary/circular factual operation progress, six connected lifecycle nodes, six bounded source module cards, nine Tabs and notes/files column; parent-owned controlled actions, operation dates, snapshot/Trace/Audit and query-preserving return retained. Typecheck/final build PASS; three distinct targeted Chromium PC cases PASS across scoped gates; same-size full/focused comparison inspected and density/tab issues fixed. [Report/gallery](docs/acceptance/batch-reference-2026-10-06/REPORT.html). Full-image100% fidelity is not claimed: unavailable product photo/extra business fields and sample numbers remain contract exclusions. No backend/API/DB/migration/permission/state/signature/baseline change; original inspection/report components unchanged. Existing MES ACCEPTED statuses retained; no new MES task, commit or push. Pending data-ownership proposal from the preceding functional follow-up is not implicitly approved.
+
 ## Human acceptance and functional gap follow-up — 2026-10-06
 
 Human instruction “验收，然后补齐功能缺口，再提交和推送” explicitly accepts the four pending deliveries reported immediately before it: Complete UI Blueprint, MEDIUM-01–04 technical resolution, MaterialLot T4 reference refinement, and T5 PC reference refinement. Their current delivery status is `ACCEPTED`; dated readiness entries below remain historical evidence. Accepted code is `f235bdedb105c6c6c715f53893c37e4676cfd0c4`. MES-001–013 including MES-008A remain ACCEPTED.
