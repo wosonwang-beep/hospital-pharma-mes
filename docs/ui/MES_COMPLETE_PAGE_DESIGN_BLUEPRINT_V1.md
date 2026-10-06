@@ -2,7 +2,7 @@
 
 **状态：APPROVED DESIGN BLUEPRINT**  
 **日期：2026-10-05**  
-业务权威：FINAL BASELINE COMPLETE v1.0.18 + approved DCPs
+业务权威：FINAL BASELINE COMPLETE v1.0.19 + approved DCPs
 视觉权威：`MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`  
 模板权威：`MES_PAGE_TEMPLATE_STANDARD_V2.md`
 
@@ -46,9 +46,9 @@ T1：单号/供应商/仓库/状态/日期/物料摘要。
 T2：单据头 → 供应商仓库 → 收货明细 → 当前 Contract 的检查/附件。  
 T3：单号状态、供应商仓库日期、物料/供应商批号/数量/单位、收货检查、次级附件、allowedActions。
 
-### 发料
-T1：发料单号/生产批/状态/日期。  
-T2：生产上下文 → 发料明细。  
+### 出库
+T1：出库单号/生产批/状态/日期。
+T2：生产上下文 → 出库明细。
 T3：单据身份/状态、生产批、明细、数量摘要、allowedActions。
 
 ### MaterialLot 360° — T4
@@ -146,9 +146,9 @@ Audit是允许高技术密度的专门页面：按现有API提供对象/Actor/Ac
 | 主数据详情 | T3-lite |
 | 产品列表/编辑/详情 | T1/T2/T3 |
 | 工艺包列表/编辑/详情 | T1/T2/T4-like |
-| 收货/发料列表 | T1 |
-| 收货/发料编辑 | T2 |
-| 收货/发料详情 | T3 |
+| 收货/出库列表 | T1 |
+| 收货/出库编辑 | T2 |
+| 收货/出库详情 | T3 |
 | MaterialLot 360° | **T4** |
 | 请验/取样/样品 | T1/T2/T3 |
 | 检验记录 | T1/T2/T3 |

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "parentVersion": "v1.0.18",
+  "unchangedParentFiles": 119,
+  "currentAuthority": "v1.0.19",
+  "uiAuthority": "Global UI V2 / T1-T6",
+  "openapiRefsResolved": true,
+  "currentRtmReferencesResolved": true,
+  "physicalMigration": "V029",
+  "authorityPointersConsistent": true,
+  "historicalMigrationsEdited": false,
+  "currentReleaseHashManifestFiles": 125,
+  "currentReleaseHashManifest": "REFRESHED AND VERIFIED"
+}

@@ -88,14 +88,21 @@ const router = createRouter({
       {path:'ebr/templates/create',name:'ebr-template-create',component:()=>import('../views/ebr/TemplateDetailView.vue'),meta:{title:'eBR 模板',permission:'ebr:template:create',mode:'create',resource:''}},
       {path:'ebr/templates/:id',name:'ebr-template-view',component:()=>import('../views/ebr/TemplateDetailView.vue'),meta:{title:'eBR 模板',permission:'ebr:template:view',mode:'view',resource:''}},
       {path:'ebr/templates/:id/designer',name:'ebr-template-designer',component:()=>import('../views/ebr/TemplateDetailView.vue'),meta:{title:'eBR 模板',permission:'ebr:template:update',mode:'designer',resource:''}},
-      {path:'wms/receipts',name:'wms-receipts',component:()=>import('../views/wms/WmsListView.vue'),meta:{title:'仓储管理',permission:'wms:receipt:view',mode:'',resource:'receipts'}},
-      {path:'wms/receipts/create',name:'wms-receipts-create',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'仓储管理',permission:'wms:receipt:create',mode:'create',resource:'receipts'}},
-      {path:'wms/receipts/:id',name:'wms-receipts-view',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'仓储管理',permission:'wms:receipt:view',mode:'view',resource:'receipts'}},
-      {path:'wms/receipts/:id/edit',name:'wms-receipts-edit',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'仓储管理',permission:'wms:receipt:update',mode:'edit',resource:'receipts'}},
-      {path:'wms/issues',name:'wms-issues',component:()=>import('../views/wms/WmsListView.vue'),meta:{title:'仓储管理',permission:'wms:issue:view',mode:'',resource:'issues'}},
-      {path:'wms/issues/create',name:'wms-issues-create',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'仓储管理',permission:'wms:issue:create',mode:'create',resource:'issues'}},
-      {path:'wms/issues/:id',name:'wms-issues-view',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'仓储管理',permission:'wms:issue:view',mode:'view',resource:'issues'}},
-      {path:'wms/issues/:id/edit',name:'wms-issues-edit',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'仓储管理',permission:'wms:issue:update',mode:'edit',resource:'issues'}},
+      {path:'wms/receipts',name:'wms-receipts',component:()=>import('../views/wms/WmsListView.vue'),meta:{title:'原辅料收货记录',permission:'wms:receipt:view',mode:'',resource:'receipts'}},
+      {path:'wms/receipts/create',name:'wms-receipts-create',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'原辅料收货记录',permission:'wms:receipt:create',mode:'create',resource:'receipts'}},
+      {path:'wms/receipts/:id',name:'wms-receipts-view',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'原辅料收货记录',permission:'wms:receipt:view',mode:'view',resource:'receipts'}},
+      {path:'wms/receipts/:id/edit',name:'wms-receipts-edit',component:()=>import('../views/wms/ReceiptDetailView.vue'),meta:{title:'原辅料收货记录',permission:'wms:receipt:update',mode:'edit',resource:'receipts'}},
+      {path:'wms/inventory',name:'wms-inventory',component:()=>import('../views/wms/WmsManagementListView.vue'),meta:{title:'库存管理',permission:'wms:inventory:view',resource:'inventory'}},
+      {path:'wms/requests',name:'wms-requests',component:()=>import('../views/wms/WmsManagementListView.vue'),meta:{title:'领料申请',permission:'wms:request:view',resource:'requests'}},
+      {path:'wms/requests/create',name:'wms-requests-create',component:()=>import('../views/wms/MaterialRequestDetailView.vue'),meta:{title:'新增领料申请',permission:'wms:request:create',resource:'requests',mode:'create'}},
+      {path:'wms/requests/:id',name:'wms-requests-view',component:()=>import('../views/wms/MaterialRequestDetailView.vue'),meta:{title:'领料申请详情',permission:'wms:request:view',resource:'requests',mode:'view'}},
+      {path:'wms/requests/:id/edit',name:'wms-requests-edit',component:()=>import('../views/wms/MaterialRequestDetailView.vue'),meta:{title:'编辑领料申请',permission:'wms:request:update',resource:'requests',mode:'edit'}},
+      {path:'wms/returns',name:'wms-returns',component:()=>import('../views/wms/WmsManagementListView.vue'),meta:{title:'退料管理',permission:'wms:issue:view',resource:'returns'}},
+      {path:'wms/returns/create',name:'wms-returns-create',component:()=>import('../views/wms/IssueReturnCreateView.vue'),meta:{title:'登记退料',permission:'wms:issue:return',requiredPermissions:['wms:issue:view'],resource:'returns',mode:'create'}},
+      {path:'wms/issues',name:'wms-issues',component:()=>import('../views/wms/WmsListView.vue'),meta:{title:'出库管理',permission:'wms:issue:view',mode:'',resource:'issues'}},
+      {path:'wms/issues/create',name:'wms-issues-create',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'新增出库单',permission:'wms:issue:create',mode:'create',resource:'issues'}},
+      {path:'wms/issues/:id',name:'wms-issues-view',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'出库单详情',permission:'wms:issue:view',mode:'view',resource:'issues'}},
+      {path:'wms/issues/:id/edit',name:'wms-issues-edit',component:()=>import('../views/wms/IssueDetailView.vue'),meta:{title:'编辑出库单',permission:'wms:issue:update',mode:'edit',resource:'issues'}},
       {path:'wms/material-lots/:id',name:'wms-material-lot',component:()=>import('../views/wms/MaterialLotView.vue'),meta:{title:'仓储管理',permission:'wms:inventory:view',mode:'view',resource:''}},
       ...resources.flatMap(def => [
         {path:`master/${def.key}`,name:`master-${def.key}`,component:()=>import('../views/master/MasterListView.vue'),meta:{title:def.title,permission:`master:${def.permission}:view`,resource:def.key}},
@@ -118,6 +125,7 @@ router.beforeEach(async to => {
   if (to.name === 'login') return { name: auth.identity.mustChangePassword ? 'change-password' : 'dashboard' }
   if (auth.identity.mustChangePassword && to.name !== 'change-password') return { name: 'change-password' }
   const permission = to.meta.permission as string | undefined
+  if (((to.meta.requiredPermissions as string[]|undefined)??[]).some(p=>!auth.can(p))) return { name: 'dashboard' }
   if (permission && !auth.can(permission)) return { name: 'dashboard' }
   return true
 })

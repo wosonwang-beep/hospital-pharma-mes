@@ -1,7 +1,7 @@
 import {test,expect,type Page} from '@playwright/test'
 import {readFileSync,mkdirSync} from 'node:fs'
 import {resolve} from 'node:path'
-const output=resolve('../../docs/acceptance/ui-blueprint-2026-10-05');mkdirSync(output,{recursive:true})
+const output=resolve(process.env.MES_UI_SCREENSHOT_DIR??'../../docs/acceptance/ui-blueprint-2026-10-05');mkdirSync(output,{recursive:true})
 const router=readFileSync(new URL('../src/router/index.ts',import.meta.url),'utf8')
 const permissions=[...router.matchAll(/permission:\s*'([^']+)'/g)].map(m=>m[1]!)
 for(const key of ['material','supplier','org','uom','equipment','qualification'])for(const action of ['view','create','update'])permissions.push(`master:${key}:${action}`)
@@ -95,11 +95,11 @@ test('Issue selectors preserve existing IDs and command contract',async({page})=
  await page.route('**/api/v1/wms/material-lots?**',r=>r.fulfill({json:{code:'OK',data:{items:[{id:'61',lotNo:'ML-20261005-001',qualityStatus:'RELEASED'}],total:1}}}))
  await page.route('**/api/v1/units?**',r=>r.fulfill({json:{code:'OK',data:{items:[{id:'10',unitName:'千克',unitCode:'kg'}],total:1}}}))
  await page.route('**/api/v1/material-issues**',r=>{if(r.request().method()==='POST'){submitted=r.request().postDataJSON();return r.fulfill({json:{code:'OK',data:{id:'1'}}})}return r.fulfill({json:{code:'OK',data:{id:'1',mainBatchId:'100',issueNo:'MI-001',status:'DRAFT',versionNo:1,items:[],returns:[]}}})})
- await page.goto('/wms/issues/create');await page.getByLabel('发料单号',{exact:true}).fill('MI-001');await page.getByLabel('生产批',{exact:true}).selectOption('100')
- await page.getByLabel('物料批次 1',{exact:true}).selectOption('61');await page.getByLabel('处方明细 1',{exact:true}).selectOption('31');await page.getByLabel('发料数量 1',{exact:true}).fill('10')
- await page.locator('.ant-select[aria-label="发料单位 1"]').click();await page.locator('.ant-select-dropdown:visible').getByText('千克（kg）',{exact:true}).click()
+ await page.goto('/wms/issues/create');await expect(page.getByRole('heading',{name:'新增出库单',exact:true})).toBeVisible();await expect(page.locator('.nav').getByText('出库管理',{exact:true})).toBeVisible();await page.getByLabel('出库单号',{exact:true}).fill('MI-001');await page.getByLabel('生产批',{exact:true}).selectOption('100')
+ await page.getByLabel('物料批次 1',{exact:true}).selectOption('61');await page.getByLabel('处方明细 1',{exact:true}).selectOption('31');await page.getByLabel('出库数量 1',{exact:true}).fill('10')
+ await page.locator('.ant-select[aria-label="出库单位 1"]').click();await page.locator('.ant-select-dropdown:visible').getByText('千克（kg）',{exact:true}).click()
  await page.getByLabel('操作原因',{exact:true}).fill('生产领料');await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:resolve(output,`issue-create-${test.info().project.name}.png`),fullPage:true})
- await page.getByRole('button',{name:'保存发料单',exact:true}).click();await expect(page).toHaveURL(/\/wms\/issues\/1$/)
+ await page.getByRole('button',{name:'保存出库单',exact:true}).click();await expect(page).toHaveURL(/\/wms\/issues\/1$/);await expect(page.getByRole('heading',{name:'出库单详情',exact:true})).toBeVisible()
  expect(submitted).toEqual({mainBatchId:'100',issueNo:'MI-001',items:[{materialLotId:'61',formulaItemId:'31',issuedQty:'10',unitId:'10'}],reason:'生产领料'});expect(errors).toEqual([])
 })
 test('Password confirmation remains client-only and preserves change-password API',async({page})=>{

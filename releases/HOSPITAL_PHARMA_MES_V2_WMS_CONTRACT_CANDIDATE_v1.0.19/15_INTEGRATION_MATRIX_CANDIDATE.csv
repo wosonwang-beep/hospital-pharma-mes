@@ -1,0 +1,5 @@
+Producer,Contract,Consumer,Source of Truth,Transaction,Failure Behavior,Regression Scope
+Production,existing immutable snapshot identity + formula,MaterialRequest,prd_process_snapshot,batch/root lock,reject mismatch or cross org,request and issue
+MaterialRequest,submitted line quota,MaterialIssue,request + linked confirmed issue sums,batch/request/issue/lot atomic,no over issue or partial commit,concurrent partial/full
+Ledger/Reservation/Charge,lot balance read,WMS inventory T1,existing immutable facts,read projection,no fabricated location allocation,inventory exact units
+IssueReturn,global scoped history,WMS returns T1/T2,wms_issue_return_item,read plus existing return command,no invented number/status or extra ledger,return and charge entitlement

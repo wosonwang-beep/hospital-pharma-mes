@@ -5,6 +5,8 @@ import java.time.*;
 import java.math.BigDecimal;
 @TableName("wms_material_issue")
 public class MaterialIssueEntity extends ScopedEntity {
+ private Long materialRequestId;
+ public Long getMaterialRequestId(){return materialRequestId;} public void setMaterialRequestId(Long value){materialRequestId=value;}
  private Long mainBatchId;
  public Long getMainBatchId(){return mainBatchId;} public void setMainBatchId(Long value){mainBatchId=value;}
  private String issueNo;

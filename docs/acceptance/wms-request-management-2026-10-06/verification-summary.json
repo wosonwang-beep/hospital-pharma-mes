@@ -1,0 +1,184 @@
+{
+  "backend": [
+    {
+      "suite": "com.hospital.mes.wms.domain.MaterialRequestRulesTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.07,
+      "cases": [
+        {
+          "name": "incoherentFreeStockIsNotClippedToZero",
+          "seconds": "0.048",
+          "result": "PASS"
+        },
+        {
+          "name": "cancelledAndSubmittedRecordsCannotBeEdited",
+          "seconds": "0.002",
+          "result": "PASS"
+        },
+        {
+          "name": "partialAndFullStatesFollowGrossConfirmedQuantities",
+          "seconds": "0.003",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.hospital.mes.production.WmsRequestManagementIT",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 10.122,
+      "cases": [
+        {
+          "name": "managementRequestLifecycleRejectsStateAndRetainsSnapshotAndReplay",
+          "seconds": "0.358",
+          "result": "PASS"
+        },
+        {
+          "name": "managementPermissionAndLinkedCancellationAreServerControlled",
+          "seconds": "0.861",
+          "result": "PASS"
+        },
+        {
+          "name": "managementHttpContractAndOrganizationScope",
+          "seconds": "0.445",
+          "result": "PASS"
+        },
+        {
+          "name": "managementRetainedLinesAndInvalidLinkedIdentitiesFailClosed",
+          "seconds": "0.704",
+          "result": "PASS"
+        },
+        {
+          "name": "managementMixedUnitsKeepGrossDemandAndOriginalReturnUnit",
+          "seconds": "0.612",
+          "result": "PASS"
+        },
+        {
+          "name": "managementZeroBalanceCannotHideOutstandingReservationIntegrity",
+          "seconds": "1.306",
+          "result": "PASS"
+        },
+        {
+          "name": "managementLinkedDemandThroughSignedProductionChargeKeepsStockAndTrace",
+          "seconds": "1.096",
+          "result": "PASS"
+        },
+        {
+          "name": "managementPartialFullAndOverIssueAreAtomicAndReturnDoesNotReopen",
+          "seconds": "0.771",
+          "result": "PASS"
+        },
+        {
+          "name": "managementMultiLocationAndMultiBatchTotalsRemainWholeLot",
+          "seconds": "2.282",
+          "result": "PASS"
+        },
+        {
+          "name": "managementLotInventoryAndReferenceFiltersDoNotInventLocationReservations",
+          "seconds": "1.662",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.hospital.mes.production.WmsRequestConcurrencyIT",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.752,
+      "cases": [
+        {
+          "name": "concurrentLinkedDraftCreationPreventsCancellation",
+          "seconds": "0.816",
+          "result": "PASS"
+        },
+        {
+          "name": "concurrentConfirmationsCannotExceedDemand",
+          "seconds": "0.92",
+          "result": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.hospital.mes.production.IncomingProductionIT",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 12.043,
+      "cases": [
+        {
+          "name": "realIncomingReleaseThroughSignedWeighChargeReturnAndReversePreservesTrace",
+          "seconds": "3.146",
+          "result": "PASS"
+        }
+      ]
+    }
+  ],
+  "backendUnitTests": 3,
+  "nativeIntegrationTests": 13,
+  "nativeDatabase": "hospital_pharma_mes_dev",
+  "migration": {
+    "highestSuccessful": 29,
+    "successCount": 29,
+    "failedCount": 0,
+    "V029Checksum": 1763109818,
+    "requestPermissions": 5
+  },
+  "frontend": {
+    "unitTests": 5,
+    "unitFiles": [
+      "src/views/wms/model.test.ts",
+      "src/api/http.test.ts"
+    ],
+    "typecheck": "PASS",
+    "build": "PASS",
+    "chromiumDesktopTests": 7,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshots": "screenshots/",
+    "pageConsoleErrors": 0,
+    "horizontalOverflow": false,
+    "browserData": "API-mocked approved read/command fixtures; real backend/native flow tested separately",
+    "screenshotCount": 10,
+    "draftEditDiscardAndRetainedIdentity": "PASS"
+  },
+  "fullRegressionRun": false,
+  "hostedCIRun": false,
+  "humanAcceptance": true,
+  "review": {
+    "independent": "wms_final_review",
+    "originalVerdict": "CHANGES REQUIRED",
+    "originalHigh": 2,
+    "remainingCritical": 0,
+    "remainingHigh": 0,
+    "authorDisposition": "FIXED AND TARGETED VERIFIED; no second independent review",
+    "deferredMedium": [
+      "tenant-wide projection and N+1 paging performance"
+    ]
+  },
+  "humanAcceptanceEvidence": "2026-10-06: 确认验收，提交和推送",
+  "submissionPreflight": {
+    "date": "2026-10-06",
+    "backendRuleTests": 3,
+    "frontendUnitTests": 5,
+    "typecheck": "PASS",
+    "repositoryContract": "PASS",
+    "ciContract": "PASS",
+    "ciNegativeTests": "PASS",
+    "stagedNonReleaseWhitespace": "PASS",
+    "frozenWhitespace": "Preserved existing Markdown line breaks, CRLF and trailing blank lines; no frozen-byte cleanup",
+    "excluded": [
+      ".env",
+      "application-ci.yml local changes",
+      "application-local.yml local changes",
+      ".agents/",
+      "skills-lock.json"
+    ],
+    "fullRegressionRepeated": false
+  }
+}

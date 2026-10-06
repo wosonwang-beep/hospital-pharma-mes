@@ -1,0 +1,2 @@
+Logical Group,Tables/Capability,Dependency,Physical Mapping,Status
+WMS-REQUEST-READ-001,two request tables + nullable issue links + five request permissions,successful native history through existing migrations; same org production snapshot and formula FKs,UNALLOCATED; inspect highest successful history before new file,NOT CREATED / NOT EXECUTED

@@ -1,0 +1,2 @@
+Maintenance,Hard Dependency,Produced Contract,Consumed Contract,Task Status Owner
+WMS-REQUEST-READ-001,existing MES-001/004/007/008/008A/009/010/011 capabilities,MaterialRequest; linked MaterialIssue; lot inventory read; return history,existing snapshot/Reservation/quality/charge/Audit/IAM,MES_TASKS.md

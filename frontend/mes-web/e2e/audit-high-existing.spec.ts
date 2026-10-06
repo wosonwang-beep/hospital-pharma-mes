@@ -89,7 +89,7 @@ test('MaterialLot T4 read chain and valid eligibility guidance',async({page,isMo
  expect(errors).toEqual([])
 })
 test('implemented issue flow is no longer described as unavailable',async({page})=>{
- const {errors}=await fixture(page);await page.goto('/wms/issues');await expect(page.getByText(/发料确认需满足生产批/)).toBeVisible();await expect(page.getByText(/Gate 尚未就绪|发料写入暂不可用/)).toHaveCount(0);expect(errors).toEqual([])
+ const {errors}=await fixture(page);await page.goto('/wms/issues');await expect(page.getByText(/出库确认需满足生产批/)).toBeVisible();await expect(page.getByText(/Gate 尚未就绪|出库写入暂不可用/)).toHaveCount(0);expect(errors).toEqual([])
 })
 
 test('MaterialLot aggregation respects trace permission',async({page})=>{

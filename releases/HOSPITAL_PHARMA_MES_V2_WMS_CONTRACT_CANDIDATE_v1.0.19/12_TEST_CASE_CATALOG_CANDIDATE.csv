@@ -1,0 +1,13 @@
+Test Case ID,Requirement ID,Maintenance,Module,Title,Gate,Spec,Execution
+TC-WMS-REQ-001,WMS-REQ-001,WMS-REQUEST-READ-001,WMS,request lifecycle and frozen snapshot,unit + native,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-REQ-002,WMS-REQ-002,WMS-REQUEST-READ-001,WMS,replay stale permission cancel state,native + API,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-REQ-003,WMS-REQ-003,WMS-REQUEST-READ-001,WMS,partial full concurrent demand bounds,native,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-REQ-004,WMS-REQ-004,WMS-REQUEST-READ-001,WMS,exact units and foreign/duplicate formula,unit + native,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-ISS-REQUEST-001,WMS-ISS-REQUEST-001,WMS-REQUEST-READ-001,WMS,legacy issue and linked identity compatibility,existing issue regression,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-INV-READ-001,WMS-INV-READ-001,WMS-REQUEST-READ-001,WMS,multi-location balances/reservation/charged quantities,native read,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-INV-READ-002,WMS-INV-READ-002,WMS-REQUEST-READ-001,WMS,positive available quantity cannot bypass quality gates,native + frontend,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-RET-READ-001,WMS-RET-READ-001,WMS-REQUEST-READ-001,WMS,scoped return history and original unit lineage,native read,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-RET-READ-002,WMS-RET-READ-002,WMS-REQUEST-READ-001,WMS,existing return bounds and request no reopen,existing return regression,Detailed contract sections 7 and 8,NOT RUN
+TC-UI-WMS-001,UI-WMS-001,WMS-REQUEST-READ-001,WMS,five menus templates pickers lot link payload,Chromium PC,Detailed contract sections 7 and 8,NOT RUN
+TC-UI-WMS-002,UI-WMS-002,WMS-REQUEST-READ-001,WMS,return execution history permission no fake states,Chromium PC,Detailed contract sections 7 and 8,NOT RUN
+TC-WMS-FLOW-001,WMS-FLOW-001,WMS-REQUEST-READ-001,WMS,receiving quality reservation request issue charge bounded return,persistent-native E2E,Detailed contract sections 7 and 8,NOT RUN

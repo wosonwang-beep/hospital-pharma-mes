@@ -1,0 +1,9 @@
+Method,Path,OperationId,Tag,Permission,Maintenance,Audit Required
+GET,/material-requests,queryMaterialRequests,wms,wms:request:view,WMS-REQUEST-READ-001,FALSE
+POST,/material-requests,createMaterialRequest,wms,wms:request:create,WMS-REQUEST-READ-001,TRUE
+GET,/material-requests/{id},getMaterialRequest,wms,wms:request:view,WMS-REQUEST-READ-001,FALSE
+PUT,/material-requests/{id},editMaterialRequest,wms,wms:request:update,WMS-REQUEST-READ-001,TRUE
+POST,/material-requests/{id}/submit,submitMaterialRequest,wms,wms:request:submit,WMS-REQUEST-READ-001,TRUE
+POST,/material-requests/{id}/cancel,cancelMaterialRequest,wms,wms:request:cancel,WMS-REQUEST-READ-001,TRUE
+GET,/wms/inventory,queryWmsInventoryLots,wms,wms:inventory:view,WMS-REQUEST-READ-001,FALSE
+GET,/material-returns,queryMaterialReturns,wms,wms:issue:view,WMS-REQUEST-READ-001,FALSE

@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 
 @Service @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class WmsService {
+ @org.springframework.beans.factory.annotation.Autowired private org.springframework.beans.factory.ObjectProvider<WmsManagementQueryService> management;
  @org.springframework.beans.factory.annotation.Autowired private org.springframework.beans.factory.ObjectProvider<InventoryDecisionService> inventoryDecisions;
  @org.springframework.beans.factory.annotation.Autowired private org.springframework.beans.factory.ObjectProvider<WmsProductionService> productionIssues;
  private final org.springframework.context.ApplicationEventPublisher events;
@@ -36,13 +37,13 @@ public class WmsService {
  private static <E extends ScopedEntity> E copy(E e,Class<E> type){try{var c=type.getDeclaredConstructor().newInstance();org.springframework.beans.BeanUtils.copyProperties(e,c);return c;}catch(Exception ex){throw new IllegalStateException(ex);}}
  @SuppressWarnings("unchecked") private ScopedStore<ScopedEntity> store(String type){return (ScopedStore<ScopedEntity>)(ScopedStore<?>)switch(type){case "Warehouse"->db.warehouse();case "Location"->db.location();case "Container"->db.container();case "MaterialLot"->db.materialLot();case "MaterialIssue"->db.materialIssue();case "Receipt"->db.receipt();default->throw new IllegalArgumentException("Unknown resource");};}
  private String readPermission(String type){return type.equals("Receipt")?"wms:receipt:view":type.equals("MaterialIssue")?"wms:issue:view":"wms:inventory:view";}
- public ScopedStore.PageData<JsonNode> list(String type,int page,int size,String keyword,Map<String,String> filters){var c=mutations.context(readPermission(type));var rows=store(type).list(c.organizationId(),page,size,keyword,filters);return new ScopedStore.PageData<>(rows.items().stream().map(x->(JsonNode)view(x)).toList(),rows.total(),page,size);}
+ public ScopedStore.PageData<JsonNode> list(String type,int page,int size,String keyword,Map<String,String> filters){if(type.equals("MaterialIssue"))return management.getObject().issues(page,size,keyword,filters);var c=mutations.context(readPermission(type));var rows=store(type).list(c.organizationId(),page,size,keyword,filters);return new ScopedStore.PageData<>(rows.items().stream().map(x->(JsonNode)view(x)).toList(),rows.total(),page,size);}
  public JsonNode get(String type,String id){var c=mutations.context(readPermission(type));return view(store(type).get(c.organizationId(),id(id)));}
  private ObjectNode view(ScopedEntity entity){
   var out=views.view(entity);
   if(entity instanceof MaterialLotEntity lot){out.set("inventoryDecisions",json.valueToTree(inventoryDecisions.getObject().history(lot.getOrgId(),lot.getId())));var actions=out.withArray("allowedActions");if("AVAILABLE".equals(lot.getInventoryStatus()))actions.add("FREEZE");if("FROZEN".equals(lot.getInventoryStatus()))actions.add("UNFREEZE");}
   if(entity instanceof ReceiptEntity r){var a=out.putArray("items");for(var item:items(r)){var n=views.view(item);var lot=db.materialLotMapper().selectOne(new QueryWrapper<MaterialLotEntity>().eq("org_id",r.getOrgId()).eq("receipt_item_id",item.getId()));if(lot!=null)n.put("materialLotId",lot.getId().toString());a.add(n);}}
-  if(entity instanceof MaterialIssueEntity issue){var a=out.putArray("items");db.materialIssueItemMapper().selectList(new QueryWrapper<MaterialIssueItemEntity>().eq("org_id",issue.getOrgId()).eq("issue_id",issue.getId()).orderByAsc("id")).forEach(i->a.add(views.view(i)));out.set("returns",productionIssues.getObject().returnFacts(issue.getOrgId(),issue.getId()));}
+  if(entity instanceof MaterialIssueEntity issue){var enriched=productionIssues.getObject().issueContext(issue);out.setAll(enriched);var a=out.putArray("items");db.materialIssueItemMapper().selectList(new QueryWrapper<MaterialIssueItemEntity>().eq("org_id",issue.getOrgId()).eq("issue_id",issue.getId()).orderByAsc("id")).forEach(i->a.add(views.view(i)));out.set("returns",productionIssues.getObject().returnFacts(issue.getOrgId(),issue.getId()));}
   return out;
  }
  private List<ReceiptItemEntity> items(ReceiptEntity receipt){return db.receiptItemMapper().selectList(new QueryWrapper<ReceiptItemEntity>().eq("org_id",receipt.getOrgId()).eq("receipt_id",receipt.getId()).orderByAsc("id"));}

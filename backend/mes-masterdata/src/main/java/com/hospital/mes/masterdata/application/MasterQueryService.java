@@ -20,6 +20,7 @@ public class MasterQueryService {
   return new ConversionEvidence(row==null?null:row.getId(),MasterRules.convert(amount,a.getDimension(),b.getDimension(),row==null?null:row.getFactor(),row==null?null:row.getMaterialId(),b.getScale()));
  }
  public UnitReference unit(long org,long id){var e=units.get(org,id);return new UnitReference(e.getId().toString(),e.getUnitCode(),e.getDimension(),e.getScale(),e.getVersionNo());}
+ public String unitName(long org,long id){return units.get(org,id).getUnitName();}
  public MasterRules.Conversion convert(long org,long from,long to,Long material,BigDecimal amount){
   var a=units.get(org,from);var b=units.get(org,to);if(from==to)return MasterRules.convert(amount,a.getDimension(),b.getDimension(),BigDecimal.ONE,null,b.getScale());
   UnitConversionEntity row=null;

@@ -1,0 +1,10 @@
+{
+  "status": "REVIEWED / AUTHORITY SWITCH APPROVED",
+  "oldReleaseChanged": [],
+  "unresolvedOpenapiRefs": [],
+  "contractErrors": [],
+  "operationsChecked": 35,
+  "runtimeAcceptance": "NOT CLAIMED",
+  "independentReview": "mes012_contract_consistency: HIGH corrections closed; final rereview no blocking findings; runtime pending",
+  "physicalAllocation": "Native DevelopmentHistoryReadIT highest24/success24/fail0; nextV025"
+}

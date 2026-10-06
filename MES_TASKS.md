@@ -1,14 +1,27 @@
 # MES Task Status Index
 
+## Current approved WMS authority — 2026-10-06
+
+Current WMS authority: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime WMS maintenance is ACCEPTED following explicit human acceptance “确认验收，提交和推送” on 2026-10-06.
+
+
 ## Current authority / bounded storage-source maintenance — 2026-10-06
 
-`FINAL BASELINE COMPLETE v1.0.18` is `AUTHORITATIVE`, approved DCP-MATERIAL-STORAGE-SOURCE-001, consistency PASS (114 v1.0.17 parent files unchanged). Global UI V2 / T1–T6 remains current. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MANIFEST_FINAL_FROZEN_V1.0.18.md). This pointer supersedes dated authority declarations below; previous v1.0.17 Functional/UI Closeout remains accepted history, not an assertion of full v1.0.18 regression.
+At that approval, `FINAL BASELINE COMPLETE v1.0.18` was `AUTHORITATIVE`, approved DCP-MATERIAL-STORAGE-SOURCE-001, consistency PASS (114 v1.0.17 parent files unchanged). Global UI V2 / T1–T6 remains current. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MANIFEST_FINAL_FROZEN_V1.0.18.md). This pointer supersedes dated authority declarations below; previous v1.0.17 Functional/UI Closeout remains accepted history, not an assertion of full v1.0.18 regression.
 
 Bounded maintenance: `ACCEPTED` — explicit human acceptance on 2026-10-06 ("验收，提交和推送"). Storage condition read/write reuses existing DB column; V028 adds relationship manufacturer and immutable receipt-item source snapshot; MaterialLot uses existing receiptItemId lineage. Current reads / sorted locks prevent stale-source freeze. Existing audit/reason/optimistic version/idempotency and QA/permissions unchanged. Seven distinct native methods passed across targeted gates (six initial cases, three current-read/direct/audit cases with two overlaps); five backend relationship rule tests and nine frontend unit tests PASS; three distinct desktop Chromium scenarios PASS across focused gates; typecheck/final build PASS. [Current evidence](docs/acceptance/material-field-cleanup-2026-10-06/SOURCE-CLOSEOUT.md). No new full-system regression is claimed; human acceptance and main commit/push are explicitly authorized for this maintenance. MES-001–013 including008A remain ACCEPTED. Workbench image/planning/SOP proposals remain unapproved; V3 stays outside scope.
 
 ## Material page Product Design maintenance — 2026-10-06
 
 `ACCEPTED` — explicit human acceptance: “验收，提交和推送”. Selected third Product Design concept implemented on material T3 detail and T2 create/edit: left basic/unit facts, right quality/remarks, compact conversion and audit controls, stable form actions. Existing eleven fields, payload, routes, permissions and GxP controls retained. Business authority v1.0.18 / Global UI V2 unchanged. Targeted Chromium flow, nine affected unit tests, typecheck and build PASS; no new full-system regression claimed. [Design QA and screenshots](docs/acceptance/material-product-design-2026-10-06/design-qa.md). Earlier taste refinement is a superseded visual checkpoint. Existing MES task acceptance remains unchanged.
+
+## MaterialIssue outbound display naming — 2026-10-06
+
+`ACCEPTED` — explicit human acceptance “确认验收，提交和推送” on 2026-10-06 covers the outbound terminology delivered with WMS. User authorized replacing 发料管理/发料单 UI terminology with 出库管理/出库单. Menu, route metadata titles, document headings, action/field labels and related evidence display names updated. MaterialIssue entity, API, payload, routes, permission keys, DB and business rules unchanged; no migration or baseline authority switch. Typecheck and two targeted Chromium scenarios PASS; exact command payload assertion retained. [Evidence](docs/acceptance/material-issue-outbound-naming-2026-10-06/REPORT.md). Existing accepted MES task status unchanged.
+
+## Authorized WMS contract completion — 2026-10-06
+
+`ACCEPTED` — explicit human runtime acceptance “确认验收，提交和推送” on 2026-10-06, following scope approval “批准并补齐” and detailed design “确认”. Current authority FINAL BASELINE COMPLETE v1.0.19; design consistency PASS and immutable119 v1.0.18 parent files retained. Formal MaterialRequest, linked existing MaterialIssue, lot inventory projection and independent existing IssueReturn history/entry implemented under Global UI V2 T1/T2/T3. Five ordered WMS menu entries; existing receipt/QA/Reservation/weigh/verify/charge/signatures preserved. V029 APPLIED: native highest29/success29/failure0. Targeted backend rules3, native integration13, frontend units5, PC Chromium7, typecheck/build PASS; no full regression or hosted CI claim. Independent review's two HIGH findings addressed and targeted verified; remaining MEDIUM debt is tenant-wide/N+1 projection paging. [Acceptance report and screenshots](docs/acceptance/wms-request-management-2026-10-06/REPORT.md), [RTM execution](docs/acceptance/wms-request-management-2026-10-06/RTM.md), [approved DCP](docs/development/DCP-WMS-REQUEST-INVENTORY-RETURN-001-APPROVED-SCOPE.md). Existing accepted MES statuses and unapproved workbench/V3 exclusions unchanged. Human acceptance explicitly authorizes committing and pushing this bounded maintenance to main.
 
 ## Retained human-confirmed final closeout — 2026-10-06
 

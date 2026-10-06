@@ -1,0 +1,2 @@
+Logical Group,Tables/Capability,Dependency,Physical Mapping,Status
+WMS-REQUEST-READ-001,two request tables + nullable issue links + five request permissions,highest successful physical migration 028 verified before allocation,V029__wms_material_request_management.sql,APPLIED native; highest29 success29 failure0 checksum1763109818

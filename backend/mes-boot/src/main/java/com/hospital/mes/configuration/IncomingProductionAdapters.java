@@ -11,9 +11,10 @@ import java.math.BigDecimal;
 import java.time.Instant;
 @Configuration @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IncomingProductionAdapters {
- @Bean WmsProductionContextPort wmsProductionContext(ProductionQueryService production,ExecutionQueryService execution){return new WmsProductionContextPort(){
+ @Bean WmsProductionContextPort wmsProductionContext(ProductionQueryService production,ExecutionQueryService execution,com.hospital.mes.process.application.ProcessQueryService process){return new WmsProductionContextPort(){
   public BatchContext lockBatch(long org,long id){var b=production.lockBatch(org,id);return new BatchContext(b.mainBatchId(),b.status(),b.snapshot(),b.versionNo());}
   public BigDecimal chargedQuantity(long org,long batch,long lot,long unit){return execution.chargedQuantity(org,batch,lot,unit);}
+  public com.fasterxml.jackson.databind.JsonNode batchFact(long org,long batch){var n=(com.fasterxml.jackson.databind.node.ObjectNode)production.batchFact(org,batch);n.put("productName",process.productName(org,n.path("productId").asLong()));return n;}
  };}
  @Bean ProductionMaterialGate productionMaterialGate(IncomingQualityQueryService quality){return (org,batch,lot,at)->quality.requireEligible(org,lot,"PRODUCTION",at);}
  @Bean ChargeStockPort chargeStock(WmsProductionService wms){return new ChargeStockPort(){

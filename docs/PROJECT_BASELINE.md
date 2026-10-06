@@ -4,9 +4,14 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
-### Current approved maintenance authority — 2026-10-06
+### Current approved WMS authority — 2026-10-06
 
-`FINAL BASELINE COMPLETE v1.0.18` — `AUTHORITATIVE`. User approved database changes and chose manufacturer ownership on each material-supplier relationship with receiving-source freeze. [Approved DCP](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MATERIAL_STORAGE_SOURCE_CONTRACT_V1.0.18.md), [frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MANIFEST_FINAL_FROZEN_V1.0.18.md), [consistency PASS](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MATERIAL_STORAGE_SOURCE_CONSISTENCY_REVIEW.json). v1.0.17 and all prior frozen releases remain unchanged historical authority. Current UI authority remains Global UI V2 / Page Template V2 (`T1–T6`). Current maintenance readiness is only in MES_TASKS.md.
+Current WMS authority: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime status and explicit human acceptance are maintained only in MES_TASKS.md.
+
+
+### Retained v1.0.18 maintenance authority — 2026-10-06
+
+At that approval, `FINAL BASELINE COMPLETE v1.0.18` was `AUTHORITATIVE`. User approved database changes and chose manufacturer ownership on each material-supplier relationship with receiving-source freeze. [Approved DCP](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MATERIAL_STORAGE_SOURCE_CONTRACT_V1.0.18.md), [frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MANIFEST_FINAL_FROZEN_V1.0.18.md), [consistency PASS](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MATERIAL_STORAGE_SOURCE_CONSISTENCY_REVIEW.json). v1.0.17 and all prior frozen releases remain unchanged historical authority. Current UI authority remains Global UI V2 / Page Template V2 (`T1–T6`). Current maintenance readiness is only in MES_TASKS.md.
 
 The v1.0.17 Closeout and subsequent dated approval descriptions below retain their original scope; earlier “current” references are historical and do not override this v1.0.18 pointer. No new final-system regression or human acceptance of this maintenance is inferred. Workbench image/planned-time/SOP proposals remain PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED; UI V3 remains NOT IN CURRENT SCOPE.
 
