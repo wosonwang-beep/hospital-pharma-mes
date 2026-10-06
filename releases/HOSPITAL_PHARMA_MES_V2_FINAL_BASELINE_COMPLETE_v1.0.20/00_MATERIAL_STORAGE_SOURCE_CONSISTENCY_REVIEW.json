@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "approvedDcp": "DCP-MATERIAL-STORAGE-SOURCE-001",
+  "parentBaseline": "v1.0.17",
+  "candidateBaseline": "v1.0.20",
+  "historicalFilesVerified": 114,
+  "physicalMigration": "V028",
+  "newPublicPaths": 0,
+  "querySortPaginationChanged": false,
+  "newPermissions": 0,
+  "businessStateEnumsChanged": false,
+  "signatureRuleChanged": false,
+  "sourceFactOwner": "ReceiptItem frozen source via existing MaterialLot.receiptItemId",
+  "uiAuthority": "Global UI V2 / T1-T6 unchanged",
+  "errors": []
+}

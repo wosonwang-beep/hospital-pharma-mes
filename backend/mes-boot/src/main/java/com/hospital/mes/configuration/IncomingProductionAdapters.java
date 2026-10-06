@@ -11,8 +11,10 @@ import java.math.BigDecimal;
 import java.time.Instant;
 @Configuration @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IncomingProductionAdapters {
- @Bean WmsProductionContextPort wmsProductionContext(ProductionQueryService production,ExecutionQueryService execution,com.hospital.mes.process.application.ProcessQueryService process){return new WmsProductionContextPort(){
+ @Bean WmsProductionContextPort wmsProductionContext(ProductionQueryService production,ExecutionQueryService execution,com.hospital.mes.process.application.ProcessQueryService process,org.springframework.beans.factory.ObjectProvider<ProductionQuantityService> quantities,org.springframework.beans.factory.ObjectProvider<com.hospital.mes.release.application.FinishedDecisionQuery> decisions,com.hospital.mes.audit.signature.SignatureTransactionService signatures,com.fasterxml.jackson.databind.ObjectMapper json){return new WmsProductionContextPort(){
   public BatchContext lockBatch(long org,long id){var b=production.lockBatch(org,id);return new BatchContext(b.mainBatchId(),b.status(),b.snapshot(),b.versionNo());}
+  public java.util.List<com.fasterxml.jackson.databind.JsonNode> finishedOutputs(long org,long batch){return quantities.getObject().facts(org,batch);}
+  public com.fasterxml.jackson.databind.JsonNode finishedDecision(long org,long batch){var row=decisions.getObject().effectiveCurrent(org,batch);if(row==null)return json.nullNode();var n=(com.fasterxml.jackson.databind.node.ObjectNode)decisions.getObject().view(row);n.put("signatureVerified",signatures.verify(org,row.getSignatureId()));return n;}
   public BigDecimal chargedQuantity(long org,long batch,long lot,long unit){return execution.chargedQuantity(org,batch,lot,unit);}
   public com.fasterxml.jackson.databind.JsonNode batchFact(long org,long batch){var n=(com.fasterxml.jackson.databind.node.ObjectNode)production.batchFact(org,batch);n.put("productName",process.productName(org,n.path("productId").asLong()));return n;}
  };}

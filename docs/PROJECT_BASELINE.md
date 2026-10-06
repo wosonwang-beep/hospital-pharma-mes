@@ -4,9 +4,17 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
-### Current approved WMS authority — 2026-10-06
+### Current approved optional inspection draft authority — 2026-10-06
 
-Current WMS authority: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime status and explicit human acceptance are maintained only in MES_TASKS.md.
+Current business authority: `FINAL BASELINE COMPLETE v1.0.21` — `AUTHORITATIVE`, approved DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001 and cross-document consistency PASS. [Frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_MANIFEST_FINAL_FROZEN_V1.0.21.md), [consistency](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_FINISHED_INBOUND_DRAFT_CONSISTENCY_REVIEW.json). Optional atomic inbound/inspection DRAFT pair uses existing contracts; physical warehouse confirmation remains mandatory for QC execution. All138 v1.0.20 files unchanged. Existing v20 finished-chain/WMS/source contracts inherited; no new migration/permission/endpoint/route/signature rule. UI V2/T1–T6 unchanged. Runtime readiness and explicit human acceptance only MES_TASKS.md. Earlier dated pointers remain historical.
+
+### Retained v1.0.20 approved finished-goods authority — 2026-10-06
+
+Historical authority at that approval: `FINAL BASELINE COMPLETE v1.0.20` — `AUTHORITATIVE`, approved DCP-FINISHED-GOODS-CHAIN-001 and cross-document consistency PASS. [Frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.20/00_MANIFEST_FINAL_FROZEN_V1.0.20.md), [consistency](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.20/00_FINISHED_GOODS_CONSISTENCY_REVIEW.json). Complete controlled finished receiving/quality/QA/shipment/trace delta supersedes only its bounded inherited contracts. Parent v1.0.19/126files unchanged; UI V2/T1–T6 unchanged. Runtime readiness and explicit human acceptance are maintained only in MES_TASKS.md. Earlier dated pointers remain historical.
+
+### Retained v1.0.19 WMS authority — 2026-10-06
+
+Historical WMS authority at that maintenance: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime status and explicit human acceptance are maintained only in MES_TASKS.md.
 
 
 ### Retained v1.0.18 maintenance authority — 2026-10-06

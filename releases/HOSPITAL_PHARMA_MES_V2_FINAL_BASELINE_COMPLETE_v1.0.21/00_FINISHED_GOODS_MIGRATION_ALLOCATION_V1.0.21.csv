@@ -1,0 +1,3 @@
+version,owner,allocation
+V030,WMS/QMS/Release,six normalized tables plus finished report decision FK + 18 permissions
+V031,WMS/QMS,additional signed/confirmed/approved immutable preservation guards

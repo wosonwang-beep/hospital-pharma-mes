@@ -1,8 +1,21 @@
 # MES Task Status Index
 
-## Current approved WMS authority — 2026-10-06
+## Approved optional finished inspection draft — 2026-10-06
 
-Current WMS authority: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime WMS maintenance is ACCEPTED following explicit human acceptance “确认验收，提交和推送” on 2026-10-06.
+`ACCEPTED` — explicit human approval “入库申请同时生成请验草稿”的流程变更明确批准. Current business authority v1.0.21 — AUTHORITATIVE, approved DCP / cross-document consistency PASS, all138 frozen v1.0.20 parent files unchanged. Only optional atomic draft generation / warehouse execution gates / existing T2/T3 controls; no other finished-image page/menu scope implicitly authorized. [Approved DCP](docs/development/DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001-APPROVED.md), [inline plan](docs/superpowers/plans/2026-10-06-finished-inbound-inspection-draft.md), [frozen manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_MANIFEST_FINAL_FROZEN_V1.0.21.md). No new schema migration for this optional change. Explicit human acceptance and commit/push authorization: “验收，提交和推送”, 2026-10-06; includes the completed finished-goods chain and optional inspection draft in current v1.0.21.
+
+Native new4+direct receiving/full-chain2 PASS; closed schema1 PASS; expanded rollback/audit/changed-payload/lost-permission case rerun1 PASS. Frontendunits9/typecheck/build PASS; PC Chromium1/3screenshots PASS with neutral draft source label and no errors/overflow. One scoped final review: no CRITICAL/HIGH/MEDIUM, LOW evidence suggestions resolved/verified. [Verification](docs/acceptance/finished-inbound-inspection-draft-2026-10-06/REPORT.md), [executed RTM](docs/acceptance/finished-inbound-inspection-draft-2026-10-06/RTM.md). Inherited load/performance and paging debt retained. Human runtime acceptance confirmed 2026-10-06; prior MES acceptance unchanged.
+
+## Approved finished-product chain maintenance — 2026-10-06
+
+`ACCEPTED` — retained authority at this maintenance `FINAL BASELINE COMPLETE v1.0.20` (AUTHORITATIVE), approved DCP-FINISHED-GOODS-CHAIN-001 / consistency PASS. Human explicitly approved the audited four-gap design change and requested implementation; human accepted the completed cumulative implementation on 2026-10-06 (“验收，提交和推送”). Scope: completed-production inbound request/independent warehouse receipt; post-completion finished inspection/sampling/results-derived report; extended signed QA evidence; finished shipment and full reverse trace. [Approved bounded contract](docs/development/DCP-FINISHED-GOODS-CHAIN-001-APPROVED.md), [implementation ledger](docs/development/FINISHED-GOODS-CHAIN-IMPLEMENTATION-PLAN.md). Successor v1.0.20 consistency PASS is recorded; v1.0.19 is retained immutable history; existing MES acceptance remains unchanged. Explicit human acceptance/commit/push authorization recorded above; no automatic acceptance inferred.
+
+
+V030/V031 APPLIED (31 success/0 failure); two domain rules and all11 new native scenarios plus affected QA/archive/OOS gates PASS across targeted runs; frontend units7/typecheck/build PASS; PC Chromium4 scenarios/15screenshots PASS. Independent review two HIGH repaired/verified; known CRITICAL/HIGH0, MEDIUM race-load/paging debt recorded. [Acceptance evidence](docs/acceptance/finished-goods-chain-2026-10-06/REPORT.md), [executed RTM](docs/acceptance/finished-goods-chain-2026-10-06/RTM.md), [frozen manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.20/00_MANIFEST_FINAL_FROZEN_V1.0.20.md). Acceptance and commit/push explicitly authorized 2026-10-06; see current v1.0.21 acceptance above. UI V2/T1–T6 remains current; prior MES-001–013 including008A remain ACCEPTED.
+
+## Retained v1.0.19 WMS authority — 2026-10-06
+
+Historical WMS authority at that maintenance: `FINAL BASELINE COMPLETE v1.0.19` — `AUTHORITATIVE`, following approved DCP-WMS-REQUEST-INVENTORY-RETURN-001 and detailed-design confirmation; design consistency PASS. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.19/00_MANIFEST_FINAL_FROZEN_V1.0.19.md). Existing v1.0.18 and earlier entries below are retained history. UI remains Global UI V2 / T1–T6; runtime WMS maintenance is ACCEPTED following explicit human acceptance “确认验收，提交和推送” on 2026-10-06.
 
 
 ## Current authority / bounded storage-source maintenance — 2026-10-06

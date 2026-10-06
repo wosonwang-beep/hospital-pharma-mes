@@ -1,0 +1,8 @@
+<script setup lang="ts">
+import {ref,watch} from 'vue'
+import {api,errorMessage,type Page} from '../../api/http'
+import type {Row} from './model'
+const props=defineProps<{modelValue?:string;disabled?:boolean}>(),emit=defineEmits<{'update:modelValue':[string]}>(),rows=ref<Row[]>([]),keyword=ref(''),page=ref(0),more=ref(false),error=ref(''),busy=ref(false)
+async function load(append=false){busy.value=true;error.value='';if(!append)page.value=0;try{const data=await api<Page<Row>>({url:'/finished-inbound-requests',params:{page:page.value,size:50,status:'CONFIRMED',keyword:keyword.value||undefined}});rows.value=append?[...rows.value,...data.items]:data.items;more.value=(page.value+1)*50<data.total}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
+watch(()=>props.disabled,()=>void load(),{immediate:true})
+</script><template><div class="finished-reference"><select class="master-native-input" aria-label="已确认成品入库" :value="modelValue" :disabled="disabled||busy" required @change="emit('update:modelValue',($event.target as HTMLSelectElement).value)"><option value="">请选择已确认成品入库</option><option v-for="r in rows" :key="r.id" :value="String(r.id)">{{r.requestNo}} · {{r.batch?.batchNo}} · {{r.quantity}}</option></select><details><summary>查找入库申请</summary><a-input v-model:value="keyword" aria-label="查找入库申请" @press-enter="load()"/><a-button @click="load()">查找</a-button><a-button v-if="more" @click="page++;load(true)">更多</a-button></details><p v-if="error" role="alert">{{error}}</p></div></template><style scoped>.finished-reference{min-width:0;flex:1}.finished-reference select{width:100%}summary{font-size:12px;color:#667085}</style>

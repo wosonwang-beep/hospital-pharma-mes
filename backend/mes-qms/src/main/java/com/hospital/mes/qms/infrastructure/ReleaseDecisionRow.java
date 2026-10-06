@@ -12,6 +12,8 @@ public class ReleaseDecisionRow extends IncomingRow {
  public Long getMaterialLotId(){return materialLotId;} public void setMaterialLotId(Long value){materialLotId=value;}
  private Long inspectionReportId;
  public Long getInspectionReportId(){return inspectionReportId;} public void setInspectionReportId(Long value){inspectionReportId=value;}
+ private Long finishedInspectionReportId;
+ public Long getFinishedInspectionReportId(){return finishedInspectionReportId;} public void setFinishedInspectionReportId(Long value){finishedInspectionReportId=value;}
  private String decision;
  public String getDecision(){return decision;} public void setDecision(String value){decision=value;}
  private String releaseBasis;

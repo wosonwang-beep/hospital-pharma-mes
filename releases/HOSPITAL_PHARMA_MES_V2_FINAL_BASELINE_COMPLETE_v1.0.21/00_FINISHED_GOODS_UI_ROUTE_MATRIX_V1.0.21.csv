@@ -1,0 +1,17 @@
+route,template,permission
+/finished/inbound,T1,wms:finished-inbound:view
+/finished/inbound/:id,T3,wms:finished-inbound:view
+/finished/inbound/create,T2,wms:finished-inbound:create
+/finished/requests,T1,qms:finished-request:view
+/finished/requests/:id,T3,qms:finished-request:view
+/finished/requests/create,T2,qms:finished-request:create
+/finished/sampling,T1,qms:finished-sampling:view
+/finished/sampling/:id,T3,qms:finished-sampling:view
+/finished/reports,T1,qms:finished-report:view
+/finished/reports/:id,T3,qms:finished-report:view
+/finished/shipments,T1,wms:finished-shipment:view
+/finished/shipments/:id,T3,wms:finished-shipment:view
+/finished/shipments/create,T2,wms:finished-shipment:create
+/wms/material-lots/:id,T4,wms:inventory:view
+/production/batches/:id,T4,production:batch:view
+/qa/batches/:id/review|release,T6,qa:batch-review|qa:release

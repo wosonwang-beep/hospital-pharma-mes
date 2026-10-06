@@ -2,7 +2,7 @@
 import {ref,watch,computed} from 'vue'
 import {api,errorMessage,type Page} from '../../api/http'
 import {referenceRows,label,type IncomingRow,type ReferenceOption} from './incomingModel'
-const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null}}>()
+const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null;status?:string|null}}>()
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
@@ -14,7 +14,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   const f=props.field,c=props.context;let rows:IncomingRow[]=[];let request:IncomingRow|undefined
   if(c.inspectionRequestId)request=await api<IncomingRow>({url:`/quality/inspection-requests/${c.inspectionRequestId}`})
   const lotId=c.materialLotId??request?.materialLotId
-  if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined})
+  if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined,status:props.queryFilters?.status||undefined})
   else if(['finishedMaterialId','materialId'].includes(f))rows=await list('/materials',f==='finishedMaterialId'?{materialType:'FINISHED',status:'ACTIVE'}:{status:'ACTIVE'})
   else if(['qcSpecificationItemId','specificationItemId'].includes(f)){if(c.sampleId){const sample=await api<IncomingRow>({url:`/samples/${c.sampleId}`});const spec=await api<IncomingRow>({url:`/quality/specification-versions/${sample.qcSpecificationVersionId}`});rows=((spec.items??[]) as IncomingRow[]).map(i=>({...i,id:i.specificationItemId??i.id}))}}
   else if(f==='productionTestInstanceId')rows=await list('/quality/production-tests',{mainBatchId:c.mainBatchId})

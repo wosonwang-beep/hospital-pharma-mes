@@ -1,0 +1,11 @@
+{
+  "database": "hospital_pharma_mes_dev",
+  "highestSuccessfulVersion": 31,
+  "successfulMigrations": 31,
+  "failedMigrations": 0,
+  "newApplied": [
+    "V030",
+    "V031"
+  ],
+  "executedHistoryEdited": false
+}

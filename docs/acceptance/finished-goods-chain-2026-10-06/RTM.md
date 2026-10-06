@@ -1,0 +1,19 @@
+# Finished goods execution RTM
+
+|Requirement|Actual targeted native case(s)|Result|
+|---|---|---|
+|FG-01|incompleteProductionCannotRequestFinishedWarehouseReceipt|PASS|
+|FG-02|ProductionQuantityIT.outputDefersStockUntilWarehouseReceiptAndPreservesSignedReversal|PASS|
+|FG-03|finishedWarehouseReceiptRequiresCompletedAndIndependentSourceAndPostsOnlyOnce|PASS|
+|FG-04|legacyOutputStockIsConfirmedWithoutDuplicateReceipt|PASS|
+|FG-05|finishedPostCompletionSamplingFreezesLotAndReportUsesActualReviewedResults|PASS|
+|FG-06|finishedOriginalFailRemainsAndCannotReleaseOrBecomePassingReport;unrelatedNewPassingSampleCannotReplaceUnresolvedOriginalFailInReport;ProductionQualityIT.failOpensOosRetestConsumesExactQuotaAndPreservesImmutableOriginal|PASS|
+|FG-07|reportMissingResultsSelfApprovalAndChangedSamplingAreControlled|PASS|
+|FG-08|finishedReceiptAndFormalReportCannotBeBypassedAtQaSubmission;completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources|PASS|
+|FG-09|FinishedReleaseIT.realBatchLifecycleReleaseIsAtomicSignedIdempotentAndMakesFinishedInventoryAvailable|PASS|
+|FG-10|completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources|PASS|
+|FG-11|shipmentExpiryFrozenCrossOrgAndConcurrentRootCannotOversell;completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources|PASS|
+|FG-12|shipmentExpiryFrozenCrossOrgAndConcurrentRootCannotOversell|PASS (root lock contention, no two committed load assertion)|
+|FG-13|completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources|PASS|
+
+Additional permission/source-digest regression: finishedRequestReadCannotExposeDeniedSamplingOrReportAndDigestRemainsStable PASS. Chromium tests validate presentation/actions with fixtures; native cases validate actual persistent-contract semantics.
