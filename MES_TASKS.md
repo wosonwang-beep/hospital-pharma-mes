@@ -376,3 +376,20 @@ User requested correction of the conflicting current authority pointers. MES_TAS
 ## MEDIUM-01–04 technical resolution — 2026-10-06
 
 User explicitly requested current-HEAD confirmation and minimum repair of remaining audit MEDIUM-01–04. Starting HEAD `092b219`: MEDIUM-01 remained valid; MEDIUM-02 was partially fixed; MEDIUM-03/04 were already fixed by the UI implementation. All four are now technically `RESOLVED` with code references and fresh targeted Chromium evidence in the [updated current-state closure report](docs/review/MES_V1.0.17_AUDIT_HIGH_CLOSURE_REPORT.md). Delivery status `READY FOR ACCEPTANCE`; resolution does not imply human acceptance. Eight distinct focused + eight direct regression Chromium cases,12 frontend unit cases, typecheck and build PASS across scoped final runs. No backend, API, database, migration or frozen business/visual contract change. Existing accepted MES statuses unchanged; prior MEDIUM01–04 remaining-debt entries are historical and superseded by this review. Inherited LOW bundle warning remains. No new MES task, commit or push.
+
+
+## MaterialLot T4 screenshot refinement — 2026-10-06
+
+READY FOR ACCEPTANCE. User authorized screenshot-based PC correction. UI Template:T4. Summary/lifecycle, six source cards and bottom three-column layout refined; existing receipt-item identity/quantity/date reused and unavailable imagery/metadata stated honestly. Original QC failure and independent report/release preserved. Typecheck/build PASS; affected Chromium desktop2 tests PASS10.8s, no overflow or console/page errors. Evidence: [desktop](docs/acceptance/material-lot-reference-2026-10-06/material-lot-desktop.png), [comparison](docs/acceptance/material-lot-reference-2026-10-06/comparison.png), [review](design-qa.md). No business/API/DB/migration/permission/frozen baseline changes. Existing accepted MES statuses unchanged; no commit/push. LOW inherited bundle warning remains; unsupported metadata and global Shell differences documented.
+
+
+MaterialLot T4 follow-up (2026-10-06): READY FOR ACCEPTANCE. Reference long connecting lines/arrows, completed circles and below-node dates implemented. Release date now reads the existing authorized release-review decisions matching trace decision ID. Typecheck/build and2 targeted desktop Chromium cases PASS; no business/DB/migration changes. [Latest screenshot](docs/acceptance/material-lot-reference-2026-10-06/material-lot-timeline-desktop.png). No commit/push.
+
+
+## T5 execution screenshot refinement — 2026-10-06
+
+READY FOR ACCEPTANCE for the authorized existing-contract PC UI scope. User explicitly invoked Product Design image-to-code + design-qa with1280×720 reference. Connected horizontal/vertical steps, exact three-column primary geometry, compact tables and existing material evidence View/selection implemented. Full original charge evidence and controlled operation ownership retained. Typecheck/build PASS; targeted Chromium desktop scenario PASS11.6s, no console/page errors or overflow and three support rows visible. [Evidence/report](docs/acceptance/t5-reference-2026-10-06/REPORT.html), [visual review](design-qa.md). No backend/API/DTO/database/migration/permission/allowedActions/signature/frozen baseline change. Blueprint§9 exclusions preserved: no unsupported production photo/static illustration or deviation command; progress/time/status remain factual, so100% full-image identity is not claimed. Existing accepted MES task status unchanged. No commit/push; earlier MaterialLot work and local DB config preserved.
+
+T5 companion validation: existing frozen IPC/signature binding desktop case PASS9.7s. Two distinct targeted Chromium cases total; no full regression.
+
+Pre-commit validation2026-10-06: fresh typecheck PASS; five affected Chromium desktop cases PASS14.3s (MaterialLot chain/trace permission, signed inventory freeze in Inventory tab, T5 selected-record/evidence/commands, frozen IPC signature binding). Existing inventory test navigation updated for owning tab, assertions unchanged. No full regression.

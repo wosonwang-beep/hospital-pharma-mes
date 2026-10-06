@@ -122,3 +122,50 @@ final result: passed
 ## Pre-push verification — 2026-10-05
 
 Scope: accumulated authorized T3 incoming detail/report presentation, T4 MaterialLot trace view and supplied T5 PC execution design, tests, assets and screenshot evidence. Fresh targeted verification: 2 affected unit suites / 8 tests PASS (2.85s); six affected Chromium desktop specs / 29 cases PASS (43.1s); npm run build including vue-tsc PASS (19.10s, existing chunk-size warning). Final EOF whitespace normalized only; no executable change after verification. Native database untouched. Root .env and workstation application-local.yml/application-ci.yml changes explicitly excluded from the commit. No task-status or frozen-baseline change.
+
+
+## MaterialLot T4 reference refinement — 2026-10-06
+
+Source: user attachment817E0F56-F2CD-406D-AD29-70D0916FE0D4/1-照片-1.jpg (1280×853).
+Implementation: docs/acceptance/material-lot-reference-2026-10-06/material-lot-desktop.png.
+Combined comparison: docs/acceptance/material-lot-reference-2026-10-06/comparison.png.
+Viewport1280×853 CSS px/device scale1; full-page capture retains existing regulated facts. Fixture state is different from illustration; frontend browser verification, not live database acceptance. Existing authorized Playwright Chromium used.
+
+Initial P2 findings: lifecycle below tabs rather than summary, count labels without connecting markers; different object icon/hierarchy; oversized fact spacing and missing three-column bottom grouping.
+Fixes: cube object identity, lifecycle in summary, existing receipt quantity/date/supplier reference matching receiptItemId; connected stages with completion derived from node statuses; compact six colored source cards with existing dates/statuses/deep links; aligned facts and honest image availability panel. Existing inventory controls remain in Inventory tab. Original FAIL independent of report/release is preserved. Post-fix screenshot checked after correcting fact spacing.
+
+Remaining exclusions: frozen global Shell (228px sidebar/56px header) retained; permission-driven original actions retained rather than introducing Print/Export. Deleted English name not restored, unsupported CAS/photo/release timestamp not fabricated. Existing additional lot metadata retained. Exact1:1 whole-page reproduction is not claimed.
+
+Typecheck PASS; final targeted Chromium desktop2 tests PASS10.8s, covering source tabs, permission/no trace requests, summary/time/quantity, no overflow/console/page errors. Build PASS9.66s; inherited LOW chunk-size warning. No backend/API/DB/migration/permission/signature/frozen baseline change. PC-only scope. No scoped CRITICAL/HIGH finding.
+
+final result: passed (authorized PC presentation scope with documented contract exclusions)
+
+
+### MaterialLot flow-node follow-up — 2026-10-06
+
+User requested the reference's connecting lines, completed markers and dates. Replaced isolated arrow icons with long continuous blue connectors ending in library arrows. Dates sit below the marker/title, all six stages remain horizontal on PC. Completed markers derive from existing statuses, not record existence. An existing permission-guarded QA release-review read resolves each trace decision by its id to obtain the real decisionAt; missing/unreadable dates remain explicit. No API/DTO/permission/state contract change.
+Evidence: docs/acceptance/material-lot-reference-2026-10-06/material-lot-timeline-desktop.png; focused source/implementation comparison flow-comparison.png. Same1280×853 Chromium viewport. Six completed markers, five lines and sixth stage date verified with existing-contract fixtures. Typecheck and2 desktop cases PASS10.8s, no page/console errors or overflow. Build PASS, inherited LOW chunk-size warning. Visual comparison: no scoped P0/P1/P2 finding.
+final result: passed
+
+
+## Production Execution T5 image-to-code — 2026-10-06
+
+Source:46F18B58-1B7B-4BEC-BFA8-8535927A9023/1-照片-1.jpg. Source and Chromium screenshot both1280×720 pixels, deviceScaleFactor1/CSS scale, operation2 IN_PROGRESS. Current source screenshot inspected before editing; same-size final combined comparison and focused core-workspace comparison inspected after changes. Saved evidence: docs/acceptance/t5-reference-2026-10-06/workbench-pc-1280x720.png, comparison-1280x720.png, comparison-workspace.png. Actual Vue with existing-contract fixtures; no backend/data acceptance claim.
+
+Initial findings P2: isolated navigation arrows instead of connected lifecycle; no left step connectors; old workspace y304/height268 vs reference y298/height254; lower region y580 vs560; one-row fixture did not expose multi-record density; no existing-material evidence entry. Corrected all within the T5 template. Multiple charges now have one selected primary record, with all original evidence retained in material tab/drawer and table View selecting context. A stricter first-screen assertion exposed table bottom713px; reduced lower card padding and passed unchanged <=710px assertion. Final support rows fully visible.
+
+Required fidelity surfaces:
+- Fonts/typography: inherited V2 UI font stack,20px title,12–13px operational content; no new font dependency. Label/value alignment checked in focused capture. Original font file is not supplied; exact glyph pixel identity not claimed.
+- Spacing/layout: shell's existing authorized T5 reference variant180px/38px retained; content x191, workspace y298/minheight254, lower panels y560, three columns204px/flexible/252px at1280. Connected stages, active rings and row rhythm inspected. No clipping or horizontal overflow.
+- Colors/tokens: existing blue primary, green completion, neutral pending; shield from installed icon library. Completion/parameter status remains truthful; no fabricated “normal”.
+- Image/asset fidelity: existing supplied hospital design mark retained; library icons retained. No fake production photo. Formal blueprint§9 explicitly prohibits static illustrative photos without a photo Contract; photo and enlarge control omitted as a contract exclusion.
+- Copy/content: headings/tabs/order match reference. Actual times replace unsupported planned intervals. Completion progress counts COMPLETED, not current step index, so1/6 vs screenshot2/6 intentionally preserved. CONFIRMED remains confirmation, not invented completion. Unsupported deviation action/SOP method hidden or unresolved per existing contract; menus and permissions preserved.
+
+Validation: targeted desktop scenario PASS11.6s, verifies tabs/geometry/count3/selected charge/full evidence/control ownership/pending operation prohibition/instruction drawer, zero console/page errors and overflow. Typecheck PASS; Build PASS9.71s (inherited LOW bundle warning). No backend/API/DTO/database/migration/permission/state/signature/baseline change. PC-only; no mobile implementation.
+
+No actionable scoped P0/P1/P2 visual or interaction finding remains. Expected business-contract exclusions listed above mean this is not an exact full-image copy. New functionality/contracts for photo/deviation/scheduling would require DESIGN CHANGE REQUIRED.
+final result: passed (existing-contract PC layout scope; full-image100% fidelity not claimed)
+
+T5 direct regression: existing frozen IPC result/signature binding Chromium desktop case PASS9.7s. No full regression.
+
+Pre-commit validation2026-10-06: fresh typecheck PASS; five affected Chromium desktop cases PASS14.3s (MaterialLot chain/trace permission, signed inventory freeze in Inventory tab, T5 selected-record/evidence/commands, frozen IPC signature binding). Existing inventory test navigation updated for owning tab, assertions unchanged. No full regression.

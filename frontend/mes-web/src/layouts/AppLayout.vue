@@ -99,7 +99,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
  #app .execution-desktop-shell :deep(.execution-user .ant-avatar){background:#e8f3ff;color:#1677ff}
  #app .execution-desktop-shell :deep(.execution-header-breadcrumb){display:block;margin:0;font-weight:400}
  #app .execution-desktop-shell .header-title>span{display:none}
- #app .execution-desktop-shell>.main-shell>.content{padding:12px 18px 12px 13px}
+ #app .execution-desktop-shell>.main-shell>.content{padding:12px 18px 12px 11px}
  #app .execution-desktop-shell>.main-shell>.content>:deep(.ant-breadcrumb){display:none}
  #app .execution-desktop-shell :deep(.execution-workbench){margin-top:0}
 }
