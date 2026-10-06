@@ -1,0 +1,34 @@
+﻿suite,test,result,seconds,failure
+com.hospital.mes.production.FinishedReleaseIT,changedDisplayedEvidencePermissionAndIndependentQaBlockWithoutDecision,PASS,2.114,
+com.hospital.mes.production.FinishedReleaseIT,auditFailureRollsBackDecisionSignatureAvailabilityAndOutbox,PASS,1.951,
+com.hospital.mes.production.FinishedReleaseIT,actualLateOriginalFailOpensOosAndBlocksFinalQaWithoutOverwritingOriginal,PASS,2.854,
+com.hospital.mes.production.FinishedReleaseIT,pairedInventoryMovementIsNotConsumptionButPhysicalRemovalBlocksRetroactiveRejection,PASS,2.552,
+com.hospital.mes.production.FinishedReleaseIT,actualCompetingQaCommandCannotBypassRootLockOrCreateDecision,PASS,2.687,
+com.hospital.mes.production.FinishedReleaseIT,outboxFailureRollsBackAllFinishedDecisionEffects,PASS,1.829,
+com.hospital.mes.production.FinishedReleaseIT,actualGateChangeInvalidatesDisplayedReviewAndRejectNeedsNoFabricatedPassingGate,PASS,2.159,
+com.hospital.mes.production.FinishedReleaseIT,exactHttpContractPermissionAndGenericSignCannotBypassQaBusinessCommand,PASS,1.935,
+com.hospital.mes.production.FinishedReleaseIT,realBatchLifecycleReleaseIsAtomicSignedIdempotentAndMakesFinishedInventoryAvailable,PASS,1.617,
+com.hospital.mes.production.FinishedReleaseIT,explicitIndependentSupersessionPreservesEveryOriginalDecisionAndSignature,PASS,2.515,
+com.hospital.mes.production.EbrArchiveIT,delegatedHttpReadAllowsOnlyOwnedArchiveAndClosedCommands,PASS,4.667,
+com.hospital.mes.production.EbrArchiveIT,archiveAuditFailureRollsBackFileManifestAndKeyThenReplayWorks,PASS,3.362,
+com.hospital.mes.production.EbrArchiveIT,reviewCopyReuseAndFinalChangedSourcePreserveImmutableHashHistory,PASS,3.879,
+com.hospital.mes.production.EbrArchiveIT,preQaFinalAndInvalidatedFinalSignatureAreBlockedWithoutFiles,PASS,1.949,
+com.hospital.mes.iam.integration.AssignmentAdministrationIT,ordinaryRoleCarryingIamPermissionCannotBeRemovedFromLastAdministrator,PASS,0.949,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[1]",PASS,0.129,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[2]",FAILURE,0.014,"
+expected: 1
+ but was: 0"
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[3]",PASS,0.06,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[4]",PASS,0.172,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[5]",FAILURE,0.01,"
+expected: 1
+ but was: 0"
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[6]",PASS,0.149,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[7]",PASS,0.444,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[8]",PASS,0.048,
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[9]",FAILURE,0.006,"
+expected: 1
+ but was: 0"
+com.hospital.mes.iam.integration.AuthFilterIT,unknownAdminRouteIsDeniedEvenForAuthenticatedUser,PASS,0.066,
+com.hospital.mes.iam.integration.AuthFilterIT,revokedOrMismatchedRedisSessionRejectsOtherwiseValidJwt,PASS,0.028,
+com.hospital.mes.iam.integration.AuthFilterIT,missingAndAlteredBearerTokensAreUnauthorizedWithTrace,PASS,0.042,

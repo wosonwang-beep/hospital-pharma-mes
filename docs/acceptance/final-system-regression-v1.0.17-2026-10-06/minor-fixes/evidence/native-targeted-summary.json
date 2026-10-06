@@ -1,0 +1,42 @@
+[
+  {
+    "name": "com.hospital.mes.production.FinishedReleaseIT",
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "22.247"
+  },
+  {
+    "name": "com.hospital.mes.production.EbrArchiveIT",
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "16.313"
+  },
+  {
+    "name": "com.hospital.mes.iam.integration.AssignmentAdministrationIT",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "12.95"
+  },
+  {
+    "name": "com.hospital.mes.iam.integration.FinalSystemPermissionIT",
+    "tests": "9",
+    "failures": "3",
+    "errors": "0",
+    "skipped": "0",
+    "time": "1.076"
+  },
+  {
+    "name": "com.hospital.mes.iam.integration.AuthFilterIT",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "3.423"
+  }
+]

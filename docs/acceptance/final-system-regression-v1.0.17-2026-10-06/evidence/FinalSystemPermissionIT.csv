@@ -1,0 +1,16 @@
+﻿test,result,message
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[1]",PASS,
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[2]",FAILURE,"
+expected: 1
+ but was: 0"
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[3]",PASS,
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[4]",PASS,
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[5]",FAILURE,"
+expected: 1
+ but was: 0"
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[6]",PASS,
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[7]",FAILURE,Status expected:<200> but was:<404>
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[8]",PASS,
+"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[9]",FAILURE,"
+expected: 1
+ but was: 0"

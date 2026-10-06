@@ -1,0 +1,42 @@
+{
+  "backend_affected_unit": {
+    "tests": 163,
+    "failures": 0
+  },
+  "native_affected": {
+    "tests": 27,
+    "passed": 24,
+    "failures": 3,
+    "errors": 0,
+    "remaining_failure": "Missing catalog registration: production:batch:view / mes:weigh:view"
+  },
+  "frontend_unit": {
+    "files": 19,
+    "tests": 72,
+    "failures": 0
+  },
+  "qa_browser_desktop_mobile": {
+    "tests": 20,
+    "passed": 20
+  },
+  "reference_browser_desktop_mobile": {
+    "tests": 20,
+    "passed": 20
+  },
+  "qa_evidence_additional_rerun": {
+    "tests": 2,
+    "passed": 2,
+    "duplicate_of_QA_cases": true
+  },
+  "typecheck": "PASS",
+  "build": "PASS",
+  "old_script_tests": {
+    "tests": 6,
+    "passed": 6
+  },
+  "required_repository_ci_negative": "PASS",
+  "Flyway": "V001-V026 validate PASS, unchanged",
+  "SYSTEM_ADMIN_permissions_after": 106,
+  "review": "no new CRITICAL/HIGH/MEDIUM after corrections",
+  "overall_final_acceptance": "NOT PASSED / DEPENDENCY_NOT_READY"
+}

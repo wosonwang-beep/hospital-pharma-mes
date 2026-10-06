@@ -1,0 +1,26 @@
+{
+  "suites": [
+    {
+      "name": "com.hospital.mes.iam.integration.FinalSystemPermissionIT",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.938"
+    },
+    {
+      "name": "com.hospital.mes.iam.integration.AuthFilterIT",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.959"
+    }
+  ],
+  "migration": "V027 applied successfully",
+  "validate": "27 successful contiguous migrations; checksum PASS",
+  "role_mappings_unchanged": true,
+  "other_permission_records_unchanged": true,
+  "scope": "Register existing production:batch:view / mes:weigh:view only",
+  "review": "No CRITICAL/HIGH/MEDIUM findings"
+}

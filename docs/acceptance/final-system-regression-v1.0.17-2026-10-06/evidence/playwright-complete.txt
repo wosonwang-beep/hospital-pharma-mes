@@ -1,0 +1,4 @@
+Chromium Desktop + Mobile complete suite
+196 cases:193 PASS,3 SKIP,0 FAIL
+Duration:7.0 minutes
+Three approved PC-only mobile exclusions (T5/reference)

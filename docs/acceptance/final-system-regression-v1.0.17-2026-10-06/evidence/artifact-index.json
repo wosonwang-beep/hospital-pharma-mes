@@ -1,0 +1,518 @@
+{
+  "external_artifact_directory": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06",
+  "restored_historical_screenshots": [
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/batches-edit-list-chromium-desktop.png",
+      "sha256": "96995de2fbea078b6f9459eec49e2a192a8a7602c602905984e8415c49d90e07"
+    },
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/batches-edit-list-chromium-mobile.png",
+      "sha256": "12da4d4075b222217e386eb3724f4750e49ef958582c21afbafa178019309ddf"
+    },
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/orders-edit-list-chromium-desktop.png",
+      "sha256": "51696bd8686eaefdd682a7025e1b384502784b0882f17bd1b2b8aa7b8b38133f"
+    },
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/orders-edit-list-chromium-mobile.png",
+      "sha256": "d904a225670f40b60e77901619e4bc5666ca71cf92bb6d35653fe3f79c73a05c"
+    },
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/trace-business-roots-chromium-desktop.png",
+      "sha256": "d57537cd743e345437716f466b5eac8dc3f65016e487e8b0b50e968277efa5e4"
+    },
+    {
+      "path": "docs/acceptance/audit-medium-2026-10-06/trace-business-roots-chromium-mobile.png",
+      "sha256": "d316f8000b7434ea8964cd6a084711fd2c5b461d0b3082b3d4099574681f7ebc"
+    },
+    {
+      "path": "docs/acceptance/batch-reference-2026-10-06/batch-pc-1280x853.png",
+      "sha256": "377ebef989dae2b9ddfe1f4efb8d3e0f2feda9e46892d470da779a9b4b6805c7"
+    },
+    {
+      "path": "docs/acceptance/incoming-quality/evidence/qc-root-chromium-desktop.png",
+      "sha256": "c1f55e7f32bfc8a9f2e81307f01f8cb93fb8951c8a7c44f19826312594d1e6c0"
+    },
+    {
+      "path": "docs/acceptance/incoming-quality/evidence/qc-root-chromium-mobile.png",
+      "sha256": "4c114aa108b9ad57591bf0c4d2aadfa1a6907286f784ed2a80315c5588196319"
+    },
+    {
+      "path": "docs/acceptance/incoming-quality/evidence/qc-standard-chromium-desktop.png",
+      "sha256": "f27b2a32c91276f053416e54baa54eb4e6da481060b370ee4c21d6935f992bb0"
+    },
+    {
+      "path": "docs/acceptance/incoming-quality/evidence/qc-standard-chromium-mobile.png",
+      "sha256": "b4a2012725e4af830458fe8299781b5ec4826431b565faeaf8909449d9feed21"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/audit-drawer-chromium-desktop.png",
+      "sha256": "563b0c03c4b8dc817195e44e59d84c6a0a93ed8d423e27a7135248506ecd8352"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/audit-drawer-chromium-mobile.png",
+      "sha256": "da810f1e117061401f7d1b28fb0a26c3ac18657593532fb5d566d6c22f7168de"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/closeout-issue-chromium-desktop.png",
+      "sha256": "38d9e669a7acdfd3bcc632bfafa89274063e55e5aba6abf7e382da56b8cc41b3"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/closeout-material-chromium-desktop.png",
+      "sha256": "bebbb294d0a6c2ae70e5a3d12c647506102050a5e209286395f1d2f95b102413"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/closeout-material-chromium-mobile.png",
+      "sha256": "f914170cbd9106f7fdce0fed4e06ab332cc93953fc7f87478e77e383d384447e"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/closeout-production-test-chromium-mobile.png",
+      "sha256": "3f468b6d03f4e77ae8a94e6d80330f7fbd21f6530ba48185d110e4b7754d8ed8"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/integration-drawer-chromium-desktop.png",
+      "sha256": "cd1c5e57ac20c81696e21bb82cbac1640f4def1fd2b6969463f2415575e7c074"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/integration-drawer-chromium-mobile.png",
+      "sha256": "1c51a57e6b9bdde4e2abd7905a447402eeab954c7b97d4ca705c11c3c90f8847"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/issue-create-chromium-desktop.png",
+      "sha256": "f9f493d48e79e325c3bd038e5f86454b440e5d78b5309b69b1ac32459099d6f4"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/issue-create-chromium-mobile.png",
+      "sha256": "524c83f95cddd9c765308d568c085437783d8ff4cdfc19f2fe3f756261247c5c"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/password-chromium-desktop.png",
+      "sha256": "2f864b41bb41d966e24bea021cc8d94f23f615b0b9dbe16497e5f656872f8244"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/password-chromium-mobile.png",
+      "sha256": "a886eabb0ee1f00d316d8b47b028c98ed5cc52d5c3a201e07af776d7251d4524"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-equipment-chromium-desktop.png",
+      "sha256": "bb65de1102664f521b6ef761488d1953e54d0e4726fe564b32646c7428a7fb39"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-equipment-chromium-mobile.png",
+      "sha256": "b28ec64c9174a1b60c8cbf3ad5ab63c915f3a6ea6945632ae69a60e7a469f457"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-materials-chromium-mobile.png",
+      "sha256": "8f647f386b2d44cfc66113546c6c5f33f3b9fa8636bd9e3c92bd93f991d0bd49"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-organizations-chromium-desktop.png",
+      "sha256": "06b870056f97762237b42bf3f08f9d9c58f769f660c4d3cf81fc85f4c10b06d8"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-organizations-chromium-mobile.png",
+      "sha256": "80f2741b8893955edb8cdb0971ad402253014cf8a332b5b8c2de20f26e68c9ff"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-qualifications-chromium-desktop.png",
+      "sha256": "bb235e9416c01cb9915c3286a8bbf4c610f7416a9699752364d1de56b796d448"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-qualifications-chromium-mobile.png",
+      "sha256": "c434ddf4c8afb495b19aba01905304b4ef86ec1f101db4a47e8d00c13eed4ade"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-suppliers-chromium-desktop.png",
+      "sha256": "7aa12a3d0749fee4e8f9e245d2b8c87365584c68197f847762a7b4875f665d7a"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-suppliers-chromium-mobile.png",
+      "sha256": "201117eb769b39c32860fb4c1f27273e153cd74111a361baca96e6d8de75017f"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-unit-conversions-chromium-desktop.png",
+      "sha256": "b79aafd0b632b014fe7b7751fddb637f5181ba5adab8690479c0cc1419f5816f"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-unit-conversions-chromium-mobile.png",
+      "sha256": "4f7a4bc44d01bfe4320dcbe1a978b0c9fcd6b094bb352884fd4203e63adcce5d"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-units-chromium-desktop.png",
+      "sha256": "4b26905daeaaa70d210019504557f55b9d602a03e2d16b1a0fe24c9cd1a41f73"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-units-chromium-mobile.png",
+      "sha256": "7a240e6f2d63bf791ff375733fe1b43917ad23f252ab8967cbe8236b497a5c4e"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-process-products-chromium-desktop.png",
+      "sha256": "e773b9e620e41523e9e3ed98f7c68e5b31e713a9430de938985c2e6aa232d2c4"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-issues-chromium-mobile.png",
+      "sha256": "4baee2b83cd3aca376d20e02fb4582021ce775c519b3bc519fe8df1812d7d35f"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-receipts-chromium-desktop.png",
+      "sha256": "a63d08d07a4d26e0ca04b0f4442abf5b8e3c181a17dc2e98da6741e836dea57e"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-receipts-chromium-mobile.png",
+      "sha256": "bbfa542a256de3ee72cf4a0d3024533008cda4af19b9e6aa9629e912fccef9f0"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-deviations-create-chromium-desktop.png",
+      "sha256": "bb530dd98cae4e46c7d93d8b4bf7ab35e1e6c856d2e69173499db3c728071d6d"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-deviations-create-chromium-mobile.png",
+      "sha256": "d4ee7f1b1da9f4cc7818beef8edd0c8d55b81b2caf48434eef7c085db9e7ce9d"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-process-products-create-chromium-desktop.png",
+      "sha256": "e4fd28cc9e254c3160d126bbf118b7c2f523724a03910214f39a7bdf08bc23d9"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-process-products-create-chromium-mobile.png",
+      "sha256": "6dfe192bf5849aea293051e6febd81d6e2680ecc9e0f59e9986f4272b6d06dc5"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-batches-create-chromium-desktop.png",
+      "sha256": "cf0c2e2bae6e59e162e7e5e72a9cd4bdf92d08b5c3b87512418e2c112d32e57d"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-batches-create-chromium-mobile.png",
+      "sha256": "d3c964779cc66fd5fdaf67df3bce17dab588258fa00d691a90e52678fcbec5c1"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-orders-create-chromium-desktop.png",
+      "sha256": "2cc1d058a21296b293d6254f5af80febca006d64166506a4bc35e74441b3828e"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-orders-create-chromium-mobile.png",
+      "sha256": "01cbdf14c1206bb681684787f58064332d7a519036ba69349c01022ed34fd8af"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-reports-create-chromium-desktop.png",
+      "sha256": "b3ea6992d37afc537d983b99534e8c929fb5a51c4370534381f86ec9068589e9"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-reports-create-chromium-mobile.png",
+      "sha256": "e6b80ab4d0d95eceae54582e632387a764494c7497b1cb5e97ef834cec808556"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-requests-create-chromium-desktop.png",
+      "sha256": "8782d0859d1bec68fa816e4ba422d6b95f1f5b53703f66046c8916e7b3288474"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-requests-create-chromium-mobile.png",
+      "sha256": "31bd4ba78071975d6ce3ac8a0572f2cc2a1445b7c0c9bde1cb92e9c292177db3"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-tasks-create-chromium-desktop.png",
+      "sha256": "fe5e12d22473976c7e003101a238603f9b02dae1afd6f334b34df6cab296b43d"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-tasks-create-chromium-mobile.png",
+      "sha256": "a8fd4c0572a08bbb9c16623adc8da5c541c20bc7e53f1b585567bfa14246a5d8"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-plans-create-chromium-desktop.png",
+      "sha256": "59d8e581156cfed056551f533e375ab1fd040a4e6efe9f772b691903be53ec1f"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-plans-create-chromium-mobile.png",
+      "sha256": "f8202ad8dd112fa9d63f97a152660865a7c5d575d1c03ca167e471afd4a80f00"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-tests-create-chromium-desktop.png",
+      "sha256": "db59e8f150b22df0c13464c32489655f280d7f30b027b9c426fb7b053fa945ee"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-tests-create-chromium-mobile.png",
+      "sha256": "9aeb1203574e4b52f41a341dfe66f28ccc676bc89c8f7245852431d255234984"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-sampling-tasks-create-chromium-desktop.png",
+      "sha256": "5ec068881b6f8dc662c190a9e0cfbf479c5a7ccf547fa4eee68d20155bbbb6be"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-sampling-tasks-create-chromium-mobile.png",
+      "sha256": "ee4abd792f060a595b7c8411919daf8547b48f23bcc257504294e0858202bbe3"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-wms-issues-create-chromium-desktop.png",
+      "sha256": "fa36ee5f66a4271ff2b93f4709aebda4125c043faa0bbdf3382da0a850d8e337"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t2-wms-issues-create-chromium-mobile.png",
+      "sha256": "79a32edc8e2be953d9d057a36fc3fe7148e1c96fafeda7f076d85ceb565c9258"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/t6/signature-dialog-chromium-mobile.png",
+      "sha256": "fb0dc844aafbc5247b2e4c133a44dd04fa79de890c03b2bb5d6781cd927ea10c"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/trace-chromium-desktop.png",
+      "sha256": "11fb0bab5b8e750652dfe5eb49be0e25cfd72aa68ca46783350cd37aa256b173"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/trace-chromium-mobile.png",
+      "sha256": "8bcee799f163bd1511c461c1882761dd95fe63d720b4ab013bc1cd2c3fa31f52"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/trace-drawer-chromium-desktop.png",
+      "sha256": "5eabb9eb0db71e52f906d4d2754ac184db2becdb9ee924664cbe37f2c5fd2c68"
+    },
+    {
+      "path": "docs/acceptance/ui-blueprint-2026-10-05/trace-drawer-chromium-mobile.png",
+      "sha256": "6f6de3b2f7caa9d4526499b678e0638cc87be414a0bb2eb5e197c942d5327773"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/evidence-drawer-chromium-desktop.png",
+      "sha256": "f4dcec1d16865a871a0a333a7e19389c5b5e50a069b9fea6eee5da63d480d6bd"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/shell-collapsed-chromium-desktop.png",
+      "sha256": "0c3850a65c1bd1c7570299b16be9a3cdde9040158918302e9cb2d1ff86ecb462"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/signature-dialog-chromium-desktop.png",
+      "sha256": "bb342532949b62601d093f84f42dc1bfe787cf99aa9209c43b3bd6bc3976f657"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/signature-dialog-chromium-mobile.png",
+      "sha256": "fb0dc844aafbc5247b2e4c133a44dd04fa79de890c03b2bb5d6781cd927ea10c"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t1-material-query-chromium-desktop.png",
+      "sha256": "289b82a8edecbc4c9b800df64ce0b0991284acbd2ca39e7b9a91b9a01bb987c1"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t1-material-query-chromium-mobile.png",
+      "sha256": "7d9fb3a2b00b99f21dc65f9ae80e57a33e08f2f262b50524e75c5e65da676bc0"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-chromium-desktop.png",
+      "sha256": "cca569ea9d23db1d6e8dd96610c348411a42d6c11dcac65e3ded94f08ffc7541"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-chromium-mobile.png",
+      "sha256": "614cdf7ade736fc7d8cd0e9775c5270479ed2596bc40cec4f6cf093b56cf9071"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-wide-chromium-desktop.png",
+      "sha256": "67a9b0402870191f68a4292e8a32239595427ec33ade455288ebb207c0aa5156"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t6-qa-review-chromium-desktop.png",
+      "sha256": "5754aa1aa9ae2f78042be6944d31180d692ffa04806a88afdea080cbff2f0e8e"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1.1/screens/after/t6-qa-review-chromium-mobile.png",
+      "sha256": "94fbbc06502be6f1562317dc6d90025078e4928705d6557d52111beda0a3b83e"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/evidence-drawer-chromium-desktop.png",
+      "sha256": "f4dcec1d16865a871a0a333a7e19389c5b5e50a069b9fea6eee5da63d480d6bd"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/evidence-drawer-chromium-mobile.png",
+      "sha256": "344e64c1db77c9a1ce9b5398097b3c01bbb6cb7c714aa3541192c0342780b60b"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/shell-collapsed-chromium-desktop.png",
+      "sha256": "0c3850a65c1bd1c7570299b16be9a3cdde9040158918302e9cb2d1ff86ecb462"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/signature-dialog-chromium-desktop.png",
+      "sha256": "bb342532949b62601d093f84f42dc1bfe787cf99aa9209c43b3bd6bc3976f657"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/signature-dialog-chromium-mobile.png",
+      "sha256": "fb0dc844aafbc5247b2e4c133a44dd04fa79de890c03b2bb5d6781cd927ea10c"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t1-material-query-chromium-desktop.png",
+      "sha256": "289b82a8edecbc4c9b800df64ce0b0991284acbd2ca39e7b9a91b9a01bb987c1"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t1-material-query-chromium-mobile.png",
+      "sha256": "7d9fb3a2b00b99f21dc65f9ae80e57a33e08f2f262b50524e75c5e65da676bc0"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t2-material-form-chromium-desktop.png",
+      "sha256": "cca569ea9d23db1d6e8dd96610c348411a42d6c11dcac65e3ded94f08ffc7541"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t2-material-form-chromium-mobile.png",
+      "sha256": "614cdf7ade736fc7d8cd0e9775c5270479ed2596bc40cec4f6cf093b56cf9071"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t6-qa-review-chromium-desktop.png",
+      "sha256": "5754aa1aa9ae2f78042be6944d31180d692ffa04806a88afdea080cbff2f0e8e"
+    },
+    {
+      "path": "docs/acceptance/ui-v2-phase-1/screens/t6-qa-review-chromium-mobile.png",
+      "sha256": "94fbbc06502be6f1562317dc6d90025078e4928705d6557d52111beda0a3b83e"
+    },
+    {
+      "path": "docs/acceptance/workbench-gap-followup-2026-10-06/deviation-context-pc.png",
+      "sha256": "1f8b619ec4869af7989ef3027971091475abd456911c32d7d7a72cba9d1e60bd"
+    },
+    {
+      "path": "docs/acceptance/workbench-gap-followup-2026-10-06/workbench-with-deviation-pc.png",
+      "sha256": "d2dc6c0dbc4c39ec03ec2b1db4c82288e82fea4934ddf11a7cd793d69ad82b42"
+    }
+  ],
+  "retained_native_fixture_files": [
+    "native-concurrency-00119a689892.json",
+    "native-concurrency-01d0ae9c416a.json",
+    "native-concurrency-033cb3aed656.json",
+    "native-concurrency-03e05c3985ec.json",
+    "native-concurrency-05e36eb00880.json",
+    "native-concurrency-0794234d5139.json",
+    "native-concurrency-0922553416c6.json",
+    "native-concurrency-0b469acf1996.json",
+    "native-concurrency-0f839be2f032.json",
+    "native-concurrency-10c5c9ace76e.json",
+    "native-concurrency-11916d185adc.json",
+    "native-concurrency-14a02c7530f6.json",
+    "native-concurrency-1afcf1b918d4.json",
+    "native-concurrency-1b4c9432c544.json",
+    "native-concurrency-1d9c3173e3cd.json",
+    "native-concurrency-21074be167c6.json",
+    "native-concurrency-227a0c8872cc.json",
+    "native-concurrency-280bf96bbb80.json",
+    "native-concurrency-2b10162cd865.json",
+    "native-concurrency-2ee0526cd1ec.json",
+    "native-concurrency-31697be3300c.json",
+    "native-concurrency-31fe75dbfa01.json",
+    "native-concurrency-323d5c0682dd.json",
+    "native-concurrency-34f2dfe24134.json",
+    "native-concurrency-36b80baf93c8.json",
+    "native-concurrency-39fb89d327e0.json",
+    "native-concurrency-3b89ee6f2ce5.json",
+    "native-concurrency-3eefceeef4af.json",
+    "native-concurrency-43dc34388b3f.json",
+    "native-concurrency-451f93db1a22.json",
+    "native-concurrency-4e01a4de6fd9.json",
+    "native-concurrency-525ab26fbefe.json",
+    "native-concurrency-544d065285b5.json",
+    "native-concurrency-5db4b5e664cd.json",
+    "native-concurrency-603cef67af04.json",
+    "native-concurrency-6b90166a708c.json",
+    "native-concurrency-6c5b46bcb1de.json",
+    "native-concurrency-7162a6eb7932.json",
+    "native-concurrency-73cd24776a3d.json",
+    "native-concurrency-78efda07229c.json",
+    "native-concurrency-79cd5e246d0b.json",
+    "native-concurrency-7c0b65197ac6.json",
+    "native-concurrency-7c80180ffd72.json",
+    "native-concurrency-7ea0eb5b25dd.json",
+    "native-concurrency-81dc7e29563a.json",
+    "native-concurrency-85254cbe8e0c.json",
+    "native-concurrency-8605d0eb5038.json",
+    "native-concurrency-86f52277026c.json",
+    "native-concurrency-8ce7cbbd7622.json",
+    "native-concurrency-8e3e513af990.json",
+    "native-concurrency-8f52030242cc.json",
+    "native-concurrency-910ec84992b3.json",
+    "native-concurrency-94121643202f.json",
+    "native-concurrency-96e6503a65b8.json",
+    "native-concurrency-9c0906457bdc.json",
+    "native-concurrency-9d7a3e8b61b9.json",
+    "native-concurrency-a2c29fafa6b1.json",
+    "native-concurrency-a7d58c1f9b5c.json",
+    "native-concurrency-ad404d90cfde.json",
+    "native-concurrency-b07e5ddac16d.json",
+    "native-concurrency-b2c236c6f9f2.json",
+    "native-concurrency-b837417388f0.json",
+    "native-concurrency-b88b811b7024.json",
+    "native-concurrency-bbed0f46cc0e.json",
+    "native-concurrency-c8e038a3c843.json",
+    "native-concurrency-caeb6f4fae41.json",
+    "native-concurrency-cda12ce525da.json",
+    "native-concurrency-db17beeaf131.json",
+    "native-concurrency-de981ef472f5.json",
+    "native-concurrency-df486282c131.json",
+    "native-concurrency-e2adb7f17b9b.json",
+    "native-concurrency-e45b2fcb8e79.json",
+    "native-concurrency-e46744a70b6a.json",
+    "native-concurrency-e535e4585b3a.json",
+    "native-concurrency-e66818fbba69.json",
+    "native-concurrency-e6ab7bdffbe0.json",
+    "native-concurrency-e898c564223f.json",
+    "native-concurrency-ec9703680ad1.json",
+    "native-concurrency-ef85dfbcb206.json",
+    "native-concurrency-f5db93e8a8ef.json",
+    "native-concurrency-f67af68b5317.json",
+    "native-concurrency-f908afd6e34c.json",
+    "native-concurrency-f9c97f98f33e.json",
+    "native-concurrency-fd815a200a5a.json"
+  ],
+  "historical_native_evidence_copies": [
+    "native-concurrency-08e02b18f5db.json",
+    "native-concurrency-0a7aa99757fd.json",
+    "native-concurrency-10a0c3cfdeaa.json",
+    "native-concurrency-15bad93bf156.json",
+    "native-concurrency-1e3149a1360e.json",
+    "native-concurrency-25e51980c156.json",
+    "native-concurrency-2c2cc45335b1.json",
+    "native-concurrency-359903b88cd1.json",
+    "native-concurrency-376cfefd7148.json",
+    "native-concurrency-402d615fe6e7.json",
+    "native-concurrency-405456176550.json",
+    "native-concurrency-41cdde63d29f.json",
+    "native-concurrency-41ead8ff5914.json",
+    "native-concurrency-43eb413248cc.json",
+    "native-concurrency-44f481ff70d2.json",
+    "native-concurrency-470029abdd6e.json",
+    "native-concurrency-477ad3c82fba.json",
+    "native-concurrency-4ac50180b034.json",
+    "native-concurrency-4addc227c6c9.json",
+    "native-concurrency-4bbdb675d6f7.json",
+    "native-concurrency-50785bf846d3.json",
+    "native-concurrency-50d64b43b18c.json",
+    "native-concurrency-5866a7ff267b.json",
+    "native-concurrency-5b865ac0d51d.json",
+    "native-concurrency-6381fc7d49be.json",
+    "native-concurrency-656fc44c247d.json",
+    "native-concurrency-699f5dbab461.json",
+    "native-concurrency-6f3e4f77826a.json",
+    "native-concurrency-6fdc71b982ad.json",
+    "native-concurrency-75484b3b87f4.json",
+    "native-concurrency-7d2b355bd2e2.json",
+    "native-concurrency-824fa18551b2.json",
+    "native-concurrency-9054a8a29309.json",
+    "native-concurrency-9821dcf73f8e.json",
+    "native-concurrency-99913235ced8.json",
+    "native-concurrency-9aa560024b59.json",
+    "native-concurrency-a67294ac7627.json",
+    "native-concurrency-b5035c0c3da6.json",
+    "native-concurrency-b55b9b03306d.json",
+    "native-concurrency-b78ffe1de4a8.json",
+    "native-concurrency-c003fe8aa77d.json",
+    "native-concurrency-c16a3a3226ba.json",
+    "native-concurrency-c1b2467069d9.json",
+    "native-concurrency-c2110fb22bdf.json",
+    "native-concurrency-c9bd5332e546.json",
+    "native-concurrency-cc30b4a02820.json",
+    "native-concurrency-cce67a2e4035.json",
+    "native-concurrency-cd5ebc9582f1.json",
+    "native-concurrency-ce2698bc6ceb.json",
+    "native-concurrency-d3af99931a03.json",
+    "native-concurrency-d79f483e57ed.json",
+    "native-concurrency-db61d7e99b87.json",
+    "native-concurrency-e2839be7bd9e.json",
+    "native-concurrency-e2935cf1c07f.json",
+    "native-concurrency-e7e48673ba0e.json",
+    "native-concurrency-f04727c07624.json",
+    "native-concurrency-f3fcf7c1b975.json",
+    "native-concurrency-f8ae87dc5ca6.json",
+    "native-concurrency-ff7a46496fa9.json",
+    "native-concurrency-summary-2026-10-04.json"
+  ],
+  "historical_copy_directory": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\historical-native-evidence-copies"
+}

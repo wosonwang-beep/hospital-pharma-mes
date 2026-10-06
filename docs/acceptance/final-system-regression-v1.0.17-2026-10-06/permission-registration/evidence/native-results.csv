@@ -1,0 +1,13 @@
+﻿suite,test,result,seconds
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[1]",PASS,0.184
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[2]",PASS,0.127
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[3]",PASS,0.031
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[4]",PASS,0.081
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[5]",PASS,0.038
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[6]",PASS,0.088
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[7]",PASS,0.244
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[8]",PASS,0.043
+com.hospital.mes.iam.integration.FinalSystemPermissionIT,"representativeCapabilitiesUseRealBackendAuthorization(String, String, String)[9]",PASS,0.06
+com.hospital.mes.iam.integration.AuthFilterIT,unknownAdminRouteIsDeniedEvenForAuthenticatedUser,PASS,0.936
+com.hospital.mes.iam.integration.AuthFilterIT,revokedOrMismatchedRedisSessionRejectsOtherwiseValidJwt,PASS,0.025
+com.hospital.mes.iam.integration.AuthFilterIT,missingAndAlteredBearerTokensAreUnauthorizedWithTrace,PASS,0.04

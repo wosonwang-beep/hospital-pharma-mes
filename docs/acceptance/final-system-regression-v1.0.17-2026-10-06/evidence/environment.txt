@@ -1,0 +1,5 @@
+PRE / POST: native MariaDB localhost:3306/hospital_pharma_mes_dev
+V001-V026 contiguous SUCCESS; explicit Flyway validate PASS, checksum unchanged
+POST SYSTEM_ADMIN permission count:106
+Redis existing container localhost:6380 PONG
+No reset/drop/rebuild/repair/migration or history changes

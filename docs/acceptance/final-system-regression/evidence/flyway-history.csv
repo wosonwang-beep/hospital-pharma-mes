@@ -1,0 +1,28 @@
+Version,Status,Description,Checksum
+V001,SUCCESS,foundation probe,1898937254
+V002,SUCCESS,iam core,-1249023458
+V003,SUCCESS,mes 001 platform base,951083024
+V004,SUCCESS,mes 001 platform permissions,2054586956
+V005,SUCCESS,mes 002 rbac contract,1026768910
+V006,SUCCESS,mes 003 master resources,297397611
+V007,SUCCESS,mes 004 material,968483909
+V008,SUCCESS,mes 005 supplier,146190384
+V009,SUCCESS,mes 004 005 frozen query indexes,138118638
+V010,SUCCESS,material basic and preferred supplier,1575872442
+V011,SUCCESS,mes 006 process,1244691380
+V012,SUCCESS,mes 007 ebr definition,-937834331
+V013,SUCCESS,mes 008 wms,1648171449
+V014,SUCCESS,incoming qc specifications,-487969150
+V015,SUCCESS,incoming attachments,-1315848784
+V016,SUCCESS,incoming quality,1041280907
+V017,SUCCESS,incoming production,-248794792
+V018,SUCCESS,incoming ebr runtime,-1063171810
+V019,SUCCESS,incoming execution,1790118999
+V020,SUCCESS,weigh charge trace,1926599918
+V021,SUCCESS,incoming issue returns,1931991047
+V022,SUCCESS,ebr review collation guard,-358375771
+V023,SUCCESS,production snapshot immutability,262434751
+V024,SUCCESS,controlled inventory ipc clearance,1378931061
+V025,SUCCESS,production quality balance,1012106487
+V026,SUCCESS,finished release ebr archive,-1726611119
+V027,SUCCESS,register existing batch weigh read permissions,-1339030558

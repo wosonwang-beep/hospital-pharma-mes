@@ -1,0 +1,4 @@
+﻿test,result,message
+unknownAdminRouteIsDeniedEvenForAuthenticatedUser,PASS,
+revokedOrMismatchedRedisSessionRejectsOtherwiseValidJwt,PASS,
+missingAndAlteredBearerTokensAreUnauthorizedWithTrace,PASS,

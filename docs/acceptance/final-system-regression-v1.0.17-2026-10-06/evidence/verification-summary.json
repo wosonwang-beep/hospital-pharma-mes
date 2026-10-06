@@ -1,0 +1,49 @@
+{
+  "backend_unit": {
+    "tests": 195,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "backend_full_it_before_authorization_patch": {
+    "tests": 497,
+    "passed": 471,
+    "failures": 1,
+    "skipped": 25,
+    "failure": "reverted outer-transaction isolation experiment"
+  },
+  "safe_it_before_authorization_patch": {
+    "tests": 496,
+    "passed": 471,
+    "failures": 0,
+    "skipped": 25,
+    "excluded_method": "ordinaryRoleCarryingIamPermissionCannotBeRemovedFromLastAdministrator"
+  },
+  "final_permission_probes": {
+    "tests": 9,
+    "passed": 5,
+    "failures": 4
+  },
+  "affected_AuthFilterIT": {
+    "tests": 3,
+    "passed": 3
+  },
+  "frontend_unit": {
+    "files": 19,
+    "tests": 72,
+    "passed": 72
+  },
+  "playwright": {
+    "tests": 196,
+    "passed": 193,
+    "skipped": 3,
+    "failures": 0
+  },
+  "typecheck": "PASS",
+  "build": "PASS",
+  "production_audit_vulnerabilities": 0,
+  "Flyway_validate": "PASS V001-V026 pre/post",
+  "migration_changes": 0,
+  "review": "no new Critical/High/Medium in bounded fixes; existing UI MEDIUM remains",
+  "acceptance": "DEPENDENCY_NOT_READY / NOT PASSED"
+}

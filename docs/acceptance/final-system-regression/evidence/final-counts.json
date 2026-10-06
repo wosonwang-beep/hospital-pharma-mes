@@ -1,0 +1,68 @@
+{
+  "testedHead": "661785ecfd51f04406a510d3b10bce3886e48941",
+  "collectedAt": "2026-10-06T15:47:12.6189854+08:00",
+  "backend": {
+    "suites": 71,
+    "tests": 195.0,
+    "failures": 0.0,
+    "errors": 0.0,
+    "skipped": 0.0,
+    "passed": 195.0
+  },
+  "integration": {
+    "suites": 52,
+    "tests": 506.0,
+    "failures": 0.0,
+    "errors": 0.0,
+    "skipped": 25.0,
+    "passed": 481.0
+  },
+  "playwright": {
+    "startTime": "2026-10-06T07:37:15.003Z",
+    "duration": 295415.60500000004,
+    "expected": 197,
+    "skipped": 3,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "frontend": {
+    "files": 19,
+    "passed": 72,
+    "failed": 0,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "productionDependencyVulnerabilities": 0
+  },
+  "flyway": {
+    "versions": "V001-V027",
+    "successful": 27,
+    "failed": 0,
+    "highest": 27,
+    "explicitValidate": "PASS",
+    "historicalMigrationChanges": 0
+  },
+  "checks": {
+    "mavenUnitExit": 0,
+    "nativeIntegrationExit": 0,
+    "frontendUnitExit": 0,
+    "typecheckExit": 0,
+    "productionBuildExit": 0,
+    "playwrightExit": 0,
+    "repositoryContract": "PASS",
+    "ciContract": "PASS",
+    "pesterPassed": 6,
+    "pesterFailed": 0,
+    "frozenContractChanged": "NO",
+    "roleGrantsChanged": "NO"
+  },
+  "severity": {
+    "critical": 0,
+    "high": 0,
+    "medium": 1,
+    "low": 3,
+    "codeReviewCritical": 0,
+    "codeReviewHigh": 0,
+    "codeReviewMedium": 0,
+    "codeReviewLow": 1
+  }
+}

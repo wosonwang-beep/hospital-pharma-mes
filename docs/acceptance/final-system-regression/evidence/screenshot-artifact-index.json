@@ -1,0 +1,537 @@
+[
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/batches-edit-list-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\batches-edit-list-chromium-desktop.png",
+    "Sha256": "1a90c438412d171de7aa56eac79e21ec22b4cc7e3d25547c9ccc59f06003018f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/batches-edit-list-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\batches-edit-list-chromium-mobile.png",
+    "Sha256": "d9394b77f7a5aa12a1e03a02a4a1a3d76484691c6b69eb3804cd05bd512af155"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/grouped-navigation-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\grouped-navigation-chromium-desktop.png",
+    "Sha256": "56dc7fcc077ec047825086a241f218ee5b544326e94688fc0c63378c5ef5dfc9"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/orders-edit-list-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\orders-edit-list-chromium-desktop.png",
+    "Sha256": "d22ede3a33acfe0344374c318c7981880c2f79ec7fe207e49a91520508950445"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/orders-edit-list-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\orders-edit-list-chromium-mobile.png",
+    "Sha256": "c396b4c8514be8c398a8b54a703553d97fc4068da2dd07e3625f6de212549ac5"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/trace-business-roots-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\trace-business-roots-chromium-desktop.png",
+    "Sha256": "78ef0c43540c8a913279e1fef3074b773d77217fbb2f8881f286ed40c9fb0666"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/audit-medium-2026-10-06/trace-business-roots-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\audit-medium-2026-10-06\\trace-business-roots-chromium-mobile.png",
+    "Sha256": "445e2749d42c74b027d7b35488e2cdb270ce71b1993dacc4cf1f73932e062544"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/batch-reference-2026-10-06/batch-pc-1280x853.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\batch-reference-2026-10-06\\batch-pc-1280x853.png",
+    "Sha256": "a3664a72c6467026b3e1c79a649da5219da89ef7c27a05e507de3abd8245f309"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/incoming-quality/evidence/qc-root-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\incoming-quality\\evidence\\qc-root-chromium-desktop.png",
+    "Sha256": "4f6d3234580324cd690b55ce76ae996cf84d00e0cdc89b9de4e5116f9ead125f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/incoming-quality/evidence/qc-root-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\incoming-quality\\evidence\\qc-root-chromium-mobile.png",
+    "Sha256": "5a7e9815bc5af3181f9714f1913807031128733d9c37a40b00863474531ae9d0"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/incoming-quality/evidence/qc-standard-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\incoming-quality\\evidence\\qc-standard-chromium-desktop.png",
+    "Sha256": "49d8a1785d553611a87612388a75ec788a9852260274e92b6413a444dead3130"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/incoming-quality/evidence/qc-standard-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\incoming-quality\\evidence\\qc-standard-chromium-mobile.png",
+    "Sha256": "ebc7e3b19484ed4e735f63ff2dcbeeebc7bb3cf39086008d1f6ade5014b2e85a"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/audit-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\audit-drawer-chromium-desktop.png",
+    "Sha256": "d65b9d6cfca84b7a3a22ee34fbd663dda6f5d13fe56c19be9cd66937f5216ec5"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/audit-drawer-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\audit-drawer-chromium-mobile.png",
+    "Sha256": "eab1c8a1049c945b98916a98397c653e6664362eaed6c8e22dbb8cf0584937b7"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/closeout-issue-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\closeout-issue-chromium-desktop.png",
+    "Sha256": "38d9e669a7acdfd3bcc632bfafa89274063e55e5aba6abf7e382da56b8cc41b3"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/closeout-material-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\closeout-material-chromium-desktop.png",
+    "Sha256": "0f2df4b51b043ead32b504f8297ffdc4305ddd5ea4f024f8b11d558598d23195"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/closeout-material-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\closeout-material-chromium-mobile.png",
+    "Sha256": "017c2720d0fc0102e654a96ef6bcbc5970cc6cb5c618629b5841325165dc2b84"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/closeout-production-test-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\closeout-production-test-chromium-desktop.png",
+    "Sha256": "52538426d9801355ac0bf83731aa64dc7503f085371b238ec3534ad758872866"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/closeout-production-test-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\closeout-production-test-chromium-mobile.png",
+    "Sha256": "df5f9a0015b2d1df6daa380faa3341fd564888e80d81885aca6cc32a725dc8d7"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/integration-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\integration-drawer-chromium-desktop.png",
+    "Sha256": "35876ce70ec1853fd3c191594175877ee0db5b2dfdb90ea4d1077eceefb7bb76"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/integration-drawer-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\integration-drawer-chromium-mobile.png",
+    "Sha256": "902215550e6c902d152a59d9a20e9ab29ec93fb87221b02b10c3fc145a3a3c1b"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/issue-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\issue-create-chromium-desktop.png",
+    "Sha256": "6053302db58e2dfbdb1cd58e4a108d561d441b786f3a512286bfdd1e43cba6db"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/issue-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\issue-create-chromium-mobile.png",
+    "Sha256": "37102813d7b1a764f6a04027e3df72d05f8bb71a3b31c6f38ee9e89f902eef27"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/password-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\password-chromium-desktop.png",
+    "Sha256": "0a1f1972624b88ed51dd001d7b86b6c38da4e9467edf00d9ee5d9a0099544f82"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/password-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\password-chromium-mobile.png",
+    "Sha256": "16bd95478334beb756f58241d3fe5c42c9b5881ec495183102766966698aa3b9"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-admin-roles-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-admin-roles-chromium-mobile.png",
+    "Sha256": "5b54d88081c443d6a65b40f4bb6c7f0ade1cf44a5b77590138722580d759ce76"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-ebr-templates-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-ebr-templates-chromium-mobile.png",
+    "Sha256": "a9c6d6d752522add98931c7d58a548396f6d6f5e13a5f5a6b096596f6f9fe236"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-equipment-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-equipment-chromium-desktop.png",
+    "Sha256": "8a3ad8bb569255677ae85155d37e06cf2904381123bd61acfa9df4ddd33b1d02"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-equipment-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-equipment-chromium-mobile.png",
+    "Sha256": "2a36e98444decf7e8e1d77dff656a330670fd9868c189a3f1155f88ed9c1e709"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-materials-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-materials-chromium-desktop.png",
+    "Sha256": "291b7fb2f96ba31c612cab7142dd57d6e3bef1aa175bf90409a2ff3837366388"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-materials-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-materials-chromium-mobile.png",
+    "Sha256": "9657771cc2b711e9c9cbb77f52b0ea2041772ac9f43c66fb21f7f144b7b50830"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-organizations-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-organizations-chromium-desktop.png",
+    "Sha256": "06b870056f97762237b42bf3f08f9d9c58f769f660c4d3cf81fc85f4c10b06d8"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-organizations-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-organizations-chromium-mobile.png",
+    "Sha256": "dadc723c660151d38b334bdf5ba751b16e6ae34041dcc41ed2bd0e7415782928"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-qualifications-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-qualifications-chromium-desktop.png",
+    "Sha256": "130cc08fbd807629f961983411f43089d60e03fc7816063feca578e11989b1ba"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-qualifications-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-qualifications-chromium-mobile.png",
+    "Sha256": "1c4fd1cdb8a7132732b33672eaa686d50f88a28f2cdf9bcd25b40ea5c988bdb7"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-suppliers-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-suppliers-chromium-desktop.png",
+    "Sha256": "7aa12a3d0749fee4e8f9e245d2b8c87365584c68197f847762a7b4875f665d7a"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-suppliers-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-suppliers-chromium-mobile.png",
+    "Sha256": "9fddc55018ea1c62d0c6baeb36ad82bd059b6dba1727f300901476cfbba686bd"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-unit-conversions-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-unit-conversions-chromium-desktop.png",
+    "Sha256": "a996d72b9a6459b1dbff7f10255fd551f489ebed5afe3ac7ea08a720050115bd"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-unit-conversions-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-unit-conversions-chromium-mobile.png",
+    "Sha256": "dd0c834a5f82b16ea3a4170570c608a5077d6c2aae0bac5a4a313a909e53282a"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-units-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-units-chromium-desktop.png",
+    "Sha256": "5a416d939f4ec2efe285a4781c04fe2eb689993af538a899bed1ec47f28241a1"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-master-units-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-master-units-chromium-mobile.png",
+    "Sha256": "08398f715d3191e2e1f3335e29ba30a5f9ba5caadd1cab931352116ad5467a95"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-process-packages-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-process-packages-chromium-desktop.png",
+    "Sha256": "0391917c9c42f8f48709b9d60c22dc178067be71ee72d48fc77ac4a2cbc77721"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-process-packages-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-process-packages-chromium-mobile.png",
+    "Sha256": "7dd4ae0e6ec66aa6cd255b7b700ffb81d50599c0c536ce3451eb4374ed7b94fb"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-process-products-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-process-products-chromium-desktop.png",
+    "Sha256": "d431b769464179a130dc1c503817cabbf4bb7d0bae84f8fbc0466246beb116dc"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-process-products-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-process-products-chromium-mobile.png",
+    "Sha256": "2a60dd9b25d560a252d913fc7e009a89379c2b25eabde229760596fc81376b0a"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-quality-specifications-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-quality-specifications-chromium-mobile.png",
+    "Sha256": "bc03dc176b6e9587e48ffaf998e0b99324ef754c74de0de6d234b8c8b773cc64"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-issues-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-wms-issues-chromium-desktop.png",
+    "Sha256": "18b9c30d81ef1aa1bd8a11cdb2eeba7a1972f5f723536036871705ef66b54ccc"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-issues-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-wms-issues-chromium-mobile.png",
+    "Sha256": "9a09d24085b6c85e80123bbdb9d40414351e17729e1895268bd8fa8bfb3502c3"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-receipts-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-wms-receipts-chromium-desktop.png",
+    "Sha256": "bc2d45d6ff00bb92daaab964fa2fb3074feacf1cac75a8a62b87a2a03ea70651"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t1-wms-receipts-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t1-wms-receipts-chromium-mobile.png",
+    "Sha256": "1f1422babf30cea1decb31a571a043af179d11c15747cb1d9bdd68e38d31274f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-deviations-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-deviations-create-chromium-desktop.png",
+    "Sha256": "bb530dd98cae4e46c7d93d8b4bf7ab35e1e6c856d2e69173499db3c728071d6d"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-deviations-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-deviations-create-chromium-mobile.png",
+    "Sha256": "d4ee7f1b1da9f4cc7818beef8edd0c8d55b81b2caf48434eef7c085db9e7ce9d"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-process-products-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-process-products-create-chromium-desktop.png",
+    "Sha256": "5e24acb51c732ad196999f13a3577fb89d0d4939d01900bf21e24b07488bd15f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-process-products-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-process-products-create-chromium-mobile.png",
+    "Sha256": "0c62d8137ac37adb2225d5eeba7f2ddcd99254840a13bdb0d2ee559e4127f2d6"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-batches-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-production-batches-create-chromium-desktop.png",
+    "Sha256": "cf0c2e2bae6e59e162e7e5e72a9cd4bdf92d08b5c3b87512418e2c112d32e57d"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-batches-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-production-batches-create-chromium-mobile.png",
+    "Sha256": "d3c964779cc66fd5fdaf67df3bce17dab588258fa00d691a90e52678fcbec5c1"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-orders-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-production-orders-create-chromium-desktop.png",
+    "Sha256": "2cc1d058a21296b293d6254f5af80febca006d64166506a4bc35e74441b3828e"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-production-orders-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-production-orders-create-chromium-mobile.png",
+    "Sha256": "01cbdf14c1206bb681684787f58064332d7a519036ba69349c01022ed34fd8af"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-reports-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-reports-create-chromium-desktop.png",
+    "Sha256": "b3ea6992d37afc537d983b99534e8c929fb5a51c4370534381f86ec9068589e9"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-reports-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-reports-create-chromium-mobile.png",
+    "Sha256": "e6b80ab4d0d95eceae54582e632387a764494c7497b1cb5e97ef834cec808556"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-requests-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-requests-create-chromium-desktop.png",
+    "Sha256": "8782d0859d1bec68fa816e4ba422d6b95f1f5b53703f66046c8916e7b3288474"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-requests-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-requests-create-chromium-mobile.png",
+    "Sha256": "31bd4ba78071975d6ce3ac8a0572f2cc2a1445b7c0c9bde1cb92e9c292177db3"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-tasks-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-tasks-create-chromium-desktop.png",
+    "Sha256": "fe5e12d22473976c7e003101a238603f9b02dae1afd6f334b34df6cab296b43d"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-inspection-tasks-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-inspection-tasks-create-chromium-mobile.png",
+    "Sha256": "a8fd4c0572a08bbb9c16623adc8da5c541c20bc7e53f1b585567bfa14246a5d8"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-plans-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-production-plans-create-chromium-desktop.png",
+    "Sha256": "59d8e581156cfed056551f533e375ab1fd040a4e6efe9f772b691903be53ec1f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-plans-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-production-plans-create-chromium-mobile.png",
+    "Sha256": "f8202ad8dd112fa9d63f97a152660865a7c5d575d1c03ca167e471afd4a80f00"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-tests-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-production-tests-create-chromium-desktop.png",
+    "Sha256": "db59e8f150b22df0c13464c32489655f280d7f30b027b9c426fb7b053fa945ee"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-production-tests-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-production-tests-create-chromium-mobile.png",
+    "Sha256": "9aeb1203574e4b52f41a341dfe66f28ccc676bc89c8f7245852431d255234984"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-sampling-tasks-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-sampling-tasks-create-chromium-desktop.png",
+    "Sha256": "5ec068881b6f8dc662c190a9e0cfbf479c5a7ccf547fa4eee68d20155bbbb6be"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-quality-sampling-tasks-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-quality-sampling-tasks-create-chromium-mobile.png",
+    "Sha256": "ee4abd792f060a595b7c8411919daf8547b48f23bcc257504294e0858202bbe3"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-wms-issues-create-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-wms-issues-create-chromium-desktop.png",
+    "Sha256": "fa36ee5f66a4271ff2b93f4709aebda4125c043faa0bbdf3382da0a850d8e337"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t2-wms-issues-create-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t2-wms-issues-create-chromium-mobile.png",
+    "Sha256": "79a32edc8e2be953d9d057a36fc3fe7148e1c96fafeda7f076d85ceb565c9258"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t6/evidence-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t6\\evidence-drawer-chromium-desktop.png",
+    "Sha256": "fefd56ed554c0f6c8f48ffdf1d0c83b7bc2214741918934a3ca4b1b65ebca105"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t6/signature-dialog-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t6\\signature-dialog-chromium-desktop.png",
+    "Sha256": "d2dcad2ee31604f9a1fd88ee86b2774a1caa6e87791a0d69f2ff105f8cc7689f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t6/signature-dialog-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t6\\signature-dialog-chromium-mobile.png",
+    "Sha256": "41945802f3a888d5a09ad3c6f1c6f054e083960f8f392843bdfda8799c36f2b5"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t6/t6-qa-review-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t6\\t6-qa-review-chromium-desktop.png",
+    "Sha256": "588139012df499bda39df3332e4003c89b3e33ed576f6b0bf57fc6ebf758b226"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/t6/t6-qa-review-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\t6\\t6-qa-review-chromium-mobile.png",
+    "Sha256": "d02dbcdfba43e2e52a942fee257a82fb65b04d45bf43ec2bed74c11942368194"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/trace-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\trace-chromium-desktop.png",
+    "Sha256": "11fb0bab5b8e750652dfe5eb49be0e25cfd72aa68ca46783350cd37aa256b173"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/trace-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\trace-chromium-mobile.png",
+    "Sha256": "8bcee799f163bd1511c461c1882761dd95fe63d720b4ab013bc1cd2c3fa31f52"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/trace-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\trace-drawer-chromium-desktop.png",
+    "Sha256": "fae07e18266a2b0e7244521d9423517c46d692de19d72aef6c08e3d5ae46ed53"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-blueprint-2026-10-05/trace-drawer-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-blueprint-2026-10-05\\trace-drawer-chromium-mobile.png",
+    "Sha256": "7737c3460ef8d8861dcab00f301e659e0fa19d521d4fab97484b91a51b62ad76"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/evidence-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\evidence-drawer-chromium-desktop.png",
+    "Sha256": "fefd56ed554c0f6c8f48ffdf1d0c83b7bc2214741918934a3ca4b1b65ebca105"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/shell-collapsed-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\shell-collapsed-chromium-desktop.png",
+    "Sha256": "0c3850a65c1bd1c7570299b16be9a3cdde9040158918302e9cb2d1ff86ecb462"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/signature-dialog-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\signature-dialog-chromium-desktop.png",
+    "Sha256": "d2dcad2ee31604f9a1fd88ee86b2774a1caa6e87791a0d69f2ff105f8cc7689f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/signature-dialog-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\signature-dialog-chromium-mobile.png",
+    "Sha256": "9d68b499e8019af9919fe52f1b660d94eb77f096468b8ddae8bae5c3d9f866db"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t1-material-query-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t1-material-query-chromium-desktop.png",
+    "Sha256": "289b82a8edecbc4c9b800df64ce0b0991284acbd2ca39e7b9a91b9a01bb987c1"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t1-material-query-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t1-material-query-chromium-mobile.png",
+    "Sha256": "7d9fb3a2b00b99f21dc65f9ae80e57a33e08f2f262b50524e75c5e65da676bc0"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t2-material-form-chromium-desktop.png",
+    "Sha256": "cca569ea9d23db1d6e8dd96610c348411a42d6c11dcac65e3ded94f08ffc7541"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t2-material-form-chromium-mobile.png",
+    "Sha256": "614cdf7ade736fc7d8cd0e9775c5270479ed2596bc40cec4f6cf093b56cf9071"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t2-material-form-wide-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t2-material-form-wide-chromium-desktop.png",
+    "Sha256": "67a9b0402870191f68a4292e8a32239595427ec33ade455288ebb207c0aa5156"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t6-qa-review-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t6-qa-review-chromium-desktop.png",
+    "Sha256": "588139012df499bda39df3332e4003c89b3e33ed576f6b0bf57fc6ebf758b226"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1.1/screens/after/t6-qa-review-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1.1\\screens\\after\\t6-qa-review-chromium-mobile.png",
+    "Sha256": "d02dbcdfba43e2e52a942fee257a82fb65b04d45bf43ec2bed74c11942368194"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/evidence-drawer-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\evidence-drawer-chromium-desktop.png",
+    "Sha256": "fefd56ed554c0f6c8f48ffdf1d0c83b7bc2214741918934a3ca4b1b65ebca105"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/evidence-drawer-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\evidence-drawer-chromium-mobile.png",
+    "Sha256": "344e64c1db77c9a1ce9b5398097b3c01bbb6cb7c714aa3541192c0342780b60b"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/shell-collapsed-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\shell-collapsed-chromium-desktop.png",
+    "Sha256": "e227bfcf4670a807b79cfa8a6c793bb40d77f7aeac2c328b3669ceb0e3d24027"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/signature-dialog-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\signature-dialog-chromium-desktop.png",
+    "Sha256": "d2dcad2ee31604f9a1fd88ee86b2774a1caa6e87791a0d69f2ff105f8cc7689f"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/signature-dialog-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\signature-dialog-chromium-mobile.png",
+    "Sha256": "9d68b499e8019af9919fe52f1b660d94eb77f096468b8ddae8bae5c3d9f866db"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t1-material-query-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t1-material-query-chromium-desktop.png",
+    "Sha256": "289b82a8edecbc4c9b800df64ce0b0991284acbd2ca39e7b9a91b9a01bb987c1"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t1-material-query-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t1-material-query-chromium-mobile.png",
+    "Sha256": "7d9fb3a2b00b99f21dc65f9ae80e57a33e08f2f262b50524e75c5e65da676bc0"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t2-material-form-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t2-material-form-chromium-desktop.png",
+    "Sha256": "cca569ea9d23db1d6e8dd96610c348411a42d6c11dcac65e3ded94f08ffc7541"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t2-material-form-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t2-material-form-chromium-mobile.png",
+    "Sha256": "614cdf7ade736fc7d8cd0e9775c5270479ed2596bc40cec4f6cf093b56cf9071"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t6-qa-review-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t6-qa-review-chromium-desktop.png",
+    "Sha256": "588139012df499bda39df3332e4003c89b3e33ed576f6b0bf57fc6ebf758b226"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/ui-v2-phase-1/screens/t6-qa-review-chromium-mobile.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\ui-v2-phase-1\\screens\\t6-qa-review-chromium-mobile.png",
+    "Sha256": "d02dbcdfba43e2e52a942fee257a82fb65b04d45bf43ec2bed74c11942368194"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/workbench-gap-followup-2026-10-06/deviation-context-pc.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\workbench-gap-followup-2026-10-06\\deviation-context-pc.png",
+    "Sha256": "1f8b619ec4869af7989ef3027971091475abd456911c32d7d7a72cba9d1e60bd"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/workbench-gap-followup-2026-10-06/workbench-chromium-desktop.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\workbench-gap-followup-2026-10-06\\workbench-chromium-desktop.png",
+    "Sha256": "07f3badcf4dda49014f07d295ec7b7a86f5e2b042600667c0910c7a442348014"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/workbench-gap-followup-2026-10-06/workbench-pc-1280x720.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\workbench-gap-followup-2026-10-06\\workbench-pc-1280x720.png",
+    "Sha256": "07f3badcf4dda49014f07d295ec7b7a86f5e2b042600667c0910c7a442348014"
+  },
+  {
+    "HistoricalPath": "docs/acceptance/workbench-gap-followup-2026-10-06/workbench-with-deviation-pc.png",
+    "FreshCopy": "D:\\codex\\_artifacts\\hospital-pharma-mes\\final-system-regression-v1.0.17-2026-10-06\\final-661785e-screens\\docs\\acceptance\\workbench-gap-followup-2026-10-06\\workbench-with-deviation-pc.png",
+    "Sha256": "869585012ed041f41929d4ee2805e86ab2f404034d257fef83e45d922f7721a1"
+  }
+]
