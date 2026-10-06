@@ -5,7 +5,7 @@ import {api,type Page} from '../../api/http'
 import {useAuthStore} from '../../stores/auth'
 import {useControlledRequest} from '../../api/controlled'
 import './productionModel'
-import {label,display,schemas} from '../quality/incomingModel'
+import {label,display,schemas,serverAllows} from '../quality/incomingModel'
 import ProcessLookup from '../process/ProcessLookup.vue'
 import IncomingReferencePicker from '../quality/IncomingReferencePicker.vue'
 const route=useRoute(),router=useRouter(),auth=useAuthStore(),request=useControlledRequest(),{busy,error}=request
@@ -22,7 +22,8 @@ async function load(){busy.value=true;request.clear();try{
 }catch(e){await request.failure(e)}finally{busy.value=false}}
 async function search(next=1){page.value=next;await router.replace({query:{...Object.fromEntries(Object.entries(query).filter(([k,v])=>v&&(batch.value||k!=='productionOrderId'))),page:String(page.value)}});await load()}
 function reset(){for(const key of Object.keys(query) as (keyof typeof query)[])query[key]='';void search(1)}
-function open(id?:string){void router.push({path:id?`${ui.value}/${id}`:`${ui.value}/create`,query:route.query})}
+function canEdit(row:Record<string,unknown>){return auth.can(`${permission.value}:update`)&&row.status==='DRAFT'&&serverAllows(row,'EDIT')}
+function open(id?:string,editing=false){void router.push({path:id?`${ui.value}/${id}${editing?'/edit':''}`:`${ui.value}/create`,query:route.query})}
 watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])query[key]=String(route.query[key]??'');const saved=Number(route.query.page??1);page.value=Number.isInteger(saved)&&saved>0?saved:1;void load()},{immediate:true})
 </script>
 <!-- UI Template: T1 Query/List. Frozen UI-ORD-Q/UI-BAT-Q filters and independent routes. -->
@@ -39,7 +40,7 @@ watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])qu
   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit" :loading="busy">查询</a-button></a-space>
  </form></a-card>
  <a-card title="数据列表" class="result-card"><div class="master-toolbar"><span>共 {{total}} 条记录</span></div>
-  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-button v-if="column.key==='actions'" type="link" @click="open(String(record.id))">查看</a-button><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
+  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-space v-if="column.key==='actions'"><a-button type="link" @click="open(String(record.id))">查看</a-button><a-button v-if="canEdit(record)" type="link" @click="open(String(record.id),true)">编辑</a-button></a-space><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
   <div class="table-footer"><span>第 {{page}} 页</span><a-pagination :current="page" :total="total" :page-size="20" :show-size-changer="false" @change="(p:number)=>search(p)"/></div>
  </a-card>
 </main></template>

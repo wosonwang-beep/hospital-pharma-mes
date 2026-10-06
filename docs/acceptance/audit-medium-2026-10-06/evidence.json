@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-06",
+  "startingHead": "092b219263087b2db9e63fa8d30e6e18b21764dc",
+  "scope": "working-tree minimal frontend repairs and fresh HEAD confirmation",
+  "result": {
+    "MEDIUM-01": "RESOLVED",
+    "MEDIUM-02": "RESOLVED",
+    "MEDIUM-03": "RESOLVED",
+    "MEDIUM-04": "RESOLVED"
+  },
+  "browser": "Playwright Chromium; Browser plugin not available",
+  "responses": "mocked existing API contracts; actual Vue application",
+  "verification": {
+    "focusedDistinctChromiumCases": 8,
+    "companionRegressionChromiumCases": 8,
+    "unitFiles": 2,
+    "unitCases": 12,
+    "typecheck": "PASS",
+    "build": "PASS",
+    "review": "no remaining CRITICAL/HIGH/MEDIUM/LOW in scope"
+  },
+  "screenshots": [
+    "batches-edit-list-chromium-desktop.png",
+    "batches-edit-list-chromium-mobile.png",
+    "grouped-navigation-chromium-desktop.png",
+    "grouped-navigation-chromium-mobile.png",
+    "orders-edit-list-chromium-desktop.png",
+    "orders-edit-list-chromium-mobile.png",
+    "regression-audit-drawer-chromium-desktop.png",
+    "regression-audit-drawer-chromium-mobile.png",
+    "regression-integration-drawer-chromium-desktop.png",
+    "regression-integration-drawer-chromium-mobile.png",
+    "regression-issue-create-chromium-mobile.png",
+    "regression-trace-chromium-desktop.png",
+    "regression-trace-chromium-mobile.png",
+    "regression-trace-drawer-chromium-desktop.png",
+    "regression-trace-drawer-chromium-mobile.png",
+    "trace-business-roots-chromium-desktop.png",
+    "trace-business-roots-chromium-mobile.png"
+  ],
+  "businessContractChanged": false,
+  "databaseChanged": false,
+  "baselineChanged": false,
+  "humanAcceptance": "NOT INFERRED"
+}

@@ -3,7 +3,7 @@
 Status: **APPROVED GLOBAL VISUAL BASELINE**  
 Approved: 2026-10-05  
 Applies to: all current and future Vue business pages.  
-Business authority remains: **FINAL BASELINE COMPLETE v1.0.15** and approved DCPs.
+Business authority remains: **FINAL BASELINE COMPLETE v1.0.17** and approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved Global UI Design System V2 visual rules remain unchanged.
 
 ## 1. Design intent
 

@@ -2,11 +2,11 @@
 import {ref,watch,computed} from 'vue'
 import {api,errorMessage,type Page} from '../../api/http'
 import {referenceRows,label,type IncomingRow,type ReferenceOption} from './incomingModel'
-const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string}>()
+const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null}}>()
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
-const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems]))
+const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
 async function list(url:string,params:Record<string,unknown>={}){const result=await api<Page<IncomingRow>>({url,params:{page:page.value,size:50,keyword:search.value||undefined,...params}});hasMore.value=(page.value+1)*50<result.total;return result.items}
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
@@ -14,7 +14,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   const f=props.field,c=props.context;let rows:IncomingRow[]=[];let request:IncomingRow|undefined
   if(c.inspectionRequestId)request=await api<IncomingRow>({url:`/quality/inspection-requests/${c.inspectionRequestId}`})
   const lotId=c.materialLotId??request?.materialLotId
-  if(f==='mainBatchId')rows=await list('/main-batches')
+  if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined})
   else if(['finishedMaterialId','materialId'].includes(f))rows=await list('/materials',f==='finishedMaterialId'?{materialType:'FINISHED',status:'ACTIVE'}:{status:'ACTIVE'})
   else if(['qcSpecificationItemId','specificationItemId'].includes(f)){if(c.sampleId){const sample=await api<IncomingRow>({url:`/samples/${c.sampleId}`});const spec=await api<IncomingRow>({url:`/quality/specification-versions/${sample.qcSpecificationVersionId}`});rows=((spec.items??[]) as IncomingRow[]).map(i=>({...i,id:i.specificationItemId??i.id}))}}
   else if(f==='productionTestInstanceId')rows=await list('/quality/production-tests',{mainBatchId:c.mainBatchId})
@@ -31,7 +31,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='formulaItemId')rows=((c.formulaItems??[]) as IncomingRow[]).map(i=>({...i,id:i.formulaItemId,displayName:`${i.materialName??i.materialId} · ${i.requiredQty??i.quantity??i.targetQty??''}`}))
   else if(f==='parameterDefId')rows=((c.parameters??[]) as IncomingRow[]).map(i=>({...i,id:i.parameterDefId}))
   else if(['equipmentId','scaleEquipmentId'].includes(f))rows=await list('/equipment',{status:'ACTIVE'})
-  else if(f==='materialLotId')rows=await list('/wms/material-lots')
+  else if(f==='materialLotId')rows=await list('/wms/material-lots',{materialId:props.queryFilters?.materialId||undefined})
   else if(f==='qcSpecificationVersionId'){
    if(!lotId&&!c.finishedMaterialId){options.value=[];return}
    const material=c.finishedMaterialId??(await api<IncomingRow>({url:`/wms/material-lots/${lotId}`})).materialId;const roots=await list('/quality/specifications',{materialId:material})

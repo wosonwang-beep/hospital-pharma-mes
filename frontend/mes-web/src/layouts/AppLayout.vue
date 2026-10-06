@@ -53,7 +53,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
     <a-layout class="main-shell" :class="{ 'main-shell-collapsed': collapsed }">
       <a-layout-header class="header" :class="{ 'header-collapsed': collapsed }">
         <div class="header-title">
-          <a-dropdown placement="bottomLeft" class="mobile-navigation">
+          <a-dropdown placement="bottomLeft" class="mobile-navigation" :trigger="['click']">
             <a-button type="text" aria-label="打开导航"><AppstoreOutlined /></a-button>
             <template #overlay>
               <a-menu @click="navigate">
