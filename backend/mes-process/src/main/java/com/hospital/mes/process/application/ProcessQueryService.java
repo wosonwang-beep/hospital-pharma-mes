@@ -7,6 +7,8 @@ public class ProcessQueryService {
  public ProcessQueryService(ProcessService process,com.hospital.mes.process.infrastructure.ProcessStore store){this.process=process;this.store=store;}
  public com.fasterxml.jackson.databind.JsonNode snapshot(long org,long versionId){return process.snapshot(org,versionId,false);}
  public String productName(long org,long productId){return store.products().get(org,productId).getProductName();}
+ public record ProductLabels(String productCode,String productName,String specification){}
+ public ProductLabels productLabels(long org,long productId){var p=store.products().get(org,productId);return new ProductLabels(p.getProductCode(),p.getProductName(),p.getSpecification());}
  public com.fasterxml.jackson.databind.JsonNode requireUsable(long org,long versionId){return process.snapshot(org,versionId,true);}
  /** Exact physical identities are attached to the detached, validated published definition. */
  public com.fasterxml.jackson.databind.JsonNode requireUsableIdentified(long org,long versionId){

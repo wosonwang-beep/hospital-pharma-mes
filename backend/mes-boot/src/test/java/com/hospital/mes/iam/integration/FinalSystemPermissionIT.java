@@ -84,7 +84,11 @@ class FinalSystemPermissionIT {
                 .andExpect(status().isOk()).andReturn();
             if (role.equals("QA")) {
                 var model = json.readTree(read.getResponse().getContentAsString()).path("data");
-                assertThat(model.path("gates").size()).isEqualTo(6);
+                assertThat(model.path("gates").size()).isEqualTo(8);
+                assertThat(java.util.stream.StreamSupport.stream(model.path("gates").spliterator(), false)
+                    .map(gate -> gate.path("code").asText()).toList()).containsExactly(
+                        "BATCH_QA_STATE", "QUALITY_PLAN", "EBR_REVIEW", "PRODUCTION_QC",
+                        "MATERIAL_BALANCE", "FINISHED_INVENTORY", "FINISHED_RECEIPT", "FINISHED_INSPECTION_REPORT");
                 assertThat(model.path("blockingCodes").size()).isGreaterThan(0);
                 assertThat(model.path("allowedActions").size()).isZero();
             }

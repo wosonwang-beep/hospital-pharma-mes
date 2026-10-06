@@ -12,16 +12,16 @@ class ProductionQuantityIT extends ProductionQualityPlanIT {
  @BeforeEach void quantityPermissions(){permissions.addAll(java.util.Set.of("balance:view","mes:quantity:record","mes:quantity:reverse"));as(author);}
  JsonNode approvedBatch(){var batch=preparedBatch(false);var p=plans.create(planBody(batch),key());as(qa);plans.approve(id(p),body("versionNo",0,"reason","Independent plan approval","signature",Map.of("reauthToken","token")),token(p),key());as(author);return startActualBatch(production.releaseBatch(id(batch),body("packageVersionId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Approved production"),token(batch),key()));}
  JsonNode output(JsonNode batch,String source,String amount){var wh=wms.maintenance("Warehouse",null,new WarehouseCreate("FW"+suffix,"Finished output","FINISHED"),null,key());var location=wms.maintenance("Location",null,new LocationCreate(id(wh),"FL"+suffix,"Finished output area"),null,key());return body("versionNo",batch.path("versionNo").asLong(),"eventType","OUTPUT","amount",amount,"unitId",unit,"sourceRef",source,"lotNo","FIN"+suffix,"locationId",id(location),"productionDate",java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString(),"expiryDate",java.time.LocalDate.now(java.time.ZoneOffset.UTC).plusYears(1).toString(),"reason","Measured actual output","signature",Map.of("reauthToken","token"));}
- @Test void outputCreatesOneQuarantinedLotAndReversalPreservesSignedOriginalAndStock(){
+ @Test void outputDefersStockUntilWarehouseReceiptAndPreservesSignedReversal(){
   var batch=approvedBatch();var command=output(batch,"OUTPUT-"+suffix,"9");String recordKey=key();var fact=quantities.record(id(batch),command,token(batch),recordKey);
   assertThat(quantities.record(id(batch),command,token(batch),recordKey)).isEqualTo(fact);
   String lot=fact.path("materialLotId").asText();assertThat(stockQuery.materialLot(1,Long.parseLong(lot)).path("qualityStatus").asText()).isEqualTo("QUARANTINE");
   assertThat(production.batch(id(batch)).path("finishedLotId").asText()).isEqualTo(lot);
-  assertThat(jdbc.queryForObject("SELECT SUM(delta_qty) FROM wms_inventory_ledger WHERE material_lot_id=?",java.math.BigDecimal.class,lot)).isEqualByComparingTo("9");
+  assertThat(jdbc.queryForObject("SELECT COALESCE(SUM(delta_qty),0) FROM wms_inventory_ledger WHERE material_lot_id=?",java.math.BigDecimal.class,lot)).isEqualByComparingTo("0");
   var current=production.batch(id(batch));var reverse=quantities.reverse(id(fact),body("versionNo",current.path("versionNo").asLong(),"reason","Correct measured output by append-only reversal","signature",Map.of("reauthToken","token")),token(current),key());
   assertThat(reverse.path("reversalOfId").asText()).isEqualTo(id(fact));
   assertThat(jdbc.queryForObject("SELECT amount FROM mes_quantity_event WHERE id=?",java.math.BigDecimal.class,id(fact))).isEqualByComparingTo("9");
-  assertThat(jdbc.queryForObject("SELECT SUM(delta_qty) FROM wms_inventory_ledger WHERE material_lot_id=?",java.math.BigDecimal.class,lot)).isEqualByComparingTo("0");
+  assertThat(jdbc.queryForObject("SELECT COALESCE(SUM(delta_qty),0) FROM wms_inventory_ledger WHERE material_lot_id=?",java.math.BigDecimal.class,lot)).isEqualByComparingTo("0");
   assertThat(verifier.verify(1,fact.path("signatureId").asLong())).isTrue();
   current=production.batch(id(batch));var finalCurrent=current;
   blockedCode("QUANTITY_ALREADY_REVERSED",()->quantities.reverse(id(fact),body("versionNo",finalCurrent.path("versionNo").asLong(),"reason","No double reversal","signature",Map.of("reauthToken","token")),token(finalCurrent),key()));
@@ -43,6 +43,6 @@ class ProductionQuantityIT extends ProductionQualityPlanIT {
   assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_quantity_event WHERE main_batch_id=?",Long.class,id(batch))).isZero();
   assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM platform_idempotency_record WHERE idempotency_key=?",Long.class,commandKey)).isZero();org.mockito.Mockito.reset(audit);
   var first=quantities.record(id(batch),command,token(batch),commandKey);assertThat(quantities.record(id(batch),command,token(batch),commandKey)).isEqualTo(first);
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_inventory_ledger WHERE material_lot_id=?",Long.class,first.path("materialLotId").asText())).isEqualTo(1);
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_inventory_ledger WHERE material_lot_id=?",Long.class,first.path("materialLotId").asText())).isZero();
  }
 }

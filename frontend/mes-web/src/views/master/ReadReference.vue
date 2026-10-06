@@ -4,6 +4,7 @@ import {api} from '../../api/http'
 import {useAuthStore} from '../../stores/auth'
 const props=defineProps<{value:unknown;field:string;name?:unknown;fallback?:string}>(),auth=useAuthStore(),resolved=ref('')
 const routes:Record<string,[string,string,string[]]>={
+ inboundRequestId:['finished-inbound-requests','wms:finished-inbound:view',['requestNo']],finishedInspectionRequestId:['quality/finished-inspection-requests','qms:finished-request:view',['inspectionRequestNo']],
  productionSampleId:['samples','qms:sample:view',['sampleNo']],
  sampleId:['quality/samples','qms:test:view',['sampleNo']],qcSpecificationVersionId:['quality/specification-versions','qms:specification:view',['specificationName','versionNoBusiness']],packageVersionId:['process-packages','process:package:view',['packageCode','businessVersion']],
  productId:['products','master:product:view',['productName','productCode']],materialId:['materials','master:material:view',['materialName','materialCode']],finishedMaterialId:['materials','master:material:view',['materialName','materialCode']],

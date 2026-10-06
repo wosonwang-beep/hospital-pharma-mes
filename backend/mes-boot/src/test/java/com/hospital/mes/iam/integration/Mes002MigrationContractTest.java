@@ -20,14 +20,22 @@ class Mes002MigrationContractTest {
         assertEquals(V001_SHA, sha256(migrations.resolve("V001__foundation_probe.sql")));
         assertEquals(V002_SHA, sha256(migrations.resolve("V002__iam_core.sql")));
         assertTrue(Files.exists(migrations.resolve("V005__mes_002_rbac_contract.sql")));
-        // Approved cumulative baseline adds V006..V026; authorized registry repair adds V027.
+        // Approved cumulative baseline adds V006..V027, source/WMS V028..V029,
+        // and the accepted finished-goods chain V030..V031. v1.0.22 adds no migration.
         // Keep an exact count and contiguous identities; original hashes above remain frozen.
+        for (var approved : java.util.Map.of(
+            "V028__material_storage_supplier_source.sql", "b0c2e67768aaabd2ce81fef51ed942eab1d342e6858ecc57dda2a5446f662663",
+            "V029__wms_material_request_management.sql", "51e19eba610ccde458e11fc55ee21454ab78cddb5dcaf07e5a1071ebd6ae0507",
+            "V030__finished_goods_controlled_chain.sql", "52b6cdf63bd04f4114a821fd2923653676ded4b6c74c1db784d126a4da7a5218",
+            "V031__finished_fact_preservation.sql", "8ce738cd2535aba583dfe6825b6f50c71b7da34b05f134ac6eec9b0d069446c7").entrySet()) {
+            assertEquals(approved.getValue(), sha256(migrations.resolve(approved.getKey())), approved.getKey());
+        }
         try (var files = Files.list(migrations)) {
             var versions = files.filter(Files::isRegularFile)
                 .map(path -> path.getFileName().toString())
                 .peek(name -> assertTrue(name.matches("V[0-9]{3}__.+\\.sql"), name))
                 .map(name -> Integer.parseInt(name.substring(1, 4))).sorted().toList();
-            assertEquals(java.util.stream.IntStream.rangeClosed(1, 27).boxed().toList(), versions);
+            assertEquals(java.util.stream.IntStream.rangeClosed(1, 31).boxed().toList(), versions);
             assertEquals(5, versions.stream().filter(version -> version <= 5).count());
         }
     }

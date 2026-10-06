@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @Configuration
 @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class IncomingRuntimeAdapters {
- @Bean ExecutionRuntimePort executionRuntime(EbrRuntimeService runtime,ExecutionQueryService query,ProductionQueryService production,ObjectProvider<MaterialBalanceService> balances,ObjectProvider<ProductionQualityService> quality) {
+ @Bean ExecutionRuntimePort executionRuntime(EbrRuntimeService runtime,ExecutionQueryService query,ProductionQueryService production,ObjectProvider<MaterialBalanceService> balances,ObjectProvider<ProductionQualityService> quality,ObjectProvider<com.hospital.mes.qms.application.FinishedInspectionService> finishedQuality,ObjectProvider<com.hospital.mes.wms.application.FinishedGoodsService> finishedGoods) {
   return new ExecutionRuntimePort() {
    public void initializeOperation(long org,long actor,long batch,long execution,long operation,long definition,JsonNode snapshot) { runtime.initializeOperation(org,actor,batch,execution,operation,definition,snapshot); }
    public void requireOperationComplete(long org,long operation) {
@@ -26,7 +26,7 @@ public class IncomingRuntimeAdapters {
    public void requireOperationReview(long org,long operation) { runtime.requireOperationReview(org,operation); }
   };
  }
- @Bean ProductionRuntimeGate productionRuntimeGate(ExecutionService execution,ExecutionQueryService query,EbrRuntimeService runtime,ProductionQueryService production,ObjectProvider<MaterialBalanceService> balances,ObjectProvider<ProductionQualityService> quality) {
+ @Bean ProductionRuntimeGate productionRuntimeGate(ExecutionService execution,ExecutionQueryService query,EbrRuntimeService runtime,ProductionQueryService production,ObjectProvider<MaterialBalanceService> balances,ObjectProvider<ProductionQualityService> quality,ObjectProvider<com.hospital.mes.qms.application.FinishedInspectionService> finishedQuality,ObjectProvider<com.hospital.mes.wms.application.FinishedGoodsService> finishedGoods) {
   return new ProductionRuntimeGate() {
    public void requireInitialized(long org,long batch,List<Long> ids) {
     var actual=production.executionIds(org,batch);
@@ -49,6 +49,7 @@ public class IncomingRuntimeAdapters {
     for(long operation:query.batchOperationIds(org,batch))runtime.requireOperationReview(org,operation);
     requireQuality(quality.getObject().blockingCodes(org,batch,true));
     balances.getObject().requireCheckpoint(org,batch,"QA_RELEASE",null);
+    finishedGoods.getObject().confirmedInbound(org,batch);var finished=finishedQuality.getObject().releaseEvidence(org,batch);var missing=new java.util.ArrayList<String>();finished.path("blockingCodes").forEach(x->missing.add(x.asText()));requireQuality(missing);
     if(production.qualityIdentity(org,batch).finishedLotId()==null)throw new ComplianceException("FINISHED_OUTPUT_REQUIRED","Actual batch-owned finished output is required before QA");
    }
   };

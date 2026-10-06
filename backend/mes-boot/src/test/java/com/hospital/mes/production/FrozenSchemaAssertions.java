@@ -15,7 +15,7 @@ public final class FrozenSchemaAssertions {
  private static JsonNode load(ObjectMapper mapper){
   try{Path root=Path.of("").toAbsolutePath();while(root!=null&&!Files.isRegularFile(root.resolve("MES_TASKS.md")))root=root.getParent();
    if(root==null)throw new AssertionError("Project root not found");
-   var api=mapper.readTree(Files.readString(root.resolve("releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.16/08_OPENAPI_FULL_V1.0.16_FROZEN.yaml")));
+   var api=mapper.readTree(Files.readString(root.resolve("releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/08_OPENAPI_FULL_V1.0.22_FROZEN.yaml")));
    return api;
   }catch(java.io.IOException e){throw new AssertionError("Frozen schema unreadable",e);}
  }

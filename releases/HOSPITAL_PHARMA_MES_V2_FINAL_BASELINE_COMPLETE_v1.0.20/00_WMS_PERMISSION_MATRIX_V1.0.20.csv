@@ -1,0 +1,10 @@
+Permission,Owner,Seed Assignment,Signature
+wms:request:view,MaterialRequest,SYSTEM_ADMIN only; other grants explicit IAM,NO NEW SIGNATURE
+wms:request:create,MaterialRequest,SYSTEM_ADMIN only; other grants explicit IAM,NO NEW SIGNATURE
+wms:request:update,MaterialRequest,SYSTEM_ADMIN only; other grants explicit IAM,NO NEW SIGNATURE
+wms:request:submit,MaterialRequest,SYSTEM_ADMIN only; other grants explicit IAM,NO NEW SIGNATURE
+wms:request:cancel,MaterialRequest,SYSTEM_ADMIN only; other grants explicit IAM,NO NEW SIGNATURE
+wms:inventory:view,Existing WMS,UNCHANGED,EXISTING RULES UNCHANGED
+wms:issue:view,Existing WMS,UNCHANGED,EXISTING RULES UNCHANGED
+wms:issue:return,Existing WMS,UNCHANGED,EXISTING RULES UNCHANGED
+wms:issue:confirm,Existing WMS,UNCHANGED,EXISTING RULES UNCHANGED

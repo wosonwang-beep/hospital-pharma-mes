@@ -76,6 +76,8 @@ class WmsRequestManagementIT extends IncomingProductionIT {
   as(author);var charge=weighing.createCharge(body("executionUnitId",executionId,"operationExecutionId",id(op),"materialLotId",lot,"weighingRecordId",id(weighed),"chargedQty","2","unitId",unit,"versionNo",op.path("versionNo").asLong(),"reason","Actual production charge"),key());
   stock.returnIssue(id(issue),body("reason","Return unused issue","items",List.of(Map.of("issueItemId",id(issue.path("items").get(0)),"quantity","1","unitId",unit))),token(issue),key());
   assertThat(onHand()).isEqualByComparingTo(before.subtract(new java.math.BigDecimal("2")));assertThat(requests.get(id(request)).path("status").asText()).isEqualTo("FULFILLED");assertThat(trace.trace(null,lot).toString()).contains(id(charge),incomingReportId);assertThat(requests.get(id(request)).path("linkedIssues").get(0).path("id").asText()).isEqualTo(id(issue));assertThat(requests.get(id(request)).path("linkedIssues").get(0).path("returns")).hasSize(1);
+  var graph=trace.trace(null,lot);assertThat(graph.path("nodes")).extracting(n->n.path("type").asText()).contains("MATERIAL_REQUEST","MATERIAL_ISSUE","MATERIAL_ISSUE_ITEM","ISSUE_RETURN","CHARGE");FrozenSchemaAssertions.assertSchema(json,"TraceGraph",graph);
+  assertThat(graph.path("edges")).noneSatisfy(e->assertThat(e.path("sourceType").asText()+e.path("targetType").asText()).isEqualTo("CHARGEMATERIAL_ISSUE_ITEM"));
   assertThat(new java.math.BigDecimal(management.inventory(0,20,Map.of("materialLotId",lot)).items().getFirst().path("reservedQty").asText())).isEqualByComparingTo("1");
  }
  @Test void managementRetainedLinesAndInvalidLinkedIdentitiesFailClosed(){

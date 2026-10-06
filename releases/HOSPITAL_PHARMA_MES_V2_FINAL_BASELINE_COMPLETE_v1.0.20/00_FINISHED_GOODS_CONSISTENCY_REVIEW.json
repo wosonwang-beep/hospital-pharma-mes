@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "approvedDcp": "DCP-FINISHED-GOODS-CHAIN-001",
+  "parentBaseline": "v1.0.19",
+  "candidateBaseline": "v1.0.20",
+  "authoritySwitched": true,
+  "parentFilesVerified": 126,
+  "operations": 24,
+  "newPermissions": 18,
+  "checks": {
+    "parent_frozen_bytes_unchanged": true,
+    "inherited_endpoints_unchanged": true,
+    "inherited_schemas_unchanged_except_approved_evidence": true,
+    "openapi_refs_resolve": true,
+    "24_operations_match_catalog_security": true,
+    "closed_command_schemas": true,
+    "controller_source_exists": true,
+    "18_new_permissions_seeded": true,
+    "six_normalized_tables": true,
+    "migration_documents_exact": true,
+    "no_executed_migration_modified": true,
+    "13_new_ui_routes_and_T1_T6_only": true,
+    "13_requirements_tests_rtm": true,
+    "authority_pointers_consistent": true
+  },
+  "notes": [
+    "Current review applies to approved finished delta. Historical inherited reviews remain prior-delta evidence.",
+    "Runtime readiness/explicit human acceptance only MES_TASKS.md.",
+    "QA original failures require signed investigation; public nested reads honor dedicated permissions."
+  ]
+}

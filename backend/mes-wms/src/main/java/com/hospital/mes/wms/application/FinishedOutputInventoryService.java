@@ -27,7 +27,8 @@ public class FinishedOutputInventoryService {
   long base;try{base=new com.fasterxml.jackson.databind.ObjectMapper().readTree(lot.getMaterialSnapshotJson()).path("baseUnitId").asLong();}catch(java.io.IOException e){throw new IllegalStateException(e);}
   var conversion=units.convert(c.organizationId(),unit,base,material,amount);BigDecimal converted=amount.multiply(new BigDecimal(conversion.factor()));
   gate(converted.compareTo(new BigDecimal(conversion.convertedValue()))==0,"QUANTITY_PRECISION_LOSS","Output conversion must be exact");validateQuantity(converted);
-  append(c,lot.getId(),location,base,converted,"PRODUCTION_OUTPUT","PRODUCTION_OBSERVATION",source,reason,mutations.digest(Map.of("key",key,"batch",batch,"action","OUTPUT")));
+  // Approved finished-chain delta: measured OUTPUT establishes identity, not warehouse receipt.
+  // The independent finished inbound confirmation is the sole new physical stock producer.
   mutations.auditSnapshot(c,"FINISHED_OUTPUT_RECEIVED","MaterialLot",lot.getId(),null,views.view(lot),reason,key);return lot.getId();
  }
  @Transactional(propagation=Propagation.MANDATORY)
@@ -37,6 +38,7 @@ public class FinishedOutputInventoryService {
   var all=store.ledgerMapper().selectList(new QueryWrapper<LedgerEntity>().eq("org_id",c.organizationId()).eq("material_lot_id",lotId).orderByAsc("id").last("FOR UPDATE"));
   gate(all.stream().noneMatch(x->x.getDeltaQty().signum()<0&&!x.getSourceType().equals("PRODUCTION_REVERSAL")),"OUTPUT_REVERSAL_CONSUMED","Physically consumed output cannot be reversed");
   var candidates=all.stream().filter(x->x.getSourceType().equals("PRODUCTION_OBSERVATION")&&x.getSourceRef().equals(originalSource)&&x.getEventType().equals("PRODUCTION_OUTPUT")).toList();
+  if(candidates.isEmpty()&&all.isEmpty())return; // New deferred output: signed observation reversal has no stock effect.
   gate(candidates.size()==1,"OUTPUT_LEDGER_MISSING","Exact original output stock fact required");var original=candidates.getFirst();
   var conversion=units.convert(c.organizationId(),unit,original.getUnitId(),lot.getMaterialId(),amount);
   gate(amount.multiply(new BigDecimal(conversion.factor())).compareTo(original.getDeltaQty())==0,"OUTPUT_LEDGER_MISMATCH","Reversal must exactly negate original physical evidence");

@@ -107,7 +107,7 @@ class IamSchemaIT {
         // Check every executed migration source rather than counting their live fixtures.
         var migrations = new PathMatchingResourcePatternResolver()
             .getResources("classpath:db/migration/V*.sql");
-        assertThat(migrations).hasSize(27);
+        assertThat(migrations).hasSize(31);
         for (var migration : migrations) {
             String sql;
             try (var stream = migration.getInputStream()) {

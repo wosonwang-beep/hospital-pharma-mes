@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checks": {
+    "sealed_manifest_exact": true,
+    "sha256sums_exact": true,
+    "current_pointers_v22": true,
+    "ui_authority_v2_retained": true
+  },
+  "sealedFileCount": 148
+}
