@@ -2,6 +2,13 @@
 
 These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.17` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
+## Current governance closeout — 2026-10-06
+
+Current business authority: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE`. Current UI authority: Global UI Design System V2 and Page Template Standard V2 (`T1–T6`). Human-confirmed Functional Baseline v1.0.17 and UI V2 Implementation are `CLOSED`; MES-001–MES-013 including MES-008A are `ACCEPTED`, with task status maintained only in MES_TASKS.md. See [current Closeout record](docs/review/MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md).
+
+DCP-WORKBENCH-GAPS-001's Material Master Image, Operation Execution Photo, Planned Operation Time and SOP/Method Reference remain `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED`. They are excluded from this Closeout and must not be implemented implicitly. Global UI V3 is `NOT IN CURRENT SCOPE`; do not implement it or switch the current UI authority.
+
+
 ## Low-token task startup
 
 For a request such as `完成 MES-XXX`:

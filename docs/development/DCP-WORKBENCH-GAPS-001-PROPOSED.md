@@ -1,4 +1,15 @@
 # DCP-WORKBENCH-GAPS-001 — data ownership decision pending
+## Current governance status — 2026-10-06
+
+| Unapproved contract | Status |
+|---|---|
+| Material Master Image | `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED` |
+| Operation Execution Photo | `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED` |
+| Planned Operation Time | `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED` |
+| SOP/Method Reference | `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED` |
+
+The user explicitly excludes these contracts from the Functional v1.0.17 / UI V2 Closeout. Closeout does not approve owner selection, contract completion or implementation. Existing-contract frontend follow-up is accepted separately; the proposal below remains a proposal. Global UI V3 is `NOT IN CURRENT SCOPE`. Authority remains FINAL BASELINE COMPLETE v1.0.17 and UI V2 / T1–T6.
+
 
 Date: 2026-10-06. Current authority: FINAL BASELINE COMPLETE v1.0.17.
 User authorizes acceptance, functional gap completion and commit/push. This proposal does not switch the baseline or authorize a selected data model before the owner answers the pending question.

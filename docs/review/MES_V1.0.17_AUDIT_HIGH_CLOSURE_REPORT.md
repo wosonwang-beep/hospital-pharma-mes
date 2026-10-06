@@ -75,3 +75,7 @@ Authority: FINAL BASELINE COMPLETE v1.0.17 + approved DCPs. Reviewed starting Gi
 - Changed implementation: ProductionListView.vue, TraceView.vue, IncomingReferencePicker.vue; AppLayout.vue only adds explicit mobile click activation. One focused E2E file added.
 - Backend / API / DTO / database / migration / state machine / permission / allowedActions business meaning / signature / QA release / frozen baseline: UNCHANGED. Protected inspection record/report and T5 PC structures unchanged.
 - Prior local/ci database configuration changes and separate authority-pointer documentation corrections preserved. No commit/push performed in this increment. MES task ACCEPTED statuses remain unchanged; this technical resolution is READY FOR ACCEPTANCE, not inferred human acceptance.
+
+## Human-confirmed final Closeout — 2026-10-06
+
+The user explicitly confirms the completed Functional / UI V2 Final Closeout Audit: Functional Baseline v1.0.17 and UI V2 Implementation `CLOSED`; CRITICAL `0`, HIGH `0`, MEDIUM-01–04 `CLOSED`. This supersedes earlier readiness and uncommitted-state descriptions for current governance, while preserving their historical evidence. Task acceptance remains indexed in MES_TASKS.md. See [current Closeout](MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md). Unapproved DCP-WORKBENCH-GAPS-001 contracts are excluded and remain PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED; Global UI V3 is NOT IN CURRENT SCOPE. No new implementation audit or test run is claimed by this documentation update.

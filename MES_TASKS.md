@@ -1,4 +1,30 @@
 # MES Task Status Index
+## Current human-confirmed final closeout — 2026-10-06
+
+Business authority: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE`, consistent with AGENTS.md and docs/PROJECT_BASELINE.md. Current UI authority remains Global UI Design System V2 / Page Template Standard V2 (`T1–T6`).
+
+| Scope | Current status |
+|---|---|
+| MES-001–MES-013, including MES-008A | `ACCEPTED` |
+| Functional Baseline v1.0.17 | `CLOSED` |
+| UI V2 Implementation | `CLOSED` |
+| CRITICAL / HIGH | `0 / 0` |
+| MEDIUM-01–04 | `CLOSED` |
+| MaterialLot T4 | `ACCEPTED` |
+| Production Batch T4 | `ACCEPTED` |
+| Production Execution T5 | `ACCEPTED` |
+| QA Decision T6 | `ACCEPTED` |
+
+Approval: the user's explicit instruction to record these statuses after the completed Functional / UI V2 Final Closeout Audit. Accepted implementation HEAD: `652feeda634c9b2ccf35864106fabadd4179e7ad`. This current record supersedes the dated READY FOR ACCEPTANCE / IN PROGRESS statements below for the delivered v1.0.17 and UI V2 scope; those statements remain historical evidence.
+
+The four new contracts in [DCP-WORKBENCH-GAPS-001](docs/development/DCP-WORKBENCH-GAPS-001-PROPOSED.md) remain `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED`: Material Master Image, Operation Execution Photo, Planned Operation Time, SOP/Method Reference. They are outside the closed scope, not active authorized implementation. Global UI V3: `NOT IN CURRENT SCOPE`; no implementation or UI authority switch.
+
+[Current Closeout and evidence references](docs/review/MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md). The task table and historical records below are retained; no frozen release is rewritten.
+
+## Historical delivery and approval records
+
+Dated entries below describe their original delivery state. For current status, use the human-confirmed Closeout above and the task-status table.
+
 
 ## Production Batch T4 reference — 2026-10-06
 

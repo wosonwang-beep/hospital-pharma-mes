@@ -3,6 +3,19 @@
 This document is the compact, stable entry point for product and engineering context. It does not track task status or reproduce detailed domain design.
 
 ## Authority
+### Current authority and Closeout — 2026-10-06
+
+- Business: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE`; the v1.0.17 release directory and frozen manifest linked below remain unchanged.
+- UI: [Global UI Design System V2](ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md) and [Page Template Standard V2](ui/MES_PAGE_TEMPLATE_STANDARD_V2.md), `T1–T6`.
+- Human-confirmed Functional Baseline v1.0.17 and UI V2 Implementation: `CLOSED`. Current task acceptance is maintained in [MES_TASKS.md](../MES_TASKS.md).
+- [Current Closeout record](review/MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md) records acceptance and existing evidence; this administrative update creates no new release or business contract.
+- DCP-WORKBENCH-GAPS-001: Material Master Image, Operation Execution Photo, Planned Operation Time, SOP/Method Reference remain `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED`, outside the closed scope.
+- Global UI V3: `NOT IN CURRENT SCOPE`. Current UI authority is not switched.
+
+### Retained approval history
+
+The dated approval entries below retain their original release descriptions. Any earlier use of “current” or “authoritative” is historical; only the current v1.0.17 pointer above applies now.
+
 
 - Current approved audit HIGH closure: user explicitly approved DCP-AUDIT-HIGH-QUERY-ACTIONS-OCCUPANCY-001 on 2026-10-05. Cumulative v1.0.17 is authoritative after cross-document consistency PASS. Scope: existing productionOrderId query, incoming read allowedActions and exclusive active equipment occupancy. [Current contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/00_AUDIT_HIGH_CONTRACT_V1.0.17.md). No schema/migration, new permission/route/state, signature or QA release-rule change. Global UI V2 and T1–T6 are unchanged. All earlier entries below are preserved approval history; the current authoritative pointer takes precedence.
 
