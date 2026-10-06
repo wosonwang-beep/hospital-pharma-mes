@@ -46,6 +46,7 @@ class AssignmentAdministrationIT {
     @Autowired private SessionStore sessions;
     @Autowired private AccessTokenCodec tokens;
     @Autowired private AssignmentAdministration assignments;
+    @Autowired private org.springframework.transaction.PlatformTransactionManager transactionManager;
     @MockitoSpyBean private AdminSecurityEventWriter eventSpy;
     private final List<String> leases = new ArrayList<>();
     @AfterEach void cleanup() {
@@ -171,7 +172,7 @@ class AssignmentAdministrationIT {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    @Transactional
     void ordinaryRoleCarryingIamPermissionCannotBeRemovedFromLastAdministrator() throws Exception {
         long userId = user();
         long secondaryRoleId = role();
@@ -183,13 +184,13 @@ class AssignmentAdministrationIT {
             jdbc.update("INSERT INTO sys_role_permission (role_id, permission_id) VALUES (?, ?)", secondaryRoleId, permissionId);
             jdbc.update("DELETE FROM sys_role_permission WHERE role_id = ? AND permission_id = ?", adminRoleId, permissionId);
             String token = administrator();
-            mvc.perform(delete("/api/v1/admin/users/{userId}/roles/{roleId}", userId, secondaryRoleId)
+            rejectedRequestInSavepoint(() -> mvc.perform(delete("/api/v1/admin/users/{userId}/roles/{roleId}", userId, secondaryRoleId)
                     .header("Authorization", bearer(token)))
-                .andExpect(status().isConflict());
-            mvc.perform(post("/api/v1/admin/roles/{roleId}/disable", secondaryRoleId)
+                .andExpect(status().isConflict()));
+            rejectedRequestInSavepoint(() -> mvc.perform(post("/api/v1/admin/roles/{roleId}/disable", secondaryRoleId)
                     .header("Authorization", bearer(token)).contentType(MediaType.APPLICATION_JSON)
                     .content("{\"expectedVersion\":0}"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict()));
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM sys_user_role WHERE user_id = ? AND role_id = ?",
                 Integer.class, userId, secondaryRoleId)).isEqualTo(1);
             assertThat(jdbc.queryForObject("SELECT enabled FROM sys_role WHERE id = ?", Boolean.class,
@@ -201,6 +202,22 @@ class AssignmentAdministrationIT {
             jdbc.update("DELETE FROM sys_role_permission WHERE role_id = ?", secondaryRoleId);
             jdbc.update("DELETE FROM sys_user WHERE id = ?", userId);
             jdbc.update("DELETE FROM sys_role WHERE id = ?", secondaryRoleId);
+        }
+    }
+
+    // Request failures mark the participating transaction rollback-only. A savepoint
+    // supplies the request boundary while all fixture/shared-grant edits stay uncommitted.
+    // Never force rollback here: the retained pair/enabled assertions must detect it.
+    private void rejectedRequestInSavepoint(org.junit.jupiter.api.function.Executable request) {
+        var boundary = new org.springframework.transaction.support.TransactionTemplate(transactionManager);
+        boundary.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_NESTED);
+        try {
+            boundary.execute(status -> {
+                try { request.execute(); } catch (Throwable failure) { throw new IllegalStateException(failure); }
+                return null;
+            });
+        } catch (org.springframework.transaction.UnexpectedRollbackException expectedRequestRollback) {
+            // The application's transactional rejection, not the test, requested rollback.
         }
     }
 

@@ -97,6 +97,7 @@
 #app :is(.query-form label,.master-form>label,.form-inline-row) { color: var(--mes-ui-secondary); font-size: 14px; }
 #app .query-form label { flex-direction: row; flex-wrap: nowrap; align-items: center; }
 #app .master-form>label, #app .form-inline-row { align-items: center; }
+#app .master-form>label:has(> .incoming-reference) { align-items: start; }
 #app :is(.master-native-input,.ant-input,.ant-input-affix-wrapper,.ant-select-selector) { border-radius: 6px !important; border-color: var(--mes-ui-border); font-size: 14px; color: var(--mes-ui-text); }
 #app .master-native-input { min-height: var(--mes-ui-control-height); margin-top: 0; }
 #app .master-native-input:focus { outline: 2px solid #91caff; outline-offset: 1px; border-color: var(--mes-ui-primary); box-shadow: none; }

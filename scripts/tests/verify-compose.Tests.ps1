@@ -17,6 +17,7 @@ Describe 'Docker Compose Foundation contract' {
   }
   It 'documents application-compatible variables without committing an env file' {
     foreach ($name in @('MES_DB_USERNAME', 'MES_DB_PASSWORD', 'MES_REDIS_PASSWORD', 'MES_MINIO_ACCESS_KEY', 'MES_MINIO_SECRET_KEY', 'MES_MINIO_LICENSE_FILE')) { $script:envExample | Should Match "(?m)^$name=" }
-    Test-Path -LiteralPath (Join-Path $script:root '.env') | Should Be $false
+    (& git -C $script:root ls-files -- '.env') | Should BeNullOrEmpty
+    (& git -C $script:root check-ignore -- '.env') | Should Be '.env'
   }
 }

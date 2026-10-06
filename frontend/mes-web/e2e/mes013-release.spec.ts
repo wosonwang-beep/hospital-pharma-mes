@@ -5,13 +5,17 @@ const envelope=(data:unknown)=>({code:'OK',message:'success',data,traceId:'mes01
 const digest='a'.repeat(64),pdfBytes=Buffer.from('%PDF-1.7 immutable archive'),fileHash=createHash('sha256').update(pdfBytes).digest('hex')
 const perms=['qa:batch-review','qa:release','ebr:form:view','ebr:pdf:generate']
 async function horizontal(page:Page,label:string){const input=page.getByLabel(label,{exact:true});await expect.poll(async()=>{const a=await input.boundingBox(),b=await input.locator('..').locator('.form-field-label').boundingBox();return !!a&&!!b&&b.x+b.width<=a.x+2&&Math.max(a.y,b.y)<Math.min(a.y+a.height,b.y+b.height)}).toBe(true)}
-async function setup(page:Page,mode:'normal'|'blocked'|'stale'|'readonly'|'tampered'|'visual'='normal'){
+async function setup(page:Page,mode:'normal'|'blocked'|'stale'|'readonly'|'tampered'|'visual'|'references'='normal'){
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));let released=false,pdf=false
  await page.route('**/api/v1/**',async route=>{const p=new URL(route.request().url()).pathname.replace('/api/v1',''),send=(data:unknown)=>route.fulfill({json:envelope(data)});
- if(p==='/auth/me')return send({userId:'8',organizationId:'1',displayName:'QA审核',permissionCodes:mode==='readonly'?['qa:batch-review','ebr:form:view']:perms,mustChangePassword:false})
- if(p==='/qa/batches/41/review-model')return send({mainBatchId:'41',versionNo:released?8:7,batchNo:'MB-41',status:released?'QA_RELEASED':'PENDING_QA',finishedLots:['51'],gates:mode==='visual'?['BATCH_QA_STATE','QUALITY_PLAN','EBR_REVIEW','PRODUCTION_QC','MATERIAL_BALANCE','FINISHED_INVENTORY'].map((code,index)=>({code,passed:true,blockingCodes:[],evidenceIds:[String(11+index)]})):[{code:'EBR',passed:true,blockingCodes:[],evidenceIds:['11']},{code:'QUALITY',passed:mode!=='blocked',blockingCodes:mode==='blocked'?['OOS_OPEN']:[],evidenceIds:['12']}],blockingCodes:mode==='blocked'?['OOS_OPEN']:[],reviewDigest:digest,allowedActions:released?[]:mode==='blocked'?['REJECT']:['RELEASE','REJECT']})
- if(p==='/main-batches/41/ebr')return send({mainBatchId:'41',definitionHash:digest,recordDigest:digest,batch:{productId:'21',plannedQty:'100',unitId:'1'},forms:[{form:{id:'61'},values:[{id:'62',revisionNo:1,value:'原始记录'}],reviews:[],ruleExecutions:[],signatures:[]}],qcTests:[],balances:[],deviations:[],decisions:released?[{id:'81',mainBatchId:'41',finishedLotId:'51',decision:'RELEASED',reason:'独立QA放行',signatureId:'91',supersedesDecisionId:null,decisionBy:'8',decisionAt:'2026-10-05T00:00:00Z'}]:[],pdfManifests:mode==='visual'?[1,2,3].map(version=>({id:String(100+version),mainBatchId:'41',generationVersion:version,definitionHash:digest,recordDigest:digest,fileId:'111',fileHash,generatedBy:'8',generatedAt:'2026-10-05T00:00:00Z',archiveKind:'REVIEW_COPY',releaseDecisionId:null})):pdf?[{id:'101',mainBatchId:'41',generationVersion:1,definitionHash:digest,recordDigest:digest,fileId:'111',fileHash,generatedBy:'8',generatedAt:'2026-10-05T00:00:00Z',archiveKind:released?'FINAL':'REVIEW_COPY',releaseDecisionId:released?'81':null}]:[],processSnapshot:{id:'31'},operations:[],charges:[],quantityEvents:[],genealogy:[],signatures:[]})
+ if(p==='/auth/me')return send({userId:'8',organizationId:'1',displayName:'QA审核',permissionCodes:mode==='readonly'?['qa:batch-review','ebr:form:view']:mode==='references'?[...perms,'wms:inventory:view','menu:iam:users','master:product:view','master:uom:view']:perms,mustChangePassword:false})
+ if(p==='/qa/batches/41/review-model')return send({mainBatchId:'41',versionNo:released?8:7,batchNo:'MB-41',status:released?'QA_RELEASED':'PENDING_QA',finishedLots:['51'],gates:(mode==='visual'||mode==='references')?['BATCH_QA_STATE','QUALITY_PLAN','EBR_REVIEW','PRODUCTION_QC','MATERIAL_BALANCE','FINISHED_INVENTORY'].map((code,index)=>({code,passed:true,blockingCodes:[],evidenceIds:[String(11+index)]})):[{code:'EBR',passed:true,blockingCodes:[],evidenceIds:['11']},{code:'QUALITY',passed:mode!=='blocked',blockingCodes:mode==='blocked'?['OOS_OPEN']:[],evidenceIds:['12']}],blockingCodes:mode==='blocked'?['OOS_OPEN']:[],reviewDigest:digest,allowedActions:released?[]:mode==='blocked'?['REJECT']:['RELEASE','REJECT']})
+ if(p==='/main-batches/41/ebr')return send({mainBatchId:'41',definitionHash:digest,recordDigest:digest,batch:{productId:'21',plannedQty:'100',unitId:'1'},forms:[{form:{id:'61'},values:[{id:'62',revisionNo:1,value:'原始记录'}],reviews:[],ruleExecutions:[],signatures:[]}],qcTests:[],balances:[],deviations:[],decisions:released?[{id:'81',mainBatchId:'41',finishedLotId:'51',decision:'RELEASED',reason:'独立QA放行',signatureId:'91',supersedesDecisionId:null,decisionBy:'8',decisionAt:'2026-10-05T00:00:00Z'}]:[],pdfManifests:(mode==='visual'||mode==='references')?[1,2,3].map(version=>({id:String(100+version),mainBatchId:'41',generationVersion:version,definitionHash:digest,recordDigest:digest,fileId:'111',fileHash,generatedBy:'8',generatedAt:'2026-10-05T00:00:00Z',archiveKind:'REVIEW_COPY',releaseDecisionId:null})):pdf?[{id:'101',mainBatchId:'41',generationVersion:1,definitionHash:digest,recordDigest:digest,fileId:'111',fileHash,generatedBy:'8',generatedAt:'2026-10-05T00:00:00Z',archiveKind:released?'FINAL':'REVIEW_COPY',releaseDecisionId:released?'81':null}]:[],processSnapshot:{id:'31'},operations:[],charges:[],quantityEvents:[],genealogy:[],signatures:[]})
  if(p==='/main-batches/41/ebr/pdf/101')return send({id:'101',mainBatchId:'41',generationVersion:1,definitionHash:digest,recordDigest:digest,fileId:'111',fileHash,generatedBy:'8',generatedAt:'2026-10-05T00:00:00Z',archiveKind:'REVIEW_COPY',releaseDecisionId:null})
+ if(p==='/wms/material-lots/51')return send({id:'51',lotNo:'FG-20261006-001'})
+ if(p==='/admin/users/8')return send({id:'8',displayName:'QA Reviewer'})
+ if(p==='/products/21')return send({id:'21',productName:'示例制剂'})
+ if(p==='/units/1')return send({id:'1',unitName:'瓶'})
  if(p==='/attachments/111/content')return route.fulfill({contentType:'application/pdf',body:mode==='tampered'?Buffer.from('tampered'):pdfBytes})
  if(p==='/auth/reauth'){expect(route.request().postDataJSON()).toEqual({objectType:'QA_RELEASE_DECISION',objectId:'41:7',recordVersion:7,meaning:'RELEASE',credential:'ui-password'});return send({reauthToken:'qa-ui'})}
  if(p==='/release-decisions'){expect(route.request().headers()['if-match']).toBe('"7"');expect(route.request().headers()['idempotency-key']).toBeTruthy();expect(route.request().postDataJSON()).toEqual({versionNo:7,reason:'独立QA放行',signature:{reauthToken:'qa-ui'},mainBatchId:'41',finishedLotId:'51',decision:'RELEASED',releaseBasis:'FULL_INSPECTION',reviewDigest:digest});if(mode==='stale')return route.fulfill({status:409,json:{code:'REVIEW_DIGEST_CONFLICT',message:'证据已变化',allowedActions:[]}});released=true;return send({id:'81'})}
@@ -30,3 +34,32 @@ test('download resolves immutable manifest and verifies actual byte hash',async(
  test('download blocks a file whose bytes do not match immutable hash',async({page})=>{await setup(page,'tampered');await page.goto('/qa/batches/41/review');await page.getByRole('button',{name:'生成 PDF 归档'}).click();await page.getByLabel('归档原因',{exact:true}).fill('归档核对证据');await page.getByRole('button',{name:'生成归档',exact:true}).click();await page.getByRole('button',{name:'下载并校验'}).click();await expect(page.getByText('归档文件校验失败，请联系管理员',{exact:true})).toBeVisible()})
 
 test('reference layout, evidence filtering and original fact drawer',async({page})=>{const errors=await setup(page,'visual');if(test.info().project.name==='chromium-desktop')await page.setViewportSize({width:1280,height:853});await page.goto('/qa/batches/41/release');await expect(page.locator('.gate-card')).toHaveCount(6);await expect(page.getByRole('tab',{name:'全部（2）',exact:true})).toHaveAttribute('aria-selected','true');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`test-results/qa-refinement-${test.info().project.name}.png`,fullPage:true,scale:'css'});await page.getByRole('tab',{name:'生产执行（2）',exact:true}).click();await expect(page.getByRole('tab',{name:'生产执行（2）',exact:true})).toHaveAttribute('aria-selected','true');await expect(page.getByText('IPC / QC 原始结果与复核（0）',{exact:true})).toHaveCount(0);await page.getByText('eBR 表单与原始修订（1）',{exact:true}).click();await expect(page.getByText('原始记录',{exact:true})).toBeVisible();expect(errors).toEqual([])})
+
+// Regression: technical identifiers belong to explicitly opened evidence, not the T6 summary.
+test('QA default presentation hides hashes internal references and lock version',async({page})=>{
+ await setup(page,'visual')
+ await page.goto('/qa/batches/41/release')
+ await expect(page.getByRole('heading',{name:'QA 批放行审核'})).toBeVisible()
+ await expect.poll(()=>page.locator('main.qa-page').innerText()).not.toContain(digest)
+ await expect(page.locator('.batch-summary').getByText('51',{exact:true})).not.toBeVisible()
+ await expect(page.locator('.archive-history').getByRole('columnheader',{name:'SHA-256',exact:true})).not.toBeVisible()
+ await expect(page.locator('.archive-history .ant-table').getByText('8',{exact:true})).toHaveCount(0)
+ await expect(page.locator('.batch-heading').getByText('来源引用 21',{exact:true})).not.toBeVisible()
+ await page.locator('.archive-technical > summary').click()
+ await expect(page.locator('.archive-technical > .master-form > label').filter({has:page.getByText('记录摘要',{exact:true})}).getByText(digest,{exact:true})).toBeVisible()
+ await page.locator('.archive-technical > summary').click()
+ await page.getByRole('button',{name:'签名并放行',exact:true}).click()
+ await page.getByLabel('操作原因',{exact:true}).fill('独立QA放行')
+ await page.getByRole('button',{name:'核对并签名',exact:true}).click()
+ await expect(page.getByText('绑定生产批版本 7',{exact:false})).not.toBeVisible()
+})
+
+test('QA reference lookups use business labels while signed command retains original identities',async({page})=>{
+ await setup(page,'references')
+ await page.goto('/qa/batches/41/release')
+ await expect(page.locator('.batch-summary').getByText('FG-20261006-001',{exact:true})).toBeVisible()
+ await expect(page.locator('.archive-history').getByText('QA Reviewer',{exact:true})).toHaveCount(3)
+ await expect(page.locator('.batch-heading').getByText('示例制剂',{exact:true})).toBeVisible()
+ await release(page)
+ await expect(page.locator('.batch-summary').getByText('已 QA 放行',{exact:true})).toBeVisible()
+})

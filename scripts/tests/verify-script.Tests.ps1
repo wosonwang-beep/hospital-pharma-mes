@@ -12,7 +12,8 @@ Describe 'Unified verification script contract' {
     foreach ($command in @('mvn -B -ntp test', 'npm ci', 'npm test -- --run', 'npm run typecheck', 'npm run build')) { $script:verify | Should Match ([regex]::Escape($command)) }
   }
   It 'delegates Compose validation with explicit Docker status' {
-    $script:verify | Should Match 'verify-compose\.ps1'
+    $script:verify | Should Match 'verify-repository\.ps1'
+    (Get-Content -LiteralPath (Join-Path $script:root 'scripts/verify-repository.ps1') -Raw) | Should Match 'verify-compose\.ps1'
     (Get-Content -LiteralPath (Join-Path $script:root 'scripts/verify-compose.ps1') -Raw) | Should Match 'UNAVAILABLE'
   }
 }

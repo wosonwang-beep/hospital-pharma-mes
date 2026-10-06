@@ -31,6 +31,23 @@ async function fixture(page:Page,withTrace=true){
   return reply({items:[],total:0,page:0,size:20})
  });return {errors,queries,traceQueries}
 }
+for (const allowedActions of [undefined, [], 'RELEASE']) test(`batch commands fail closed for ${JSON.stringify(allowedActions)}`, async ({page}) => {
+ await page.route('**/api/v1/**', route => {
+  const path = new URL(route.request().url()).pathname.replace('/api/v1', '')
+  const data = path === '/auth/me'
+   ? {userId:'8',organizationId:'1',displayName:'Production',permissionCodes:['production:batch:view','production:batch:release','production:batch:update'],mustChangePassword:false}
+   : path === '/main-batches/41'
+    ? {id:'41',batchNo:'MB-41',status:'DRAFT',versionNo:0,allowedActions}
+    : {items:[],total:0}
+  return route.fulfill({json:{code:'OK',data,message:'success',traceId:'fail-closed'}})
+ })
+ await page.goto('/production/batches/41')
+ await expect(page.getByRole('heading',{name:'生产批 360° 视图',exact:true})).toBeVisible()
+ await page.getByRole('button',{name:'更多受控操作',exact:true}).click()
+ await expect(page.locator('.batch-controlled-menu')).toBeVisible()
+ await expect(page.getByRole('button',{name:'下达生产批',exact:true})).toHaveCount(0)
+})
+
 for(const resource of ['orders','batches'])test(`frozen ${resource} query and navigation restore`,async({page})=>{
  const {errors,queries}=await fixture(page)
  const order=resource==='batches'?'&productionOrderId=41':''
@@ -44,7 +61,7 @@ for(const resource of ['orders','batches'])test(`frozen ${resource} query and na
  const options=await main.getByLabel('状态',{exact:true}).locator('option').evaluateAll(nodes=>nodes.map(n=>(n as HTMLOptionElement).value))
  expect(options).toEqual(resource==='batches'?['','DRAFT','RELEASED','IN_PROGRESS','PRODUCTION_COMPLETED','PENDING_QA','QA_RELEASED','REJECTED']:['','DRAFT','IN_PROGRESS','COMPLETED'])
  await main.getByRole('button',{name:'查看',exact:true}).click();await expect(page).toHaveURL(new RegExp(`/production/${resource}/41\\?`))
- await page.getByRole('button',{name:/返回列表/}).click();await expect(main.getByLabel('关键字')).toHaveValue('保留查询');await expect(main.locator('.table-footer')).toContainText('第 2 页')
+ await page.getByRole('button',{name:resource==='batches'?'← 返回':'← 返回列表',exact:true}).click();await expect(main.getByLabel('关键字')).toHaveValue('保留查询');await expect(main.locator('.table-footer')).toContainText('第 2 页')
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
  await page.screenshot({path:resolve(output,`${resource}-${test.info().project.name}.png`),fullPage:true,scale:'css'})
  await main.getByRole('button',{name:/重\s*置/,exact:true}).click();await expect(main.getByLabel('关键字')).toHaveValue('');await expect(page).toHaveURL(new RegExp(`/production/${resource}\\?page=1$`))

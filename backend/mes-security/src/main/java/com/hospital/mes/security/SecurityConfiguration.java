@@ -182,6 +182,7 @@ public class SecurityConfiguration {
                     .access(AuthorizationManagers.allOf(
                         AuthorityAuthorizationManager.hasAuthority("menu:iam:roles"),
                         AuthorityAuthorizationManager.hasAuthority("action:iam:role.manage")))
+                .requestMatchers(HttpMethod.GET, "/api/v1/quality/production-plans", "/api/v1/quality/production-plans/{id}").hasAuthority("qms:plan:view")
                 .requestMatchers(HttpMethod.GET, "/api/v1/quality/specifications").hasAuthority("qms:specification:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/quality/specifications").hasAuthority("qms:specification:create")
                 .requestMatchers(HttpMethod.GET, "/api/v1/quality/specifications/{id}").hasAuthority("qms:specification:view")
