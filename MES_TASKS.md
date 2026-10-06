@@ -6,6 +6,10 @@
 
 Bounded maintenance: `ACCEPTED` — explicit human acceptance on 2026-10-06 ("验收，提交和推送"). Storage condition read/write reuses existing DB column; V028 adds relationship manufacturer and immutable receipt-item source snapshot; MaterialLot uses existing receiptItemId lineage. Current reads / sorted locks prevent stale-source freeze. Existing audit/reason/optimistic version/idempotency and QA/permissions unchanged. Seven distinct native methods passed across targeted gates (six initial cases, three current-read/direct/audit cases with two overlaps); five backend relationship rule tests and nine frontend unit tests PASS; three distinct desktop Chromium scenarios PASS across focused gates; typecheck/final build PASS. [Current evidence](docs/acceptance/material-field-cleanup-2026-10-06/SOURCE-CLOSEOUT.md). No new full-system regression is claimed; human acceptance and main commit/push are explicitly authorized for this maintenance. MES-001–013 including008A remain ACCEPTED. Workbench image/planning/SOP proposals remain unapproved; V3 stays outside scope.
 
+## Material page Product Design maintenance — 2026-10-06
+
+`ACCEPTED` — explicit human acceptance: “验收，提交和推送”. Selected third Product Design concept implemented on material T3 detail and T2 create/edit: left basic/unit facts, right quality/remarks, compact conversion and audit controls, stable form actions. Existing eleven fields, payload, routes, permissions and GxP controls retained. Business authority v1.0.18 / Global UI V2 unchanged. Targeted Chromium flow, nine affected unit tests, typecheck and build PASS; no new full-system regression claimed. [Design QA and screenshots](docs/acceptance/material-product-design-2026-10-06/design-qa.md). Earlier taste refinement is a superseded visual checkpoint. Existing MES task acceptance remains unchanged.
+
 ## Retained human-confirmed final closeout — 2026-10-06
 
 Historical business authority at that Closeout: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE` at the time. UI authority remains Global UI Design System V2 / Page Template Standard V2 (`T1–T6`).
