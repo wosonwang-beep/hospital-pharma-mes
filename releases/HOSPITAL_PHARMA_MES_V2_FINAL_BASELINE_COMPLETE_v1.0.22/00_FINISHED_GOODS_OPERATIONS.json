@@ -1,0 +1,194 @@
+[
+  {
+    "path": "/finished-inbound-requests",
+    "method": "GET",
+    "permission": "wms:finished-inbound:view",
+    "request": null,
+    "response": "FinishedInboundRequestPage",
+    "created": false
+  },
+  {
+    "path": "/finished-inbound-requests/{id}",
+    "method": "GET",
+    "permission": "wms:finished-inbound:view",
+    "request": null,
+    "response": "FinishedInboundRequest",
+    "created": false
+  },
+  {
+    "path": "/finished-inbound-requests",
+    "method": "POST",
+    "permission": "wms:finished-inbound:create",
+    "request": "FinishedInboundCreate",
+    "response": "FinishedInboundRequest",
+    "created": true
+  },
+  {
+    "path": "/quality/finished-inspection-requests",
+    "method": "GET",
+    "permission": "qms:finished-request:view",
+    "request": null,
+    "response": "FinishedInspectionRequestPage",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-requests/{id}",
+    "method": "GET",
+    "permission": "qms:finished-request:view",
+    "request": null,
+    "response": "FinishedInspectionRequest",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-requests",
+    "method": "POST",
+    "permission": "qms:finished-request:create",
+    "request": "FinishedInspectionCreate",
+    "response": "FinishedInspectionRequest",
+    "created": true
+  },
+  {
+    "path": "/quality/finished-sampling-records",
+    "method": "GET",
+    "permission": "qms:finished-sampling:view",
+    "request": null,
+    "response": "FinishedSamplingRecordPage",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-sampling-records/{id}",
+    "method": "GET",
+    "permission": "qms:finished-sampling:view",
+    "request": null,
+    "response": "FinishedSamplingRecord",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-reports",
+    "method": "GET",
+    "permission": "qms:finished-report:view",
+    "request": null,
+    "response": "FinishedInspectionReportPage",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-reports/{id}",
+    "method": "GET",
+    "permission": "qms:finished-report:view",
+    "request": null,
+    "response": "FinishedInspectionReport",
+    "created": false
+  },
+  {
+    "path": "/finished-shipments",
+    "method": "GET",
+    "permission": "wms:finished-shipment:view",
+    "request": null,
+    "response": "FinishedShipmentPage",
+    "created": false
+  },
+  {
+    "path": "/finished-shipments/{id}",
+    "method": "GET",
+    "permission": "wms:finished-shipment:view",
+    "request": null,
+    "response": "FinishedShipment",
+    "created": false
+  },
+  {
+    "path": "/finished-shipments",
+    "method": "POST",
+    "permission": "wms:finished-shipment:create",
+    "request": "FinishedShipmentCreate",
+    "response": "FinishedShipment",
+    "created": true
+  },
+  {
+    "path": "/finished-inbound-requests/{id}/submit",
+    "method": "POST",
+    "permission": "wms:finished-inbound:submit",
+    "request": "FinishedReasonCommand",
+    "response": "FinishedInboundRequest",
+    "created": false
+  },
+  {
+    "path": "/finished-inbound-requests/{id}/cancel",
+    "method": "POST",
+    "permission": "wms:finished-inbound:cancel",
+    "request": "FinishedReasonCommand",
+    "response": "FinishedInboundRequest",
+    "created": false
+  },
+  {
+    "path": "/finished-inbound-requests/{id}/confirm",
+    "method": "POST",
+    "permission": "wms:finished-inbound:confirm",
+    "request": "FinishedReceiptConfirm",
+    "response": "FinishedInboundRequest",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-requests/{id}/submit",
+    "method": "POST",
+    "permission": "qms:finished-request:submit",
+    "request": "FinishedReasonCommand",
+    "response": "FinishedInspectionRequest",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-requests/{id}/accept",
+    "method": "POST",
+    "permission": "qms:finished-request:accept",
+    "request": "FinishedReasonCommand",
+    "response": "FinishedInspectionRequest",
+    "created": false
+  },
+  {
+    "path": "/quality/finished-inspection-requests/{id}/sample",
+    "method": "POST",
+    "permission": "qms:finished-sampling:create",
+    "request": "FinishedSamplingCommand",
+    "response": "FinishedSamplingRecord",
+    "created": true
+  },
+  {
+    "path": "/quality/finished-inspection-requests/{id}/generate-report",
+    "method": "POST",
+    "permission": "qms:finished-report:generate",
+    "request": "FinishedReportGenerate",
+    "response": "FinishedInspectionReport",
+    "created": true
+  },
+  {
+    "path": "/quality/finished-inspection-reports/{id}/approve",
+    "method": "POST",
+    "permission": "qms:finished-report:approve",
+    "request": "FinishedSignedCommand",
+    "response": "FinishedInspectionReport",
+    "created": false
+  },
+  {
+    "path": "/finished-shipments/{id}/confirm",
+    "method": "POST",
+    "permission": "wms:finished-shipment:confirm",
+    "request": "FinishedSignedCommand",
+    "response": "FinishedShipment",
+    "created": false
+  },
+  {
+    "path": "/finished-shipments/{id}/cancel",
+    "method": "POST",
+    "permission": "wms:finished-shipment:cancel",
+    "request": "FinishedReasonCommand",
+    "response": "FinishedShipment",
+    "created": false
+  },
+  {
+    "path": "/finished-material-lots/{id}/chain",
+    "method": "GET",
+    "permission": "wms:inventory:view",
+    "request": null,
+    "response": "FinishedLotChain",
+    "created": false
+  }
+]

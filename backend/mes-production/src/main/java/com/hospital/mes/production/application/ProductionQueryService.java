@@ -12,6 +12,7 @@ public class ProductionQueryService {
  public record QualityIdentity(long mainBatchId,long productId,long unitId,Long processSnapshotId,Long finishedLotId,String status,long versionNo){}
  public QualityIdentity qualityIdentity(long org,long id){var row=db.batches.get(org,id);return new QualityIdentity(row.getId(),row.getProductId(),row.getUnitId(),row.getProcessSnapshotId(),row.getFinishedLotId(),row.getStatus(),row.getVersionNo());}
  public String batchNumber(long org,long id){return db.batches.get(org,id).getBatchNo();}
+ public Long finishedBatchForLot(long org,long lot){var b=db.batchMapper.selectOne(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<BatchEntity>().eq("org_id",org).eq("finished_lot_id",lot));return b==null?null:b.getId();}
  public record ExecutionContext(long mainBatchId,long executionUnitId,Long subBatchId,String batchStatus,String executionStatus,JsonNode snapshot,long versionNo){}
  public BatchContext batch(long org,long id){var b=db.batches.get(org,id);return context(b);}
  public BatchContext lockBatch(long org,long id){requireTransaction();var b=db.batches.get(org,id);db.orders.lock(org,b.getProductionOrderId());return context(db.batches.lock(org,id));}

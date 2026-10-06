@@ -1,0 +1,317 @@
+[
+  {
+    "path": "/quality/production-plans",
+    "method": "get",
+    "permission": "qms:plan:view",
+    "request": null,
+    "response": "ProductionPlanPage",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-plans",
+    "method": "post",
+    "permission": "qms:plan:create",
+    "request": "ProductionPlanCreateCommand",
+    "response": "ProductionPlan",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/quality/production-plans/{id}",
+    "method": "get",
+    "permission": "qms:plan:view",
+    "request": null,
+    "response": "ProductionPlan",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/samples",
+    "method": "get",
+    "permission": "qms:sample:view",
+    "request": null,
+    "response": "ProductionSamplePage",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/samples",
+    "method": "post",
+    "permission": "qms:sample:create",
+    "request": "ProductionSampleCreateCommand",
+    "response": "ProductionSample",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/samples/{id}",
+    "method": "get",
+    "permission": "qms:sample:view",
+    "request": null,
+    "response": "ProductionSample",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-tests",
+    "method": "get",
+    "permission": "qms:test:view",
+    "request": null,
+    "response": "ProductionTestPage",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-tests",
+    "method": "post",
+    "permission": "qms:test:record",
+    "request": "ProductionTestCreateCommand",
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/quality/production-tests/{id}",
+    "method": "get",
+    "permission": "qms:test:view",
+    "request": null,
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-plans/{id}",
+    "method": "put",
+    "permission": "qms:plan:update",
+    "request": "ProductionPlanUpdateCommand",
+    "response": "ProductionPlan",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-plans/{id}/approve",
+    "method": "post",
+    "permission": "qms:plan:approve",
+    "request": "ProductionPlanApproveCommand",
+    "response": "ProductionPlan",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/samples/{id}/receive",
+    "method": "post",
+    "permission": "qms:sample:receive",
+    "request": "ProductionSampleReceiveCommand",
+    "response": "ProductionSample",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-tests/{id}/results",
+    "method": "post",
+    "permission": "qms:test:record",
+    "request": "ProductionTestResultCommand",
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/quality/production-tests/{id}/revisions",
+    "method": "post",
+    "permission": "qms:test:record",
+    "request": "ProductionTestResultCommand",
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/quality/production-tests/{id}/review",
+    "method": "post",
+    "permission": "qms:test:review",
+    "request": "ProductionTestReviewCommand",
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/quality/production-tests/{id}/retest",
+    "method": "post",
+    "permission": "qms:test:retest",
+    "request": "ProductionRetestCommand",
+    "response": "ProductionTest",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/capas/{id}/start",
+    "method": "post",
+    "permission": "qms:capa:update",
+    "request": "CapaStartCommand",
+    "response": "ProductionCapa",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/capas/{id}/complete",
+    "method": "post",
+    "permission": "qms:capa:update",
+    "request": "CapaCompleteCommand",
+    "response": "ProductionCapa",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/capas/{id}/verify",
+    "method": "post",
+    "permission": "qms:capa:verify",
+    "request": "CapaVerifyCommand",
+    "response": "ProductionCapa",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/deviations/{id}/capas",
+    "method": "get",
+    "permission": "qms:capa:view",
+    "request": null,
+    "response": "ProductionCapaPage",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/deviations/{id}/capas",
+    "method": "post",
+    "permission": "qms:capa:create",
+    "request": "CapaCreateCommand",
+    "response": "ProductionCapa",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/main-batches/{id}/quantity-events",
+    "method": "get",
+    "permission": "balance:view",
+    "request": null,
+    "response": "QuantityFactPage",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/main-batches/{id}/quantity-events",
+    "method": "post",
+    "permission": "mes:quantity:record",
+    "request": "ProductionQuantityCommand",
+    "response": "QuantityFact",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/quantity-events/{id}/reverse",
+    "method": "post",
+    "permission": "mes:quantity:reverse",
+    "request": "QuantityReversalCommand",
+    "response": "QuantityFact",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/main-batches/{id}/material-balance",
+    "method": "get",
+    "permission": "balance:view",
+    "request": null,
+    "response": "BalanceView",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/main-batches/{id}/material-balance/recalculate",
+    "method": "post",
+    "permission": "balance:view",
+    "request": "BalanceRecalculateCommand",
+    "response": "BalanceView",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/balances/{id}/investigations",
+    "method": "post",
+    "permission": "balance:investigate",
+    "request": "BalanceInvestigationCreateCommand",
+    "response": "BalanceInvestigation",
+    "task": "MES-012-R2",
+    "create": true
+  },
+  {
+    "path": "/balance-investigations/{id}/investigate",
+    "method": "post",
+    "permission": "balance:investigate",
+    "request": "BalanceInvestigateCommand",
+    "response": "BalanceInvestigation",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/balance-investigations/{id}/approve",
+    "method": "post",
+    "permission": "balance:approve",
+    "request": "BalanceApproveCommand",
+    "response": "BalanceInvestigation",
+    "task": "MES-012-R2",
+    "create": false
+  },
+  {
+    "path": "/qa/batches/{id}/review-model",
+    "method": "get",
+    "permission": "qa:batch-review",
+    "request": null,
+    "response": "FinishedReviewModel",
+    "task": "MES-013-R2",
+    "create": false
+  },
+  {
+    "path": "/release-decisions",
+    "method": "post",
+    "permission": "qa:release",
+    "request": "FinishedReleaseCommand",
+    "response": "FinishedDecision",
+    "task": "MES-013-R2",
+    "create": true
+  },
+  {
+    "path": "/release-decisions/{id}",
+    "method": "get",
+    "permission": "qa:batch-review",
+    "request": null,
+    "response": "FinishedDecision",
+    "task": "MES-013-R2",
+    "create": false
+  },
+  {
+    "path": "/main-batches/{id}/ebr",
+    "method": "get",
+    "permission": "ebr:form:view",
+    "request": null,
+    "response": "BatchEbrReadModel",
+    "task": "MES-013-R2",
+    "create": false
+  },
+  {
+    "path": "/main-batches/{id}/ebr/pdf",
+    "method": "post",
+    "permission": "ebr:pdf:generate",
+    "request": "EbrPdfCommand",
+    "response": "EbrPdfManifest",
+    "task": "MES-013-R2",
+    "create": false
+  },
+  {
+    "path": "/main-batches/{id}/ebr/pdf/{manifestId}",
+    "method": "get",
+    "permission": "ebr:form:view",
+    "request": null,
+    "response": "EbrPdfManifest",
+    "task": "MES-013-R2",
+    "create": false
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "approvedDcp": "DCP-TRACE-FINISHED-INVENTORY-001",
+  "checks": {
+    "parent_release_immutable": true,
+    "only_inventory_query_parameters_changed": true,
+    "only_two_read_schemas_changed": true,
+    "all_existing_and_finished_trace_node_types_typed": true,
+    "nullable_context_closed": true,
+    "local_openapi_refs_resolve": true,
+    "test_rtm_integration_migration_dependency_reconciled": true,
+    "schema_migrations_unchanged": true
+  },
+  "parentFileCount": 144
+}

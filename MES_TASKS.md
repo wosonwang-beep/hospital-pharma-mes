@@ -1,5 +1,11 @@
 # MES Task Status Index
 
+## Approved trace / finished inventory closure — 2026-10-06
+
+`ACCEPTED` — explicit human acceptance and commit/push/main merge authorization: “验收，提交和推送，合并到main”, 2026-10-06. User approved audit gaps1/4 only: “授权修改批准，投料记录是关键，不是称量。” Current authority FINAL BASELINE COMPLETE v1.0.22 / approved DCP-TRACE-FINISHED-INVENTORY-001 / consistency PASS. [Contract](docs/development/DCP-TRACE-FINISHED-INVENTORY-001-APPROVED.md), [ledger](docs/development/TRACE-FINISHED-INVENTORY-IMPLEMENTATION.md). Actual-charge forward trace/WMS sources and finished inventory read/T1 menu; no mandatory weighing, new DB/migration, QA/stock/signature rule. Historical acceptance unchanged. Earlier dated pointers below retain their historical scope.
+
+Targeted backend unit1 + native integration5, frontend units4/typecheck/build, PC Chromium3 distinct scenarios PASS. Independent review CRITICAL/HIGH0; MEDIUM stale inventory response fixed and reviewed/verified. Parent144 files and migration hashes unchanged; sealed148-file manifest/SHA256SUMS and current pointers PASS; native031 retained. [Evidence/screenshots](docs/acceptance/trace-finished-inventory-2026-10-06/REPORT.md), [executed RTM](docs/acceptance/trace-finished-inventory-2026-10-06/RTM.md). Inherited aggregation/N+1 and bundle-size debt remain. No other audit gaps implemented; human runtime acceptance confirmed.
+
 ## Approved optional finished inspection draft — 2026-10-06
 
 `ACCEPTED` — explicit human approval “入库申请同时生成请验草稿”的流程变更明确批准. Current business authority v1.0.21 — AUTHORITATIVE, approved DCP / cross-document consistency PASS, all138 frozen v1.0.20 parent files unchanged. Only optional atomic draft generation / warehouse execution gates / existing T2/T3 controls; no other finished-image page/menu scope implicitly authorized. [Approved DCP](docs/development/DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001-APPROVED.md), [inline plan](docs/superpowers/plans/2026-10-06-finished-inbound-inspection-draft.md), [frozen manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_MANIFEST_FINAL_FROZEN_V1.0.21.md). No new schema migration for this optional change. Explicit human acceptance and commit/push authorization: “验收，提交和推送”, 2026-10-06; includes the completed finished-goods chain and optional inspection draft in current v1.0.21.

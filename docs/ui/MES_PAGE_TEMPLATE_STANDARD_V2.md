@@ -2,7 +2,7 @@
 
 Status: **APPROVED**  
 Depends on: `MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`  
-Business authority: FINAL BASELINE COMPLETE v1.0.21 + approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved T1–T6 template rules remain unchanged.
+Business authority: FINAL BASELINE COMPLETE v1.0.22 + approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved T1–T6 template rules remain unchanged.
 
 Every Vue business page must declare/select one of T1–T6. A page may contain subordinate components from another pattern, but its primary structure must remain one template. If none fits, stop with **DESIGN CHANGE REQUIRED**; do not invent T7.
 
