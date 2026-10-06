@@ -5,6 +5,8 @@ import java.time.*;
 import java.math.BigDecimal;
 @TableName("wms_material_receipt_item")
 public class ReceiptItemEntity extends ScopedEntity {
+ private String sourceSnapshotJson;
+ public String getSourceSnapshotJson(){return sourceSnapshotJson;} public void setSourceSnapshotJson(String value){sourceSnapshotJson=value;}
  private Long receiptId;
  public Long getReceiptId(){return receiptId;} public void setReceiptId(Long value){receiptId=value;}
  private Long materialId;

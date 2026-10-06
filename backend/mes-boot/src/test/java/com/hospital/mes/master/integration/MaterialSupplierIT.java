@@ -71,4 +71,33 @@ class MaterialSupplierIT {
   assertThat(jdbc.queryForObject("SELECT english_name FROM md_material WHERE id=?",String.class,id)).isEqualTo("Legacy English");
   assertThat(jdbc.queryForObject("SELECT alias_name FROM md_material WHERE id=?",String.class,id)).isEqualTo("Legacy alias");
  }
+
+ @Test void storageConditionPersistsAuditedAndDetached(){
+  var input=(ObjectNode)json.valueToTree(request("STORAGE"+suffix,unit("STU","MASS").path("id").asText()));input.put("storageCondition","阴凉干燥");
+  var m=materials.create(json.convertValue(input,MaterialCommands.Create.class),key());String id=m.path("id").asText();assertThat(m.path("storageCondition").asText()).isEqualTo("阴凉干燥");
+  var captured=queries.snapshot(1,Long.parseLong(id)).deepCopy();var body=(ObjectNode)json.valueToTree(edit(m,"Storage maintenance",true));body.put("storageCondition","避光密闭");String k=key();var command=json.convertValue(body,MaterialCommands.Update.class);var updated=materials.update(id,command,null,k);
+  assertThat(materials.update(id,command,null,k)).isEqualTo(updated);assertThat(materials.get(id).path("storageCondition").asText()).isEqualTo("避光密闭");assertThat(captured.path("storageCondition").asText()).isEqualTo("阴凉干燥");
+  assertThat(jdbc.queryForObject("SELECT storage_condition FROM md_material WHERE id=?",String.class,id)).isEqualTo("避光密闭");assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_audit_event WHERE object_id=? AND action='Material:UPDATE'",Long.class,id)).isEqualTo(1);
+  body.put("versionNo",updated.path("versionNo").asLong());body.put("storageCondition","x".repeat(501));assertThatThrownBy(()->materials.update(id,json.convertValue(body,MaterialCommands.Update.class),null,key())).isInstanceOf(IllegalArgumentException.class);
+ }
+ @Test void manufacturerBelongsToMaterialSupplierRelationship(){
+  var m=material();var s=supplier("SOURCE");String id=m.path("id").asText();var r=new SupplierCommands.Assign(0L,"source manufacturer",List.of(new SupplierCommands.Relationship(s.path("id").asText(),true,true,null,"厂家甲")));String k=key();var assigned=relationships.assign(id,r,null,k);
+  assertThat(assigned.path("suppliers").get(0).path("manufacturerName").asText()).isEqualTo("厂家甲");assertThat(relationships.assign(id,r,null,k)).isEqualTo(assigned);assertThatThrownBy(()->relationships.assign(id,r,null,key())).hasMessageContaining("Reload");
+  assertThat(supplierQueries.freezeSource(1,Long.parseLong(id),s.path("id").asLong(),Instant.now()).path("manufacturerName").asText()).isEqualTo("厂家甲");
+  assertThat(materials.get(id).path("manufacturerName").asText()).isNotEqualTo("厂家甲");
+  when(contexts.current()).thenReturn(new CurrentPlatformContext(2,context.actorId(),Set.of(),permissions,"s","r"));assertThatThrownBy(()->relationships.get(id)).isInstanceOf(NoSuchElementException.class);
+ }
+
+ @Test void freezeSourceUsesCurrentReadAfterConsistentSnapshot(){
+  var tx=new TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+  // Committed uniquely-owned fixtures are retained as native concurrency evidence; no shared seed is changed.
+  var fixture=tx.execute(t->{long a=actor("source_current_"+suffix);when(contexts.current()).thenReturn(new CurrentPlatformContext(1,a,Set.of(),permissions,"s","r"));var u=unit("CURU","MASS");var m=materials.create(request("CURM"+suffix,u.path("id").asText()),key());var supplier=supplier("CURS");relationships.assign(m.path("id").asText(),new SupplierCommands.Assign(0L,"initial",List.of(new SupplierCommands.Relationship(supplier.path("id").asText(),true,true,null,"厂家旧"))),null,key());return Map.of("material",m.path("id").asLong(),"supplier",supplier.path("id").asLong());});
+  try {tx.execute(t->{assertThat(jdbc.queryForObject("SELECT manufacturer_name FROM md_material_supplier WHERE material_id=?",String.class,fixture.get("material"))).isEqualTo("厂家旧");
+   tx.execute(w->{relationships.assign(fixture.get("material").toString(),new SupplierCommands.Assign(1L,"source changed between read and lock",List.of(new SupplierCommands.Relationship(fixture.get("supplier").toString(),true,true,null,"厂家新"))),null,key());return null;});
+   assertThat(jdbc.queryForObject("SELECT manufacturer_name FROM md_material_supplier WHERE material_id=?",String.class,fixture.get("material"))).isEqualTo("厂家旧");
+   try {assertThat(supplierQueries.freezeSource(1,fixture.get("material"),fixture.get("supplier"),Instant.now()).path("manufacturerName").asText()).isEqualTo("厂家新");}
+   catch(com.hospital.mes.common.exception.ResourceConflictException conflict){assertThat(conflict).hasMessageContaining("Concurrent record change");} // MariaDB current-read snapshot conflict fails closed, never freezes the old source.
+   return null;
+  });tx.execute(t->{assertThat(supplierQueries.freezeSource(1,fixture.get("material"),fixture.get("supplier"),Instant.now()).path("manufacturerName").asText()).isEqualTo("厂家新");return null;});} finally {tx.execute(t->{var m=materials.get(fixture.get("material").toString());materials.disable(m.path("id").asText(),new MaterialCommands.Disable(m.path("versionNo").asLong(),"Retained test evidence; not for production use"),null,key());return null;});}
+ }
 }

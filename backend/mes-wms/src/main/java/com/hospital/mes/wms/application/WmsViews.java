@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.*;
 @org.springframework.stereotype.Component
 public class WmsViews {
+ @org.springframework.beans.factory.annotation.Autowired(required=false) private ReceiptItemMapper receiptItems;
  private final ObjectMapper json;
  public WmsViews(ObjectMapper json){this.json=json;}
  public ObjectNode view(ScopedEntity e){
@@ -20,6 +21,13 @@ public class WmsViews {
    if(v instanceof LocalDate date)n.put(k,date.toString());
   }
   if(n.has("materialSnapshotJson")){String snapshot=n.path("materialSnapshotJson").asText(null);n.remove("materialSnapshotJson");try{n.set("materialSnapshot",snapshot==null?NullNode.instance:json.readTree(snapshot));}catch(Exception ex){throw new IllegalStateException("Invalid stored snapshot",ex);}}
+  String source=null;
+  if(e instanceof ReceiptItemEntity item){source=item.getSourceSnapshotJson();n.remove("sourceSnapshotJson");}
+  else if(e instanceof MaterialLotEntity lot && lot.getReceiptItemId()!=null && receiptItems!=null){
+   var item=receiptItems.selectOne(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<ReceiptItemEntity>().eq("org_id",lot.getOrgId()).eq("id",lot.getReceiptItemId()));
+   if(item==null)throw new IllegalStateException("Receipt source lineage missing");source=item.getSourceSnapshotJson();
+  }
+  if(e instanceof ReceiptItemEntity || e instanceof MaterialLotEntity){try{n.set("sourceSnapshot",source==null?NullNode.instance:json.readTree(source));}catch(Exception ex){throw new IllegalStateException("Invalid receipt source snapshot",ex);}}
   ArrayNode actions=n.putArray("allowedActions");
   if(e instanceof ReceiptEntity r){if("DRAFT".equals(r.getRecordStatus())){actions.add("UPDATE");actions.add("CONFIRM");}}
   else if(e instanceof WarehouseEntity||e instanceof LocationEntity||e instanceof ContainerEntity){actions.add("UPDATE");actions.add("ACTIVE".equals(n.path("status").asText())?"DISABLE":"ENABLE");}

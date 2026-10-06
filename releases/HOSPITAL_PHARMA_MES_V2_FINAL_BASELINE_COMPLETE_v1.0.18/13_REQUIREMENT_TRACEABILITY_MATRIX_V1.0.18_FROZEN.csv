@@ -1,0 +1,82 @@
+Requirement ID,Title,Database,API,UI,Task,Test,Status
+IAM-001,认证与账户状态,sys_user;sys_role;sys_permission;sys_menu,/auth;/users;/roles,RBAC,MES-002-R2,TC-IAM-001;TC-IAM-002,FROZEN
+IAM-002,RBAC授权,sys_user;sys_role;sys_permission;sys_menu,/auth;/users;/roles,RBAC,MES-002-R2,TC-IAM-003;TC-IAM-004,FROZEN
+MD-001,组织层级,md_organization;md_unit;md_unit_conversion,/organizations;/units,基础主数据,MES-003-R2,TC-MD-002,FROZEN
+MD-002,单位与换算,md_organization;md_unit;md_unit_conversion,/organizations;/units,基础主数据,MES-003-R2,TC-MD-001,FROZEN
+MD-MAT-001,物料基本信息（停用三个名称字段）,md_material;md_material_version;md_material_quality_spec;md_material_storage_rule;md_material_production_rule,/materials,物料主数据,MES-004-R2,TC-MAT-001;TC-MAT-002;TC-MAT-003;TC-MAT-004;TC-UI-001,FROZEN
+MD-SUP-001,供应商与合格关系,md_supplier;md_material_supplier,/suppliers,供应商,MES-005-R2,TC-SUP-001;TC-SUP-002,FROZEN
+MD-EQP-001,设备与校准,md_equipment;md_qualification,/equipment;/qualifications,设备/资格,MES-003-R2,TC-EQP-001,FROZEN
+MD-QUAL-001,人员资格,md_equipment;md_qualification,/equipment;/qualifications,设备/资格,MES-003-R2,TC-QUAL-001,FROZEN
+PROC-001,工艺包版本,proc_package;proc_package_version;proc_formula_version;proc_formula_item;proc_route_version;proc_operation_def;proc_parameter_def,/process-packages,工艺设计器,MES-006-R2,TC-PROC-001,FROZEN
+PROC-BOM-001,处方/BOM,proc_package;proc_package_version;proc_formula_version;proc_formula_item;proc_route_version;proc_operation_def;proc_parameter_def,/process-packages,工艺设计器,MES-006-R2,TC-PROC-003,FROZEN
+PROC-ROUTE-001,路线与工序,proc_package;proc_package_version;proc_formula_version;proc_formula_item;proc_route_version;proc_operation_def;proc_parameter_def,/process-packages,工艺设计器,MES-006-R2,TC-PROC-002,FROZEN
+PROC-PARAM-001,工艺参数,proc_package;proc_package_version;proc_formula_version;proc_formula_item;proc_route_version;proc_operation_def;proc_parameter_def,/process-packages,工艺设计器,MES-006-R2,TC-PROC-004,FROZEN
+EBR-001,动态Designer,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-001,FROZEN
+EBR-002,动态字段,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-011,FROZEN
+EBR-003,规则引擎,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-002;TC-EBR-005,FROZEN
+EBR-004,批次版本冻结,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-003,FROZEN
+EBR-005,Renderer,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-004;TC-EBR-009,FROZEN
+EBR-006,更正修订链,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-006,FROZEN
+EBR-007,电子签名/复核,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-007;TC-EBR-008,FROZEN
+EBR-008,PDF归档,ebr_template_version;ebr_section_def;ebr_group_def;ebr_form_def;ebr_field_def;ebr_rule_def;ebr_batch_snapshot;ebr_form_instance;ebr_field_value_revision;ebr_rule_execution;ebr_review_record;gxp_signature;ebr_pdf_manifest,/ebr/*;/forms/*,eBR Designer/Renderer,MES-007-R2;MES-013-R2,TC-EBR-010,FROZEN
+WMS-001,收货待验上架,wms_warehouse;wms_location;md_material_lot;wms_inventory_ledger;wms_reservation;wms_material_issue,/inventory/*;/material-issues,WMS,MES-008-R2,TC-WMS-001,FROZEN
+WMS-002,库存流水,wms_warehouse;wms_location;md_material_lot;wms_inventory_ledger;wms_reservation;wms_material_issue,/inventory/*;/material-issues,WMS,MES-008-R2,TC-WMS-002;TC-WMS-003,FROZEN
+WMS-003,预留齐套,wms_warehouse;wms_location;md_material_lot;wms_inventory_ledger;wms_reservation;wms_material_issue,/inventory/*;/material-issues,WMS,MES-008-R2,TC-WMS-004,FROZEN
+WMS-004,发料退料,wms_warehouse;wms_location;md_material_lot;wms_inventory_ledger;wms_reservation;wms_material_issue,/inventory/*;/material-issues,WMS,MES-008-R2,TC-WMS-005,FROZEN
+PRD-001,生产订单,prd_production_order;prd_main_batch;prd_sub_batch;prd_execution_unit;prd_process_snapshot,/production-orders;/main-batches;/execution-units,生产管理,MES-009-R2,TC-BAT-005,FROZEN
+PRD-002,MainBatch,prd_production_order;prd_main_batch;prd_sub_batch;prd_execution_unit;prd_process_snapshot,/production-orders;/main-batches;/execution-units,生产管理,MES-009-R2,TC-BAT-001;TC-UI-002,FROZEN
+PRD-003,SubBatch,prd_production_order;prd_main_batch;prd_sub_batch;prd_execution_unit;prd_process_snapshot,/production-orders;/main-batches;/execution-units,生产管理,MES-009-R2,TC-BAT-002,FROZEN
+PRD-004,ExecutionUnit,prd_production_order;prd_main_batch;prd_sub_batch;prd_execution_unit;prd_process_snapshot,/production-orders;/main-batches;/execution-units,生产管理,MES-009-R2,TC-BAT-003;TC-BAT-004,FROZEN
+MES-OP-001,工序状态机,mes_operation_execution;mes_equipment_usage;mes_equipment_run;mes_parameter_value,/operations/*,车间执行,MES-010-R2,TC-OP-001;TC-OP-002,FROZEN
+MES-EQP-001,设备Usage/Run,mes_operation_execution;mes_equipment_usage;mes_equipment_run;mes_parameter_value,/operations/*,车间执行,MES-010-R2,TC-EQP-002,FROZEN
+MES-PAR-001,参数采集,mes_operation_execution;mes_equipment_usage;mes_equipment_run;mes_parameter_value,/operations/*,车间执行,MES-010-R2,TC-PAR-001,FROZEN
+MES-WGH-001,称量,mes_weighing_record;mes_material_charge;mes_quantity_event;mes_genealogy;wms_inventory_ledger,/weighings;/material-charges;/trace,称量投料/追溯,MES-011-R2,TC-WGH-001;TC-WGH-002;TC-WGH-003,FROZEN
+MES-CHG-001,投料,mes_weighing_record;mes_material_charge;mes_quantity_event;mes_genealogy;wms_inventory_ledger,/weighings;/material-charges;/trace,称量投料/追溯,MES-011-R2,TC-CHG-001;TC-CHG-002;TC-CHG-003,FROZEN
+BAL-001,数量事件,mes_quantity_event;mes_balance_rule;mes_balance_result;mes_balance_investigation,/balances/*,物料平衡,MES-012-R2,TC-BAL-004,FROZEN
+BAL-002,规则计算,mes_quantity_event;mes_balance_rule;mes_balance_result;mes_balance_investigation,/balances/*,物料平衡,MES-012-R2,TC-BAL-001,FROZEN
+BAL-003,超限调查,mes_quantity_event;mes_balance_rule;mes_balance_result;mes_balance_investigation,/balances/*,物料平衡,MES-012-R2,TC-BAL-002;TC-BAL-003,FROZEN
+QMS-IPC-001,Frozen production IPC and independent review,qms_ipc_instance;qms_ipc_result_revision;qms_ipc_review,/ipc;/ipc/{id}/submit-result;/ipc/{id}/review-result,UI-EXEC-W;existing process editor,MES-012 approved IPC stage;MES-010 consumer,TC-OP-002;TC-QMS-004,TARGETED NATIVE GATE PASS; full-task RTM review remains separate
+QMS-001,取样检验,qms_ipc_instance;qms_sample;qms_test_result_revision;qms_deviation;qms_capa,/samples;/deviations;/ipc,QMS,MES-012-R2,TC-QMS-001,FROZEN
+QMS-DEV-001,Deviation/OOS/OOT/CAPA,qms_ipc_instance;qms_sample;qms_test_result_revision;qms_deviation;qms_capa,/samples;/deviations;/ipc,QMS,MES-012-R2,TC-QMS-002;TC-QMS-003,FROZEN
+REL-001,QA放行,qms_release_decision;prd_main_batch;md_material_lot;gxp_signature,/release-decisions,QA放行,MES-013-R2,TC-REL-001;TC-REL-002;TC-REL-003;TC-REL-004,FROZEN
+TRC-001,Genealogy,mes_weighing_record;mes_material_charge;mes_quantity_event;mes_genealogy;wms_inventory_ledger,/weighings;/material-charges;/trace,称量投料/追溯,MES-011-R2,TC-TRC-001,FROZEN
+AUD-001,Audit Trail,gxp_audit_event,/audit-events,/audit,MES-001-R2,TC-AUD-001;TC-AUD-002,FROZEN V1.0.14
+SIG-001,电子签名,gxp_signature;platform_idempotency_record,/auth/reauth;/records/{type}/{id}/sign,GxP Signature Dialog,MES-001-R2 platform; MES-007-R2/MES-013-R2 providers,TC-SIG-001;TC-SIG-002;TC-SIG-003;TC-EBR-007;TC-REL-003,FROZEN V1.0.14
+INT-001,ERP/LIMS/设备集成,integration_inbox;integration_outbox;platform_idempotency_record,/integration/messages;/integration/messages/{messageRef}/retry,/integration/operations,MES-001-R2,TC-INT-001;TC-INT-002;TC-INT-003;TC-INT-004;TC-UI-003,FROZEN V1.0.14
+NFR-001,安全,platform/config,N/A,管理,MES-001-R2,TC-MIG-001;TC-NFR-001,FROZEN V1.0.14 / ENTERPRISE VALIDATION OPEN
+NFR-002,备份恢复与连续性,platform/config,N/A,管理,MES-001-R2,TC-NFR-001,FROZEN V1.0.14 / ENTERPRISE VALIDATION OPEN
+NFR-003,数据保留,platform/config,N/A,管理,MES-001-R2,TC-NFR-001,FROZEN V1.0.14 / ENTERPRISE VALIDATION OPEN
+MD-MAT-002,是否入库必验版本化,md_material_version;md_material_lot,/materials,/master/materials/:id,MES-004-R2,TC-MAT-005;TC-WMS-008,FROZEN V1.0.14
+QMS-EXM-001,来料免验质量决策,md_material_lot;qms_release_decision,/qa/material-lots/{lotId}/release-review,/wms/material-lots/:id,MES-008A-R2,TC-WMS-006;TC-WMS-007,FROZEN V1.0.14
+QMS-IN-001,来料请验,qms_inspection_request;qms_inspection_request_item,/quality/inspection-requests,/quality/inspection-requests; independent create/execute routes per approved DCP,MES-008A-R2,TC-QMS-IN-001; DCP-MES-008A-CONTRACT-001 existing-case extensions,FROZEN V1.0.14
+QMS-SMP-001,包装级取样与样品,qms_sampling_task;qms_sampling_detail;qms_sample,/quality/sampling-tasks;/quality/samples,/quality/sampling-tasks; independent create/execute routes per approved DCP,MES-008A-R2,TC-QMS-SMP-001;TC-QMS-SMP-002;TC-QMS-SMP-003; DCP-MES-008A-CONTRACT-001 existing-case extensions,FROZEN V1.0.14
+QMS-TST-001,来料检验与结果修订,qms_inspection_task;qms_inspection_item;qms_test_execution;qms_test_result_revision,/quality/inspection-tasks;/quality/inspection-items,/quality/inspection-tasks; independent create/execute routes per approved DCP,MES-008A-R2,TC-QMS-TST-001;TC-QMS-TST-002;TC-QMS-TST-003; DCP-MES-008A-CONTRACT-001 existing-case extensions,FROZEN V1.0.14
+QMS-RPT-001,检验报告,qms_inspection_report;qms_inspection_report_item,/quality/inspection-reports,/quality/inspection-reports; independent create/execute routes per approved DCP,MES-008A-R2,TC-QMS-RPT-001;TC-QMS-RPT-002; DCP-MES-008A-CONTRACT-001 existing-case extensions,FROZEN V1.0.14
+QMS-MREL-001,来料物料放行,qms_release_decision;md_material_lot,/qa/material-lots/{lotId}/release-decisions,/qa/material-lots/:id/release,MES-008A-R2,TC-QMS-MREL-001;TC-QMS-MREL-002;TC-QMS-MREL-003;TC-QMS-MREL-004; DCP-MES-008A-CONTRACT-001 existing-case extensions,FROZEN V1.0.14
+WMS-ELG-001,Inventory freeze and final eligibility,wms_material_lot_inventory_decision;md_material_lot,POST material-lots/{id}/freeze|unfreeze,UI-WMS-LOT-V,MES-008;008A;011,TC-CLOSURE-FREEZE;final-use concurrency,TARGETED NATIVE GATE PASS; full-task RTM review remains separate
+,,,,,,,
+,,,,,,,
+MD-001,DCP-MES-003-R2-001 contract completion,LG-003,MES-003 typed OpenAPI,MES-003 route matrix,MES-003-R2,TC-MD-001/TC-MD-002/TC-EQP-001/TC-QUAL-001,FROZEN
+MD-002,DCP-MES-003-R2-001 contract completion,LG-003,MES-003 typed OpenAPI,MES-003 route matrix,MES-003-R2,TC-MD-001/TC-MD-002/TC-EQP-001/TC-QUAL-001,FROZEN
+MD-EQP-001,DCP-MES-003-R2-001 contract completion,LG-003,MES-003 typed OpenAPI,MES-003 route matrix,MES-003-R2,TC-MD-001/TC-MD-002/TC-EQP-001/TC-QUAL-001,FROZEN
+MD-QUAL-001,DCP-MES-003-R2-001 contract completion,LG-003,MES-003 typed OpenAPI,MES-003 route matrix,MES-003-R2,TC-MD-001/TC-MD-002/TC-EQP-001/TC-QUAL-001,FROZEN
+EBR-001;EBR-003,Approved staged definition gate,LG-007A,11 concrete eBR operations,existing Designer,MES-007-R2,TC-EBR-001;002;definition part of 011,runtime tests still required at LG-007B/010
+WMS-001,Receipt draft update contract,wms_material_receipt/item,PUT /wms/receipts/{id},existing receipt Edit,MES-008-R2,optimistic/audit/confirmed immutable,APPROVED DCP; actual batch/Gate tests deferred
+REQ-IN-QCS-001,identity/schema,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-001,FROZEN V1.0.14
+REQ-IN-QCS-002,item definition,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-002,FROZEN V1.0.14
+REQ-IN-QCS-003,lifecycle,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-003,FROZEN V1.0.14
+REQ-IN-QCS-004,GxP signing,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-004,FROZEN V1.0.14
+REQ-IN-QCS-005,atomicity/concurrency,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-005,FROZEN V1.0.14
+REQ-IN-QCS-006,immutable consumers,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-006,FROZEN V1.0.14
+REQ-IN-QCS-007,UI/API,qc_specification;qc_specification_version;qc_specification_item,/quality/specifications;/quality/specification-versions,UI-QCS-Q/C/V/E,MES-008A-R2,TC-IN-QCS-007,FROZEN V1.0.14
+MES-OP-001-CLEARANCE,Approved bounded clearance Gate,mes_clearance_record;mes_clearance_review,POST operations/{id}/record-clearance|review-clearance,UI-EXEC-W,MES-010,TC-CLOSURE-CLEARANCE,TARGETED NATIVE GATE PASS; full-task RTM review remains separate
+BAL-001..003,Approved material-balance completion,mes_quantity_event;mes_balance_rule;mes_balance_result;mes_balance_investigation,/main-batches/{id}/material-balance;/balances/{id}/investigations,UI-BAL-V,MES-012-R2,TC-BAL-001..004,FROZEN
+QMS-IPC-001;QMS-001;QMS-DEV-001,Approved production QC/investigation/CAPA,qms_production_plan;qms_sample;qms_production_test_instance;qms_test_result_revision;qms_deviation;qms_capa,/samples;/quality/production-tests;/deviations;/capas,Production quality + existing deviation/IPC UI,MES-012-R2,TC-QMS-001..004,FROZEN
+REL-001;EBR-008,Approved finished QA / archive,qms_release_decision;ebr_pdf_manifest,/release-decisions;/main-batches/{id}/ebr/pdf,UI-QA-RELEASE,MES-013-R2,TC-REL-001..004;TC-EBR-010,FROZEN
+AUD-H05,Production order filter,No delta,GET /main-batches,UI-BAT-Q/T1,Approved audit closure,TC-AUD-H05,FROZEN
+AUD-H07,Incoming server actions,No delta,Existing incoming read DTOs,Existing incoming T1-T6,Approved audit closure,TC-AUD-H07,FROZEN
+AUD-H08,Exclusive active equipment,Existing equipment/usage/run,Existing operation commands,Existing operation execution,Approved audit closure,TC-AUD-H08,FROZEN
+MAT-STORAGE-001,存储环境读写,existing md_material.storage_condition,Material CRUD,T1/T2/T3,MES-004 maintenance,TC-MAT-STORAGE-001,APPROVED CONTRACT; runtime acceptance separate
+MAT-SOURCE-001,供应关系厂家,V028 md_material_supplier.manufacturer_name,existing relationship assignment/read,Material suppliers,MES-005 maintenance,TC-MAT-SOURCE-001,APPROVED CONTRACT; runtime acceptance separate
+RCV-SOURCE-001,收货冻结来源,V028 receipt_item.source_snapshot_json; existing receiptItemId FK,ReceiptItem/MaterialLot sourceSnapshot,Receipt T3 / MaterialLot T4,MES-008 maintenance,TC-RCV-SOURCE-001,APPROVED CONTRACT; runtime acceptance separate
+UI-MAT-CLEAN-001,默认物料字段清理,No additional schema,Existing query/sort/page,Material T1/T2/T3,UI maintenance,TC-UI-MAT-CLEAN-001,APPROVED CONTRACT; runtime acceptance separate

@@ -1,5 +1,7 @@
 package com.hospital.mes.masterdata.infrastructure;
 @com.baomidou.mybatisplus.annotation.TableName("md_material_supplier") public class MaterialSupplierEntity extends ScopedEntity {
+ private String manufacturerName;
+ public String getManufacturerName(){return manufacturerName;} public void setManufacturerName(String value){manufacturerName=value;}
  private Long materialId;
  public Long getMaterialId(){return materialId;} public void setMaterialId(Long value){materialId=value;}
  private Long supplierId;

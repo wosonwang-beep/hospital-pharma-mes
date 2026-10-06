@@ -1,5 +1,6 @@
 export interface MaterialField {key:string;label:string;kind:string;required:boolean;max:number|null}
 export const materialFields:MaterialField[] = [
+ {key:'storageCondition',label:'存储环境',kind:'text',required:false,max:500},
   {
     "key": "materialCode",
     "label": "物料编码",
@@ -106,16 +107,24 @@ export const materialFields:MaterialField[] = [
     "max": null
   }
 ]
+// Presentation whitelist only; materialFields remains the unchanged write contract.
+export const materialDisplaySections = [
+ {title:'基本信息',keys:['materialCode','materialName','materialType','specification','gradePurity']},
+ {title:'单位 / 包装',keys:['baseUnitId','packUnitId','packSpec']},
+ {title:'管理 / 质量属性',keys:['requiresIncomingInspection','storageCondition']},
+ {title:'备注',keys:['remark']}
+]
+export const materialDisplayFields:MaterialField[] = materialDisplaySections.flatMap(section=>section.keys.map(key=>materialFields.find(f=>f.key===key)!))
 export function initialMaterialForm(){return Object.fromEntries(materialFields.map(f=>[f.key,f.kind==='boolean'?true:null])) as Record<string,unknown>}
 export function materialPayload(form:Record<string,unknown>,editing=false){
  const body:Record<string,unknown>={}
  for(const f of materialFields){if(editing&&f.key==='materialCode')continue;let value=form[f.key];if(value===''||value===undefined)value=null;if(f.required&&value===null)throw new Error(`请填写${f.label}`);if(f.kind==='datetime'&&value!==null)value=new Date(String(value)+'Z').toISOString();body[f.key]=value}
  return body
 }
-export interface SupplierLink {id?:string;supplierId:string;supplierCode?:string;supplierName?:string;approved:boolean;preferred:boolean;validTo:string|null}
+export interface SupplierLink {id?:string;supplierId:string;supplierCode?:string;supplierName?:string;qualificationStatus?:string;manufacturerName?:string|null;approved:boolean;preferred:boolean;validTo:string|null}
 export function supplierPayload(items:SupplierLink[]){
  const active=items.filter(x=>x.approved),preferred=items.filter(x=>x.preferred)
  if(preferred.length!==(active.length?1:0)||preferred.some(x=>!x.approved))throw new Error('有效供应商关系必须选择一个首选供应商')
  if(new Set(items.map(x=>x.supplierId)).size!==items.length)throw new Error('供应商不能重复选择')
- return items.map(({supplierId,approved,preferred,validTo})=>({supplierId,approved,preferred,validTo:validTo||null}))
+ return items.map(({supplierId,approved,preferred,validTo,manufacturerName})=>({supplierId,approved,preferred,validTo:validTo||null,manufacturerName:manufacturerName?.trim()||null}))
 }

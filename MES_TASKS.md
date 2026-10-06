@@ -1,7 +1,14 @@
 # MES Task Status Index
-## Current human-confirmed final closeout — 2026-10-06
 
-Business authority: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE`, consistent with AGENTS.md and docs/PROJECT_BASELINE.md. Current UI authority remains Global UI Design System V2 / Page Template Standard V2 (`T1–T6`).
+## Current authority / bounded storage-source maintenance — 2026-10-06
+
+`FINAL BASELINE COMPLETE v1.0.18` is `AUTHORITATIVE`, approved DCP-MATERIAL-STORAGE-SOURCE-001, consistency PASS (114 v1.0.17 parent files unchanged). Global UI V2 / T1–T6 remains current. [Manifest](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/00_MANIFEST_FINAL_FROZEN_V1.0.18.md). This pointer supersedes dated authority declarations below; previous v1.0.17 Functional/UI Closeout remains accepted history, not an assertion of full v1.0.18 regression.
+
+Bounded maintenance: `ACCEPTED` — explicit human acceptance on 2026-10-06 ("验收，提交和推送"). Storage condition read/write reuses existing DB column; V028 adds relationship manufacturer and immutable receipt-item source snapshot; MaterialLot uses existing receiptItemId lineage. Current reads / sorted locks prevent stale-source freeze. Existing audit/reason/optimistic version/idempotency and QA/permissions unchanged. Seven distinct native methods passed across targeted gates (six initial cases, three current-read/direct/audit cases with two overlaps); five backend relationship rule tests and nine frontend unit tests PASS; three distinct desktop Chromium scenarios PASS across focused gates; typecheck/final build PASS. [Current evidence](docs/acceptance/material-field-cleanup-2026-10-06/SOURCE-CLOSEOUT.md). No new full-system regression is claimed; human acceptance and main commit/push are explicitly authorized for this maintenance. MES-001–013 including008A remain ACCEPTED. Workbench image/planning/SOP proposals remain unapproved; V3 stays outside scope.
+
+## Retained human-confirmed final closeout — 2026-10-06
+
+Historical business authority at that Closeout: `FINAL BASELINE COMPLETE v1.0.17` — `AUTHORITATIVE` at the time. UI authority remains Global UI Design System V2 / Page Template Standard V2 (`T1–T6`).
 
 | Scope | Current status |
 |---|---|
@@ -60,18 +67,18 @@ Current business authority is governed by [PROJECT_BASELINE.md](docs/PROJECT_BAS
 
 | Task | Status | Title | Dependencies | Task Card |
 |---|---|---|---|---|
-| MES-003-R2 | `ACCEPTED` | 组织、单位、设备与人员资格 | Hard: MES-001, MES-002 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-003-R2.md) |
-| MES-004-R2 | `ACCEPTED` | 物料基本信息与单位换算 | Hard: MES-001, MES-003; Soft: MES-005 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-004-R2.md) |
-| MES-005-R2 | `ACCEPTED` | 多供应商关系与唯一首选供应商 | Hard: MES-001, MES-003, MES-004 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-005-R2.md) |
-| MES-006-R2 | `ACCEPTED` | BOM处方、工艺路线与参数版本 | Hard: MES-003, MES-004; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-006-R2.md) |
-| MES-007-R2 | `ACCEPTED` | 动态eBR定义与运行引擎 | Hard: MES-001, MES-002, MES-006; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-007-R2.md) |
-| MES-008-R2 | `ACCEPTED` | WMS收货、库存、预留与发退料 | Hard: MES-003, MES-004, MES-005; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-008-R2.md) |
-| MES-008A-R2 | `ACCEPTED` | Incoming Material Quality & Material Release | Hard: MES-001, MES-002, MES-003, MES-004, MES-005, MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-008A-R2.md) |
-| MES-009-R2 | `ACCEPTED` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-009-R2.md) |
-| MES-010-R2 | `ACCEPTED` | 工序、设备运行与参数采集 | Hard: MES-003, MES-006, MES-007, MES-009; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-010-R2.md) |
-| MES-011-R2 | `ACCEPTED` | 称量、投料与Genealogy | Hard: MES-004, MES-006, MES-008, MES-008A, MES-009, MES-010; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-011-R2.md) |
-| MES-012-R2 | `ACCEPTED` | IPC、生产质量调查与物料平衡 | Hard: MES-008A, MES-009, MES-010, MES-011; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-012-R2.md) |
-| MES-013-R2 | `ACCEPTED` | QA放行与eBR归档 | Hard: MES-007, MES-008A, MES-009, MES-011, MES-012 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.17/tasks/MES-013-R2.md) |
+| MES-003-R2 | `ACCEPTED` | 组织、单位、设备与人员资格 | Hard: MES-001, MES-002 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-003-R2.md) |
+| MES-004-R2 | `ACCEPTED` | 物料基本信息与单位换算 | Hard: MES-001, MES-003; Soft: MES-005 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-004-R2.md) |
+| MES-005-R2 | `ACCEPTED` | 多供应商关系与唯一首选供应商 | Hard: MES-001, MES-003, MES-004 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-005-R2.md) |
+| MES-006-R2 | `ACCEPTED` | BOM处方、工艺路线与参数版本 | Hard: MES-003, MES-004; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-006-R2.md) |
+| MES-007-R2 | `ACCEPTED` | 动态eBR定义与运行引擎 | Hard: MES-001, MES-002, MES-006; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-007-R2.md) |
+| MES-008-R2 | `ACCEPTED` | WMS收货、库存、预留与发退料 | Hard: MES-003, MES-004, MES-005; Soft: MES-009 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-008-R2.md) |
+| MES-008A-R2 | `ACCEPTED` | Incoming Material Quality & Material Release | Hard: MES-001, MES-002, MES-003, MES-004, MES-005, MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-008A-R2.md) |
+| MES-009-R2 | `ACCEPTED` | 订单与正式批模型 | Hard: MES-003, MES-004, MES-006, MES-007; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-009-R2.md) |
+| MES-010-R2 | `ACCEPTED` | 工序、设备运行与参数采集 | Hard: MES-003, MES-006, MES-007, MES-009; Soft: MES-008 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-010-R2.md) |
+| MES-011-R2 | `ACCEPTED` | 称量、投料与Genealogy | Hard: MES-004, MES-006, MES-008, MES-008A, MES-009, MES-010; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-011-R2.md) |
+| MES-012-R2 | `ACCEPTED` | IPC、生产质量调查与物料平衡 | Hard: MES-008A, MES-009, MES-010, MES-011; Soft: MES-007 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-012-R2.md) |
+| MES-013-R2 | `ACCEPTED` | QA放行与eBR归档 | Hard: MES-007, MES-008A, MES-009, MES-011, MES-012 | [Open](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.18/tasks/MES-013-R2.md) |
 
 DCP-MES-002-R2-001 resolves the former MES-012 ambiguity. Incoming material request/sampling/testing/report/release belongs to MES-008A; MES-012 owns production IPC, OOS/OOT, Deviation, CAPA, investigation, and material balance.
 
@@ -431,3 +438,7 @@ READY FOR ACCEPTANCE for the authorized existing-contract PC UI scope. User expl
 T5 companion validation: existing frozen IPC/signature binding desktop case PASS9.7s. Two distinct targeted Chromium cases total; no full regression.
 
 Pre-commit validation2026-10-06: fresh typecheck PASS; five affected Chromium desktop cases PASS14.3s (MaterialLot chain/trace permission, signed inventory freeze in Inventory tab, T5 selected-record/evidence/commands, frozen IPC signature binding). Existing inventory test navigation updated for owning tab, assertions unchanged. No full regression.
+
+## Material Master UI field cleanup — 2026-10-06
+
+Authorized controlled presentation maintenance on main `15d4741`; T1/T2/T3 retain UI V2. Existing-contract cleanup `READY FOR ACCEPTANCE`: default columns/ordered fields simplified, hidden write values preserved, existing supplier qualification/material context shown. Typecheck/build PASS,9 affected unit tests PASS,1 targeted Chromium PC flow PASS. [Report/screenshots](docs/acceptance/material-field-cleanup-2026-10-06/REPORT.md). `DESIGN CHANGE REQUIRED` only for storage environment read/write (DB column exists but closed read/write DTOs exclude it) and genuine supplier/receipt/lot-source manufacturer ownership (no current association). No inferred manufacturer, new API/DTO/DB/migration/state/permission/signature or frozen release changes. Functional v1.0.17/UI V2 Closeout and accepted MES task statuses remain unchanged; this maintenance has not been human-accepted. Unapproved workbench proposals/UI V3 remain out of scope. No commit/push.

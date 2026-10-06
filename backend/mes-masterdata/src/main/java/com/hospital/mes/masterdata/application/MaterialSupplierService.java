@@ -49,8 +49,8 @@ public class MaterialSupplierService {
    var ordered=input.stream().sorted(Comparator.comparing(x->Boolean.TRUE.equals(x.preferred()))).toList();
    for(var item:ordered){
     long sid=MasterMutation.id(item.supplierId());var row=current.stream().filter(e->e.getSupplierId()==sid).findFirst().orElse(null);
-    if(row==null){row=new MaterialSupplierEntity();row.setMaterialId(m.getId());row.setSupplierId(sid);row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());store.insert(row,c.organizationId(),c.actorId());}
-    else{row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());store.update(row,row.getVersionNo(),c.actorId(),List.of("approved","preferred","validTo"));}
+    if(row==null){row=new MaterialSupplierEntity();row.setMaterialId(m.getId());row.setSupplierId(sid);row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());row.setManufacturerName(com.hospital.mes.masterdata.domain.MasterRules.optional(item.manufacturerName(),200));store.insert(row,c.organizationId(),c.actorId());}
+    else{row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());row.setManufacturerName(com.hospital.mes.masterdata.domain.MasterRules.optional(item.manufacturerName(),200));store.update(row,row.getVersionNo(),c.actorId(),List.of("approved","preferred","validTo","manufacturerName"));}
    }
    materials.update(m,expected,c.actorId(),List.of());mutations.auditSnapshot(c,"Material:SUPPLIERS","Material",m.getId(),before,view(m),reason,key);return m;
   },x->view((MaterialEntity)x),200);
@@ -65,6 +65,19 @@ public class MaterialSupplierService {
   var supplier=suppliers.get(org,supplierId);
   var row=store.relationships(org,materialId,false).stream().filter(e->e.getSupplierId()==supplierId).findFirst().orElseThrow(()->new MasterGateException("SUPPLIER_NOT_APPROVED","LINK_APPROVED_SUPPLIER"));
   SupplierRules.usable(supplier.getQualificationStatus(),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);return mutations.view(row);
+ }
+ public void lockSources(long org,java.util.List<Long> materialIds,long supplierId){materialIds.stream().distinct().sorted().forEach(id->materials.lock(org,id));suppliers.lock(org,supplierId);}
+ public JsonNode freezeSource(long org,long materialId,long supplierId,Instant at){
+  // Same material -> supplier lock order as relationship assignment.
+  var material=materials.lock(org,materialId);MaterialRules.usable(material.getStatus(),material.getEffectiveFrom(),material.getEffectiveTo(),at);
+  var supplier=suppliers.lock(org,supplierId);
+  var row=store.relationships(org,materialId,true).stream().filter(e->e.getSupplierId()==supplierId).findFirst().orElseThrow(()->new MasterGateException("SUPPLIER_NOT_APPROVED","LINK_APPROVED_SUPPLIER"));
+  SupplierRules.usable(supplier.getQualificationStatus(),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);
+  var relation=mutations.view(row);
+  var source=com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.objectNode();
+  source.put("relationshipId",relation.path("id").asText());source.put("materialId",Long.toString(materialId));source.put("supplierId",Long.toString(supplierId));
+  source.put("supplierCode",supplier.getSupplierCode());source.put("supplierName",supplier.getSupplierName());
+  source.set("manufacturerName",relation.get("manufacturerName")==null?com.fasterxml.jackson.databind.node.NullNode.instance:relation.get("manufacturerName"));return source;
  }
  public JsonNode requirePreferred(long org,long materialId,Instant at){
   var rows=store.relationships(org,materialId,false).stream().filter(e->Boolean.TRUE.equals(e.getPreferred())&&Boolean.TRUE.equals(e.getApproved())).toList();

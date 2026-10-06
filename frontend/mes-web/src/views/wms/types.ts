@@ -124,6 +124,7 @@ export interface ReceiptItem {
  damageCheckPassed?:boolean
  contaminationCheckPassed?:boolean
  receiptId?:string
+ sourceSnapshot?:{relationshipId:string;materialId:string;supplierId:string;supplierCode:string;supplierName:string;manufacturerName:string|null}|null
  materialSnapshot?:Record<string,unknown>
  requiresIncomingInspectionSnapshot?:boolean
  materialLotId?:string
@@ -190,6 +191,7 @@ export interface MaterialLot {
  expiryDate?:string
  retestDate?:string
  receiptItemId?:string
+ sourceSnapshot?:{relationshipId:string;materialId:string;supplierId:string;supplierCode:string;supplierName:string;manufacturerName:string|null}|null
  materialSnapshot?:Record<string,unknown>
  requiresIncomingInspectionSnapshot?:boolean
  qualityStatus?:"QUARANTINE"|"PENDING_SAMPLING"|"SAMPLING"|"SAMPLED"|"TESTING"|"PENDING_QC_REVIEW"|"QC_PASSED"|"QC_FAILED"|"PENDING_QA_RELEASE"|"PENDING_DISPOSITION"|"RELEASED"|"REJECTED"

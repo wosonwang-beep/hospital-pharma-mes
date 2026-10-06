@@ -6,4 +6,5 @@ public class MaterialQueryService {
  public MaterialQueryService(MaterialService materials){this.materials=materials;}
  public com.fasterxml.jackson.databind.JsonNode snapshot(long org,long materialId){return materials.snapshot(org,materialId);}
  public com.fasterxml.jackson.databind.JsonNode requireUsable(long org,long materialId,java.time.Instant at){return materials.requireUsable(org,materialId,at);}
+ public com.fasterxml.jackson.databind.JsonNode freezeUsable(long org,long materialId,java.time.Instant at){return materials.freezeUsable(org,materialId,at);}
 }
