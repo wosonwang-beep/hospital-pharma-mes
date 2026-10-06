@@ -11,6 +11,7 @@ import IncomingFacts from './IncomingFacts.vue'
 import IncomingDocument from './IncomingDocument.vue'
 import {documentNumber,documentStatus} from './incomingDetailModel'
 import ProductionDeviationControls from './ProductionDeviationControls.vue'
+import {deviationInitial} from '../production/workbenchFacts'
 import ProductionSampleControls from './ProductionSampleControls.vue'
 type Row=Record<string,unknown>
 type Target=SigningTarget
@@ -68,7 +69,8 @@ async function save(){busy.value=true;error.value='';try{const body=commandBody(
  const result=await api<Row>({url,method:'POST',data:body,headers:{'Idempotency-Key':pendingKey,...(version===undefined?{}:{'If-Match':`"${version}"`})}});if(selected.value?.action==='label')labelResult.value=result;pendingFingerprint='';submitted.value=true;signatureOpen.value=false;selected.value=null;form.value={};if(create.value)await router.replace(`${base.value}/${result.id}`);else await load()
  }catch(e){await request.failure(e)}finally{password.value='';busy.value=false}}
 function can(permission:string){return auth.can(permission)}
-onBeforeRouteLeave(()=>submitted.value||!Object.keys(form.value).length||window.confirm('离开将放弃未保存的输入，是否继续？'))
+// Production commands use QualityCommandForm's own dirty/saved guard; the unused incoming form must not block successful navigation.
+onBeforeRouteLeave(()=>production.value||submitted.value||!Object.keys(form.value).length||window.confirm('离开将放弃未保存的输入，是否继续？'))
 watch(()=>route.fullPath,()=>{selected.value=null;labelResult.value=null;submitted.value=false;void load()},{immediate:true})
 </script>
 <!-- UI Template: T2 for create, T3 for incoming documents, T6 for material release review. -->
@@ -76,7 +78,7 @@ watch(()=>route.fullPath,()=>{selected.value=null;labelResult.value=null;submitt
  <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="conflict" type="warning" message="记录已变化。输入已保留，请核对最新记录后重试。"><template #action><a-button @click="load">重新加载</a-button></template></a-alert>
  <a-card v-if="labelResult" title="样品标签" class="form-section"><IncomingFacts :value="labelResult"/></a-card><IncomingDocument v-if="record&&!production" :record="record" :resource="resource"><template #decision-actions><a-space wrap><a-button v-for="a in actions" :key="a.action" @click="open(a.action,`${base}/${a.action}`)">{{actionLabels[a.action]}}</a-button></a-space></template></IncomingDocument><a-card v-else-if="record" :title="`${title}详情`" class="form-section"><IncomingFacts :value="record"/></a-card>
  <template v-if="executing&&resource==='inspection-tasks'"><a-card v-for="item in itemRows" :key="String(item.id)" :title="String(item.itemName??item.id)" class="form-section"><a-space wrap><a-button v-if="serverAllows(item,'executions')&&can('qms:test:execute')" @click="open('executions',`/quality/inspection-items/${item.id}/executions`,item)">记录原始检验</a-button><a-button v-if="serverAllows(item,'approved-retests')&&can('qms:test:execute')" @click="open('approved-retests',`/quality/inspection-items/${item.id}/approved-retests`,item)">记录批准复检</a-button></a-space><div v-for="execution in executions(item)" :key="String(execution.id)"><p>检验执行 {{execution.id}}</p><a-button v-if="serverAllows(execution,'results')&&can('qms:test:execute')" @click="open('results',`/quality/inspection-items/${item.id}/results`,execution)">提交原始结果</a-button><a-button v-for="revision in revisions(execution).slice(-1)" v-show="serverAllows(revision,'revisions')&&serverAllows(execution,'revisions')&&can('qms:test:correct')" :key="String(revision.id)" @click="open('revisions',`/quality/test-results/${revision.id}/revisions`,execution)">更正结果（保留原始记录）</a-button></div></a-card></template>
- <ProductionDeviationControls v-if="production&&resource==='deviations'" :record="record??{}" :create="create" @saved="r=>create?router.replace({path:'/deviations/'+r.id,query:{scope:'PRODUCTION'}}):load()"/><ProductionSampleControls v-if="production&&resource==='samples'&&record" :record="record" @saved="load"/>
+ <ProductionDeviationControls v-if="production&&resource==='deviations'" :record="record??{}" :create="create" :initial-value="deviationInitial(route.query)" @saved="r=>create?router.replace({path:'/deviations/'+r.id,query:{scope:'PRODUCTION'}}):load()"/><ProductionSampleControls v-if="production&&resource==='samples'&&record" :record="record" @saved="load"/>
  <a-card v-if="!production&&(create||selected)" :title="create?`新增${title}`:actionLabels[selected!.action]" class="form-section"><p v-if="create&&resource==='inspection-reports'">根据请验单的全部必检项目自动汇总已复核结果，并保留原始结果和调查依据。</p><form @submit.prevent="prepare"><IncomingFormFields v-model="form" :schema="schema" :disabled="busy" :context="fieldContext" :locked-fields="lockedFields"/><a-space><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">{{signed?'核对并签名':'提交'}}</a-button><a-button v-if="!create" :disabled="busy" @click="selected=null;form={}">取消</a-button></a-space></form></a-card>
 <a-modal v-model:open="signatureOpen" title="电子签名确认" :confirm-loading="busy" ok-text="签名并提交" cancel-text="取消" @ok="save" @cancel="password=''">
  <p>签名含义：{{display(target()?.meaning)}}；绑定记录 {{target()?.recordId}}，版本 {{target()?.recordVersion}}。</p>

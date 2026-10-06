@@ -1,20 +1,26 @@
 import {test,expect} from '@playwright/test'
 import {resolve} from 'node:path'
 import {mkdirSync} from 'node:fs'
-const output=resolve('../../docs/acceptance/t5-reference-2026-10-06');mkdirSync(output,{recursive:true})
+const output=resolve('../../docs/acceptance/workbench-gap-followup-2026-10-06');mkdirSync(output,{recursive:true})
 test('T5 operation navigation preserves command ownership and existing evidence',async({page,isMobile},info)=>{
  test.skip(isMobile,'用户已批准 T5 PC-only；本例校验冻结的 PC 参考，不实施移动端 T5。')
  if(info.project.name==='chromium-desktop')await page.setViewportSize({width:1280,height:720})
+ let createPermission=false,created:Record<string,unknown>|null=null
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())})
  const names=['称量','投料','混合','灌装','IPC 检验','清场']
  const operations=names.map((_,i)=>({id:String(102+i),executionUnitId:'101',operationDefId:String(12+i),operationSeq:i+1,status:i===0?'COMPLETED':i===1?'IN_PROGRESS':'PENDING',startedAt:i<2?'2026-10-05T08:00:00Z':null,completedAt:i===0?'2026-10-05T08:30:00Z':null,operatorId:i<2?'5':null,equipmentUsages:[],parameterValues:i===1?[{id:'301',parameterDefId:'201',rawValue:'25',textValue:null,unitId:'11',sourceMode:'MANUAL',equipmentId:null,sourceMessageId:null,capturedAt:'2026-10-05T08:45:00Z'},{id:'302',parameterDefId:'202',rawValue:'52',unitId:'13',sourceMode:'MANUAL',capturedAt:'2026-10-05T08:45:00Z'},{id:'303',parameterDefId:'203',textValue:'08:45',unitId:null,sourceMode:'MANUAL',capturedAt:'2026-10-05T08:45:00Z'}]:[],gates:[],gateEvidence:[],versionNo:4,allowedActions:[]}))
  const execution={id:'101',mainBatchId:'100',subBatchId:null,unitType:'DIRECT',executionNo:'PB-20261005-001/DIRECT',status:'IN_PROGRESS',versionNo:0,allowedActions:[]}
- const batch={id:'100',batchNo:'PB-20261005-001',productId:'9',plannedQty:'10000',unitId:'12',status:'IN_PROGRESS',processSnapshotId:'130',processSnapshot:{id:'130',snapshot:{process:{route:{operations:names.map((operationName,i)=>({operationDefId:String(12+i),operationName,parameters:i===1?[{parameterDefId:'201',parameterName:'投料温度'},{parameterDefId:'202',parameterName:'环境湿度',upperLimit:'60'},{parameterDefId:'203',parameterName:'投料时间'}]:[]}))}},materials:[],ebr:{}}}}
+ const batch={id:'100',batchNo:'PB-20261005-001',productId:'9',plannedQty:'10000',unitId:'12',status:'IN_PROGRESS',processSnapshotId:'130',processSnapshot:{id:'130',snapshot:{process:{route:{operations:names.map((operationName,i)=>({operationDefId:String(12+i),operationName,parameters:i===1?[{parameterDefId:'201',parameterName:'投料温度'},{parameterDefId:'202',parameterName:'环境湿度',upperLimit:'60',unitId:'13'},{parameterDefId:'203',parameterName:'投料时间'}]:[]}))}},materials:[],ebr:{}}}}
  await page.route('**/api/v1/**',r=>{
   const path=new URL(r.request().url()).pathname.replace('/api/v1','');let data:unknown=[]
-  if(path==='/auth/me')data={userId:'5',organizationId:'1',displayName:'操作员张三',permissionCodes:['mes:execution:view','mes:operation:view','mes:operation:complete','mes:weigh:view','mes:charge:view','ebr:form:view','production:batch:view','master:product:view','master:uom:view','wms:inventory:view','wms:receipt:view','wms:issue:view','production:order:view','process:package:view','trace:view','master:material:view','master:supplier:view','master:equipment:view','qms:plan:view','qms:test:view','qms:specification:view','qms:inspection-request:view','qms:sampling:view','qms:report:view','qms:deviation:view','iam:role:view'],mustChangePassword:false}
+  if(path==='/deviations'&&r.request().method()==='POST'){created=r.request().postDataJSON();return r.fulfill({json:{code:'OK',data:{id:'701',...created},message:'success'}})}
+  if(path==='/deviations/701')data={id:'701',investigationScope:'PRODUCTION',mainBatchId:'100',operationExecutionId:'103',allowedActions:[],capas:[]}
+  if(path==='/auth/me')data={userId:'5',organizationId:'1',displayName:'操作员张三',permissionCodes:['mes:execution:view','mes:operation:view','mes:operation:complete','mes:weigh:view','mes:charge:view','ebr:form:view','production:batch:view','master:product:view','master:uom:view','wms:inventory:view','wms:receipt:view','wms:issue:view','production:order:view','process:package:view','trace:view','master:material:view','master:supplier:view','master:equipment:view','qms:plan:view','qms:test:view','qms:specification:view','qms:inspection-request:view','qms:sampling:view','qms:report:view','qms:deviation:view',...(createPermission?['qms:deviation:create']:[]),'iam:role:view'],mustChangePassword:false}
   else if(path==='/execution-units/101')data=execution
   else if(path==='/main-batches/100')data=batch
+  else if(path==='/main-batches')data={items:[batch],total:1,page:0,size:20}
+  else if(path==='/main-batches/100/execution-units')data=[execution]
+  else if(path==='/quality/production-tests')data={items:[],total:0,page:0,size:20}
   else if(path==='/execution-units/101/operations')data=operations
   else if(path==='/execution-units/101/material-charges')data=[{id:'401',operationExecutionId:'103',materialLotId:'30',weighingRecordId:'501',chargedQty:'10.020',unitId:'10',chargedBy:'5',verifiedBy:'6',chargedAt:'2026-10-05T08:45:00Z',status:'CONFIRMED',gateEvidence:[],signatureEvidence:[],versionNo:0},{id:'402',operationExecutionId:'103',materialLotId:'31',weighingRecordId:'502',chargedQty:'1.000',unitId:'10',chargedBy:'5',chargedAt:'2026-10-05T08:46:00Z',status:'CONFIRMED'},{id:'403',operationExecutionId:'103',materialLotId:'32',weighingRecordId:'503',chargedQty:'0.500',unitId:'10',chargedBy:'5',chargedAt:'2026-10-05T08:47:00Z',status:'CONFIRMED'}]
   else if(path==='/execution-units/101/weighings')data=[{id:'501',targetQty:'10.000',actualQty:'10.020',unitId:'10',status:'VERIFIED'},{id:'502',targetQty:'1.000',actualQty:'1.000',unitId:'10',status:'VERIFIED'},{id:'503',targetQty:'0.500',actualQty:'0.500',unitId:'10',status:'VERIFIED'}]
@@ -54,6 +60,8 @@ test('T5 operation navigation preserves command ownership and existing evidence'
  await expect(page.locator('.instruction-preview')).toHaveCount(0)
  await expect(page.locator('.charge-photo')).toHaveCount(0)
  await expect(page.getByRole('button',{name:'记录偏差',exact:true})).toHaveCount(0)
+ await expect(page.locator('.support-grid')).toContainText('范围内')
+ await expect(page.locator('.support-grid')).toContainText('未设范围')
  await expect(page.locator('.support-grid .ant-table-tbody').first().locator('tr.ant-table-row')).toHaveCount(3)
  await expect(page.locator('.execution-charge')).toHaveCount(1)
  const supportBottom=await page.locator('.support-grid').evaluate(el=>el.getBoundingClientRect().bottom)
@@ -78,5 +86,31 @@ test('T5 operation navigation preserves command ownership and existing evidence'
  await page.getByRole('tab',{name:'工艺参数',exact:true}).click()
  await page.locator('.workbench-heading').getByRole('button',{name:'工艺指令',exact:true}).click()
  await expect(page.getByText('冻结工艺指令',{exact:true})).toBeVisible()
+ await page.getByRole('button',{name:'Close',exact:true}).click()
+ createPermission=true
+ await page.reload()
+ await expect(page.getByRole('button',{name:'记录偏差',exact:true})).toBeVisible()
+ await page.screenshot({path:resolve(output,'workbench-with-deviation-pc.png')})
+ await page.getByRole('button',{name:'记录偏差',exact:true}).click()
+ await expect(page).toHaveURL(/deviations\/create.*mainBatchId=100.*operationExecutionId=103/)
+ await expect(page.getByLabel('生产批',{exact:true})).toHaveValue('100')
+ await expect(page.getByLabel('工序执行',{exact:true})).toHaveValue('103')
+ await page.getByLabel('严重程度',{exact:true}).selectOption('MINOR')
+ await page.getByLabel('情况描述',{exact:true}).fill('工序投料观察到异常，建立调查')
+ await page.getByLabel('操作原因',{exact:true}).fill('记录实际观察')
+ let unsavedPrompt=false
+ page.once('dialog',async dialog=>{unsavedPrompt=true;await dialog.dismiss()})
+ await page.getByRole('button',{name:'← 返回',exact:true}).click()
+ await expect.poll(()=>unsavedPrompt).toBe(true)
+ await expect(page).toHaveURL(/deviations\/create/)
+ await expect(page.locator('.incoming-reference .error')).toHaveCount(0)
+ await page.screenshot({path:resolve(output,'deviation-context-pc.png'),fullPage:true})
+ await page.getByRole('button',{name:/^提\s*交$/}).click()
+ await expect.poll(()=>created).toMatchObject({investigationScope:'PRODUCTION',mainBatchId:'100',operationExecutionId:'103',investigationKind:'DEVIATION',severity:'MINOR',description:'工序投料观察到异常，建立调查',reason:'记录实际观察'})
+ await expect(page).toHaveURL(/deviations\/701/)
+ batch.status='QA_RELEASED'
+ await page.goto('/mes/execution/101')
+ await expect(page.getByRole('heading',{name:'生产执行工作台',exact:true})).toBeVisible()
+ await expect(page.getByRole('button',{name:'记录偏差',exact:true})).toHaveCount(0)
  expect(errors).toEqual([])
 })

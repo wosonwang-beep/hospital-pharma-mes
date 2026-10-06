@@ -1,5 +1,13 @@
 # MES Task Status Index
 
+## Human acceptance and functional gap follow-up — 2026-10-06
+
+Human instruction “验收，然后补齐功能缺口，再提交和推送” explicitly accepts the four pending deliveries reported immediately before it: Complete UI Blueprint, MEDIUM-01–04 technical resolution, MaterialLot T4 reference refinement, and T5 PC reference refinement. Their current delivery status is `ACCEPTED`; dated readiness entries below remain historical evidence. Accepted code is `f235bdedb105c6c6c715f53893c37e4676cfd0c4`. MES-001–013 including MES-008A remain ACCEPTED.
+
+Functional follow-up is `IN PROGRESS`, not accepted: reuse existing production deviation creation and frozen parameter/read facts first. Missing image association, planned operation times and frozen SOP method contracts require an explicitly bounded design decision and consistency review; no sample screenshot data may become production facts. Current FINAL BASELINE COMPLETE v1.0.17 remains authoritative. User also authorizes committing and pushing the verified follow-up, excluding local database configurations.
+
+Existing-contract follow-up delivery: `READY FOR ACCEPTANCE`. PC T5 production deviation context/permission/final-QA guard, exact same-unit frozen range presentation and production save-navigation correction completed. Typecheck/build,9 focused unit tests and3 final Chromium PC cases PASS; scoped delivered increment has no remaining CRITICAL/HIGH. [Report and screenshots](docs/acceptance/workbench-gap-followup-2026-10-06/REPORT.md). No backend/API/DB/migration/frozen baseline change. The overall functional follow-up remains `IN PROGRESS` / `USER DECISION REQUIRED` for the new image/planning/SOP contracts in [the bounded proposal](docs/development/DCP-WORKBENCH-GAPS-001-PROPOSED.md). No complete-gap closure or acceptance of this new increment is inferred.
+
 Latest verified increment (2026-10-05): [MES-012 closeout](docs/acceptance/mes-012/CLOSEOUT-2026-10-05.md) and [MES-013 closeout](docs/acceptance/mes-013/CLOSEOUT-2026-10-05.md) are ACCEPTED following explicit human confirmation “确认验收” on 2026-10-05. Native V001..V026 validated/schema026; MES-01315 distinct native business methods and required targeted gates PASS, independent CRITICAL0/HIGH0/MEDIUM0. Earlier MES-001..011 human acceptance remains unchanged. FINAL BASELINE COMPLETE v1.0.17 is authoritative. Acceptance is explicitly authorized by the user.
 
 This is the sole task-status index for future Codex sessions. It records status and navigation only; requirements remain in `FINAL BASELINE COMPLETE v1.0.17`. Update status here when a task starts or reaches a verified gate. Only human approval may set `ACCEPTED`.
