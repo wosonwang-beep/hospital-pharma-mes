@@ -7,7 +7,6 @@ import { useAuthStore } from '../stores/auth'
 import ExecutionReferenceNavigation from './ExecutionReferenceNavigation.vue'
 import {
   AppstoreOutlined,
-  DesktopOutlined,
   HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -24,8 +23,13 @@ const authorization = usePlatformAuthContext()
 const auth = useAuthStore()
 const title = computed(() => String(route.meta.title ?? '工作台'))
 const selectedKeys = computed(() => [String(route.name ?? 'dashboard')])
-const usersSelected = computed(() => route.path.startsWith('/admin/users'))
-const rolesSelected = computed(() => route.path.startsWith('/admin/roles'))
+const navigationGroups=computed(()=>[
+ {title:'基础主数据',items:[...resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`)).map(r=>({key:`master-${r.key}`,title:r.title,path:`/master/${r.key}`})),...(auth.can('master:product:view')?[{key:'process-products',title:'产品管理',path:'/process/products'}]:[]),...(auth.can('process:package:view')?[{key:'process-packages',title:'工艺包管理',path:'/process/packages'}]:[])]},
+ {title:'仓库管理',items:[{key:'wms-receipts',title:'收货单',path:'/wms/receipts',permission:'wms:receipt:view'},{key:'wms-issues',title:'发料单',path:'/wms/issues',permission:'wms:issue:view'}].filter(i=>auth.can(i.permission))},
+ {title:'生产管理',items:[{key:'production-orders-list',title:'生产订单',path:'/production/orders',permission:'production:order:view'},{key:'production-batches-list',title:'生产批',path:'/production/batches',permission:'production:batch:view'},{key:'ebr-templates',title:'eBR 模板',path:'/ebr/templates',permission:'ebr:template:view'}].filter(i=>auth.can(i.permission))},
+ {title:'质量管理',items:[{key:'production-plans-list',title:'生产质量计划',path:'/quality/production-plans',permission:'qms:plan:view'},{key:'production-tests-list',title:'生产检验',path:'/quality/production-tests',permission:'qms:test:view'},{key:'qc-specifications',title:'QC质量标准',path:'/quality/specifications',permission:'qms:specification:view'},{key:'incoming-inspection-requests-list',title:'请验单',path:'/quality/inspection-requests',permission:'qms:inspection-request:view'},{key:'incoming-sampling-tasks-list',title:'取样记录',path:'/quality/sampling-tasks',permission:'qms:sampling:view'},{key:'incoming-samples-list',title:'样品',path:'/quality/samples',permission:'qms:test:view'},{key:'incoming-inspection-tasks-list',title:'检验记录',path:'/quality/inspection-tasks',permission:'qms:test:view'},{key:'incoming-inspection-reports-list',title:'检验报告',path:'/quality/inspection-reports',permission:'qms:report:view'},{key:'incoming-deviations-list',title:'质量调查',path:'/deviations',permission:'qms:deviation:view'}].filter(i=>auth.can(i.permission))},
+ {title:'系统管理',items:[{key:'users',title:'用户管理',path:'/admin/users',permission:'iam:user:view'},{key:'roles',title:'角色与权限',path:'/admin/roles',permission:'iam:role:view'},{key:'trace',title:'完整追溯',path:'/trace',permission:'trace:view'},{key:'audit',title:'GMP Audit Trail',path:'/audit',permission:'audit:view'},{key:'integration-operations',title:'Integration Operations',path:'/integration/operations',permission:'integration:view'}].filter(i=>authorization.can(i.permission))}
+].filter(g=>g.items.length))
 const executionWorkbench = computed(() => route.name === 'execution-execution')
 
 function navigate({ key }: { key: string }) {
@@ -43,28 +47,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
       <ExecutionReferenceNavigation v-if="executionWorkbench&&!collapsed"/>
       <a-menu mode="inline" :selectedKeys="selectedKeys" class="nav" :class="{'execution-original-navigation':executionWorkbench&&!collapsed}" @click="navigate">
         <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
-        <a-menu-item v-if="auth.can('iam:user:view')" key="users" aria-label="用户管理" :class="{ 'ant-menu-item-selected': usersSelected }"><UserOutlined />用户管理</a-menu-item>
-        <a-menu-item v-if="auth.can('iam:role:view')" key="roles" aria-label="角色与权限" :class="{ 'ant-menu-item-selected': rolesSelected }"><AppstoreOutlined />角色与权限</a-menu-item>
-        <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
-        <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
-        <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:plan:view')" key="production-plans-list"><AppstoreOutlined />生产质量计划</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="production-tests-list"><AppstoreOutlined />生产检验</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />质量调查</a-menu-item>
-        <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
-        <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
-        <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>
-        <a-menu-item v-if="auth.can('ebr:template:view')" key="ebr-templates" :class="{'ant-menu-item-selected':route.path.startsWith('/ebr/templates')}"><AppstoreOutlined />eBR 模板</a-menu-item>
-        <a-menu-item v-if="auth.can('wms:receipt:view')" key="wms-receipts" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/receipts')}"><AppstoreOutlined />收货单</a-menu-item>
-        <a-menu-item v-if="auth.can('wms:issue:view')" key="wms-issues" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/issues')}"><AppstoreOutlined />发料单</a-menu-item>
-        <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
-        <a-menu-item v-if="authorization.can('integration:view')" key="integration-operations"><DesktopOutlined />Integration Operations</a-menu-item>
+        <a-menu-item-group v-for="group in navigationGroups" :key="group.title" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key" :aria-label="item.key==='users'||item.key==='roles'?item.title:undefined" :class="{'ant-menu-item-selected':route.path.startsWith(item.path)}"><AppstoreOutlined/>{{item.title}}</a-menu-item></a-menu-item-group>
       </a-menu>
     </a-layout-sider>
     <a-layout class="main-shell" :class="{ 'main-shell-collapsed': collapsed }">
@@ -75,28 +58,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
             <template #overlay>
               <a-menu @click="navigate">
                 <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
-                <a-menu-item v-if="auth.can('iam:user:view')" key="users"><UserOutlined />用户管理</a-menu-item>
-                <a-menu-item v-if="auth.can('iam:role:view')" key="roles"><AppstoreOutlined />角色与权限</a-menu-item>
-                <a-menu-item v-for="def in resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`))" :key="`master-${def.key}`" :class="{'ant-menu-item-selected':route.path.startsWith(`/master/${def.key}`)}"><AppstoreOutlined />{{def.title}}</a-menu-item>
-        <a-menu-item v-if="auth.can('master:product:view')" key="process-products" :class="{'ant-menu-item-selected':route.path.startsWith('/process/products')}"><AppstoreOutlined />产品管理</a-menu-item>
-        <a-menu-item v-if="auth.can('process:package:view')" key="process-packages" :class="{'ant-menu-item-selected':route.path.startsWith('/process/packages')}"><AppstoreOutlined />工艺包管理</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:plan:view')" key="production-plans-list"><AppstoreOutlined />生产质量计划</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="production-tests-list"><AppstoreOutlined />生产检验</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:specification:view')" key="qc-specifications"><AppstoreOutlined />QC质量标准</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:inspection-request:view')" key="incoming-inspection-requests-list"><AppstoreOutlined />请验单</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:sampling:view')" key="incoming-sampling-tasks-list"><AppstoreOutlined />取样记录</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-samples-list"><AppstoreOutlined />样品</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:test:view')" key="incoming-inspection-tasks-list"><AppstoreOutlined />检验记录</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:report:view')" key="incoming-inspection-reports-list"><AppstoreOutlined />检验报告</a-menu-item>
-        <a-menu-item v-if="auth.can('qms:deviation:view')" key="incoming-deviations-list"><AppstoreOutlined />质量调查</a-menu-item>
-        <a-menu-item v-if="auth.can('production:order:view')" key="production-orders-list"><AppstoreOutlined />生产订单</a-menu-item>
-        <a-menu-item v-if="auth.can('production:batch:view')" key="production-batches-list"><AppstoreOutlined />生产批</a-menu-item>
-        <a-menu-item v-if="auth.can('trace:view')" key="trace"><AppstoreOutlined />追溯查询</a-menu-item>
-        <a-menu-item v-if="auth.can('ebr:template:view')" key="ebr-templates" :class="{'ant-menu-item-selected':route.path.startsWith('/ebr/templates')}"><AppstoreOutlined />eBR 模板</a-menu-item>
-        <a-menu-item v-if="auth.can('wms:receipt:view')" key="wms-receipts" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/receipts')}"><AppstoreOutlined />收货单</a-menu-item>
-        <a-menu-item v-if="auth.can('wms:issue:view')" key="wms-issues" :class="{'ant-menu-item-selected':route.path.startsWith('/wms/issues')}"><AppstoreOutlined />发料单</a-menu-item>
-        <a-menu-item v-if="authorization.can('audit:view')" key="audit"><AppstoreOutlined />GMP Audit Trail</a-menu-item>
-                <a-menu-item v-if="authorization.can('integration:view')" key="integration-operations"><DesktopOutlined />Integration Operations</a-menu-item>
+                <a-menu-item-group v-for="group in navigationGroups" :key="group.title" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key">{{item.title}}</a-menu-item></a-menu-item-group>
               </a-menu>
             </template>
           </a-dropdown>
@@ -108,7 +70,7 @@ async function logout() { await auth.logout(); await router.replace('/login') }
           <span>{{ title }}</span><span class="environment-chip">GMP · 验证环境</span>
         </div>
         <div v-if="executionWorkbench" class="execution-header-tools"><a-tooltip title="当前契约未提供全局搜索"><a-input disabled placeholder="搜索工单、批号、物料…" class="execution-header-search"><template #prefix><SearchOutlined/></template></a-input></a-tooltip><a-tooltip title="系统运行正常"><BellOutlined class="execution-system-icon"/></a-tooltip><a-dropdown><a-button type="text" class="execution-user"><a-avatar size="small"><UserOutlined/></a-avatar>{{auth.identity?.displayName}}<DownOutlined/></a-button><template #overlay><a-menu><a-menu-item @click="router.push('/change-password')">改密</a-menu-item><a-menu-item @click="logout">退出</a-menu-item></a-menu></template></a-dropdown></div>
-        <div class="user" :class="{'execution-original-user':executionWorkbench}"><span class="status-dot" />系统运行正常<a-avatar><UserOutlined /></a-avatar><span>{{ auth.identity?.displayName }}</span><button class="header-link" @click="router.push('/change-password')">改密</button><button class="header-link" @click="logout">退出</button></div>
+        <div class="user" :class="{'execution-original-user':executionWorkbench}"><span class="status-dot" />{{executionWorkbench?'系统运行正常':'已登录'}}<a-avatar><UserOutlined /></a-avatar><span>{{ auth.identity?.displayName }}</span><button class="header-link" @click="router.push('/change-password')">改密</button><button class="header-link" @click="logout">退出</button></div>
       </a-layout-header>
       <a-layout-content class="content">
         <a-breadcrumb><a-breadcrumb-item><HomeOutlined /> 首页</a-breadcrumb-item><a-breadcrumb-item>{{ title }}</a-breadcrumb-item></a-breadcrumb>

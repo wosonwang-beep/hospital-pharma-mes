@@ -33,7 +33,7 @@ const cases=[
  {path:'/quality/samples/41',record:sample,text:'样品身份与来源'},
  {path:'/quality/inspection-tasks/201',record:task,text:'检验结论与复核'},
  {path:'/quality/inspection-reports/91',record:report,text:'检验结论'},
- {path:'/deviations/71',record:investigation,text:'原始结果与最终选定结果证据'},
+ {path:'/deviations/71',record:investigation,text:'原始异常事实'},
  {path:'/qa/material-lots/61/review',record:release,text:'放行条件与阻断检查'},
 ]
 const permissions=['qms:inspection-request:view','qms:sampling:view','qms:test:view','qms:report:view','qms:deviation:view','qa:material-release:view','wms:inventory:view','wms:receipt:view','qms:specification:view','iam:user:view','master:uom:view','master:equipment:view','audit:view','trace:view']
@@ -64,7 +64,8 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
  await page.goto(scenario.path);await expect(page.getByText(scenario.text,{exact:true})).toBeVisible()
  await expect(page.getByText('详情响应不完整或状态不符合当前契约，请重新加载并核对数据来源。',{exact:true})).toHaveCount(0)
  await expect(page.getByRole('button',{name:'审计追踪',exact:true})).toBeVisible()
- if(scenario.record.inspectionRequestId&&!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports'))await expect(page.getByText('IR-20261005-001（ID 21）').first()).toBeVisible()
+ if(scenario.record.inspectionRequestId&&!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports')&&!scenario.path.startsWith('/qa/'))await expect(page.getByText('IR-20261005-001',{exact:true}).first()).toBeVisible()
+ if(!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports')&&!scenario.path.startsWith('/qa/')){await expect(page.getByText('记录元数据',{exact:true})).toBeHidden();await expect(page.getByText('电子签名记录',{exact:true})).toBeHidden();if(scenario.path.startsWith('/deviations/')){await page.getByRole('button',{name:/更多记录与审计证据/}).click();await expect(page.getByText('原始结果与最终选定结果证据',{exact:true})).toBeVisible();await page.getByRole('button',{name:/更多记录与审计证据/}).click()}}
  if(scenario.path.includes('inspection-tasks')){
   await expect(page.getByRole('button',{name:'IR-20261005-001',exact:true})).toBeVisible()
   await expect(page.getByText('95.000000 – 105.000000',{exact:true})).toBeVisible()

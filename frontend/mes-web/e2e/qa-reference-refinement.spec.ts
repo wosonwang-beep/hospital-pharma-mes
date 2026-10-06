@@ -3,7 +3,7 @@ import {mkdirSync} from 'node:fs'
 import {resolve} from 'node:path'
 // Browser plugin not available: use repository Chromium to render the real Vue app.
 // Only API responses are mocked; no runtime/auth bypass or business writes are introduced.
-const output=resolve('../../docs/acceptance/qa-reference-refinement/screens')
+const output=resolve('../../docs/acceptance/ui-blueprint-2026-10-05/t6')
 mkdirSync(output,{recursive:true})
 const perms=['master:material:view','master:material:create','master:material:update','qa:release','qa:batch-review','ebr:form:view','ebr:pdf:generate']
 async function fixture(page:Page){

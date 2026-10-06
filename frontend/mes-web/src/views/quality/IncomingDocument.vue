@@ -4,6 +4,8 @@ import {useRouter} from 'vue-router'
 import {api,errorMessage,type Page} from '../../api/http'
 import {useAuthStore} from '../../stores/auth'
 import IncomingFacts from './IncomingFacts.vue'
+import MaterialReleaseOverview from './MaterialReleaseOverview.vue'
+import IncomingBusinessOverview from './IncomingBusinessOverview.vue'
 import InspectionRecordOverview from './InspectionRecordOverview.vue'
 import InspectionReportOverview from './InspectionReportOverview.vue'
 import {schemas,type IncomingRow} from './incomingModel'
@@ -15,6 +17,7 @@ const references=ref<Record<string,{name:string;row:IncomingRow;route?:string}>>
 const evidence=ref<IncomingRow|null>(null),evidenceOpen=ref(false),evidenceBusy=ref(false),evidenceError=ref('')
 const compact=computed(()=>['inspection-tasks','inspection-reports'].includes(props.resource)),moreOpen=ref(false),selectedItem=ref<IncomingRow|null>(null)
 const qa=computed(()=>props.resource==='release')
+const ordinary=computed(()=>!compact.value&&!qa.value)
 const rootSchema=readSchemas
 const missing=computed(()=>{
  const schema=schemas[rootSchema[props.resource]??'']
@@ -24,7 +27,7 @@ const invalidStatus=computed(()=>{
  const statuses=schemas[rootSchema[props.resource]??'']?.properties?.status?.enum
  return !!statuses&&props.record.status!==undefined&&!statuses.includes(String(props.record.status))
 })
-const summary=computed(()=>selectFacts(props.record,summaryFields))
+const summary=computed(()=>selectFacts(props.record,ordinary.value?summaryFields.filter(k=>!['versionNo','recordStatus'].includes(k)):summaryFields))
 const signatures=computed(()=>signatureEntries(props.record))
 const request=computed(()=>props.resource==='inspection-requests'?props.record:references.value[`inspectionRequestId:${props.record.inspectionRequestId}`]?.row)
 const lotId=computed(()=>props.record.materialLotId??request.value?.materialLotId)
@@ -36,7 +39,7 @@ function facts(row:IncomingRow,keys:string[]){return selectFacts(row,keys)}
 function valueLabel(key:string,value:unknown){
  if(key==='status'&&invalidStatus.value&&value===props.record.status)return documentStatus(props.resource,props.record)
  const ref=references.value[`${key}:${value}`]
- return ref?`${ref.name}（ID ${value}）`:detailDisplay(key,value)
+ return ref?(ordinary.value?ref.name:`${ref.name}（ID ${value}）`):detailDisplay(key,value)
 }
 const mappings:Record<string,{url:string;permission:string;route?:string}>={
  inspectionRequestId:{url:'/quality/inspection-requests',permission:'qms:inspection-request:view',route:'/quality/inspection-requests'},
@@ -120,14 +123,18 @@ function gateText(row:IncomingRow){return gateNames[String(row.code)]??(row.mess
  <a-alert v-if="missing.length||invalidStatus" type="warning" show-icon message="详情响应不完整或状态不符合当前契约，请重新加载并核对数据来源。" :description="invalidStatus?`未识别业务状态：${record.status}`:`缺少：${missing.map(detailLabel).join('、')}`"/>
  <InspectionRecordOverview v-if="resource==='inspection-tasks'" :record="record" :request="request" :lot="lot" :references="references" :value-label="valueLabel" @view-item="selectedItem=$event"/>
  <InspectionReportOverview v-if="resource==='inspection-reports'" :record="record" :request="request" :lot="lot" :references="references"/>
- <button v-if="compact" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
- <div v-show="!compact||moreOpen">
- <a-card v-if="!compact" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/>
+ <a-card v-if="ordinary" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/><div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span></div></a-card>
+ <IncomingBusinessOverview v-if="ordinary" :record="record" :resource="resource" :value-label="valueLabel"/>
+ <MaterialReleaseOverview v-if="qa" :record="record" :lot="lot" :gate-text="gateText"><template #actions><slot name="decision-actions"/></template></MaterialReleaseOverview>
+ <button v-if="compact||ordinary||qa" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
+ <a-card v-if="ordinary||qa" title="关联记录与追溯" class="form-section"><a-space wrap><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space></a-card>
+ <div v-show="moreOpen">
+ <a-card v-if="!compact&&!ordinary&&!qa" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/>
   <div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span><span>库存状态：{{detailDisplay('inventoryStatus',lot.inventoryStatus)}}</span></div>
-  <a-space wrap class="related-context"><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space>
+  <a-space v-if="!ordinary" wrap class="related-context"><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space>
   <details v-if="lookupNotices.length"><summary>关联信息读取说明</summary><p v-for="notice in lookupNotices" :key="notice">{{notice}}</p></details>
  </a-card>
- <a-card v-for="section in sections[resource]??[]" :key="section.title" :title="section.title" class="form-section"><IncomingFacts :value="facts(record,section.keys)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
+ <a-card v-for="section in sections[resource]??[]" :key="section.title" :title="ordinary?section.title+'（完整证据）':section.title" class="form-section"><IncomingFacts :value="facts(record,section.keys)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
  <a-card v-if="Object.keys(standard).length" title="请验时冻结的质量标准版本" class="form-section"><IncomingFacts :value="standard" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
  <template v-if="resource==='inspection-tasks'">
   <a-card title="检验项目、标准快照与执行结果" class="form-section"><p v-if="!rows(record.items).length">暂无检验项目</p>
@@ -151,10 +158,8 @@ function gateText(row:IncomingRow){return gateNames[String(row.code)]??(row.mess
   </section>
  </a-card>
  <a-card v-if="resource==='deviations'" title="原始结果与最终选定结果证据" class="form-section"><div class="result-comparison"><section v-for="key in ['originalResultRevisionId','selectedResultRevisionId']" :key="key"><h3>{{detailLabel(key)}}</h3><IncomingFacts v-if="references[`${key}:${record[key]}`]" :value="references[`${key}:${record[key]}`]!.row" :label-formatter="detailLabel" :value-formatter="valueLabel"/><p v-else>{{record[key]?`关联结果 ${record[key]} 暂不可读取，请从关联检验记录查看。`:'暂无记录'}}</p></section></div></a-card>
- <template v-if="qa"><div class="decision-grid"><a-card title="放行条件与阻断检查" class="form-section"><a-alert :type="record.eligibleForRelease?'success':'warning'" :message="record.eligibleForRelease?'当前满足放行条件，仍须执行授权质量决定':'当前不满足放行条件'" show-icon/>
-   <p v-if="!rows(record.gateReasons).length">当前暂无阻断原因。</p><section v-for="gate in rows(record.gateReasons)" :key="String(gate.code)" class="document-section"><p>{{gateText(gate)}}</p><IncomingFacts :value="facts(gate,['code','evidenceIds'])" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section>
-  </a-card><a-card title="质量决定摘要" class="form-section"><IncomingFacts :value="facts(record,['materialLotId','qualityStatus','inventoryStatus','eligibleForRelease','versionNo','evidenceDigest'])" :label-formatter="detailLabel" :value-formatter="valueLabel"/><p>QC检验合格与QA物料放行是独立决定。</p><slot name="decision-actions"/></a-card></div>
-  <a-card v-for="[key,title] in [['reports','检验报告证据'],['investigations','来料调查证据'],['decisions','物料质量决定历史']]" :key="key" :title="title" class="form-section"><p v-if="!rows(record[key!]).length">暂无记录</p><section v-for="row in rows(record[key!])" :key="String(row.id)" class="document-section"><h3>{{documentNumber(row)}}</h3><a-button v-if="key==='reports'&&auth.can('qms:report:view')" type="link" @click="router.push(`/quality/inspection-reports/${row.id}`)">查看检验报告</a-button><a-button v-if="key==='investigations'&&auth.can('qms:deviation:view')" type="link" @click="router.push(`/deviations/${row.id}`)">查看来料调查</a-button><a-button v-if="key==='decisions'&&auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_release_decision',objectId:String(row.id)}})">查看质量决定审计</a-button><IncomingFacts :value="row" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section></a-card>
+ <template v-if="qa">
+ <a-card v-for="[key,title] in [['reports','检验报告证据'],['investigations','来料调查证据'],['decisions','物料质量决定历史']]" :key="key" :title="title" class="form-section"><p v-if="!rows(record[key!]).length">暂无记录</p><section v-for="row in rows(record[key!])" :key="String(row.id)" class="document-section"><h3>{{documentNumber(row)}}</h3><a-button v-if="key==='reports'&&auth.can('qms:report:view')" type="link" @click="router.push(`/quality/inspection-reports/${row.id}`)">查看检验报告</a-button><a-button v-if="key==='investigations'&&auth.can('qms:deviation:view')" type="link" @click="router.push(`/deviations/${row.id}`)">查看来料调查</a-button><a-button v-if="key==='decisions'&&auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_release_decision',objectId:String(row.id)}})">查看质量决定审计</a-button><IncomingFacts :value="row" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section></a-card>
  </template>
  <a-card title="电子签名记录" class="form-section"><p v-if="!signatures.length">暂无电子签名记录</p><section v-for="(entry,index) in signatures" :key="`${entry.metadata.signatureId}:${index}`" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><p class="muted">{{entry.context}}</p><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="auth.can('audit:view')" @click="openEvidence(entry.metadata)">查看签名证据</a-button><p v-else>签名快照需要审计查看权限。</p></section></a-card>
  <a-card title="记录元数据" class="form-section"><IncomingFacts :value="facts(record,readFields)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
@@ -166,4 +171,5 @@ function gateText(row:IncomingRow){return gateNames[String(row.code)]??(row.mess
 <style scoped>
 .evidence-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;background:#fff;border:1px solid var(--mes-ui-border,#e8edf3);border-radius:10px;padding:20px;color:#26364d;margin-bottom:16px;cursor:pointer;font:inherit}.evidence-toggle strong{display:block;font-size:14px;font-weight:600}.evidence-toggle small{display:block;font-size:12px;color:#66758a;margin-top:6px}.evidence-toggle:focus-visible{outline:2px solid #1677ff;outline-offset:2px}
 .incoming-document{min-width:0}.document-section{border-top:1px solid var(--mes-border,#e8edf3);padding-top:16px;margin-top:16px;min-width:0}.document-section:first-child{border-top:0;margin-top:0;padding-top:0}h3,h4{font-size:15px;font-weight:600;margin:0 0 12px}.result-version{margin-top:16px;padding:16px;border:1px solid var(--mes-border,#e8edf3);border-radius:8px;min-width:0}.result-comparison,.decision-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.result-comparison>section{min-width:0}.related-context{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.muted,details{color:#596778;font-size:12px}p{overflow-wrap:anywhere}details{margin-top:12px}details summary{cursor:pointer}@media(max-width:767px){.result-comparison,.decision-grid{grid-template-columns:minmax(0,1fr)}.result-version{padding:12px}}
+.evidence-toggle>span:last-child{flex-shrink:0;white-space:nowrap}
 </style>

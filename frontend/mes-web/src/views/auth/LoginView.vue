@@ -23,7 +23,7 @@ async function submit() {
 }
 </script>
 
-<template><main class="auth-page"><form class="auth-card" @submit.prevent="submit">
+<template><main class="auth-page" data-ui-template="Specialized"><form class="auth-card" @submit.prevent="submit">
   <div class="auth-mark">+</div><h1>医院制剂 MES</h1><p>使用受控院内员工账号登录</p>
   <label>账号<a-input v-model:value="loginName" autocomplete="username" required /></label>
   <label>密码<a-input-password v-model:value="password" autocomplete="current-password" required /></label>

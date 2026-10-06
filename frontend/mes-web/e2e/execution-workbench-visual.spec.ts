@@ -1,8 +1,9 @@
 import {test,expect} from '@playwright/test'
 import {resolve} from 'node:path'
 import {mkdirSync} from 'node:fs'
-const output=resolve('../../docs/acceptance/execution-workbench-reference-match-2026-10-05');mkdirSync(output,{recursive:true})
-test('T5 operation navigation preserves command ownership and existing evidence',async({page},info)=>{
+const output=resolve('../../docs/acceptance/ui-blueprint-2026-10-05/t5');mkdirSync(output,{recursive:true})
+test('T5 operation navigation preserves command ownership and existing evidence',async({page,isMobile},info)=>{
+ test.skip(isMobile,'用户已批准 T5 PC-only；本例校验冻结的 PC 参考，不实施移动端 T5。')
  if(info.project.name==='chromium-desktop')await page.setViewportSize({width:1280,height:720})
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())})
  const names=['称量','投料','混合','灌装','IPC 检验','清场']
@@ -48,12 +49,10 @@ test('T5 operation navigation preserves command ownership and existing evidence'
  expect(Math.abs(referenceGeometry.workspace-304)).toBeLessThanOrEqual(2)
  expect(Math.abs(referenceGeometry.support-580)).toBeLessThanOrEqual(2)
  await expect(page.locator('.instruction-preview')).toHaveCount(0)
- await expect(page.getByRole('img',{name:'用户提供的投料界面设计示意，非现场记录'})).toBeVisible()
+ await expect(page.locator('.charge-photo')).toHaveCount(0)
+ await expect(page.getByRole('button',{name:'记录偏差',exact:true})).toHaveCount(0)
  await page.screenshot({path:resolve(output,'workbench-pc-1280x720.png')})
  await page.screenshot({path:resolve(output,`workbench-${info.project.name}.png`),fullPage:true})
- await page.getByRole('button',{name:'查看大图',exact:true}).click()
- await expect(page.getByText('投料界面设计示意',{exact:true})).toBeVisible()
- await page.locator('.ant-modal-close').click()
  await page.locator('.workbench-heading').getByRole('button',{name:'批记录',exact:true}).click()
  await page.getByRole('button',{name:'完整记录与审计证据',exact:true}).click()
  await expect(page.getByText('完整记录与审计证据',{exact:true})).toBeVisible()

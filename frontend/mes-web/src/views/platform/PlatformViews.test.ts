@@ -33,6 +33,18 @@ describe('GMP Audit Trail', () => {
     await screen.findByText('暂无审计事件')
     expect(auditApi.queryAuditEvents).toHaveBeenCalledWith({ objectType: 'Equipment', objectId: '21', page: 0, size: 50 })
   })
+  test('audit filters and selected digest detail use the existing read contract',async()=>{
+    usePlatformAuthContext().setPermissions(['audit:view'])
+    const event={id:'9',orgId:'1',actorId:'23',actorRole:'QA',action:'SIGN',objectType:'EBR',objectId:'88',oldValueDigest:'old-digest',newValueDigest:'new-digest',reason:'QA审核',clientInfo:null,occurredAt:'2026-10-05T01:00:00Z',transactionId:'tx',requestId:null,source:'API' as const}
+    vi.mocked(auditApi.queryAuditEvents).mockResolvedValue(page([event]))
+    render(AuditTrailView,{global:{plugins:[pinia]}})
+    await fireEvent.click(await screen.findByRole('button',{name:'查看详情'}))
+    expect(screen.getByText('old-digest')).toBeTruthy()
+    await fireEvent.click(await screen.findByRole('button',{name:'关闭'}))
+    await fireEvent.update(screen.getByLabelText('业务动作'),'SIGN')
+    await fireEvent.click(screen.getByRole('button',{name:'查询'}))
+    await waitFor(()=>expect(auditApi.queryAuditEvents).toHaveBeenCalledWith(expect.objectContaining({action:'SIGN',page:0,size:50})))
+  })
   test('shows 403 without audit:view and never queries the API', async () => {
     render(AuditTrailView, { global: { plugins: [pinia] } })
 
@@ -127,6 +139,16 @@ describe('Integration Inbox / Outbox Operations', () => {
     expect(submitted?.idempotencyKey).toBeTruthy()
   })
 
+  test('inbox direction and status filter are submitted without new actions',async()=>{
+    usePlatformAuthContext().setPermissions(['integration:view'])
+    vi.mocked(integrationApi.queryIntegrationMessages).mockResolvedValue(page([]))
+    render(IntegrationOperationsView,{global:{plugins:[pinia]}})
+    await screen.findByText('暂无集成消息')
+    await fireEvent.click(screen.getByRole('button',{name:'Inbox 收件箱'}))
+    await fireEvent.update(screen.getByLabelText('状态'),'PROCESSED')
+    await fireEvent.click(screen.getByRole('button',{name:'查询'}))
+    await waitFor(()=>expect(integrationApi.queryIntegrationMessages).toHaveBeenCalledWith({direction:'INBOX',status:['PROCESSED'],page:0,size:50}))
+  })
   test('supports the integration empty and error states', async () => {
     usePlatformAuthContext().setPermissions(['integration:view'])
     vi.mocked(integrationApi.queryIntegrationMessages).mockResolvedValue(page([]))

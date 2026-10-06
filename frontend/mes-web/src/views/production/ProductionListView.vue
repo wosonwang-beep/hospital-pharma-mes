@@ -26,7 +26,7 @@ function open(id?:string){void router.push({path:id?`${ui.value}/${id}`:`${ui.va
 watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])query[key]=String(route.query[key]??'');const saved=Number(route.query.page??1);page.value=Number.isInteger(saved)&&saved>0?saved:1;void load()},{immediate:true})
 </script>
 <!-- UI Template: T1 Query/List. Frozen UI-ORD-Q/UI-BAT-Q filters and independent routes. -->
-<template><main class="admin-page master-page t1-query-list production-query-page">
+<template><main data-ui-template="T1" class="admin-page master-page t1-query-list production-query-page t1-query-list">
  <header class="admin-page-header"><div><h1>{{title}}</h1><p>查询计划与状态 · 查询条件随导航保留</p></div><a-button v-if="auth.can(`${permission}:create`)" type="primary" @click="open()">新增{{title}}</a-button></header>
  <a-alert v-if="error" type="error" :message="error" show-icon/>
  <a-card title="查询条件" class="query-card"><form class="query-form" @submit.prevent="search(1)">
