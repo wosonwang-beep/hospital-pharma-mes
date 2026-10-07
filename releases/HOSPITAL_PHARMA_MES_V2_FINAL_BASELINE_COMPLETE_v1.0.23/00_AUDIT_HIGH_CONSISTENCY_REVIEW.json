@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "approvedDcp": "DCP-AUDIT-HIGH-QUERY-ACTIONS-OCCUPANCY-001",
+  "parentBaseline": "v1.0.16",
+  "candidateBaseline": "v1.0.23",
+  "historicalFilesVerified": 109,
+  "addedPaths": 0,
+  "addedPermissions": 0,
+  "physicalSchemaDelta": false,
+  "executedMigrationsChanged": false,
+  "incomingDecoratedReadSchemas": [
+    "InspectionRequest",
+    "SamplingTask",
+    "SamplingDetail",
+    "Sample",
+    "InspectionTask",
+    "InspectionItem",
+    "TestExecution",
+    "TestResultRevision",
+    "InspectionReport",
+    "Deviation",
+    "ReleaseDecision",
+    "ReleaseReview"
+  ],
+  "businessStateEnumsChanged": false,
+  "signatureCanonicalChanged": false,
+  "globalUiV2Changed": false,
+  "pageTemplates": "T1–T6 unchanged",
+  "errors": [],
+  "runtimeEvidence": "See docs/review/MES_V1.0.23_AUDIT_HIGH_CLOSURE_REPORT.md; consistency PASS does not imply human acceptance."
+}

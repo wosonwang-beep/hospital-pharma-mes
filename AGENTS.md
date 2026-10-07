@@ -1,13 +1,17 @@
 # Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.22` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.23` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
 
 ## Current governance closeout — 2026-10-06
 
-Current business authority: `FINAL BASELINE COMPLETE v1.0.22` — `AUTHORITATIVE`, following user-approved DCP-TRACE-FINISHED-INVENTORY-001 and cross-document consistency PASS. Only actual-charge forward/WMS/source trace and finished inventory read/menu are extended. All prior finished/WMS/source/QA/GxP rules remain inherited; no mandatory weighing introduced. Parent v1.0.21 remains immutable; runtime status only MES_TASKS.md. Current UI authority: Global UI Design System V2 and Page Template Standard V2 (`T1–T6`). Human-confirmed Functional Baseline v1.0.17 and UI V2 Implementation are `CLOSED`; MES-001–MES-013 including MES-008A are `ACCEPTED`, with task status maintained only in MES_TASKS.md. See [historical v1.0.17 Closeout record](docs/review/MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md).
+Current business authority: FINAL BASELINE COMPLETE v1.0.23 — AUTHORITATIVE, following user-approved DCP-PRODUCTION-FINISHED-ENTRY-001 and cross-document consistency PASS. Only shared navigation, real context entry routes and bounded read projections are extended. All prior v1.0.22 WMS/finished/source/QA/GxP rules are inherited; no mandatory weighing introduced. Parent v1.0.22 remains immutable; runtime status only MES_TASKS.md. Current UI authority: Global UI Design System V2 and Page Template Standard V2 (`T1–T6`). Human-confirmed Functional Baseline v1.0.17 and UI V2 Implementation are `CLOSED`; MES-001–MES-013 including MES-008A are `ACCEPTED`, with task status maintained only in MES_TASKS.md. See [historical v1.0.17 Closeout record](docs/review/MES_V1.0.17_FUNCTIONAL_UI_V2_FINAL_CLOSEOUT.md).
 
 DCP-WORKBENCH-GAPS-001's Material Master Image, Operation Execution Photo, Planned Operation Time and SOP/Method Reference remain `PROPOSED / NOT AUTHORIZED / NOT IMPLEMENTED`. They are excluded from this Closeout and must not be implemented implicitly. Global UI V3 is `NOT IN CURRENT SCOPE`; do not implement it or switch the current UI authority.
 
+
+## Approved global navigation supplement — 2026-10-07
+
+Business authority is FINAL BASELINE COMPLETE v1.0.23, inheriting the [approved shared-navigation supplement](docs/development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md). Global UI V2/T1–T6 remain unchanged. All shell variants share one permission-filtered navigation configuration, ordered 首页 / 基础管理 / WMS管理 / 质量管理 / 生产管理 / 成品管理 / 系统管理. The original menu-only supplement is superseded in its bounded production/finished entry scope by [DCP-PRODUCTION-FINISHED-ENTRY-001](docs/development/DCP-PRODUCTION-FINISHED-ENTRY-001-APPROVED.md). Only its exact readonly API/DTO and entry routes are added; permission codes and GxP rules unchanged; frozen releases remain immutable. Runtime maintenance status is only in MES_TASKS.md.
 
 ## Low-token task startup
 
@@ -41,7 +45,7 @@ Do not scan the whole repository or read all `docs/`/baseline artifacts by defau
 
 - The approved global visual baseline is [`docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`](docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md), and approved business page structures are [`docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md`](docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md).
 - Every new or substantially modified Vue business page must inherit the Global UI Design System and explicitly select exactly one T1–T6 page template. Do not invent a new business page structure, module-specific visual language, font/color/spacing system, or ad-hoc CRUD layout. If T1–T6 cannot represent the page without changing business meaning, stop with `DESIGN CHANGE REQUIRED`.
-- The UI baseline is subordinate to FINAL BASELINE v1.0.22 and approved DCPs for business fields, states, permissions, routes, APIs, workflows and GxP controls. Visual work must never change those contracts implicitly.
+- The UI baseline is subordinate to FINAL BASELINE v1.0.23 and approved DCPs for business fields, states, permissions, routes, APIs, workflows and GxP controls. Visual work must never change those contracts implicitly.
 
 ## Context and token control
 

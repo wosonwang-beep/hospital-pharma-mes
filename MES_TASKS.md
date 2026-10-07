@@ -1,5 +1,13 @@
 # MES Task Status Index
 
+## Approved shared navigation / production-finished entries — 2026-10-07
+
+`ACCEPTED` — explicit human acceptance and commit/push authorization “验收，提交和推送”, 2026-10-07, for the approved DCP-PRODUCTION-FINISHED-ENTRY-001 scope. Current authority `FINAL BASELINE COMPLETE v1.0.23` — `AUTHORITATIVE`; cross-document consistency PASS; parent v1.0.22 immutable. One shared permission-filtered seven-domain navigation; production five entries and finished nine entries; actual execution/balance/receiving/finished-test/QA selectors reuse existing controlled pages. Five readonly APIs and receivingOnly query supplement only; no DB/migration/state/permission-code/signature/QA Gate or mandatory-weighing change. Existing accepted MES tasks unchanged.
+
+Backend compile/native integration3 (21.76s), frontend units7/typecheck/build, PC Chromium shared-shell2 + real-entry1 PASS. New closed DTOs, permission/organization isolation, original IPC exclusion and true pre-pagination filters verified. Scoped self-review CRITICAL/HIGH0. HIGH-01/HIGH-02 and scoped MEDIUM-01/02 ready; MEDIUM-03 full finished T2/T3 visual refinement remains PARTIAL/outside the bounded entry DCP. Remaining inherited projection/N+1 MEDIUM and bundle-size LOW debt. [Current report/screenshots/RTM](docs/acceptance/shared-navigation-2026-10-07/ENTRY-CLOSEOUT.md), [review](releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_PRODUCTION_FINISHED_ENTRY_CONSISTENCY_REVIEW.json). Human acceptance and main commit/push explicitly authorized; the historical checksum issue and remaining visual refinement are not implicitly closed.
+
+Historical v1.0.22 manifest discrepancy LEGACY-BASELINE-SHA-01 remains OPEN outside this DCP:90 of143 SHA entries differ, while all150 parent bytes are unchanged by this task. Current v1.0.23 candidate checksums PASS. No full historical-baseline integrity or global HIGH0 claim; separate controlled metadata remediation required. See current closeout report.
+
 ## Approved trace / finished inventory closure — 2026-10-06
 
 `ACCEPTED` — explicit human acceptance and commit/push/main merge authorization: “验收，提交和推送，合并到main”, 2026-10-06. User approved audit gaps1/4 only: “授权修改批准，投料记录是关键，不是称量。” Current authority FINAL BASELINE COMPLETE v1.0.22 / approved DCP-TRACE-FINISHED-INVENTORY-001 / consistency PASS. [Contract](docs/development/DCP-TRACE-FINISHED-INVENTORY-001-APPROVED.md), [ledger](docs/development/TRACE-FINISHED-INVENTORY-IMPLEMENTATION.md). Actual-charge forward trace/WMS sources and finished inventory read/T1 menu; no mandatory weighing, new DB/migration, QA/stock/signature rule. Historical acceptance unchanged. Earlier dated pointers below retain their historical scope.

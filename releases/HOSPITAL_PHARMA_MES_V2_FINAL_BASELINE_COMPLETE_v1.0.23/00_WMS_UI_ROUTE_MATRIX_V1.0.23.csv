@@ -1,0 +1,8 @@
+UI ID,Title,Template,Route,Permission
+UI-WMS-INV-Q,库存管理,T1,/wms/inventory,wms:inventory:view
+UI-WMS-REQ-Q,领料申请,T1,/wms/requests,wms:request:view
+UI-WMS-REQ-C,新增领料申请,T2,/wms/requests/create,wms:request:create
+UI-WMS-REQ-V,领料申请详情,T3,/wms/requests/:id,wms:request:view
+UI-WMS-REQ-E,编辑领料申请,T2,/wms/requests/:id/edit,wms:request:update
+UI-WMS-RET-Q,退料管理,T1,/wms/returns,wms:issue:view
+UI-WMS-RET-C,执行退料,T2,/wms/returns/create,wms:issue:view + wms:issue:return

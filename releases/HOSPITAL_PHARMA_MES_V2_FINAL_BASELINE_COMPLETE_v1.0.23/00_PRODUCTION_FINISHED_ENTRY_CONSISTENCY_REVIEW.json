@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "approvedDcp": "DCP-PRODUCTION-FINISHED-ENTRY-001",
+  "checks": {
+    "parent_immutable": true,
+    "migration_immutable": true,
+    "inherited_endpoints_unchanged_except_approved_query": true,
+    "inherited_schemas_unchanged": true,
+    "only_five_new_reads": true,
+    "refs_resolve": true,
+    "routes_rtm_tests_reconciled": true
+  },
+  "parentFileCount": 150
+}

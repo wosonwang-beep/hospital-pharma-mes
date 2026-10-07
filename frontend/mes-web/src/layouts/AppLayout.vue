@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { resources } from '../master/resources'
+import { navigationHome, permittedNavigation, selectedNavigationKey } from './navigation'
 import { useRoute, useRouter } from 'vue-router'
-import { usePlatformAuthContext } from '../auth/PlatformAuthContext'
 import { useAuthStore } from '../stores/auth'
 import ExecutionReferenceNavigation from './ExecutionReferenceNavigation.vue'
 import {
@@ -19,18 +18,11 @@ import {
 const collapsed = ref(window.matchMedia('(max-width: 900px)').matches)
 const route = useRoute()
 const router = useRouter()
-const authorization = usePlatformAuthContext()
 const auth = useAuthStore()
 const title = computed(() => String(route.meta.title ?? '工作台'))
-const selectedKeys = computed(() => [String(route.name ?? 'dashboard')])
-const navigationGroups=computed(()=>[
- {title:'基础主数据',items:[...resources.filter(r=>r.key!=='unit-conversions'&&auth.can(`master:${r.permission}:view`)).map(r=>({key:`master-${r.key}`,title:r.title,path:`/master/${r.key}`})),...(auth.can('master:product:view')?[{key:'process-products',title:'产品管理',path:'/process/products'}]:[]),...(auth.can('process:package:view')?[{key:'process-packages',title:'工艺包管理',path:'/process/packages'}]:[])]},
- {title:'仓储管理',items:[{key:'wms-receipts',title:'原辅料收货记录',path:'/wms/receipts',permission:'wms:receipt:view'},{key:'wms-inventory',title:'库存管理',path:'/wms/inventory',permission:'wms:inventory:view'},{key:'wms-requests',title:'领料申请',path:'/wms/requests',permission:'wms:request:view'},{key:'wms-issues',title:'出库管理',path:'/wms/issues',permission:'wms:issue:view'},{key:'wms-returns',title:'退料管理',path:'/wms/returns',permission:'wms:issue:view'}].filter(i=>auth.can(i.permission))},
- {title:'成品管理',items:[{key:'finished-inbound',title:'成品入库申请',path:'/finished/inbound',permission:'wms:finished-inbound:view'},{key:'finished-requests',title:'成品请验单',path:'/finished/requests',permission:'qms:finished-request:view'},{key:'finished-sampling',title:'成品取样记录',path:'/finished/sampling',permission:'qms:finished-sampling:view'},{key:'finished-reports',title:'成品检验报告',path:'/finished/reports',permission:'qms:finished-report:view'},{key:'finished-inventory',title:'成品库存',path:'/finished/inventory',permission:'wms:inventory:view'},{key:'finished-shipments',title:'成品发货出库',path:'/finished/shipments',permission:'wms:finished-shipment:view'}].filter(i=>auth.can(i.permission))},
- {title:'生产管理',items:[{key:'production-orders-list',title:'生产订单',path:'/production/orders',permission:'production:order:view'},{key:'production-batches-list',title:'生产批',path:'/production/batches',permission:'production:batch:view'},{key:'ebr-templates',title:'eBR 模板',path:'/ebr/templates',permission:'ebr:template:view'}].filter(i=>auth.can(i.permission))},
- {title:'质量管理',items:[{key:'production-plans-list',title:'生产质量计划',path:'/quality/production-plans',permission:'qms:plan:view'},{key:'production-tests-list',title:'生产检验',path:'/quality/production-tests',permission:'qms:test:view'},{key:'qc-specifications',title:'QC质量标准',path:'/quality/specifications',permission:'qms:specification:view'},{key:'incoming-inspection-requests-list',title:'请验单',path:'/quality/inspection-requests',permission:'qms:inspection-request:view'},{key:'incoming-sampling-tasks-list',title:'取样记录',path:'/quality/sampling-tasks',permission:'qms:sampling:view'},{key:'incoming-samples-list',title:'样品',path:'/quality/samples',permission:'qms:test:view'},{key:'incoming-inspection-tasks-list',title:'检验记录',path:'/quality/inspection-tasks',permission:'qms:test:view'},{key:'incoming-inspection-reports-list',title:'检验报告',path:'/quality/inspection-reports',permission:'qms:report:view'},{key:'incoming-deviations-list',title:'质量调查',path:'/deviations',permission:'qms:deviation:view'}].filter(i=>auth.can(i.permission))},
- {title:'系统管理',items:[{key:'users',title:'用户管理',path:'/admin/users',permission:'iam:user:view'},{key:'roles',title:'角色与权限',path:'/admin/roles',permission:'iam:role:view'},{key:'trace',title:'完整追溯',path:'/trace',permission:'trace:view'},{key:'audit',title:'GMP Audit Trail',path:'/audit',permission:'audit:view'},{key:'integration-operations',title:'Integration Operations',path:'/integration/operations',permission:'integration:view'}].filter(i=>authorization.can(i.permission))}
-].filter(g=>g.items.length))
+const navigationGroups = computed(() => permittedNavigation(auth.can))
+const selectedKey = computed(() => selectedNavigationKey(route.path, navigationGroups.value))
+const selectedKeys = computed(() => selectedKey.value ? [selectedKey.value] : [])
 const batchReference = computed(()=>route.name==='production-batches-view')
 const executionWorkbench = computed(() => route.name === 'execution-execution'||batchReference.value)
 
@@ -46,10 +38,10 @@ async function logout() { await auth.logout(); await router.replace('/login') }
       <div class="brand" :class="{ 'brand-collapsed': collapsed }">
         <span class="brand-mark">+</span><span>{{ collapsed ? '' : '医院制剂 MES' }}</span>
       </div>
-      <ExecutionReferenceNavigation v-if="executionWorkbench&&!collapsed"/>
+      <ExecutionReferenceNavigation v-if="executionWorkbench&&!collapsed" :groups="navigationGroups" :home="navigationHome" :selected-key="selectedKey" @navigate="navigate"/>
       <a-menu mode="inline" :selectedKeys="selectedKeys" class="nav" :class="{'execution-original-navigation':executionWorkbench&&!collapsed}" @click="navigate">
-        <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
-        <a-menu-item-group v-for="group in navigationGroups" :key="group.title" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key" :aria-label="item.key==='users'||item.key==='roles'?item.title:undefined" :class="{'ant-menu-item-selected':route.path.startsWith(item.path)}"><AppstoreOutlined/>{{item.title}}</a-menu-item></a-menu-item-group>
+        <a-menu-item :key="navigationHome.key"><HomeOutlined />{{navigationHome.title}}</a-menu-item>
+        <a-menu-item-group v-for="group in navigationGroups" :key="group.key" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key" :aria-label="item.key==='users'||item.key==='roles'?item.title:undefined" :class="{'ant-menu-item-selected':selectedKey===item.key}"><AppstoreOutlined/>{{item.title}}</a-menu-item></a-menu-item-group>
       </a-menu>
     </a-layout-sider>
     <a-layout class="main-shell" :class="{ 'main-shell-collapsed': collapsed }">
@@ -58,9 +50,9 @@ async function logout() { await auth.logout(); await router.replace('/login') }
           <a-dropdown placement="bottomLeft" class="mobile-navigation" :trigger="['click']">
             <a-button type="text" aria-label="打开导航"><AppstoreOutlined /></a-button>
             <template #overlay>
-              <a-menu @click="navigate">
-                <a-menu-item key="dashboard"><HomeOutlined />首页</a-menu-item>
-                <a-menu-item-group v-for="group in navigationGroups" :key="group.title" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key">{{item.title}}</a-menu-item></a-menu-item-group>
+              <a-menu :selectedKeys="selectedKeys" @click="navigate">
+                <a-menu-item :key="navigationHome.key"><HomeOutlined />{{navigationHome.title}}</a-menu-item>
+                <a-menu-item-group v-for="group in navigationGroups" :key="group.key" :title="group.title"><a-menu-item v-for="item in group.items" :key="item.key">{{item.title}}</a-menu-item></a-menu-item-group>
               </a-menu>
             </template>
           </a-dropdown>
@@ -83,6 +75,9 @@ async function logout() { await auth.logout(); await router.replace('/login') }
 </template>
 
 <style scoped>
+.sidebar :deep(.ant-layout-sider-children){display:flex;flex-direction:column;height:100%}
+.sidebar .brand{flex-shrink:0}
+.sidebar .nav{flex:1;min-height:0;overflow-y:auto}
 .execution-header-breadcrumb{display:none}
 .execution-header-tools{display:none}
 /* PC execution reference only. Other routes and mobile shell retain their baseline. */

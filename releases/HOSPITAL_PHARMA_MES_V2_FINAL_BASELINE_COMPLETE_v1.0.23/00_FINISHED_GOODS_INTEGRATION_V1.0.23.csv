@@ -1,0 +1,7 @@
+producer,consumer,contract,invariant
+ProductionQuantity,WMS,actual signed OUTPUT/reversal via port,OUTPUT measurement never physical stock
+WMS,QMS,confirmed FinishedInboundRequest,independent signature + exact frozen source
+Production QC,FinishedReport,Sample/TestResult/review/OOS,immutable FAIL; frozen standard; independent review
+QMS/WMS,QA/eBR,finished receiving/request/sampling/report,"8 gates, no QC PASS availability"
+QA,WMS Shipment,effective current signed decision,released available stock only; locks/atomic exact debit
+WMS/QMS/Production/Release,Trace,scoped source read ports,permission filtered actual-source lineage

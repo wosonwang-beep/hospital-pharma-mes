@@ -4,14 +4,19 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
-### Current approved trace / finished inventory authority — 2026-10-06
+### Current approved navigation / real entry authority — 2026-10-07
 
-Current business authority: `FINAL BASELINE COMPLETE v1.0.22` — `AUTHORITATIVE`, approved DCP-TRACE-FINISHED-INVENTORY-001 and cross-document consistency PASS. [Contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_TRACE_FINISHED_INVENTORY_CONTRACT_V1.0.22.md), [manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_MANIFEST_FINAL_FROZEN_V1.0.22.md), [review](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_TRACE_FINISHED_INVENTORY_CONSISTENCY_REVIEW.json). Actual-charge forward/WMS/source trace; server-filtered finished inventory and T1 entry only. No database/migration/QA/signature/stock/weighing change. Parent v1.0.21 immutable; UI V2/T1–T6 retained; runtime readiness only MES_TASKS.md.
+Current business authority: FINAL BASELINE COMPLETE v1.0.23 — AUTHORITATIVE, approved DCP-PRODUCTION-FINISHED-ENTRY-001, cross-document consistency PASS. [Contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_PRODUCTION_FINISHED_ENTRY_CONTRACT_V1.0.23.md), [manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_MANIFEST_FINAL_FROZEN_V1.0.23.md), [review](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_PRODUCTION_FINISHED_ENTRY_CONSISTENCY_REVIEW.json). Shared seven-domain navigation and real production/finished context selectors only; original v1.0.22 business, DB/migration, state, permission codes, QA/signature/stock and no-mandatory-weighing rules inherited. UI V2/T1–T6 unchanged. Parent v1.0.22 immutable; runtime readiness only MES_TASKS.md.
+
+
+### Historical v1.0.22 trace / finished inventory authority — 2026-10-06
+
+Historical authority at that approval: `FINAL BASELINE COMPLETE v1.0.22` — `AUTHORITATIVE`, approved DCP-TRACE-FINISHED-INVENTORY-001 and cross-document consistency PASS. [Contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_TRACE_FINISHED_INVENTORY_CONTRACT_V1.0.22.md), [manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_MANIFEST_FINAL_FROZEN_V1.0.22.md), [review](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.22/00_TRACE_FINISHED_INVENTORY_CONSISTENCY_REVIEW.json). Actual-charge forward/WMS/source trace; server-filtered finished inventory and T1 entry only. No database/migration/QA/signature/stock/weighing change. Parent v1.0.21 immutable; UI V2/T1–T6 retained; runtime readiness only MES_TASKS.md.
 
 
 ### Retained v1.0.21 optional inspection draft authority — 2026-10-06
 
-Current business authority: `FINAL BASELINE COMPLETE v1.0.21` — `AUTHORITATIVE`, approved DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001 and cross-document consistency PASS. [Frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_MANIFEST_FINAL_FROZEN_V1.0.21.md), [consistency](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_FINISHED_INBOUND_DRAFT_CONSISTENCY_REVIEW.json). Optional atomic inbound/inspection DRAFT pair uses existing contracts; physical warehouse confirmation remains mandatory for QC execution. All138 v1.0.20 files unchanged. Existing v20 finished-chain/WMS/source contracts inherited; no new migration/permission/endpoint/route/signature rule. UI V2/T1–T6 unchanged. Runtime readiness and explicit human acceptance only MES_TASKS.md. Earlier dated pointers remain historical.
+Historical authority at that approval: `FINAL BASELINE COMPLETE v1.0.21` — `AUTHORITATIVE`, approved DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001 and cross-document consistency PASS. [Frozen manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_MANIFEST_FINAL_FROZEN_V1.0.21.md), [consistency](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.21/00_FINISHED_INBOUND_DRAFT_CONSISTENCY_REVIEW.json). Optional atomic inbound/inspection DRAFT pair uses existing contracts; physical warehouse confirmation remains mandatory for QC execution. All138 v1.0.20 files unchanged. Existing v20 finished-chain/WMS/source contracts inherited; no new migration/permission/endpoint/route/signature rule. UI V2/T1–T6 unchanged. Runtime readiness and explicit human acceptance only MES_TASKS.md. Earlier dated pointers remain historical.
 
 ### Retained v1.0.20 approved finished-goods authority — 2026-10-06
 
@@ -112,3 +117,7 @@ Start with `AGENTS.md` and `MES_TASKS.md`. After selecting one task, open its Ta
 Do not read every baseline artifact or all repository documentation as a startup step. Detailed domain documents remain at their existing locations and are loaded on demand.
 
 Current approved material-only change: DCP-MATERIAL-BASIC-001, direct basic maintenance with multiple suppliers/one preferred and consumer snapshots; v1.0.4 retained as historical authority.
+
+## Approved shared navigation supplement — 2026-10-07
+
+FINAL BASELINE COMPLETE v1.0.22 remains the inherited business authority with [DCP-GLOBAL-NAVIGATION-001](development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md) for the explicitly approved menu names/order and shared configuration only. Global UI V2/T1–T6 stay current. No frozen release or API/DB/permission/state/signature/route contract changes; other finished UI gaps remain outside this supplement. Runtime readiness remains only in MES_TASKS.md.

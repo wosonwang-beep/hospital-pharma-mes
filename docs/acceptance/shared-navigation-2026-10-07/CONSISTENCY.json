@@ -1,0 +1,172 @@
+{
+  "authority": "FINAL BASELINE COMPLETE v1.0.23",
+  "approval": "User required shared navigation then supplied seven fixed top-level names/order",
+  "ui": "Global UI V2 / T1-T6 unchanged; navigation names/order approved supplement",
+  "database_migration": "UNCHANGED",
+  "domain_state_machine": "UNCHANGED",
+  "api_openapi_dto": "Five approved additional GET projections; receivingOnly optional filter; existing schemas/commands unchanged",
+  "business_routes": "Approved T1 context selectors and finished test detail alias only",
+  "permission_codes": "UNCHANGED; existing contextual AND requirements enforced",
+  "audit_signature_revision_lineage": "UNCHANGED",
+  "integration_task_dependencies": "Approved PE-01..06 RTM/read integration supplement",
+  "prior_frozen_sha256": {
+    "entries": 143,
+    "mismatchesAlreadyAtHEAD": 90,
+    "notModifiedByThisTask": true,
+    "interpretation": "Historical attestation discrepancy; no repair of frozen history"
+  },
+  "governance_documents": [
+    "AGENTS.md",
+    "MES_TASKS.md",
+    "docs/PROJECT_BASELINE.md",
+    "docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md",
+    "docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md"
+  ],
+  "contract": "DCP-PRODUCTION-FINISHED-ENTRY-001-APPROVED",
+  "rtm_test_evidence": "docs/acceptance/shared-navigation-2026-10-07/ENTRY-CLOSEOUT.md",
+  "review": "PASS",
+  "authority_version_switched": true,
+  "out_of_scope": [
+    "MEDIUM-03 complete finished T2/T3 visual redesign",
+    "Global UI V3",
+    "unapproved workbench fields"
+  ],
+  "submenu_amendment": {
+    "approval": "User explicitly supplied final nine-item basic and five-item WMS submenus",
+    "basic": [
+      "物料主数据",
+      "供应商",
+      "组织",
+      "单位",
+      "单位换算",
+      "设备",
+      "人员资格",
+      "产品管理",
+      "工艺包管理"
+    ],
+    "wms": [
+      "原辅料收货记录",
+      "库存管理",
+      "领料申请",
+      "出库管理",
+      "退料管理"
+    ],
+    "unit_conversion": "Existing master-unit-conversions route and master:uom:view reused",
+    "validation": "unit3 / PC Chromium2 / final build PASS"
+  },
+  "quality_wms_clarification": {
+    "wms_routes": [
+      "/wms/receipts",
+      "/wms/inventory",
+      "/wms/requests",
+      "/wms/issues",
+      "/wms/returns"
+    ],
+    "backend_entity": "MaterialIssue UNCHANGED",
+    "ui_term": "出库",
+    "quality_order": [
+      "请验单",
+      "取样记录",
+      "样品",
+      "检验记录",
+      "检验报告",
+      "QC质量标准",
+      "生产质量计划",
+      "生产检验",
+      "质量调查"
+    ],
+    "quality_business_logic": "UNCHANGED",
+    "validation": "units3/typecheck/PC Chromium2 PASS"
+  },
+  "historical_menu_only_review": {
+    "authority": "v1.0.22 inherited + DCP-GLOBAL-NAVIGATION-001 approved menu supplement",
+    "approval": "User required shared navigation then supplied seven fixed top-level names/order",
+    "ui": "Global UI V2 / T1-T6 unchanged; navigation names/order approved supplement",
+    "database_migration": "UNCHANGED",
+    "domain_state_machine": "UNCHANGED",
+    "api_openapi_dto": "UNCHANGED",
+    "business_routes": "UNCHANGED",
+    "permission_codes": "UNCHANGED",
+    "audit_signature_revision_lineage": "UNCHANGED",
+    "integration_task_dependencies": "UNCHANGED",
+    "prior_frozen_sha256": {
+      "entries": 149,
+      "mismatches": 0
+    },
+    "governance_documents": [
+      "AGENTS.md",
+      "MES_TASKS.md",
+      "docs/PROJECT_BASELINE.md",
+      "docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md",
+      "docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md"
+    ],
+    "contract": "docs/development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md",
+    "rtm_test_evidence": "docs/acceptance/shared-navigation-2026-10-07/REPORT.md",
+    "review": "PASS",
+    "authority_version_switched": false,
+    "out_of_scope": [
+      "HIGH-02",
+      "MEDIUM-01",
+      "MEDIUM-02",
+      "MEDIUM-03",
+      "new finished routes",
+      "Global UI V3",
+      "unapproved workbench fields"
+    ],
+    "submenu_amendment": {
+      "approval": "User explicitly supplied final nine-item basic and five-item WMS submenus",
+      "basic": [
+        "物料主数据",
+        "供应商",
+        "组织",
+        "单位",
+        "单位换算",
+        "设备",
+        "人员资格",
+        "产品管理",
+        "工艺包管理"
+      ],
+      "wms": [
+        "原辅料收货记录",
+        "库存管理",
+        "领料申请",
+        "出库管理",
+        "退料管理"
+      ],
+      "unit_conversion": "Existing master-unit-conversions route and master:uom:view reused",
+      "validation": "unit3 / PC Chromium2 / final build PASS"
+    },
+    "quality_wms_clarification": {
+      "wms_routes": [
+        "/wms/receipts",
+        "/wms/inventory",
+        "/wms/requests",
+        "/wms/issues",
+        "/wms/returns"
+      ],
+      "backend_entity": "MaterialIssue UNCHANGED",
+      "ui_term": "出库",
+      "quality_order": [
+        "请验单",
+        "取样记录",
+        "样品",
+        "检验记录",
+        "检验报告",
+        "QC质量标准",
+        "生产质量计划",
+        "生产检验",
+        "质量调查"
+      ],
+      "quality_business_logic": "UNCHANGED",
+      "validation": "units3/typecheck/PC Chromium2 PASS"
+    }
+  },
+  "parent_byte_snapshot": {
+    "files": 150,
+    "unchanged": true
+  },
+  "current_v23_sha256": {
+    "mismatches": 0
+  },
+  "historical_manifest_issue": "LEGACY-BASELINE-SHA-01 HIGH governance evidence; outside bounded DCP"
+}

@@ -1,0 +1,20 @@
+permission,default_role,operations
+qms:finished-report:approve,SYSTEM_ADMIN only,POST /quality/finished-inspection-reports/{id}/approve
+qms:finished-report:generate,SYSTEM_ADMIN only,POST /quality/finished-inspection-requests/{id}/generate-report
+qms:finished-report:view,SYSTEM_ADMIN only,"GET /quality/finished-inspection-reports,GET /quality/finished-inspection-reports/{id}"
+qms:finished-request:accept,SYSTEM_ADMIN only,POST /quality/finished-inspection-requests/{id}/accept
+qms:finished-request:create,SYSTEM_ADMIN only,POST /quality/finished-inspection-requests
+qms:finished-request:submit,SYSTEM_ADMIN only,POST /quality/finished-inspection-requests/{id}/submit
+qms:finished-request:view,SYSTEM_ADMIN only,"GET /quality/finished-inspection-requests,GET /quality/finished-inspection-requests/{id}"
+qms:finished-sampling:create,SYSTEM_ADMIN only,POST /quality/finished-inspection-requests/{id}/sample
+qms:finished-sampling:view,SYSTEM_ADMIN only,"GET /quality/finished-sampling-records,GET /quality/finished-sampling-records/{id}"
+wms:finished-inbound:cancel,SYSTEM_ADMIN only,POST /finished-inbound-requests/{id}/cancel
+wms:finished-inbound:confirm,SYSTEM_ADMIN only,POST /finished-inbound-requests/{id}/confirm
+wms:finished-inbound:create,SYSTEM_ADMIN only,POST /finished-inbound-requests
+wms:finished-inbound:submit,SYSTEM_ADMIN only,POST /finished-inbound-requests/{id}/submit
+wms:finished-inbound:view,SYSTEM_ADMIN only,"GET /finished-inbound-requests,GET /finished-inbound-requests/{id}"
+wms:finished-shipment:cancel,SYSTEM_ADMIN only,POST /finished-shipments/{id}/cancel
+wms:finished-shipment:confirm,SYSTEM_ADMIN only,POST /finished-shipments/{id}/confirm
+wms:finished-shipment:create,SYSTEM_ADMIN only,POST /finished-shipments
+wms:finished-shipment:view,SYSTEM_ADMIN only,"GET /finished-shipments,GET /finished-shipments/{id}"
+wms:inventory:view,existing,GET /finished-material-lots/{id}/chain

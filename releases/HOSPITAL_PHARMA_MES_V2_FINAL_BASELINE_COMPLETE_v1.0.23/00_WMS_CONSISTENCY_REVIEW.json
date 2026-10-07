@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "kind": "APPROVED DESIGN CONSISTENCY; NOT RUNTIME ACCEPTANCE",
+  "approval": [
+    "批准并补齐",
+    "确认"
+  ],
+  "parentVersion": "1.0.18",
+  "parentFiles": 119,
+  "parentUnchanged": true,
+  "newOperations": 8,
+  "requirements": 12,
+  "newPermissions": 5,
+  "newUiRoutes": 7,
+  "physicalMigration": "V029__wms_material_request_management.sql (allocated after successful history 028)",
+  "checks": [
+    "all inherited OpenAPI paths retained",
+    "all local schema refs resolved",
+    "12 distinct requirement/test mappings",
+    "closed controlled commands",
+    "parent byte hashes unchanged",
+    "existing inventory bucket API retained; new lot-level projection explicit",
+    "issue/return/charge/signature source and rules retained",
+    "all unaffected inherited operations and schemas identical",
+    "existing issue write required fields/validations retained",
+    "linked issue item identity available in read model",
+    "new nullable fields follow OpenAPI 3.1 type union",
+    "ApiResponse metadata constraints reused verbatim",
+    "endpoint permission catalog matches OpenAPI",
+    "permission matrix covers new endpoint rights",
+    "RTM covers all 12 detailed setup/action/assertion definitions",
+    "candidate Markdown file links resolve",
+    "AGENTS/MES_TASKS/PROJECT_BASELINE point to v1.0.23; v1.0.18 retained as historical authority",
+    "current RTM points to actual final OpenAPI/UI matrices",
+    "physical mapping V029 matches successful native history",
+    "targeted unit/native/Chromium/typecheck/build evidence recorded externally"
+  ],
+  "errors": [],
+  "runtimeVerification": "TARGETED PASS; human acceptance not inferred"
+}

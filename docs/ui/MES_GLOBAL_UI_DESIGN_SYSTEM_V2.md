@@ -3,7 +3,7 @@
 Status: **APPROVED GLOBAL VISUAL BASELINE**  
 Approved: 2026-10-05  
 Applies to: all current and future Vue business pages.  
-Business authority remains: **FINAL BASELINE COMPLETE v1.0.22** and approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved Global UI Design System V2 visual rules remain unchanged.
+Business authority remains: **FINAL BASELINE COMPLETE v1.0.23** and approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved Global UI Design System V2 visual rules remain unchanged.
 
 ## 1. Design intent
 
@@ -19,8 +19,12 @@ This is a **visual/design-system baseline**, not a new business contract. It mus
 - Content gutter: 24 px desktop; 16 px tablet; 12–16 px mobile.
 - Breadcrumb is secondary navigation and must not visually compete with page title.
 - Sidebar uses domain grouping rather than a flat list where permissions expose many modules.
+- Approved [DCP-GLOBAL-NAVIGATION-001](../development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md): all shell variants consume one shared navigation configuration. Domain order is 首页、基础管理、WMS管理、质量管理、生产管理、成品管理、系统管理; permissions hide inaccessible entries and empty domains without reordering the remaining domains. Long sidebars scroll; production shell variants do not maintain separate destination definitions.
+- Final approved 基础管理 submenu: 物料主数据、供应商、组织、单位、单位换算、设备、人员资格、产品管理、工艺包管理. WMS管理 submenu: 原辅料收货记录、库存管理、领料申请、出库管理、退料管理. Both use existing view permissions and retain this order after filtering.
 - Header and sidebar remain visually quiet; the current task/page is the focal point.
 - Avoid large uninterrupted dark blocks unless required by an approved shell variant.
+
+- Approved quality submenu: 请验单、取样记录、样品、检验记录、检验报告、QC质量标准、生产质量计划、生产检验、质量调查. Existing routes/view permissions and quality logic are unchanged. WMS routes stay /wms/receipts, /wms/inventory, /wms/requests, /wms/issues, /wms/returns; backend MaterialIssue remains, UI uses 出库.
 
 ## 3. Typography
 
@@ -127,3 +131,6 @@ Codex/agents must not:
 The approved first QA Batch Release concept is the visual reference for hierarchy, density, status treatment, card restraint, evidence presentation and decision clarity. It is **T6 Decision Workbench**, not a universal page wireframe.
 
 All pages inherit this Design System and select exactly one approved page template from `MES_PAGE_TEMPLATE_STANDARD_V2.md`.
+
+
+Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.

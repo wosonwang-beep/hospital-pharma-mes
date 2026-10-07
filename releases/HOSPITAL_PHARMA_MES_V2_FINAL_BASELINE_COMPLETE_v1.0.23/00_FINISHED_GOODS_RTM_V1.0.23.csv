@@ -1,0 +1,14 @@
+requirement,test,scenario,owner,evidence
+FG-01,TC-FG-01,completed production required,incompleteProductionCannotRequestFinishedWarehouseReceipt,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-02,TC-FG-02,signed output alone zero stock,ProductionQuantityIT.outputDefersStockUntilWarehouseReceiptAndPreservesSignedReversal,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-03,TC-FG-03,independent signed receipt once/replay,finishedWarehouseReceiptRequiresCompletedAndIndependentSourceAndPostsOnlyOnce,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-04,TC-FG-04,legacy actual ledger no duplicate,legacyOutputStockIsConfirmedWithoutDuplicateReceipt,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-05,TC-FG-05,frozen finished request and real sample,finishedPostCompletionSamplingFreezesLotAndReportUsesActualReviewedResults,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-06,TC-FG-06,original FAIL/OOS/retest preserved,finishedOriginalFailRemainsAndCannotReleaseOrBecomePassingReport;unrelatedNewPassingSampleCannotReplaceUnresolvedOriginalFailInReport;ProductionQualityIT.failOpensOosRetestConsumesExactQuotaAndPreservesImmutableOriginal,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-07,TC-FG-07,independent stale report approval,reportMissingResultsSelfApprovalAndChangedSamplingAreControlled,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-08,TC-FG-08,receipt/report/QA gates and no premature shipment,finishedReceiptAndFormalReportCannotBeBypassedAtQaSubmission;completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-09,TC-FG-09,atomic signed QA availability,FinishedReleaseIT.realBatchLifecycleReleaseIsAtomicSignedIdempotentAndMakesFinishedInventoryAvailable,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-10,TC-FG-10,signed exact shipment once and reverse trace,completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-11,TC-FG-11,expiry/frozen/stock/org/permission guards,shipmentExpiryFrozenCrossOrgAndConcurrentRootCannotOversell;completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS
+FG-12,TC-FG-12,root lock serializes confirmations/shipments,shipmentExpiryFrozenCrossOrgAndConcurrentRootCannotOversell,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS (root-lock contention only)
+FG-13,TC-FG-13,full production-to-shipment native lifecycle,completeChainRequiresQaThenShipsExactStockOnceAndTracesAllSources,docs/acceptance/finished-goods-chain-2026-10-06/RTM.md: PASS

@@ -2,9 +2,11 @@
 
 Status: **APPROVED**  
 Depends on: `MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`  
-Business authority: FINAL BASELINE COMPLETE v1.0.22 + approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved T1–T6 template rules remain unchanged.
+Business authority: FINAL BASELINE COMPLETE v1.0.23 + approved DCPs, as governed by [PROJECT_BASELINE.md](../PROJECT_BASELINE.md). The approved T1–T6 template rules remain unchanged.
 
 Every Vue business page must declare/select one of T1–T6. A page may contain subordinate components from another pattern, but its primary structure must remain one template. If none fits, stop with **DESIGN CHANGE REQUIRED**; do not invent T7.
+
+Approved [shared-navigation supplement](../development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md): all T1–T6 shells, including Production Batch T4 and execution T5, inherit the same domain menu configuration, order and permission filtering. Page structures and routes remain unchanged.
 
 ## T1 — Query / List
 
@@ -148,3 +150,6 @@ and verify:
 ## Stop condition
 
 If a required page cannot be represented by T1–T6 without changing its business meaning, stop with `DESIGN CHANGE REQUIRED` and propose the smallest design-system change. Do not silently invent a new page structure.
+
+
+Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.

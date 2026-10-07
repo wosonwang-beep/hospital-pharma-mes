@@ -1,0 +1,29 @@
+Logical Migration Group,Original Section 15 Label,Task,Name,Tables/Capability,Depends On,Physical Mapping,Status
+LG-000,—,Repository,repository_foundation,sys_foundation_probe,—,V001__foundation_probe.sql,APPLIED/EXISTING; IMMUTABLE
+LG-002,V002,MES-002,iam_rbac,"sys_user,sys_role,sys_permission,sys_user_role,sys_role_permission,sys_security_event",LG-000,V002__iam_core.sql; V005__mes_002_rbac_contract.sql,APPLIED; immutable
+LG-001,V001,MES-001,platform_base,"gxp_audit_event,gxp_signature,integration_inbox,integration_outbox,platform_idempotency_record; permission seed",physical V002 identity compatibility,V003__mes_001_platform_base.sql; V004__mes_001_platform_permissions.sql,APPLIED; immutable
+LG-003,V003,MES-003,organization_uom_equipment,"md_organization,md_unit,md_unit_conversion,md_equipment,md_qualification","LG-001,LG-002",V006__mes_003_master_resources.sql,APPLIED DEV 2026-10-03; history immutable
+LG-004,V004,MES-004,material_master,material basic master and inspection policy; retired version/rule tables preserved,LG-003,V007__mes_004_material.sql + V009__mes_004_005_frozen_query_indexes.sql + V010__material_basic_and_preferred_supplier.sql,APPLIED DEV 2026-10-03; executed history immutable
+LG-005,V005,MES-005,supplier,supplier qualification and multiple material-supplier relationships with single preferred,LG-004,V008__mes_005_supplier.sql + V009__mes_004_005_frozen_query_indexes.sql + V010__material_basic_and_preferred_supplier.sql,APPLIED DEV 2026-10-03; executed history immutable
+LG-006,V006,MES-006,process_bom_route,"product,process package,BOM,route,operation,param","LG-003,LG-004",next free,FUTURE
+LG-007A,V007A,MES-007,ebr_definition,eBR definition,LG-006,V012__mes_007_ebr_definition.sql,PLANNED
+LG-007B,V007B,MES-009,batch_ebr_runtime,batch/eBR runtime after physical dependencies,"LG-007A,LG-009A",next free,FUTURE
+LG-008,V008,MES-008,wms,WMS receipt/lot/ledger/inventory,"LG-004,LG-005",V013__mes_008_wms.sql,PLANNED
+LG-008A,V008A,MES-008A,incoming_quality,inspection request/sampling/inspection/report/release generalization,"LG-001,LG-002,LG-003,LG-004,LG-005,LG-008",next free,FUTURE
+LG-009A,V009A,MES-009,production_core,production order/batch/execution snapshot,LG-006,V012__mes_007_ebr_definition.sql,PLANNED
+LG-010,V010,MES-010,execution,operation/equipment/parameter execution,"LG-007B,LG-009A",next free,FUTURE
+LG-011,V011,MES-011,weigh_charge,weighing/charge/genealogy,"LG-008,LG-008A,LG-009A,LG-010",next free,FUTURE
+LG-012,V012,MES-012,balance_qms,"balance,IPC,OOS/OOT,deviation/CAPA","LG-008A,LG-010,LG-011",next free,FUTURE
+LG-013,V013,MES-013,release_pdf,finished-product release decision/PDF manifest,"LG-007B,LG-008A,LG-012",next free,FUTURE
+LG-008-BATCH-FK,append-only,MES-009,wms_batch_fk,reservation/issue main_batch_id FK; writes blocked before actual batch,"LG-008,LG-009A",next free,FUTURE
+LG-007B-OP-FK,append-only,MES-010,ebr_operation_fk,form_instance operation FK; writes blocked before actual operation,"LG-007B,LG-010",next free,FUTURE
+LG-008A-BATCH-FK,append-only,MES-009,qms_batch_fk,qms_sample/qms_release_decision main_batch_id -> prd_main_batch.id; validate before install,"LG-008A,LG-009A",next free after live history check,FUTURE
+LG-008A-QC,append-only,MES-008A,qc_standards,Approved immutable specification producer,LG-004,V014__incoming_qc_specifications.sql,PLANNED
+LG-008A-ATT,append-only,MES-008A,attachments,Retained attachment and receipt association,"LG-001,LG-008",V015__incoming_attachments.sql,PLANNED
+LG-004/005/008,Approved storage/source maintenance,MES-004/005/008 maintenance,material supplier source,existing storage; supplier manufacturer; receipt source,V027 successful native,V028__material_storage_supplier_source.sql,APPROVED additive; no backfill
+LG-WMS-REQUEST-READ-001,Approved WMS request/read maintenance,WMS-REQUEST-READ-001,material request and issue links,existing source and signature rules retained,successful native history028,V029__wms_material_request_management.sql,APPLIED native checksum1763109818
+LG-FG-V030,V030,DCP-FINISHED-GOODS-CHAIN-001,finished_goods_controlled_chain,00_FINISHED_GOODS_DATABASE_V1.0.23.md,native successful V029,V030__finished_goods_controlled_chain.sql,APPLIED; append-only
+LG-FG-V031,V031,DCP-FINISHED-GOODS-CHAIN-001,finished_fact_preservation,00_FINISHED_GOODS_DATABASE_V1.0.23.md,native successful V030,V031__finished_fact_preservation.sql,APPLIED; append-only
+LG-FD-NONE,NONE,DCP-FINISHED-INBOUND-INSPECTION-DRAFT-001,optional_finished_inspection_draft,Existing tables/PK/FK/indexes; no physical schema change,Applied V030/V031,NONE; highest successful31 unchanged,NO MIGRATION
+LG-TI-NONE,NONE,DCP-TRACE-FINISHED-INVENTORY-001,trace_finished_inventory_reads,Existing tables/PK/FK; no physical change,Applied V001..V031,NONE; highest successful031 unchanged,NO MIGRATION
+LG-PE-NONE,NONE,DCP-PRODUCTION-FINISHED-ENTRY-001,Navigation_read_projection,Existing tables and relationships,Applied V001..V031,NONE; highest successful031 unchanged,NO MIGRATION
