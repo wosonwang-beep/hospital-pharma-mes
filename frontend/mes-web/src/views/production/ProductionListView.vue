@@ -8,6 +8,7 @@ import './productionModel'
 import {label,display,schemas,serverAllows} from '../quality/incomingModel'
 import ProcessLookup from '../process/ProcessLookup.vue'
 import IncomingReferencePicker from '../quality/IncomingReferencePicker.vue'
+import ReadReference from '../master/ReadReference.vue'
 const route=useRoute(),router=useRouter(),auth=useAuthStore(),request=useControlledRequest(),{busy,error}=request
 const rows=ref<Record<string,unknown>[]>([]),total=ref(0),page=ref(1)
 const query=reactive({keyword:'',status:'',productId:'',productionOrderId:'',plannedDateFrom:'',plannedDateTo:''})
@@ -15,6 +16,7 @@ const batch=computed(()=>route.meta.resource==='batches'),title=computed(()=>bat
 const base=computed(()=>batch.value?'/main-batches':'/production-orders'),ui=computed(()=>batch.value?'/production/batches':'/production/orders'),permission=computed(()=>batch.value?'production:batch':'production:order')
 const states=computed(()=>schemas[batch.value?'MainBatch':'Order']?.properties?.status?.enum??[])
 function stateLabel(value:unknown){return ({PENDING_QA:'待 QA 审核',QA_RELEASED:'已 QA 放行'} as Record<string,string>)[String(value)]??display(value)}
+function formatQty(value:unknown){const n=Number(value);return Number.isFinite(n)?new Intl.NumberFormat('zh-CN',{maximumFractionDigits:6}).format(n):display(value)}
 const columns=computed(()=>[batch.value?'batchNo':'orderNo','productId','plannedQty','unitId','plannedDate','status'].map(k=>({title:label(k),key:k,dataIndex:k})).concat([{title:'操作',key:'actions',dataIndex:'actions'}]))
 async function load(){busy.value=true;request.clear();try{
  const params={...Object.fromEntries(Object.entries(query).filter(([k,v])=>v&&(batch.value||k!=='productionOrderId'))),page:page.value-1,size:20}
@@ -40,7 +42,7 @@ watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])qu
   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit" :loading="busy">查询</a-button></a-space>
  </form></a-card>
  <a-card title="数据列表" class="result-card"><div class="master-toolbar"><span>共 {{total}} 条记录</span></div>
-  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-space v-if="column.key==='actions'"><a-button type="link" @click="open(String(record.id))">查看</a-button><a-button v-if="canEdit(record)" type="link" @click="open(String(record.id),true)">编辑</a-button></a-space><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
+  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-space v-if="column.key==='actions'"><a-button type="link" @click="open(String(record.id))">查看</a-button><a-button v-if="canEdit(record)" type="link" @click="open(String(record.id),true)">编辑</a-button></a-space><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><ReadReference v-else-if="column.key==='productId'" field="productId" :value="record.productId"/><ReadReference v-else-if="column.key==='unitId'" field="unitId" :value="record.unitId"/><span v-else-if="column.key==='plannedQty'">{{formatQty(record.plannedQty)}}</span><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
   <div class="table-footer"><span>第 {{page}} 页</span><a-pagination :current="page" :total="total" :page-size="20" :show-size-changer="false" @change="(p:number)=>search(p)"/></div>
  </a-card>
 </main></template>

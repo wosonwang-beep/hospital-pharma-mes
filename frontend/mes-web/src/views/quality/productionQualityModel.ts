@@ -3,6 +3,12 @@ import {labels,enumLabels,referenceFields,type IncomingRow} from './incomingMode
 export const qualityOperations=contract.operations
 export const qualityActionLabels:Record<string,string>={approve:'批准',results:'记录原始结果',revisions:'更正结果',review:'独立复核',retest:'批准复检',recalculate:'重新计算',investigations:'建立调查',investigate:'记录调查',start:'开始整改',complete:'完成整改',verify:'独立验证',reverse:'冲销数量记录',capas:'新增CAPA','quantity-events':'记录产量与损耗'}
 export function permits(row:IncomingRow,action:string){const names:Record<string,string>={results:'RECORD_RESULT',revisions:'REVISE',UPDATE:'EDIT'};return Array.isArray(row.allowedActions)&&row.allowedActions.includes(names[action]??action.split('-').join('_').toUpperCase())}
+/** Presentation only: the existing signed QC review command already rejects self-review. */
+export function canPresentIndependentQualityReview(row:IncomingRow,actorId:unknown){
+ if(!permits(row,'review')||actorId==null||!Array.isArray(row.results)||row.currentResultRevisionId==null)return false
+ const current=(row.results as IncomingRow[]).find(result=>String(result.id)===String(row.currentResultRevisionId))
+ return current?.recordedBy!=null&&String(current.recordedBy)!==String(actorId)
+}
 export const eventTypes=['CHARGE','ISSUE','RETURN','OUTPUT','SAMPLE','LOSS','SCRAP','WIP'] as const
 export type Expression={sum:string[]}|{constant:string}|{op:string;left:Expression;right:Expression}
 export function validateExpression(value:unknown,depth=1,counter={nodes:0}):asserts value is Expression{

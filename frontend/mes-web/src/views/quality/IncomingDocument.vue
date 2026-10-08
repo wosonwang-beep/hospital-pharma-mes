@@ -7,6 +7,7 @@ import IncomingFacts from './IncomingFacts.vue'
 import MaterialReleaseOverview from './MaterialReleaseOverview.vue'
 import IncomingBusinessOverview from './IncomingBusinessOverview.vue'
 import InspectionRecordOverview from './InspectionRecordOverview.vue'
+import InspectionPrintPanel from '../../components/printing/InspectionPrintPanel.vue'
 import InspectionReportOverview from './InspectionReportOverview.vue'
 import {schemas,type IncomingRow} from './incomingModel'
 import {detailLabel,detailDisplay,documentNumber,documentStatus,readSchemas,auditTypes,rows,sections,selectFacts,signatureEntries,slotNames,summaryFields} from './incomingDetailModel'
@@ -115,7 +116,7 @@ async function openEvidence(metadata:IncomingRow){
  try{evidence.value=await api<IncomingRow>({url:`/quality/signature-evidence/${metadata.signatureId}`})}catch(e){evidenceError.value=errorMessage(e)}finally{evidenceBusy.value=false}
 }
 const gateNames:Record<string,string>={INVENTORY_FROZEN:'物料批库存已冻结',EXPIRED:'物料批已过有效期',APPROVED_REPORT_REQUIRED:'缺少唯一有效的已批准检验报告',APPROVED_PASS_REPORT_REQUIRED:'检验报告尚未批准或综合结论不合格',REPORT_LOT_MISMATCH:'检验报告与当前物料批不一致',REPORT_SUPERSEDED:'检验报告已被后续报告替代',RECEIPT_INCOMPLETE:'收货记录尚未完成',INVESTIGATION_OPEN:'存在尚未关闭的来料调查',REPORT_NOT_APPROVED:'缺少已批准检验报告',REPORT_REQUIRED:'缺少所需检验报告',REPORT_EVIDENCE_CHANGED:'报告关联证据已发生变化',REPORT_EVIDENCE_INVALID:'报告关联证据不满足要求',LOT_FROZEN:'物料批已冻结',LOT_EXPIRED:'物料批已过有效期',RETEST_DUE:'物料批已到复验期',QUALITY_STATE:'当前质量状态不允许放行'}
-function gateText(row:IncomingRow){return gateNames[String(row.code)]??(row.message!==row.code?String(row.message):`放行受阻，检查代码：${row.code}`)}
+function gateText(row:IncomingRow){const code=String(row.code??'');const family=code.split(':')[0]??code;return gateNames[code]??gateNames[family]??(row.message&&row.message!==row.code?String(row.message):'当前质量放行条件未满足，请查看完整证据')}
 </script>
 
 <!-- Ordinary documents select T3; the existing material decision route selects T6. -->
@@ -123,10 +124,11 @@ function gateText(row:IncomingRow){return gateNames[String(row.code)]??(row.mess
  <a-alert v-if="missing.length||invalidStatus" type="warning" show-icon message="详情响应不完整或状态不符合当前契约，请重新加载并核对数据来源。" :description="invalidStatus?`未识别业务状态：${record.status}`:`缺少：${missing.map(detailLabel).join('、')}`"/>
  <InspectionRecordOverview v-if="resource==='inspection-tasks'" :record="record" :request="request" :lot="lot" :references="references" :value-label="valueLabel" @view-item="selectedItem=$event"/>
  <InspectionReportOverview v-if="resource==='inspection-reports'" :record="record" :request="request" :lot="lot" :references="references"/>
+ <InspectionPrintPanel v-if="resource==='inspection-reports'&&record.id" :business-id="String(record.id)" :approved="record.status==='APPROVED'&&record.recordStatus==='APPROVED'"/>
  <a-card v-if="ordinary" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/><div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span></div></a-card>
  <IncomingBusinessOverview v-if="ordinary" :record="record" :resource="resource" :value-label="valueLabel"/>
  <MaterialReleaseOverview v-if="qa" :record="record" :lot="lot" :gate-text="gateText"><template #actions><slot name="decision-actions"/></template></MaterialReleaseOverview>
- <button v-if="compact||ordinary||qa" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
+ <button v-if="compact||ordinary" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
  <a-card v-if="ordinary||qa" title="关联记录与追溯" class="form-section"><a-space wrap><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space></a-card>
  <div v-show="moreOpen">
  <a-card v-if="!compact&&!ordinary&&!qa" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/>

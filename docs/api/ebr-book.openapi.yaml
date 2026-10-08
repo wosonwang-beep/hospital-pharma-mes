@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: DCP-EBR-BOOK-001 additive API
+  version: 2026-10-08
+  description: Review delta only; frozen v1.0.23 contract remains unchanged. All IDs are decimal strings. Business content is read by server from owning modules.
+servers:
+  - url: /api/v1
+paths:
+  /ebr/book-templates:
+    get:
+      operationId: listBookTemplates
+      x-permission: ebr:template:view
+      description: Organization-scoped latest 200 immutable versions, descending ID.
+      responses: {'200': {description: ApiResponse data is an array of BookTemplate}}
+    post:
+      operationId: createBookTemplateVersion
+      x-permission: ebr:template:create
+      parameters: [{$ref: '#/components/parameters/Key'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [templateCode, definition, reason]
+              properties:
+                templateCode: {$ref: '#/components/schemas/Code'}
+                definition: {$ref: '#/components/schemas/Definition'}
+                reason: {$ref: '#/components/schemas/Reason'}
+      responses: {'200': {description: New DRAFT BookTemplate; same command key replays the original response}, '409': {description: Command key conflict}}
+  /ebr/book-templates/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      operationId: getBookTemplate
+      x-permission: ebr:template:view
+      responses: {'200': {description: ApiResponse data is BookTemplate}}
+  /ebr/book-templates/{id}/{action}:
+    parameters:
+      - {$ref: '#/components/parameters/Id'}
+      - {in: path, name: action, required: true, schema: {type: string, enum: [publish, deactivate]}}
+    post:
+      operationId: transitionBookTemplate
+      x-permission: ebr:template:publish
+      description: DRAFT to PUBLISHED requires an independent actor, validated effective process/eBR mappings, whitelist fields and no overlapping active mapping. PUBLISHED to INACTIVE retains frozen historical use. Content is never overwritten.
+      parameters: [{$ref: '#/components/parameters/Key'}, {$ref: '#/components/parameters/Match'}]
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/Transition'}}}
+      responses: {'200': {description: ApiResponse data is BookTemplate}, '409': {description: Stale version, invalid mapping or transition}}
+  /main-batches/{id}/book:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      operationId: readProductionBook
+      x-permissions: [ebr:form:view, production:batch:view, master:product:view, master:uom:view]
+      description: Frozen directory, actual product/specification/batch/quantity/unitName, complete selected fields from all executions; each source applies its owning permission. Denied source has ACCESS_DENIED and no documents. A legacy batch has legacy=true and no automatic retrofit.
+      responses: {'200': {description: ApiResponse data is BatchBook}, '403': {description: Base authorization denied}}
+  /main-batches/{id}/book/pdfs:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      operationId: listArchivedBookPdfs
+      x-permission: ebr:form:view
+      description: Rechecks all current source access before returning archived manifest metadata.
+      responses: {'200': {description: ApiResponse data is an array of BookPdf}}
+    post:
+      operationId: generateProductionBookPdf
+      x-permission: ebr:pdf:generate
+      parameters: [{$ref: '#/components/parameters/Key'}, {$ref: '#/components/parameters/Match'}]
+      description: No submitted business contents. FINAL requires complete required entries and the existing effective QA/batch/lot/signature gate, rechecked before source-hash reuse. Source digest also binds existing full controlled evidence. REVIEW_COPY is visibly draft. One archived PDF serves preview/download/print.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - {$ref: '#/components/schemas/Generate'}
+      responses: {'200': {description: ApiResponse data is BookPdf}, '409': {description: Stale batch, absent frozen book, incomplete source or invalid QA/signature gate}}
+  /main-batches/{id}/book/pdfs/{pdfId}/content:
+    parameters:
+      - {$ref: '#/components/parameters/Id'}
+      - {in: path, name: pdfId, required: true, schema: {$ref: '#/components/schemas/Id'}}
+    get:
+      operationId: readArchivedBookPdf
+      x-permissions: [ebr:form:view, production:batch:view, master:product:view]
+      description: Organization/batch/source-owner authorization and archived SHA-256 checked; immutable original bytes returned, never regenerated. Historical signature validity is not fabricated.
+      responses:
+        '200':
+          description: Same immutable PDF for preview, download and print; Cache-Control no-store
+          content: {application/pdf: {schema: {type: string, format: binary}}}
+        '403': {description: Current access denied}
+components:
+  parameters:
+    Id: {in: path, name: id, required: true, schema: {$ref: '#/components/schemas/Id'}}
+    Key: {in: header, name: Idempotency-Key, required: true, schema: {type: string, minLength: 1, maxLength: 128}}
+    Match: {in: header, name: If-Match, required: true, schema: {type: string}, description: Quoted versionNo matching the closed command body}
+  schemas:
+    Id: {type: string, pattern: '^[1-9][0-9]*$'}
+    Code: {type: string, pattern: '^[A-Za-z][A-Za-z0-9_-]{0,63}$'}
+    Reason: {type: string, minLength: 1, maxLength: 1000}
+    Transition:
+      type: object
+      additionalProperties: false
+      required: [versionNo, reason]
+      properties:
+        versionNo: {type: integer, format: int64, minimum: 0}
+        reason: {$ref: '#/components/schemas/Reason'}
+    Generate:
+      type: object
+      additionalProperties: false
+      required: [versionNo, archiveKind, reason]
+      properties:
+        versionNo: {type: integer, format: int64, minimum: 0}
+        archiveKind: {type: string, enum: [REVIEW_COPY, FINAL]}
+        reason: {$ref: '#/components/schemas/Reason'}
+    Definition:
+      type: object
+      additionalProperties: false
+      required: [varietyCode, varietyName, mappings, entries]
+      properties:
+        varietyCode: {$ref: '#/components/schemas/Code'}
+        varietyName: {type: string, minLength: 1, maxLength: 120}
+        mappings: {type: array, minItems: 1, maxItems: 100, items: {$ref: '#/components/schemas/Mapping'}}
+        entries: {type: array, minItems: 1, maxItems: 80, items: {$ref: '#/components/schemas/Entry'}}
+    Mapping:
+      type: object
+      additionalProperties: false
+      required: [productId, packageVersionId, ebrTemplateVersionId]
+      properties:
+        productId: {$ref: '#/components/schemas/Id'}
+        packageVersionId: {$ref: '#/components/schemas/Id'}
+        ebrTemplateVersionId: {$ref: '#/components/schemas/Id'}
+    Entry:
+      type: object
+      additionalProperties: false
+      required: [code, chapter, title, kind, order, required, minCount, scope, fields, attachmentIds]
+      properties:
+        code: {$ref: '#/components/schemas/Code'}
+        chapter: {type: string, minLength: 1, maxLength: 120}
+        title: {type: string, minLength: 1, maxLength: 160}
+        kind: {type: string, enum: [FORM, PROCESS_INSTRUCTIONS, PRODUCTION_ORDER, MATERIAL_ISSUES, CHARGES, CLEARANCE, INSPECTION_REPORTS, ATTACHMENTS]}
+        order: {type: integer, minimum: 1}
+        required: {type: boolean}
+        minCount: {type: integer, minimum: 0, maximum: 1000}
+        scope: {type: string, enum: [BATCH, OPERATION]}
+        operationCode: {type: string, nullable: true}
+        formCode: {type: string, nullable: true}
+        printTemplateVersionId: {type: string, nullable: true}
+        fields: {type: array, maxItems: 200, items: {$ref: '#/components/schemas/Code'}}
+        attachmentIds: {type: array, maxItems: 100, items: {$ref: '#/components/schemas/Id'}}

@@ -272,6 +272,15 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/execution-units/{id}/material-charges").hasAuthority("mes:charge:view")
                 .requestMatchers(HttpMethod.GET, "/api/v1/execution-units/{id}/operations").hasAuthority("mes:operation:view")
                 .requestMatchers(HttpMethod.GET, "/api/v1/execution-units/{id}/weighings").hasAuthority("mes:weigh:view")
+                // Navigation is a read-only permission-scoped projection. The query service
+                // checks the exact requested context (balance, QA review, or release).
+                .requestMatchers(HttpMethod.GET, "/api/v1/navigation/executions").hasAuthority("mes:execution:view")
+                .requestMatchers(HttpMethod.GET, "/api/v1/navigation/batches", "/api/v1/navigation/batches/{id}")
+                    .hasAnyAuthority("balance:view", "qa:batch-review", "qa:release")
+                .requestMatchers(HttpMethod.GET, "/api/v1/quality/finished-tests", "/api/v1/quality/finished-tests/{id}")
+                    .hasAuthority("qms:test:view")
+                .requestMatchers(HttpMethod.GET, "/api/v1/samples", "/api/v1/samples/{id}")
+                    .hasAuthority("qms:sample:view")
                 .requestMatchers(HttpMethod.GET, "/api/v1/main-batches").hasAuthority("production:batch:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/main-batches").hasAuthority("production:batch:create")
                 .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}").hasAuthority("production:batch:view")
@@ -283,6 +292,11 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}/sub-batches").hasAuthority("production:batch:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/main-batches/{id}/sub-batches").hasAuthority("production:subbatch:create")
                 .requestMatchers(HttpMethod.POST, "/api/v1/main-batches/{id}/submit-qa").hasAuthority("qa:batch-review")
+                .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}/material-balance").hasAuthority("balance:view")
+                .requestMatchers(HttpMethod.POST, "/api/v1/main-batches/{id}/material-balance/recalculate").hasAuthority("balance:view")
+                .requestMatchers(HttpMethod.POST, "/api/v1/balances/{id}/investigations").hasAuthority("balance:investigate")
+                .requestMatchers(HttpMethod.POST, "/api/v1/balance-investigations/{id}/investigate").hasAuthority("balance:investigate")
+                .requestMatchers(HttpMethod.POST, "/api/v1/balance-investigations/{id}/approve").hasAuthority("balance:approve")
                 .requestMatchers(HttpMethod.POST, "/api/v1/material-charges").hasAuthority("mes:charge:create")
                 .requestMatchers(HttpMethod.POST, "/api/v1/material-charges/{id}/reverse").hasAuthority("mes:charge:reverse")
                 .requestMatchers(HttpMethod.POST, "/api/v1/operations/{id}/complete").hasAuthority("mes:operation:complete")
@@ -310,6 +324,12 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/v1/forms/{id}/submit").hasAuthority("ebr:form:submit")
                 .requestMatchers(HttpMethod.POST, "/api/v1/field-values/{id}/corrections").hasAuthority("ebr:record:correct")
                 .requestMatchers(HttpMethod.POST, "/api/v1/forms/{id}/reviews").hasAnyAuthority("ebr:review:verify","ebr:review:approve")
+                // New controlled book routes reuse exact existing authorities; owner-module gates remain in services.
+                .requestMatchers(HttpMethod.GET, "/api/v1/ebr/book-templates", "/api/v1/ebr/book-templates/{id}").hasAuthority("ebr:template:view")
+                .requestMatchers(HttpMethod.POST, "/api/v1/ebr/book-templates").hasAuthority("ebr:template:create")
+                .requestMatchers(HttpMethod.POST, "/api/v1/ebr/book-templates/{id}/publish", "/api/v1/ebr/book-templates/{id}/deactivate").hasAuthority("ebr:template:publish")
+                .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}/book", "/api/v1/main-batches/{id}/book/pdfs", "/api/v1/main-batches/{id}/book/pdfs/{pdfId}/content").hasAuthority("ebr:form:view")
+                .requestMatchers(HttpMethod.POST, "/api/v1/main-batches/{id}/book/pdfs").hasAuthority("ebr:pdf:generate")
                 .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}/ebr").hasAuthority("ebr:form:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/main-batches/{id}/ebr/pdf").hasAuthority("ebr:pdf:generate")
                 .requestMatchers(HttpMethod.GET, "/api/v1/main-batches/{id}/ebr/pdf/{manifestId}").hasAuthority("ebr:form:view")
@@ -324,6 +344,34 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/ipc", "/api/v1/ipc/{id}").hasAuthority("qms:ipc:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/ipc", "/api/v1/ipc/{id}/submit-result").hasAuthority("qms:ipc:record")
                 .requestMatchers(HttpMethod.POST, "/api/v1/ipc/{id}/review-result").hasAuthority("qms:ipc:review")
+                // Controlled printing: explicit default-deny allowlist; service also checks org/business/QA evidence.
+                .requestMatchers(HttpMethod.GET,
+                    "/api/v1/printing/types",
+                    "/api/v1/printing/fields",
+                    "/api/v1/printing/templates",
+                    "/api/v1/printing/templates/{id}/preview",
+                    "/api/v1/printing/templates/{id}/docx",
+                    "/api/v1/printing/templates/{id}/design",
+                    "/api/v1/printing/designer/default",
+                    "/api/v1/printing/sample.docx").hasAuthority("print:template:view")
+                .requestMatchers(HttpMethod.POST,
+                    "/api/v1/printing/templates",
+                    "/api/v1/printing/designer",
+                    "/api/v1/printing/templates/{id}/validate",
+                    "/api/v1/printing/editor/sessions").hasAuthority("print:template:manage")
+                .requestMatchers(HttpMethod.GET,
+                    "/api/v1/printing/editor/sessions/{id}").hasAuthority("print:template:manage")
+                .requestMatchers(HttpMethod.POST,
+                    "/api/v1/printing/templates/{id}/publish",
+                    "/api/v1/printing/templates/{id}/deactivate",
+                    "/api/v1/printing/templates/{id}/bind").hasAuthority("print:template:publish")
+                .requestMatchers(HttpMethod.GET,
+                    "/api/v1/printing/applicable",
+                    "/api/v1/printing/artifacts",
+                    "/api/v1/printing/artifacts/{id}/pdf").hasAuthority("print:document:generate")
+                .requestMatchers(HttpMethod.POST,
+                    "/api/v1/printing/artifacts").hasAuthority("print:document:generate")
+                // Editor /transfer/** is a separate ordered chain with signed expiring capability enforcement.
                 .anyRequest().denyAll())
             .addFilterBefore(sessions, UsernamePasswordAuthenticationFilter.class)
             .build();

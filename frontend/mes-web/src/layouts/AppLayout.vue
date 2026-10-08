@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { navigationHome, permittedNavigation, selectedNavigationKey } from './navigation'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { message } from 'ant-design-vue'
 import ExecutionReferenceNavigation from './ExecutionReferenceNavigation.vue'
 import dashboardLogo from '../assets/login/hospital-flower-mark.png'
 import hospitalDesignMark from '../assets/execution-reference/hospital-design-mark.png'
@@ -22,6 +23,12 @@ const collapsed = ref(window.matchMedia('(max-width: 900px)').matches)
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const loggingOut = ref(false)
+watch(() => auth.identity, (identity, previous) => {
+  if (previous && !identity && !loggingOut.value) {
+    void router.replace({ path: '/login', query: { redirect: route.fullPath } })
+  }
+})
 const title = computed(() => String(route.meta.title ?? '工作台'))
 const navigationGroups = computed(() => permittedNavigation(auth.can))
 const selectedKey = computed(() => selectedNavigationKey(route.path, navigationGroups.value))
@@ -36,7 +43,15 @@ const dashboardIcons={master:CodeSandboxOutlined,wms:MedicineBoxOutlined,quality
 function navigate({ key }: { key: string }) {
   void router.push({ name: key })
 }
-async function logout() { await auth.logout(); await router.replace('/login') }
+async function logout() {
+  loggingOut.value = true
+  try { await auth.logout() }
+  catch { message.warning('本机已退出，服务器会话注销未完成') }
+  finally {
+    try { await router.replace('/login') }
+    finally { loggingOut.value = false }
+  }
+}
 function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router.push(String(value))}
 </script>
 
@@ -82,7 +97,7 @@ function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router
       </a-layout-header>
       <a-layout-content class="content">
         <a-breadcrumb><a-breadcrumb-item><HomeOutlined /> 首页</a-breadcrumb-item><a-breadcrumb-item>{{ title }}</a-breadcrumb-item></a-breadcrumb>
-        <RouterView />
+        <RouterView v-if="auth.identity" />
       </a-layout-content>
     </a-layout>
   </a-layout>

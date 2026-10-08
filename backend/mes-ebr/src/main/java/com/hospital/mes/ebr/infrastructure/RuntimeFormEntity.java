@@ -1,6 +1,7 @@
 package com.hospital.mes.ebr.infrastructure;
 @com.baomidou.mybatisplus.annotation.TableName("ebr_form_instance")
 public class RuntimeFormEntity extends com.hospital.mes.masterdata.infrastructure.ScopedEntity {
+ private Long sharedMainBatchId; public Long getSharedMainBatchId(){return sharedMainBatchId;} public void setSharedMainBatchId(Long v){sharedMainBatchId=v;}
  private Long operationExecutionId; public Long getOperationExecutionId(){return operationExecutionId;} public void setOperationExecutionId(Long v){operationExecutionId=v;}
  private Long formDefId; public Long getFormDefId(){return formDefId;} public void setFormDefId(Long v){formDefId=v;}
  private String status; public String getStatus(){return status;} public void setStatus(String v){status=v;}

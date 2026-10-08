@@ -33,6 +33,7 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'production-orders-list', title: '生产订单', path: '/production/orders', permission: 'production:order:view' },
     { key: 'production-batches-list', title: '生产批', path: '/production/batches', permission: 'production:batch:view' },
     { key: 'production-execution', title: '生产执行', path: '/production/execution', permission: 'mes:execution:view', requiredPermissions: ['mes:operation:view'] },
+    {key:'ebr-book-templates',title:'批记录册模板',path:'/ebr/book-templates',permission:'ebr:template:view'},
     { key: 'ebr-templates', title: 'eBR模板', path: '/ebr/templates', permission: 'ebr:template:view' },
     { key: 'production-balances', title: '物料平衡', path: '/production/balances', permission: 'balance:view' }
   ] },
@@ -48,6 +49,7 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'finished-shipments', title: '成品发货出库', path: '/finished/shipments', permission: 'wms:finished-shipment:view' }
   ] },
   { key: 'system', title: '系统管理', items: [
+    { key: 'print-templates', title: '打印模板', path: '/admin/print-templates', permission: 'print:template:view' },
     { key: 'users', title: '用户管理', path: '/admin/users', permission: 'iam:user:view' },
     { key: 'roles', title: '角色与权限', path: '/admin/roles', permission: 'iam:role:view' },
     { key: 'trace', title: '完整追溯', path: '/trace', permission: 'trace:view' },

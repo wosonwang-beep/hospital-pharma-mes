@@ -1,0 +1,9 @@
+package com.hospital.mes.configuration;
+import com.hospital.mes.reporting.application.EditorActorPort;import com.hospital.mes.audit.application.CurrentPlatformContext;import com.hospital.mes.system.infrastructure.*;import com.hospital.mes.security.session.SessionStore;import com.hospital.mes.security.context.PlatformOrganizationResolver;import com.hospital.mes.common.exception.PermissionException;import org.springframework.stereotype.Component;import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;import java.util.*;
+@Component @ConditionalOnProperty(prefix="mes.print.editor",name="enabled",havingValue="true")
+public class PrintEditorActorAdapter implements EditorActorPort {
+ private final SysUserMapper users;private final SysRolePermissionMapper roles;private final SessionStore sessions;private final PlatformOrganizationResolver organization;
+ public PrintEditorActorAdapter(SysUserMapper users,SysRolePermissionMapper roles,SessionStore sessions,PlatformOrganizationResolver organization){this.users=users;this.roles=roles;this.sessions=sessions;this.organization=organization;}
+ public CurrentPlatformContext requireActiveEditor(long org,long actor,String session){var user=users.selectById(actor);var lease=sessions.findById(session).orElseThrow(()->new PermissionException("EDITOR_SESSION_REVOKED","Login session revoked"));var permissions=Set.copyOf(roles.activePermissionCodes(actor));if(org!=organization.organizationId()||lease.identity().userId()!=actor||lease.identity().organizationId()!=org||user==null||!Boolean.TRUE.equals(user.getEnabled())||!permissions.containsAll(Set.of("print:template:manage","print:template:view")))throw new PermissionException("EDITOR_PERMISSION_REVOKED","Editor actor or permission revoked");return new CurrentPlatformContext(org,actor,Set.copyOf(roles.activeRoleCodes(actor)),permissions,session,UUID.randomUUID().toString());}
+}
+

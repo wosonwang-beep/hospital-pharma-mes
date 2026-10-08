@@ -1,0 +1,15 @@
+<script setup lang="ts">
+import {ref,watch} from 'vue'
+import {useAuthStore} from '../../stores/auth'
+import {applicable,history,generate,pdf,type PrintTemplate,type PrintArtifact} from '../../api/printing'
+import {errorMessage} from '../../api/http'
+import PdfPreview from './PdfPreview.vue'
+const props=defineProps<{businessId:string;approved:boolean}>(),auth=useAuthStore()
+const choices=ref<PrintTemplate[]>([]),archives=ref<PrintArtifact[]>([]),selected=ref<string>(),formal=ref(false),busy=ref(false),error=ref(''),open=ref(false),blob=ref<Blob|null>(null),name=ref('检验报告.pdf')
+async function load(){if(!auth.can('print:document:generate'))return;try{[choices.value,archives.value]=await Promise.all([applicable(),history(props.businessId)]);selected.value=choices.value[0]?.id}catch(e){error.value=errorMessage(e)}}
+watch(()=>props.businessId,()=>{formal.value=false;void load()},{immediate:true})
+async function preview(a:PrintArtifact){busy.value=true;error.value='';try{blob.value=await pdf(a.id);name.value=`${a.reportNo}-${a.formal?'正式':'草稿'}-v${a.businessVersion}.pdf`;open.value=true}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
+async function create(){if(!selected.value)return;busy.value=true;error.value='';try{const a=await generate(props.businessId,selected.value,formal.value);await preview(a);archives.value=await history(props.businessId)}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
+</script>
+<template><a-card v-if="auth.can('print:document:generate')" title="报告打印" class="print-panel"><a-alert v-if="error" type="error" :message="error" show-icon/><a-space wrap><a-select v-model:value="selected" placeholder="选择已发布的适用模板" style="min-width:260px" :options="choices.map(t=>({value:t.id,label:`${t.templateName} · 第 ${t.templateRevision} 版`}))"/><a-radio-group v-model:value="formal"><a-radio :value="false">草稿</a-radio><a-radio :value="true" :disabled="!approved">正式</a-radio></a-radio-group><a-button type="primary" :disabled="!selected" :loading="busy" @click="create">生成并预览 PDF</a-button></a-space><p class="hint">完整报告由服务端读取。正式报告需完成既有审核与电子签名；旧版本重打直接使用归档文件。</p><a-empty v-if="!choices.length" description="尚无已发布并绑定的适用模板"/><a-table v-if="archives.length" :data-source="archives" row-key="id" :pagination="false" size="small"><a-table-column title="业务版本" data-index="businessVersion"/><a-table-column title="模板版本" data-index="templateRevision"/><a-table-column title="类型"><template #default="{record}"><a-tag :color="record.formal?'green':'orange'">{{record.formal?'正式':'草稿'}}</a-tag></template></a-table-column><a-table-column title="生成时间" data-index="createdAt"/><a-table-column title="归档文件"><template #default="{record}"><a-button type="link" :loading="busy" @click="preview(record)">查看 / 重打</a-button></template></a-table-column></a-table><a-modal v-model:open="open" title="检验报告 PDF" width="90vw" :footer="null"><PdfPreview :blob="blob" :name="name"/></a-modal></a-card></template>
+<style scoped>.print-panel{margin-top:16px}.hint{color:#68758a;margin:14px 0;font-size:13px}</style>

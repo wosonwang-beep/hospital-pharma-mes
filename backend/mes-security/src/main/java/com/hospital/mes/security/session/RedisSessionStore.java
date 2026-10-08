@@ -29,11 +29,17 @@ public class RedisSessionStore implements SessionStore {
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private static final DefaultRedisScript<Long> CREATE = script("""
-        redis.call('HSET', KEYS[1],
-          'userId', ARGV[1], 'organizationId', ARGV[2], 'loginName', ARGV[3], 'displayName', ARGV[4],
-          'roleCodes', ARGV[5], 'permissionCodes', ARGV[6], 'mustChange', ARGV[7],
-          'createdAt', ARGV[8], 'absoluteExpiresAt', ARGV[9],
-          'idleExpiresAt', ARGV[10], 'renewDigest', ARGV[11])
+        redis.call('HSET', KEYS[1], 'userId', ARGV[1])
+        redis.call('HSET', KEYS[1], 'organizationId', ARGV[2])
+        redis.call('HSET', KEYS[1], 'loginName', ARGV[3])
+        redis.call('HSET', KEYS[1], 'displayName', ARGV[4])
+        redis.call('HSET', KEYS[1], 'roleCodes', ARGV[5])
+        redis.call('HSET', KEYS[1], 'permissionCodes', ARGV[6])
+        redis.call('HSET', KEYS[1], 'mustChange', ARGV[7])
+        redis.call('HSET', KEYS[1], 'createdAt', ARGV[8])
+        redis.call('HSET', KEYS[1], 'absoluteExpiresAt', ARGV[9])
+        redis.call('HSET', KEYS[1], 'idleExpiresAt', ARGV[10])
+        redis.call('HSET', KEYS[1], 'renewDigest', ARGV[11])
         redis.call('PEXPIRE', KEYS[1], ARGV[12])
         redis.call('SADD', KEYS[2], ARGV[13])
         redis.call('PEXPIRE', KEYS[2], 28800000)
@@ -53,7 +59,8 @@ public class RedisSessionStore implements SessionStore {
         if not values[1] or tonumber(ARGV[1]) >= tonumber(values[1])
           or tonumber(ARGV[1]) >= tonumber(values[2]) or values[3] ~= ARGV[2] then return 0 end
         local nextIdle = math.min(tonumber(values[1]), tonumber(ARGV[1]) + 1800000)
-        redis.call('HSET', KEYS[1], 'renewDigest', ARGV[3], 'idleExpiresAt', tostring(nextIdle))
+        redis.call('HSET', KEYS[1], 'renewDigest', ARGV[3])
+        redis.call('HSET', KEYS[1], 'idleExpiresAt', tostring(nextIdle))
         redis.call('PEXPIRE', KEYS[1], nextIdle - tonumber(ARGV[1]))
         return 1
         """);

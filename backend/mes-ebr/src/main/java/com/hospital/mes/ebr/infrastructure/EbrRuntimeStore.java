@@ -12,6 +12,7 @@ public class EbrRuntimeStore {
  @SuppressWarnings("unchecked")public <T extends ScopedEntity>ScopedStore<T> store(Class<T> c){return (ScopedStore<T>)stores.get(c);}
  @SuppressWarnings("unchecked")public <T extends ScopedEntity>List<T> rows(Class<T> c,long org,String column,Object id){return ((BaseMapper<T>)mappers.get(c)).selectList(new QueryWrapper<T>().eq("org_id",org).eq(column,id).orderByAsc("id"));}
  public RuntimeBatchSnapshotEntity snapshot(long org,long batch){return rows(RuntimeBatchSnapshotEntity.class,org,"main_batch_id",batch).stream().findFirst().orElseThrow(()->new NoSuchElementException("eBR batch snapshot not initialized"));}
+ public List<RuntimeFormEntity> shared(long org,long batch){return rows(RuntimeFormEntity.class,org,"shared_main_batch_id",batch);}
  public List<RuntimeFormEntity> forms(long org,long operation){return rows(RuntimeFormEntity.class,org,"operation_execution_id",operation);}
  public List<RuntimeValueEntity> values(RuntimeFormEntity f){return rows(RuntimeValueEntity.class,f.getOrgId(),"form_instance_id",f.getId());}
  public List<RuntimeValueEntity> current(RuntimeFormEntity f){Map<String,RuntimeValueEntity> latest=new LinkedHashMap<>();for(var v:values(f))latest.put(v.getFieldCode()+"|"+v.getOccurrencePath(),v);return List.copyOf(latest.values());}

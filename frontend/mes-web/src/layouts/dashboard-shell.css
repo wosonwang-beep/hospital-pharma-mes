@@ -2,6 +2,7 @@
  #app .dashboard-desktop-shell{--mes-ui-sidebar-width:256px;--mes-ui-header-height:64px}
  #app .dashboard-desktop-shell .sidebar{background:#fafcff!important;border-right:1px solid #edf3fb}
  #app .dashboard-desktop-shell .brand{width:256px;height:64px;background:#fff;color:#102350;gap:10px;padding:0 14px;border-right:1px solid #edf3fb}
+ #app .dashboard-desktop-shell .brand.brand-collapsed{width:80px;padding:0;justify-content:center}
  .dashboard-brand-logo{width:40px;height:40px;object-fit:contain;flex-shrink:0}
  .dashboard-brand-copy{display:grid;gap:2px;overflow:hidden;white-space:nowrap}
  .dashboard-brand-copy strong{font-size:16px;font-weight:700;letter-spacing:-.02em}
@@ -10,6 +11,8 @@
  #app .dashboard-desktop-shell :deep(.nav .ant-menu-item),#app .dashboard-desktop-shell :deep(.nav .ant-menu-submenu-title){color:#14254e;height:48px;line-height:48px;width:100%;margin:4px 0;border-radius:8px;padding-left:18px!important;font-size:15px}
  #app .dashboard-desktop-shell :deep(.nav .ant-menu-item-selected){background:#1677ff!important;color:#fff!important;font-weight:600}
  #app .dashboard-desktop-shell :deep(.nav .ant-menu-submenu-title .anticon){color:#1677ff;font-size:20px;margin-right:10px}
+ #app .dashboard-desktop-shell :deep(.ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title){padding-inline:0!important;text-align:center}
+ #app .dashboard-desktop-shell :deep(.ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title .anticon){margin-right:0}
  #app .dashboard-desktop-shell :deep(.dashboard-menu-quality>.ant-menu-submenu-title .anticon){color:#8a40ff}
  #app .dashboard-desktop-shell :deep(.dashboard-menu-production>.ant-menu-submenu-title .anticon){color:#00bfa1}
  #app .dashboard-desktop-shell :deep(.dashboard-menu-system>.ant-menu-submenu-title .anticon){color:#5681cf}

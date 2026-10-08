@@ -494,3 +494,86 @@ Authorized controlled presentation maintenance on main `15d4741`; T1/T2/T3 retai
 ## Login / Home Workbench visual maintenance — 2026-10-07
 
 ACCEPTED. The user explicitly approved the delivered reference-based login and home workbench presentation with “验收，提交和更新”. Existing Specialized page classification, UI V2 and FINAL BASELINE COMPLETE v1.0.23 remain unchanged. Five metric cards, six existing-route shortcuts, task/announcement positions and three chart panels follow the selected desktop reference. Shared seven-group navigation and permission filtering are preserved. Actual data and explicit unavailable states replace illustrated statistics; no unified task/announcement/inventory-warning contract or permission expansion is introduced. Actual browser checks at 1536×1024 passed with no overflow or final console errors; login error and successful login, menu search and requisition entry were verified. Pre-commit typecheck PASS, three affected frontend files/eight tests PASS, build PASS (13.40s). No backend/API/DTO/database/migration/state/signature/frozen release changes. LOW inherited bundle warning and documented visual/contract exclusions remain. [Design QA and acceptance evidence](design-qa.md). No new MES task started; local DB configuration and unrelated files remain excluded from the delivery.
+
+## Home Workbench proactive audit follow-up — 2026-10-07
+
+Final verification: typecheck and build PASS12.68s after the identity-loss fix. Six affected suites/20 cases PASS. Runtime delivery remains READY FOR ACCEPTANCE.
+
+READY FOR ACCEPTANCE. User requested proactive audit/repair and current-data inspection. Nine confirmed homepage/shared-shell issues repaired: frozen production/sample counting, collapsed brand, chart container resizing, undated/cross-midnight trends, late async cleanup, expired-session logout and immediate removal/navigation of controlled content after identity loss. [Scoped audit and evidence](docs/review/MES_HOME_WORKBENCH_PROACTIVE_AUDIT_2026-10-07.md). Six targeted frontend suites/20 tests PASS3.51s; typecheck PASS. Actual browser desktop/side-bar/normal logout-relogin evidence passed before the final nonvisual identity-loss supplement, which has component regression evidence; further local browser navigation was blocked by browser security policy. Readonly DEV data audit covered98 business tables with no named test-marker hits;18 meaningful materials/two products/seven suppliers retained, trading tables empty. Two immutable supplier-code transcription inconsistencies remain MEDIUM debt, along with unavailable dashboard projections and inherited LOW bundle warning. No database/schema/migration/backend/API/permission/signature/frozen-release changes; no data deletion, new MES task, automatic acceptance, commit or push. Prior accepted maintenance record remains historical.
+
+## Controlled Word printing — 2026-10-08
+
+IN PROGRESS. Explicit user-authorized DCP-CONTROLLED-WORD-PRINTING-001: foundational Word template management and inspection-report PDF integration; user selected A (existing Word plus browser Office editing), separately approved schema additions and official LibreOffice installation. [Bounded contract](docs/architecture/CONTROLLED_WORD_PRINTING_DCP_2026-10-08.md), [API](docs/api/controlled-printing.openapi.yaml), [RTM/evidence](docs/acceptance/controlled-printing/REPORT.md). main 8f61f75 retained; user-owned parallel modifications preserved. Prior authority v1.0.23 and UI V2/T1–T6 remain unchanged pending design-authority review.
+
+New V033 is NOT EXECUTED. No shared business data, existing Flyway history, role grants or running mes-boot restart. Required isolated migration validation awaits an authorized environment compatible with AGENTS.md; online Word JWT persistent-secret approval is pending. Backend unit and real LibreOffice PDF tests, frontend type/build and isolated browser UI validation are being recorded; API-fixture browser checks do not constitute real Office save/DB integration. No READY FOR ACCEPTANCE or human acceptance, push, deployment, environment reset or next MES task inferred.
+
+
+## Production batch book — 2026-10-08
+
+IMPLEMENTED / SCOPED CHECKS PASS, pending design-owner review and documented residuals. Explicit approved DCP-EBR-BOOK-001 covers versioned book templates/applicability mapping, frozen shared BATCH records only where configured, actual owner-source read-only directory, original runtime entry/review, real DOCX/PDF book and immutable history. [Contract](docs/architecture/EBR_BOOK_DCP_2026-10-08.md), [API](docs/api/ebr-book.openapi.yaml), [fields/templates](docs/acceptance/ebr-book/FIELDS_AND_TEMPLATES.md), [acceptance evidence and limitations](docs/acceptance/ebr-book/REPORT.md). V035/V036 applied to authorized localhost DEV after full private backup; prior executed migrations and frozen v1.0.23 unchanged. Synthetic transaction rollback only; no business data cleanup, new grant, push or authority switch. Existing online Office/JWT pending item remains separate. Final checks/deployment status recorded in the scoped delivery document.
+
+EBR book final scoped execution: backend18/frontend6/captured-browser6 PASS; final local V036 JAR pid20084 healthy UP, old V034 JAR retained. No persistent synthetic business rows (book tables0); true new-book live browser recording flow remains unverified. [Deployment and delivery](docs/acceptance/ebr-book/DEPLOYMENT_AND_DELIVERY.md).
+
+EBR book HTTP closeout: precise existing-authority routes added after authenticated403 red reproduction; final backend18/frontend6/captured-browser8/live-readonly-browser1 PASS. Final local V036 HTTP-fix JAR pid32520 UP (2026-10-08 14:43+08:00), 36 migrations valid; both prior JARs retained. Actual button is “打开生产批记录册”; old batches explain legacy scope and link original entry/review/QA evidence, without retrofit or grants. New persistent-book browser full flow remains an explicit gap. Library prepare_uploads unavailable; no attachment IDs or bypass upload.
+
+2026-10-08 eBR book scoped supplement: book-template author publish approved; process/eBR/QA approval gates preserved. Backend47/frontend6/browser8 PASS; packaged worker real PDF PASS. New JAR not running: automatic approval rejected DEV service replacement against no-deploy instruction. Persistent new-book chain PENDING. Evidence: docs/acceptance/ebr-book/FINAL_SCOPED_ACCEPTANCE_20261008.md. Runtime acceptance awaits design owner; no push/commit.
+
+
+## 2026-10-08 本机 DEV 实际验收补充（16:05）
+
+此前“部署阻塞、尚未发布”的状态已被本节取代。用户后续明确批准本机 DEV 后端部署更新；首次拒绝后仅按主助手提供的明确授权重试一次，部署成功。当前排版候选运行 PID 25628，健康 UP，JAR mes-boot-V036-ebr-book-layout-20261008.jar，SHA256 F6D06A37F694511DF30A0F3474C2A466CF727B426E16DFB0A931F671586C5B25。旧隔离转换包保留回滚。
+
+真实浏览器 admin 已新建并自行发布合成册模板 21（SYNTHETIC_BOOK_UI_20261008）；新建生产订单 139、批次 142（SYNTHETIC_BOOK_BATCH_20261008）。均明确 DEV 合成，不作生产或签名证据。账号自行发布例外仅针对册/打印模板，ProcessService/EbrService 未改审核规则。
+
+下达实际拒绝 WEIGHING_POLICY_REQUIRED：Invalid or missing deployment weighing policy for material 1。批次仍 DRAFT，无执行表单，未保存业务表单、未生成该持久批次 PDF。既有部署生产者要求 mes.production.material-weighing-policies 中精确组织/物料绑定及 required、precision、tolerancePct、policyVersion；没有擅自补容差或放宽门禁。第二同品种规格亦缺独立批准的工艺/eBR基础版本。
+
+下达选择器另有真实缺陷：把版本筛选 status 设为产品状态 ACTIVE。已仅移除此错误条件，仍筛选 APPROVED/EFFECTIVE 版本。回归测试及册前端测试 7 项通过，类型/构建通过；浏览器已能选择匹配的有效工艺。
+
+排版第一轮后端 7 项、浏览器 8 项通过，但逐页复核发现追溯表来源长码仍跨列，继续收紧保留全文的单元格换行预算。最终排版待再次验证。已有 Library v0 PDF 属失败或空数据样例，不能声称完成真实表单保存验收。
+
+
+# 当前验收状态：实施与回滚验证通过；实际持久流程受上游配置阻碍
+
+2026-10-08。本节为最新事实，后文旧状态仅保留历史。
+
+- 基线：main / 8f61f75；保护并行未提交修改，不提交或推送，不修改既有迁移。
+- 本机 DEV 当前后端：PID 30432，JAR mes-boot-V036-ebr-book-titlewrap-20261008.jar，SHA256 AE97A58F930525CE6B991430DF33D2C6DBCB941891CDEFE3A361CF1B70F34428；健康 UP。此前布局、隔离转换包均保留回滚。用户后续已明确批准 DEV 部署更新，首次审批拒绝后按补充授权正常重试获准。
+- 真实浏览器：admin 发布合成册模板 21；新建合成生产订单 139、批次 142。批次下达失败，仍 DRAFT。没有表单保存或持久批次 PDF，不声称完整真实业务验收。
+- 具体阻碍：WEIGHING_POLICY_REQUIRED / material 1。部署未配置 mes.production.material-weighing-policies 精确组织/物料映射。规则要求 required、precision（当前基本单位）、tolerancePct、policyVersion，禁止按物料类型等推定。需受控部署负责人给定这些值及完整配方物料映射；没有擅自设置 false 或容差。第二同品种规格还缺独立批准的工艺/eBR 基础版本。
+- 自行发布例外仅册/打印模板；ProcessService/EbrService 无差异，运行审核、称量核验和 QA 独立签名未放宽。
+- 选择器缺陷已修复：移除误用于版本查询的 ACTIVE，仍仅允许 APPROVED/EFFECTIVE。前端相关 7 项通过，类型/构建通过。
+- PDF：固定列宽、显式保留全文换行、长标题换行、五列业务表、中文状态和真实单位名称、执行单元区分；内部完整源快照和64字符摘要保留。渲染版本 EBR_BOOK_V4_TITLE_WRAP 避免复用旧错误排版。
+- 测试：单元格修复阶段后端 7 项全过；最终标题阶段真实转换 5 项全过（含已安装 LibreOffice），package 成功。16 页长明细样例逐页缩略图复核，表头/页码连续；8 页实际数据库回滚册正在最终重生成。回滚测试有真实保存/提交合成字段及不可变旧产物校验，权限上下文和独立身份为测试夹具，不冒充持久业务。
+- 浏览器回归 8 项使用真实回滚 JSON/PDF 捕获配合接口路由夹具，验证 UI、同 PDF 下载哈希、拒绝访问和原表入口；与真正持久化 UI 配置发布/订单批次创建证据分开。原始表单截图展示录入前空数据，不能当作真实填表闭环。
+- Library：目录截图 libfile_0ed73503344881919c19b012fc780ad3 已更新 v1（视口截图，页头 y=0）。DOCX libfile_b75fa641aa98819195004173c693c603、长明细 PDF libfile_a3e2b44066d4819195fc6975f1a6590e 已更新 v1。失败旧版保留，不新建重复附件。Windows 本地扩展属性写回不受支持，Library 写入成功且返回身份已保存私有 JSON。
+
+---
+
+
+
+2026-10-08 最终标题版本另2项回滚测试及8项浏览器测试通过；8页册与16页明细PDF复核并更新Library原身份v1。真实持久流程仍受称量策略阻碍；当前DEV PID30432健康UP。
+
+
+## 只读组合复核 2026-10-08
+
+只读 JDBC setReadOnly(true) 检查当前DEV实际行，并检查现有配置/启动脚本；未调整物料策略、删除业务行或改冻结快照。
+
+- 持久产品仅 ID1 KCL30（氯化钾溶液，30ml:3g/瓶）及ID2 HYTEA100（合剂，100ml/瓶）；无持久合成产品。
+- KCL30生效组合：工艺8/eBR6、工艺9/eBR7、工艺11/eBR9、工艺12/eBR10。eBR10作者11565、批准11568，确有独立批准；其它三个为作者11572、批准11569。HYTEA100工艺2仅DRAFT，无eBR。
+- 唯一册模板21已PUBLISHED，映射产品1/工艺12/eBR10。订单139及批次142明确SYNTHETIC_BOOK_*，仍DRAFT；批次process_snapshot_id为空。未撤销或删除。
+- 所有已下达快照2、3、4、5、7、8、9、10的has_book=0；无法通过补写不可变快照复用为新册。
+- 历史快照9、10是现成称量策略来源：组织1/物料1（KCL，基本单位1=g），required=true，precision=0.001，tolerancePct=0.5，policyVersion=KCL-DEMO-2026，configurationHash=8243be2cf0aa04d8cc5217d3fcce08843d8c9fe5f5109f7b402eba2d7b15545b。此为历史冻结证据，不等于当前部署输入。其它已生效工艺还使用物料5纯化水，需要其独立映射，故工艺12/eBR10是当前最小单物料组合。
+- 当前进程只指定local profile及日志路径；根配置、.env、mes-boot application配置、scripts、已知部署脚本未找到 material-weighing-policies 配置。未访问或打印凭证。规则生产者ProductionMaterialPolicyService只读Environment明确绑定，不允许从历史快照或废弃物料列自动推断。
+
+最小业务决定：是否将上述历史 KCL-DEMO-2026 策略完整且原值不变地重新提供为本机DEV受控部署输入，仅用于已标记合成验收的下一步；这是共享真实物料1的策略输入，尚未擅自启用。若否，需给定本次合法受控配置，不能默认required=false。跨规格另需确定一个KCL第二规格产品、其已发布工艺和已生效eBR并由独立授权身份批准，再新建册模板版本绑定；已有唯一KCL规格不足。
+
+只读本地证据：ebr-combinations-readonly.log、ebr-frozen-policies-readonly.log。规则路径：docs/development/incoming-material-weigh-policy-supplement.md、backend/mes-production/src/main/java/com/hospital/mes/production/application/ProductionMaterialPolicyService.java。
+
+
+## 目录与示例标签复核收尾
+
+仅修两处标签：目录长名称保留开头与执行单元后缀，中间缩略；完整名仍在正文/书签，已验证两条PREPARE的/1与/2可区分。16页第10页正文为“分装包装记录”，与目录一致。后端8项全过（真实FOP/LibreOffice、目录/书签断言、事务回滚），浏览器8项全过，package成功，指定两页已视觉复核。渲染版本EBR_BOOK_V5_TOC_LABEL。
+
+最新DEV PID22852，JAR mes-boot-V036-ebr-book-toclabel-20261008.jar，SHA256 E8D23F85D7CDFC7E710B4C866FE2332C1B9B759AB91A9BE833A089FCE737539F；既有配置原样沿用，称量策略未添加/改变。旧titlewrap包保留回滚。前面的PID/附件版本为历史检查点。
+
+真实持久闭环仍未完成：订单139/批次142不动；最小单规格需要受控确认是否恢复历史组织1/物料1的KCL-DEMO-2026完整称量策略作为当前部署输入（required=true，precision=0.001克，tolerancePct=0.5），不得从历史冻结对象自动启用。跨规格需明确KCL第二规格及独立批准工艺/eBR。

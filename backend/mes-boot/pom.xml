@@ -4,6 +4,7 @@
   <parent><groupId>com.hospital.mes</groupId><artifactId>mes-backend</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
   <artifactId>mes-boot</artifactId>
   <dependencies>
+    <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-reporting</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qc</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-qms</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>com.hospital.mes</groupId><artifactId>mes-production</artifactId><version>${project.version}</version></dependency>

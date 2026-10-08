@@ -3,5 +3,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent><groupId>com.hospital.mes</groupId><artifactId>mes-backend</artifactId><version>0.1.0-SNAPSHOT</version><relativePath>../pom.xml</relativePath></parent>
   <artifactId>mes-reporting</artifactId>
-</project>
+<dependencies>
+<dependency><groupId>com.hospital.mes</groupId><artifactId>mes-masterdata</artifactId><version>${project.version}</version></dependency>
+<dependency><groupId>com.deepoove</groupId><artifactId>poi-tl</artifactId><version>1.12.2</version><exclusions>
+<exclusion><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-transcoder</artifactId></exclusion>
+<exclusion><groupId>org.apache.xmlgraphics</groupId><artifactId>batik-codec</artifactId></exclusion>
+</exclusions></dependency>
+<!-- Pure Java DOCX -> PDF: docx4j FO export through Apache FOP (default engine). -->
+<dependency><groupId>org.docx4j</groupId><artifactId>docx4j-export-fo</artifactId><version>11.5.12</version></dependency>
+<dependency><groupId>org.docx4j</groupId><artifactId>docx4j-JAXB-ReferenceImpl</artifactId><version>11.5.12</version></dependency>
+<!-- Historical fallback kept optional for legacy complex DOCX while the new renderer is validated. -->
+<dependency><groupId>org.jodconverter</groupId><artifactId>jodconverter-local</artifactId><version>4.4.11</version></dependency>
+<dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+<dependency><groupId>org.apache.pdfbox</groupId><artifactId>pdfbox</artifactId><version>3.0.8</version><scope>test</scope></dependency></dependencies></project>
 

@@ -1,0 +1,8 @@
+package com.hospital.mes.release.application;
+import com.fasterxml.jackson.databind.*;import com.hospital.mes.audit.idempotency.*;import com.hospital.mes.masterdata.application.MasterMutation;import com.hospital.mes.common.exception.ResourceConflictException;import java.util.function.Supplier;import org.springframework.transaction.annotation.Transactional;
+@org.springframework.stereotype.Service @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(prefix="spring.datasource",name="url")
+public class BookCommandService {
+ private final PlatformIdempotencyService keys;private final MasterMutation mutations;private final ObjectMapper json;
+ public BookCommandService(PlatformIdempotencyService keys,MasterMutation mutations,ObjectMapper json){this.keys=keys;this.mutations=mutations;this.json=json;}
+ @Transactional public JsonNode execute(String permission,String operation,String key,Object request,Supplier<JsonNode> work){var c=mutations.context(permission);var ownership=keys.begin(new IdempotencyCommand(c.organizationId(),c.actorId(),operation,key,mutations.digest(request)));if(ownership.type()==IdempotencyDecisionType.REPLAY){try{return json.readTree(ownership.responseJson());}catch(java.io.IOException ex){throw new IllegalStateException(ex);}}if(ownership.type()!=IdempotencyDecisionType.OWNER)throw new ResourceConflictException("IDEMPOTENCY_CONFLICT","Book command key conflict");var result=work.get();String response=result.toString();keys.complete(ownership.handle(),200,response,"EbrBookCommand",result.path("id").asText());try{return json.readTree(response);}catch(java.io.IOException ex){throw new IllegalStateException(ex);}}
+}

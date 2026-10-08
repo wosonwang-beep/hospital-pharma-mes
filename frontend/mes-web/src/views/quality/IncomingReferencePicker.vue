@@ -2,11 +2,11 @@
 import {ref,watch,computed} from 'vue'
 import {api,errorMessage,type Page} from '../../api/http'
 import {referenceRows,label,type IncomingRow,type ReferenceOption} from './incomingModel'
-const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null;status?:string|null}}>()
+const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null;materialIds?:string[];status?:string|null}}>()
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
-const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
+const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.materialId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
 async function list(url:string,params:Record<string,unknown>={}){const result=await api<Page<IncomingRow>>({url,params:{page:page.value,size:50,keyword:search.value||undefined,...params}});hasMore.value=(page.value+1)*50<result.total;return result.items}
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
@@ -22,7 +22,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
   else if(f==='productionOrderId')rows=await list('/production-orders')
   else if(f==='packageVersionId'){
-   const roots=await list('/process-packages',{productId:c.productId,status:'ACTIVE'})
+   const roots=await list('/process-packages',{productId:c.productId})
    const packages=await Promise.all(roots.map(root=>api<IncomingRow>({url:`/process-packages/${root.id}`})))
    rows=packages.flatMap(root=>((root.versions??[]) as IncomingRow[]).filter(v=>['APPROVED','EFFECTIVE'].includes(String(v.status))).map(v=>({...v,displayName:`${root.packageCode} · V${v.businessVersion}`})))
   }else if(f==='ebrTemplateVersionId')rows=await list('/ebr/templates',{packageVersionId:c.packageVersionId,status:'EFFECTIVE'})
@@ -31,7 +31,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='formulaItemId')rows=((c.formulaItems??[]) as IncomingRow[]).map(i=>({...i,id:i.formulaItemId,displayName:`${i.materialName??i.materialId} · ${i.requiredQty??i.quantity??i.targetQty??''}`}))
   else if(f==='parameterDefId')rows=((c.parameters??[]) as IncomingRow[]).map(i=>({...i,id:i.parameterDefId}))
   else if(['equipmentId','scaleEquipmentId'].includes(f))rows=await list('/equipment',{status:'ACTIVE'})
-  else if(f==='materialLotId')rows=await list('/wms/material-lots',{materialId:props.queryFilters?.materialId||undefined})
+  else if(f==='materialLotId'){const single=props.queryFilters?.materialId;const ids=single?[single]:[...new Set(props.queryFilters?.materialIds??[])];if(ids.length){const sets=await Promise.all(ids.map(materialId=>list('/wms/material-lots',{materialId})));rows=sets.flat()}else rows=await list('/wms/material-lots');if(c.investigationScope==='INCOMING_MATERIAL')rows=rows.filter(lot=>String((lot.materialSnapshot as IncomingRow|undefined)?.materialType??'')!=='FINISHED')}
   else if(f==='qcSpecificationVersionId'){
    if(!lotId&&!c.finishedMaterialId){options.value=[];return}
    const material=c.finishedMaterialId??(await api<IncomingRow>({url:`/wms/material-lots/${lotId}`})).materialId;const roots=await list('/quality/specifications',{materialId:material})

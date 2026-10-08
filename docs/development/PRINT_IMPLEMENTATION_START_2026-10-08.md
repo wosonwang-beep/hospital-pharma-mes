@@ -1,0 +1,1 @@
+Print implementation startup: explicitly authorized DOCX template management and inspection-report PDF scope. Baseline main 8f61f75. Existing changes preserved. No shared database migration authorized or executed.

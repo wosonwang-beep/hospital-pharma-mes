@@ -4,7 +4,27 @@ export interface FinishedDecision {id:string;mainBatchId:string;finishedLotId:st
 export interface PdfManifest {id:string;mainBatchId:string;generationVersion:number;definitionHash:string;recordDigest:string;fileId:string;fileHash:string;generatedBy:string;generatedAt:string;archiveKind:'REVIEW_COPY'|'FINAL';releaseDecisionId:string|null}
 export type Evidence=Record<string,unknown>
 export interface BatchArchive {finishedQuality?:{requests:Evidence[]};finishedReceiving?:Evidence[];mainBatchId:string;definitionHash:string;recordDigest:string;batch:Evidence;forms:Evidence[];qcTests:Evidence[];balances:Evidence[];deviations:Evidence[];decisions:FinishedDecision[];pdfManifests:PdfManifest[];processSnapshot:Evidence;operations:Evidence[];charges:Evidence[];quantityEvents:Evidence[];genealogy:Evidence[];signatures:Evidence[]}
+/** Resolve the latest effective QA decision from links, not incidental database row order. */
+export function effectiveQaDecision(archive:BatchArchive|null):FinishedDecision|null{
+ if(!archive)return null
+ const superseded=new Set(archive.decisions.map(decision=>decision.supersedesDecisionId).filter((id):id is string=>Boolean(id)))
+ const effective=archive.decisions.filter(decision=>!superseded.has(decision.id))
+ return effective.length===1?effective[0]??null:null
+}
+/** A historic FINAL remains downloadable but cannot represent the current effective QA decision. */
+export function hasCurrentFinalArchive(archive:BatchArchive|null):boolean{
+ const current=effectiveQaDecision(archive)
+ if(!archive||!current)return false
+ return archive.pdfManifests.some(manifest=>manifest.archiveKind==='FINAL'&&manifest.recordDigest===archive.recordDigest&&manifest.releaseDecisionId===current.id)
+}
 export function canDecide(review:FinishedReview|null,decision:'RELEASED'|'REJECTED'){return !!review?.allowedActions.includes(decision==='RELEASED'?'RELEASE':'REJECT')}
+/** Presentation guard mirrors the already-enforced server independence check; it cannot authorize a decision. */
+export function canPresentDecision(review:FinishedReview|null,archive:BatchArchive|null,actorId:string|number|null|undefined){
+ if(!review?.allowedActions.length)return false
+ if(!['QA_RELEASED','REJECTED'].includes(review.status))return true
+ const predecessor=effectiveQaDecision(archive)
+ return !!predecessor&&actorId!=null&&String(predecessor.decisionBy)!==String(actorId)
+}
 export function signingTarget(review:FinishedReview,decision:'RELEASED'|'REJECTED'){return {objectType:'QA_RELEASE_DECISION',objectId:`${review.mainBatchId}:${review.versionNo}`,recordVersion:review.versionNo,meaning:decision==='RELEASED'?'RELEASE':'REJECT'}}
 export function releaseCommand(review:FinishedReview,decision:'RELEASED'|'REJECTED',lot:string,reason:string,reauthToken:string,predecessor:string|null){if(!canDecide(review,decision))throw Error('该质量决定当前不可执行，请刷新批审证据');if(!review.finishedLots.includes(lot))throw Error('请选择当前生产批的成品批次');if(!reason.trim()||reason.length>1000)throw Error('请填写操作原因（最多1000字）');return {versionNo:review.versionNo,reason:reason.trim(),signature:{reauthToken},mainBatchId:review.mainBatchId,finishedLotId:lot,decision,releaseBasis:'FULL_INSPECTION',reviewDigest:review.reviewDigest,...(predecessor?{supersedesDecisionId:predecessor}:{})}}
 export const gateLabels:Record<string,string>={BATCH_QA_STATE:'生产批 QA 状态',QUALITY_PLAN:'生产质量计划',EBR_REVIEW:'eBR 完整性与复核',PRODUCTION_QC:'IPC / QC 与质量调查',MATERIAL_BALANCE:'物料平衡',FINISHED_INVENTORY:'成品待放行库存',FINISHED_RECEIPT:'成品仓库接收',FINISHED_INSPECTION_REPORT:'成品检验报告及QC审批',EBR:'eBR 完整性',PRODUCTION:'生产完成',QUALITY:'IPC / QC 与质量调查',BALANCE:'物料平衡',GENEALOGY:'物料追溯',SIGNATURE:'电子签名完整性',FINISHED_LOT:'成品库存'}

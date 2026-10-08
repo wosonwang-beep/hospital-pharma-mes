@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: Controlled Word Printing bounded delta
+  version: DCP-CONTROLLED-WORD-PRINTING-001
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+paths:
+  /printing/templates:
+    get:
+      summary: Organization-scoped metadata page; print:template:view
+      parameters:
+        - {name: page, in: query, schema: {type: integer, minimum: 0, default: 0}}
+        - {name: size, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 20}}
+        - {name: keyword, in: query, schema: {type: string, maxLength: 200}}
+        - {name: status, in: query, schema: {type: string, enum: [DRAFT, VALIDATED, PUBLISHED, INACTIVE]}}
+        - {name: businessType, in: query, schema: {type: string, enum: [INSPECTION_REPORT]}}
+      responses:
+        '200': {description: API envelope containing items/total/page/size, no binary or snapshot data}
+    post:
+      summary: Append DOCX draft version; print:template:manage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, templateCode, templateName, businessType, reason]
+              properties:
+                file: {type: string, format: binary, description: DOCX at most 5MB}
+                templateCode: {type: string, maxLength: 60}
+                templateName: {type: string, maxLength: 120}
+                businessType: {type: string, enum: [INSPECTION_REPORT]}
+                reason: {type: string, maxLength: 500}
+      responses:
+        '200': {description: API envelope with new draft template metadata}
+  /printing/designer/default:
+    get:
+      summary: Native MES visual designer safe initial blocks; print:template:view
+      parameters:
+        - {name: businessType, in: query, required: true, schema: {type: string, enum: [INSPECTION_REPORT]}}
+      responses:
+        '200': {description: API envelope containing default bounded block layout}
+  /printing/designer:
+    post:
+      summary: Append a versioned DOCX draft built from allowlisted native page blocks; print:template:manage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [templateCode, templateName, businessType, reason, design]
+              properties:
+                templateCode: {type: string, maxLength: 60, pattern: '^[A-Za-z0-9_-]+$'}
+                templateName: {type: string, maxLength: 120}
+                businessType: {type: string, enum: [INSPECTION_REPORT]}
+                reason: {type: string, maxLength: 1000}
+                design:
+                  type: object
+                  required: [blocks]
+                  properties:
+                    blocks:
+                      type: array
+                      minItems: 1
+                      maxItems: 80
+                      items:
+                        type: object
+                        required: [id, type]
+                        properties:
+                          id: {type: string, maxLength: 64}
+                          type: {type: string, enum: [TITLE, TEXT, FIELD, TABLE, WORD_TABLE, DIVIDER]}
+                          text: {type: string, maxLength: 600}
+                          fieldKey: {type: string, description: Approved non-repeating field key only}
+                          columns: {type: array, minItems: 1, maxItems: 8, items: {type: string}}
+                          fontSize: {type: integer, minimum: 8, maximum: 28}
+                          align: {type: string, enum: [LEFT, CENTER, RIGHT]}
+                          widths:
+                            type: array
+                            description: Word clipboard column widths as percentages summing to 100
+                            minItems: 1
+                            maxItems: 12
+                            items: {type: number, minimum: 1, maximum: 100}
+                          rows:
+                            type: array
+                            description: Inert, validated Word table geometry; no HTML or OOXML accepted from the browser
+                            minItems: 1
+                            maxItems: 30
+                            items:
+                              type: object
+                              properties:
+                                heightPt: {type: number, minimum: 10, maximum: 150}
+                                cells:
+                                  type: array
+                                  minItems: 1
+                                  maxItems: 12
+                                  items:
+                                    type: object
+                                    required: [text]
+                                    properties:
+                                      text: {type: string, maxLength: 600}
+                                      colspan: {type: integer, minimum: 1, maximum: 12}
+                                      rowspan: {type: integer, minimum: 1, maximum: 30}
+                                      background: {type: string, pattern: '^#[0-9A-Fa-f]{6}$'}
+                                      color: {type: string, pattern: '^#[0-9A-Fa-f]{6}$'}
+                                      borderColor: {type: string, pattern: '^#[0-9A-Fa-f]{6}$'}
+                                      borderPt: {type: number, minimum: 0.25, maximum: 4}
+                                      fieldKey: {type: string, description: Approved single-valued field key bound only within this cell}
+                                      spans: {type: array, maxItems: 80, items: {type: object, properties: {text: {type: string, maxLength: 600}, bold: {type: boolean}, italic: {type: boolean}, underline: {type: boolean}, color: {type: string}, fontSize: {type: integer}}}}
+      responses:
+        '200': {description: Metadata for a newly appended DRAFT DOCX template version; never overwrites published templates}
+        '403': {description: Insufficient template-management permission}
+        '400': {description: Invalid layout, forbidden field/expression, or missing mandatory report number/mode fields}
+  /printing/templates/{id}/design:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      summary: Recover native designer metadata from organization-scoped DOCX; print:template:view
+      responses:
+        '200': {description: Original template metadata and validated embedded native design JSON}
+        '400': {description: Uploaded legacy DOCX has no native designer metadata; it remains printable as DOCX}
+  /printing/templates/{id}/validate:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      summary: Strict whitelist validation and actual example PDF; print:template:manage
+      requestBody: {$ref: '#/components/requestBodies/VersionCommand'}
+      responses:
+        '200': {description: VALIDATED metadata only after true conversion}
+        '422': {description: Invalid DOCX or unavailable/failed converter; no preview archived}
+  /printing/templates/{id}/publish:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      summary: Publish a validated version; print:template:publish
+      requestBody: {$ref: '#/components/requestBodies/VersionCommand'}
+      responses:
+        '200': {description: Immutable published metadata}
+  /printing/templates/{id}/deactivate:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      summary: Disable a published version; print:template:publish
+      requestBody: {$ref: '#/components/requestBodies/VersionCommand'}
+      responses:
+        '200': {description: Inactive metadata; retained archive remains readable}
+  /printing/templates/{id}/bind:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      summary: Enable/disable published compatible business binding; print:template:publish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [businessType, enabled, reason]
+              properties:
+                businessType: {type: string, enum: [INSPECTION_REPORT]}
+                enabled: {type: boolean}
+                reason: {type: string, maxLength: 500}
+      responses:
+        '200': {description: Scoped binding metadata}
+  /printing/artifacts:
+    get:
+      summary: Archived versions for authorized report; print:document:generate plus qms:report:view
+      parameters:
+        - {name: businessType, in: query, required: true, schema: {type: string, enum: [INSPECTION_REPORT]}}
+        - {name: businessId, in: query, required: true, schema: {type: string}}
+      responses:
+        '200': {description: API envelope with archive metadata only}
+    post:
+      summary: Generate complete backend report or reuse formal archive; print:document:generate plus qms:report:view
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [businessType, businessId, templateVersionId, formal]
+              properties:
+                businessType: {type: string, enum: [INSPECTION_REPORT]}
+                businessId: {type: string}
+                templateVersionId: {type: string}
+                formal: {type: boolean, description: Formal requires existing approval and verified signature}
+      responses:
+        '200': {description: Metadata with business/template versions, snapshot/PDF hashes; no frontend report fields accepted}
+        '403': {description: Permission or organization rejection}
+        '422': {description: Missing approval, inactive/unbound template or failed conversion; no artifact}
+  /printing/artifacts/{id}/pdf:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      summary: Same immutable PDF for preview/download with fresh report authorization
+      parameters:
+        - {name: download, in: query, schema: {type: boolean, default: false}}
+      responses:
+        '200': {description: Stored hash-verified PDF bytes, no-store, inline/attachment, content: {application/pdf: {schema: {type: string, format: binary}}}}
+  /printing/editor/sessions:
+    post:
+      summary: Open actor-bound online Word session; view/manage permissions, editor must be configured
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [templateVersionId], properties: {templateVersionId: {type: string}}}
+      responses:
+        '200': {description: sessionId/documentServerUrl/JWT-signed DocEditor configuration; no secret exposed}
+  /printing/editor/sessions/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      summary: Read own session saved draft version; print:template:manage
+      responses:
+        '200': {description: savedTemplateVersionId blank until authenticated successful callback}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
+  parameters:
+    Id: {name: id, in: path, required: true, schema: {type: string}}
+  requestBodies:
+    VersionCommand:
+      required: true
+      content:
+        application/json:
+          schema: {type: object, required: [versionNo, reason], properties: {versionNo: {type: integer, minimum: 0}, reason: {type: string, maxLength: 500}}}
