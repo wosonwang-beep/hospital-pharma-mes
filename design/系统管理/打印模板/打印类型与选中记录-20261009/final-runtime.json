@@ -1,0 +1,19 @@
+{
+  "health": 200,
+  "checks": [
+    {
+      "batch": "16",
+      "status": 200,
+      "sha256": "6a2ea88ea68321cf677a7b834354175dbb6f92ce6c5a774462a84689879bf7da"
+    },
+    {
+      "batch": "17",
+      "status": 200,
+      "sha256": "c89a7154f8df5d1b990d76aad37a6eba4c2ef2e2c002d110915437c9865deb59"
+    },
+    {
+      "listSchema": "PASS"
+    }
+  ],
+  "frontend": 200
+}

@@ -1,0 +1,86 @@
+{
+  "errors": [],
+  "httpFailures": [],
+  "checks": [
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "01-list-desktop",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "02-list-mobile",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "03-editor-initial",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "types": [
+        "生产管理 · eBR过程表单",
+        "质量管理 · 检验报告"
+      ]
+    },
+    {
+      "name": "03b-inserted-field-and-detail-table",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "04-word-import",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "word-row-repeat-written-back",
+      "before": "A4 竖向 · 19 个字段绑定\n缩放\n90%",
+      "after": "A4 竖向 · 20 个字段绑定\n缩放\n90%"
+    },
+    {
+      "name": "10-word-row-repeat",
+      "alerts": [],
+      "overflow": false
+    }
+  ],
+  "created": []
+}

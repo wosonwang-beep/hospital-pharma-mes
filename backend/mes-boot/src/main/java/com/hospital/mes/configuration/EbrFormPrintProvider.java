@@ -4,6 +4,8 @@ import com.hospital.mes.reporting.application.*;import com.hospital.mes.ebr.appl
 public class EbrFormPrintProvider implements PrintDataProvider {
  private final EbrRuntimeService runtime;private final MasterMutation mutations;private final MasterQueryService units;
  public EbrFormPrintProvider(EbrRuntimeService runtime,MasterMutation mutations,MasterQueryService units){this.runtime=runtime;this.mutations=mutations;this.units=units;}
+ public String moduleLabel(){return "生产管理";}
+ public String documentLabel(){return "eBR过程表单";}
  public String businessType(){return "EBR_PROCESS_FORM";}
  public Set<String> fields(){return Set.of("modeLabel","reportNo","formName","formStatus","definitionHash","signatureReference");}
  public Set<String> itemFields(){return Set.of("sequence","fieldCode","label","standard","actual","unit","source","occurrence");}

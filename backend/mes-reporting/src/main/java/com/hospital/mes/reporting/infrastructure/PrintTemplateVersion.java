@@ -10,6 +10,8 @@ public class PrintTemplateVersion extends ScopedEntity {
  private Long templateRevision;
  public Long getTemplateRevision(){return templateRevision;} public void setTemplateRevision(Long v){templateRevision=v;}
  private String businessType;
+ private String printType;
+ public String getPrintType(){return printType;} public void setPrintType(String value){printType=value;}
  public String getBusinessType(){return businessType;} public void setBusinessType(String v){businessType=v;}
  private String status;
  public String getStatus(){return status;} public void setStatus(String v){status=v;}

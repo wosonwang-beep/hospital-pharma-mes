@@ -1,0 +1,155 @@
+{
+  "errors": [],
+  "httpFailures": [],
+  "checks": [
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "01-list-desktop",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "02-list-mobile",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "03-editor-initial",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "modules": [
+        "生产管理",
+        "质量管理"
+      ]
+    },
+    {
+      "name": "03b-inserted-field-and-detail-table",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "04-word-import",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "05-filled-preview",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "06-saved-draft",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "07-real-pdf",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "08-reopened-bindings",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "09-reopened-filled-preview",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "10-reference-viewport",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "editorPairs": [
+        {
+          "label": "模板编码 *",
+          "sameLine": true
+        },
+        {
+          "label": "模板名称 *",
+          "sameLine": true
+        },
+        {
+          "label": "适用功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "业务功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "数据区域",
+          "sameLine": true
+        },
+        {
+          "label": "字段搜索",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "name": "11-editor-mobile",
+      "alerts": [],
+      "overflow": false
+    }
+  ],
+  "created": [
+    {
+      "id": "14",
+      "code": "TEST_CANVAS_1791543708478",
+      "revision": 1,
+      "businessType": "INSPECTION_REPORT"
+    }
+  ],
+  "testCode": "TEST_CANVAS_1791543708478"
+}

@@ -1,0 +1,22 @@
+{
+  "errors": [],
+  "httpFailures": [],
+  "checks": [
+    {
+      "name": "canvas-published"
+    },
+    {
+      "name": "business-applicable",
+      "testCode": "TEST_CANVAS_1791539160793"
+    },
+    {
+      "name": "11-published-bound-template",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "only-own-test-template-deactivated"
+    }
+  ],
+  "created": []
+}

@@ -345,6 +345,8 @@ public class SecurityConfiguration {
                 // Controlled printing: explicit default-deny allowlist; service also checks org/business/QA evidence.
                 .requestMatchers(HttpMethod.GET,
                     "/api/v1/printing/types",
+                    "/api/v1/printing/sources",
+                    "/api/v1/printing/templates/{id}",
                     "/api/v1/printing/fields",
                     "/api/v1/printing/templates",
                     "/api/v1/printing/templates/{id}/preview",
@@ -367,6 +369,8 @@ public class SecurityConfiguration {
                     "/api/v1/printing/applicable",
                     "/api/v1/printing/artifacts",
                     "/api/v1/printing/artifacts/{id}/pdf").hasAuthority("print:document:generate")
+                .requestMatchers(HttpMethod.GET, "/api/v1/printing/batches/{id}/pdf").hasAuthority("print:document:generate")
+                .requestMatchers(HttpMethod.POST, "/api/v1/printing/batches").hasAuthority("print:document:generate")
                 .requestMatchers(HttpMethod.POST,
                     "/api/v1/printing/artifacts").hasAuthority("print:document:generate")
                 // Department administration: scoped CRUD, hierarchy and user membership.

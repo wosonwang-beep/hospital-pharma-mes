@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: Approved template print type and selected-record printing supplement
+  version: DCP-PRINT-TYPE-BATCH-004
+  description: Current bounded overlay to controlled-printing.openapi.yaml. Prior artifact, signature and lifecycle contracts remain effective. Saved template printType controls output; callers never send outputMode or business facts.
+servers: [{url: /api/v1}]
+security: [{bearerAuth: []}]
+paths:
+  /printing/sources:
+    get:
+      summary: Real registered sources; print:template:view
+      responses:
+        '200': {description: API envelope containing value/module/label source entries}
+  /printing/fields:
+    get:
+      summary: Server-authoritative field dictionary and example for the source and template type
+      parameters:
+        - {name: businessType, in: query, required: true, schema: {type: string}}
+        - {name: printType, in: query, schema: {$ref: '#/components/schemas/PrintType'}}
+      responses:
+        '200': {description: Field catalogue with key/label/group/description/example/repeated/dataType/unitField; DOCUMENT detail fields or LIST record-prefixed header fields}
+        '400': {description: Unknown source or type}
+  /printing/templates:
+    get:
+      summary: Existing paginated template query, additionally filtering printType and returning it in every DTO
+      parameters:
+        - {name: printType, in: query, schema: {$ref: '#/components/schemas/PrintType'}}
+        - {name: businessType, in: query, schema: {type: string}}
+      responses:
+        '200': {description: Existing template page envelope; all template metadata includes printType}
+    post:
+      summary: Existing immutable version upload, with persisted type default DOCUMENT for older callers
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, templateCode, templateName, businessType, reason]
+              properties:
+                file: {type: string, format: binary, description: DOCX at most 5MB}
+                templateCode: {type: string, maxLength: 60}
+                templateName: {type: string, maxLength: 120}
+                businessType: {type: string, description: Registered source key}
+                printType: {type: string, enum: [DOCUMENT, LIST], default: DOCUMENT}
+                reason: {type: string, maxLength: 1000}
+      responses:
+        '200': {description: New draft template DTO including persisted printType}
+  /printing/templates/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      summary: Organization-scoped authoritative metadata for Canvas or Word reopening; print:template:view
+      responses:
+        '200': {description: Template DTO including printType; no binary design or snapshot}
+  /printing/batches:
+    post:
+      summary: Read saved template type, authorize and load each real record, freeze selected output atomically (25MB maximum combined PDF)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [businessType, recordIds, templateVersionId]
+              properties:
+                businessType: {type: string, description: Must match enabled published template binding}
+                recordIds:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  uniqueItems: true
+                  items: {type: string, pattern: '^[1-9][0-9]*$'}
+                  description: Selection order retained; server retrieves facts and source versions
+                templateVersionId: {type: string, pattern: '^[1-9][0-9]*$'}
+                formal: {type: boolean, default: false, description: DOCUMENT uses existing per-record approval and signature gates; LIST and WMS receipts reject true}
+      responses:
+        '200': {description: API envelope with immutable batch metadata, content: {application/json: {schema: {type: object, properties: {data: {$ref: '#/components/schemas/PrintBatch'}}}}}}
+        '400': {description: Invalid IDs, unknown JSON fields or incompatible formal/type}
+        '401': {description: Authentication required}
+        '403': {description: Printing or any source read permission missing}
+        '409': {description: Template/source state or frozen integrity rejection; no partial batch committed}
+  /printing/batches/{id}/pdf:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      summary: Reauthorize all source records and verify hashes; read archived PDF without recomputing
+      parameters: [{name: download, in: query, schema: {type: boolean, default: false}}]
+      responses:
+        '200': {description: Frozen PDF bytes with no-store and inline/attachment disposition, content: {application/pdf: {schema: {type: string, format: binary}}}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
+  parameters:
+    Id: {name: id, in: path, required: true, schema: {type: string}}
+  schemas:
+    PrintType: {type: string, enum: [DOCUMENT, LIST]}
+    PrintBatch:
+      type: object
+      required: [id, printType, recordCount, formal, templateVersionId, snapshotHash, pdfHash]
+      properties:
+        id: {type: string}
+        printType: {$ref: '#/components/schemas/PrintType'}
+        businessType: {type: string}
+        recordCount: {type: integer}
+        formal: {type: boolean}
+        templateVersionId: {type: string}
+        snapshotHash: {type: string}
+        pdfHash: {type: string}

@@ -1,0 +1,303 @@
+{
+  "errors": [],
+  "httpFailures": [],
+  "checks": [
+    {
+      "pairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true
+        },
+        {
+          "label": "打印类型",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "pairs": [
+        {
+          "label": "模板编码 *",
+          "sameLine": true
+        },
+        {
+          "label": "模板名称 *",
+          "sameLine": true
+        },
+        {
+          "label": "适用功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "打印类型 *",
+          "sameLine": true
+        },
+        {
+          "label": "输出规则",
+          "sameLine": true
+        },
+        {
+          "label": "业务功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "数据区域",
+          "sameLine": true
+        },
+        {
+          "label": "字段搜索",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "pairs": [
+        {
+          "label": "模板编码 *",
+          "sameLine": true
+        },
+        {
+          "label": "模板名称 *",
+          "sameLine": true
+        },
+        {
+          "label": "适用功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "打印类型 *",
+          "sameLine": true
+        },
+        {
+          "label": "输出规则",
+          "sameLine": true
+        },
+        {
+          "label": "业务功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "数据区域",
+          "sameLine": true
+        },
+        {
+          "label": "字段搜索",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "pairs": [
+        {
+          "label": "模板编码 *",
+          "sameLine": true
+        },
+        {
+          "label": "模板名称 *",
+          "sameLine": true
+        },
+        {
+          "label": "适用功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "打印类型 *",
+          "sameLine": true
+        },
+        {
+          "label": "输出规则",
+          "sameLine": true
+        },
+        {
+          "label": "业务功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "数据区域",
+          "sameLine": true
+        },
+        {
+          "label": "字段搜索",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "pairs": [
+        {
+          "label": "模板编码 *",
+          "sameLine": true
+        },
+        {
+          "label": "模板名称 *",
+          "sameLine": true
+        },
+        {
+          "label": "适用功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "打印类型 *",
+          "sameLine": true
+        },
+        {
+          "label": "输出规则",
+          "sameLine": true
+        },
+        {
+          "label": "业务功能",
+          "sameLine": true
+        },
+        {
+          "label": "单据类型",
+          "sameLine": true
+        },
+        {
+          "label": "数据区域",
+          "sameLine": true
+        },
+        {
+          "label": "字段搜索",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "pairs": [
+        {
+          "label": "单号 / 关键字",
+          "sameLine": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true
+        },
+        {
+          "label": "供应商",
+          "sameLine": true
+        },
+        {
+          "label": "仓库",
+          "sameLine": true
+        }
+      ]
+    },
+    {
+      "outputTypes": [
+        "DOCUMENT",
+        "LIST"
+      ],
+      "sameRecordIds": true
+    }
+  ],
+  "created": [
+    {
+      "id": "43",
+      "orgId": "1",
+      "createdBy": "11556",
+      "versionNo": 0,
+      "createdAt": "2026-10-09T12:33:52.533",
+      "templateCode": "TEST_BATCH_1791549228931_DOCUMENT",
+      "templateName": "测试专用收货单据",
+      "templateRevision": 1,
+      "businessType": "WMS_RECEIPT",
+      "printType": "DOCUMENT",
+      "status": "DRAFT",
+      "contentHash": "0b20ca51324ae168b63f9179ef7f08dccd99a4b193fab098f60267dcca69bb07",
+      "previewHash": null,
+      "publishedAt": "null"
+    },
+    {
+      "id": "44",
+      "orgId": "1",
+      "createdBy": "11556",
+      "versionNo": 0,
+      "createdAt": "2026-10-09T12:34:13.831",
+      "templateCode": "TEST_BATCH_1791549228931_LIST",
+      "templateName": "测试专用收货列表",
+      "templateRevision": 1,
+      "businessType": "WMS_RECEIPT",
+      "printType": "LIST",
+      "status": "DRAFT",
+      "contentHash": "1414c2a5555db18c2e48cd9e8d457c5862623ae147b68366678e96c302f8c884",
+      "previewHash": null,
+      "publishedAt": "null"
+    }
+  ],
+  "batches": [
+    {
+      "id": "16",
+      "businessType": "WMS_RECEIPT",
+      "templateVersionId": "43",
+      "printType": "DOCUMENT",
+      "recordCount": 2,
+      "formal": false,
+      "snapshotHash": "5fc60a7b2f263ddae8aabc3a64e1be1d3abbbafd60dc9a80fa414216dc939d32",
+      "pdfHash": "6a2ea88ea68321cf677a7b834354175dbb6f92ce6c5a774462a84689879bf7da",
+      "request": {
+        "businessType": "WMS_RECEIPT",
+        "recordIds": [
+          "25",
+          "22"
+        ],
+        "templateVersionId": "43",
+        "formal": false
+      }
+    },
+    {
+      "id": "17",
+      "businessType": "WMS_RECEIPT",
+      "templateVersionId": "44",
+      "printType": "LIST",
+      "recordCount": 2,
+      "formal": false,
+      "snapshotHash": "4dc3eb81e495a0ad974379a7c278f1e41c51a958e7afad37e7fe9388398985f4",
+      "pdfHash": "c89a7154f8df5d1b990d76aad37a6eba4c2ef2e2c002d110915437c9865deb59",
+      "request": {
+        "businessType": "WMS_RECEIPT",
+        "recordIds": [
+          "25",
+          "22"
+        ],
+        "templateVersionId": "44",
+        "formal": false
+      }
+    }
+  ]
+}

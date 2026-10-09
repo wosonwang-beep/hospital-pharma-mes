@@ -1,5 +1,17 @@
 # MES Task Status Index
 
+## Canvas 打印模板编辑器及模板打印类型增量 — 2026-10-09
+
+**ACCEPTED — HUMAN CONFIRMED。** 用户在本会话明确回复“验收”，确认本打印增量交付；记录时间 2026-10-09 23:07（本机时间）。 批量PDF合并25MB上限的末轮14单元及2真实DEV回滚集成PASS，当前源JAR启动和历史PDF逐字节复核通过。用户批准“对，按照这个设计进行开发”：模板版本 `printType=DOCUMENT/LIST` 决定完整单据/选中列表，`businessType` 绑定业务数据源；调用页面仅传模板、来源及选中 ID，不传 outputMode 或事实正文。Canvas 字段、Word 导入、草稿/重开、预览、发布保留，列表 T1 / 编辑 T2 / 收货详情 T3 继承 UI V2；全部查询标签与控件保持同行。WMS 收货真实 provider、收货和检验报告查询勾选打印、收货详情单条入口及不可变 batch 归档已接入。同两条实际收货记录通过 UI 输出两页单据或一页两行列表，中文、数量、单位、顺序、分页实测通过。隔离 PDF 转换进程的 Windows windir 大小写遗漏与非法 JSON 500 已修复。当前来源为收货单/检验报告/eBR 过程表单，不宣称所有业务来源或全部系统管理已完成。
+
+V047 模板类型/批量输出与 V049 不可变保护已正常执行；共享任务的 V048/V050 内容保留，执行后源迁移/checksum 无改动；最终 Flyway 50 validate PASS，未 repair/清库。Java 21 源构建与实际 8080 health UP、5173 HTTP 200。前端打印 4 文件 15 测试、typecheck/build PASS；打印单元 30（原 28 + 新循环/环境 2）及 provider 签名/批准回归 5 PASS；末轮 NativePrintDesignerIT 2 + PrintTypeBatchIT 2 真实 DEV 回滚 PASS，中文内容断言与跨组织/权限/不可变触发器/源变更冻结检查通过。真实 5173/8080 页面与匹配尺寸截图、未知参数/重复 ID 400、未认证 401、停用后历史读取、QC 实际打印通过；测试模板仅停用并解除自己的绑定，不删除证据或改既有业务记录。
+
+范围内自审 CRITICAL/HIGH 0，跨文档一致性 PASS；剩余 LOW 为 Word 插件大包及复杂 Word 文件排版逐件核验；MEDIUM 为同步串行批量转换的100条重载耗时未做压力验收。用户已明确授权本次提交、推送及 main 合并；提交前全量 CI 检查出现旧契约失败，禁止绕过，远端 main 发布待该阻断解决。批准与完整证据：[DCP-PRINT-TYPE-BATCH-004](docs/development/DCP-PRINT-TYPE-BATCH-004-APPROVED.md)、[验证及一致性记录](docs/review/PRINT_TYPE_BATCH_20261009.md)、[当前 API 补充](docs/api/print-type-batch.openapi.yaml)。早期 outputMode 讨论已被该模板属性设计取代，历史参数草案与 [Canvas 编辑器早期验证](docs/review/CANVAS_PRINT_EDITOR_20261009.md) 仅保留阶段证据，不能当作当前实现状态。
+
+人工验收记录：本次仅更新 MES_TASKS.md 的上述任务状态，白名单为本文件；其他系统管理状态保留。已实际读取 AGENTS.md、docs/development/MES_DEV_RULES.md、MES_TASKS.md、docs/PROJECT_BASELINE.md 权威章节、DCP-PRINT-TYPE-BATCH-004-APPROVED.md 与 PRINT_TYPE_BATCH_20261009.md；依据仍为 FINAL BASELINE v1.0.23、批准的打印补充及 UI V2/T1–T6。设计差异：本次无实现/设计修改或新增差异。迁移：没有新迁移/数据库写入，原 V047/V049 证据保留。验收证据：引用上次已记录的定向测试、真实页面/PDF、50 个迁移校验和一致性复核；本次状态记录未重新运行构建/测试，不新增运行 PASS。结论：仅本打印模板与单据/列表增量由明确人工确认转 ACCEPTED，剩余 LOW/MEDIUM 技术债保留，原用户数据与历史证据保留；该验收状态记录步骤没有提交/推送操作；后续提交授权与门禁结果见下方提交准备记录。
+
+提交准备记录：本次白名单为打印后端/适配器/测试、Canvas 与选中打印前端及依赖、V047/V049、打印批准/API/证据文档和本任务索引；共享 SecurityConfiguration 只纳入打印 allowlist 代码块。其他生产/eBR/系统管理修改、V044–046/V048/V050、本机配置、缓存与日志保留未纳入。仓库/Compose/CI policy 正反例 PASS；前端构建 PASS，生产依赖审计0漏洞。全量前端137/145通过（8失败），全量后端因旧 Mes002MigrationContractTest 仍限定001–031失败；当前原main已至043。打印相关定向与此前真实回滚/页面证据保留，不将全量失败改写为PASS。需要旧测试契约受控复核后才能完成远端main推送。
+
 ## V040 系统管理部门实施 — 2026-10-09
 
 **IN PROGRESS — NOT HUMAN ACCEPTED.** 原工作区 `main` 与同一 MariaDB DEV：V040 部门/用户归属表迁移成功、40 migrations validate；IAM 授权和数据库菜单已接入。后端部门树/组织用户下拉/CRUD/归属关系 + Vue T1/T2/T3 完成局部施工并部署至原项目 8080、前端 5173。 `SystemDepartmentIT` 3/3 真实 DEV 数据库回滚集成通过；前端 typecheck/build PASS、Chromium 1440×900 1/1 fixture 视觉测试 PASS，全部查询/编辑字段水平同行，操作列在可视区域。后端 HTTP 200 health、未授权部门 API 401。仍需真实管理员会话 E2E 和原稿差异闭环、权限多账号回归。仅本地修改未提交/推送。证据：`design/系统管理/部门管理/部门管理-实施视觉与回归记录.md`。后续用户、菜单、角色、角色权限按相同工序逐页设计与终验。

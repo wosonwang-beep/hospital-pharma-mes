@@ -50,6 +50,15 @@ class PrintLifecycleTest {
  @Test void permissionDenialPreventsAnyWrite(){rights=Set.of();assertThrows(PermissionException.class,()->service.upload("A","报告","INSPECTION_REPORT",InspectionSampleTemplate.create(),"创建"));verifyNoInteractions(templates,bindings,artifacts,converter);}
  @Test void publishedVersionCannotBeValidatedOrOverwritten(){template("PUBLISHED");assertThrows(ComplianceException.class,()->service.validate("10",0,"验证"));verifyNoInteractions(converter);verify(templates,never()).update(any(),any());}
  @Test void publishRequiresRealPreviewState(){template("DRAFT");assertThrows(ComplianceException.class,()->service.publish("10",0,"发布"));verify(templates,never()).update(any(),any());}
+ @Test void listTemplateWithoutSelectedRecordLoopCannotValidate()throws Exception{
+  when(provider.fieldDefinitions()).thenReturn(InspectionSampleTemplate.dictionary());
+  var row=template("DRAFT");row.setPrintType("LIST");
+  var schema=PrintSchema.of(provider,"LIST");
+  var design=new ObjectMapper().readTree("{\"blocks\":[{\"id\":\"number\",\"type\":\"FIELD\",\"fieldKey\":\"reportNo\"},{\"id\":\"mode\",\"type\":\"FIELD\",\"fieldKey\":\"modeLabel\"}]}");
+  row.setDocx(new NativePrintDesigner(new ObjectMapper()).generate(design,schema.definitions()));
+  assertTrue(assertThrows(IllegalArgumentException.class,()->service.validate("10",0,"验证列表")).getMessage().contains("记录循环表"));
+  verifyNoInteractions(converter);verify(templates,never()).update(any(),any());
+ }
  @Test void optimisticVersionConflictStopsPublish(){template("VALIDATED");assertThrows(ResourceConflictException.class,()->service.publish("10",3,"发布"));}
  @Test void incompatibleBusinessBindingDenied(){template("PUBLISHED");assertThrows(ComplianceException.class,()->service.bind("10","OTHER",true,"绑定"));verifyNoInteractions(bindings);}
  @Test void conversionFailureLeavesNoArtifact(){template("PUBLISHED");when(bindings.selectCount(any())).thenReturn(1L);when(provider.load("22",false)).thenReturn(new PrintDataProvider.PrintSnapshot("4","R",InspectionSampleTemplate.example(2)));when(converter.convert(any())).thenThrow(new ComplianceException("PRINT_CONVERSION_FAILED","timeout"));assertThrows(ComplianceException.class,()->service.generate("INSPECTION_REPORT","22","10",false));verify(artifacts,never()).insert(any(PrintArtifact.class));}

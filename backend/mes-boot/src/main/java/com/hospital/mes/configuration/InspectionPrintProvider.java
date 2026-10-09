@@ -19,6 +19,8 @@ import static com.hospital.mes.qms.infrastructure.IncomingStore.*;
 public class InspectionPrintProvider implements PrintDataProvider {
  private final IncomingQualityService quality;private final IncomingStore db;private final MaterialLotMapper lots;private final SysUserMapper users;private final MasterMutation mutations;private final SignatureTransactionService signatures;private final ObjectMapper json;private final com.hospital.mes.masterdata.infrastructure.UnitMapper units;
  public InspectionPrintProvider(IncomingQualityService quality,IncomingStore db,MaterialLotMapper lots,SysUserMapper users,MasterMutation mutations,SignatureTransactionService signatures,ObjectMapper json,com.hospital.mes.masterdata.infrastructure.UnitMapper units){this.quality=quality;this.db=db;this.lots=lots;this.users=users;this.mutations=mutations;this.signatures=signatures;this.json=json;this.units=units;}
+ public String moduleLabel(){return "质量管理";}
+ public String documentLabel(){return "检验报告";}
  public String businessType(){return "INSPECTION_REPORT";}
  public List<PrintField> fieldDefinitions(){return InspectionSampleTemplate.dictionary();}
  public Set<String> fields(){return InspectionSampleTemplate.fields();}

@@ -15,5 +15,5 @@
 <!-- Historical fallback kept optional for legacy complex DOCX while the new renderer is validated. -->
 <dependency><groupId>org.jodconverter</groupId><artifactId>jodconverter-local</artifactId><version>4.4.11</version></dependency>
 <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
-<dependency><groupId>org.apache.pdfbox</groupId><artifactId>pdfbox</artifactId><version>3.0.8</version><scope>test</scope></dependency></dependencies></project>
+<dependency><groupId>org.apache.pdfbox</groupId><artifactId>pdfbox</artifactId><version>3.0.8</version></dependency></dependencies></project>
 

@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "path": "/printing/sources",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/printing/fields?businessType=WMS_RECEIPT&printType=INVALID",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "path": "/printing/batches",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "path": "/printing/batches",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "archive": "7",
+      "status": 200
+    },
+    {
+      "archive": "8",
+      "status": 200
+    },
+    {
+      "qcTemplate": "42"
+    },
+    {
+      "qcRealPrint": "PASS",
+      "records": 1
+    },
+    {
+      "receiptDetailEntry": "PASS"
+    }
+  ],
+  "errors": []
+}

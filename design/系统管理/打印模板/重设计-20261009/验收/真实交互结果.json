@@ -1,0 +1,109 @@
+{
+  "errors": [],
+  "httpFailures": [],
+  "checks": [
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "01-list-desktop",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "queryPairs": [
+        {
+          "label": "名称或编码",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "业务数据源",
+          "sameLine": true,
+          "sideBySide": true
+        },
+        {
+          "label": "状态",
+          "sameLine": true,
+          "sideBySide": true
+        }
+      ]
+    },
+    {
+      "name": "02-list-mobile",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "03-editor-initial",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "types": [
+        "生产管理 · eBR过程表单",
+        "质量管理 · 检验报告"
+      ]
+    },
+    {
+      "name": "03b-inserted-field-and-detail-table",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "04-word-import",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "05-filled-preview",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "06-saved-draft",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "07-real-pdf",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "08-reopened-bindings",
+      "alerts": [],
+      "overflow": false
+    },
+    {
+      "name": "09-reopened-filled-preview",
+      "alerts": [],
+      "overflow": false
+    }
+  ],
+  "created": [
+    {
+      "id": "10",
+      "code": "TEST_CANVAS_1791539160793",
+      "revision": 1,
+      "businessType": "INSPECTION_REPORT"
+    }
+  ],
+  "testCode": "TEST_CANVAS_1791539160793"
+}

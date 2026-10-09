@@ -35,7 +35,7 @@ public class Docx4jFopPdfConverter implements PdfConverter {
    if(boot)command.add("-Dloader.main="+Docx4jPdfWorker.class.getName());command.addAll(List.of("-cp",cp,boot?"org.springframework.boot.loader.launch.PropertiesLauncher":Docx4jPdfWorker.class.getName(),input.toString(),output.toString(),job.toString()));
    var builder=new ProcessBuilder(command).directory(job.toFile());
    // No inherited DB passwords, JWT, app credentials or JVM injection options.
-   var inherited=new HashMap<>(builder.environment());builder.environment().clear();for(String name:List.of("SystemRoot","WINDIR","ComSpec"))if(inherited.containsKey(name))builder.environment().put(name,inherited.get(name));builder.environment().put("TEMP",job.toString());builder.environment().put("TMP",job.toString());
+   var inherited=new HashMap<>(builder.environment());builder.environment().clear();builder.environment().putAll(systemEnvironment(inherited));builder.environment().put("TEMP",job.toString());builder.environment().put("TMP",job.toString());
    builder.redirectOutput(ProcessBuilder.Redirect.DISCARD).redirectError(ProcessBuilder.Redirect.DISCARD);
    worker=builder.start();
    if(!worker.waitFor(deadline,TimeUnit.MILLISECONDS))throw new ComplianceException("PRINT_CONVERSION_TIMEOUT","Word conversion exceeded its hard deadline; nothing archived");
@@ -56,6 +56,13 @@ public class Docx4jFopPdfConverter implements PdfConverter {
     if(job!=null)cleanup(job);cleaned=true;
    }finally{if(cleaned)GATE.release();if(interrupted)Thread.currentThread().interrupt();}
   }
+ }
+ static Map<String,String> systemEnvironment(Map<String,String> inherited){
+  var result=new HashMap<String,String>();
+  // Windows environment names are case insensitive; HashMap is not. A workstation
+  // commonly exports "windir", which the isolated font scanner needs to locate CJK fonts.
+  for(String name:List.of("SystemRoot","WINDIR","ComSpec"))inherited.entrySet().stream().filter(e->e.getKey().equalsIgnoreCase(name)).findFirst().ifPresent(e->result.put(name,e.getValue()));
+  return result;
  }
  private void cleanup(Path job){
   if(!job.toAbsolutePath().normalize().startsWith(temporaryRoot)||!job.getFileName().toString().startsWith("mes-docx4j-"))throw new IllegalStateException("Unsafe conversion cleanup target");
