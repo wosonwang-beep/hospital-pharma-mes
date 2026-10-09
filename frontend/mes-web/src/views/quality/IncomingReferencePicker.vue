@@ -6,7 +6,7 @@ const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;dis
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
-const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.materialId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.processPackageId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
+const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.materialId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.processPackageId,props.context.prescriptionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
 async function list(url:string,params:Record<string,unknown>={}){const result=await api<Page<IncomingRow>>({url,params:{page:page.value,size:50,keyword:search.value||undefined,...params}});hasMore.value=(page.value+1)*50<result.total;return result.items}
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
@@ -22,8 +22,15 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
   else if(f==='productionOrderId')rows=await list('/production-orders')
   else if(f==='processPackageId'){
-   const packages=await list('/process-packages',{productId:c.productId});rows=packages.filter(root=>((root.currentDefinition??{}) as IncomingRow).status==='EFFECTIVE').map(root=>({...root,displayName:String(root.packageCode)}))
-  }else if(f==='ebrTemplateVersionId')rows=(await list('/ebr/templates',{processPackageId:c.processPackageId,status:'EFFECTIVE'})).map(t=>({...t,displayName:`${t.templateName||'未命名（历史模板）'} · ${t.templateCode} · V${t.version}`}))
+   const packages=await list('/process-packages');rows=packages.filter(root=>((root.currentDefinition??{}) as IncomingRow).status==='EFFECTIVE').map(root=>({...root,displayName:String(root.packageCode)}))
+  }else if(f==='prescriptionId'){
+   rows=(await list('/production-prescriptions',{productId:c.productId,status:'ACTIVE'})).map(root=>({...root,displayName:String(root.prescriptionName??root.prescriptionCode)+' · '+String(root.processCode??'')}))
+  }else if(f==='ebrTemplateVersionId'){
+   let processPackageId=c.processPackageId
+   if(!processPackageId&&c.prescriptionId)processPackageId=(await api<IncomingRow>({url:'/production-prescriptions/'+String(c.prescriptionId)})).processPackageId
+   if(!processPackageId)rows=[]
+   else rows=(await list('/ebr/templates',{processPackageId,status:'EFFECTIVE'})).map(t=>({...t,displayName:String(t.templateName||'未命名（历史模板）')+' · '+String(t.templateCode)+' · V'+String(t.version)}))
+  }
   else if(f==='operationExecutionId'){rows=(c.operations??[]) as IncomingRow[];if(!rows.length&&c.mainBatchId){const units=await api<IncomingRow[]>({url:`/main-batches/${c.mainBatchId}/execution-units`});rows=(await Promise.all(units.map(u=>api<IncomingRow[]>({url:`/execution-units/${u.id}/operations`})))).flat()}}
   else if(f==='weighingRecordId')rows=((c.weighings??[]) as IncomingRow[]).filter(w=>w.status==='VERIFIED')
   else if(f==='formulaItemId')rows=((c.formulaItems??[]) as IncomingRow[]).map(i=>({...i,id:i.formulaItemId,displayName:`${i.materialName??i.materialId} · ${i.requiredQty??i.quantity??i.targetQty??''}`}))

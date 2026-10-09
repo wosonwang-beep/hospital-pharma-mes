@@ -1,0 +1,41 @@
+{
+  "notice": "设计原型的字段目录与业务数据均为示例；正式功能必须从后端已授权的业务数据源获取。",
+  "documents": [
+    {
+      "id": "wms.receipt", "module": "WMS管理", "name": "收货单",
+      "datasets": [
+        {"id":"header","name":"单据基本信息","many":false,"fields":[{"id":"number","label":"收货单号","type":"文本"},{"id":"date","label":"收货日期","type":"日期"},{"id":"remark","label":"备注","type":"文本"}]},
+        {"id":"supplier","name":"关联供应商","many":false,"fields":[{"id":"name","label":"供应商名称","type":"文本"},{"id":"code","label":"供应商编码","type":"文本"},{"id":"contact","label":"联系人","type":"文本"}]},
+        {"id":"items","name":"收货明细","many":true,"fields":[{"id":"code","label":"物料编码","type":"文本"},{"id":"name","label":"物料名称","type":"文本"},{"id":"spec","label":"规格","type":"文本"},{"id":"lot","label":"供应商批号","type":"文本"},{"id":"quantity","label":"收货数量","type":"数值"},{"id":"unit","label":"单位","type":"文本"}]}
+      ],
+      "samples": [
+        {"id":"RCV-示例-001","data":{"header":{"number":"RCV-示例-001","date":"2026-10-09","remark":"核对外包装及随货资料"},"supplier":{"name":"示例药用原料供应商","code":"SUP-示例-01","contact":"示例联系人"},"items":[{"code":"RM-001","name":"氯化钠","spec":"药用级","lot":"LOT-1001","quantity":1000,"unit":"g"},{"code":"RM-002","name":"苯扎氯铵","spec":"药用级","lot":"LOT-1002","quantity":100,"unit":"g"},{"code":"RM-003","name":"甘油","spec":"药用级","lot":"LOT-1003","quantity":500,"unit":"ml"}]}},
+        {"id":"RCV-示例-002","data":{"header":{"number":"RCV-示例-002","date":"2026-10-08","remark":"单行明细示例"},"supplier":{"name":"另一示例供应商","code":"SUP-示例-02","contact":"示例联系人二"},"items":[{"code":"RM-010","name":"纯化水","spec":"制剂用","lot":"LOT-2001","quantity":20,"unit":"L"}]}}
+      ]
+    },
+    {
+      "id":"wms.request","module":"WMS管理","name":"领料申请单",
+      "datasets":[
+        {"id":"header","name":"申请信息","many":false,"fields":[{"id":"number","label":"申请单号","type":"文本"},{"id":"batch","label":"生产批号","type":"文本"},{"id":"date","label":"申请日期","type":"日期"}]},
+        {"id":"items","name":"申请明细","many":true,"fields":[{"id":"name","label":"物料名称","type":"文本"},{"id":"requested","label":"申请数量","type":"数值"},{"id":"unit","label":"单位","type":"文本"}]}
+      ],
+      "samples":[{"id":"REQ-示例-001","data":{"header":{"number":"REQ-示例-001","batch":"BATCH-示例-001","date":"2026-10-09"},"items":[{"name":"氯化钠","requested":900,"unit":"g"},{"name":"甘油","requested":200,"unit":"ml"}]}}]
+    },
+    {
+      "id":"quality.report","module":"质量管理","name":"检验报告",
+      "datasets":[
+        {"id":"header","name":"报告信息","many":false,"fields":[{"id":"number","label":"报告编号","type":"文本"},{"id":"sample","label":"样品名称","type":"文本"},{"id":"lot","label":"受检批号","type":"文本"},{"id":"conclusion","label":"检验结论","type":"文本"}]},
+        {"id":"items","name":"检验项目","many":true,"fields":[{"id":"name","label":"检验项目","type":"文本"},{"id":"standard","label":"质量标准","type":"文本"},{"id":"result","label":"检验结果","type":"文本"},{"id":"verdict","label":"项目判定","type":"文本"}]}
+      ],
+      "samples":[{"id":"QC-示例-001","data":{"header":{"number":"QC-示例-001","sample":"氯化钠","lot":"LOT-1001","conclusion":"示例：符合规定"},"items":[{"name":"性状","standard":"白色结晶","result":"白色结晶","verdict":"符合"},{"name":"鉴别","standard":"应呈正反应","result":"呈正反应","verdict":"符合"}]}}]
+    },
+    {
+      "id":"finished.shipment","module":"成品管理","name":"发货单",
+      "datasets":[
+        {"id":"header","name":"发货信息","many":false,"fields":[{"id":"number","label":"发货单号","type":"文本"},{"id":"destination","label":"接收科室","type":"文本"},{"id":"date","label":"发货日期","type":"日期"}]},
+        {"id":"items","name":"成品明细","many":true,"fields":[{"id":"name","label":"制剂名称","type":"文本"},{"id":"batch","label":"成品批号","type":"文本"},{"id":"quantity","label":"发货数量","type":"数值"},{"id":"unit","label":"单位","type":"文本"}]}
+      ],
+      "samples":[{"id":"SHIP-示例-001","data":{"header":{"number":"SHIP-示例-001","destination":"示例门诊科室","date":"2026-10-09"},"items":[{"name":"甘油洗剂","batch":"BATCH-示例-001","quantity":24,"unit":"瓶"}]}}]
+    }
+  ]
+}

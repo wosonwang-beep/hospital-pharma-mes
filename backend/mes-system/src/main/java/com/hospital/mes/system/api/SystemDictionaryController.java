@@ -93,10 +93,10 @@ public class SystemDictionaryController {
     }
     @GetMapping("/dictionaries")
     @PreAuthorize("hasAuthority('iam:dict:view')")
-    public ApiResponse<PageResult<DictType>> list(@RequestParam(defaultValue="0") int page,@RequestParam(defaultValue="20") int size,
-        @RequestParam(required=false) String code,@RequestParam(required=false) String name,
-        @RequestParam(required=false) String kind,@RequestParam(required=false) String status,
-        @RequestParam(required=false) String createdFrom,@RequestParam(required=false) String createdTo){
+    public ApiResponse<PageResult<DictType>> list(@RequestParam(name="page",defaultValue="0") int page,@RequestParam(name="size",defaultValue="20") int size,
+        @RequestParam(name="code",required=false) String code,@RequestParam(name="name",required=false) String name,
+        @RequestParam(name="kind",required=false) String kind,@RequestParam(name="status",required=false) String status,
+        @RequestParam(name="createdFrom",required=false) String createdFrom,@RequestParam(name="createdTo",required=false) String createdTo){
         verify(page>=0&&page<=100000,"Invalid page");int limit=size(size,100);
         String where=" WHERE t.org_id=? AND (? IS NULL OR t.dict_code LIKE CONCAT('%',?,'%')) "+
             "AND (? IS NULL OR t.dict_name LIKE CONCAT('%',?,'%')) AND (? IS NULL OR t.dict_kind=?) AND (? IS NULL OR t.status=?) "+
@@ -127,16 +127,16 @@ public class SystemDictionaryController {
     }
     @GetMapping("/dictionaries/{id}")
     @PreAuthorize("hasAuthority('iam:dict:view')")
-    public ApiResponse<DictType> get(@PathVariable String id){return ok(requireType(id(id)));}
+    public ApiResponse<DictType> get(@PathVariable("id") String id){return ok(requireType(id(id)));}
     @GetMapping("/dictionaries/{id}/items")
     @PreAuthorize("hasAuthority('iam:dict:view')")
-    public ApiResponse<List<DictItem>> items(@PathVariable String id){
+    public ApiResponse<List<DictItem>> items(@PathVariable("id") String id){
         long typeId=id(id);requireType(typeId);
         return ok(db.query(ITEM_SELECT+" ORDER BY sort_no,id",this::item,org(),typeId));
     }
     @GetMapping("/dictionary-options/{code}")
-    public ApiResponse<List<Option>> options(@PathVariable String code,
-        @RequestParam(required=false) String selectedValue){
+    public ApiResponse<List<Option>> options(@PathVariable("code") String code,
+        @RequestParam(name="selectedValue",required=false) String selectedValue){
         verify(code!=null&&CODE.matcher(code).matches(),"Invalid dictionary code");
         verify(selectedValue==null||selectedValue.length()<=80,"Invalid selected option");
         var types=db.query("SELECT id,status FROM sys_dict_type WHERE org_id=? AND dict_code=?",
@@ -174,7 +174,7 @@ public class SystemDictionaryController {
     }
     @PutMapping("/dictionaries/{id}")
     @PreAuthorize("hasAuthority('iam:dict:update')")
-    public ApiResponse<JsonNode> update(@PathVariable String id,@RequestHeader("If-Match")String match,
+    public ApiResponse<JsonNode> update(@PathVariable("id") String id,@RequestHeader("If-Match")String match,
         @RequestHeader("Idempotency-Key")String key,@RequestBody TypeRequest r){
         long dictId=id(id),version=IamRequestVersion.parse(match);validateType(r);CurrentPlatformContext c=contexts.current();
         return ok(mutations.execute(c,"dictTypeUpdate",key,new Revision(id,version,r),"DICT_TYPE",
@@ -198,7 +198,7 @@ public class SystemDictionaryController {
     }
     @PostMapping("/dictionaries/{id}/items")
     @PreAuthorize("hasAuthority('iam:dict:update')")
-    public ApiResponse<JsonNode> createItem(@PathVariable String id,@RequestHeader("Idempotency-Key")String key,@RequestBody ItemRequest r){
+    public ApiResponse<JsonNode> createItem(@PathVariable("id") String id,@RequestHeader("Idempotency-Key")String key,@RequestBody ItemRequest r){
         long type=id(id);validateItem(r);CurrentPlatformContext c=contexts.current();
         return ok(mutations.execute(c,"dictItemCreate",key,Map.of("dictId",type,"payload",r),"DICT_ITEM",()->addItem(c,type,r,key),DictItem::id));
     }
@@ -228,7 +228,7 @@ public class SystemDictionaryController {
     }
     @PutMapping("/dictionaries/{id}/items/{itemId}")
     @PreAuthorize("hasAuthority('iam:dict:update')")
-    public ApiResponse<JsonNode> updateItem(@PathVariable String id,@PathVariable String itemId,
+    public ApiResponse<JsonNode> updateItem(@PathVariable("id") String id,@PathVariable("itemId") String itemId,
         @RequestHeader("If-Match")String match,@RequestHeader("Idempotency-Key")String key,@RequestBody ItemRequest r){
         long type=id(id),item=id(itemId),version=IamRequestVersion.parse(match);
         validateItem(r);CurrentPlatformContext c=contexts.current();

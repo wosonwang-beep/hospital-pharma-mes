@@ -40,7 +40,7 @@ class IncomingProductionIT extends IncomingQualityFixture {
  @Autowired org.springframework.test.web.servlet.MockMvc mvc;
  @Autowired @org.springframework.beans.factory.annotation.Qualifier("requestMappingHandlerMapping") org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping productionMappings;
  @Autowired ProductionService production; @Autowired ProductionQueryService productionQuery;
- @Autowired ProcessService process; @Autowired ProcessQueryService processQuery;
+ @Autowired ProcessService process; @Autowired ProcessQueryService processQuery; @Autowired PrescriptionService prescriptions;
  @Autowired EbrService ebr; @Autowired ExecutionService executionService;
  @Autowired WeighChargeService weighing; @Autowired WmsProductionService stock;
  @Autowired WmsQueryService stockQuery; @Autowired EquipmentService equipment;
@@ -57,8 +57,8 @@ class IncomingProductionIT extends IncomingQualityFixture {
  @org.springframework.test.context.bean.override.mockito.MockitoSpyBean com.hospital.mes.execution.infrastructure.GenealogyMapper genealogyMapper;
 
  @BeforeEach void productionPermissions(){
-  for(String prefix:List.of("master:product:","master:equipment:","process:package:","ebr:template:","production:order:","production:batch:","mes:execution:","mes:operation:","mes:weigh:","mes:charge:","wms:reservation:","wms:issue:"))
-   for(String action:List.of("view","create","update","edit","submit","approve","publish","release","start","pause","complete","verify","reverse","confirm","return"))permissions.add(prefix+action);
+  for(String prefix:List.of("master:product:","master:equipment:","process:package:","ebr:template:","production:prescription:","production:order:","production:batch:","mes:execution:","mes:operation:","mes:weigh:","mes:charge:","wms:reservation:","wms:issue:"))
+   for(String action:List.of("view","create","update","edit","activate","submit","approve","publish","release","start","pause","complete","verify","reverse","confirm","return"))permissions.add(prefix+action);
   permissions.addAll(Set.of("production:subbatch:create","mes:equipment:bind","mes:param:record","qa:batch-review","ebr:designer:edit","trace:view","ebr:form:view","ebr:form:edit","ebr:form:submit"));as(author);
   configurationName="production-it-"+suffix;var properties=new HashMap<String,Object>();String p="mes.production.material-weighing-policies[0].";
   properties.put(p+"organization-id","1");properties.put(p+"material-id",material);properties.put(p+"required",true);properties.put(p+"precision","0.001");properties.put(p+"tolerance-pct","0.5");properties.put(p+"policy-version","TEST-"+suffix);
@@ -82,6 +82,50 @@ class IncomingProductionIT extends IncomingQualityFixture {
  void blockedCode(String code,Runnable action){var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_NESTED);assertThatThrownBy(()->tx.execute(status->{action.run();return null;})).isInstanceOfSatisfying(com.hospital.mes.common.exception.ComplianceException.class,ex->assertThat(ex.code()).isEqualTo(code));}
  void blocked(Runnable action){rejected(com.hospital.mes.common.exception.ComplianceException.class,action);}
  BigDecimal onHand(){return stockQuery.ledger(1,Long.parseLong(lot)).stream().map(x->new BigDecimal(x.path("deltaQty").asText())).reduce(BigDecimal.ZERO,BigDecimal::add);}
+
+ @Test void activePrescriptionRunsThroughReservationIssueWeighingAndChargeWithExplicitPrescriptionItemEvidence(){
+  permissions.add("production:prescription:activate");
+  releaseIncoming(()->{});as(author);
+  var draft=preparedBatch(false);String batchId=id(draft);
+  var prescription=prescriptions.create(new ProcessCommands.PrescriptionCreate(
+   "RXRUN"+suffix,"Runtime prescription",productId,packageVersionId,"10",unit,
+   List.of(new ProcessCommands.PrescriptionItem(1,material,"2",unit,"0",true))),key());
+  prescription=prescriptions.activate(id(prescription),new ProcessCommands.PrescriptionAction(prescription.path("versionNo").asLong(),"Activate runtime prescription"),null,key());
+  var released=production.releaseBatch(batchId,body("prescriptionId",id(prescription),"ebrTemplateVersionId",templateVersionId,"reason","Release by active prescription"),token(draft),key());
+  var snapshot=productionQuery.batch(1,Long.parseLong(batchId)).snapshot();
+  assertThat(snapshot.path("prescription").path("prescriptionId").asText()).isEqualTo(id(prescription));
+  String recipeItem=snapshot.path("prescription").path("items").get(0).path("formulaItemId").asText();
+
+  stock.reserve(batchId,body("items",List.of(Map.of("formulaItemId",recipeItem,"materialLotId",lot,"reservedQty","3","unitId",unit)),"reason","Prescription reservation"),token(released),key());
+  var reservation=jdbc.queryForMap("SELECT formula_item_id,prescription_item_id FROM wms_reservation WHERE main_batch_id=? AND prescription_item_id=?",Long.parseLong(batchId),Long.parseLong(recipeItem));
+  assertThat(reservation.get("formula_item_id")).isNull();
+  assertThat(((Number)reservation.get("prescription_item_id")).longValue()).isEqualTo(Long.parseLong(recipeItem));
+
+  var issue=stock.createIssue(body("mainBatchId",batchId,"issueNo","RXISS"+suffix,"items",List.of(Map.of("formulaItemId",recipeItem,"materialLotId",lot,"issuedQty","3","unitId",unit)),"reason","Prescription issue"),key());
+  issue=stock.confirmIssue(id(issue),body("reason","Confirm prescription issue"),token(issue),key());
+  var issueItem=jdbc.queryForMap("SELECT formula_item_id,prescription_item_id FROM wms_material_issue_item WHERE issue_id=?",Long.parseLong(id(issue)));
+  assertThat(issueItem.get("formula_item_id")).isNull();
+  assertThat(((Number)issueItem.get("prescription_item_id")).longValue()).isEqualTo(Long.parseLong(recipeItem));
+
+  var runningBatch=production.startBatch(batchId,body("reason","Start prescription batch"),token(released),key());
+  String executionId=runningBatch.path("executionUnits").get(0).path("id").asText();
+  var op=executionService.operations(executionId).getFirst();
+  op=executionService.start(id(op),body("reason","Start prescription operation"),token(op),key());
+  var scale=equipment.create(new EquipmentCommands.Create("RXSC"+suffix,"Prescription scale","PRODUCTION_IT_SCALE",LocalDate.now(ZoneOffset.UTC).plusDays(30),"Production"),key());
+  var execution=production.execution(executionId);
+  var weighed=weighing.createWeighing(body("executionUnitId",executionId,"materialLotId",lot,"formulaItemId",recipeItem,"targetQty","2","actualQty","2","unitId",unit,"scaleEquipmentId",id(scale),"versionNo",execution.path("versionNo").asLong(),"reason","Prescription weighing"),key());
+  var weighingEvidence=jdbc.queryForMap("SELECT bom_item_id,prescription_item_id FROM mes_weighing_record WHERE id=?",Long.parseLong(id(weighed)));
+  assertThat(weighingEvidence.get("bom_item_id")).isNull();
+  assertThat(((Number)weighingEvidence.get("prescription_item_id")).longValue()).isEqualTo(Long.parseLong(recipeItem));
+
+  as(reviewer);
+  weighed=weighing.verifyWeighing(id(weighed),body("reason","Independent prescription verification","reauthToken","token"),token(weighed),key());
+  as(author);
+  var charge=weighing.createCharge(body("executionUnitId",executionId,"operationExecutionId",id(op),"materialLotId",lot,"weighingRecordId",id(weighed),"chargedQty","2","unitId",unit,"versionNo",op.path("versionNo").asLong(),"reason","Prescription charge"),key());
+  assertThat(charge.path("status").asText()).isEqualTo("CONFIRMED");
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_material_charge WHERE id=?",Long.class,Long.parseLong(id(charge)))).isEqualTo(1);
+  assertThat(onHand()).isLessThan(new BigDecimal("10"));
+ }
 
  @Test void sameMaterialDifferentFormulaLineCannotBorrowReservationEntitlement(){
   releaseIncoming(()->{});as(author);var batch=releasedBatch(true);String batchId=id(batch);var items=productionQuery.batch(1,Long.parseLong(batchId)).snapshot().path("process").path("formula").path("items");String first=items.get(0).path("formulaItemId").asText(),second=items.get(1).path("formulaItemId").asText();

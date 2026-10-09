@@ -10,6 +10,9 @@ import java.time.*;
  public Long getMaterialLotId(){return materialLotId;} public void setMaterialLotId(Long value){materialLotId=value;}
  private Long bomItemId;
  public Long getBomItemId(){return bomItemId;} public void setBomItemId(Long value){bomItemId=value;}
+ private Long prescriptionItemId;
+ public Long getPrescriptionItemId(){return prescriptionItemId;} public void setPrescriptionItemId(Long value){prescriptionItemId=value;}
+ public Long getRecipeItemId(){return prescriptionItemId!=null?prescriptionItemId:bomItemId;}
  private BigDecimal targetQty;
  public BigDecimal getTargetQty(){return targetQty;} public void setTargetQty(BigDecimal value){targetQty=value;}
  private BigDecimal actualQty;

@@ -10,6 +10,8 @@ import java.time.*;
  public Long getPackageVersionId(){return packageVersionId;} public void setPackageVersionId(Long value){packageVersionId=value;}
  private Long formulaVersionId;
  public Long getFormulaVersionId(){return formulaVersionId;} public void setFormulaVersionId(Long value){formulaVersionId=value;}
+ private Long prescriptionId;
+ public Long getPrescriptionId(){return prescriptionId;} public void setPrescriptionId(Long value){prescriptionId=value;}
  private Long routeVersionId;
  public Long getRouteVersionId(){return routeVersionId;} public void setRouteVersionId(Long value){routeVersionId=value;}
  private Long ebrTemplateVersionId;

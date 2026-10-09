@@ -9,7 +9,7 @@ import static com.hospital.mes.ebr.domain.EbrCommands.*;
 public final class EbrDefinitionRules {
     public static final Set<String> FIELD_TYPES=Set.of("NUMBER","TEXT","TEXTAREA","ENUM","MULTI_ENUM","BOOLEAN","DATE","TIME","DATETIME","BARCODE","MATERIAL_LOT","CONTAINER","EQUIPMENT","PERSON","ATTACHMENT","IMAGE","TIMER","CALCULATED","INSTRUMENT_VALUE","SIGNATURE_PLACEHOLDER");
     public static final Set<String> TRIGGERS=Set.of("ON_CHANGE","ON_SAVE","ON_SUBMIT","ON_OPERATION_COMPLETE","ON_BATCH_CLOSE");
-    private static final Set<String> NULLABLE=Set.of("groupCode","unitId","precisionScale","defaultExpr","placeholder","helpText","validationJson","visibilityRuleCode","minOccurs","maxOccurs","operationDefId","formCode","fieldCode","severity","errorCode","messageTemplate");
+    private static final Set<String> NULLABLE=Set.of("groupCode","unitId","precisionScale","defaultExpr","placeholder","helpText","validationJson","visibilityRuleCode","minOccurs","maxOccurs","operationDefId","formCode","fieldCode","severity","errorCode","messageTemplate","canvasDocument");
     private EbrDefinitionRules(){}
     public static String text(String value,int maximum,String path){if(value==null||value.isBlank()||value.length()>maximum)throw new IllegalArgumentException(path+": required, maximum "+maximum);return value.strip();}
     public static void gate(boolean value,String message){if(!value)throw new ComplianceException("LINT_FAILED",message);}
@@ -40,6 +40,12 @@ public final class EbrDefinitionRules {
         Map<String,Set<String>> dependencies=new LinkedHashMap<>();
         for(var form:forms.values()){
             if(publication&&form.fields().isEmpty())issue(issues,"forms."+form.formCode()+".fields","REQUIRED","Form requires fields");
+            if(form.canvasDocument()!=null&&!form.canvasDocument().isNull()&&!form.canvasDocument().isMissingNode()){
+                String canvasPath="forms."+form.formCode()+".canvasDocument";
+                if(!form.canvasDocument().isObject())issue(issues,canvasPath,"INVALID_CANVAS_DOCUMENT","Canvas document must be a JSON object");
+                else if(form.canvasDocument().toString().length()>2_000_000)issue(issues,canvasPath,"CANVAS_DOCUMENT_TOO_LARGE","Canvas document exceeds 2 MB");
+                else if(!form.canvasDocument().path("data").path("main").isArray())issue(issues,canvasPath,"INVALID_CANVAS_DOCUMENT","Canvas editor data.main array required");
+            }
             for(var field:form.fields()){
                 String path="forms."+form.formCode()+".fields."+field.fieldCode();
                 enumValue(field.fieldType(),FIELD_TYPES,path+".fieldType",issues);enumValue(field.sourceType(),Set.of("MANUAL","BARCODE","INSTRUMENT","SYSTEM","DERIVED"),path+".sourceType",issues);

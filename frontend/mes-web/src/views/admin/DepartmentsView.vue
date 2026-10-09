@@ -3,12 +3,14 @@ import {computed,onMounted,reactive,ref} from 'vue'
 import {useRoute,useRouter} from 'vue-router'
 import {api,errorMessage,idempotencyKey,type Page} from '../../api/http'
 import {useAuthStore} from '../../stores/auth'
+import DictionarySelect from '../../components/DictionarySelect.vue'
 import {type Department,type DepartmentForm,type DepartmentOrg,type DepartmentPerson,departmentStatus,departmentTree} from './departmentModel'
 const route=useRoute(),router=useRouter(),auth=useAuthStore()
 const rows=ref<Department[]>([]),total=ref(0),tree=ref<Department[]>([]),organizations=ref<DepartmentOrg[]>([]),people=ref<DepartmentPerson[]>([])
 const busy=ref(false),saving=ref(false),error=ref(''),formError=ref(''),notice=ref('')
 const modal=ref(false),editing=ref<Department|null>(null),selected=ref<string|null>(null),page=ref(1)
 const filters=reactive({code:'',name:'',status:''})
+const appliedFilters=reactive({code:'',name:'',status:''})
 const form=reactive<DepartmentForm>({code:'',name:'',organizationId:'',parentId:null,leaderUserId:null,phone:null,description:null,sortNo:10,status:'ACTIVE'})
 const fullTree=computed(()=>departmentTree(tree.value))
 const expandedKeys=ref<string[]>([])
@@ -18,9 +20,9 @@ const descendants=computed(()=>{
  return visited
 })
 const scopedRows=computed(()=>rows.value.filter(x=>
-  (!filters.code.trim()||x.code.toLowerCase().includes(filters.code.trim().toLowerCase()))&&
-  (!filters.name.trim()||x.name.includes(filters.name.trim()))&&
-  (!filters.status||x.status===filters.status)&&
+  (!appliedFilters.code.trim()||x.code.toLowerCase().includes(appliedFilters.code.trim().toLowerCase()))&&
+  (!appliedFilters.name.trim()||x.name.includes(appliedFilters.name.trim()))&&
+  (!appliedFilters.status||x.status===appliedFilters.status)&&
   (!selected.value||descendants.value.has(x.id))))
 const potentialParent=computed(()=>tree.value.filter(x=>x.organizationId===form.organizationId&&x.status==='ACTIVE'&&x.id!==editing.value?.id&&!isDescendant(x.id,editing.value?.id)))
 const orgOptions=computed(()=>organizations.value.map(x=>({value:x.id,label:x.name+'（'+x.code+'）'})))
@@ -37,7 +39,8 @@ async function load(){
   expandedKeys.value=branches.filter(x=>branches.some(child=>child.parentId===x.id)).map(x=>x.id)
  }catch(e){error.value=errorMessage(e)}finally{busy.value=false}
 }
-function reset(){Object.assign(filters,{code:'',name:'',status:''});selected.value=null;void load()}
+function search(){Object.assign(appliedFilters,filters)}
+function reset(){Object.assign(filters,{code:'',name:'',status:''});Object.assign(appliedFilters,filters);selected.value=null;void load()}
 function isDescendant(id:string,ancestor:string|undefined){
  if(!ancestor)return false
  const seen=new Set<string>();let current=tree.value.find(x=>x.id===id)
@@ -78,10 +81,10 @@ onMounted(load)
 <template><main class="admin-page departments-page" data-ui-template="T1">
 <header class="admin-page-header"><h1>部门管理</h1><a-button v-if="auth.can('iam:department:create')" type="primary" @click="open()">＋ 新增部门</a-button></header>
 <a-card class="query-card" title="查询条件">
- <form class="query-form department-query" @submit.prevent="load">
+ <form class="query-form department-query" @submit.prevent="search">
   <label><span class="form-field-label">部门编码</span><a-input v-model:value="filters.code" allow-clear placeholder="请输入部门编码"/></label>
   <label><span class="form-field-label">部门名称</span><a-input v-model:value="filters.name" allow-clear placeholder="请输入部门名称"/></label>
-  <label><span class="form-field-label">状态</span><a-select v-model:value="filters.status" :options="[{value:'',label:'全部状态'},{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
+  <label><span class="form-field-label">状态</span><DictionarySelect :model-value="filters.status||null" dict-code="DEPARTMENT_STATUS" placeholder="全部状态" @update:model-value="filters.status=$event??''"/></label>
   <a-space class="dept-query-actions"><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
  </form>
 </a-card>
@@ -101,7 +104,7 @@ onMounted(load)
     <span v-else-if="column.dataIndex==='leaderName'">{{record.leaderName??'—'}}</span>
    </template>
   </a-table>
-  <div class="dept-count">共 {{total}} 条部门记录</div>
+  <div class="dept-count">共 {{scopedRows.length}} 条符合条件的部门记录（全部 {{total}} 条）</div>
  </a-card>
 </div>
 <a-modal v-model:open="modal" class="department-edit-modal" :title="editing?'编辑部门':'新增部门'" :width="800" :footer="null" :mask-closable="!saving">
@@ -113,7 +116,7 @@ onMounted(load)
   <label><span class="form-field-label">所属组织 *</span><a-select v-model:value="form.organizationId" show-search option-filter-prop="label" :options="orgOptions" @change="()=>form.parentId=null"/></label>
   <label><span class="form-field-label">负责人</span><a-select v-model:value="form.leaderUserId" show-search allow-clear option-filter-prop="label" :options="personOptions" :filter-option="false" @search="async (term:string)=>{try{people=await api<DepartmentPerson[]>({url:'/department-users',params:{keyword:term}})}catch{}}"/></label>
   <label><span class="form-field-label">联系电话</span><a-input v-model:value="form.phone" :maxlength="40"/></label>
-  <label><span class="form-field-label">状态</span><a-select v-model:value="form.status" :options="[{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
+  <label><span class="form-field-label">状态</span><DictionarySelect :model-value="form.status" dict-code="DEPARTMENT_STATUS" required @update:model-value="form.status=($event??'ACTIVE') as DepartmentForm['status']"/></label>
   <label><span class="form-field-label">显示排序</span><a-input-number v-model:value="form.sortNo" :min="0" :max="999999" style="width:100%"/></label>
   <label class="dept-wide"><span class="form-field-label">备注</span><a-textarea v-model:value="form.description" :rows="3" :maxlength="500"/></label>
   <div class="dept-buttons"><a-button @click="modal=false">取消</a-button><a-button type="primary" html-type="submit" :loading="saving">保存部门</a-button></div>
@@ -121,10 +124,10 @@ onMounted(load)
 </a-modal>
 </main></template>
 <style scoped>
-.department-query{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}
-.department-query>label{display:grid;grid-template-columns:130px minmax(0,1fr);align-items:center;gap:12px;min-width:0}
+.department-query{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;justify-content:flex-start}
+.department-query>label{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0;white-space:nowrap}.department-query>label>.form-field-label{flex:0 0 auto}.department-query>label:nth-child(1) :deep(.ant-input){width:132px}.department-query>label:nth-child(2) :deep(.ant-input){width:148px}.department-query>label:nth-child(3) :deep(.ant-select){width:106px}
 .department-query .form-field-label{text-align:right;white-space:nowrap}
-.dept-query-actions{grid-column:1/-1;justify-self:end}
+.dept-query-actions{margin-left:4px;white-space:nowrap;flex:0 0 auto}
 .dept-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start}
 .dept-tree-card{min-height:365px}
 .dept-count{text-align:right;font-size:12px;color:#8798aa;padding:10px}

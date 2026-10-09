@@ -36,9 +36,9 @@ public class ProcessQueryService {
  public com.fasterxml.jackson.databind.JsonNode requireCurrentIdentified(long org,long packageId){
   if(TransactionSynchronizationManager.isActualTransactionActive())store.packages().lock(org,packageId);
   var root=store.current(org,packageId);var result=(com.fasterxml.jackson.databind.node.ObjectNode)requireCurrent(org,packageId);
-  var formula=store.formula(org,root);var route=store.route(org,root);
-  result.put("processPackageId",Long.toString(packageId));result.put("currentDefinitionId",root.getId().toString());result.put("formulaId",formula.getId().toString());result.put("routeId",route.getId().toString());
-  var items=store.items(org,formula.getId());for(var item:result.path("formula").path("items")){var source=items.stream().filter(x->x.getLineNo().intValue()==item.path("lineNo").asInt()).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)item).put("formulaItemId",source.getId().toString());}
+  var formula=store.formula(org,root);var route=store.route(org,root);if(route==null)throw new com.hospital.mes.common.exception.ComplianceException("BATCH_DEFINITION_NOT_READY","Production process route required");
+  result.put("processPackageId",Long.toString(packageId));result.put("currentDefinitionId",root.getId().toString());result.put("routeId",route.getId().toString());
+  if(formula!=null){result.put("formulaId",formula.getId().toString());var items=store.items(org,formula.getId());for(var item:result.path("formula").path("items")){var source=items.stream().filter(x->x.getLineNo().intValue()==item.path("lineNo").asInt()).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)item).put("formulaItemId",source.getId().toString());}}
   var operations=store.operations(org,route.getId());for(var operation:result.path("route").path("operations")){var source=operations.stream().filter(x->x.getOperationCode().equals(operation.path("operationCode").asText())).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)operation).put("operationDefId",source.getId().toString());var parameters=store.parameters(org,source.getId());for(var parameter:operation.path("parameters")){var p=parameters.stream().filter(x->x.getParameterCode().equals(parameter.path("parameterCode").asText())).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)parameter).put("parameterDefId",p.getId().toString());}}
   return result;
  }

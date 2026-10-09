@@ -9,6 +9,9 @@ public class ReservationEntity extends ScopedEntity {
  public Long getMainBatchId(){return mainBatchId;} public void setMainBatchId(Long value){mainBatchId=value;}
  private Long formulaItemId;
  public Long getFormulaItemId(){return formulaItemId;} public void setFormulaItemId(Long value){formulaItemId=value;}
+ private Long prescriptionItemId;
+ public Long getPrescriptionItemId(){return prescriptionItemId;} public void setPrescriptionItemId(Long value){prescriptionItemId=value;}
+ public Long getRecipeItemId(){return prescriptionItemId!=null?prescriptionItemId:formulaItemId;}
  private Long materialLotId;
  public Long getMaterialLotId(){return materialLotId;} public void setMaterialLotId(Long value){materialLotId=value;}
  private BigDecimal reservedQty;

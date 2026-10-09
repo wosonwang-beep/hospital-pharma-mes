@@ -13,11 +13,23 @@ DCP-WORKBENCH-GAPS-001's Material Master Image, Operation Execution Photo, Plann
 
 Business authority is FINAL BASELINE COMPLETE v1.0.23, inheriting the [approved shared-navigation supplement](docs/development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md). Global UI V2/T1–T6 remain unchanged. All shell variants share one permission-filtered navigation configuration, ordered 首页 / 基础管理 / WMS管理 / 质量管理 / 生产管理 / 成品管理 / 系统管理. The original menu-only supplement is superseded in its bounded production/finished entry scope by [DCP-PRODUCTION-FINISHED-ENTRY-001](docs/development/DCP-PRODUCTION-FINISHED-ENTRY-001-APPROVED.md). Only its exact readonly API/DTO and entry routes are added; permission codes and GxP rules unchanged; frozen releases remain immutable. Runtime maintenance status is only in MES_TASKS.md.
 
+## Mandatory development and acceptance read gate — 2026-10-09
+
+**Every development, bugfix, design-review, or acceptance task MUST physically read** [`docs/development/MES_DEV_RULES.md`](docs/development/MES_DEV_RULES.md) **together with this AGENTS.md before inspecting/modifying implementation.** Apply its DESIGN LOCK, REUSE GATE, WRITE GATE, VISUAL GATE and ACCEPTANCE GATE. User-confirmed designs must first be recorded in the repository and matched to the approved baseline; do not implement from conversational memory alone. If the mandatory file is missing/unreadable, stop. No PASS/ACCEPTED claim without recorded evidence. This rule applies to Codex and any other coding agent; do not remove it as a token optimization.
+
+## Prototype-first UI development — explicit user decision 2026-10-09
+
+For every new or substantially redesigned MES business page, follow MES_DEV_RULES.md Section 2A: **requirements and approved baseline → complete local mes-demo Vue 3 interactive prototype plus annotated design specification → human approval of the exact source version/hash → frozen design record → Codex integration into the official Vue 3 / Ant Design Vue project and real MES integration → visual/functional/integration gates**. A general approval of this workflow does not approve an individual prototype. **Do not start formal MES integration without the human-approved local prototype source version/hash and matching DESIGN LOCK.** Preserve the authorized simple-edit modal exception and all frozen contracts; stop on conflicts rather than redesigning.
+
+## Anti-loop quality gate — explicit user decision 2026-10-09
+
+The mandatory development/acceptance standard, Section 6A, is binding: **maximum 2 automatic repair rounds per task; ordinary UI task wall-clock budget 10 minutes; stop early when the same failure recurs after a targeted fix; never automatically change approved design contracts, acceptance assertions, thresholds, skip conditions, or tests to force PASS.** Classify failures before repair; design conflicts and out-of-scope changes stop immediately. Special editors require approved dedicated checks, not a blanket bypass. At the limit report BLOCKED with evidence, never silently restart a new agent/session or claim acceptance. Any relaxation requires explicit user approval.
+
 ## Low-token task startup
 
 For a request such as `完成 MES-XXX`:
 
-1. Read this file and [`MES_TASKS.md`](MES_TASKS.md) only.
+1. Read this file, the mandatory development/acceptance standard linked above, and [`MES_TASKS.md`](MES_TASKS.md) first; then follow their targeted-document routing. Never omit the mandatory standard for token savings.
 2. Locate exactly one task. Do not reimplement an `ACCEPTED` task.
 3. Read that task's linked Task Card, then only the mandatory reference sections named by the card.
 4. Inspect only affected modules, direct integration contracts, migrations, and tests. Use `rg`/`rg --files` with scoped paths.
@@ -42,6 +54,8 @@ Do not scan the whole repository or read all `docs/`/baseline artifacts by defau
 - Applicable CI contracts remain mandatory before merge; do not bypass failures or weaken assertions without an explicit reviewed CI-contract change.
 
 ## Mandatory UI governance
+
+- **Query label/control pairing — explicit user requirement 2026-10-09:** every query/filter label and its input/select/picker must stay on the same horizontal line at every viewport. Never place a query label above its control. If space is insufficient, wrap the complete label/control pair together to the next row; do not split the pair. Check this explicitly in design references, implementation and responsive acceptance.
 
 - The approved global visual baseline is [`docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md`](docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md), and approved business page structures are [`docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md`](docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md).
 - Every new or substantially modified Vue business page must inherit the Global UI Design System and explicitly select exactly one T1–T6 page template. Do not invent a new business page structure, module-specific visual language, font/color/spacing system, or ad-hoc CRUD layout. If T1–T6 cannot represent the page without changing business meaning, stop with `DESIGN CHANGE REQUIRED`.

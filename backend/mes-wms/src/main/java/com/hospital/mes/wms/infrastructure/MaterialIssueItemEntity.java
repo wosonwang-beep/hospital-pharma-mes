@@ -13,6 +13,9 @@ public class MaterialIssueItemEntity extends ScopedEntity {
  public Long getMaterialLotId(){return materialLotId;} public void setMaterialLotId(Long value){materialLotId=value;}
  private Long formulaItemId;
  public Long getFormulaItemId(){return formulaItemId;} public void setFormulaItemId(Long value){formulaItemId=value;}
+ private Long prescriptionItemId;
+ public Long getPrescriptionItemId(){return prescriptionItemId;} public void setPrescriptionItemId(Long value){prescriptionItemId=value;}
+ public Long getRecipeItemId(){return prescriptionItemId!=null?prescriptionItemId:formulaItemId;}
  private BigDecimal issuedQty;
  public BigDecimal getIssuedQty(){return issuedQty;} public void setIssuedQty(BigDecimal value){issuedQty=value;}
  private Long unitId;

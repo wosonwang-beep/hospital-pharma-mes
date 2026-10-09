@@ -41,6 +41,15 @@ export interface EbrSection {
  pageBreakFlag:boolean
  groups:Array<EbrGroup>
 }
+export interface EbrCanvasDocument {
+ version?:string
+ data:{
+  header?:Array<Record<string,unknown>>
+  main:Array<Record<string,unknown>>
+  footer?:Array<Record<string,unknown>>
+ }
+ options?:Record<string,unknown>
+}
 export interface EbrForm {
  formCode:string
  formName:string
@@ -48,6 +57,7 @@ export interface EbrForm {
  schemaVersion:string
  sequenceNo:number
  fields:Array<EbrField>
+ canvasDocument?:EbrCanvasDocument|null
 }
 export interface EbrRule {
  ruleCode:string

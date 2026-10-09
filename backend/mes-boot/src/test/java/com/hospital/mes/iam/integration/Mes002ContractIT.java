@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hospital.mes.system.application.IamContractService;
 import com.hospital.mes.security.identity.LoginSnapshot;
 import com.hospital.mes.security.jwt.AccessTokenCodec;
 import com.hospital.mes.security.password.PasswordService;
@@ -210,13 +211,14 @@ class Mes002ContractIT {
         assertThat(paths.path("/api/v1/menus/{id}").at("/put/operationId").asText()).isEqualTo("updateMenus");
         assertThat(paths.path("/api/v1/users/{id}").at("/put/parameters").toString()).contains("Idempotency-Key", "If-Match");
         JsonNode schemas = json.readTree(document).at("/components/schemas");
-        assertThat(schemas.at("/IamUserResponse/properties/id/type").asText()).isEqualTo("string");
-        assertThat(schemas.at("/IamUserResponse/properties/username/type").asText()).isEqualTo("string");
-        assertThat(schemas.at("/IamUserResponse/properties/roleNames/type").asText()).isEqualTo("array");
-        assertThat(schemas.at("/IamUserResponse/properties/lastLoginAt/type").asText()).isEqualTo("string");
-        assertThat(schemas.at("/IamUserResponse/properties/updatedAt/type").asText()).isEqualTo("string");
-        assertThat(schemas.at("/IamRoleResponse/properties/id/type").asText()).isEqualTo("string");
-        assertThat(schemas.at("/IamPermissionResponse/properties/id/type").asText()).isEqualTo("string");
+        JsonNode userSchema = schemas.path(IamContractService.IamUserResponse.class.getCanonicalName());
+        assertThat(userSchema.at("/properties/id/type").asText()).isEqualTo("string");
+        assertThat(userSchema.at("/properties/username/type").asText()).isEqualTo("string");
+        assertThat(userSchema.at("/properties/roleNames/type").asText()).isEqualTo("array");
+        assertThat(userSchema.at("/properties/lastLoginAt/type").asText()).isEqualTo("string");
+        assertThat(userSchema.at("/properties/updatedAt/type").asText()).isEqualTo("string");
+        assertThat(schemas.path(IamContractService.IamRoleResponse.class.getCanonicalName()).at("/properties/id/type").asText()).isEqualTo("string");
+        assertThat(schemas.path(IamContractService.IamPermissionResponse.class.getCanonicalName()).at("/properties/id/type").asText()).isEqualTo("string");
     }
 
     private String databaseUser(boolean enabled, String password) {

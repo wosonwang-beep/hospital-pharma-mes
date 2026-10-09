@@ -94,9 +94,9 @@ public class SystemDepartmentController {
     }
     @GetMapping("/departments")
     @PreAuthorize("hasAuthority('iam:department:view')")
-    public ApiResponse<PageResult<Department>> list(@RequestParam(defaultValue="0")int page,
-        @RequestParam(defaultValue="20")int size,@RequestParam(required=false)String code,
-        @RequestParam(required=false)String name,@RequestParam(required=false)String status){
+    public ApiResponse<PageResult<Department>> list(@RequestParam(name="page",defaultValue="0")int page,
+        @RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="code",required=false)String code,
+        @RequestParam(name="name",required=false)String name,@RequestParam(name="status",required=false)String status){
         check(page>=0&&page<=100000&&size>=1&&size<=100,"Invalid pagination");
         String where=" AND (? IS NULL OR d.department_code LIKE CONCAT('%',?,'%')) "+
             "AND (? IS NULL OR d.department_name LIKE CONCAT('%',?,'%')) AND (? IS NULL OR d.status=?)";
@@ -115,7 +115,7 @@ public class SystemDepartmentController {
     }
     @GetMapping("/departments/{id}")
     @PreAuthorize("hasAuthority('iam:department:view')")
-    public ApiResponse<Department> get(@PathVariable String id){return ok(required(id(id)));}
+    public ApiResponse<Department> get(@PathVariable("id") String id){return ok(required(id(id)));}
     @GetMapping("/department-organizations")
     @PreAuthorize("hasAuthority('iam:department:view')")
     public ApiResponse<List<Organization>> organizations(){
@@ -124,7 +124,7 @@ public class SystemDepartmentController {
     }
     @GetMapping("/department-users")
     @PreAuthorize("hasAuthority('iam:department:view')")
-    public ApiResponse<List<Person>> people(@RequestParam(required=false)String keyword){
+    public ApiResponse<List<Person>> people(@RequestParam(name="keyword",required=false)String keyword){
         String q=blank(keyword);return ok(jdbc.query(
             "SELECT id,display_name,login_name FROM sys_user WHERE enabled=TRUE AND (? IS NULL OR display_name LIKE CONCAT('%',?,'%') OR login_name LIKE CONCAT('%',?,'%')) ORDER BY display_name LIMIT 100",
             (rs,i)->new Person(Long.toString(rs.getLong(1)),rs.getString(2),rs.getString(3)),q,q,q));
@@ -176,7 +176,7 @@ public class SystemDepartmentController {
     }
     @PutMapping("/departments/{id}")
     @PreAuthorize("hasAuthority('iam:department:update')")
-    public ApiResponse<JsonNode> update(@PathVariable String id,@RequestHeader("If-Match")String ifMatch,
+    public ApiResponse<JsonNode> update(@PathVariable("id") String id,@RequestHeader("If-Match")String ifMatch,
         @RequestHeader("Idempotency-Key")String key,@RequestBody DepartmentCommand request){
         validate(request);long departmentId=id(id),expected=version(ifMatch);var ctx=contexts.current();
         return ok(mutations.execute(ctx,"departmentUpdate",key,new DepartmentVersion(expected,request),"DEPARTMENT",
@@ -204,7 +204,7 @@ public class SystemDepartmentController {
     }
     @GetMapping("/users/{userId}/department")
     @PreAuthorize("hasAnyAuthority('iam:user:view','iam:department:view')")
-    public ApiResponse<UserDepartment> getAssignment(@PathVariable String userId){
+    public ApiResponse<UserDepartment> getAssignment(@PathVariable("userId") String userId){
         long user=id(userId);
         return ok(jdbc.query("SELECT ud.department_id,d.department_name,ud.version_no FROM sys_user_department ud JOIN sys_department d ON d.id=ud.department_id AND d.org_id=ud.org_id WHERE ud.org_id=? AND ud.user_id=?",
             (rs,i)->new UserDepartment(userId,Long.toString(rs.getLong(1)),rs.getString(2),rs.getLong(3)),org(),user)
@@ -212,7 +212,7 @@ public class SystemDepartmentController {
     }
     @PutMapping("/users/{userId}/department")
     @PreAuthorize("hasAuthority('iam:department:update') and hasAuthority('iam:user:update')")
-    public ApiResponse<JsonNode> assign(@PathVariable String userId,@RequestHeader("Idempotency-Key")String key,
+    public ApiResponse<JsonNode> assign(@PathVariable("userId") String userId,@RequestHeader("Idempotency-Key")String key,
         @RequestBody DepartmentAssignment request){
         long user=id(userId);var ctx=contexts.current();
         check(request!=null,"Department assignment required");

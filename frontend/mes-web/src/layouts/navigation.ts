@@ -30,11 +30,11 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'incoming-deviations-list', title: '质量调查', path: '/deviations', permission: 'qms:deviation:view' }
   ] },
   { key: 'production', title: '生产管理', items: [
+    { key: 'production-prescriptions-list', title: '生产处方', path: '/production/prescriptions', permission: 'production:prescription:view', requiredPermissions: ['master:product:view','process:package:view'] },
     { key: 'production-orders-list', title: '生产订单', path: '/production/orders', permission: 'production:order:view' },
     { key: 'production-batches-list', title: '生产批', path: '/production/batches', permission: 'production:batch:view' },
     { key: 'production-execution', title: '生产执行', path: '/production/execution', permission: 'mes:execution:view', requiredPermissions: ['mes:operation:view'] },
-    {key:'ebr-book-templates',title:'批记录册模板',path:'/ebr/book-templates',permission:'ebr:template:view'},
-    { key: 'ebr-templates', title: 'eBR模板', path: '/ebr/templates', permission: 'ebr:template:view' },
+    {key:'ebr-book-templates',title:'电子批记录模板',path:'/ebr/book-templates',permission:'ebr:template:view'},
     { key: 'production-balances', title: '物料平衡', path: '/production/balances', permission: 'balance:view' }
   ] },
   { key: 'finished', title: '成品管理', items: [
