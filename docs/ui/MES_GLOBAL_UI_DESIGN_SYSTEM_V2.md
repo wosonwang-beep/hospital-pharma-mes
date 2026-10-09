@@ -20,7 +20,7 @@ This is a **visual/design-system baseline**, not a new business contract. It mus
 - Breadcrumb is secondary navigation and must not visually compete with page title.
 - Sidebar uses domain grouping rather than a flat list where permissions expose many modules.
 - Approved [DCP-GLOBAL-NAVIGATION-001](../development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md): all shell variants consume one shared navigation configuration. Domain order is 首页、基础管理、WMS管理、质量管理、生产管理、成品管理、系统管理; permissions hide inaccessible entries and empty domains without reordering the remaining domains. Long sidebars scroll; production shell variants do not maintain separate destination definitions.
-- Final approved 基础管理 submenu: 物料主数据、供应商、组织、单位、单位换算、设备、人员资格、产品管理、工艺包管理. WMS管理 submenu: 原辅料收货记录、库存管理、领料申请、出库管理、退料管理. Both use existing view permissions and retain this order after filtering.
+- Final approved 基础管理 submenu: 物料主数据、供应商、组织、单位、单位换算、设备、人员资格、产品管理、生产工艺. WMS管理 submenu: 原辅料收货记录、库存管理、领料申请、出库管理、退料管理. Both use existing view permissions and retain this order after filtering.
 - Header and sidebar remain visually quiet; the current task/page is the focal point.
 - Avoid large uninterrupted dark blocks unless required by an approved shell variant.
 
@@ -134,3 +134,10 @@ All pages inherit this Design System and select exactly one approved page templa
 
 
 Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.
+
+
+## Approved bounded control removal — 2026-10-09
+
+Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](../development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes only basic maintenance audit/version controls and the process binding of new production/eBR work. [Bounded contract](../architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md) specifies database, domain, state, API, permissions, UI, migration, integration and RTM changes. Basic pages retain UI V2 and their existing T1–T6 templates, without audit panels, client version controls or process revision actions. Production/eBR retain their own audit, signatures, revision checks and immutable frozen evidence. Historical releases and evidence remain immutable. Runtime verification/status is only MES_TASKS.md. This approved supplement does not authorize any further business/UI redesign.
+
+Approved 2026-10-09 [eBR template-name supplement](../development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md): retain existing page structures and visual authority; create requires 模板名称, draft designer edits it through controlled Save, list/detail/production selectors show name with code/revision, and keyword searches name or code. Unnamed historical revisions display 未命名（历史模板）; signed/frozen history is not backfilled. No broader UI redesign is authorized.

@@ -230,7 +230,7 @@ class NativeConcurrencyIT extends IncomingProductionIT {
     }
     void prepareGate(String gate){
         incomingReportId=id(releaseIncoming(()->{}));as(author);
-        var draft=namedDraft("10");batch=production.releaseBatch(id(draft),body("packageVersionId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","IT_RACE real release"),token(draft),key());
+        var draft=namedDraft("10");batch=production.releaseBatch(id(draft),body("processPackageId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","IT_RACE real release"),token(draft),key());
         batchId=id(batch);executionId=batch.path("executionUnits").get(0).path("id").asText();
         formulaId=productionQuery.batch(1,Long.parseLong(batchId)).snapshot().path("process").path("formula").path("items").get(0).path("formulaItemId").asText();
         if(gate.equals("RESERVE"))return;

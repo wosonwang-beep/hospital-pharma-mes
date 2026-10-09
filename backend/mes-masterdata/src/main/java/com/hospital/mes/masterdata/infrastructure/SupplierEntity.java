@@ -8,5 +8,5 @@ package com.hospital.mes.masterdata.infrastructure;
  public String getQualificationStatus(){return qualificationStatus;} public void setQualificationStatus(String value){qualificationStatus=value;}
  private java.time.LocalDate validTo;
  public java.time.LocalDate getValidTo(){return validTo;} public void setValidTo(java.time.LocalDate value){validTo=value;}
-@Override public java.util.List<String> allowedActions(){return "INACTIVE".equals(qualificationStatus)?java.util.List.of():"APPROVED".equals(qualificationStatus)?java.util.List.of("UPDATE","DISABLE"):java.util.List.of("UPDATE","QUALIFY","DISABLE");}
+@Override public java.util.List<String> allowedActions(){return "INACTIVE".equals(qualificationStatus)?java.util.List.of():java.util.List.of("UPDATE","DISABLE");}
 }

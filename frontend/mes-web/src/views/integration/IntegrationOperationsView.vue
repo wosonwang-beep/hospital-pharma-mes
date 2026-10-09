@@ -52,12 +52,12 @@ function openRetry(message: IntegrationMessage) {
 }
 
 async function confirmRetry() {
-  if (!selected.value || !retryReason.value.trim()) return
+  if (!selected.value) return
   retryError.value = false
   try {
     const updated = await retryIntegrationMessage({
       messageRef: selected.value.messageRef,
-      reason: retryReason.value.trim(),
+      reason: '集成重试（系统记录）',
       versionNo: selected.value.versionNo,
       idempotencyKey: crypto.randomUUID()
     })
@@ -76,11 +76,11 @@ onMounted(load)
     <section v-if="!permitted" class="state-card forbidden" role="alert">无权查看 Integration Operations</section>
     <template v-else>
       <header class="page-heading">
-        <div><h1>Integration Inbox / Outbox Operations</h1><p>查询已有集成消息 · 人工重试保留原因、并发版本与幂等保护</p></div>
+        <div><h1>Integration Inbox / Outbox Operations</h1></div>
         <button class="secondary-button" type="button" :disabled="loading" @click="load">刷新</button>
       </header>
       <nav class="console-tabs" aria-label="消息方向"><button v-for="v in ['OUTBOX','INBOX']" :key="v" :aria-pressed="direction===v" @click="tab(v as IntegrationDirection)">{{v==='OUTBOX'?'Outbox 发件箱':'Inbox 收件箱'}}</button></nav>
-      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in [['system','系统'],['messageId','消息编号'],['eventType','事件类型'],['aggregateType','业务对象类型'],['aggregateId','业务对象编号'],['occurredFrom','开始时间（UTC）'],['occurredTo','结束时间（UTC）']]" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">状态</span><select v-model="filters.status" aria-label="状态" class="master-native-input"><option value="">全部</option><option v-for="state in statuses" :key="state" :value="state">{{statusNames[state]}}</option></select></label><div class="query-actions"><button class="primary-button" :disabled="loading">查询</button><button class="secondary-button" type="button" @click="reset">重置</button></div></form></section>
+      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in [['system','系统'],['messageId','消息编号'],['eventType','事件类型'],['aggregateType','业务对象类型'],['aggregateId','业务对象编号'],['occurredFrom','开始时间（UTC）'],['occurredTo','结束时间（UTC）']]" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">状态</span><a-select show-search option-filter-prop="children" v-model:value="filters.status" aria-label="状态" class="master-native-input"><a-select-option value="">全部</a-select-option><a-select-option v-for="state in statuses" :key="state" :value="state">{{statusNames[state]}}</a-select-option></a-select></label><div class="query-actions"><button class="primary-button" :disabled="loading">查询</button><button class="secondary-button" type="button" @click="reset">重置</button></div></form></section>
       <section class="metric-grid">
         <article class="metric-card"><span>Outbox Pending / Retry Wait</span><strong>{{ loading ? '—' : pendingTotal }}</strong><small>发件箱待发送或等待重试</small></article>
         <article class="metric-card"><span>Dead Letter</span><strong>{{ loading ? '—' : deadLetterTotal }}</strong><small>进入死信状态的消息</small></article>
@@ -104,10 +104,8 @@ onMounted(load)
       <div v-if="selected" class="dialog-backdrop" role="presentation">
         <section class="retry-dialog" role="dialog" aria-modal="true" aria-labelledby="retry-title">
           <h2 id="retry-title">人工重试 {{ selected.messageRef }}</h2>
-          <label for="retry-reason">重试原因</label>
-          <textarea id="retry-reason" v-model="retryReason" maxlength="1000" rows="4" />
           <p v-if="retryError" class="error" role="alert">人工重试提交失败</p>
-          <footer><button type="button" class="secondary-button" @click="selected = null">取消</button><button type="button" class="primary-button" :disabled="!retryReason.trim()" @click="confirmRetry">确认重试</button></footer>
+          <footer><button type="button" class="secondary-button" @click="selected = null">取消</button><button type="button" class="primary-button"  @click="confirmRetry">确认重试</button></footer>
         </section>
       </div>
     </template>

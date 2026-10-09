@@ -22,11 +22,11 @@ async function load(page = Number(route.query.page ?? 0)) {
 function reset() { keyword.value = ''; status.value = undefined; roleId.value = undefined; void load(0) }
 onMounted(async () => { if (auth.can('iam:role:view')) roles.value = (await api<Page<Role>>({ url:'/roles', params:{ page:0, size:100 } })).items; await load() })
 </script>
-<template><main data-ui-template="T1" class="admin-page t1-query-list"><header class="admin-page-header"><div><h1>用户管理</h1><p>查询员工账号并在独立页面维护资料与角色。</p></div>
+<template><main data-ui-template="T1" class="admin-page t1-query-list"><header class="admin-page-header"><div><h1>用户管理</h1></div>
   <a-button v-if="auth.can('iam:user:create')" type="primary" @click="router.push({path:'/admin/users/create',query:route.query})">新增用户</a-button></header>
   <a-card title="查询条件" class="query-card"><form class="query-form" @submit.prevent="load(0)"><label><span class="form-field-label">账号或姓名</span><a-input v-model:value="keyword" allow-clear /></label>
-  <label><span class="form-field-label">状态</span><a-select v-model:value="status" allow-clear style="width:160px"><a-select-option value="ACTIVE">启用</a-select-option><a-select-option value="INACTIVE">停用</a-select-option></a-select></label>
-  <label v-if="auth.can('iam:role:view')">角色<a-select v-model:value="roleId" allow-clear style="width:220px"><a-select-option v-for="role in roles" :key="role.id" :value="role.id">{{ role.roleName }}</a-select-option></a-select></label>
+  <label><span class="form-field-label">状态</span><a-select show-search option-filter-prop="children" v-model:value="status" allow-clear style="width:160px"><a-select-option value="ACTIVE">启用</a-select-option><a-select-option value="INACTIVE">停用</a-select-option></a-select></label>
+  <label v-if="auth.can('iam:role:view')">角色<a-select show-search option-filter-prop="children" v-model:value="roleId" allow-clear style="width:220px"><a-select-option v-for="role in roles" :key="role.id" :value="role.id">{{ role.roleName }}</a-select-option></a-select></label>
   <a-space><a-button type="primary" html-type="submit">查询</a-button><a-button @click="reset">重置</a-button></a-space></form></a-card>
   <a-alert v-if="error" type="error" :message="error" show-icon /><a-card title="用户列表" class="result-card"><a-table :columns="columns" :data-source="data.items" row-key="id" :loading="loading" :scroll="{x:900}" :pagination="false">
   <template #bodyCell="{ column, record }"><template v-if="column.key==='roles'">{{ record.roleNames.length ? record.roleNames.join('、') : '未分配' }}</template><template v-else-if="column.key==='status'"><a-tag :color="record.status==='ACTIVE'?'success':'default'">{{ record.status==='ACTIVE'?'启用':'停用' }}</a-tag></template>

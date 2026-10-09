@@ -14,5 +14,5 @@ public class UnitController {
  @GetMapping public ApiResponse<ScopedStore.PageData<JsonNode>> list(@RequestParam(name="page",defaultValue="0")int page,@RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="keyword",required=false)String keyword,@RequestParam Map<String,String> filters){return ApiResponse.success(service.list(page,size,keyword,filters),traces.currentTraceId());}
  @GetMapping("/{id}") public ApiResponse<JsonNode> get(@PathVariable("id")String id){return ApiResponse.success(service.get(id),traces.currentTraceId());}
  @PostMapping public ApiResponse<JsonNode> create(@RequestBody UnitCommands.Create body,@RequestHeader("Idempotency-Key")String key){return ApiResponse.success(service.create(body,key),traces.currentTraceId());}
- @PutMapping("/{id}") public ApiResponse<JsonNode> update(@PathVariable("id")String id,@RequestBody UnitCommands.Update body,@RequestHeader(name="If-Match",required=false)String version,@RequestHeader("Idempotency-Key")String key){return ApiResponse.success(service.command(id,body,version,key),traces.currentTraceId());}
+ @PutMapping("/{id}") public ApiResponse<JsonNode> update(@PathVariable("id")String id,@RequestBody UnitCommands.Update body,@RequestHeader("Idempotency-Key")String key){return ApiResponse.success(service.command(id,body,null,key),traces.currentTraceId());}
 }

@@ -10,6 +10,12 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface SysRoleMenuMapper {
     @Select("""
+        SELECT DISTINCT m.menu_code FROM sys_role_menu rm JOIN sys_menu m ON m.id=rm.menu_id
+        JOIN sys_user_role ur ON ur.role_id=rm.role_id JOIN sys_role r ON r.id=ur.role_id
+        WHERE ur.user_id=#{userId} AND rm.org_id=#{orgId} AND r.enabled=1
+        """)
+    List<String> effectiveMenuCodes(@Param("userId") long userId, @Param("orgId") long orgId);
+    @Select("""
         SELECT m.menu_code FROM sys_role_menu rm JOIN sys_menu m ON m.id = rm.menu_id
         WHERE rm.role_id = #{roleId} ORDER BY m.menu_code
         """)

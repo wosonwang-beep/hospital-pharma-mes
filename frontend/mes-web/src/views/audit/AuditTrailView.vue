@@ -58,10 +58,10 @@ watch(() => route.query, load, { immediate: true })
     <section v-if="!permitted" class="state-card forbidden" role="alert">无权查看 GMP Audit Trail</section>
     <template v-else>
       <header class="page-heading">
-        <div><h1>GMP Audit Trail</h1><p>查询已有审计事件与变更证据 · 只读</p></div>
+        <div><h1>GMP Audit Trail</h1></div>
         <button class="secondary-button" type="button" :disabled="loading" @click="load">刷新</button>
       </header>
-      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in filterFields" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">来源</span><select v-model="filters.source" aria-label="来源" class="master-native-input"><option value="">全部</option><option v-for="s in ['API','SCHEDULER','INTEGRATION','SYSTEM']" :key="s">{{s}}</option></select></label><div class="query-actions"><button class="primary-button" :disabled="loading">查询</button><button class="secondary-button" type="button" @click="reset">重置</button></div></form></section>
+      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in filterFields" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">来源</span><a-select show-search option-filter-prop="children" v-model:value="filters.source" aria-label="来源" class="master-native-input"><a-select-option value="">全部</a-select-option><a-select-option v-for="s in ['API','SCHEDULER','INTEGRATION','SYSTEM']" :key="s" :value="s">{{s}}</a-select-option></a-select></label><div class="query-actions"><button class="primary-button" :disabled="loading">查询</button><button class="secondary-button" type="button" @click="reset">重置</button></div></form></section>
       <section class="metric-grid one">
         <article class="metric-card"><span>今日审计事件</span><strong>{{ loading ? '—' : todayTotal }}</strong><small>当前对象范围 · UTC 日</small></article>
       </section>

@@ -5,5 +5,5 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import java.util.*;
 @Repository @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class UnitStore extends ScopedStore<UnitEntity> {
- public UnitStore(UnitMapper mapper){super(mapper,List.of("unit_code","unit_name","scale"),Map.of("dimension","dimension"));}
+ public UnitStore(UnitMapper mapper){super(false,mapper,List.of("unit_code","unit_name","scale"),Map.of("dimension","dimension"));}
 }

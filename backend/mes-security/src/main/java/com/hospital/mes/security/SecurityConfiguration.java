@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/foundation/status", "/v3/api-docs/**", "/swagger-ui/**",
                     "/swagger-ui.html", "/actuator/health", "/actuator/info").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/v1/auth/me", "/api/v1/auth/navigation").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/change-password",
                     "/api/v1/auth/logout").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/reauth",
@@ -67,14 +67,11 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/products", "/api/v1/products/{id}").hasAuthority("master:product:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/products").hasAuthority("master:product:create")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/products/{id}").hasAuthority("master:product:update")
-                .requestMatchers(HttpMethod.GET, "/api/v1/process-packages", "/api/v1/process-packages/{id}", "/api/v1/process-versions/{id}/formula", "/api/v1/process-versions/{id}/route").hasAuthority("process:package:view")
+                .requestMatchers("/api/v1/process-versions/**", "/api/v1/process-packages/{id}/versions").denyAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/process-packages", "/api/v1/process-packages/{id}").hasAuthority("process:package:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/process-packages").hasAuthority("process:package:create")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/process-packages/{id}").hasAuthority("process:package:update")
-                .requestMatchers(HttpMethod.POST, "/api/v1/process-packages/{id}/versions", "/api/v1/process-versions/{id}/lint").hasAuthority("process:package:edit")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/process-versions/{id}/formula", "/api/v1/process-versions/{id}/route").hasAuthority("process:package:edit")
-                .requestMatchers(HttpMethod.POST, "/api/v1/process-versions/{id}/submit").hasAuthority("process:package:submit")
-                .requestMatchers(HttpMethod.POST, "/api/v1/process-versions/{id}/approve").hasAuthority("process:package:approve")
-                .requestMatchers(HttpMethod.POST, "/api/v1/process-versions/{id}/publish").hasAuthority("process:package:publish")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/process-packages/{id}/current-definition").hasAuthority("process:package:edit")
                 .requestMatchers(HttpMethod.GET, "/api/v1/ebr/templates").hasAuthority("ebr:template:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/ebr/templates").hasAuthority("ebr:template:create")
                 .requestMatchers(HttpMethod.GET, "/api/v1/ebr/templates/{id}").hasAuthority("ebr:template:view")
@@ -176,6 +173,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/menus", "/api/v1/menus/{id}")
                     .hasAuthority("iam:menu:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/menus").hasAuthority("iam:menu:create")
+                .requestMatchers(HttpMethod.POST, "/api/v1/menus/{id}/permissions").hasAuthority("iam:menu:update")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/menus/{id}")
                     .hasAuthority("iam:menu:update")
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/users",
@@ -371,6 +369,20 @@ public class SecurityConfiguration {
                     "/api/v1/printing/artifacts/{id}/pdf").hasAuthority("print:document:generate")
                 .requestMatchers(HttpMethod.POST,
                     "/api/v1/printing/artifacts").hasAuthority("print:document:generate")
+                // Department administration: scoped CRUD, hierarchy and user membership.
+                .requestMatchers(HttpMethod.GET,"/api/v1/departments","/api/v1/departments/tree",
+                    "/api/v1/departments/{id}","/api/v1/department-organizations","/api/v1/department-users").hasAuthority("iam:department:view")
+                .requestMatchers(HttpMethod.POST,"/api/v1/departments").hasAuthority("iam:department:create")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/departments/{id}").hasAuthority("iam:department:update")
+                .requestMatchers(HttpMethod.GET,"/api/v1/users/{userId}/department").hasAnyAuthority("iam:user:view","iam:department:view")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/users/{userId}/department").hasAuthority("iam:department:update")
+                // Maintainable system dictionaries; reference options are authenticated read-only.
+                .requestMatchers(HttpMethod.GET,"/api/v1/dictionaries","/api/v1/dictionaries/{id}","/api/v1/dictionaries/{id}/items").hasAuthority("iam:dict:view")
+                .requestMatchers(HttpMethod.POST,"/api/v1/dictionaries","/api/v1/dictionaries/import/preview","/api/v1/dictionaries/import").hasAuthority("iam:dict:create")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/dictionaries/{id}").hasAuthority("iam:dict:update")
+                .requestMatchers(HttpMethod.POST,"/api/v1/dictionaries/{id}/items").hasAuthority("iam:dict:update")
+                .requestMatchers(HttpMethod.PUT,"/api/v1/dictionaries/{id}/items/{itemId}").hasAuthority("iam:dict:update")
+                .requestMatchers(HttpMethod.GET,"/api/v1/dictionary-options/{code}").authenticated()
                 // Editor /transfer/** is a separate ordered chain with signed expiring capability enforcement.
                 .anyRequest().denyAll())
             .addFilterBefore(sessions, UsernamePasswordAuthenticationFilter.class)

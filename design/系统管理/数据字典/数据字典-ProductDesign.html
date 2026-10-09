@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MES 数据字典 · Product Design PC 原型</title><link rel="stylesheet" href="数据字典-ProductDesign.css"></head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <div class="logo"><span class="logo-icon">✚</span><div><div class="logo-title">医院制剂生产管理系统</div><div class="logo-sub">Hospital Pharma MES</div></div></div>
+ <nav class="nav">
+  <div class="nav-label">工作导航</div>
+  <div class="nav-domain"><span class="navico">⌂</span>首页</div>
+  <div class="nav-domain"><span class="navico">▤</span>基础管理 <span class="chevron">⌄</span></div>
+  <div class="nav-domain"><span class="navico">▦</span>系统管理 <span class="chevron">⌃</span></div>
+  <div class="nav-entry">部门管理</div><div class="nav-entry">用户管理</div><div class="nav-entry">菜单管理</div><div class="nav-entry">角色管理</div><div class="nav-entry">角色权限</div><div class="nav-entry active">数据字典</div>
+ </nav><div class="nav-footer">GMP · 合规 · 质量 · 安全</div>
+</aside>
+<div class="core">
+<header class="topbar"><div class="topbar-left"><span class="collapse-icon">☰</span><div class="global-search">⌕　搜索菜单、功能...</div></div><div class="topright"><span class="bell">♧</span><span class="bell">♢</span><span class="profile"><span class="avatar">管</span><span>系统管理员　⌄</span></span></div></header>
+<div class="breadcrumb" id="crumb">首页　/　系统管理　/　<strong>数据字典</strong></div>
+<main class="page" id="page"></main>
+</div></div>
+<div id="modalRoot"></div><div id="toastRoot"></div>
+<div class="demo-foot">PC 交互设计原型 · 示例数据 · 未连接业务数据库</div>
+<script>
+(function(){
+'use strict';
+const params=new URLSearchParams(location.search);
+const state={view:params.get('view')||'list',selected:params.get('code')||'EQUIPMENT_TYPE',keyword:'',name:'',kind:'',status:'',expanded:true,overlay:null,dialog:null,editingItem:null,rowsSelected:new Set()};
+const dicts=[
+{code:'EQUIPMENT_TYPE',name:'设备类型',kind:'系统级',structure:'平级结构',description:'用于维护生产与检验设备分类选项',status:'启用',created:'2026-09-12',updated:'2026-10-07',sort:10,items:[['HOMOGENIZER','均质设备',10,'启用','制剂生产中的均质与分散设备'],['MIXER','混合设备',20,'启用','原辅料或制剂的混合设备'],['WEIGHING','称量设备',30,'启用'],['FILLING','灌装设备',40,'启用'],['STERILIZER','灭菌设备',50,'启用'],['PACKAGING','包装设备',60,'停用']]},
+{code:'MATERIAL_TYPE',name:'物料类型',kind:'系统级',structure:'平级结构',description:'原辅料、包材及成品的业务类别',status:'启用',created:'2026-09-12',updated:'2026-10-06',sort:20,items:[['RAW','原料',10,'启用'],['EXCIPIENT','辅料',20,'启用'],['PACKAGING','包装材料',30,'启用'],['FINISHED','成品',40,'启用']]},
+{code:'STORAGE_ENVIRONMENT',name:'存储环境',kind:'业务级',structure:'树形结构',description:'物料存储区域及温湿度环境类型',status:'启用',created:'2026-09-18',updated:'2026-10-06',sort:30,items:[['NORMAL','常温',10,'启用'],['COOL','阴凉',20,'启用'],['REFRIGERATED','冷藏',30,'启用'],['FROZEN','冷冻',40,'启用']]},
+{code:'SUPPLIER_CATEGORY',name:'供应商分类',kind:'业务级',structure:'平级结构',description:'供应商业务类别及资质分类',status:'启用',created:'2026-09-19',updated:'2026-10-05',sort:40,items:[['RAW','原辅料供应商',10,'启用'],['PACK','包装材料供应商',20,'启用'],['SERVICE','服务供应商',30,'启用']]},
+{code:'INSPECTION_CATEGORY',name:'检验项目分类',kind:'业务级',structure:'树形结构',description:'QC 检验项目的分类检索选项',status:'启用',created:'2026-09-20',updated:'2026-10-04',sort:50,items:[['PHYSICOCHEMICAL','理化检验',10,'启用'],['MICROBIOLOGICAL','微生物检验',20,'启用'],['IDENTITY','鉴别',30,'启用'],['ASSAY','含量测定',40,'启用']]},
+{code:'CONTAINER_CATEGORY',name:'容器类型',kind:'业务级',structure:'平级结构',description:'物料容器及包装单位分类',status:'启用',created:'2026-09-22',updated:'2026-10-03',sort:60,items:[['BOTTLE','瓶',10,'启用'],['DRUM','桶',20,'启用'],['BAG','袋',30,'启用']]},
+{code:'DOCUMENT_CATEGORY',name:'附件类型',kind:'系统级',structure:'平级结构',description:'受控文件与一般附件的分类标签',status:'停用',created:'2026-09-25',updated:'2026-10-01',sort:70,items:[['SOP','SOP 文档',10,'启用'],['COA','检验合格证明',20,'启用'],['OTHER','其他资料',30,'停用']]}
+];
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+const page=document.getElementById('page'),crumb=document.getElementById('crumb');
+const byCode=function(c){return dicts.find(function(x){return x.code===c})||dicts[0]};
+const btn=function(text,action,kind){return '<button class="btn '+(kind||'')+'" data-action="'+action+'">'+text+'</button>'};
+function heading(title,description,right,back){return '<div class="page-title-bar"><div>'+(back?'<a class="backlink" data-action="back">← 返回数据字典</a>':'')+'<div class="page-heading"><h1>'+esc(title)+'</h1>'+(description?'<span>'+description+'</span>':'')+'</div></div><div class="buttons">'+(right||'')+'</div></div>';}
+function pill(txt){return '<span class="tag '+(txt==='启用'?'green':'')+'"><span class="dot"></span>'+txt+'</span>'}
+function count(data){return '<button class="item-count" data-action="openItems" data-code="'+esc(data.code)+'">'+data.items.length+' 项</button>'}
+function renderList(){
+ const list=dicts.filter(function(x){return(!state.keyword||x.code.toLowerCase().includes(state.keyword.toLowerCase()))&&(!state.name||x.name.includes(state.name))&&(!state.kind||x.kind===state.kind)&&(!state.status||x.status===state.status)});
+ const r=heading('数据字典','','');
+ const filters='<section class="card filter-card"><div class="filter-grid"><label><span class="field-label">字典 CODE</span><input id="fltCode" placeholder="请输入字典 CODE" value="'+esc(state.keyword)+'"></label><label><span class="field-label">字典名称</span><input id="fltName" placeholder="请输入字典名称" value="'+esc(state.name)+'"></label><label><span class="field-label">字典类型</span><select id="fltKind"><option value="">全部类型</option><option value="系统级" '+(state.kind==='系统级'?'selected':'')+'>系统级</option><option value="业务级" '+(state.kind==='业务级'?'selected':'')+'>业务级</option></select></label><label><span class="field-label">状态</span><select id="fltStatus"><option value="">全部状态</option><option value="启用" '+(state.status==='启用'?'selected':'')+'>启用</option><option value="停用" '+(state.status==='停用'?'selected':'')+'>停用</option></select></label><label class="date-filter"><span class="field-label">创建时间</span><div class="range"><input type="text" placeholder="开始日期" aria-label="开始日期"><span>至</span><input type="text" placeholder="结束日期" aria-label="结束日期"></div></label><div class="buttons">'+btn('重置','reset')+btn('⌕ 查询','search','btn-primary')+'</div></div></section>';
+ const toolbar='<div class="toolbar"><div class="buttons">'+btn('＋ 新建','create','btn-primary')+btn('⇩ 导入','import','btn-secondary')+btn('↧ 导出','export','btn-secondary')+'</div><div class="toolbar-title">字典列表 <span class="toolbar-note">共 '+list.length+' 条</span></div></div>';
+ const cols=[2.8,3.8,13.3,10,6.6,8,6.3,14,6.5,8.6,8.6,11.3];
+ const colgroup='<colgroup>'+cols.map(function(w){return '<col style="width:'+w+'%">'}).join('')+'</colgroup>';
+ const th=['<input class="checkbox" type="checkbox" aria-label="全选">','序号','字典 CODE','字典名称','字典类型','字典结构','字典项','字典描述','状态','创建时间','更新时间','操作'].map(function(t){return '<th>'+t+'</th>'}).join('');
+ const trs=list.map(function(x,i){return '<tr><td><input class="checkbox" type="checkbox" aria-label="选择 '+esc(x.name)+'"></td><td class="num">'+(i+1)+'</td><td title="'+esc(x.code)+'"><span class="code">'+esc(x.code)+'</span></td><td><span class="strong">'+esc(x.name)+'</span></td><td>'+esc(x.kind)+'</td><td>'+esc(x.structure)+'</td><td>'+count(x)+'</td><td title="'+esc(x.description)+'">'+esc(x.description)+'</td><td>'+pill(x.status)+'</td><td>'+esc(x.created)+'</td><td>'+esc(x.updated)+'</td><td><span class="row-actions"><button class="link-btn" data-action="edit" data-code="'+x.code+'">编辑</button><button class="link-btn danger" data-action="toggle" data-code="'+x.code+'">'+(x.status==='启用'?'停用':'启用')+'</button></span></td></tr>'}).join('');
+ const bottom='<div class="table-foot"><span>当前仅为页面设计示例数据，保存不会修改数据库</span><div class="pager"><span>共 '+list.length+' 条</span><button class="page-btn">‹</button><button class="page-btn active">1</button><button class="page-btn">›</button></div></div>';
+ return r+filters+'<section class="card">'+toolbar+'<table class="data-table">'+colgroup+'<thead><tr>'+th+'</tr></thead><tbody>'+(trs||'<tr><td colspan="12"><div class="empty">没有找到匹配的字典类型，请调整查询条件</div></td></tr>')+'</tbody></table>'+bottom+'</section>';
+}
+function field(label,value,mode,options){return '<div class="form-cell"><label class="field-label">'+label+'</label>'+(options?'<select '+(mode||'')+'>'+options.map(function(x){return '<option'+(x===value?' selected':'')+'>'+esc(x)+'</option>'}).join('')+'</select>':'<input '+(mode||'')+' value="'+esc(value)+'">')+'</div>';}
+function renderForm(edit){
+ const v=edit?byCode(state.selected):{code:'',name:'',kind:'业务级',structure:'平级结构',sort:10,status:'启用',description:''};
+ const html=heading(edit?'编辑数据字典':'新增数据字典',edit?v.name:'配置可选业务类型及下拉选项',edit?btn('查看字典项','openItems',''):'',true);
+ const form='<section class="card main-form"><div class="panel-heading">字典基本信息</div><div class="form-grid">'
+  +field('字典 CODE <span class="star">*</span>',v.code,edit?'disabled id="dictCode"':'id="dictCode"')
+  +field('字典名称 <span class="star">*</span>',v.name,'id="dictName"')
+  +field('字典类型 <span class="star">*</span>',v.kind,'id="dictKind"',['系统级','业务级'])
+  +field('字典结构 <span class="star">*</span>',v.structure,'id="dictStructure"',['平级结构','树形结构'])
+  +field('显示排序',String(v.sort),'id="dictSort"')
+  +field('启用状态',v.status,'id="dictStatus"',['启用','停用'])
+  +'<div class="form-cell full"><label class="field-label">字典描述</label><textarea id="dictDesc" placeholder="简要说明字典用途">'+esc(v.description)+'</textarea></div>'
+  +'</div><div class="form-footer">'+btn('取消','back')+btn('保存字典','saveDict','btn-primary')+'</div></section>';
+ return html+form+'<div class="helper">ⓘ 字典 CODE 与字典项编码用于业务数据引用，投入使用后不可随意修改。系统级和业务级用于区分治理责任，不改变后端业务状态机规则。</div>';
+}
+function renderDetail(){
+ const x=byCode(state.selected);
+ return heading(x.name,'',btn('编辑字典','edit','btn-primary'),true)
+ +'<section class="card main-form"><div class="panel-heading">字典基本信息</div><div class="kv">'
+ +[['字典 CODE',x.code],['字典名称',x.name],['字典类型',x.kind],['字典结构',x.structure],['状态',x.status],['字典项数量',x.items.length+' 项'],['创建时间',x.created],['最后更新时间',x.updated]].map(function(e){return '<div><small>'+e[0]+'</small><strong>'+esc(e[1])+'</strong></div>'}).join('')+'</div></section>'
+ +'<div class="helper">ⓘ 历史引用的编码不可直接变更，停用只禁止新增选择，不覆盖已保存的业务数据。</div>'
+ +'<section class="card main-form" style="margin-top:18px"><div class="toolbar"><strong class="toolbar-title">字典项</strong>'+btn('查看与维护字典项','openItems','btn-primary')+'</div>'
+ +'<div style="padding:15px 20px">'+x.items.map(function(y){return '<div style="padding:11px 0;border-bottom:1px solid #edf1f5;display:flex;justify-content:space-between;font-size:13px"><span>'+esc(y[1])+'　 <span class="code">'+esc(y[0])+'</span></span>'+pill(y[3])+'</div>'}).join('')+'</div></section>';
+}
+function renderTree(){
+ state.selected='STORAGE_ENVIRONMENT';const x=byCode(state.selected);
+ return heading('树形字典 · '+x.name,'父子级联选项示意',btn('字典项管理','openItems','btn-primary'),true)
+ +'<div class="detail-wrap"><section class="card"><div class="panel-heading">字典层级</div><div style="padding:14px 17px"><div class="tree-node active">⌄　存储环境 <small>根节点</small></div><div class="tree-node indent">▣　常温环境 <small>NORMAL</small></div><div class="tree-node indent">▣　阴凉环境 <small>COOL</small></div><div class="tree-node indent">⌄　低温环境 <small>LOW_TEMP</small></div><div class="tree-node indent" style="padding-left:59px">└　冷藏 <small>REFRIGERATED</small></div><div class="tree-node indent" style="padding-left:59px">└　冷冻 <small>FROZEN</small></div></div></section><section class="card"><div class="panel-heading">选中节点</div><div class="kv" style="display:block"><div><small>字典名称</small><strong>存储环境</strong></div><div style="margin-top:24px"><small>字典结构</small><strong>树形结构</strong></div><div style="margin-top:24px"><small>层级维护</small><strong>支持新增下级、排序及启停</strong></div></div></section></div>';
+}
+function render(){
+ page.innerHTML=state.view==='list'?renderList():state.view==='create'?renderForm(false):state.view==='edit'?renderForm(true):state.view==='detail'?renderDetail():renderTree();
+ const titles={list:'数据字典',create:'新增字典',edit:'编辑字典',detail:'字典详情',tree:'树形字典'};
+ crumb.innerHTML='首页　/　系统管理　/　<strong>'+titles[state.view]+'</strong>';
+}
+function showToast(msg){document.getElementById('toastRoot').innerHTML='<div class="toast">'+esc(msg)+'</div>';setTimeout(function(){document.getElementById('toastRoot').innerHTML=''},2600)}
+function closeDialog(){document.getElementById('modalRoot').innerHTML='';state.overlay=null;state.editingItem=null;}
+function openItems(code){
+ const x=byCode(code||state.selected);state.selected=x.code;state.overlay='items';
+ const rows=x.items.map(function(y,i){return '<tr><td>'+(i+1)+'</td><td><span class="code">'+esc(y[0])+'</span></td><td>'+esc(y[1])+'</td><td>'+esc(y[4]||'—')+'</td><td>'+pill(y[3])+'</td><td><button class="link-btn" data-action="editItem" data-index="'+i+'">编辑</button>　<button class="link-btn danger" data-action="toggleItem" data-index="'+i+'">'+(y[3]==='启用'?'停用':'启用')+'</button></td></tr>'}).join('');
+ const ui='<div class="modal-overlay" data-action="closeOverlay"><section role="dialog" aria-modal="true" aria-label="字典项信息" class="modal">'
+ +'<header class="modal-head"><div class="modal-title">字典项信息 <span>'+esc(x.name)+'　/　'+esc(x.code)+'</span></div><button class="close" data-action="close">×</button></header>'
+ +'<div class="modal-content"><div class="modal-help"><span>字典项直接关联业务下拉选项，编码保留历史引用。</span>'+btn('＋ 新增字典项','newItem','btn-secondary')+'</div>'
+ +'<table class="modal-table"><colgroup><col style="width:54px"><col style="width:180px"><col style="width:180px"><col><col style="width:105px"><col style="width:130px"></colgroup><thead><tr><th>序号</th><th>字典项值</th><th>字典项名称</th><th>字典项描述</th><th>状态</th><th>操作</th></tr></thead><tbody>'+rows+'</tbody></table><div id="itemEditor"></div></div>'
+ +'<footer class="modal-footer"><span>共 '+x.items.length+' 条 · 平级/树形按字典结构维护</span>'+btn('关闭','close')+'</footer></section></div>';
+ document.getElementById('modalRoot').innerHTML=ui;
+}
+
+function openImport(){
+ state.overlay='import';
+ const ui='<div class="modal-overlay" data-action="closeOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="导入字典预检">'
+ +'<header class="modal-head"><div class="modal-title">导入字典 <span>先校验，再确认导入</span></div><button class="close" data-action="close">×</button></header>'
+ +'<div class="modal-content">'
+ +'<div class="modal-help"><span>支持 Excel / CSV 模板：字典 CODE、名称、类型、结构、字典项和状态。</span>'+btn('下载导入模板','downloadTemplate','btn-secondary')+'</div>'
+ +'<div style="display:flex;align-items:center;gap:13px;padding:15px 17px;border-radius:7px;border:1px dashed #adcdeb;background:#f7fbff;font-size:12px;color:#4f7396">'
+ +'<strong style="font-size:13px;color:#315c87">导入预检</strong><span>MES_字典导入示例.xlsx</span><span style="margin-left:auto"><span class="tag green">● 已预检</span></span></div>'
+ +'<div class="modal-help" style="margin-top:16px"><strong style="color:#365779">导入内容预览</strong><span>本页为设计样例，未读取真实文件</span></div>'
+ +'<table class="modal-table"><colgroup><col style="width:54px"><col style="width:200px"><col style="width:150px"><col style="width:130px"><col style="width:110px"><col></colgroup><thead><tr><th>序号</th><th>字典 CODE</th><th>字典名称</th><th>字典类型</th><th>校验结果</th><th>说明</th></tr></thead><tbody>'
+ +'<tr><td>1</td><td><span class="code">MATERIAL_GRADE</span></td><td>物料等级</td><td>业务级</td><td><span class="tag green">● 通过</span></td><td>可导入</td></tr>'
+ +'<tr><td>2</td><td><span class="code">PRODUCTION_LINE_TYPE</span></td><td>产线类型</td><td>业务级</td><td><span class="tag green">● 通过</span></td><td>可导入</td></tr>'
+ +'<tr><td>3</td><td><span class="code">EQUIPMENT_TYPE</span></td><td>设备类型</td><td>系统级</td><td><span class="tag amber">存在冲突</span></td><td>已存在相同 CODE，须处理后再导入</td></tr>'
+ +'</tbody></table><div class="helper">ⓘ 导入必须校验重复 CODE、父子级别、引用关系与管理权限。冲突项不能静默覆盖。</div></div>'
+ +'<footer class="modal-footer"><span>3 条预检 · 2 条可导入 · 1 条冲突</span><span class="buttons">'+btn('取消','close')+btn('仅导入 2 条通过项','confirmImport','btn-primary')+'</span></footer></section></div>';
+ document.getElementById('modalRoot').innerHTML=ui;
+}
+function itemEditor(index){
+ const x=byCode(state.selected);const item=index==null?['','',x.items.length*10+10,'启用']:x.items[index];state.editingItem=index;
+ const editor=document.getElementById('itemEditor');
+ if(!editor)return;
+ editor.innerHTML='<div class="inline-form"><div class="inline-fields">'
+ +'<label class="inline-pair"><span>选项编码</span><input id="itemCode" '+(index==null?'':'disabled')+' placeholder="请输入编码" value="'+esc(item[0])+'"></label>'
+ +'<label class="inline-pair"><span>选项名称</span><input id="itemLabel" placeholder="请输入名称" value="'+esc(item[1])+'"></label>'
+ +'<label class="inline-pair"><span>排序</span><input id="itemSort" type="number" placeholder="序号" value="'+esc(item[2])+'"></label>'
+ +'<label class="inline-pair"><span>状态</span><select id="itemStatus"><option '+(item[3]==='启用'?'selected':'')+'>启用</option><option '+(item[3]==='停用'?'selected':'')+'>停用</option></select></label>'
+ +'</div><div class="inline-actions">'+btn('保存选项','saveItem','btn-primary')+'</div></div>';
+ const scrollHost=editor.closest('.modal-content');if(scrollHost)scrollHost.scrollTop=scrollHost.scrollHeight;
+}
+function click(event){
+ const target=event.target.closest('[data-action]');if(!target)return;
+ const action=target.dataset.action;
+ if(action==='closeOverlay'&&event.target!==target)return;
+ event.preventDefault();
+ const code=target.dataset.code;
+ if(action==='close'||action==='closeOverlay'){closeDialog();return}
+ if(action==='openItems'){openItems(code||state.selected);return}
+ if(action==='newItem'){itemEditor(null);return}
+ if(action==='editItem'){itemEditor(Number(target.dataset.index));return}
+ if(action==='toggleItem'){const x=byCode(state.selected);const i=Number(target.dataset.index);x.items[i][3]=x.items[i][3]==='启用'?'停用':'启用';openItems(x.code);showToast('原型演示：选项已切换，不会保存到真实数据库');return}
+ if(action==='saveItem'){const x=byCode(state.selected),code=document.getElementById('itemCode').value.trim(),label=document.getElementById('itemLabel').value.trim(),sort=Number(document.getElementById('itemSort').value),status=document.getElementById('itemStatus').value;if(!code||!label){showToast('请填写选项值与选项名称');return}const item=[code,label,sort,status,state.editingItem==null?'':(x.items[state.editingItem][4]||'')];if(state.editingItem==null)x.items.push(item);else x.items[state.editingItem]=item;openItems(x.code);showToast('仅更新原型展示数据');return}
+ if(action==='create'){state.view='create';render();return}
+ if(action==='edit'){state.selected=code||state.selected;state.view='edit';render();return}
+ if(action==='detail'){state.selected=code||state.selected;state.view='detail';render();return}
+ if(action==='back'){state.view='list';render();return}
+ if(action==='search'){state.keyword=document.getElementById('fltCode').value.trim();state.name=document.getElementById('fltName').value.trim();state.kind=document.getElementById('fltKind').value;state.status=document.getElementById('fltStatus').value;render();return}
+ if(action==='reset'){state.keyword='';state.name='';state.kind='';state.status='';render();return}
+ if(action==='toggle'){const x=byCode(code);x.status=x.status==='启用'?'停用':'启用';render();showToast('原型演示：字典状态已切换（未持久化）');return}
+ if(action==='saveDict'){const code=document.getElementById('dictCode').value.trim(),name=document.getElementById('dictName').value.trim();if(!code||!name){showToast('请填写字典 CODE 与名称');return}showToast('原型演示：保存动作，未写入真实数据库');return}
+ if(action==='import'){openImport();return}
+ if(action==='confirmImport'){showToast('设计原型：实际导入需要后端校验后提交（此处不写入数据库）');return}
+ if(action==='downloadTemplate'){showToast('设计原型：正式实现将提供 Excel/CSV 导入模板');return}
+ if(action==='export'){const csv=['字典CODE,字典名称,字典类型,字典结构,状态'].concat(dicts.map(function(x){return [x.code,x.name,x.kind,x.structure,x.status].join(',')})).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='MES_数据字典_设计示例.csv';link.click();setTimeout(function(){URL.revokeObjectURL(link.href)},1000);return}
+}
+document.addEventListener('click',click);
+document.addEventListener('keydown',function(event){if(event.key==='Escape')closeDialog()});
+window.designPreview={openItems:openItems,close:closeDialog,switchView:function(v){state.view=v;render()},setSelected:function(code){state.selected=code;render()}};
+if(state.view==='items'){state.view='list';render();openItems(state.selected)}else render();
+})();
+</script>
+</body></html>

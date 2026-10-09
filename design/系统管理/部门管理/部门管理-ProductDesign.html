@@ -1,0 +1,39 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>医院制剂 MES · 部门管理 PC 原型</title><link rel="stylesheet" href="./部门管理-ProductDesign.css"></head><body>
+<div class="shell">
+<aside class="sidebar"><div class="logo"><span class="logo-icon">✚</span><div><div class="logo-title">医院制剂生产管理系统</div><div class="logo-sub">Hospital Pharma MES</div></div></div>
+<nav class="nav"><div class="nav-label">工作导航</div><div class="nav-domain"><span class="navico">⌂</span>首页</div><div class="nav-domain"><span class="navico">▤</span>基础管理<span class="chevron">⌄</span></div><div class="nav-domain"><span class="navico">▦</span>系统管理<span class="chevron">⌃</span></div><div class="nav-entry active">部门管理</div><div class="nav-entry">用户管理</div><div class="nav-entry">菜单管理</div><div class="nav-entry">角色管理</div><div class="nav-entry">角色权限</div><div class="nav-entry">数据字典</div></nav>
+</aside>
+<div class="core"><header class="topbar"><div class="topbar-left"><span class="collapse-icon">☰</span><div class="global-search">⌕　搜索菜单、功能...</div></div><div class="topright"><span class="bell">♧</span><span class="bell">♢</span><span class="profile"><span class="avatar">管</span>系统管理员　⌄</span></div></header>
+<div class="breadcrumb">首页　/　系统管理　/　<strong>部门管理</strong></div>
+<main class="page" id="stage"></main></div></div>
+<div class="demo-foot">部门管理设计稿 · 示例数据 / 不是当前业务数据库</div>
+<script>
+const scene=new URLSearchParams(location.search).get('view')||'list';
+const records=[
+ {id:1,code:'PHARMACY',name:'药剂科',parent:'—',org:'医院管理组织',leader:'陈主任',phone:'020-88012345',status:'启用',sort:10,remark:'药剂科职能管理'},
+ {id:2,code:'PREPARATION',name:'制剂室',parent:'药剂科',org:'医院管理组织',leader:'李老师',phone:'020-88012346',status:'启用',sort:20,remark:'制剂生产组织'},
+ {id:3,code:'QUALITY',name:'质量管理室',parent:'药剂科',org:'医院管理组织',leader:'王老师',phone:'020-88012347',status:'启用',sort:30,remark:'负责QA'},
+ {id:4,code:'QC_LAB',name:'检验室',parent:'质量管理室',org:'医院管理组织',leader:'赵老师',phone:'020-88012348',status:'启用',sort:40,remark:'QC检验'},
+ {id:5,code:'WAREHOUSE',name:'仓储组',parent:'药剂科',org:'医院管理组织',leader:'刘老师',phone:'020-88012349',status:'停用',sort:50,remark:'仓库物料管理'}
+];
+function pill(v){return '<span class="tag '+(v==='启用'?'green':'')+'"><span class="dot"></span>'+v+'</span>'}
+function heading(n,actions=''){return '<div class="page-title-bar"><div class="page-heading"><h1>'+n+'</h1></div><div class="buttons">'+actions+'</div></div>'}
+function btn(label,to,variant=''){return '<a class="btn '+variant+'" href="?view='+to+'">'+label+'</a>'}
+const tree='<section class="card dept-tree"><div class="dept-tree-title">部门结构 <small style="font-size:11px;color:#91a1b5">共 5 个部门</small></div><button class="dept-node selected">⌄　全部部门 <small>5</small></button><button class="dept-node indent">⌄　药剂科 <small>4</small></button><button class="dept-node indent2">▣　制剂室</button><button class="dept-node indent2">⌄　质量管理室</button><button class="dept-node indent2" style="padding-left:64px">▣　检验室</button><button class="dept-node indent2">▣　仓储组</button></section>';
+const cols='<colgroup><col style="width:11%"><col style="width:16%"><col style="width:14%"><col style="width:16%"><col style="width:12%"><col style="width:8%"><col style="width:7%"><col style="width:16%"></colgroup>';
+const table='<table class="data-table">'+cols+'<thead><tr><th>部门编码</th><th>部门名称</th><th>上级部门</th><th>所属组织</th><th>负责人</th><th>状态</th><th>排序</th><th>操作</th></tr></thead><tbody>'+records.map(x=>'<tr><td><span class="code">'+x.code+'</span></td><td><span class="strong">'+x.name+'</span></td><td>'+x.parent+'</td><td>'+x.org+'</td><td>'+x.leader+'</td><td>'+pill(x.status)+'</td><td>'+x.sort+'</td><td class="actions"><a href="?view=detail">查看</a><a href="?view=edit">编辑</a></td></tr>').join('')+'</tbody></table><div class="table-foot"><span>共 5 条</span><span>每页 20 条　‹　1　›</span></div>';
+const filters='<section class="card filter-card"><div class="filter-grid dept-filter"><label><span class="field-label">部门编码</span><input placeholder="请输入部门编码"></label><label><span class="field-label">部门名称</span><input placeholder="请输入部门名称"></label><label><span class="field-label">状态</span><select><option>全部状态</option><option>启用</option><option>停用</option></select></label><div class="buttons"><button class="btn">重置</button><button class="btn btn-primary">⌕ 查询</button></div></div></section>';
+function input(label,value='',extra=''){return '<div class="form-cell"><span class="field-label">'+label+'</span><input value="'+value+'" '+extra+'></div>'}
+function select(label,values,value){return '<div class="form-cell"><span class="field-label">'+label+'</span><select>'+values.map(x=>'<option '+(x===value?'selected':'')+'>'+x+'</option>').join('')+'</select></div>'}
+function editModal(isCreate){
+const body='<div class="modal-content"><div class="form-grid dept-form-grid">'+input('部门编码 <i class="star">*</i>',isCreate?'':'PREPARATION',isCreate?'placeholder="例如 PREPARATION"':'disabled')+input('部门名称 <i class="star">*</i>',isCreate?'':'制剂室',isCreate?'placeholder="请输入部门名称"':'')+select('上级部门',['药剂科','质量管理室','无上级'],'药剂科')+select('所属组织',['医院管理组织','制剂生产组织'],'医院管理组织')+select('负责人',['李老师','陈主任','王老师'],'李老师')+input('联系电话','020-88012346')+select('状态',['启用','停用'],'启用')+input('显示排序','20')+'<div class="form-cell full"><span class="field-label">备注</span><textarea>部门职能、权限及人员关系由业务管理规则约束</textarea></div></div><div class="form-footer">'+btn('取消','list')+btn('保存部门','list','btn-primary')+'</div></div>';
+return '<div class="modal-overlay"><section class="modal dept-modal" role="dialog" aria-modal="true" aria-label="'+(isCreate?'新增部门':'编辑部门')+'"><div class="modal-head"><div class="modal-title">'+(isCreate?'新增部门':'编辑部门')+'<span>部门基本信息</span></div><a class="close" href="?view=list">×</a></div>'+body+'</section></div>';
+}
+const stage=document.getElementById('stage');
+if(scene==='detail'){
+ stage.innerHTML=heading('部门详情',btn('返回列表','list')+btn('编辑部门','edit','btn-primary'))+'<section class="card dept-read-block"><div class="panel-heading">部门基本信息</div><div class="dept-inline">'+Object.entries({部门编码:'PREPARATION',部门名称:'制剂室',上级部门:'药剂科',所属组织:'医院管理组织',负责人:'李老师',联系电话:'020-88012346',状态:'启用',排序:'20',部门说明:'承担制剂生产组织与人员管理'}).map(x=>'<div><span>'+x[0]+'</span><strong>'+x[1]+'</strong></div>').join('')+'</div></section>';
+}else{
+ stage.innerHTML=heading('部门管理',btn('＋ 新增部门','create','btn-primary'))+filters+'<div class="department-main">'+tree+'<section class="card dept-result"><div class="toolbar"><strong class="toolbar-title">部门列表</strong></div>'+table+'</section></div>';
+ if(scene==='create'||scene==='edit')document.body.insertAdjacentHTML('beforeend',editModal(scene==='create'));
+}
+</script></body></html>

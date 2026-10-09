@@ -32,7 +32,7 @@ class ProductionQualityPlanIT extends IncomingProductionIT {
         blockedCode("INDEPENDENT_REVIEW_REQUIRED",()->plans.approve(id(plan),approval,token(plan),key()));
         as(qa);var approved=plans.approve(id(plan),approval,token(plan),key());
         assertThat(verifier.verify(1,approved.path("signatureId").asLong())).isTrue();
-        as(author);var dispatched=production.releaseBatch(id(batch),body("packageVersionId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Freeze actual plan"),token(batch),key());
+        as(author);var dispatched=production.releaseBatch(id(batch),body("processPackageId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Freeze actual plan"),token(batch),key());
         var snapshot=productionQuery.batch(1,Long.parseLong(id(dispatched))).snapshot();
         assertThat(snapshot.path("qualityPlan").path("contentHash").asText()).isEqualTo(approved.path("contentHash").asText());
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_balance_rule WHERE main_batch_id=?",Integer.class,id(batch))).isEqualTo(1);
@@ -41,7 +41,7 @@ class ProductionQualityPlanIT extends IncomingProductionIT {
     }
     @Test void draftPlanDoesNotPermitDispatchOrClientPassEvidence() {
         var batch=preparedBatch(false);var command=planBody(batch);plans.create(command,key());
-        blockedCode("QUALITY_PLAN_NOT_APPROVED",()->production.releaseBatch(id(batch),body("packageVersionId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Draft cannot freeze"),token(batch),key()));
+        blockedCode("QUALITY_PLAN_NOT_APPROVED",()->production.releaseBatch(id(batch),body("processPackageId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Draft cannot freeze"),token(batch),key()));
         assertThat(production.batch(id(batch)).path("status").asText()).isEqualTo("DRAFT");
         ((com.fasterxml.jackson.databind.node.ObjectNode)command).put("status","APPROVED");
         rejected(IllegalArgumentException.class,()->plans.create(command,key()));

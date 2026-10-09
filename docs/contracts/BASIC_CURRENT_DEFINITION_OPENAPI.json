@@ -1,0 +1,3555 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DCP-BASIC-NO-AUDIT-VERSION-001 bounded API supplement",
+    "version": "2026-10-09",
+    "description": "Approved supplement to FINAL BASELINE v1.0.23. Only listed basic controls/process bindings supersede prior contracts. Historical evidence and regulated controls remain. Fully qualified schema IDs prevent Create/Update collisions without changing HTTP payload fields. DCP-EBR-TEMPLATE-NAME-001 adds required create templateName and controlled draft name editing; historical canonical content remains unchanged."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "paths": {
+    "/api/v1/units/{id}": {
+      "get": {
+        "tags": [
+          "unit-controller"
+        ],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "unit-controller"
+        ],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.UnitCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/unit-conversions/{id}": {
+      "get": {
+        "tags": [
+          "unit-conversion-controller"
+        ],
+        "operationId": "get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "unit-conversion-controller"
+        ],
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.UnitConversionCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/suppliers/{id}": {
+      "get": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "get_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.SupplierCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/qualifications/{id}": {
+      "get": {
+        "tags": [
+          "qualification-controller"
+        ],
+        "operationId": "get_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "qualification-controller"
+        ],
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.QualificationCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.ProductUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/process-packages/{id}": {
+      "get": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "getPackage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcpPackageResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "updatePackage",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.PackageUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/process-packages/{id}/current-definition": {
+      "put": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "saveCurrentDefinition",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.CurrentDefinitionSave"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcpPackageResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/organizations/{id}": {
+      "get": {
+        "tags": [
+          "organization-controller"
+        ],
+        "operationId": "get_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "organization-controller"
+        ],
+        "operationId": "update_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.OrganizationCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/materials/{id}": {
+      "get": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "get_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "update_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.MaterialCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/materials/{id}/suppliers": {
+      "get": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "suppliers",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "assign_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.SupplierCommands.Assign"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/equipment/{id}": {
+      "get": {
+        "tags": [
+          "equipment-controller"
+        ],
+        "operationId": "get_8",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "put": {
+        "tags": [
+          "equipment-controller"
+        ],
+        "operationId": "update_7",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.equipment.application.EquipmentCommands.Update"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/ebr/templates/{id}": {
+      "get": {
+        "tags": [
+          "ebr-controller"
+        ],
+        "operationId": "detail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ebr-controller"
+        ],
+        "operationId": "save_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Save"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/units": {
+      "get": {
+        "tags": [
+          "unit-controller"
+        ],
+        "operationId": "list_1",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "unit-controller"
+        ],
+        "operationId": "create",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.UnitCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/unit-conversions": {
+      "get": {
+        "tags": [
+          "unit-conversion-controller"
+        ],
+        "operationId": "list_2",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "unit-conversion-controller"
+        ],
+        "operationId": "create_1",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.UnitConversionCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/suppliers": {
+      "get": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "list_3",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "supplier-controller"
+        ],
+        "operationId": "create_2",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.SupplierCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/qualifications": {
+      "get": {
+        "tags": [
+          "qualification-controller"
+        ],
+        "operationId": "list_6",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "qualification-controller"
+        ],
+        "operationId": "create_6",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.QualificationCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "products",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "createProduct",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.ProductCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/process-packages": {
+      "get": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "packages",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "process-controller"
+        ],
+        "operationId": "createPackage",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.PackageCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/organizations": {
+      "get": {
+        "tags": [
+          "organization-controller"
+        ],
+        "operationId": "list_8",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "organization-controller"
+        ],
+        "operationId": "create_7",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.OrganizationCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/materials": {
+      "get": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "list_9",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "create_8",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.MaterialCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/materials/{id}/disable": {
+      "post": {
+        "tags": [
+          "material-controller"
+        ],
+        "operationId": "disable",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.MaterialCommands.Disable"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/main-batches/{id}/release": {
+      "post": {
+        "tags": [
+          "production-controller"
+        ],
+        "operationId": "releaseBatch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcpProductionRelease"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseJava.lang.Object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/equipment": {
+      "get": {
+        "tags": [
+          "equipment-controller"
+        ],
+        "operationId": "list_13",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      },
+      "post": {
+        "tags": [
+          "equipment-controller"
+        ],
+        "operationId": "create_11",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.equipment.application.EquipmentCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        },
+        "x-basic-maintenance-contract": "No audit append or revision/client-version precondition. Permission, org scope, validation, row locks and idempotency retained."
+      }
+    },
+    "/api/v1/ebr/templates": {
+      "get": {
+        "tags": [
+          "ebr-controller"
+        ],
+        "operationId": "list_14",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arg3",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ebr-controller"
+        ],
+        "operationId": "create_12",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ebr/templates/{id}/versions": {
+      "post": {
+        "tags": [
+          "ebr-controller"
+        ],
+        "operationId": "version",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.VersionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ebr/book-templates": {
+      "get": {
+        "tags": [
+          "book-controller"
+        ],
+        "operationId": "list_15",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "book-controller"
+        ],
+        "operationId": "create_13",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcpNewBookCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ebr/book-templates/{id}": {
+      "get": {
+        "tags": [
+          "book-controller"
+        ],
+        "operationId": "template",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "com.hospital.mes.masterdata.application.MaterialCommands.Update": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "materialName": {
+            "type": "string"
+          },
+          "materialType": {
+            "type": "string"
+          },
+          "specification": {
+            "type": "string"
+          },
+          "gradePurity": {
+            "type": "string"
+          },
+          "appearance": {
+            "type": "string"
+          },
+          "baseUnitId": {
+            "type": "string"
+          },
+          "packSpec": {
+            "type": "string"
+          },
+          "packUnitId": {
+            "type": "string"
+          },
+          "manufacturerName": {
+            "type": "string"
+          },
+          "lotControlled": {
+            "type": "boolean"
+          },
+          "effectiveFrom": {
+            "type": "string"
+          },
+          "effectiveTo": {
+            "type": "string"
+          },
+          "remark": {
+            "type": "string"
+          },
+          "requiresIncomingInspection": {
+            "type": "boolean"
+          },
+          "storageCondition": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.common.api.ApiResponseCom.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode"
+          },
+          "traceId": {
+            "type": "string"
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.CurrentDefinitionSave": {
+        "type": "object",
+        "properties": {
+          "formula": {
+            "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.FormulaSave"
+          },
+          "route": {
+            "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.RouteSave"
+          }
+        },
+        "required": [
+          "formula",
+          "route"
+        ],
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.SupplierCommands.Create": {
+        "type": "object",
+        "properties": {
+          "supplierCode": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.UnitConversionCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "fromUnitId": {
+            "type": "string"
+          },
+          "toUnitId": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "string"
+          },
+          "materialId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.OrganizationCommands.Create": {
+        "type": "object",
+        "properties": {
+          "parentId": {
+            "type": "string"
+          },
+          "orgCode": {
+            "type": "string"
+          },
+          "orgName": {
+            "type": "string"
+          },
+          "orgType": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.VersionCreate": {
+        "type": "object",
+        "properties": {
+          "versionNo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "copyDefinition": {
+            "type": "boolean"
+          }
+        }
+      },
+      "com.hospital.mes.common.api.ApiResponseCom.fasterxml.jackson.databind.JsonNode": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/com.fasterxml.jackson.databind.JsonNode"
+          },
+          "traceId": {
+            "type": "string"
+          }
+        }
+      },
+      "com.fasterxml.jackson.databind.JsonNode": {},
+      "com.hospital.mes.masterdata.application.SupplierCommands.Assign": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "suppliers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.masterdata.application.SupplierCommands.Relationship"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.MaterialCommands.Create": {
+        "type": "object",
+        "properties": {
+          "materialCode": {
+            "type": "string"
+          },
+          "materialName": {
+            "type": "string"
+          },
+          "materialType": {
+            "type": "string"
+          },
+          "specification": {
+            "type": "string"
+          },
+          "gradePurity": {
+            "type": "string"
+          },
+          "appearance": {
+            "type": "string"
+          },
+          "baseUnitId": {
+            "type": "string"
+          },
+          "packSpec": {
+            "type": "string"
+          },
+          "packUnitId": {
+            "type": "string"
+          },
+          "manufacturerName": {
+            "type": "string"
+          },
+          "lotControlled": {
+            "type": "boolean"
+          },
+          "effectiveFrom": {
+            "type": "string"
+          },
+          "effectiveTo": {
+            "type": "string"
+          },
+          "remark": {
+            "type": "string"
+          },
+          "requiresIncomingInspection": {
+            "type": "boolean"
+          },
+          "storageCondition": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.equipment.application.EquipmentCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "equipmentName": {
+            "type": "string"
+          },
+          "equipmentType": {
+            "type": "string"
+          },
+          "calibrationDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Save": {
+        "type": "object",
+        "properties": {
+          "versionNo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Definition"
+          },
+          "templateName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "生产 eBR 模板名称。新建必填，草稿保存可指定；旧历史记录为 null。DCP-EBR-TEMPLATE-NAME-001."
+          }
+        }
+      },
+      "com.hospital.mes.masterdata.application.MaterialCommands.Disable": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.UnitConversionCommands.Create": {
+        "type": "object",
+        "properties": {
+          "fromUnitId": {
+            "type": "string"
+          },
+          "toUnitId": {
+            "type": "string"
+          },
+          "factor": {
+            "type": "string"
+          },
+          "materialId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.ProductUpdate": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "dosageForm": {
+            "type": "string"
+          },
+          "specification": {
+            "type": "string"
+          },
+          "baseUnitId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.common.api.ApiResponseJava.lang.Object": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {},
+          "traceId": {
+            "type": "string"
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.PackageUpdate": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.equipment.application.EquipmentCommands.Create": {
+        "type": "object",
+        "properties": {
+          "equipmentCode": {
+            "type": "string"
+          },
+          "equipmentName": {
+            "type": "string"
+          },
+          "equipmentType": {
+            "type": "string"
+          },
+          "calibrationDueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "location": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.PackageCreate": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "packageCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Create": {
+        "type": "object",
+        "properties": {
+          "processPackageId": {
+            "type": "string"
+          },
+          "templateCode": {
+            "type": "string"
+          },
+          "templateName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "生产 eBR 模板名称。新建必填，草稿保存可指定；旧历史记录为 null。DCP-EBR-TEMPLATE-NAME-001."
+          }
+        },
+        "required": [
+          "processPackageId",
+          "templateCode",
+          "templateName"
+        ]
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.ProductCreate": {
+        "type": "object",
+        "properties": {
+          "productCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "dosageForm": {
+            "type": "string"
+          },
+          "specification": {
+            "type": "string"
+          },
+          "baseUnitId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.OrganizationCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "orgName": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.UnitCommands.Create": {
+        "type": "object",
+        "properties": {
+          "unitCode": {
+            "type": "string"
+          },
+          "unitName": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "scale": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.UnitCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "unitName": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "scale": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.QualificationCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.QualificationCommands.Create": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "qualificationCode": {
+            "type": "string"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.SupplierCommands.Update": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.RouteSave": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "routeCode": {
+            "type": "string"
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.Operation"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.SupplierCommands.Relationship": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "approved": {
+            "type": "boolean"
+          },
+          "preferred": {
+            "type": "boolean"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          },
+          "manufacturerName": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.masterdata.application.ScopedStore.PageDataCom.fasterxml.jackson.databind.JsonNode": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.fasterxml.jackson.databind.JsonNode"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Definition": {
+        "type": "object",
+        "properties": {
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Section"
+            }
+          },
+          "forms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Form"
+            }
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Rule"
+            }
+          },
+          "signatureRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.SignatureRule"
+            }
+          },
+          "reviewRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.ReviewRule"
+            }
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.FormulaSave": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "formulaCode": {
+            "type": "string"
+          },
+          "batchBasisQty": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.FormulaLine"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Form": {
+        "type": "object",
+        "properties": {
+          "formCode": {
+            "type": "string"
+          },
+          "formName": {
+            "type": "string"
+          },
+          "operationDefId": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Field"
+            }
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.FormulaLine": {
+        "type": "object",
+        "properties": {
+          "lineNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "materialId": {
+            "type": "string"
+          },
+          "requiredQty": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "overagePct": {
+            "type": "string"
+          },
+          "critical": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Section": {
+        "type": "object",
+        "properties": {
+          "sectionCode": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatMode": {
+            "type": "string"
+          },
+          "visibilityRuleCode": {
+            "type": "string"
+          },
+          "pageBreakFlag": {
+            "type": "boolean"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Group"
+            }
+          }
+        }
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Rule": {
+        "type": "object",
+        "properties": {
+          "ruleCode": {
+            "type": "string"
+          },
+          "formCode": {
+            "type": "string"
+          },
+          "fieldCode": {
+            "type": "string"
+          },
+          "ruleType": {
+            "type": "string"
+          },
+          "triggerPoint": {
+            "type": "string"
+          },
+          "expression": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "messageTemplate": {
+            "type": "string"
+          },
+          "deviationTrigger": {
+            "type": "boolean"
+          },
+          "activeFlag": {
+            "type": "boolean"
+          }
+        }
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.SignatureRule": {
+        "type": "object",
+        "properties": {
+          "objectScope": {
+            "type": "string"
+          },
+          "objectCode": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string"
+          },
+          "requiredRole": {
+            "type": "string"
+          },
+          "reauthRequired": {
+            "type": "boolean"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invalidateOnChange": {
+            "type": "boolean"
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.Operation": {
+        "type": "object",
+        "properties": {
+          "operationCode": {
+            "type": "string"
+          },
+          "operationName": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requiredRole": {
+            "type": "string"
+          },
+          "completionRule": {
+            "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.CompletionRule"
+          },
+          "predecessorCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requiredEquipmentType": {
+            "type": "string"
+          },
+          "clearanceRequired": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.Parameter"
+            }
+          },
+          "ipcDefinitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.IpcDefinition"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.ReviewRule": {
+        "type": "object",
+        "properties": {
+          "objectScope": {
+            "type": "string"
+          },
+          "objectCode": {
+            "type": "string"
+          },
+          "reviewType": {
+            "type": "string"
+          },
+          "requiredRole": {
+            "type": "string"
+          },
+          "independentUserRequired": {
+            "type": "boolean"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Field": {
+        "type": "object",
+        "properties": {
+          "fieldCode": {
+            "type": "string"
+          },
+          "groupCode": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "fieldType": {
+            "type": "string"
+          },
+          "sourceType": {
+            "type": "string"
+          },
+          "dataType": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "precisionScale": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requiredFlag": {
+            "type": "boolean"
+          },
+          "readonlyFlag": {
+            "type": "boolean"
+          },
+          "defaultExpr": {
+            "type": "string"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "helpText": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validationJson": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.ebr.domain.EbrCommands.Option"
+            }
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.IpcDefinition": {
+        "type": "object",
+        "properties": {
+          "ipcCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "resultType": {
+            "type": "string"
+          },
+          "lowerLimit": {
+            "type": "string"
+          },
+          "upperLimit": {
+            "type": "string"
+          },
+          "expectedText": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "methodReference": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Group": {
+        "type": "object",
+        "properties": {
+          "groupCode": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "layoutColumns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repeatMode": {
+            "type": "string"
+          },
+          "minOccurs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxOccurs": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.CompletionRule": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.CompletionRule"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.process.domain.ProcessCommands.Parameter": {
+        "type": "object",
+        "properties": {
+          "parameterCode": {
+            "type": "string"
+          },
+          "parameterName": {
+            "type": "string"
+          },
+          "acquisitionMode": {
+            "type": "string"
+          },
+          "unitId": {
+            "type": "string"
+          },
+          "lowerLimit": {
+            "type": "string"
+          },
+          "upperLimit": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "com.hospital.mes.ebr.domain.EbrCommands.Option": {
+        "type": "object",
+        "properties": {
+          "optionCode": {
+            "type": "string"
+          },
+          "optionLabel": {
+            "type": "string"
+          },
+          "optionValue": {
+            "type": "string"
+          },
+          "sequenceNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "activeFlag": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DcpCurrentDefinition": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "formula",
+          "route"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "EFFECTIVE"
+            ]
+          },
+          "formula": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.FormulaSave"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "route": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.RouteSave"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "DcpCurrentPackage": {
+        "type": "object",
+        "required": [
+          "id",
+          "packageCode",
+          "productId",
+          "status",
+          "currentDefinition"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "packageCode": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "currentDefinition": {
+            "$ref": "#/components/schemas/DcpCurrentDefinition"
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "versionNo"
+              ]
+            },
+            {
+              "required": [
+                "versions"
+              ]
+            },
+            {
+              "required": [
+                "selectedVersion"
+              ]
+            }
+          ]
+        }
+      },
+      "DcpPackageResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DcpCurrentPackage"
+          }
+        }
+      },
+      "DcpProductionRelease": {
+        "type": "object",
+        "required": [
+          "processPackageId",
+          "ebrTemplateVersionId",
+          "reason"
+        ],
+        "properties": {
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "processPackageId": {
+            "type": "string"
+          },
+          "ebrTemplateVersionId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Production versionNo or If-Match remains required; both must agree when supplied. The package and published eBR current binding must match; frozen snapshot remains immutable."
+      },
+      "DcpBookMapping": {
+        "type": "object",
+        "required": [
+          "productId",
+          "ebrTemplateVersionId"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "ebrTemplateVersionId": {
+            "type": "string"
+          },
+          "processPackageId": {
+            "type": "string"
+          },
+          "packageVersionId": {
+            "type": "string"
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "processPackageId"
+            ],
+            "not": {
+              "required": [
+                "packageVersionId"
+              ]
+            }
+          },
+          {
+            "required": [
+              "packageVersionId"
+            ],
+            "not": {
+              "required": [
+                "processPackageId"
+              ]
+            }
+          }
+        ],
+        "additionalProperties": false,
+        "description": "Read contract for retained published definitions. New create/publish rejects the historical packageVersionId alternative with BOOK_CURRENT_PROCESS_REQUIRED."
+      },
+      "DcpNewBookMapping": {
+        "type": "object",
+        "required": [
+          "productId",
+          "ebrTemplateVersionId",
+          "processPackageId"
+        ],
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "ebrTemplateVersionId": {
+            "type": "string"
+          },
+          "processPackageId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DcpNewBookDefinition": {
+        "type": "object",
+        "required": [
+          "varietyCode",
+          "varietyName",
+          "mappings",
+          "entries"
+        ],
+        "properties": {
+          "varietyCode": {
+            "type": "string"
+          },
+          "varietyName": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "mappings": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/DcpNewBookMapping"
+            }
+          },
+          "entries": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "description": "Existing closed BookDefinition.Entry contract is inherited unchanged; no executable expressions."
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DcpNewBookCreate": {
+        "type": "object",
+        "required": [
+          "templateCode",
+          "definition",
+          "reason"
+        ],
+        "properties": {
+          "templateCode": {
+            "type": "string"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/DcpNewBookDefinition"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "x-authority": "../development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md",
+  "x-integration-contract": "../architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md",
+  "x-retired-paths": [
+    "/api/v1/process-versions/**",
+    "/api/v1/process-packages/{id}/versions"
+  ],
+  "x-compatibility": "Legacy basic versionNo/sourceVersionId/sourceVersionNo are ignored by adapters and excluded from new schemas. Archived published JSON is never rewritten."
+}

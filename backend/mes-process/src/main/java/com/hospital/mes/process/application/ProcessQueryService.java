@@ -31,6 +31,19 @@ public class ProcessQueryService {
   }
   return result;
  }
+ public com.fasterxml.jackson.databind.JsonNode currentSnapshot(long org,long packageId){return process.currentSnapshot(org,packageId,false);}
+ public com.fasterxml.jackson.databind.JsonNode requireCurrent(long org,long packageId){return process.currentSnapshot(org,packageId,true);}
+ public com.fasterxml.jackson.databind.JsonNode requireCurrentIdentified(long org,long packageId){
+  if(TransactionSynchronizationManager.isActualTransactionActive())store.packages().lock(org,packageId);
+  var root=store.current(org,packageId);var result=(com.fasterxml.jackson.databind.node.ObjectNode)requireCurrent(org,packageId);
+  var formula=store.formula(org,root);var route=store.route(org,root);
+  result.put("processPackageId",Long.toString(packageId));result.put("currentDefinitionId",root.getId().toString());result.put("formulaId",formula.getId().toString());result.put("routeId",route.getId().toString());
+  var items=store.items(org,formula.getId());for(var item:result.path("formula").path("items")){var source=items.stream().filter(x->x.getLineNo().intValue()==item.path("lineNo").asInt()).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)item).put("formulaItemId",source.getId().toString());}
+  var operations=store.operations(org,route.getId());for(var operation:result.path("route").path("operations")){var source=operations.stream().filter(x->x.getOperationCode().equals(operation.path("operationCode").asText())).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)operation).put("operationDefId",source.getId().toString());var parameters=store.parameters(org,source.getId());for(var parameter:operation.path("parameters")){var p=parameters.stream().filter(x->x.getParameterCode().equals(parameter.path("parameterCode").asText())).findFirst().orElseThrow();((com.fasterxml.jackson.databind.node.ObjectNode)parameter).put("parameterDefId",p.getId().toString());}}
+  return result;
+ }
+ public java.util.List<OperationReference> currentOperations(long org,long packageId){var root=store.current(org,packageId);var route=store.route(org,root);if(route==null)return java.util.List.of();return store.operations(org,route.getId()).stream().map(o->new OperationReference(o.getId().toString(),o.getOperationCode(),o.getOperationName())).toList();}
+ public OperationReference requireCurrentOperation(long org,long packageId,long operationId){return currentOperations(org,packageId).stream().filter(o->o.id().equals(Long.toString(operationId))).findFirst().orElseThrow(()->new java.util.NoSuchElementException("Operation not in current package"));}
  public void requireProduct(long org,long productId){if(!"ACTIVE".equals(store.products().get(org,productId).getStatus()))throw new com.hospital.mes.common.exception.ComplianceException("PRODUCT_NOT_USABLE","Active product required");}
  public record OperationReference(String id,String operationCode,String operationName){}
  public java.util.List<OperationReference> operations(long org,long versionId){

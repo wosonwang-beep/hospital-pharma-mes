@@ -12,6 +12,8 @@ public class SysMenuEntity {
     private String menuCode;
     private String menuName;
     private String routePath;
+    private String permissionCode;
+    private String requiredPermissions;
     private Integer sortNo;
     private String status;
     private Long createdBy;
@@ -24,6 +26,8 @@ public class SysMenuEntity {
     public String getMenuCode() { return menuCode; } public void setMenuCode(String value) { menuCode = value; }
     public String getMenuName() { return menuName; } public void setMenuName(String value) { menuName = value; }
     public String getRoutePath() { return routePath; } public void setRoutePath(String value) { routePath = value; }
+    public String getPermissionCode() { return permissionCode; } public void setPermissionCode(String value) { permissionCode = value; }
+    public String getRequiredPermissions() { return requiredPermissions; } public void setRequiredPermissions(String value) { requiredPermissions = value; }
     public Integer getSortNo() { return sortNo; } public void setSortNo(Integer value) { sortNo = value; }
     public String getStatus() { return status; } public void setStatus(String value) { status = value; }
     public Long getCreatedBy() { return createdBy; } public void setCreatedBy(Long value) { createdBy = value; }

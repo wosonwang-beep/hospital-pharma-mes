@@ -1,0 +1,36 @@
+@import url("../数据字典/数据字典-ProductDesign.css");
+.department-main{display:grid;grid-template-columns:265px minmax(0,1fr);gap:15px}
+.dept-tree{padding:15px;min-height:405px}
+.dept-tree-title{display:flex;justify-content:space-between;align-items:center;padding:0 0 14px;border-bottom:1px solid #edf1f5;font-size:14px;font-weight:700}
+.dept-node{width:100%;border:0;background:none;display:flex;align-items:center;gap:8px;text-align:left;padding:11px 12px;font-size:13px;color:#47617e;border-radius:5px;margin-top:3px}
+.dept-node.selected{background:#edf4ff;color:#245cc5;font-weight:700}
+.dept-node.indent{padding-left:29px}
+.dept-node.indent2{padding-left:46px}
+.dept-node small{margin-left:auto;font-size:11px;color:#91a1b5}
+.dept-result{min-width:0}
+.dept-result table{table-layout:fixed}
+.dept-result th,.dept-result td{white-space:nowrap}
+.dept-filter{grid-template-columns:repeat(3,minmax(0,1fr));}
+.dept-filter label{display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:10px}
+.dept-filter .field-label{text-align:right;flex:0 0 110px;white-space:nowrap;color:#546981}
+.dept-filter label>input,.dept-filter label>select{flex:1;min-width:0;width:auto}
+.dept-filter>.buttons{grid-column:1/-1;justify-content:flex-end}
+.dept-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 15px}
+.dept-form-grid .form-cell{display:flex;flex-direction:row;align-items:center;gap:10px}
+.dept-form-grid .form-cell>.field-label{flex:0 0 118px;width:118px;text-align:right;white-space:nowrap}
+.dept-form-grid .form-cell>input,.dept-form-grid .form-cell>select,.dept-form-grid .form-cell>textarea{flex:1;min-width:0}
+.dept-modal{height:auto;width:790px;max-height:calc(100vh - 65px)}
+.dept-modal .modal-content{padding:10px 24px}
+.dept-modal .form-grid{padding:18px 0}
+.dept-modal .form-footer{margin:0 -24px;border-top:1px solid #e9edf2;padding:16px 24px}
+.dept-breadcrumb{font-size:12px;color:#7890a9;margin:0 0 16px}
+.dept-inline{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 30px;padding:24px}
+.dept-inline>div{display:flex;align-items:baseline;gap:14px;font-size:13px}
+.dept-inline>div>span{flex:0 0 130px;text-align:right;color:#8696a7}
+.dept-inline>div>strong{color:#304d6d;font-weight:600}
+.dept-read-block{max-width:1030px}
+.dept-status{font-size:12px;padding:4px 9px;border-radius:12px;background:#eaf7ee;color:#2c9062}
+@media(max-width:1280px){.department-main{grid-template-columns:230px minmax(0,1fr)}.dept-filter{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.dept-result .actions a{margin-right:12px;display:inline-block;text-decoration:none}
+.dept-result .actions a:last-child{margin-right:0}

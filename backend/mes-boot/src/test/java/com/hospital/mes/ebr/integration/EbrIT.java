@@ -47,11 +47,10 @@ class EbrIT {
         unit=units.create(new UnitCommands.Create("EU"+suffix,"eBR unit","MASS",3),key()).path("id").asText();
         String material=materials.create(json.convertValue(Map.of("materialCode","EM"+suffix,"materialName","eBR material","materialType","RAW","baseUnitId",unit,"lotControlled",true),MaterialCommands.Create.class),key()).path("id").asText();
         var product=process.createProduct(new ProcessCommands.ProductCreate("EP"+suffix,"eBR product",null,null,unit),key());
-        var pkg=process.createPackage(new ProcessCommands.PackageCreate(product.path("id").asText(),"EK"+suffix),key());processId=pkg.path("selectedVersion").path("id").asText();
-        process.saveFormula(processId,new ProcessCommands.FormulaSave(0L,"Fixture BOM","EF"+suffix,"10",unit,List.of(new ProcessCommands.FormulaLine(1,material,"1",unit,"0",true))),null,key());
-        process.saveRoute(processId,new ProcessCommands.RouteSave(1L,"Fixture route","ER"+suffix,List.of(new ProcessCommands.Operation("MIX","Mix",1,null,null,List.of(),null,false,List.of()))),null,key());
-        process.transition(processId,"SUBMIT",new ProcessCommands.Transition(2L,"Fixture submit",null),null,key());as(1,approver);process.transition(processId,"APPROVE",new ProcessCommands.Transition(3L,"Fixture approve","test-token"),null,key());process.transition(processId,"PUBLISH",new ProcessCommands.Transition(4L,"Fixture publish",null),null,key());as(1,creator);
-        operationId=processQuery.operations(1,Long.parseLong(processId)).getFirst().id();
+        var pkg=process.createPackage(new ProcessCommands.PackageCreate(product.path("id").asText(),"EK"+suffix),key());processId=pkg.path("id").asText();
+        process.saveCurrentDefinition(processId,new com.hospital.mes.process.domain.ProcessCommands.CurrentDefinitionSave(null,null,null,new ProcessCommands.FormulaSave(0L,"Fixture BOM","EF"+suffix,"10",unit,List.of(new ProcessCommands.FormulaLine(1,material,"1",unit,"0",true))),new ProcessCommands.RouteSave(1L,"Fixture route","ER"+suffix,List.of(new ProcessCommands.Operation("MIX","Mix",1,null,null,List.of(),null,false,List.of())))),null,key());
+        as(1,approver);as(1,creator);
+        operationId=processQuery.currentOperations(1,Long.parseLong(processId)).getFirst().id();
     }
     long actor(String name){jdbc.update("INSERT INTO sys_user(login_name,login_name_normalized,display_name,password_hash,enabled,must_change_password) VALUES(?,?,?,?,TRUE,FALSE)",name,name,"eBR rollback actor","test-only");return jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name_normalized=?",Long.class,name);}
     void as(long org,long actor){when(contexts.current()).thenReturn(new CurrentPlatformContext(org,actor,Set.of(role),permissions,"ebr-test-session","ebr-"+suffix));}
@@ -61,8 +60,35 @@ class EbrIT {
         var rule=new Rule("LIMIT","F","WEIGHT","VALIDATION","ON_SUBMIT","value('WEIGHT') < 10","BLOCK","OUT_OF_RANGE","Outside range",true,true);
         return new Definition(List.of(new Section("S","Section",1,"NONE",null,false,List.of(new Group("G","Group",1,2,"LIST",1,5)))),List.of(new Form("F","Form",operationId,"1.0",1,List.of(field))),List.of(rule),List.of(new SignatureRule("FORM","F","APPROVE",role,true,1,true)),List.of(new ReviewRule("FORM","F","VERIFY",role,true,1)));
     }
-    JsonNode draft(){var row=service.create(new Create(processId,"ET"+suffix),key());return service.save(row.path("id").asText(),new Save(0L,"Define template",definition()),null,key());}
+    JsonNode draft(){var row=service.create(new Create(processId,"ET"+suffix,"Test eBR template"),key());return service.save(row.path("id").asText(),new Save(0L,"Define template",definition()),null,key());}
     JsonNode command(JsonNode row,String action){return service.command(row.path("id").asText(),action,new Command(row.path("versionNo").asLong(),"Controlled "+action),null,key());}
+    @Autowired EbrDefinitions templateDefinitions;
+    @Autowired MasterMutation templateMutations;
+    @Test void requiredNameIsValidatedTrimmedAndSearchable(){
+        for(String invalid:Arrays.asList(null,"","   ","x".repeat(101)))assertThatThrownBy(()->service.create(new Create(processId,"NAME"+suffix,invalid),key())).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("templateName");
+        var created=service.create(new Create(processId,"NAME"+suffix,"  Named "+suffix+"  "),key());
+        assertThat(created.path("templateName").asText()).isEqualTo("Named "+suffix);
+        assertThat(service.list(0,20,"Named "+suffix,Map.of()).items()).extracting(Summary::id).contains(created.path("id").asText());
+        assertThat(service.list(0,20,"NAME"+suffix,Map.of()).items()).extracting(Summary::id).contains(created.path("id").asText());
+    }
+    @Test void draftNameIsAuditedInheritedFrozenAndCannotRenameEffective(){
+        var row=draft();String id=row.path("id").asText();
+        row=service.save(id,new Save(row.path("versionNo").asLong(),"Name correction",definition(),"Named "+suffix),null,key());
+        assertThat(row.path("templateName").asText()).isEqualTo("Named "+suffix);
+        var submitted=command(row,"SUBMIT");as(1,approver);var approved=command(submitted,"APPROVE");var effective=command(approved,"PUBLISH");
+        var frozen=query.requirePublished(1,Long.parseLong(id)).deepCopy();
+        assertThat(frozen.path("templateName").asText()).isEqualTo("Named "+suffix);
+        assertThatThrownBy(()->service.save(id,new Save(effective.path("versionNo").asLong(),"Forbidden rename",definition(),"Changed"),null,key())).hasMessageContaining("draft");
+        as(1,creator);var next=service.version(id,new VersionCreate(effective.path("versionNo").asLong(),"Next revision",true),null,key());
+        assertThat(next.path("templateName").asText()).isEqualTo("Named "+suffix);
+        service.save(next.path("id").asText(),new Save(next.path("versionNo").asLong(),"Next name",definition(),"Next "+suffix),null,key());
+        assertThat(query.requirePublished(1,Long.parseLong(id))).isEqualTo(frozen);
+    }
+    @Test void historicalCanonicalNamesAreAbsentAndApprovedHashesRemainValid(){
+        var legacy=jdbc.queryForList("SELECT id,content_hash FROM ebr_template_version WHERE template_name IS NULL AND content_hash IS NOT NULL");
+        assertThat(legacy).isNotEmpty();
+        for(var r:legacy){var row=store.store(com.hospital.mes.ebr.infrastructure.TemplateEntity.class).get(1,((Number)r.get("id")).longValue());var canonical=templateDefinitions.canonical(row);assertThat(canonical.has("templateName")).isFalse();assertThat(templateMutations.digest(canonical)).isEqualTo(r.get("content_hash"));}
+    }
     @Test void normalizedLifecyclePublishedSnapshotAndVersionCopyStayImmutable(){
         var row=draft();String id=row.path("id").asText();assertThat(row.path("operationChoices").get(0).path("id").asText()).isEqualTo(operationId);
         assertThat(command(row,"LINT").path("valid").asBoolean()).isTrue();var submitted=command(row,"SUBMIT");as(1,approver);var approved=command(submitted,"APPROVE");assertThat(approved.path("approvedBy").asText()).isEqualTo(Long.toString(approver));var effective=command(approved,"PUBLISH");
@@ -73,7 +99,7 @@ class EbrIT {
         assertThatThrownBy(()->service.version(id,new VersionCreate(effective.path("versionNo").asLong(),"Duplicate draft",false),null,key())).isInstanceOf(ResourceConflictException.class);
     }
     @Test void nativeApiRejectsDuplicateFieldWithLocationAndPreservesDraft() throws Exception {
-        var row=service.create(new Create(processId,"DUP"+suffix),key());
+        var row=service.create(new Create(processId,"DUP"+suffix,"Test eBR template"),key());
         var d=definition();var form=d.forms().getFirst();
         var duplicate=new Form(form.formCode(),form.formName(),form.operationDefId(),form.schemaVersion(),form.sequenceNo(),List.of(form.fields().getFirst(),form.fields().getFirst()));
         var request=new Save(0L,"Duplicate field validation",new Definition(d.sections(),List.of(duplicate),d.rules(),d.signatureRules(),d.reviewRules()));
@@ -102,7 +128,7 @@ class EbrIT {
     @Test void disabledRoleAndForeignProcessOperationFailLintAndPreserveDraft(){
         var row=draft();String id=row.path("id").asText();jdbc.update("UPDATE sys_role SET enabled=FALSE WHERE role_code=?",role);var lint=command(row,"LINT");assertThat(lint.path("valid").asBoolean()).isFalse();assertThat(lint.path("issues").toString()).contains("requiredRole");
         assertThatThrownBy(()->command(row,"SUBMIT")).isInstanceOf(ComplianceException.class);jdbc.update("UPDATE sys_role SET enabled=TRUE WHERE role_code=?",role);
-        assertThatThrownBy(()->processQuery.requireOperation(1,Long.parseLong(processId),Long.MAX_VALUE)).isInstanceOf(NoSuchElementException.class);assertThatThrownBy(()->processQuery.operations(2,Long.parseLong(processId))).isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(()->processQuery.requireCurrentOperation(1,Long.parseLong(processId),Long.MAX_VALUE)).isInstanceOf(NoSuchElementException.class);assertThatThrownBy(()->processQuery.currentOperations(2,Long.parseLong(processId))).isInstanceOf(NoSuchElementException.class);
         var d=definition();var bad=new Definition(d.sections(),List.of(new Form("F","Form",Long.toString(Long.MAX_VALUE),"1.0",1,d.forms().getFirst().fields())),d.rules(),d.signatureRules(),d.reviewRules());assertThatThrownBy(()->service.save(id,new Save(1L,"Wrong operation",bad),null,key())).hasMessageContaining("operationDefId");
         assertThat(service.get(id).path("status").asText()).isEqualTo("DRAFT");
     }

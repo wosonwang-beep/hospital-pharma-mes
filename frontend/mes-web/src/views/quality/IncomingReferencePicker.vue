@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {ref,watch,computed} from 'vue'
+import {ref,watch,computed,onBeforeUnmount} from 'vue'
 import {api,errorMessage,type Page} from '../../api/http'
 import {referenceRows,label,type IncomingRow,type ReferenceOption} from './incomingModel'
 const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null;materialIds?:string[];status?:string|null}}>()
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
-const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.materialId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.packageVersionId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
+const contextKey=computed(()=>JSON.stringify([props.context.mainBatchId,props.context.finishedMaterialId,props.context.sampleId,props.context.investigationScope,props.context.materialLotId,props.context.materialId,props.context.inspectionRequestId,props.context.qcSpecificationVersionId,props.context.id,props.context.qcSpecificationItemId,props.context.reports,props.context.decisions,props.context.productId,props.context.processPackageId,props.context.operations,props.context.processSnapshot,props.context.formulaItems,props.queryFilters]))
 async function list(url:string,params:Record<string,unknown>={}){const result=await api<Page<IncomingRow>>({url,params:{page:page.value,size:50,keyword:search.value||undefined,...params}});hasMore.value=(page.value+1)*50<result.total;return result.items}
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
@@ -21,11 +21,9 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='locationId')rows=await list('/locations')
   else if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
   else if(f==='productionOrderId')rows=await list('/production-orders')
-  else if(f==='packageVersionId'){
-   const roots=await list('/process-packages',{productId:c.productId})
-   const packages=await Promise.all(roots.map(root=>api<IncomingRow>({url:`/process-packages/${root.id}`})))
-   rows=packages.flatMap(root=>((root.versions??[]) as IncomingRow[]).filter(v=>['APPROVED','EFFECTIVE'].includes(String(v.status))).map(v=>({...v,displayName:`${root.packageCode} · V${v.businessVersion}`})))
-  }else if(f==='ebrTemplateVersionId')rows=await list('/ebr/templates',{packageVersionId:c.packageVersionId,status:'EFFECTIVE'})
+  else if(f==='processPackageId'){
+   const packages=await list('/process-packages',{productId:c.productId});rows=packages.filter(root=>((root.currentDefinition??{}) as IncomingRow).status==='EFFECTIVE').map(root=>({...root,displayName:String(root.packageCode)}))
+  }else if(f==='ebrTemplateVersionId')rows=(await list('/ebr/templates',{processPackageId:c.processPackageId,status:'EFFECTIVE'})).map(t=>({...t,displayName:`${t.templateName||'未命名（历史模板）'} · ${t.templateCode} · V${t.version}`}))
   else if(f==='operationExecutionId'){rows=(c.operations??[]) as IncomingRow[];if(!rows.length&&c.mainBatchId){const units=await api<IncomingRow[]>({url:`/main-batches/${c.mainBatchId}/execution-units`});rows=(await Promise.all(units.map(u=>api<IncomingRow[]>({url:`/execution-units/${u.id}/operations`})))).flat()}}
   else if(f==='weighingRecordId')rows=((c.weighings??[]) as IncomingRow[]).filter(w=>w.status==='VERIFIED')
   else if(f==='formulaItemId')rows=((c.formulaItems??[]) as IncomingRow[]).map(i=>({...i,id:i.formulaItemId,displayName:`${i.materialName??i.materialId} · ${i.requiredQty??i.quantity??i.targetQty??''}`}))
@@ -65,8 +63,13 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   const next=referenceRows('plain',rows);options.value=append?[...options.value,...next.filter(v=>!options.value.some(x=>x.value===v.value))]:next
  }catch(e){if(current===sequence)error.value=errorMessage(e)}finally{if(current===sequence)loading.value=false}
 }
-function selected(event:Event){const value=(event.target as HTMLSelectElement).value;emit('update:modelValue',value);const row=options.value.find(o=>o.value===value)?.record;if(row)emit('select',row)}
+let searchTimer:ReturnType<typeof setTimeout>|undefined
+function searchRecords(value:string){search.value=value;clearTimeout(searchTimer);++sequence;loading.value=false;searchTimer=setTimeout(()=>void load(),250)}
+function selected(raw:unknown){const value=raw==null?'':String(raw);emit('update:modelValue',value);const row=options.value.find(o=>o.value===value)?.record;if(row)emit('select',row)}
+function nextPage(event:UIEvent){const target=event.target as HTMLElement;if(hasMore.value&&!loading.value&&target.scrollTop+target.clientHeight>=target.scrollHeight-24){page.value++;void load(true)}}
+const choices=computed(()=>{const found=options.value.filter(o=>!['qcSpecificationItemId','specificationItemId','operationExecutionId','weighingRecordId','formulaItemId','parameterDefId','inspectionRequestItemId','supersedesDecisionId','optionalSpecificationItemIds'].includes(props.field)||!search.value||o.label.toLocaleLowerCase().includes(search.value.trim().toLocaleLowerCase()));return props.modelValue&&!options.value.some(o=>o.value===String(props.modelValue))?[{value:String(props.modelValue),label:`已绑定记录 ${props.modelValue}`},...found]:found})
+onBeforeUnmount(()=>{clearTimeout(searchTimer);++sequence})
 watch([()=>props.field,contextKey],()=>void load(),{immediate:true})
 </script>
-<template><div class="incoming-reference"><select :value="modelValue??''" class="master-native-input" :aria-label="inputLabel??label(field)" :disabled="disabled||loading" :required="required" @change="selected"><option value="">请选择{{inputLabel??label(field)}}</option><option v-if="modelValue&&!options.some(o=>o.value===String(modelValue))" :value="String(modelValue)">已绑定记录 {{modelValue}}</option><option v-for="option in options" :key="option.value" :value="option.value">{{option.label}}</option></select><details v-if="!disabled"><summary>查找其他记录</summary><div class="reference-search"><input v-model="search" class="master-native-input" :aria-label="`查找${label(field)}`" placeholder="编号或名称" @keydown.enter.prevent="load()"/><a-button :loading="loading" @click="load()">查找</a-button><a-button v-if="hasMore" :loading="loading" @click="page++;load(true)">更多</a-button></div></details><p v-if="error" role="alert" class="error">{{error}}</p><p v-else-if="!loading&&!options.length" class="muted">暂无符合条件的记录，请先完成上游记录。</p></div></template>
-<style scoped>.incoming-reference{min-width:0;flex:1}.incoming-reference>select{width:100%}.reference-search{display:flex;gap:8px;margin-top:8px}.incoming-reference summary{font-size:12px;color:#595959;cursor:pointer;margin-top:4px}.muted{color:#595959;font-size:12px;margin:4px 0}.error{font-size:12px}</style>
+<template><div class="incoming-reference"><a-select :value="modelValue?String(modelValue):undefined" :aria-label="inputLabel??label(field)" :placeholder="`输入编号或名称搜索${inputLabel??label(field)}`" :disabled="disabled" :loading="loading" show-search allow-clear :filter-option="false" :options="choices" :default-active-first-option="false" :not-found-content="loading?'正在搜索…':error?'搜索失败，请重新输入':'没有匹配记录'" @search="searchRecords" @change="selected" @popup-scroll="nextPage"/><p v-if="error" role="alert" class="error">{{error}}</p></div></template>
+<style scoped>.incoming-reference{min-width:0;flex:1;width:100%}.incoming-reference :deep(.ant-select){width:100%}.error{font-size:12px;color:#b42318;margin:4px 0}</style>

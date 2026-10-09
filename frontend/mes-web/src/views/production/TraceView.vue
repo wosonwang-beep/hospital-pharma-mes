@@ -91,7 +91,7 @@ onMounted(()=>{if(mainBatchId.value||materialLotId.value)void search()})
 
 <template>
  <main class="admin-page master-page trace-page" data-ui-template="T4">
-  <header class="admin-page-header"><div><h1>完整追溯</h1><p>从真实供应商、原料批次与投料记录，追溯生产、检验、放行和发货</p></div><a-button v-if="materialLotId&&auth.can('wms:inventory:view')" @click="router.push('/wms/material-lots/'+materialLotId)">物料批详情</a-button></header>
+  <header class="admin-page-header"><div><h1>完整追溯</h1></div><a-button v-if="materialLotId&&auth.can('wms:inventory:view')" @click="router.push('/wms/material-lots/'+materialLotId)">物料批详情</a-button></header>
   <a-alert v-if="error" type="error" :message="error" show-icon/>
   <a-card class="query-card" title="追溯条件"><form class="query-form" @submit.prevent="search">
    <label v-if="auth.can('production:batch:view')&&auth.can('master:product:view')"><span class="form-field-label">产品</span><ProcessLookup v-model="productId" resource="products" label="追溯产品" allow-clear @update:model-value="mainBatchId=''"/></label>
@@ -120,7 +120,7 @@ onMounted(()=>{if(mainBatchId.value||materialLotId.value)void search()})
     <summary>展开完整证据关系图（{{nodes.length}} 条记录、{{edges.length}} 条关系）</summary>
     <div v-if="detailsOpen">
      <div class="trace-filters">
-      <label>记录类型<select v-model="nodeType" class="master-native-input"><option value="">全部</option><option v-for="type in [...new Set(nodes.map(n=>String(n.type)))]" :key="type" :value="type">{{typeNames[type]??type}}</option></select></label>
+      <label>记录类型<a-select show-search option-filter-prop="children" v-model:value="nodeType" class="master-native-input"><a-select-option value="">全部</a-select-option><a-select-option v-for="type in [...new Set(nodes.map(n=>String(n.type)))]" :key="type" :value="type">{{typeNames[type]??type}}</a-select-option></a-select></label>
       <label>编号或名称<input v-model="keyword" class="master-native-input" aria-label="追溯记录过滤"/></label>
       <span class="muted">当前显示 {{visibleNodes.length}} / {{filteredNodes.length}} 个节点、{{lines.length}} 条可见关系</span>
      </div>

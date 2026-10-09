@@ -36,7 +36,7 @@ watch(()=>props.lotId,()=>void load(),{immediate:true})
 </script>
 <!-- Read-only T4 subordinate view: existing trace graph is the sole lineage source. -->
 <template><section class="lot-lineage">
- <a-alert v-if="!auth.can('trace:view')" type="info" message="完整关联记录需要追溯查询权限，请联系管理员。" show-icon/>
+ <a-alert v-if="!auth.can('trace:view')" type="warning" message="完整关联记录需要追溯查询权限，请联系管理员。" show-icon/>
  <a-alert v-else-if="error" type="error" :message="error" show-icon><template #action><a-button @click="load">重试</a-button></template></a-alert>
  <a-table v-else-if="!overview" :loading="busy" :data-source="rows" :pagination="false" :scroll="{x:600}" :row-key="(n:Node)=>n.type+':'+n.id" :columns="[{title:'记录类型',key:'type'},{title:'来源说明',dataIndex:'label'},{title:'状态',key:'status'},{title:'操作',key:'actions'}]">
   <template #bodyCell="{column,record}"><span v-if="column.dataIndex==='label'">{{description(record)}}</span><span v-else-if="column.key==='type'">{{names[record.type]??record.type}}</span><span v-else-if="column.key==='status'">{{display(record.status)}}</span><template v-else-if="column.key==='actions'"><a-button v-if="destination(record)" type="link" @click="router.push(destination(record)!)">查看来源记录</a-button><span v-else>—</span></template></template>

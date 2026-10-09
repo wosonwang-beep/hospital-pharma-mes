@@ -4,12 +4,12 @@ export interface NavigationItem { key: string; title: string; path: string; perm
 export interface NavigationGroup { key: string; title: string; items: NavigationItem[] }
 export const navigationHome: NavigationItem = { key: 'dashboard', title: '首页', path: '/' }
 
-/** Approved HIGH-01 menu order. All shell variants consume this configuration. */
+/** Historical approved menu order used by migration fixtures. Runtime shells consume /auth/navigation database trees. */
 export const navigationConfiguration: NavigationGroup[] = [
   { key: 'master', title: '基础管理', items: [
     ...resources.map(r => ({ key: `master-${r.key}`, title: r.key === 'equipment' ? '设备' : r.title, path: `/master/${r.key}`, permission: `master:${r.permission}:view` })),
     { key: 'process-products', title: '产品管理', path: '/process/products', permission: 'master:product:view' },
-    { key: 'process-packages', title: '工艺包管理', path: '/process/packages', permission: 'process:package:view' }
+    { key: 'process-packages', title: '生产工艺', path: '/process/packages', permission: 'process:package:view' }
   ] },
   { key: 'wms', title: 'WMS管理', items: [
     { key: 'wms-receipts', title: '原辅料收货记录', path: '/wms/receipts', permission: 'wms:receipt:view' },
@@ -52,6 +52,7 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'print-templates', title: '打印模板', path: '/admin/print-templates', permission: 'print:template:view' },
     { key: 'users', title: '用户管理', path: '/admin/users', permission: 'iam:user:view' },
     { key: 'roles', title: '角色与权限', path: '/admin/roles', permission: 'iam:role:view' },
+    { key: 'menus', title: '菜单管理', path: '/admin/menus', permission: 'iam:menu:view' },
     { key: 'trace', title: '完整追溯', path: '/trace', permission: 'trace:view' },
     { key: 'audit', title: 'GMP Audit Trail', path: '/audit', permission: 'audit:view' },
     { key: 'integration-operations', title: 'Integration Operations', path: '/integration/operations', permission: 'integration:view' }

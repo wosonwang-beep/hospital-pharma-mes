@@ -87,10 +87,13 @@ export interface EbrDefinition {
  reviewRules:Array<EbrReviewRule>
 }
 export interface EbrCreate {
- packageVersionId:string
+ packageVersionId?:string
+ processPackageId:string
  templateCode:string
+ templateName:string
 }
 export interface EbrSave {
+ templateName?:string|null
  versionNo:number
  reason:string
  definition:EbrDefinition
@@ -116,8 +119,10 @@ export interface EbrSimulation {
 }
 export interface EbrSummary {
  id:string
- packageVersionId:string
+ packageVersionId?:string
+ processPackageId:string
  templateCode:string
+ templateName?:string|null
  version:number
  status:"DRAFT"|"SUBMITTED"|"APPROVED"|"EFFECTIVE"|"WITHDRAWN"
  contentHash:string|null
@@ -129,8 +134,10 @@ export interface EbrSummary {
 }
 export interface EbrDetail {
  id:string
- packageVersionId:string
+ packageVersionId?:string
+ processPackageId:string
  templateCode:string
+ templateName?:string|null
  version:number
  status:"DRAFT"|"SUBMITTED"|"APPROVED"|"EFFECTIVE"|"WITHDRAWN"
  contentHash:string|null

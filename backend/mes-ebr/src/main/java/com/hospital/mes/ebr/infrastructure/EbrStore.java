@@ -9,7 +9,7 @@ public class EbrStore {
 private final Map<Class<?>,BaseMapper<?>> mappers=new HashMap<>();
 private final Map<Class<?>,ScopedStore<?>> stores=new HashMap<>();
 public EbrStore(TemplateMapper template,SectionMapper section,GroupMapper group,FormMapper form,FieldMapper field,OptionMapper option,RuleMapper rule,SignatureRuleMapper signatureRule,ReviewRuleMapper reviewRule){
-mappers.put(TemplateEntity.class,template);stores.put(TemplateEntity.class,new ScopedStore<>(template,List.of("template_code"),Map.of("status","status","packageVersionId","package_version_id")));
+mappers.put(TemplateEntity.class,template);stores.put(TemplateEntity.class,new ScopedStore<>(template,List.of("template_code","template_name"),Map.of("status","status","packageVersionId","package_version_id","processPackageId","process_package_id")));
 mappers.put(SectionEntity.class,section);stores.put(SectionEntity.class,new ScopedStore<>(section,List.of(),Map.of()));
 mappers.put(GroupEntity.class,group);stores.put(GroupEntity.class,new ScopedStore<>(group,List.of(),Map.of()));
 mappers.put(FormEntity.class,form);stores.put(FormEntity.class,new ScopedStore<>(form,List.of(),Map.of()));

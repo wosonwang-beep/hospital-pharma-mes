@@ -1,0 +1,1 @@
+(async()=>{for(const path of ['/actuator/health','/api/v1/dictionaries','/api/v1/dictionary-options/EQUIPMENT_TYPE']){try{const r=await fetch('http://127.0.0.1:8080'+path,{signal:AbortSignal.timeout(2500)});console.log(path,'HTTP',r.status,(await r.text()).slice(0,140))}catch(e){console.log(path,'FAILED',e.message)}}})();

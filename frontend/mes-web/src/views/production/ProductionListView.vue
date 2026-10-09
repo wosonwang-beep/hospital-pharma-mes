@@ -30,7 +30,7 @@ watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])qu
 </script>
 <!-- UI Template: T1 Query/List. Frozen UI-ORD-Q/UI-BAT-Q filters and independent routes. -->
 <template><main data-ui-template="T1" class="admin-page master-page t1-query-list production-query-page t1-query-list">
- <header class="admin-page-header"><div><h1>{{title}}</h1><p>查询计划与状态 · 查询条件随导航保留</p></div><a-button v-if="auth.can(`${permission}:create`)" type="primary" @click="open()">新增{{title}}</a-button></header>
+ <header class="admin-page-header"><div><h1>{{title}}</h1></div><a-button v-if="auth.can(`${permission}:create`)" type="primary" @click="open()">新增{{title}}</a-button></header>
  <a-alert v-if="error" type="error" :message="error" show-icon/>
  <a-card title="查询条件" class="query-card"><form class="query-form" @submit.prevent="search(1)">
   <label><span class="form-field-label">{{batch?'批号 / 关键字':'订单号 / 关键字'}}</span><input v-model="query.keyword" class="master-native-input" aria-label="关键字"/></label>
@@ -38,7 +38,7 @@ watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])qu
   <label v-if="batch"><span class="form-field-label">生产订单</span><IncomingReferencePicker field="productionOrderId" v-model="query.productionOrderId" :context="{}"/></label>
   <label><span class="form-field-label">计划日期从</span><input v-model="query.plannedDateFrom" type="date" class="master-native-input" aria-label="计划日期从"/></label>
   <label><span class="form-field-label">计划日期至</span><input v-model="query.plannedDateTo" type="date" class="master-native-input" aria-label="计划日期至"/></label>
-  <label><span class="form-field-label">状态</span><select v-model="query.status" class="master-native-input" aria-label="状态"><option value="">全部状态</option><option v-for="state in states" :key="String(state)" :value="String(state)">{{stateLabel(state)}}</option></select></label>
+  <label><span class="form-field-label">状态</span><a-select show-search option-filter-prop="children" v-model:value="query.status" class="master-native-input" aria-label="状态"><a-select-option value="">全部状态</a-select-option><a-select-option v-for="state in states" :key="String(state)" :value="String(state)">{{stateLabel(state)}}</a-select-option></a-select></label>
   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit" :loading="busy">查询</a-button></a-space>
  </form></a-card>
  <a-card title="数据列表" class="result-card"><div class="master-toolbar"><span>共 {{total}} 条记录</span></div>

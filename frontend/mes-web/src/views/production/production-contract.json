@@ -2668,7 +2668,7 @@
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
         },
-        "packageVersionId": {
+        "processPackageId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
         },
@@ -2695,7 +2695,7 @@
       },
       "required": [
         "id",
-        "packageVersionId",
+        "processPackageId",
         "formulaVersionId",
         "routeVersionId",
         "ebrTemplateVersionId",
@@ -2903,7 +2903,7 @@
           "type": "string",
           "minLength": 1
         },
-        "packageVersionId": {
+        "processPackageId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
         },
@@ -2915,7 +2915,7 @@
       "required": [
         "versionNo",
         "reason",
-        "packageVersionId",
+        "processPackageId",
         "ebrTemplateVersionId"
       ]
     },

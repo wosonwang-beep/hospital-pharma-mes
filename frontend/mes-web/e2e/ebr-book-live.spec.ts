@@ -1,0 +1,12 @@
+import {test,expect} from '@playwright/test'
+import {readFileSync} from 'node:fs'
+// Reuse the already-authorized local DEV account in the existing live test; never print credentials or modify business data.
+const prior=readFileSync(new URL('./printing-live-v034.tmp.spec.ts',import.meta.url),'utf8')
+const password=prior.match(/getByLabel\('密码'\)\.fill\('([^']+)'\)/)?.[1]
+test('V036 live HTTP and browser authorize empty book-template list and preserve legacy batch',async({page})=>{
+ if(!password)throw Error('Existing local DEV fixture login unavailable')
+ page.on('response',async response=>{if(response.url().endsWith('/auth/me')&&response.ok()){const result=await response.json();const codes=result.data?.permissionCodes??[];console.log('LIVE_BOOK_ACCESS',JSON.stringify(Object.fromEntries(['ebr:form:view','ebr:template:view','production:batch:view','master:product:view','master:uom:view'].map(key=>[key,codes.includes(key)]))))}});const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message))
+ await page.goto('/login');await page.getByLabel('账号').fill('admin');await page.getByLabel('密码').fill(password);await page.getByRole('button',{name:'登 录',exact:true}).click();await expect(page).toHaveURL(/\/$/)
+ await page.getByText('生产管理',{exact:true}).first().click();await page.getByRole('menuitem',{name:'批记录册模板',exact:true}).click();await expect(page.getByRole('heading',{name:'生产批记录册模板',exact:true})).toBeVisible();await expect(page.getByText('暂无数据',{exact:true})).toBeVisible();await expect(page.locator('.ant-alert-error')).toHaveCount(0)
+ await page.getByRole('menuitem').filter({hasText:'生产批'}).first().click();await page.getByRole('button',{name:'查看',exact:true}).first().click();await page.getByRole('button',{name:'打开生产批记录册',exact:true}).click();await expect(page.getByRole('heading',{name:'生产批记录册',exact:true})).toBeVisible();await expect(page.getByText(/此批使用原冻结eBR|批次尚未下达/)).toBeVisible();await expect(page.locator('.legacy-book')).toBeVisible();await expect(page.locator('.ant-alert-error')).toHaveCount(0);await expect(page.getByRole('button',{name:'查看原电子批记录',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'生成并预览整册 PDF',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'查看原电子批记录',exact:true}).click();await expect(page.getByRole('tab',{name:'电子批记录',exact:true})).toHaveAttribute('aria-selected','true');expect(errors).toEqual([])
+})

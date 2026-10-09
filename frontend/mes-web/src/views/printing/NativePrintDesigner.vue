@@ -117,14 +117,14 @@ function drop(event:DragEvent,targetId:string){
 }
 async function save(){
  error.value=''
- if(!/^[A-Za-z0-9_-]{1,60}$/.test(templateCode.value)||!templateName.value.trim()||!reason.value.trim()){
+ if(!/^[A-Za-z0-9_-]{1,60}$/.test(templateCode.value)||!templateName.value.trim()){
   error.value='请填写模板编码（英文字母、数字、下划线或横线）、名称和保存原因';return
  }
  busy.value=true
  try{
   const result=await api<PrintTemplate>({url:'/printing/designer',method:'POST',data:{
    templateCode:templateCode.value,templateName:templateName.value,businessType:'INSPECTION_REPORT',
-   reason:reason.value,design:design.value
+   reason:'打印配置维护（系统记录）',design:design.value
   }})
   message.success(`已保存第 ${result.templateRevision} 版草稿，请验证 PDF 后发布`)
   await router.push('/admin/print-templates')
@@ -150,7 +150,7 @@ async function save(){
    <a-row :gutter="[16,12]">
     <a-col :xs="24" :md="7"><label>模板编码 <a-input v-model:value="templateCode" maxlength="60" :disabled="!!existingId" placeholder="例如 INSPECT_REPORT"/></label></a-col>
     <a-col :xs="24" :md="8"><label>模板名称 <a-input v-model:value="templateName" maxlength="120" placeholder="例如 原辅料检验报告"/></label></a-col>
-    <a-col :xs="24" :md="9"><label>保存原因 <a-input v-model:value="reason" maxlength="500" placeholder="说明本次设计或修改原因"/></label></a-col>
+    
    </a-row>
   </a-card>
   <a-spin :spinning="busy">
@@ -245,7 +245,7 @@ async function save(){
       </div>
       <div v-if="selectedBlock.type==='FIELD'" class="property-group">
        <label>中文字段（自动填充）</label>
-       <a-select v-model:value="selectedBlock.fieldKey" style="width:100%" :options="fields.filter(f=>!f.repeated&&f.key!=='items').map(f=>({value:f.key,label:f.label}))"/>
+       <a-select show-search option-filter-prop="label" v-model:value="selectedBlock.fieldKey" style="width:100%" :options="fields.filter(f=>!f.repeated&&f.key!=='items').map(f=>({value:f.key,label:f.label}))"/>
        <p class="hint">{{fieldInfo(selectedBlock.fieldKey)?.description}}</p>
       </div>
       <div v-if="selectedBlock.type==='WORD_TABLE'" class="property-group">

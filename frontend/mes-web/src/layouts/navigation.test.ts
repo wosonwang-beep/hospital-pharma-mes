@@ -10,7 +10,7 @@ describe('approved shared global navigation', () => {
     expect(items.some(item => item.key === 'execution-execution')).toBe(false)
     expect(navigationConfiguration.find(group=>group.key==='production')?.items.map(item=>item.title)).toEqual(['生产订单','生产批','生产执行','批记录册模板','eBR模板','物料平衡'])
     expect(navigationConfiguration.find(group=>group.key==='finished')?.items.map(item=>item.title)).toEqual(['成品入库申请','成品生产入库（待检）','成品请验','成品取样','成品检验','QA批审核','成品放行','成品库存','成品发货出库'])
-    expect(navigationConfiguration.find(group => group.key === 'master')?.items.map(item => item.title)).toEqual(['物料主数据', '供应商', '组织', '单位', '单位换算', '设备', '人员资格', '产品管理', '工艺包管理'])
+    expect(navigationConfiguration.find(group => group.key === 'master')?.items.map(item => item.title)).toEqual(['物料主数据', '供应商', '组织', '单位', '单位换算', '设备', '人员资格', '产品管理', '生产工艺'])
     expect(navigationConfiguration.find(group => group.key === 'wms')?.items.map(item => item.title)).toEqual(['原辅料收货记录', '库存管理', '领料申请', '出库管理', '退料管理'])
     expect(navigationConfiguration.find(group => group.key === 'wms')?.items.map(item => item.path)).toEqual(['/wms/receipts', '/wms/inventory', '/wms/requests', '/wms/issues', '/wms/returns'])
     expect(navigationConfiguration.find(group => group.key === 'quality')?.items.map(item => item.title)).toEqual(['请验单', '取样记录', '样品', '检验记录', '检验报告', 'QC质量标准', '生产质量计划', '生产检验', '质量调查'])

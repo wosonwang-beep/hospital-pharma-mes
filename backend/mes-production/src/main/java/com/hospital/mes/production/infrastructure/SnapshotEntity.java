@@ -4,6 +4,8 @@ import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 import java.math.BigDecimal;
 import java.time.*;
 @TableName("prd_process_snapshot") public class SnapshotEntity extends ScopedEntity {
+ private Long processPackageId;
+ public Long getProcessPackageId(){return processPackageId;} public void setProcessPackageId(Long value){processPackageId=value;}
  private Long packageVersionId;
  public Long getPackageVersionId(){return packageVersionId;} public void setPackageVersionId(Long value){packageVersionId=value;}
  private Long formulaVersionId;

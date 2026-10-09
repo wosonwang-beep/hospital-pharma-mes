@@ -4,6 +4,8 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
+Current authority is frozen FINAL BASELINE v1.0.23 plus approved bounded supplements. For basic audit/version controls and new production/eBR process bindings, [DCP-BASIC-NO-AUDIT-VERSION-001](development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes the affected clauses following [cross-document consistency PASS](review/DCP_BASIC_CURRENT_CONSISTENCY_REVIEW.md). All other frozen contracts and historical releases remain authoritative and immutable.
+
 ### Current approved navigation / real entry authority — 2026-10-07
 
 Current business authority: FINAL BASELINE COMPLETE v1.0.23 — AUTHORITATIVE, approved DCP-PRODUCTION-FINISHED-ENTRY-001, cross-document consistency PASS. [Contract](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_PRODUCTION_FINISHED_ENTRY_CONTRACT_V1.0.23.md), [manifest](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_MANIFEST_FINAL_FROZEN_V1.0.23.md), [review](../releases/HOSPITAL_PHARMA_MES_V2_FINAL_BASELINE_COMPLETE_v1.0.23/00_PRODUCTION_FINISHED_ENTRY_CONSISTENCY_REVIEW.json). Shared seven-domain navigation and real production/finished context selectors only; original v1.0.22 business, DB/migration, state, permission codes, QA/signature/stock and no-mandatory-weighing rules inherited. UI V2/T1–T6 unchanged. Parent v1.0.22 immutable; runtime readiness only MES_TASKS.md.
@@ -121,3 +123,12 @@ Current approved material-only change: DCP-MATERIAL-BASIC-001, direct basic main
 ## Approved shared navigation supplement — 2026-10-07
 
 FINAL BASELINE COMPLETE v1.0.22 remains the inherited business authority with [DCP-GLOBAL-NAVIGATION-001](development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md) for the explicitly approved menu names/order and shared configuration only. Global UI V2/T1–T6 stay current. No frozen release or API/DB/permission/state/signature/route contract changes; other finished UI gaps remain outside this supplement. Runtime readiness remains only in MES_TASKS.md.
+
+
+## Approved basic maintenance and current process supplement — 2026-10-09
+
+Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes only basic maintenance audit/version controls and the process binding of new production/eBR work. [Bounded contract](architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md) specifies database, domain, state, API, permissions, UI, migration, integration and RTM changes. Basic pages retain UI V2 and their existing T1–T6 templates, without audit panels, client version controls or process revision actions. Production/eBR retain their own audit, signatures, revision checks and immutable frozen evidence. Historical releases and evidence remain immutable. Runtime verification/status is only MES_TASKS.md. This approved supplement does not authorize any further business/UI redesign.
+
+## Approved eBR template name supplement — 2026-10-09
+
+Human-approved [DCP-EBR-TEMPLATE-NAME-001](development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md) adds only the eBR template name and its current UI/API/storage/search/frozen-content contract. Historical null-name canonical definitions, signatures, snapshots and PDF evidence remain unchanged. No whole-book redesign or further audit/version removal is authorized. Current UI V2 remains. Runtime status is only MES_TASKS.md.

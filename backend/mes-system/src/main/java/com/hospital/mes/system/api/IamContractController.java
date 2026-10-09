@@ -195,6 +195,14 @@ public class IamContractController {
     public ApiResponse<IamMenuResponse> getMenus(@PathVariable("id") String id) {
         return success(iam.getMenu(id(id), contexts.current().organizationId()));
     }
+    @PostMapping("/menus/{id}/permissions")
+    public ApiResponse<JsonNode> assignMenuPermissions(@PathVariable("id") String id,
+            @RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String ifMatch,
+            @RequestBody IamContractService.AssignMenuPermissionsRequest request) {
+        long resourceId=id(id),version=IamRequestVersion.parse(ifMatch);var context=contexts.current();
+        return success(mutations.execute(context,"assignMenuPermissions",key,new MutationEnvelope(id,version,request),"MENU",
+            ()->iam.assignMenuPermissions(resourceId,version,request,context,key),IamMenuResponse::id));
+    }
 
     @PutMapping("/menus/{id}")
     public ApiResponse<JsonNode> updateMenus(@PathVariable("id") String id,

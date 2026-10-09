@@ -35,37 +35,36 @@ public class MaterialService {
   if(m.getPackUnitId()!=null)n.put("packUnitName",units.get(m.getOrgId(),m.getPackUnitId()).getUnitName());
   return n;
  }
- @Transactional public JsonNode create(MaterialCommands.Create r,String key){
+ @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public JsonNode create(MaterialCommands.Create r,String key){
   var c=mutations.context("master:material:create");
   return mutations.execute(c,"Material:CREATE",key,r,()->{
    var e=new MaterialEntity();e.setMaterialCode(MasterRules.text(r.materialCode(),50));
    if(materials.count(c.organizationId(),"material_code",e.getMaterialCode(),null)>0)throw new ResourceConflictException("MATERIAL_CODE_EXISTS","Material code already exists");
    apply(e,new MaterialCommands.Update(null,null,r.materialName(),r.materialType(),r.specification(),r.gradePurity(),r.appearance(),r.baseUnitId(),r.packSpec(),r.packUnitId(),r.manufacturerName(),r.lotControlled(),r.effectiveFrom(),r.effectiveTo(),r.remark(),r.requiresIncomingInspection(),r.storageCondition()),c.organizationId());
    e.setStatus("ACTIVE");materials.insert(e,c.organizationId(),c.actorId());
-   mutations.auditSnapshot(c,"Material:CREATE","Material",e.getId(),null,mutations.view(e),null,key);
+
    events.publishEvent(new MaterialEvents.Created(c.organizationId(),e.getId()));return e;
   },x->view((MaterialEntity)x),201);
  }
- @Transactional public JsonNode update(String id,MaterialCommands.Update r,String header,String key){
-  var c=mutations.context("master:material:update");long expected=MasterMutation.version(header,r.versionNo());String reason=MasterRules.text(r.reason(),1000);
+ @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public JsonNode update(String id,MaterialCommands.Update r,String header,String key){
+  var c=mutations.context("master:material:update");long expected=0L;String reason=MasterRules.text(r.reason()==null||r.reason().isBlank()?"基础资料维护（系统记录）":r.reason(),1000);
   return mutations.execute(c,"Material:UPDATE:"+id,key,Map.of("id",id,"version",expected,"body",r),()->{
-   var e=materials.lock(c.organizationId(),MasterMutation.id(id));requireVersion(e,expected);var before=mutations.view(e);
+   var e=materials.lock(c.organizationId(),MasterMutation.id(id));var before=mutations.view(e);
    apply(e,r,c.organizationId());if(MaterialRules.enabled(e.getStatus()))e.setStatus("ACTIVE");
    materials.update(e,expected,c.actorId(),List.of("materialName","materialType","specification","gradePurity","appearance","baseUnitId","packSpec","packUnitId","manufacturerName","lotControlled","effectiveFrom","effectiveTo","remark","requiresIncomingInspection","storageCondition","status"));
-   mutations.auditSnapshot(c,"Material:UPDATE","Material",e.getId(),before,mutations.view(e),reason,key);
+
    events.publishEvent(new MaterialEvents.Updated(c.organizationId(),e.getId()));return e;
   },x->view((MaterialEntity)x),200);
  }
- @Transactional public JsonNode disable(String id,MaterialCommands.Disable r,String header,String key){
-  var c=mutations.context("master:material:disable");long expected=MasterMutation.version(header,r.versionNo());String reason=MasterRules.text(r.reason(),1000);
+ @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public JsonNode disable(String id,MaterialCommands.Disable r,String header,String key){
+  var c=mutations.context("master:material:disable");long expected=0L;String reason=MasterRules.text(r.reason()==null||r.reason().isBlank()?"基础资料维护（系统记录）":r.reason(),1000);
   return mutations.execute(c,"Material:DISABLE:"+id,key,Map.of("id",id,"version",expected,"body",r),()->{
-   var e=materials.lock(c.organizationId(),MasterMutation.id(id));requireVersion(e,expected);var before=mutations.view(e);
+   var e=materials.lock(c.organizationId(),MasterMutation.id(id));var before=mutations.view(e);
    e.setStatus(MaterialRules.disable(e.getStatus()));materials.update(e,expected,c.actorId(),List.of("status"));
-   mutations.auditSnapshot(c,"Material:DISABLE","Material",e.getId(),before,mutations.view(e),reason,key);
+
    events.publishEvent(new MaterialEvents.Disabled(c.organizationId(),e.getId()));return e;
   },x->view((MaterialEntity)x),200);
  }
- private void requireVersion(MaterialEntity m,long expected){if(m.getVersionNo()!=expected)throw new ResourceConflictException("VERSION_CONFLICT","Reload material before saving");}
  private void apply(MaterialEntity e,MaterialCommands.Update r,long org){
   e.setMaterialName(MasterRules.text(r.materialName(),200));
   e.setStorageCondition(MasterRules.optional(r.storageCondition(),500));

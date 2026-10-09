@@ -1,5 +1,5 @@
 export type BookKind='FORM'|'PROCESS_INSTRUCTIONS'|'PRODUCTION_ORDER'|'MATERIAL_ISSUES'|'CHARGES'|'CLEARANCE'|'INSPECTION_REPORTS'|'ATTACHMENTS'
-export interface BookMapping{productId:string;packageVersionId:string;ebrTemplateVersionId:string}
+export interface BookMapping{productId:string;packageVersionId?:string;processPackageId?:string;ebrTemplateVersionId:string}
 export interface BookEntry{code:string;chapter:string;title:string;kind:BookKind;order:number;required:boolean;minCount:number;scope:'BATCH'|'OPERATION';operationCode:string|null;formCode:string|null;printTemplateVersionId:string|null;fields:string[];attachmentIds:string[]}
 export interface BookDefinition{varietyCode:string;varietyName:string;mappings:BookMapping[];entries:BookEntry[]}
 export interface BookTemplate{id:string;templateCode:string;revision:number;status:string;versionNo:number;definition:BookDefinition;definitionHash:string;createdBy:string}

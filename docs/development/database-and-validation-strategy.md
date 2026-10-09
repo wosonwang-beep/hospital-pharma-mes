@@ -8,9 +8,9 @@ The objective is `PERSISTENT DEV + ON-DEMAND TEST + TARGETED VALIDATION + KEY IN
 
 ## 2. Environment model
 
-The user's local-environment decision of 2026-10-02 is authoritative: local development and local database tests share the native Windows MariaDB database `hospital_pharma_mes_dev` at `localhost:3306`. All project tables and Flyway history belong to that database. Do not create another local TEST database or start a MariaDB container for this project.
+The explicit 2026-10-08 user decision supersedes any older local isolation/staging practices. Edit, build, run and test in the same `D:\codex\_project\gmp\hospital-pharma-mes` checkout on `main` without copied or shadow workspaces. The single local frontend is `127.0.0.1:5173` and backend is `127.0.0.1:8080`; do not silently use a second port. Local development and database tests share the native Windows MariaDB `hospital_pharma_mes_dev` at `localhost:3306` and Redis `localhost:6379`. All project tables and Flyway history belong to this database. Do not create another local TEST database or start a MariaDB/Redis container for this project.
 
-`application-local.yml` is the development profile; `application-ci.yml` is also used by local integration tests. Both load the ignored root `.env` when launched from `D:\codex\_project\gmp\hospital-pharma-mes`. Explicit environment/command-line overrides must not redirect local work to a different database.
+`application-local.yml` is the single local runtime configuration. The test `application-ci.yml` imports it directly; both resolve the same ignored root `.env` from `D:\codex\_project\gmp\hospital-pharma-mes`. Explicit environment/command-line overrides must not redirect local tests to a different database or Redis. Hosted CI injects its own credentials because GitHub runners cannot connect to the local workstation.
 
 Hosted GitHub CI keeps its existing service-container configuration because it cannot reach this workstation's localhost. PROD is never a development or test target. There is no embedded-database or in-memory Redis fallback.
 
@@ -43,7 +43,7 @@ Forbidden:
 - using `flyway repair` to hide a real mismatch;
 - manually creating or altering formal business tables outside a new physical Flyway migration.
 
-If a database contains the same physical version with a different description/checksum, stop migration of that database. Do not repair or overwrite it. Preserve it for investigation and provision an isolated compatible database/volume unless destructive recovery is explicitly authorized.
+If a database contains the same physical version with a different description/checksum, stop migration of that database. Do not repair or overwrite it. Preserve it for investigation and request an approved append-only migration/source recovery plan. Do not silently create an isolated local database/volume.
 
 ## 5. Local test rule
 
@@ -145,6 +145,6 @@ The GitHub Actions MariaDB/Redis service containers are ephemeral TEST infrastru
 
 ## 15. Operational evidence
 
-When provisioning or validating DEV, record the database name and service status, exact MariaDB/Redis named volume names, successful Flyway versions/descriptions, application connectivity, and a restart test. The restart test writes non-sensitive schema and Redis markers, runs `docker compose down` without `-v`, restarts, and verifies both markers persist.
+When validating local DEV, record the existing native MariaDB database, Redis and application service status, highest successful Flyway version, current-source build/launch identity, and application connectivity on the single approved ports. Do not create container volumes, run Docker Compose for this local verification, or stop/restart persistent services solely to prove persistence. Only perform a restart check when required and safe for active work; preserve existing records and migrations.
 
 Never place passwords, tokens, credentials, or full successful build logs in the evidence record.

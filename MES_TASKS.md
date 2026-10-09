@@ -1,5 +1,41 @@
 # MES Task Status Index
 
+## V040 系统管理部门实施 — 2026-10-09
+
+**IN PROGRESS — NOT HUMAN ACCEPTED.** 原工作区 `main` 与同一 MariaDB DEV：V040 部门/用户归属表迁移成功、40 migrations validate；IAM 授权和数据库菜单已接入。后端部门树/组织用户下拉/CRUD/归属关系 + Vue T1/T2/T3 完成局部施工并部署至原项目 8080、前端 5173。 `SystemDepartmentIT` 3/3 真实 DEV 数据库回滚集成通过；前端 typecheck/build PASS、Chromium 1440×900 1/1 fixture 视觉测试 PASS，全部查询/编辑字段水平同行，操作列在可视区域。后端 HTTP 200 health、未授权部门 API 401。仍需真实管理员会话 E2E 和原稿差异闭环、权限多账号回归。仅本地修改未提交/推送。证据：`design/系统管理/部门管理/部门管理-实施视觉与回归记录.md`。后续用户、菜单、角色、角色权限按相同工序逐页设计与终验。
+
+
+## 系统管理增量进度 · 2026-10-08 23:31
+
+**数据字典 V039：核心实施和目标测试完成；正式验收仍未关闭。**
+- 在原项目 `main` 工作区维护后端 `DictionaryImportService`、导入 API 预检/提交、CSV 模板、Vue 导入弹窗和树形字典编辑。仅接受新字典 CODE；已存在/重复/不合法项在预检中标示，正式提交再次校验；受事务、管理员授权、幂等和审计保护。CSV 模板只有表头，避免误导入演示数据。
+- 真实 MariaDB 回滚测试 `SystemDictionaryCrudIT` + `SystemDictionaryIT` 4/4 PASS；CSV 解析 Vitest 3/3 PASS；Chromium T1/T2/字典项/导入/树形 UI 2/2 PASS，接口业务数据为 fixture。
+- 后端最新版从原项目 `backend/mes-boot/target/mes-boot-0.1.0-SNAPSHOT.jar` 运行（8080 health 200），数据库 V039 校验通过、未登录字典 API 401。前端 production build PASS。
+- 导入只支持 UTF-8 CSV（Excel 可另存 CSV），尚未提供 .xlsx 原生解析；不能宣称 Excel 导入已完成。
+- 仍需真实管理员浏览器操作、角色权限多账号检查、动态下拉业务表单真实数据回归及设计图逐项对照。**NOT HUMAN ACCEPTED**。
+
+**部门管理：完成 4 张 1440×900 PC 静态设计图和独立视觉自评，未改业务代码/数据库。**
+- `design/系统管理/部门管理/部门管理-{查询,新增,编辑,查看}.png` 和 `部门管理-ProductDesign.html`。
+- 三列同行查询、左右部门树/列表、居中 T2 简单新增/编辑、T3 只读详情；Chromium 4/4 场景几何检查无标签分行或页面横向溢出。
+- 需求/模型契约记于 `部门管理-独立设计评审.md`：部门不同于现有 md_organization，用户主属部门需要独立真实关系；未完成正式 DCP/新增 Flyway/后端服务及用户归属功能。
+- 系统管理余下用户、菜单、角色、角色权限仍需逐个按稿视觉和业务验收。不要合并任务状态、不要宣称全系统完成。
+
+
+
+## V039 数据字典增量实现记录 — 2026-10-08
+- 直接在当前 `main` 工作区和本机 MariaDB DEV 中实施；`V039__system_dictionary.sql` 已成功应用并通过 39 项 Flyway 迁移校验，原有业务数据不清理、原 Flyway 文件不改写。
+- `SystemDictionaryController`、Vue T1/T2/T3、字典项弹窗、动态下拉已新增；物料类型、设备类型、组织类型选项读取数据库，不复用前端类型硬编码。
+- 2026-10-08 晚间后端 3/3 真实 MariaDB 回滚集成测试通过；1440×900 Chromium 1/1 mock 展示层测试通过，测试断言五个查询标签及各表单标签同一行、PC 查询三列；Maven package 和前端 typecheck/build 通过。
+- 增补创建日期筛选、全量 CSV 导出、历史已停用字典项禁选但回显原名称（`selectedValue`）。
+- 已从项目 `backend/mes-boot/target` 的最新 JAR 重启单一 8080；健康检查 HTTP 200，未登录请求两个受保护字典接口均返回 401。
+- **IN PROGRESS / NOT ACCEPTED**：图片参考里的 CSV/Excel 批量导入、树形可视编辑完善、真实管理员网页登录到数据库及正式 UI 同屏逐像素验收仍未闭环。不同权限账户、业务主数据关联的完整回归亦待验证。
+- 仅做本地变更，尚未提交 Git；其他系统管理功能：部门/用户/菜单/角色/角色权限仍为待逐页设计/整改/验收。
+
+## Database menus / usability / direct maintenance — 2026-10-08
+
+`IN PROGRESS — NOT HUMAN ACCEPTED`. Scope: [approved supplement](docs/development/DCP-DATABASE-MENU-AND-USABILITY-001-APPROVED.md). Database tree menu shell deployed with V037; role grants remain unchanged by agent validation. V038 direct activation applied in native DEV during rollback integration validation; executable deployment and remaining browser flow checks pending. Frontend typecheck/build PASS; role/menu/master units15 PASS; picker/menu units6 PASS (menu3 overlap); backend navigation4/domain5/menu integration3/direct activation3 PASS. Full system/visual acceptance is not claimed. Browser screenshot confirms inline production-batch search; remaining click-based visual checks are pending. No commit; unrelated local configuration, seeds and user changes preserved.
+
+
 ## Finished T2/T3 visual refinement — 2026-10-07
 
 `ACCEPTED` — explicit human acceptance and commit/push authorization “验收，提交和推送”, 2026-10-07; user requested “成品页面视觉收口”, within the approved complete-page blueprint / Global UI V2 T2–T3. Scope: existing finished inbound, inspection-request, sampling, report and shipment create/controlled-action/detail presentation only. Business authority remains FINAL BASELINE COMPLETE v1.0.23; accepted incoming records/reports, T4/T5/T6 and frozen releases unchanged. No Backend/API/DTO/DB/migration/state/permission/signature/QA Gate change. Typecheck/build PASS; finished command units4 PASS; final visual Chromium4 plus direct warehouse-signature/sample-handoff regressions2 PASS. 12 rendered screenshots (1440×900 PC plus one 768px usability smoke) saved outside repository at `C:/Users/Administrator/.codex/artifacts/finished-ui-2026-10-07/`. Fixture-backed UI/command validation only, not a new real-database full-system acceptance. Browser plugin unavailable; repository Playwright Chromium used. Source/read-only results, original FAIL revisions, independent review/signature metadata, allowedActions/permission gates and atomic optional inspection draft verified. Scoped self-review CRITICAL/HIGH0. Build bundle-size LOW and inherited aggregation/N+1 MEDIUM remain; historical baseline checksum issue unchanged. MEDIUM-03 existing finished T2/T3 presentation RESOLVED and human-accepted; accepted incoming/T4/T5/T6 not changed. Pre-commit typecheck and finished command units4 rechecked PASS. No new MES task, business baseline switch or historical release change. Main commit/push authorized for this visual refinement; local database configuration and unrelated user-owned changes excluded.
@@ -577,3 +613,44 @@ EBR book HTTP closeout: precise existing-authority routes added after authentica
 最新DEV PID22852，JAR mes-boot-V036-ebr-book-toclabel-20261008.jar，SHA256 E8D23F85D7CDFC7E710B4C866FE2332C1B9B759AB91A9BE833A089FCE737539F；既有配置原样沿用，称量策略未添加/改变。旧titlewrap包保留回滚。前面的PID/附件版本为历史检查点。
 
 真实持久闭环仍未完成：订单139/批次142不动；最小单规格需要受控确认是否恢复历史组织1/物料1的KCL-DEMO-2026完整称量策略作为当前部署输入（required=true，precision=0.001克，tolerancePct=0.5），不得从历史冻结对象自动启用。跨规格需明确KCL第二规格及独立批准工艺/eBR。
+
+## 基础管理取消审计与版本控制 — 2026-10-09
+
+**READY FOR ACCEPTANCE — NOT HUMAN ACCEPTED.** Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](docs/development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md), including production/eBR binding redesign and preservation of historical evidence. [Contract](docs/architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md), [bounded OpenAPI](docs/contracts/BASIC_CURRENT_DEFINITION_OPENAPI.json), [cross-document review](docs/review/DCP_BASIC_CURRENT_CONSISTENCY_REVIEW.md).
+
+- 实现：基础管理各功能前后端取消审计追加、客户端版本前置条件及计数递增；工艺包只有一个可维护的当前定义，不再创建/选择/比较/审批/发布工艺版本。基础维护保留权限、组织隔离、校验、事务、行锁和幂等。新生产/eBR 绑定 processPackageId；生产快照、eBR 自身修订/签名/审计、WMS/QA 证据继续受控。历史 eBR 复制按工序编码映射当前身份，缺失工序拒绝复制；新整册模板拒绝旧工艺版本绑定。
+- 迁移：原 DEV 已成功执行新增 V041/V042，42 migrations validated/successful，失败 0；执行前完整私有备份成功。原审计、签名和工艺版本 INSERT 字节一致；原配方/路线/子项/eBR 模板/生产快照共 67 行的迁移前列值全部保持不变。未修改旧迁移，未 repair/clean/重建数据库。
+- 验证：Maven 编译/package PASS。10 类定向真实 DEV 集成共 99 个独立测试 PASS（MasterResources 12、MaterialSupplier 17、Process 9、DirectProcessActivation 5、BasicNoVersion 7、BasicMaintenanceConcurrency 1、Ebr 9、EbrRuntime 13、ProductionBook 3、FunctionalClosure 23；重跑不重复计数）。覆盖真实并发连接、旧证据复制、失效绑定拒绝、签名/独立复核、冻结快照及已发布整册/PDF 不变。前端 6 suites / 22 tests PASS、typecheck/build PASS。未宣称 full regression 或 hosted CI 已运行。
+- 运行页面：原 checkout 编译的最终 JAR 已启动于唯一 8080，health HTTP 200/UP；复用真实 5173。Browser skill/plugin workflow 不可用，使用标准 Playwright Chromium。11 项真实页面/API 检查 PASS、相关 console/API errors 0；九类基础页面无审计/版本入口，真实单位新增和页面编辑保存不携带 versionNo/If-Match，单一工艺包选择器可实际选择。1440×900 与 1366×768 截图已人工查看，保留 UI V2；无本次另供设计参考图。证据：`C:/Users/Administrator/AppData/Local/Temp/mes-basic-live/`。唯一 NVUI 临时单位及其幂等记录已按准确 ID/编码清理，计数未递增、审计 0；其他业务和历史记录未删除。
+- 评审：跨文档一致性 PASS，批准范围内无未解决 CRITICAL/HIGH；基础旧审计/版本 CI 断言已按批准契约替换，生产/eBR 受控断言未削弱。既有 ACCEPTED 任务不重开，其他系统管理工作状态不改变。当前权威为 v1.0.23 + 有界批准补充，历史冻结发布不改写。
+- 非阻塞债务：MEDIUM，本轮浏览器直接刷新观察到登录态丢失，未在本次基础管理范围内改造登录/续期；真实验收采用页面内导航。LOW，现有前端主 bundle 大小警告仍在。源码、部署、定向验证已完成，等待人验收；未提交/推送，保留无关工作区修改及本机 `.env`/local/ci 配置。
+
+- 2026-10-09 用户称谓更正：当前菜单、路由标题、列表/维护字段、权限显示及生产/eBR 选择器统一为“生产工艺”。真实数据库菜单 ID 10 经既有受控菜单 API 更新，保留权限、路由及系统配置审计；无数据库结构变更或新迁移，未修改已执行迁移/历史证据。同步批准补充、当前契约和 UI 文档；技术标识 processPackageId 等保持兼容。typecheck PASS，2 suites / 6 tests PASS，真实 5173/8080 菜单、列表、新增页和 eBR 选择器 4 项检查 PASS。评审无新增 CRITICAL/HIGH，原非阻塞债务与 READY FOR ACCEPTANCE 状态不变。截图：`C:/Users/Administrator/AppData/Local/Temp/mes-process-terminology/`。
+
+## eBR 模板名称缺口 — 2026-10-09
+
+DESIGN CHANGE REQUIRED — 用户指出关键模板名称缺失。定向源码检查确认创建/列表页面、DTO 与持久化实体均只有 templateCode，没有 templateName。已有基础管理补充不包含 eBR 名称新增字段。具体方案见 [DCP-EBR-TEMPLATE-NAME-001-PROPOSED](docs/development/DCP-EBR-TEMPLATE-NAME-001-PROPOSED.md)：新建必填名称，草稿受控编辑，列表/详情/选择器展示及名称搜索；新修订/快照包含名称，旧签名/摘要/快照不改写。等待明确设计变更批准；本轮仅检查及方案文档，无业务代码/数据库变更，未运行测试，既有 ACCEPTED/READY 状态不改变。
+
+## eBR 模板名称实施 — 2026-10-09
+
+**ACCEPTED — HUMAN CONFIRMED 2026-10-09.**  用户明确“批准” DCP-EBR-TEMPLATE-NAME-001；[批准补充](docs/development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md)、[有界契约](docs/architecture/EBR_TEMPLATE_NAME_CONTRACT.md)。范围仅模板名称存储/受控草稿维护/查询展示/生产选择及新冻结内容，旧历史不回填。V043 已分配在真实 DEV 最高成功 V042 后；迁移前旧模板、生产快照和签名私有备份已保存。实现和定向验证已完成，既有任务验收状态不改变。
+
+- 实现：名称新建必填、草稿受控编辑，按修订继承；列表/详情/设计器及生产 eBR 选择显示名称+编码/版本，名称或编码可查询。更新 DTO、实体、当前 OpenAPI、批准 DCP/契约/RTM/两份 UI 权威及 [一致性评审](docs/review/DCP_EBR_TEMPLATE_NAME_CONSISTENCY_REVIEW.md)。生产快照冻结名称；旧 null 名称不进入原 canonical JSON，既有签名/摘要/批次记录不改写。
+- 迁移：V043 成功，前序迁移未改动；原 4 条模板、8 条生产快照、111 条签名所有原列值逐条比对不变。私有备份与验证 JSON 位于工作站 backups，未进入仓库。未 repair/clean/重建数据库。
+- 验证：Maven package PASS，8 unit tests PASS；EbrIT 12、EbrRuntimeIT 13、ProductionBookIT 3 共 28 项独立真实 DEV 集成 PASS；加强的新名称冻结/新修订改名不影响原批次测试单项重跑 PASS（不重复计数）。前端 typecheck/build PASS、2 suites / 8 tests PASS。真实 5173/8080 新增、受控保存、详情/列表展示、名称查询 5 项 PASS；页面截图已查看，证据 `C:/Users/Administrator/AppData/Local/Temp/mes-ebr-name-live/`。
+- 评审：cross-document PASS，新增 CRITICAL/HIGH 0。已有 ProductionViewsTest 过时字段断言按此前批准的 processPackageId 契约补齐，保持精确断言。既有 MEDIUM 刷新登录态问题及 LOW bundle 警告保留，本次未扩大处理。
+- DEV 测试数据：两条明确 EBRNAME 前缀草稿（ID 251/252）及其审计证据保留，未发布，未删除任何受控或历史记录。已人验收；未提交/推送，保留无关编辑及本机数据库配置。
+
+- 最终运行：真实 checkout 最终 JAR 已重启于 8080（PID 15968），health HTTP 200/UP；5173 继续复用该源码。新名称冻结与后续修订改名隔离的加强断言已在真实 DEV 通过。
+
+- 人工验收：用户明确回复“验收”，确认本次 DCP-EBR-TEMPLATE-NAME-001 模板名称交付。仅将本项标记 ACCEPTED，既有验证/评审与非阻塞债务保留；不扩展其他任务验收、不自动开始下一任务，不推断提交或推送授权。
+
+## 用户要求的真实数据电子批记录模板样张 — 2026-10-09
+
+READY FOR ACCEPTANCE — TEMPLATE DRAFT / NOT PUBLISHED. 用户请求“做一份电子批记录的模板给我看看，用真实的数据”，授权通过既有设计器/API创建模板内容；未修改冻结业务字段、状态或系统代码。
+
+- 数据来源：真实 8080 API读取当前 DEV 的产品 ID 1（KCL30 氯化钾溶液，30ml:3g/瓶）、生产工艺 ID 1、处方基准120000ml，以及物料 ID 1–4：氯化钾12000g、羟苯乙酯60g、95%酒精600ml、甘油600ml；绑定实际当前工序定义 IDs。DEV 数据包含演示/验证记录，不声称来自真实生产现场。
+- 已创建并受控保存模板 ID 291，编码 EBR-KCL30-120L-PREVIEW-20261009，名称“氯化钾溶液 30ml:3g · 120L 电子批生产记录”，V1/DRAFT。六工序、52字段，按现有角色配置独立复核/重新认证签名。实际生产值及签名留空，处方值标明来源；未预填正常/合格结论，未新增强制称量或无来源工艺限度。适用生产工艺的当前完整性状态为 DRAFT，仅供查看；未提交、审批、发布或下达批次，未改写历史记录。
+- 样张：docs/examples/ebr/KCL30-120L-20261009/ 内 HTML、8页 PDF及读取时source-snapshot.json。8页包括封面、六工序、独立历史参考附录。附录记录来源是 GET /main-batches/16/ebr（批号20261007-KCL-001，另一个旧工艺快照）；不会作为本模板执行数据。理论4000瓶明确标注120000ml÷30ml换算参考且未计损耗。
+- 验证：真实 POST/PUT/GET HTTP200，既有服务定义/引用/单位/DSL/角色校验通过；真实5173设计器显示正确名称、工序与定义。六表52字段、所有MANUAL字段默认值为空检查PASS；PDF文件有效、8页，封面及第一工序截图人工查看，修正打印分页后首工序单页完整。无系统代码变化，本轮未重跑无关编译/回归。
+- 评审/迁移：无新增Schema/Flyway迁移，无新增业务/GxP契约；旧证据保持原状。保留现有刷新登录态和bundle非阻塞债务。仅交付查看草稿及样张，不代表可投产的受控归档或现场真实性认证；不更改既有已验收任务，不提交/推送。

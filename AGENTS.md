@@ -1,6 +1,6 @@
 # Hospital Pharmaceutical MES V2.0 Engineering Rules
 
-These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.23` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts.
+These are repository-wide mandatory rules. `FINAL BASELINE COMPLETE v1.0.23` remains authoritative for frozen business, database, API, state-machine, UI, integration, and GxP contracts, subject only to the explicitly approved bounded supplements listed below.
 
 ## Current governance closeout — 2026-10-06
 
@@ -120,3 +120,24 @@ Do not run full regression by default. It is reserved for defined milestones/key
 `MES_TASKS.md` is the only task-status index. Codex may move an authorized task from `NOT STARTED` to `IN PROGRESS` and, after required verification, to `READY FOR ACCEPTANCE`. Only explicit human approval may set `ACCEPTED`.
 
 After work, report only: implementation summary, migration status, targeted test result, review result, remaining technical debt, and task readiness/status. Never start the next MES task automatically.
+
+## Approved database menus and usability supplement — 2026-10-08
+
+The explicit human-approved scope in [DCP-DATABASE-MENU-AND-USABILITY-001](docs/development/DCP-DATABASE-MENU-AND-USABILITY-001-APPROVED.md) supersedes only the affected menu source, basic-data/process maintenance workflow and interaction patterns. Historical business releases and Global UI V2 remain immutable. Review actual usability/visual layout separately from functional tests; runtime status remains only MES_TASKS.md.
+
+## Single local source and environment — explicit user decision 2026-10-08
+
+- Develop, edit, build, debug, validate, and deploy **directly** from the existing `D:\codex\_project\gmp\hospital-pharma-mes` checkout on `main`. Never create copied/staged/shadow development worktrees or use a second checkout to build or validate changes. Preserve unrelated and uncommitted edits.
+- Local runtime and integration tests use the **same root `.env` and `application-local.yml`**; test `application-ci.yml` imports local settings instead of maintaining another database/Redis configuration. The hosted GitHub Actions CI service containers remain necessary off-machine and are not local development environments.
+- Reuse **one** local MariaDB `localhost:3306/hospital_pharma_mes_dev`, **one** Redis `localhost:6379`, backend `8080` and frontend `5173`. Playwright reuses frontend `5173`; no extra local test databases, Redis instances, frontend ports, isolated project copies or alternate build staging directories.
+- Run tests against the actual working-tree source and shared local services. API-mocked fixture tests remain useful unit/contract checks but **cannot count as real running-page acceptance**. For user-approved page designs, acceptance requires direct 5173 browser inspection, real 8080 HTTP, functional interactions, and side-by-side screenshot comparison with the supplied reference at matching viewport sizes.
+- Using the persistent DEV database does not authorize data loss: transaction/rollback tests or clearly identified new test records only; do not overwrite signed/released/history data, repair/clean Flyway or rebuild database. Inspect migration impact and preserve append-only migrations before any real database change. Don't claim verified/deployed until actual source-backed service was started and checked.
+
+
+## Approved basic maintenance and current process supplement — 2026-10-09
+
+Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](docs/development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes only basic maintenance audit/version controls and the process binding of new production/eBR work. [Bounded contract](docs/architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md) specifies database, domain, state, API, permissions, UI, migration, integration and RTM changes. Basic pages retain UI V2 and their existing T1–T6 templates, without audit panels, client version controls or process revision actions. Production/eBR retain their own audit, signatures, revision checks and immutable frozen evidence. Historical releases and evidence remain immutable. The [cross-document review](docs/review/DCP_BASIC_CURRENT_CONSISTENCY_REVIEW.md) is PASS. Runtime verification/status is only MES_TASKS.md. This approved supplement does not authorize any further business/UI redesign.
+
+## Approved eBR template name supplement — 2026-10-09
+
+Human-approved [DCP-EBR-TEMPLATE-NAME-001](docs/development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md) adds only the eBR template name and its current UI/API/storage/search/frozen-content contract. Historical null-name canonical definitions, signatures, snapshots and PDF evidence remain unchanged. No whole-book redesign or further audit/version removal is authorized. Current UI V2 remains. Runtime status is only MES_TASKS.md.

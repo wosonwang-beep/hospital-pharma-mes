@@ -1,0 +1,18 @@
+# DCP-EBR-TEMPLATE-NAME-001 consistency review
+
+Review outcome: PASS — 2026-10-09. Authority remains immutable FINAL BASELINE v1.0.23 plus existing bounded supplements and the explicitly human-approved [template-name supplement](../development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md). [Current contract and RTM](../architecture/EBR_TEMPLATE_NAME_CONTRACT.md) specifies this change; runtime status remains only MES_TASKS.md.
+
+| Artifact | Consistent change |
+| --- | --- |
+| Database / migration | Append-only V043 adds nullable template_name after successful V042. New templates require a name; old rows remain null. No executed migration altered. |
+| Domain / states | Name is per eBR revision, trimmed/nonblank <=100; no uniqueness requirement. Existing DRAFT-only save, reason, audit, optimistic concurrency and idempotency retained. New revision inherits name; newly submitted revisions require it. Existing archived approval/publication remains compatible. |
+| API / OpenAPI | Create requires templateName; controlled Save may supply it, omission retains current value. Summary/detail include nullable name; keyword matches code or name; version comparison includes name. Current bounded OpenAPI schemas updated. No new route/permission. |
+| UI | Existing UI V2 and structures retained. Create/name editor, list, detail and designer identifiers show name, code and revision. Shared production eBR selection shows name/code/revision and retains exact record IDs. Legacy null-name choices are marked 未命名（历史模板）. Both UI authorities reference the bounded approval. |
+| Integration / evidence | Canonical definition includes name only when non-null. New production freeze includes the name. Publishing a renamed new revision preserves the already released batch snapshot and renderer. Historical canonical shape and approved hashes remain unchanged. No whole-book redesign or regulated control removal. |
+| Test / RTM / dependencies | EBR-NAME-001–004 map to required-name validation/search, controlled editing/revision/hash, native historical comparison and live UI. Existing runtime signature/correction and book/PDF regression retained. No new module/task dependency. Prior task acceptance and frozen artifacts unchanged. |
+
+Targeted evidence: Maven package PASS; 8 unit tests PASS; EbrIT 12, EbrRuntimeIT 13 and ProductionBookIT 3 PASS (28 distinct integration tests), plus focused rerun of publishingNextTemplateCannotChangeReleasedRendererOrSnapshot with explicit old/new-name and frozen-production assertions. Frontend typecheck/build PASS; 2 suites / 8 tests PASS, including exact ID selection from named/legacy eBR options. Real 5173/8080 create, controlled name save, detail/list display and name search verified; screenshots inspected. No supplied reference image exists for this narrow field correction.
+
+Native private before/after exports confirm every pre-migration column of 4 original templates, 8 production snapshots and 111 signatures unchanged; the four template names remain null. Dumps and evidence JSON remain outside the repository. Two clearly identified EBRNAME draft fixtures created by real-page testing are retained, with their audit trails; no regulated record was physically deleted or published during browser checks.
+
+No new unresolved CRITICAL/HIGH issue. Existing MEDIUM reload-session behavior and LOW bundle-size warning remain outside this change. The stale ProductionViewsTest property assertion was updated to the already approved processPackageId contract, retaining exact-field checking; no business or GxP assertion was weakened. Local configuration and unrelated working-tree changes preserved. Human acceptance/commit/push are not inferred.

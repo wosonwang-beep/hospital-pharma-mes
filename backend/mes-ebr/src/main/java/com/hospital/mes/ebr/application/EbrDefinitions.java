@@ -36,9 +36,9 @@ public class EbrDefinitions {
     public List<Issue> lint(TemplateEntity template,Definition definition,boolean publication){
         List<Issue> issues=new ArrayList<>(EbrDefinitionRules.lint(definition,publication));if(!issues.isEmpty())return List.copyOf(issues);
         long org=template.getOrgId();
-        check(issues,"packageVersionId",()->{if(publication)processes.requireUsable(org,template.getPackageVersionId());else processes.snapshot(org,template.getPackageVersionId());});
+        check(issues,"processPackageId",()->{if(template.getProcessPackageId()!=null){if(publication)processes.requireCurrent(org,template.getProcessPackageId());else processes.currentSnapshot(org,template.getProcessPackageId());}else {if(publication)processes.requireUsable(org,template.getPackageVersionId());else processes.snapshot(org,template.getPackageVersionId());}});
         for(var form:definition.forms()){
-            if(form.operationDefId()!=null)check(issues,"forms."+form.formCode()+".operationDefId",()->processes.requireOperation(org,template.getPackageVersionId(),MasterMutation.id(form.operationDefId())));
+            if(form.operationDefId()!=null)check(issues,"forms."+form.formCode()+".operationDefId",()->{if(template.getProcessPackageId()!=null)processes.requireCurrentOperation(org,template.getProcessPackageId(),MasterMutation.id(form.operationDefId()));else processes.requireOperation(org,template.getPackageVersionId(),MasterMutation.id(form.operationDefId()));});
             for(var field:form.fields()){
                 if(field.unitId()!=null)check(issues,"fields."+field.fieldCode()+".unitId",()->units.unit(org,MasterMutation.id(field.unitId())));
                 if(field.defaultExpr()!=null)references(org,field.defaultExpr(),"fields."+field.fieldCode()+".defaultExpr",issues);
@@ -86,7 +86,7 @@ public class EbrDefinitions {
             var portable=json.createObjectNode();portable.put("schemaVersion",form.getSchemaVersion());portable.set("form",json.valueToTree(definition.forms().stream().filter(f->f.formCode().equals(form.getFormCode())).findFirst().orElseThrow()));portable.set("rules",json.valueToTree(definition.rules().stream().filter(r->r.formCode()==null||r.formCode().equals(form.getFormCode())).toList()));form.setSchemaJson(encode(portable));form.setStatus("EFFECTIVE");db.store(FormEntity.class).update(form,form.getVersionNo(),context.actorId(),List.of("schemaJson","status"));
         }
     }
-    public JsonNode canonical(TemplateEntity template){var n=json.createObjectNode();n.put("schemaVersion","1.0");n.put("templateVersionId",template.getId().toString());n.put("packageVersionId",template.getPackageVersionId().toString());n.put("templateCode",template.getTemplateCode());n.put("version",template.getBusinessVersion());n.set("definition",json.valueToTree(load(template)));return n;}
+    public JsonNode canonical(TemplateEntity template){var n=json.createObjectNode();n.put("schemaVersion","1.0");n.put("templateVersionId",template.getId().toString());if(template.getProcessPackageId()!=null)n.put("processPackageId",template.getProcessPackageId().toString());else n.put("packageVersionId",template.getPackageVersionId().toString());n.put("templateCode",template.getTemplateCode());if(template.getTemplateName()!=null)n.put("templateName",template.getTemplateName());n.put("version",template.getBusinessVersion());n.set("definition",json.valueToTree(load(template)));return n;}
     private void ownership(Long id,Long before,Long after){if(id!=null&&!Objects.equals(before,after))throw new ResourceConflictException("RETAINED_DEFINITION_REQUIRED","Saved definition ownership must be retained");}
     private String signatureKey(SignatureRule r){return r.objectScope()+"|"+r.objectCode()+"|"+r.meaning()+"|"+r.sequenceNo();}
     private String signatureKey(SignatureRuleEntity r){return r.getObjectScope()+"|"+r.getObjectCode()+"|"+r.getMeaning()+"|"+r.getSequenceNo();}

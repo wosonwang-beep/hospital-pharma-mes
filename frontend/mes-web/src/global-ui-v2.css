@@ -280,3 +280,6 @@
 #app .nav .ant-menu-item-group-title{font-size:12px;color:var(--mes-ui-secondary);padding:14px 12px 6px}#app .nav .ant-menu-item-group-list{margin:0}#app .nav .ant-menu-item-group .ant-menu-item{padding-left:20px!important}#app .master-page>details>summary{background:white;border:1px solid var(--mes-ui-border);border-radius:8px;padding:16px;cursor:pointer;font-weight:600}#app .master-page>details[open]>summary{margin-bottom:16px}.trace-filters label{white-space:nowrap}.trace-filters input,.trace-filters select{max-width:250px}
 
 .evidence-facts header{display:flex;justify-content:flex-end;align-items:center}.evidence-facts header h2{display:none}.evidence-facts dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px}.evidence-facts dt{color:var(--mes-ui-secondary)}.evidence-facts dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}@media(max-width:767px){.evidence-facts dl{grid-template-columns:95px minmax(0,1fr);gap:12px}}
+
+/* User-approved list state badges: white fill and blue outline. */
+#app .ant-table :is(.ant-tag-success,.ant-tag-green){background:#fff;border-color:#1677ff;color:#1677ff}

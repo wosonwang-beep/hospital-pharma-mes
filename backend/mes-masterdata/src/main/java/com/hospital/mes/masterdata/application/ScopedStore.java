@@ -9,9 +9,11 @@ import java.util.*;
 import org.springframework.beans.BeanWrapperImpl;
 public class ScopedStore<E extends ScopedEntity> {
     protected final BaseMapper<E> mapper;
+    private final boolean versioned;
     private final List<String> columns;
     private final Map<String,String> filters;
-    public ScopedStore(BaseMapper<E> mapper,List<String> columns,Map<String,String> filters){this.mapper=mapper;this.columns=columns;this.filters=filters;}
+    public ScopedStore(BaseMapper<E> mapper,List<String> columns,Map<String,String> filters){this(true,mapper,columns,filters);}
+    public ScopedStore(boolean versioned,BaseMapper<E> mapper,List<String> columns,Map<String,String> filters){this.versioned=versioned;this.mapper=mapper;this.columns=columns;this.filters=filters;}
     public E get(long org,long id){E row=mapper.selectOne(new QueryWrapper<E>().eq("org_id",org).eq("id",id)); if(row==null)throw new NoSuchElementException("Resource not found");return row;}
     public E lock(long org,long id){
         try {E row=mapper.selectOne(new QueryWrapper<E>().eq("org_id",org).eq("id",id).last("FOR UPDATE"));if(row==null)throw new NoSuchElementException("Resource not found");return row;}
@@ -43,11 +45,13 @@ public class ScopedStore<E extends ScopedEntity> {
     public long count(long org,String col,Object value,String status){var q=new QueryWrapper<E>().eq("org_id",org).eq(col,value);if(status!=null)q.eq("status",status);return mapper.selectList(q.last("FOR UPDATE")).size();}
     public void insert(E e,long org,long actor){var now=LocalDateTime.now(ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MILLIS);e.setOrgId(org);e.setCreatedBy(actor);e.setUpdatedBy(actor);e.setCreatedAt(now);e.setUpdatedAt(now);e.setVersionNo(0L);mapper.insert(e);}
     public void update(E e,long expected,long actor,List<String> fields){
-        e.setUpdatedBy(actor);e.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MILLIS));e.setVersionNo(expected+1);
-        var u=new UpdateWrapper<E>().eq("org_id",e.getOrgId()).eq("id",e.getId()).eq("version_no",expected);
+        e.setUpdatedBy(actor);e.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MILLIS));if(versioned)e.setVersionNo(expected+1);
+        var u=new UpdateWrapper<E>().eq("org_id",e.getOrgId()).eq("id",e.getId());
+        if(versioned)u.eq("version_no",expected);
         var bean=new BeanWrapperImpl(e);
         for(String f:fields)u.set(f.replaceAll("([a-z])([A-Z])","$1_$2").toLowerCase(Locale.ROOT),bean.getPropertyValue(f));
-        u.set("updated_by",actor).set("updated_at",e.getUpdatedAt()).set("version_no",expected+1);
+        u.set("updated_by",actor).set("updated_at",e.getUpdatedAt());
+        if(versioned)u.set("version_no",expected+1);
         if(mapper.update(null,u)!=1)throw new ResourceConflictException("VERSION_CONFLICT","Record changed; reload before retrying");
     }
 }

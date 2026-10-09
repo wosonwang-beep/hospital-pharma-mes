@@ -29,7 +29,7 @@ class EbrDefinitionRulesTest {
     }
     @Test void fieldTypeCatalogAndUnknownPropertiesAreClosed() throws Exception {
         assertThat(EbrDefinitionRules.lint(definition(field("A","CUSTOM_JS"),""),true)).isNotEmpty();
-        assertThatThrownBy(()->json.readValue("{\"packageVersionId\":\"1\",\"templateCode\":\"T\",\"templateName\":\"unfrozen\"}",Create.class)).hasMessageContaining("Unknown field");
+        assertThatThrownBy(()->json.readValue("{\"processPackageId\":\"1\",\"templateCode\":\"T\",\"unexpectedField\":\"unfrozen\"}",Create.class)).hasMessageContaining("Unknown field");
     }
     @Test void duplicateCalculationTargetsCannotSilentlyOverwrite() throws Exception {
         var d=definition(field("A","NUMBER"),"");

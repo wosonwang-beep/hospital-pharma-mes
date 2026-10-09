@@ -26,12 +26,12 @@ public class MaterialSupplierService {
   }
   return n;
  }
- @Transactional public JsonNode assign(String id,SupplierCommands.Assign r,String header,String key){
-  var c=mutations.context("master:material:update");long expected=MasterMutation.version(header,r.versionNo());String reason=MasterRules.text(r.reason(),1000);
+ @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public JsonNode assign(String id,SupplierCommands.Assign r,String header,String key){
+  var c=mutations.context("master:material:update");long expected=0L;String reason=MasterRules.text(r.reason()==null||r.reason().isBlank()?"基础资料维护（系统记录）":r.reason(),1000);
   if(r.suppliers()==null||r.suppliers().size()>500)throw new IllegalArgumentException("Supplier list required, maximum 500");
   validatePreferred(r.suppliers());
   return mutations.execute(c,"Material:SUPPLIERS:"+id,key,Map.of("id",id,"version",expected,"body",r),()->{
-   var m=materials.lock(c.organizationId(),MasterMutation.id(id));if(m.getVersionNo()!=expected)throw new ResourceConflictException("VERSION_CONFLICT","Reload material relationships");
+   var m=materials.lock(c.organizationId(),MasterMutation.id(id));
    if(!MaterialRules.enabled(m.getStatus()))throw new StateTransitionException("INVALID_STATE","Inactive material cannot change relationships");
    var before=view(m);var current=store.relationships(c.organizationId(),m.getId(),true);
    var input=r.suppliers().stream().sorted(Comparator.comparingLong(x->MasterMutation.id(x.supplierId()))).toList();
@@ -52,7 +52,7 @@ public class MaterialSupplierService {
     if(row==null){row=new MaterialSupplierEntity();row.setMaterialId(m.getId());row.setSupplierId(sid);row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());row.setManufacturerName(com.hospital.mes.masterdata.domain.MasterRules.optional(item.manufacturerName(),200));store.insert(row,c.organizationId(),c.actorId());}
     else{row.setApproved(item.approved());row.setPreferred(item.preferred());row.setValidTo(item.validTo());row.setManufacturerName(com.hospital.mes.masterdata.domain.MasterRules.optional(item.manufacturerName(),200));store.update(row,row.getVersionNo(),c.actorId(),List.of("approved","preferred","validTo","manufacturerName"));}
    }
-   materials.update(m,expected,c.actorId(),List.of());mutations.auditSnapshot(c,"Material:SUPPLIERS","Material",m.getId(),before,view(m),reason,key);return m;
+   materials.update(m,expected,c.actorId(),List.of());return m;
   },x->view((MaterialEntity)x),200);
  }
  private void validatePreferred(List<SupplierCommands.Relationship> rows){

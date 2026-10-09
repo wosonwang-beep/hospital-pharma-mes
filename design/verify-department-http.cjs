@@ -1,0 +1,1 @@
+(async()=>{for(const endpoint of ['/actuator/health','/api/v1/departments','/api/v1/departments/tree','/api/v1/department-organizations','/api/v1/users/1/department']){try{const response=await fetch('http://127.0.0.1:8080'+endpoint,{signal:AbortSignal.timeout(3500)});console.log(endpoint,'HTTP',response.status)}catch(e){console.log(endpoint,'ERROR',e.message)}}})();

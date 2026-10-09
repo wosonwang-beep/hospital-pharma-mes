@@ -103,15 +103,15 @@ class MasterResourcesIT {
         String key=key();var r=new UnitCommands.Create("R"+suffix,"Replay","MASS",3);
         var a=units.create(r,key);var b=units.create(r,key);
         assertThat(a).isEqualTo(b);
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_audit_event WHERE actor_id=? AND action='Unit:CREATE'",Long.class,actor)).isEqualTo(1L);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_audit_event WHERE actor_id=? AND action='Unit:CREATE'",Long.class,actor)).isZero();
         assertThatThrownBy(()->units.create(new UnitCommands.Create("S"+suffix,"Other","MASS",3),key)).hasMessageContaining("Key reused");
     }
-    @Test void staleVersionIsRejectedAndMatchingReplayStillWorks() {
-        var e=eq();String id=e.get("id").asText(),key=key();var cmd=new EquipmentCommands.Update("DISABLE","retired",0L,null,null,null,null);
-        var a=equipment.command(id,cmd,"\"0\"",key);assertThat(a.get("versionNo").asLong()).isEqualTo(1);
-        assertThat(equipment.command(id,cmd,"\"0\"",key)).isEqualTo(a);
-        assertThatThrownBy(()->equipment.command(id,cmd,"0",key())).hasMessageContaining("reload");
-        assertThatThrownBy(()->equipment.command(id,cmd,"1",key())).hasMessageContaining("Conflicting versions");
+    @Test void legacyVersionIsIgnoredAndMatchingReplayStillWorks() {
+        var e=eq();String id=e.path("id").asText(),key=key();var cmd=new EquipmentCommands.Update("UPDATE",null,999L,"Changed","MIXER",LocalDate.parse("2027-10-03"),"Test location");
+        var a=equipment.command(id,cmd,null,key);assertThat(a.has("versionNo")).isFalse();
+        assertThat(equipment.command(id,cmd,null,key)).isEqualTo(a);
+        assertThat(equipment.command(id,cmd,"0",key()).path("equipmentName").asText()).isEqualTo("Changed");
+        assertThat(jdbc.queryForObject("SELECT version_no FROM md_equipment WHERE id=?",Long.class,id)).isZero();
     }
     @Test void crossOrganizationReadsWritesAndReferencesAreHidden() {
         var u=unit("ISO","MASS");
@@ -138,16 +138,15 @@ class MasterResourcesIT {
         unit("DUP","MASS");assertThatThrownBy(()->unit("DUP","MASS")).isInstanceOf(org.springframework.dao.DuplicateKeyException.class);
         assertThatThrownBy(()->qualifications.create(new QualificationCommands.Create("999999999","TEST",null,null),key())).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
     }
-    @Test void auditFailureRollsBackBusinessAndIdempotencyInRealTransaction() {
-        var tx=new TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        String code="ROLLBACK"+suffix,key=key();
+    @Test void auditAvailabilityDoesNotControlBasicMaintenance() {
         doThrow(new IllegalStateException("injected audit failure")).when(audit).append(any());
-        assertThatThrownBy(()->tx.execute(s->{long a=newActor("rollback_"+suffix);when(contexts.current()).thenReturn(new CurrentPlatformContext(1,a,Set.of("TEST_MASTER"),permissions,"s","r"));return units.create(new UnitCommands.Create(code,"Rollback","MASS",3),key);})).hasMessageContaining("injected audit failure");
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM md_unit WHERE unit_code=?",Long.class,code)).isZero();
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM platform_idempotency_record WHERE idempotency_key=?",Long.class,key)).isZero();
+        String k=key();var row=units.create(new UnitCommands.Create("NOAUDIT"+suffix,"Ordinary unit","MASS",3),k);
+        assertThat(row.path("id").asText()).isNotBlank();assertThat(units.create(new UnitCommands.Create("NOAUDIT"+suffix,"Ordinary unit","MASS",3),k)).isEqualTo(row);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_audit_event WHERE actor_id=?",Long.class,actor)).isZero();
+        verify(audit,never()).append(any());
     }
 
-    @Test void realConcurrentTransactionsUseCurrentDimensionPairAndVersion() throws Exception {
+    @Test void realConcurrentTransactionsUseCurrentDimensionAndPair() throws Exception {
         // Committed raw fixture rows have no production/audit evidence. Every business call below
         // fails and rolls back; cleanup targets exactly these fixture IDs, never shared data.
         var tx=new TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
@@ -158,7 +157,7 @@ class MasterResourcesIT {
         var writer=java.util.concurrent.Executors.newSingleThreadExecutor(r->new Thread(r,"master-writer"));
         var reader=java.util.concurrent.Executors.newSingleThreadExecutor(r->new Thread(r,"master-reader"));
         try {
-            for(String scenario:List.of("DIMENSION","PAIR","VERSION")) {
+            for(String scenario:List.of("DIMENSION","PAIR")) {
                 tx.execute(s->{jdbc.update("DELETE FROM md_unit_conversion WHERE org_id=1 AND from_unit_id=? AND to_unit_id=?",fixture[1],fixture[2]);jdbc.update("UPDATE md_unit SET dimension='MASS',version_no=0 WHERE id IN (?,?)",fixture[1],fixture[2]);return null;});
                 var held=new java.util.concurrent.CountDownLatch(1);var readerAtLock=new java.util.concurrent.CountDownLatch(1);var first=new java.util.concurrent.atomic.AtomicBoolean(true);
                 doAnswer(call->{if(Thread.currentThread().getName().equals("master-reader")&&first.compareAndSet(true,false))readerAtLock.countDown();return call.callRealMethod();}).when(unitStore).lock(anyLong(),anyLong());

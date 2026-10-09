@@ -1,0 +1,45 @@
+const {chromium}=require('D:/codex/_project/gmp/hospital-pharma-mes/frontend/mes-web/node_modules/@playwright/test');
+const fs=require('fs'),path=require('path');
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+ const url='file:///'+path.join(__dirname,'数据字典-ProductDesign.html').replace(/\\/g,'/');
+ const cases=[['list','数据字典-查询-新版.png'],['items','数据字典-字典项弹窗-新版.png'],['create','数据字典-新增-新版.png'],['edit','数据字典-编辑-新版.png'],['detail','数据字典-查看-新版.png'],['tree','数据字典-树形结构-新版.png']];
+ for(const [view,file] of cases){
+  await page.goto(url+'?view='+view,{waitUntil:'load'});await page.waitForTimeout(100);
+  const info=await page.evaluate(()=>({title:document.querySelector('h1')?.textContent||'',modals:document.querySelectorAll('[role="dialog"]').length,width:document.documentElement.scrollWidth,bodyHeight:document.documentElement.scrollHeight,buttons:document.querySelectorAll('button').length,content:document.getElementById('page')?.innerText.length||0}));
+  if(info.width>1440)throw Error('Horizontal overflow '+view+' '+JSON.stringify(info));
+  if(info.content<45)throw Error('Insufficient content '+view+' '+JSON.stringify(info));
+  await page.screenshot({path:path.join(__dirname,file),fullPage:view==='detail'});
+  console.log('RENDER '+view+' '+JSON.stringify(info)+' '+file);
+ }
+ await page.goto(url+'?view=list');
+ await page.locator('[data-action="import"]').click();
+ if(await page.getByRole('dialog',{name:'导入字典预检'}).count()!==1)throw Error('Import preview missing');
+ await page.screenshot({path:path.join(__dirname,'数据字典-导入校验-新版.png'),fullPage:false});
+ await page.keyboard.press('Escape');
+ await page.locator('[data-action="openItems"]').first().click();
+ await page.locator('[data-action="editItem"]').first().click();
+ if(await page.locator('#itemEditor input').count()<2)throw Error('Inline item editor missing');
+ await page.screenshot({path:path.join(__dirname,'数据字典-字典项编辑-新版.png'),fullPage:false});
+ await page.keyboard.press('Escape');
+ await page.locator('#fltCode').fill('MATERIAL');
+ await page.locator('[data-action="search"]').click();
+ const matches=await page.locator('.data-table tbody tr').count();if(matches!==1)throw Error('Search expected one row, got '+matches);
+ await page.locator('#fltCode').fill('');
+ await page.locator('[data-action="reset"]').click();
+ await page.locator('[data-action="openItems"]').first().click();
+ if(await page.getByRole('dialog').count()!==1)throw Error('Modal not opened');
+ await page.locator('[data-action="newItem"]').click();
+ await page.locator('#itemCode').fill('TEST_PROTOTYPE');
+ await page.locator('#itemLabel').fill('测试预览项');
+ await page.locator('[data-action="saveItem"]').click();
+ const found=await page.getByRole('dialog').getByText('测试预览项').count();if(found<1)throw Error('New item not rendered');
+ await page.keyboard.press('Escape');
+ if(await page.getByRole('dialog').count()!==0)throw Error('Modal failed to close');
+ console.log('INTERACTION_OK filter/reset modal/newItem/close');
+ if(errors.length)throw Error('PAGE_ERRORS '+JSON.stringify(errors));
+ console.log('QA_OK 8 design states, zero JS errors, zero document overflow');
+ await browser.close();
+})().catch(e=>{console.error('FAILED '+e.stack);process.exit(1)});

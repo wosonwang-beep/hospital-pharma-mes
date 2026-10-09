@@ -5,6 +5,9 @@ spring:
       max-request-size: 11MB
   application:
     name: hospital-pharma-mes
+springdoc:
+  # Nested command classes share names such as Create/Update; keep their schemas distinct.
+  use-fqn: true
 management:
   endpoints:
     web:

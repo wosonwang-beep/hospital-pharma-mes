@@ -153,3 +153,10 @@ If a required page cannot be represented by T1–T6 without changing its busines
 
 
 Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.
+
+
+## Approved bounded control removal — 2026-10-09
+
+Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](../development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes only basic maintenance audit/version controls and the process binding of new production/eBR work. [Bounded contract](../architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md) specifies database, domain, state, API, permissions, UI, migration, integration and RTM changes. Basic pages retain UI V2 and their existing T1–T6 templates, without audit panels, client version controls or process revision actions. Production/eBR retain their own audit, signatures, revision checks and immutable frozen evidence. Historical releases and evidence remain immutable. Runtime verification/status is only MES_TASKS.md. This approved supplement does not authorize any further business/UI redesign.
+
+Approved 2026-10-09 [eBR template-name supplement](../development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md): retain existing page structures and visual authority; create requires 模板名称, draft designer edits it through controlled Save, list/detail/production selectors show name with code/revision, and keyword searches name or code. Unnamed historical revisions display 未命名（历史模板）; signed/frozen history is not backfilled. No broader UI redesign is authorized.

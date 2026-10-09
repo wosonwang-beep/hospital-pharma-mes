@@ -3,6 +3,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("proc_formula_version")
 public class FormulaEntity extends ScopedEntity {
+ private Long currentDefinitionId;
+ public Long getCurrentDefinitionId(){return currentDefinitionId;} public void setCurrentDefinitionId(Long v){currentDefinitionId=v;}
  private Long packageVersionId;
  public Long getPackageVersionId(){return packageVersionId;} public void setPackageVersionId(Long v){packageVersionId=v;}
  private String formulaCode;

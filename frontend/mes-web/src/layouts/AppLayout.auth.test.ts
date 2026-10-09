@@ -7,6 +7,7 @@ const mocks=vi.hoisted(()=>({auth:null as any,replace:vi.fn(),push:vi.fn(),warni
 vi.mock('../stores/auth',()=>({useAuthStore:()=>mocks.auth}))
 vi.mock('vue-router',()=>({useRoute:()=>({name:'wms-issues',path:'/wms/issues',fullPath:'/wms/issues?page=2',meta:{title:'出库管理'}}),useRouter:()=>({replace:mocks.replace,push:mocks.push})}))
 vi.mock('ant-design-vue',()=>({message:{warning:mocks.warning}}))
+vi.mock('../api/http',()=>({api:async()=>[],errorMessage:()=> '请求失败'}))
 const slot={template:'<div><slot/></div>'}
 const options={global:{stubs:{ALayout:slot,ALayoutSider:slot,ALayoutHeader:slot,ALayoutContent:slot,AMenu:slot,AMenuItem:slot,AMenuItemGroup:slot,ASubMenu:slot,AInput:slot,AAutoComplete:slot,ABreadcrumb:slot,ABreadcrumbItem:slot,AAvatar:slot,ATooltip:slot,AButton:slot,ADropdown:slot,RouterView:{template:'<div>受控业务详情</div>'}}}}
 beforeEach(()=>{

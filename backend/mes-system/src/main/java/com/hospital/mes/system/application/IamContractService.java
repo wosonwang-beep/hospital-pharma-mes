@@ -6,6 +6,7 @@ import com.hospital.mes.common.exception.ResourceConflictException;
 import com.hospital.mes.security.session.SessionStore;
 import com.hospital.mes.system.infrastructure.SysMenuEntity;
 import com.hospital.mes.system.infrastructure.SysMenuMapper;
+import com.hospital.mes.system.infrastructure.SysMenuPermissionMapper;
 import com.hospital.mes.system.infrastructure.SysPermissionEntity;
 import com.hospital.mes.system.infrastructure.SysPermissionMapper;
 import com.hospital.mes.system.infrastructure.SysRoleEntity;
@@ -41,7 +42,9 @@ public class IamContractService {
 
     public record CreateRoleRequest(String roleCode, String roleName, String reason) { }
     public record UpdateRoleRequest(String roleName, String status, String reason) { }
-    public record AssignRolePermissionsRequest(List<String> permissionCodes, String reason) { }
+    public record AssignRolePermissionsRequest(List<String> permissionCodes, String reason, List<String> menuCodes) {
+        public AssignRolePermissionsRequest(List<String> permissionCodes,String reason) { this(permissionCodes,reason,null); }
+    }
     public record IamRoleResponse(String id, String roleCode, String roleName, String status,
                            long version, List<String> permissionCodes, List<String> menuCodes) { }
 
@@ -54,16 +57,22 @@ public class IamContractService {
                                  String permissionType, String routePath, String status, long version) { }
 
     public record CreateMenuRequest(String menuCode, String menuName, String routePath,
-                                    String parentId, Integer sortNo, String status, String reason) { }
+                                    String parentId, Integer sortNo, String status, String reason, String permissionCode, String requiredPermissions) {
+        public CreateMenuRequest(String code, String name, String path, String parent, Integer sort, String status, String reason) { this(code,name,path,parent,sort,status,reason,null,null); }
+    }
     public record UpdateMenuRequest(String menuName, String routePath, String parentId,
-                                    Integer sortNo, String status, String reason) { }
+                                    Integer sortNo, String status, String reason, String permissionCode, String requiredPermissions) {
+        public UpdateMenuRequest(String name, String path, String parent, Integer sort, String status, String reason) { this(name,path,parent,sort,status,reason,null,null); }
+    }
     public record IamMenuResponse(String id, String menuCode, String menuName, String routePath,
-                           String parentId, int sortNo, String status, long version) { }
+                           String parentId, int sortNo, String status, long version, String permissionCode, String requiredPermissions, List<String> permissionCodes) { }
+    public record AssignMenuPermissionsRequest(List<String> permissionCodes,String reason) { }
 
     private final SysUserMapper users;
     private final SysRoleMapper roles;
     private final SysPermissionMapper permissions;
     private final SysMenuMapper menus;
+    private final SysMenuPermissionMapper menuPermissions;
     private final SysUserRoleMapper userRoles;
     private final SysRolePermissionMapper rolePermissions;
     private final SysRoleMenuMapper roleMenus;
@@ -76,11 +85,12 @@ public class IamContractService {
                               SysMenuMapper menus, SysUserRoleMapper userRoles,
                               SysRolePermissionMapper rolePermissions, SysRoleMenuMapper roleMenus,
                               UserAdministration userAdministration, SessionStore sessions,
-                              AdminSafetyGuard safety, IamAuditWriter audit) {
+                              AdminSafetyGuard safety, IamAuditWriter audit, SysMenuPermissionMapper menuPermissions) {
         this.users = users; this.roles = roles; this.permissions = permissions; this.menus = menus;
         this.userRoles = userRoles; this.rolePermissions = rolePermissions; this.roleMenus = roleMenus;
         this.userAdministration = userAdministration; this.sessions = sessions; this.safety = safety;
         this.audit = audit;
+        this.menuPermissions = menuPermissions;
     }
 
     @Transactional(readOnly = true)
@@ -204,18 +214,20 @@ public class IamContractService {
         IamRoleResponse before = getRole(id);
         Set<String> codes = strings(request.permissionCodes(), 160);
         codes.forEach(this::requirePermission);
+        List<SysMenuEntity> directory = menus.selectList(new LambdaQueryWrapper<SysMenuEntity>().eq(SysMenuEntity::getOrgId,context.organizationId()));
+        Set<String> menuCodes = request.menuCodes() == null ? null : strings(request.menuCodes(),64);
+        if (menuCodes != null) for (String menuCode : menuCodes) {
+            SysMenuEntity menu = directory.stream().filter(m -> m.getMenuCode().equals(menuCode)).findFirst().orElseThrow(() -> new IllegalArgumentException("Menu is outside this organization"));
+            if (menu.getPermissionCode() != null && (!codes.contains(menu.getPermissionCode()) || !codes.containsAll(NavigationTree.required(menu.getRequiredPermissions())))) throw new IllegalArgumentException("Visible menu requires its view permissions");
+        }
         safety.runPreservingEffectiveAdmin(() -> {
             if (roles.touchVersion(id, version, context.actorId()) != 1) throw conflict();
             rolePermissions.deleteForRole(id);
             codes.forEach(code -> rolePermissions.grant(id, requirePermission(code).getId()));
             roleMenus.deleteForRole(id);
-            codes.forEach(code -> {
-                if (menus.selectCount(new LambdaQueryWrapper<SysMenuEntity>()
-                    .eq(SysMenuEntity::getOrgId, context.organizationId())
-                    .eq(SysMenuEntity::getMenuCode, code)) > 0) {
-                    roleMenus.grant(context.organizationId(), id, code, context.actorId());
-                }
-            });
+            directory.stream().filter(menu -> menuCodes != null ? menuCodes.contains(menu.getMenuCode()) : menu.getPermissionCode() != null && codes.contains(menu.getPermissionCode()))
+                .filter(menu -> NavigationTree.required(menu.getRequiredPermissions()).stream().allMatch(codes::contains))
+                .forEach(menu -> roleMenus.grant(context.organizationId(), id, menu.getMenuCode(), context.actorId()));
         });
         IamRoleResponse after = getRole(id);
         audit.append(context, "IAM_ROLE_PERMISSIONS_ASSIGNED", "ROLE", after.id(), before, after,
@@ -280,7 +292,7 @@ public class IamContractService {
             .orderByAsc(SysMenuEntity::getSortNo).orderByAsc(SysMenuEntity::getId);
         long total = menus.selectCount(query);
         query.last("LIMIT " + size + " OFFSET " + Math.multiplyExact((long) page, size));
-        return new PageResult<>(menus.selectList(query).stream().map(IamContractService::menuView).toList(), total, page, size);
+        return new PageResult<>(menus.selectList(query).stream().map(this::menuView).toList(), total, page, size);
     }
 
     @Transactional(readOnly = true)
@@ -294,6 +306,8 @@ public class IamContractService {
         validateParent(menu.getParentId(), context.organizationId(), null);
         menu.setMenuCode(requiredText(request.menuCode(), 64)); menu.setMenuName(requiredText(request.menuName(), 100));
         menu.setRoutePath(route(request.routePath())); menu.setSortNo(sort(request.sortNo()));
+        menu.setPermissionCode(menuPermission(menu.getRoutePath(), request.permissionCode(), request.menuCode()));
+        menu.setRequiredPermissions(requiredMenuPermissions(request.requiredPermissions()));
         menu.setStatus(statusRequired(request.status())); menu.setCreatedBy(context.actorId());
         menu.setUpdatedBy(context.actorId()); menu.setVersionNo(0L);
         menus.insert(menu);
@@ -311,7 +325,9 @@ public class IamContractService {
         validateParent(parentId, context.organizationId(), id);
         if (menus.updateContract(id, context.organizationId(), version, parentId,
             requiredText(request.menuName(), 100), route(request.routePath()), sort(request.sortNo()),
-            statusRequired(request.status()), context.actorId()) != 1) throw conflict();
+            statusRequired(request.status()), context.actorId(),
+            menuPermission(route(request.routePath()), request.permissionCode(), before.permissionCode()),
+            request.requiredPermissions() == null ? before.requiredPermissions() : requiredMenuPermissions(request.requiredPermissions())) != 1) throw conflict();
         IamMenuResponse after = getMenu(id, context.organizationId());
         audit.append(context, "IAM_MENU_UPDATED", "MENU", after.id(), before, after, request.reason(), key);
         return after;
@@ -334,10 +350,21 @@ public class IamContractService {
             permission.getDisplayName(), permission.getPermissionType(), permission.getMenuRoute(),
             state(Boolean.TRUE.equals(permission.getEnabled())), value(permission.getVersion()));
     }
-    private static IamMenuResponse menuView(SysMenuEntity menu) {
+    @Transactional
+    public IamMenuResponse assignMenuPermissions(long id,long version,AssignMenuPermissionsRequest request,CurrentPlatformContext context,String key) {
+        require(request,"Menu permission request is required");
+        IamMenuResponse before=getMenu(id,context.organizationId());
+        Set<String> codes=strings(request.permissionCodes(),160);codes.forEach(this::requirePermission);
+        if(before.routePath()==null && !codes.isEmpty())throw new IllegalArgumentException("Bind function permissions to a page menu, not a directory");
+        if(menus.touch(id,context.organizationId(),version,context.actorId())!=1)throw conflict();
+        menuPermissions.clear(id);codes.forEach(code->menuPermissions.bind(id,requirePermission(code).getId(),context.actorId()));
+        IamMenuResponse after=getMenu(id,context.organizationId());
+        audit.append(context,"IAM_MENU_FUNCTIONS_ASSIGNED","MENU",after.id(),before,after,request.reason(),key);return after;
+    }
+    private IamMenuResponse menuView(SysMenuEntity menu) {
         return new IamMenuResponse(Long.toString(menu.getId()), menu.getMenuCode(), menu.getMenuName(),
             menu.getRoutePath(), menu.getParentId() == null ? null : Long.toString(menu.getParentId()),
-            menu.getSortNo(), menu.getStatus(), value(menu.getVersionNo()));
+            menu.getSortNo(), menu.getStatus(), value(menu.getVersionNo()), menu.getPermissionCode(), menu.getRequiredPermissions(), menuPermissions.codes(menu.getId()));
     }
 
     private SysUserEntity requireUser(long id) { return required(id, () -> users.selectById(id), "User"); }
@@ -359,7 +386,23 @@ public class IamContractService {
     private void validateParent(Long parentId, long orgId, Long selfId) {
         if (parentId == null) return;
         if (parentId.equals(selfId)) throw new IllegalArgumentException("Menu cannot parent itself");
-        requireMenu(parentId, orgId);
+        Set<Long> visited = new LinkedHashSet<>();
+        Long current = parentId;
+        while (current != null) {
+            if (current.equals(selfId) || !visited.add(current)) throw new IllegalArgumentException("Menu parent cycle");
+            current = requireMenu(current, orgId).getParentId();
+        }
+    }
+    private String menuPermission(String path, String requested, String fallback) {
+        if (path == null) return null;
+        String code = text(requested) != null ? requiredText(requested,160) : text(fallback);
+        if (code == null) throw new IllegalArgumentException("A page menu requires its existing view permission");
+        requirePermission(code); return code;
+    }
+    private String requiredMenuPermissions(String requested) {
+        if (text(requested) == null) return null;
+        List<String> codes = NavigationTree.required(requiredText(requested,512));
+        codes.forEach(this::requirePermission); return String.join(",", codes);
     }
     private static <T> T required(long id, Supplier<T> supplier, String name) {
         if (id < 1) throw new NoSuchElementException(name + " not found");

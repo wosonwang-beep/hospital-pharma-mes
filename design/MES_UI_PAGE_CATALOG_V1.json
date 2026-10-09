@@ -1,0 +1,1574 @@
+{
+  "state": "ALL_PENDING_DESIGN",
+  "source": "MariaDB sys_menu + same-main Vue Router",
+  "counts": {
+    "rootMenus": 7,
+    "features": 44,
+    "routes": 144,
+    "globalPages": 2,
+    "contextPages": 14
+  },
+  "features": [
+    {
+      "menu": "首页",
+      "group": "首页",
+      "menuCode": "nav_home",
+      "path": "/",
+      "folder": "首页/首页",
+      "pages": [
+        {
+          "path": "/",
+          "name": "MISSING_ROUTE",
+          "title": "首页",
+          "mode": "",
+          "type": "查询",
+          "routeMissing": true,
+          "designFile": "首页-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "物料主数据",
+      "group": "基础管理",
+      "menuCode": "master:material:view",
+      "path": "/master/materials",
+      "folder": "基础管理/物料主数据",
+      "pages": [
+        {
+          "path": "/master/materials",
+          "name": "master-materials",
+          "title": "物料主数据",
+          "mode": "",
+          "type": "查询",
+          "designFile": "物料主数据-查询.png"
+        },
+        {
+          "path": "/master/materials/create",
+          "name": "master-materials-create",
+          "title": "物料主数据",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "物料主数据-新增.png"
+        },
+        {
+          "path": "/master/materials/:id",
+          "name": "master-materials-view",
+          "title": "物料主数据",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "物料主数据-查看.png"
+        },
+        {
+          "path": "/master/materials/:id/edit",
+          "name": "master-materials-edit",
+          "title": "物料主数据",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "物料主数据-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "原辅料收货记录",
+      "group": "WMS管理",
+      "menuCode": "wms:receipt:view",
+      "path": "/wms/receipts",
+      "folder": "WMS管理/原辅料收货记录",
+      "pages": [
+        {
+          "path": "/wms/receipts",
+          "name": "wms-receipts",
+          "title": "原辅料收货记录",
+          "mode": "",
+          "type": "查询",
+          "designFile": "原辅料收货记录-查询.png"
+        },
+        {
+          "path": "/wms/receipts/create",
+          "name": "wms-receipts-create",
+          "title": "原辅料收货记录",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "原辅料收货记录-新增.png"
+        },
+        {
+          "path": "/wms/receipts/:id",
+          "name": "wms-receipts-view",
+          "title": "原辅料收货记录",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "原辅料收货记录-查看.png"
+        },
+        {
+          "path": "/wms/receipts/:id/edit",
+          "name": "wms-receipts-edit",
+          "title": "原辅料收货记录",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "原辅料收货记录-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "请验单",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-inspection-requests-list",
+      "path": "/quality/inspection-requests",
+      "folder": "质量管理/请验单",
+      "pages": [
+        {
+          "path": "/quality/inspection-requests",
+          "name": "incoming-inspection-requests-list",
+          "title": "请验单",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "请验单-查询.png"
+        },
+        {
+          "path": "/quality/inspection-requests/create",
+          "name": "incoming-inspection-requests-create",
+          "title": "请验单",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "请验单-新增.png"
+        },
+        {
+          "path": "/quality/inspection-requests/:id",
+          "name": "incoming-inspection-requests-view",
+          "title": "请验单",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "请验单-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "生产订单",
+      "group": "生产管理",
+      "menuCode": "nav_production-orders-list",
+      "path": "/production/orders",
+      "folder": "生产管理/生产订单",
+      "pages": [
+        {
+          "path": "/production/orders",
+          "name": "production-orders-list",
+          "title": "生产订单",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "生产订单-查询.png"
+        },
+        {
+          "path": "/production/orders/create",
+          "name": "production-orders-create",
+          "title": "生产订单",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "生产订单-新增.png"
+        },
+        {
+          "path": "/production/orders/:id",
+          "name": "production-orders-view",
+          "title": "生产订单",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "生产订单-查看.png"
+        },
+        {
+          "path": "/production/orders/:id/edit",
+          "name": "production-orders-edit",
+          "title": "生产订单",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "生产订单-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品入库申请",
+      "group": "成品管理",
+      "menuCode": "nav_finished-inbound",
+      "path": "/finished/inbound",
+      "folder": "成品管理/成品入库申请",
+      "pages": [
+        {
+          "path": "/finished/inbound",
+          "name": "finished-inbound",
+          "title": "成品入库申请",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "成品入库申请-查询.png"
+        },
+        {
+          "path": "/finished/inbound/create",
+          "name": "finished-inbound-create",
+          "title": "新增成品入库申请",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "成品入库申请-新增.png"
+        },
+        {
+          "path": "/finished/inbound/:id",
+          "name": "finished-inbound-view",
+          "title": "成品入库申请",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "成品入库申请-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "打印模板",
+      "group": "系统管理",
+      "menuCode": "nav_print-templates",
+      "path": "/admin/print-templates",
+      "folder": "系统管理/打印模板",
+      "pages": [
+        {
+          "path": "/admin/print-templates",
+          "name": "print-templates",
+          "title": "打印模板",
+          "mode": "",
+          "type": "查询",
+          "designFile": "打印模板-查询.png"
+        },
+        {
+          "path": "/admin/print-templates/new",
+          "name": "print-template-native-create",
+          "title": "可视化打印模板设计",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "打印模板-新增.png"
+        },
+        {
+          "path": "/admin/print-templates/:id/design",
+          "name": "print-template-native-design",
+          "title": "可视化打印模板设计",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "打印模板-编辑.png"
+        },
+        {
+          "path": "/admin/print-templates/:id/edit",
+          "name": "print-template-editor",
+          "title": "Word 模板编辑",
+          "mode": "",
+          "type": "编辑",
+          "designFile": "打印模板-编辑-print-template-editor.png"
+        }
+      ]
+    },
+    {
+      "menu": "用户管理",
+      "group": "系统管理",
+      "menuCode": "iam:user:view",
+      "path": "/admin/users",
+      "folder": "系统管理/用户管理",
+      "pages": [
+        {
+          "path": "/admin/users",
+          "name": "users",
+          "title": "用户管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "用户管理-查询.png"
+        },
+        {
+          "path": "/admin/users/create",
+          "name": "user-create",
+          "title": "新增用户",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "用户管理-新增.png"
+        },
+        {
+          "path": "/admin/users/:id",
+          "name": "user-view",
+          "title": "用户详情",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "用户管理-查看.png"
+        },
+        {
+          "path": "/admin/users/:id/edit",
+          "name": "user-edit",
+          "title": "编辑用户",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "用户管理-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "供应商",
+      "group": "基础管理",
+      "menuCode": "master:supplier:view",
+      "path": "/master/suppliers",
+      "folder": "基础管理/供应商",
+      "pages": [
+        {
+          "path": "/master/suppliers",
+          "name": "master-suppliers",
+          "title": "供应商",
+          "mode": "",
+          "type": "查询",
+          "designFile": "供应商-查询.png"
+        },
+        {
+          "path": "/master/suppliers/create",
+          "name": "master-suppliers-create",
+          "title": "供应商",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "供应商-新增.png"
+        },
+        {
+          "path": "/master/suppliers/:id",
+          "name": "master-suppliers-view",
+          "title": "供应商",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "供应商-查看.png"
+        },
+        {
+          "path": "/master/suppliers/:id/edit",
+          "name": "master-suppliers-edit",
+          "title": "供应商",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "供应商-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "库存管理",
+      "group": "WMS管理",
+      "menuCode": "nav_wms-inventory",
+      "path": "/wms/inventory",
+      "folder": "WMS管理/库存管理",
+      "pages": [
+        {
+          "path": "/wms/inventory",
+          "name": "wms-inventory",
+          "title": "库存管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "库存管理-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "取样记录",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-sampling-tasks-list",
+      "path": "/quality/sampling-tasks",
+      "folder": "质量管理/取样记录",
+      "pages": [
+        {
+          "path": "/quality/sampling-tasks",
+          "name": "incoming-sampling-tasks-list",
+          "title": "取样记录",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "取样记录-查询.png"
+        },
+        {
+          "path": "/quality/sampling-tasks/create",
+          "name": "incoming-sampling-tasks-create",
+          "title": "取样记录",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "取样记录-新增.png"
+        },
+        {
+          "path": "/quality/sampling-tasks/:id",
+          "name": "incoming-sampling-tasks-view",
+          "title": "取样记录",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "取样记录-查看.png"
+        },
+        {
+          "path": "/quality/sampling-tasks/:id/execute",
+          "name": "incoming-sampling-tasks-execute",
+          "title": "取样记录",
+          "mode": "execute",
+          "type": "执行",
+          "designFile": "取样记录-执行.png"
+        }
+      ]
+    },
+    {
+      "menu": "生产批",
+      "group": "生产管理",
+      "menuCode": "nav_production-batches-list",
+      "path": "/production/batches",
+      "folder": "生产管理/生产批",
+      "pages": [
+        {
+          "path": "/production/batches/:id/balance",
+          "name": "batch-balance",
+          "title": "物料平衡与偏差",
+          "mode": "",
+          "type": "查看",
+          "designFile": "生产批-查看.png"
+        },
+        {
+          "path": "/production/batches",
+          "name": "production-batches-list",
+          "title": "生产批",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "生产批-查询.png"
+        },
+        {
+          "path": "/production/batches/create",
+          "name": "production-batches-create",
+          "title": "生产批",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "生产批-新增.png"
+        },
+        {
+          "path": "/production/batches/:id",
+          "name": "production-batches-view",
+          "title": "生产批",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "生产批-查看-production-batches-view.png"
+        },
+        {
+          "path": "/production/batches/:id/edit",
+          "name": "production-batches-edit",
+          "title": "生产批",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "生产批-编辑.png"
+        },
+        {
+          "path": "/production/batches/:id/book",
+          "name": "production-batch-book",
+          "title": "生产批记录册",
+          "mode": "",
+          "type": "查看",
+          "designFile": "生产批-查看-production-batch-book.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品生产入库（待检）",
+      "group": "成品管理",
+      "menuCode": "nav_finished-receiving",
+      "path": "/finished/receiving",
+      "folder": "成品管理/成品生产入库（待检）",
+      "pages": [
+        {
+          "path": "/finished/receiving",
+          "name": "finished-receiving",
+          "title": "成品生产入库（待检）",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "成品生产入库（待检）-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "角色与权限",
+      "group": "系统管理",
+      "menuCode": "iam:role:view",
+      "path": "/admin/roles",
+      "folder": "系统管理/角色与权限",
+      "pages": [
+        {
+          "path": "/admin/roles",
+          "name": "roles",
+          "title": "角色与权限",
+          "mode": "",
+          "type": "查询",
+          "designFile": "角色与权限-查询.png"
+        },
+        {
+          "path": "/admin/roles/create",
+          "name": "role-create",
+          "title": "新增角色",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "角色与权限-新增.png"
+        },
+        {
+          "path": "/admin/roles/:id",
+          "name": "role-view",
+          "title": "角色详情",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "角色与权限-查看.png"
+        },
+        {
+          "path": "/admin/roles/:id/edit",
+          "name": "role-edit",
+          "title": "编辑角色",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "角色与权限-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "组织",
+      "group": "基础管理",
+      "menuCode": "master:org:view",
+      "path": "/master/organizations",
+      "folder": "基础管理/组织",
+      "pages": [
+        {
+          "path": "/master/organizations",
+          "name": "master-organizations",
+          "title": "组织",
+          "mode": "",
+          "type": "查询",
+          "designFile": "组织-查询.png"
+        },
+        {
+          "path": "/master/organizations/create",
+          "name": "master-organizations-create",
+          "title": "组织",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "组织-新增.png"
+        },
+        {
+          "path": "/master/organizations/:id",
+          "name": "master-organizations-view",
+          "title": "组织",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "组织-查看.png"
+        },
+        {
+          "path": "/master/organizations/:id/edit",
+          "name": "master-organizations-edit",
+          "title": "组织",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "组织-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "领料申请",
+      "group": "WMS管理",
+      "menuCode": "nav_wms-requests",
+      "path": "/wms/requests",
+      "folder": "WMS管理/领料申请",
+      "pages": [
+        {
+          "path": "/wms/requests",
+          "name": "wms-requests",
+          "title": "领料申请",
+          "mode": "",
+          "type": "查询",
+          "designFile": "领料申请-查询.png"
+        },
+        {
+          "path": "/wms/requests/create",
+          "name": "wms-requests-create",
+          "title": "新增领料申请",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "领料申请-新增.png"
+        },
+        {
+          "path": "/wms/requests/:id",
+          "name": "wms-requests-view",
+          "title": "领料申请详情",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "领料申请-查看.png"
+        },
+        {
+          "path": "/wms/requests/:id/edit",
+          "name": "wms-requests-edit",
+          "title": "编辑领料申请",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "领料申请-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "样品",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-samples-list",
+      "path": "/quality/samples",
+      "folder": "质量管理/样品",
+      "pages": [
+        {
+          "path": "/quality/samples",
+          "name": "incoming-samples-list",
+          "title": "样品",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "样品-查询.png"
+        },
+        {
+          "path": "/quality/samples/:id",
+          "name": "incoming-samples-view",
+          "title": "样品",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "样品-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "生产执行",
+      "group": "生产管理",
+      "menuCode": "nav_production-execution",
+      "path": "/production/execution",
+      "folder": "生产管理/生产执行",
+      "pages": [
+        {
+          "path": "/production/execution",
+          "name": "production-execution",
+          "title": "生产执行",
+          "mode": "",
+          "type": "查询",
+          "designFile": "生产执行-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品请验",
+      "group": "成品管理",
+      "menuCode": "nav_finished-requests",
+      "path": "/finished/requests",
+      "folder": "成品管理/成品请验",
+      "pages": [
+        {
+          "path": "/finished/requests",
+          "name": "finished-requests",
+          "title": "成品请验单",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "成品请验-查询.png"
+        },
+        {
+          "path": "/finished/requests/create",
+          "name": "finished-requests-create",
+          "title": "新增成品请验单",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "成品请验-新增.png"
+        },
+        {
+          "path": "/finished/requests/:id",
+          "name": "finished-requests-view",
+          "title": "成品请验单",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "成品请验-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "单位",
+      "group": "基础管理",
+      "menuCode": "master:uom:view",
+      "path": "/master/units",
+      "folder": "基础管理/单位",
+      "pages": [
+        {
+          "path": "/master/units",
+          "name": "master-units",
+          "title": "单位",
+          "mode": "",
+          "type": "查询",
+          "designFile": "单位-查询.png"
+        },
+        {
+          "path": "/master/units/create",
+          "name": "master-units-create",
+          "title": "单位",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "单位-新增.png"
+        },
+        {
+          "path": "/master/units/:id",
+          "name": "master-units-view",
+          "title": "单位",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "单位-查看.png"
+        },
+        {
+          "path": "/master/units/:id/edit",
+          "name": "master-units-edit",
+          "title": "单位",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "单位-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "出库管理",
+      "group": "WMS管理",
+      "menuCode": "wms:issue:view",
+      "path": "/wms/issues",
+      "folder": "WMS管理/出库管理",
+      "pages": [
+        {
+          "path": "/wms/issues",
+          "name": "wms-issues",
+          "title": "出库管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "出库管理-查询.png"
+        },
+        {
+          "path": "/wms/issues/create",
+          "name": "wms-issues-create",
+          "title": "新增出库单",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "出库管理-新增.png"
+        },
+        {
+          "path": "/wms/issues/:id",
+          "name": "wms-issues-view",
+          "title": "出库单详情",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "出库管理-查看.png"
+        },
+        {
+          "path": "/wms/issues/:id/edit",
+          "name": "wms-issues-edit",
+          "title": "编辑出库单",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "出库管理-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "检验记录",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-inspection-tasks-list",
+      "path": "/quality/inspection-tasks",
+      "folder": "质量管理/检验记录",
+      "pages": [
+        {
+          "path": "/quality/inspection-tasks",
+          "name": "incoming-inspection-tasks-list",
+          "title": "检验记录",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "检验记录-查询.png"
+        },
+        {
+          "path": "/quality/inspection-tasks/create",
+          "name": "incoming-inspection-tasks-create",
+          "title": "检验记录",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "检验记录-新增.png"
+        },
+        {
+          "path": "/quality/inspection-tasks/:id",
+          "name": "incoming-inspection-tasks-view",
+          "title": "检验记录",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "检验记录-查看.png"
+        },
+        {
+          "path": "/quality/inspection-tasks/:id/execute",
+          "name": "incoming-inspection-tasks-execute",
+          "title": "检验记录",
+          "mode": "execute",
+          "type": "执行",
+          "designFile": "检验记录-执行.png"
+        }
+      ]
+    },
+    {
+      "menu": "批记录册模板",
+      "group": "生产管理",
+      "menuCode": "nav_ebr-book-templates",
+      "path": "/ebr/book-templates",
+      "folder": "生产管理/批记录册模板",
+      "pages": [
+        {
+          "path": "/ebr/book-templates",
+          "name": "ebr-book-templates",
+          "title": "批记录册模板",
+          "mode": "",
+          "type": "查询",
+          "designFile": "批记录册模板-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品取样",
+      "group": "成品管理",
+      "menuCode": "nav_finished-sampling",
+      "path": "/finished/sampling",
+      "folder": "成品管理/成品取样",
+      "pages": [
+        {
+          "path": "/finished/sampling",
+          "name": "finished-sampling",
+          "title": "成品取样记录",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "成品取样-查询.png"
+        },
+        {
+          "path": "/finished/sampling/:id",
+          "name": "finished-sampling-view",
+          "title": "成品取样记录",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "成品取样-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "菜单管理",
+      "group": "系统管理",
+      "menuCode": "nav_menus",
+      "path": "/admin/menus",
+      "folder": "系统管理/菜单管理",
+      "pages": [
+        {
+          "path": "/admin/menus",
+          "name": "menus",
+          "title": "菜单管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "菜单管理-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "eBR模板",
+      "group": "生产管理",
+      "menuCode": "ebr:template:view",
+      "path": "/ebr/templates",
+      "folder": "生产管理/eBR模板",
+      "pages": [
+        {
+          "path": "/ebr/templates",
+          "name": "ebr-templates",
+          "title": "eBR 模板",
+          "mode": "",
+          "type": "查询",
+          "designFile": "eBR模板-查询.png"
+        },
+        {
+          "path": "/ebr/templates/create",
+          "name": "ebr-template-create",
+          "title": "eBR 模板",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "eBR模板-新增.png"
+        },
+        {
+          "path": "/ebr/templates/:id",
+          "name": "ebr-template-view",
+          "title": "eBR 模板",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "eBR模板-查看.png"
+        },
+        {
+          "path": "/ebr/templates/:id/designer",
+          "name": "ebr-template-designer",
+          "title": "eBR 模板",
+          "mode": "designer",
+          "type": "设计",
+          "designFile": "eBR模板-设计.png"
+        }
+      ]
+    },
+    {
+      "menu": "单位换算",
+      "group": "基础管理",
+      "menuCode": "nav_master-unit-conversions",
+      "path": "/master/unit-conversions",
+      "folder": "基础管理/单位换算",
+      "pages": [
+        {
+          "path": "/master/unit-conversions",
+          "name": "master-unit-conversions",
+          "title": "单位换算",
+          "mode": "",
+          "type": "查询",
+          "designFile": "单位换算-查询.png"
+        },
+        {
+          "path": "/master/unit-conversions/create",
+          "name": "master-unit-conversions-create",
+          "title": "单位换算",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "单位换算-新增.png"
+        },
+        {
+          "path": "/master/unit-conversions/:id",
+          "name": "master-unit-conversions-view",
+          "title": "单位换算",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "单位换算-查看.png"
+        },
+        {
+          "path": "/master/unit-conversions/:id/edit",
+          "name": "master-unit-conversions-edit",
+          "title": "单位换算",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "单位换算-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "退料管理",
+      "group": "WMS管理",
+      "menuCode": "nav_wms-returns",
+      "path": "/wms/returns",
+      "folder": "WMS管理/退料管理",
+      "pages": [
+        {
+          "path": "/wms/returns",
+          "name": "wms-returns",
+          "title": "退料管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "退料管理-查询.png"
+        },
+        {
+          "path": "/wms/returns/create",
+          "name": "wms-returns-create",
+          "title": "登记退料",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "退料管理-新增.png"
+        }
+      ]
+    },
+    {
+      "menu": "检验报告",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-inspection-reports-list",
+      "path": "/quality/inspection-reports",
+      "folder": "质量管理/检验报告",
+      "pages": [
+        {
+          "path": "/quality/inspection-reports",
+          "name": "incoming-inspection-reports-list",
+          "title": "检验报告",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "检验报告-查询.png"
+        },
+        {
+          "path": "/quality/inspection-reports/create",
+          "name": "incoming-inspection-reports-create",
+          "title": "检验报告",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "检验报告-新增.png"
+        },
+        {
+          "path": "/quality/inspection-reports/:id",
+          "name": "incoming-inspection-reports-view",
+          "title": "检验报告",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "检验报告-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品检验",
+      "group": "成品管理",
+      "menuCode": "nav_finished-tests",
+      "path": "/finished/tests",
+      "folder": "成品管理/成品检验",
+      "pages": [
+        {
+          "path": "/finished/tests",
+          "name": "finished-tests",
+          "title": "成品检验",
+          "mode": "",
+          "type": "查询",
+          "designFile": "成品检验-查询.png"
+        },
+        {
+          "path": "/finished/tests/:id",
+          "name": "finished-test-view",
+          "title": "成品检验记录",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "成品检验-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "完整追溯",
+      "group": "系统管理",
+      "menuCode": "nav_trace",
+      "path": "/trace",
+      "folder": "系统管理/完整追溯",
+      "pages": [
+        {
+          "path": "/trace",
+          "name": "trace",
+          "title": "完整追溯",
+          "mode": "",
+          "type": "查询",
+          "designFile": "完整追溯-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "设备",
+      "group": "基础管理",
+      "menuCode": "master:equipment:view",
+      "path": "/master/equipment",
+      "folder": "基础管理/设备",
+      "pages": [
+        {
+          "path": "/master/equipment",
+          "name": "master-equipment",
+          "title": "设备与人员资格",
+          "mode": "",
+          "type": "查询",
+          "designFile": "设备-查询.png"
+        },
+        {
+          "path": "/master/equipment/create",
+          "name": "master-equipment-create",
+          "title": "设备与人员资格",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "设备-新增.png"
+        },
+        {
+          "path": "/master/equipment/:id",
+          "name": "master-equipment-view",
+          "title": "设备与人员资格",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "设备-查看.png"
+        },
+        {
+          "path": "/master/equipment/:id/edit",
+          "name": "master-equipment-edit",
+          "title": "设备与人员资格",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "设备-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "QC质量标准",
+      "group": "质量管理",
+      "menuCode": "qms:specification:view",
+      "path": "/quality/specifications",
+      "folder": "质量管理/QC质量标准",
+      "pages": [
+        {
+          "path": "/quality/specifications",
+          "name": "qc-specifications",
+          "title": "QC质量标准",
+          "mode": "",
+          "type": "查询",
+          "designFile": "QC质量标准-查询.png"
+        },
+        {
+          "path": "/quality/specifications/create",
+          "name": "qc-specification-create",
+          "title": "新增QC质量标准",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "QC质量标准-新增.png"
+        },
+        {
+          "path": "/quality/specifications/:id",
+          "name": "qc-specification-view",
+          "title": "QC质量标准详情",
+          "mode": "",
+          "type": "查看",
+          "designFile": "QC质量标准-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "物料平衡",
+      "group": "生产管理",
+      "menuCode": "nav_production-balances",
+      "path": "/production/balances",
+      "folder": "生产管理/物料平衡",
+      "pages": [
+        {
+          "path": "/production/balances",
+          "name": "production-balances",
+          "title": "物料平衡",
+          "mode": "",
+          "type": "查询",
+          "designFile": "物料平衡-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "QA批审核",
+      "group": "成品管理",
+      "menuCode": "nav_finished-qa-reviews",
+      "path": "/finished/qa-reviews",
+      "folder": "成品管理/QA批审核",
+      "pages": [
+        {
+          "path": "/finished/qa-reviews",
+          "name": "finished-qa-reviews",
+          "title": "QA批审核",
+          "mode": "",
+          "type": "查询",
+          "designFile": "QA批审核-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "人员资格",
+      "group": "基础管理",
+      "menuCode": "master:qualification:view",
+      "path": "/master/qualifications",
+      "folder": "基础管理/人员资格",
+      "pages": [
+        {
+          "path": "/master/qualifications",
+          "name": "master-qualifications",
+          "title": "人员资格",
+          "mode": "",
+          "type": "查询",
+          "designFile": "人员资格-查询.png"
+        },
+        {
+          "path": "/master/qualifications/create",
+          "name": "master-qualifications-create",
+          "title": "人员资格",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "人员资格-新增.png"
+        },
+        {
+          "path": "/master/qualifications/:id",
+          "name": "master-qualifications-view",
+          "title": "人员资格",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "人员资格-查看.png"
+        },
+        {
+          "path": "/master/qualifications/:id/edit",
+          "name": "master-qualifications-edit",
+          "title": "人员资格",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "人员资格-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "生产质量计划",
+      "group": "质量管理",
+      "menuCode": "nav_production-plans-list",
+      "path": "/quality/production-plans",
+      "folder": "质量管理/生产质量计划",
+      "pages": [
+        {
+          "path": "/quality/production-plans",
+          "name": "production-plans-list",
+          "title": "生产质量计划",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "生产质量计划-查询.png"
+        },
+        {
+          "path": "/quality/production-plans/create",
+          "name": "production-plans-create",
+          "title": "生产质量计划",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "生产质量计划-新增.png"
+        },
+        {
+          "path": "/quality/production-plans/:id",
+          "name": "production-plans-view",
+          "title": "生产质量计划",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "生产质量计划-查看.png"
+        },
+        {
+          "path": "/quality/production-plans/:id/edit",
+          "name": "production-plans-edit",
+          "title": "生产质量计划",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "生产质量计划-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品放行",
+      "group": "成品管理",
+      "menuCode": "nav_finished-releases",
+      "path": "/finished/releases",
+      "folder": "成品管理/成品放行",
+      "pages": [
+        {
+          "path": "/finished/releases",
+          "name": "finished-releases",
+          "title": "成品放行",
+          "mode": "",
+          "type": "查询",
+          "designFile": "成品放行-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "产品管理",
+      "group": "基础管理",
+      "menuCode": "master:product:view",
+      "path": "/process/products",
+      "folder": "基础管理/产品管理",
+      "pages": [
+        {
+          "path": "/process/products",
+          "name": "process-products",
+          "title": "产品管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "产品管理-查询.png"
+        },
+        {
+          "path": "/process/products/create",
+          "name": "process-products-create",
+          "title": "产品",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "产品管理-新增.png"
+        },
+        {
+          "path": "/process/products/:id",
+          "name": "process-products-view",
+          "title": "产品",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "产品管理-查看.png"
+        },
+        {
+          "path": "/process/products/:id/edit",
+          "name": "process-products-edit",
+          "title": "产品",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "产品管理-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "生产检验",
+      "group": "质量管理",
+      "menuCode": "nav_production-tests-list",
+      "path": "/quality/production-tests",
+      "folder": "质量管理/生产检验",
+      "pages": [
+        {
+          "path": "/quality/production-tests",
+          "name": "production-tests-list",
+          "title": "生产检验",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "生产检验-查询.png"
+        },
+        {
+          "path": "/quality/production-tests/create",
+          "name": "production-tests-create",
+          "title": "生产检验",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "生产检验-新增.png"
+        },
+        {
+          "path": "/quality/production-tests/:id",
+          "name": "production-tests-view",
+          "title": "生产检验",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "生产检验-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品库存",
+      "group": "成品管理",
+      "menuCode": "nav_finished-inventory",
+      "path": "/finished/inventory",
+      "folder": "成品管理/成品库存",
+      "pages": [
+        {
+          "path": "/finished/inventory",
+          "name": "finished-inventory",
+          "title": "成品库存",
+          "mode": "",
+          "type": "查询",
+          "designFile": "成品库存-查询.png"
+        }
+      ]
+    },
+    {
+      "menu": "处方与工艺管理",
+      "group": "基础管理",
+      "menuCode": "process:package:view",
+      "path": "/process/packages",
+      "folder": "基础管理/处方与工艺管理",
+      "pages": [
+        {
+          "path": "/process/packages",
+          "name": "process-packages",
+          "title": "工艺包管理",
+          "mode": "",
+          "type": "查询",
+          "designFile": "处方与工艺管理-查询.png"
+        },
+        {
+          "path": "/process/packages/create",
+          "name": "process-packages-create",
+          "title": "工艺包",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "处方与工艺管理-新增.png"
+        },
+        {
+          "path": "/process/packages/:id",
+          "name": "process-packages-view",
+          "title": "工艺包",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "处方与工艺管理-查看.png"
+        },
+        {
+          "path": "/process/packages/:id/edit",
+          "name": "process-packages-edit",
+          "title": "工艺包",
+          "mode": "edit",
+          "type": "编辑",
+          "designFile": "处方与工艺管理-编辑.png"
+        }
+      ]
+    },
+    {
+      "menu": "质量调查",
+      "group": "质量管理",
+      "menuCode": "nav_incoming-deviations-list",
+      "path": "/deviations",
+      "folder": "质量管理/质量调查",
+      "pages": [
+        {
+          "path": "/deviations",
+          "name": "incoming-deviations-list",
+          "title": "来料调查",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "质量调查-查询.png"
+        },
+        {
+          "path": "/deviations/create",
+          "name": "incoming-deviations-create",
+          "title": "来料调查",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "质量调查-新增.png"
+        },
+        {
+          "path": "/deviations/:id",
+          "name": "incoming-deviations-view",
+          "title": "来料调查",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "质量调查-查看.png"
+        }
+      ]
+    },
+    {
+      "menu": "成品发货出库",
+      "group": "成品管理",
+      "menuCode": "nav_finished-shipments",
+      "path": "/finished/shipments",
+      "folder": "成品管理/成品发货出库",
+      "pages": [
+        {
+          "path": "/finished/shipments",
+          "name": "finished-shipments",
+          "title": "成品发货出库",
+          "mode": "list",
+          "type": "查询",
+          "designFile": "成品发货出库-查询.png"
+        },
+        {
+          "path": "/finished/shipments/create",
+          "name": "finished-shipments-create",
+          "title": "新增成品发货出库",
+          "mode": "create",
+          "type": "新增",
+          "designFile": "成品发货出库-新增.png"
+        },
+        {
+          "path": "/finished/shipments/:id",
+          "name": "finished-shipments-view",
+          "title": "成品发货出库",
+          "mode": "view",
+          "type": "查看",
+          "designFile": "成品发货出库-查看.png"
+        }
+      ]
+    }
+  ],
+  "globals": [
+    {
+      "path": "/login",
+      "name": "login",
+      "title": "登录",
+      "mode": "",
+      "folder": "系统入口/登录",
+      "designFile": "登录.png"
+    },
+    {
+      "path": "/change-password",
+      "name": "change-password",
+      "title": "修改密码",
+      "mode": "",
+      "folder": "系统入口/修改密码",
+      "designFile": "修改密码.png"
+    }
+  ],
+  "others": [
+    {
+      "path": "/qa/batches/:id/review",
+      "name": "finished-qa-review",
+      "title": "QA 批审详情",
+      "mode": "review",
+      "folder": "业务上下文页/QA 批审详情",
+      "designFile": "QA 批审详情-审核.png"
+    },
+    {
+      "path": "/qa/batches/:id/release",
+      "name": "finished-qa-release",
+      "title": "QA 批放行审核",
+      "mode": "release",
+      "folder": "业务上下文页/QA 批放行审核",
+      "designFile": "QA 批放行审核-放行.png"
+    },
+    {
+      "path": "/qa/material-lots/:id/review",
+      "name": "incoming-release-review",
+      "title": "物料放行",
+      "mode": "review",
+      "folder": "业务上下文页/物料放行",
+      "designFile": "物料放行-审核.png"
+    },
+    {
+      "path": "/qa/material-lots/:id/release",
+      "name": "incoming-release-release",
+      "title": "物料放行",
+      "mode": "release",
+      "folder": "业务上下文页/物料放行",
+      "designFile": "物料放行-放行.png"
+    },
+    {
+      "path": "/mes/execution/:id/forms/:formId",
+      "name": "execution-form",
+      "title": "电子批记录",
+      "mode": "",
+      "folder": "业务上下文页/电子批记录",
+      "designFile": "电子批记录-查看.png"
+    },
+    {
+      "path": "/mes/execution/:id",
+      "name": "execution-execution",
+      "title": "生产执行",
+      "mode": "execution",
+      "folder": "业务上下文页/生产执行",
+      "designFile": "生产执行-查看.png"
+    },
+    {
+      "path": "/mes/execution/:id/weighing",
+      "name": "execution-weighing",
+      "title": "生产执行",
+      "mode": "weighing",
+      "folder": "业务上下文页/生产执行",
+      "designFile": "生产执行-查看.png"
+    },
+    {
+      "path": "/mes/execution/:id/charge",
+      "name": "execution-charge",
+      "title": "生产执行",
+      "mode": "charge",
+      "folder": "业务上下文页/生产执行",
+      "designFile": "生产执行-查看.png"
+    },
+    {
+      "path": "/quality/specification-versions/:id/edit",
+      "name": "qc-specification-version",
+      "title": "QC质量标准版本",
+      "mode": "",
+      "folder": "业务上下文页/QC质量标准版本",
+      "designFile": "QC质量标准版本-编辑.png"
+    },
+    {
+      "path": "/wms/material-lots/:id",
+      "name": "wms-material-lot",
+      "title": "仓储管理",
+      "mode": "view",
+      "folder": "业务上下文页/仓储管理",
+      "designFile": "仓储管理-查看.png"
+    },
+    {
+      "path": "/finished/reports",
+      "name": "finished-reports",
+      "title": "成品检验报告",
+      "mode": "list",
+      "folder": "业务上下文页/成品检验报告",
+      "designFile": "成品检验报告-功能.png"
+    },
+    {
+      "path": "/finished/reports/:id",
+      "name": "finished-reports-view",
+      "title": "成品检验报告",
+      "mode": "view",
+      "folder": "业务上下文页/成品检验报告",
+      "designFile": "成品检验报告-查看.png"
+    },
+    {
+      "path": "/audit",
+      "name": "audit",
+      "title": "GMP Audit Trail",
+      "mode": "",
+      "folder": "业务上下文页/GMP Audit Trail",
+      "designFile": "GMP Audit Trail-功能.png"
+    },
+    {
+      "path": "/integration/operations",
+      "name": "integration-operations",
+      "title": "Integration Inbox / Outbox Operations",
+      "mode": "",
+      "folder": "业务上下文页/Integration Inbox - Outbox Operations",
+      "designFile": "Integration Inbox - Outbox Operations-功能.png"
+    }
+  ]
+}
