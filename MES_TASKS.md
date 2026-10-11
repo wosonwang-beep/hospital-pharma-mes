@@ -3,6 +3,22 @@
 
 # MES Task Status Index
 
+## 角色名称去除演示前缀 — 2026-10-10
+
+**READY FOR ACCEPTANCE — NOT HUMAN ACCEPTED（20:40）。** 用户明确要求更新数据库，全部角色名称去掉“演示”。通过现有8080版本化/幂等/审计PUT接口更新7个sys_role.display_name，去掉“演示·”前缀；主数据/仓储/生产/取样/QC检验/QC复核/QA岗位名称已持久化。完整API前后比对角色数量/id/编码/状态/菜单及权限集合不变，仅目标版本+1；真实DEV SQL确认名称残留0、7条更新审计。无新迁移，原Flyway51不变，无UI/业务源码/登录账号/历史证据修改、提交或推送。未运行构建/视觉/全量回归（数据维护且源码/布局不变）；本次范围内CRITICAL/HIGH0，无新增技术债。依据和证据：[数据修改设计与核查记录](docs/development/decisions/ROLE_NAME_CLEANUP_20261010.md)。其他任务状态保留。
+
+## 打印业务字典与数据源配置增量 — 2026-10-10
+
+**当前阶段：原型已由用户确认；后端详细设计主设计复核中（用户已授权主对话批准）；正式开发未开始。** 2026-10-10主设计委派明确确认UI UX Pro Max四步原型，关系为源可绑多类型、组织内每类型唯一源、模板单类型自动源；本轮仅完成同一详细设计补充及文档入口。交审入口：[005详细设计](docs/development/DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED.md)、[OpenAPI](docs/api/print-data-source-configuration.openapi.json)、[跨域契约矩阵](docs/development/PRINT_DATA_SOURCE_CONTRACT_MATRIX_20261010.csv)、[文档复核](docs/review/PRINT_DATA_SOURCE_DESIGN_REVIEW_20261010.md)。正式编译/测试/DB/Flyway/PDF/部署均NOT RUN；迁移号UNALLOCATED，不能锁V052。主设计已定稿单据unitId的LIVE_LOOKUP及displayValue显式HALF_UP；独立类型元数据读写/策略目录、多dataset、安全键/顺序、专用状态/恢复、不可变sidecar和固定摘要样例已由主设计明确，待准确修正文档复核下发；不等待用户重复批准。下方旧PENDING静态/V2/V3条目保留历史，不表示当前原型未确认。
+
+用户授权“把这个任务做到收尾为止”“授权所有执行”，但主对话仍要求先审核详细设计并明确下发才编码。后续DEV操作须真实目标、备份回滚和保留现有数据/代码；无生产、不可恢复删除、持久安全权限、付款、推送或无关功能授权。本轮不执行DEV迁移或部署。
+
+**当前阶段：独立静态设计已交付 / PENDING HUMAN REVIEW。** 用户明确纠正“先出设计图，再出交互原型”；暂停修改原型。V2/V3及其hash仅为未批准工程探索，不能作为已确认设计。新增四张独立imagegen页面稿（T1源列表、T2来源维护、T2收货/出库完整配置）及取数/明细/关联/字段操作注解，保存于`design/系统管理/打印数据源配置/静态设计-20261010/`。说明由Codex编写、内置imagegen绘制，非原型截图。已视觉自查并针对现有字段名修正图稿；未运行正式构建/真实接口/持久化/打印验收；本次无源码/数据库/迁移/推送变更。静态图确认后才制作匹配交互原型，具体原型版本仍需单独批准；已接受打印模板功能保持原契约。
+
+V3完整取数配置原型：用户授权补齐来源、主表、明细、关联和字段，模板保持不变。已完成来源目录新增/编辑JSON结构、主表/记录参数/页面、多明细区域、关联键/基数/缺失处理、字段映射维护及按配置试取；收货/出库与新自定义来源全流程12项原型检查PASS，4视口38对标签同行无溢出，原型typecheck/build PASS。仅mes-demo/设计记录/检查证据修改；正式MES及数据库未改、无迁移/推送。PENDING HUMAN APPROVAL：正式完整schema/源权限/数据持久化/真实业务打印均NOT RUN；跨多级关联、集合排序和多账号不宣称已实现/验收。新证据printing-source-v3-20261010，旧原型和数据保留。
+
+**IN PROGRESS — REVISED PROTOTYPE PENDING HUMAN APPROVAL。** 原三页设计已被用户拒绝，历史哈希/11项检查保留为非当前设计证据。用户明确要求保持已可用打印模板，仅补齐数据库可配置业务/单据/源/字段，并要求打印数据源配置与打印模板同级。已按此方向制作5174独立T1/T2/T3收货/出库数据源原型与独立设计说明：同级菜单、查询、字段选择、来源映射、分组/名称/格式/启停、试取示例及浏览器保存重开。13项原型检查PASS，CUAWright1440查询4对/375配置6对同行无溢出。正式字典基础数据入库已获授权但本轮尚未执行；正式MES源码/数据库未改，无新Flyway/提交推送。数据读取定义维护、多页面绑定/关联配置、完整新增/校验/权限、真实源数据和模板联动/旧历史兼容仍待；当前原型未完成功能全覆盖，不宣称正式验收。源哈希、限制与证据见[设计锁定记录](docs/development/decisions/PRINT_CONFIGURATION_DESIGN_LOCK_20261010.md)、[独立设计说明](docs/development/decisions/PRINT_CONFIGURATION_UI_SPEC_20261010.md)。
+
 ## 全工作区代码提交与远端同步 — 2026-10-09
 
 用户在已获知全量后端迁移契约失败与前端8项失败后，再次明确要求“没提交的代码都提交和推送”。本次按该指令提交打印之外的生产处方/eBR/系统管理现有实现、对应测试、V044/V045/V046/V048/V050及开发规范/设计记录，并推送原main；这是代码同步指令，不代表其他功能已验收或全量门禁PASS。不修改测试断言、门禁配置、冻结历史或已执行迁移。本机.env、application-local.yml、application-ci.yml、含本机登录信息的临时验证脚本、缓存、日志和参考图片保留在工作区。
@@ -20,6 +36,14 @@ V047 模板类型/批量输出与 V049 不可变保护已正常执行；共享�
 人工验收记录：本次仅更新 MES_TASKS.md 的上述任务状态，白名单为本文件；其他系统管理状态保留。已实际读取 AGENTS.md、docs/development/MES_DEV_RULES.md、MES_TASKS.md、docs/PROJECT_BASELINE.md 权威章节、DCP-PRINT-TYPE-BATCH-004-APPROVED.md 与 PRINT_TYPE_BATCH_20261009.md；依据仍为 FINAL BASELINE v1.0.23、批准的打印补充及 UI V2/T1–T6。设计差异：本次无实现/设计修改或新增差异。迁移：没有新迁移/数据库写入，原 V047/V049 证据保留。验收证据：引用上次已记录的定向测试、真实页面/PDF、50 个迁移校验和一致性复核；本次状态记录未重新运行构建/测试，不新增运行 PASS。结论：仅本打印模板与单据/列表增量由明确人工确认转 ACCEPTED，剩余 LOW/MEDIUM 技术债保留，原用户数据与历史证据保留；该验收状态记录步骤没有提交/推送操作；后续提交授权与门禁结果见下方提交准备记录。
 
 提交准备记录：本次白名单为打印后端/适配器/测试、Canvas 与选中打印前端及依赖、V047/V049、打印批准/API/证据文档和本任务索引；共享 SecurityConfiguration 只纳入打印 allowlist 代码块。其他生产/eBR/系统管理修改、V044–046/V048/V050、本机配置、缓存与日志保留未纳入。仓库/Compose/CI policy 正反例 PASS；前端构建 PASS，生产依赖审计0漏洞。全量前端137/145通过（8失败），全量后端因旧 Mes002MigrationContractTest 仍限定001–031失败；当前原main已至043。打印相关定向与此前真实回滚/页面证据保留，不将全量失败改写为PASS。需要旧测试契约受控复核后才能完成远端main推送。
+
+## 菜单原型正式集成与基础数据初始化 — 2026-10-10
+
+**READY FOR ACCEPTANCE — NOT HUMAN ACCEPTED（2026-10-10 17:32）。** 用户明确批准权限说明字段和聚合保存API，并批准共享顶栏/本地刷新代理的定向修复。正式菜单T1列表与T2/T3配置已按冻结5174原型接入5173/8080：查询/树/分页、特殊权限草稿、关联/解除、只读角色、统一事务保存、版本/幂等/回滚；不自动扩张角色授权。V051新增说明字段并补齐正式既有基础菜单/权限关联，51迁移validate PASS，旧迁移及自定义数据保留。Java源码构建、前端typecheck/build、前端10测试、真实DEV8集成和真实浏览器35检查PASS；四视口标签同行/局部滚动和最终截图已审查。测试菜单/权限仅停用、不删除。剩余MEDIUM为非法空permission-change id的错误响应规范化，LOW为移动分页计数换行及既有大包/Flyway版本警告；未运行全量回归，未提交推送。依据：[批准补充](docs/development/DCP-MENU-CONFIGURATION-001-APPROVED.md)、[设计锁定](docs/development/decisions/MENU_FUNCTION_DESIGN_LOCK_20261010.md)、[实施与验收证据](docs/review/MENU_CONFIGURATION_RUNTIME_20261010.md)。仅本菜单增量待人工终验，其他任务状态不变。
+
+以下为授权前的历史门禁记录，不是当前状态：
+
+**BLOCKED / DESIGN CHANGE REQUIRED — NOT ACCEPTED。** 用户确认当前5174菜单原型并要求完成正式开发，追加菜单/权限作为正式基础数据初始化固定。已读取AGENTS.md、MES_DEV_RULES.md、v1.0.23权威路由、UI V2/T1/T2、数据库菜单批准DCP、当前原型哈希、正式菜单/权限/角色接口与V037等现有种子数据。当前原型UI版本已确认，基础数据初始化范围已记录；发现正式权限说明字段缺失、菜单+权限定义+关联无聚合保存事务，两者需要受控字段/API变更授权，停止业务施工。记录：[菜单原型确认与门禁](docs/development/decisions/MENU_FUNCTION_DESIGN_LOCK_20261010.md)、[最小变更提案](docs/development/DCP-MENU-CONFIGURATION-001-PROPOSED.md)。本轮只增加文档和此任务索引，无源码/数据库/迁移修改，无提交推送，既有用户数据与其他任务状态保留；构建/正式浏览器/真实持久化验收NOT RUN，未以原型旧结果冒充正式通过。
 
 ## 系统管理报错目标修复 — 2026-10-09
 
@@ -679,3 +703,82 @@ READY FOR ACCEPTANCE — TEMPLATE DRAFT / NOT PUBLISHED. 用户请求“做一�
 - 样张：docs/examples/ebr/KCL30-120L-20261009/ 内 HTML、8页 PDF及读取时source-snapshot.json。8页包括封面、六工序、独立历史参考附录。附录记录来源是 GET /main-batches/16/ebr（批号20261007-KCL-001，另一个旧工艺快照）；不会作为本模板执行数据。理论4000瓶明确标注120000ml÷30ml换算参考且未计损耗。
 - 验证：真实 POST/PUT/GET HTTP200，既有服务定义/引用/单位/DSL/角色校验通过；真实5173设计器显示正确名称、工序与定义。六表52字段、所有MANUAL字段默认值为空检查PASS；PDF文件有效、8页，封面及第一工序截图人工查看，修正打印分页后首工序单页完整。无系统代码变化，本轮未重跑无关编译/回归。
 - 评审/迁移：无新增Schema/Flyway迁移，无新增业务/GxP契约；旧证据保持原状。保留现有刷新登录态和bundle非阻塞债务。仅交付查看草稿及样张，不代表可投产的受控归档或现场真实性认证；不更改既有已验收任务，不提交/推送。
+
+
+## 主设计批准与实施下发 — 2026-10-10T13:02:40.670492+00:00
+
+MAIN DESIGN APPROVED / IMPLEMENTATION IN PROGRESS。来源：主对话01a115d2-8ace-7574-9a08-ac48dfc970cc本次委派，已审阅DCP005第1–11节及修正实体/API，批准同一文件及18操作/61schema契约作为实施基线。用户先前已明确授权主对话批准、任务做到收尾及必要DEV迁移/后端更新/测试；本记录不把主设计批准写成用户最终验收，不改历史审批。
+
+本次白名单：mes-reporting打印领域/API/应用/持久化及直接消费provider、mes-boot定向测试与新增Flyway、正式Vue打印页面/API/路由/现有导航入口、当前同一设计/契约/复核/任务索引。现有其他菜单/权限/UI未提交改动保留，开始清单和文件备份位于本机print-source-implementation/worktree-before.txt及file-backup/。不修改旧迁移、旧归档正文/hash/触发器、冻结releases、无关业务，不提交或推送。
+
+专项环境覆盖：本次主设计下发明确要求迁移先在隔离测试库验证，仅该验证允许专项隔离库；正式DEV仍为已有localhost:3306/hospital_pharma_mes_dev、Redis6379、后端8080、前端5173；不drop旧库、不repair旧checksum、不增加持久安全开关。真实目标/版本/备份可恢复确认后才执行DEV迁移。复杂打印集成初始预算90分钟，最多2轮自动修复，重复同根因立即报告；不改批准验收断言。当前实施开始，迁移/编译/业务/UI/PDF验证未运行，不能宣称验收或部署完成。
+
+
+## 打印配置当前执行门禁 — 2026-10-10T13:33:06.877264+00:00
+
+MAIN DESIGN APPROVED / IMPLEMENTATION BLOCKED（非用户验收）。本次已保存193文件备份和工作树清单；真实目标localhost:3306/hospital_pharma_mes_dev最高成功V051。V052新增源码已在专项隔离库执行成功，约5.8MB DEV备份已恢复验证；循环组合FK、跨组织拒绝、源编码/类型唯一、sidecar不可更新删除与事务回滚检查通过。原DEV未迁移/部署。相关模块编译PASS；定向单元30项中29通过、1错误（Mockito测试夹具嵌套stubbing），没有修改原断言。两轮自动修复已用完，遵守MES_DEV_RULES.md §6A暂停新代码/测试，已请求本复杂集成专项放宽。
+
+未完成：主设计刚批准的baseTemplateVersionId/sourceSelection显式升级增量同步及实施；真实DEV集成/权限并发/校验竞态/旧打印全链回归；前端真实API接入、浏览器刷新/重启持久化与截图、真实收货/检验PDF及部署验证。不得宣称后端闭环、功能READY、用户验收或生产部署完成。本机准确清单/日志/约束证据：C:\Users\Administrator\Documents\Codex\2026-10-10\task\print-source-implementation\implementation-status.json。保留所有他人未提交改动、旧迁移/历史归档，未提交推送。
+
+
+## 打印配置当前执行门禁 — 2026-10-10T13:33:58.507059+00:00
+
+MAIN DESIGN APPROVED / IMPLEMENTATION BLOCKED（非用户验收）。本次已保存193文件备份和工作树清单；真实目标localhost:3306/hospital_pharma_mes_dev最高成功V051。V052新增源码已在专项隔离库执行成功，约5.8MB DEV备份已恢复验证；循环组合FK、跨组织拒绝、源编码/类型唯一、sidecar不可更新删除与事务回滚检查通过。原DEV未迁移/部署。相关模块编译PASS；定向单元30项中29通过、1错误（Mockito测试夹具嵌套stubbing），没有修改原断言。两轮自动修复已用完，遵守MES_DEV_RULES.md §6A暂停新代码/测试，已请求本复杂集成专项放宽。
+
+未完成：主设计刚批准的baseTemplateVersionId/sourceSelection显式升级增量同步及实施；真实DEV集成/权限并发/校验竞态/旧打印全链回归；前端真实API接入、浏览器刷新/重启持久化与截图、真实收货/检验PDF及部署验证。不得宣称后端闭环、功能READY、用户验收或生产部署完成。本机准确清单/日志/约束证据：C:\Users\Administrator\Documents\Codex\2026-10-10\task\print-source-implementation\implementation-status.json。保留所有他人未提交改动、旧迁移/历史归档，未提交推送。
+
+
+## 本任务修复上限有界例外及显式升级批准 — 2026-10-10T13:36:48.414288+00:00
+
+MAIN DESIGN APPROVED / IMPLEMENTATION IN PROGRESS。来源同一主对话本次委派：用户已授权主对话全权批准当前任务并做到收尾，主设计批准DCP005复杂前后端集成对MES_DEV_RULES §6A两轮修复上限作专项放宽，只覆盖本任务兼容/契约集成，不修改全局规则、不弱化断言和安全要求；逐原因定向修复/复测，同原因复发或需要改变设计立即报告，不无限循环。原Mockito撤权拒绝断言保留；失败是夹具在thenReturn参数构造时再次stubbing，先构造夹具即可修复，非权限校验通过。复杂集成预算仍按本任务90分钟记录，不因此扩至无限。
+
+主设计批准现有Word/Canvas保存增加可选baseTemplateVersionId与sourceSelection(mode=INHERIT|UPGRADE,targetSourceRevisionId,targetConfigHash)。默认INHERIT，首次新模板解析唯一当前已发布源，同编码后续版本继承旧引用。UPGRADE需base及显式目标、同businessType/同源、当前绑定与ENABLED/PUBLISHED/类型覆盖，hash/目标冲突409，缺字段/集合兼容422带问题；复制新模板版本并重验，不修改旧版或静默删除绑定。LEGACY转CONFIGURED必须显式UPGRADE及完整兼容；前端仅增加版本升级差异预览/确认，不提供任意换源。本增量沿同一文件身份同步契约/矩阵后实施。此前BLOCKED仅为已获专项放宽的阶段记录，不是当前终止。
+
+
+## DCP005执行进度（非最终验收）— 2026-10-10T14:17:01.430749+00:00
+
+正式实现候选已接入。V052在第二隔离库恢复备份并执行通过后，经后续明确授权及自动审批重试，于13:58:57 UTC通过Flyway升级本机hospital_pharma_mes_dev；当前最高成功V052、136表。V001–V051原始文件哈希均保留。打印纯单元30/30、真实DEV回滚集成10/10通过，原断言保留、回滚检查通过；收货实际PDF与批次单据/LIST已覆盖，检验模板真实PDF转换已覆盖，尚未覆盖实际检验artifact/PDF。
+
+正式Vue数据源API、四路由、列表/四步/属性检查器、目录关联和字段、多类型冲突、元数据管理（中文同行等值筛选）、草稿/取消导航保护、真实样本校验及明确版本发布、最小字段预览已接入。Canvas独立datasetKey循环、固定版本字段加载和显式源升级差异确认已接入；Word导入保存同契约，OnlyOffice回调明确继承base。最新类型检查和构建PASS（既有大包提示保留），Canvas6旧+3新增测试9/9通过。未运行正式浏览器，不将构建或mock原型作为正式验收。
+
+自动审批拒绝且未执行：print-source-final-backend-checks.py（历史正式归档重用当前策略复核、单位LIVE_LOOKUP语义及真实检验PDF/升级回滚追加用例）；print-source-deploy.ps1（停止明确8080 MES PID24276、重打包、local8080及正式5173启动）。拒绝理由分别为额外后端行为范围与停止既有服务/部署授权未被审查接受。没有间接执行或绕过。8080仍旧进程health200，5173未启动，原型5174正常。正式计划URL http://127.0.0.1:5173/admin/print-data-sources 当前不可打开。临时正式浏览器写开关仍待专用stdio进程专项批准。
+
+当前状态 IMPLEMENTATION IN PROGRESS / BLOCKED DEPLOYMENT AUTO-REVIEW，非READY/ACCEPTED/收尾。仍需处理精确审批、后端补充检查与DEV部署、真实浏览器写路径/重开/导航/权限/控制台/设计图对照、实际检验PDF、升级/绑定并发/发布竞态。完整候选清单及证据C:\Users\Administrator\Documents\Codex\2026-10-10\task\print-source-implementation\implementation-status.json 与 CURRENT_OUTCOME.md。保留193文件初始备份、file-backup及5.8MB已恢复验证的DEV备份。未提交/推送/合并。
+
+
+## 最新专项授权执行与门禁 — 2026-10-10T14:32:25.101208+00:00
+
+历史归档补充已按用户准确动作授权应用；PrintService.generate命中正式归档前调用现有archiveAuthorize，保留provider.load、组织隔离、当前业务权限、旧字节/hash，单位目录语义准确LIVE_LOOKUP。30项单元通过；显式升级/默认继承/错误hash/旧模板不变用例通过。实际检验artifact/PDF/evidence用例首次因夹具遗漏正常模板业务绑定被规则拦截；补齐标准publish->bind步骤后定向1/1通过，未弱化断言。修正后WMS真实PDF/批次历史回归2/2、旧生命周期13/13再次通过。合计12个不同DEV用例分别通过，不宣称一次新全套12/12执行。
+
+同一部署动作在用户准确列表后回复授权的证据下重试，仍被自动审批拒绝且未执行。拒绝理由：授权回复缺乏对具体服务中断副作用明确逐项确认。再次STOP，不间接启动/换端口/杀其他进程。8080仍旧local进程24276，5173未启动；正式运行/浏览器验收NOT RUN。CUAWright临时写客户端仅准备未启动，开关未变更，不宣称已完成正式截图。完整构建/模块包及hash已保存，boot薄包不可直接运行，重打包及回滚说明保留。
+
+本任务90分钟窗口截至14:32:40 UTC；已申请专项延长30分钟至15:02:40 UTC，尚未收到明确批准，届时停止新修改和新测试，保持上述部署门禁。尚缺正式服务启动、真实API/浏览器核心闭环、并发与竞态验收；不是READY/ACCEPTED/任务收尾。未提交推送或合并。
+
+
+
+## 2026-10-10 本次授权重新打包/重启与核心验收收尾
+
+DEV已部署（后端PID25580/前端26676，8080/5173 HTTP200），V052与52迁移验证通过；源码修复精确HTTP权限路由、参数显式命名、实际单位字典SQL及按授权元数据生成默认设计。最终定向回归9/9、安全7/7、前端构建PASS。真实收货取数/发布、中文字段模板预览、409冲突回滚及真实PDF生成成功；归档PDF字节/摘要不变。浏览器完成保存重开、取消与只读等核心流程，1280标签同行10/10。CUAWright PDF嵌入阅读空白，完整多类型/字段关系CRUD浏览器矩阵及多行真实样本等未完成，状态为DEV_DEPLOYED_CORE_API_PASSED_BROWSER_ACCEPTANCE_PARTIAL，不能宣称全量验收通过。原型和正式代码均保留、无提交推送。完整证据：C:\Users\Administrator\Documents\Codex\2026-10-10\task\print-source-implementation\CURRENT_OUTCOME.md。
+
+## 2026-10-10 15:59 UTC DCP005补齐验收
+同一用户明确批准的MES DEV临时CUAWright测试已继续：真实API16检查PASS；浏览器CRUD8断言PASS、多选解除/恢复/重开3PASS、模板中文字段及只读详情2PASS。新QA源21绑定两个独立DEV测试类型，复用现有收货读策略；最终两类型真实取数通过后发布修订26，测试附加字段/关联已删除保存，保留全部版本/审计。原源19完整不变、模板68固定修订22、归档27 PDF摘要不变。无产品源码、迁移、权限、凭据或服务改变，无提交推送。
+保留自动断言FAIL：正常refresh401资源日志触发console全空断言；低权限UI测试期待403但现有守卫实际重定向首页。既有生产账号7条API403和匿名401已通过；无既有仅查看/管理/发布拆分角色，不新建权限。WMS及5个现有APPROVED检验报告均仅1行，无真实多行样本，NOT RUN。PDF拦截已被主设计接受工具限制，先前未弹窗未复现，不再改PDF或安全保护。
+全部专用临时写进程已退出，15:58:53默认mutation=false/browser inactive检查PASS，15:59:27专用进程清单空。状态DEV_DEPLOYED_CORE_FLOW_VERIFIED_ACCEPTANCE_PARTIAL / IN PROGRESS，非READY/ACCEPTED。完整报告与原始失败证据：C:\Users\Administrator\Documents\Codex\2026-10-10\task\print-source-implementation\ROUND2_ACCEPTANCE_20261010.md。
+
+
+## 2026-10-10 打印数据源限定DEV验收补充收尾
+
+同一主设计明确批准的认证/首页回退/隔离fixture约定已写入DCP005与docs/development/decisions/PRINT_SOURCE_ACCEPTANCE_SUPPLEMENT_20261010.md。新增认证5项+实际router/源组件11项=16/16 PASS，vue-tsc PASS；同DEV回滚IT5/5 PASS（真实三行SQL排序、双独立集合各3行、source view/manage/publish上下文正反例、两个独立事务竞争已有归属被唯一键1062/23000拒绝）。0失败/0错误/0跳过。每项回滚验证源21恢复、fixture收货单不存在，用户/角色/授予数量不变；产品指纹无变化。未开写浏览器、部署、打包、新迁移、真实角色/凭据或Git提交推送。
+
+原2浏览器FAIL和原报告保留，不改判历史；另列批准修订后21项结果。前置实机API16与浏览器13项PASS沿用。两次新测试夹具/观测修正均保留首轮日志，未修改旧断言/产品：Antd插件注册、按受控十进制字符串读取数量且3.750期望不变。限定DEV交付未发现阻断问题，可审阅使用；整体IN PROGRESS，待主设计/用户最终验收，不写ACCEPTED。
+
+环境/未运行限制：真实窄权限账号及已有多行单据现场实机（本轮获批隔离上下文/回滚fixture代替）；空类型首次竞争赢家、发布压力竞态、正式375及全量UI矩阵未测；已接受PDF内嵌工具限制不再扩大。完整最终报告C:\Users\Administrator\Documents\Codex\2026-10-10\task\PRINT_SOURCE_FINAL_DEV_DELIVERY_20261010.md；机器结果print-source-implementation/acceptance-supplement/results.json；最终源清单FINAL_CHANGED_FILES_20261010.md/json。
+
+
+## 2026-10-10 打印数据源限定DEV交付明确批准
+
+当前状态：DEV_ACCEPTED／本次开发交付完成。批准来源：主对话01a115d2-8ace-7574-9a08-ac48dfc970cc设计与验收负责人本次明确委派；用户已授权由其批准。依据已核实DEV部署、16项真实API、13项浏览器通过断言及本轮21/21针对性补测，批准本次限定DEV交付，不再设置待用户人工验收阻塞已约定开发范围。此前IN PROGRESS/待验收文字保留为阶段历史，本条是当前任务状态。
+
+保留范围限制：PDF内嵌阅读器工具限制；真实窄权限账号/已有多行业务单据现场实机未验证（已批准事务fixture/隔离上下文补测）；空类型首次竞争赢家、发布压力及正式375视口未覆盖。不能写成生产验证或全系统回归完成。原2条FAIL、首轮夹具失败及后续批准补充21/21验证均保持原始历史，不改判旧报告。
+
+本次仅更新任务索引和最终交付报告；未运行新测试、打开浏览器、修改产品/权限/凭据/迁移、部署或扩张任务；未提交推送。完整最终报告：C:\Users\Administrator\Documents\Codex\2026-10-10\task\PRINT_SOURCE_FINAL_DEV_DELIVERY_20261010.md。既有入口http://127.0.0.1:5173/admin/print-data-sources；原型http://127.0.0.1:5174/#/printing/data-sources。

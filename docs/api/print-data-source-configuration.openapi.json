@@ -1,0 +1,6080 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "现有受控打印 — 数据源配置有界详细设计增量",
+    "version": "DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED",
+    "description": "主设计复核中 MAIN DESIGN REVIEW；已落实主设计八项修正，正式开发NOT STARTED。不等待用户重复批准，待主对话明确下发实施。"
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "paths": {
+    "/printing/data-sources": {
+      "get": {
+        "operationId": "listPrintDataSources",
+        "summary": "分页查询数据源",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": ""
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": ""
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "description": ""
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ENABLED",
+                "DISABLED"
+              ]
+            },
+            "description": ""
+          },
+          {
+            "name": "businessType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$",
+              "example": "receivedQty"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourcePageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createPrintDataSource",
+        "summary": "创建源身份及草稿",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceCreateRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}": {
+      "get": {
+        "operationId": "getPrintDataSource",
+        "summary": "查看源当前草稿/发布引用",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUnusedPrintDataSource",
+        "summary": "可恢复逻辑删除从未使用的草稿源",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletionResultResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionReasonRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/draft": {
+      "put": {
+        "operationId": "savePrintSourceDraft",
+        "summary": "保存草稿与原子类型绑定",
+        "description": "无status写字段；完整配置规范化，类型只是唯一归属预留，不即用旧发布版；所有改动使校验过期。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceDraftRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/validate": {
+      "post": {
+        "operationId": "validatePrintSourceDraft",
+        "summary": "逐类型真实有权限样本校验",
+        "description": "每类型真实样本；捕获metadata版本/hash；包括幂等重放都重查样本当前业务读取权，无持久化preview。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResultResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidationRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/publish": {
+      "post": {
+        "operationId": "publishPrintSourceDraft",
+        "summary": "事务复核证明并冻结修订",
+        "description": "请求显式revisionId/configHash目标；metadataVersion/hash/catalog/绑定及30分钟证明全部复核；含幂等重放重新检查源及样本当前业务权限，撤权403。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:publish"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/deactivate": {
+      "post": {
+        "operationId": "deactivatePrintSource",
+        "summary": "停用身份阻止新使用",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:publish"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionReasonRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/revisions/{revisionId}": {
+      "get": {
+        "operationId": "getPrintSourceRevision",
+        "summary": "按固定源修订读取",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "revisionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceRevisionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/data-sources/metadata/catalogs": {
+      "get": {
+        "operationId": "getPrintCatalogs",
+        "summary": "获取当前配置管理员可见白名单",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "businessType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$",
+              "example": "receivedQty"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogMetadataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/data-sources/metadata/document-types": {
+      "get": {
+        "operationId": "getPrintDocumentTypes",
+        "summary": "中文类型、绑定和禁选原因",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentTypesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/sources": {
+      "get": {
+        "operationId": "getLegacyPrintProviderSources",
+        "summary": "兼容保留provider来源目录",
+        "description": "与源配置目录是两个职责；不改既有DTO。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:template:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderSourcesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/fields": {
+      "get": {
+        "operationId": "getCompatiblePrintFields",
+        "summary": "按类型/模板固定源修订读取字段",
+        "description": "固定legacy版本传templateVersionId走legacy；固定配置版本走该源修订；无固定版本解析唯一已发布源，无绑定/发布明确报错，禁止任意fallback。既有Canvas接入同步传版本ID。example是合成示例。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:template:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "businessType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$",
+              "example": "receivedQty"
+            },
+            "description": ""
+          },
+          {
+            "name": "printType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DOCUMENT",
+                "LIST"
+              ],
+              "default": "DOCUMENT"
+            },
+            "description": ""
+          },
+          {
+            "name": "templateVersionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompatibleFieldResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/reactivate": {
+      "post": {
+        "operationId": "reactivatePrintSource",
+        "summary": "恢复运行可用性",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:publish"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionReasonRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/{id}/restore": {
+      "post": {
+        "operationId": "restoreUnusedPrintSource",
+        "summary": "恢复从未使用逻辑删除草稿且不恢复类型绑定",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "example": "101"
+            },
+            "description": ""
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionReasonRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/data-sources/metadata/authorization-policies": {
+      "get": {
+        "operationId": "getAuthorizationPolicies",
+        "summary": "当前管理员可配置中文授权策略目录",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationPoliciesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      }
+    },
+    "/printing/document-types/{businessType}/metadata": {
+      "get": {
+        "operationId": "getPrintDocumentTypeMetadata",
+        "summary": "读取当前组织类型元数据",
+        "description": "",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:view"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "businessType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TypeMetadataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        }
+      },
+      "put": {
+        "operationId": "putPrintDocumentTypeMetadata",
+        "summary": "首建或更新受控类型元数据",
+        "description": "manage；expectedVersion0表示首建，锁字典叶项防并发；更新严格版本；在用根/策略/过滤语义变更409；校验失效。",
+        "tags": [
+          "Printing source configuration"
+        ],
+        "x-permissions": [
+          "print:source:manage"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "businessType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "example": "print-source-publish-20261010-1"
+            },
+            "description": "平台幂等作用域组织/操作者/operationCode，24小时；长度1–128沿实际IdempotencyCommand。"
+          },
+          {
+            "name": "If-Match",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+|\"[0-9]+\")$",
+              "example": "\"3\""
+            },
+            "description": "与expectedVersion相同；沿项目允许裸数字或成对双引号。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "现有ApiResponse成功包",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TypeMetadataResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "现有ApiError；具体code见详细设计§7",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "既有认证链未认证响应；不改安全链"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TypeMetadataRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/printing/templates": {
+      "post": {
+        "operationId": "saveWordTemplateWithExplicitSource",
+        "summary": "Existing template save with approved optional source inheritance/upgrade",
+        "x-permission": "print:template:manage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/WordTemplateSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New template draft using existing ApiResponse"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT / explicit source target changed"
+          },
+          "422": {
+            "description": "PRINT_SOURCE_STRUCTURE_INVALID; incompatible fields/datasets; fieldErrors issues"
+          }
+        }
+      }
+    },
+    "/printing/designer": {
+      "post": {
+        "operationId": "saveNativeTemplateWithExplicitSource",
+        "summary": "Existing template save with approved optional source inheritance/upgrade",
+        "x-permission": "print:template:manage",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NativeTemplateSaveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New template draft using existing ApiResponse"
+          },
+          "409": {
+            "description": "VERSION_CONFLICT / explicit source target changed"
+          },
+          "422": {
+            "description": "PRINT_SOURCE_STRUCTURE_INVALID; incompatible fields/datasets; fieldErrors issues"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "AuditIdentity": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "createdBy",
+          "createdAt",
+          "updatedBy",
+          "updatedAt",
+          "versionNo"
+        ],
+        "description": "现有ScopedEntity；ID字符串，UTC时间；请求不可传orgId。",
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z",
+          "updatedBy": "101",
+          "updatedAt": "2026-10-10T12:00:00.000Z",
+          "versionNo": 0
+        }
+      },
+      "FieldError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "field",
+          "code",
+          "message"
+        ],
+        "example": {
+          "field": "sample",
+          "code": "sample",
+          "message": "sample"
+        }
+      },
+      "ProblemDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "fieldErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "requestId",
+          "code",
+          "message",
+          "fieldErrors",
+          "allowedActions"
+        ],
+        "description": "现有ApiError别名，不是另一套RFC7807响应。依赖/冲突详情在FieldError.message中。",
+        "example": {
+          "requestId": "sample",
+          "code": "sample",
+          "message": "sample",
+          "fieldErrors": [],
+          "allowedActions": []
+        }
+      },
+      "ParameterDeclaration": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DOCUMENT_ID",
+              "SERVER_CONTEXT"
+            ]
+          },
+          "contextKey": {
+            "type": "string",
+            "enum": [
+              "ORG_ID",
+              "ACTOR_ID"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "name",
+          "source",
+          "contextKey"
+        ],
+        "description": "恰有一个DOCUMENT_ID；contextKey仅SERVER_CONTEXT需要；不接收客户端任意参数。",
+        "example": {
+          "name": "sample",
+          "source": "DOCUMENT_ID",
+          "contextKey": null
+        }
+      },
+      "JoinKey": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "parentFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "targetFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          }
+        },
+        "required": [
+          "parentFieldId",
+          "targetFieldId"
+        ],
+        "example": {
+          "parentFieldId": "sample",
+          "targetFieldId": "sample"
+        }
+      },
+      "SortKey": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "catalogFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ]
+          }
+        },
+        "required": [
+          "catalogFieldId",
+          "direction"
+        ],
+        "example": {
+          "catalogFieldId": "sample",
+          "direction": "ASC"
+        }
+      },
+      "JoinNode": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nodeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "parentNodeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "catalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "knownRelationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "cardinality": {
+            "type": "string",
+            "enum": [
+              "1:1",
+              "N:1",
+              "1:N"
+            ]
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JoinKey"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortKey"
+            },
+            "minItems": 0,
+            "maxItems": 8,
+            "default": []
+          },
+          "displayOrder": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "datasetKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9]{0,79}$",
+            "nullable": true,
+            "default": null
+          }
+        },
+        "required": [
+          "nodeId",
+          "label",
+          "parentNodeId",
+          "catalogId",
+          "knownRelationId",
+          "cardinality",
+          "keys",
+          "displayOrder"
+        ],
+        "description": "无环树；1:N必须唯一datasetKey，非集合null；keys/cardinality匹配已知关系。displayOrder+nodeId确定规范顺序。",
+        "example": {
+          "nodeId": "items",
+          "label": "收货明细",
+          "parentNodeId": "main",
+          "catalogId": "wms.receiptItem",
+          "knownRelationId": "receipt.items",
+          "cardinality": "1:N",
+          "keys": [
+            {
+              "parentFieldId": "id",
+              "targetFieldId": "receiptId"
+            }
+          ],
+          "displayOrder": 0,
+          "datasetKey": "items",
+          "sort": []
+        }
+      },
+      "SourcePath": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nodeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "catalogFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          }
+        },
+        "required": [
+          "nodeId",
+          "catalogFieldId"
+        ],
+        "example": {
+          "nodeId": "sample",
+          "catalogFieldId": "sample"
+        }
+      },
+      "FieldFormat": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "RAW",
+              "NUMBER",
+              "DATE"
+            ]
+          },
+          "scale": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "nullable": true
+          },
+          "roundingMode": {
+            "type": "string",
+            "enum": [
+              "HALF_UP"
+            ],
+            "nullable": true
+          },
+          "dateStyle": {
+            "type": "string",
+            "enum": [
+              "DATE_ONLY",
+              "UTC_DATE_TIME"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "kind",
+          "scale",
+          "roundingMode",
+          "dateStyle"
+        ],
+        "description": "默认RAW不舍入；NUMBER必须明确scale0–6及HALF_UP，仅displayValue，rawValue不改。业务层精度拒绝继续保留，不暴露UNNECESSARY显示模式。",
+        "example": {
+          "kind": "RAW",
+          "scale": null,
+          "roundingMode": null,
+          "dateStyle": null
+        }
+      },
+      "FieldMapping": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldId": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+          },
+          "fieldKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "dataType": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "DATE",
+              "DATETIME",
+              "BOOLEAN"
+            ]
+          },
+          "sourcePath": {
+            "$ref": "#/components/schemas/SourcePath"
+          },
+          "dataGroup": {
+            "type": "string",
+            "pattern": "^(?:MAIN|[A-Za-z][A-Za-z0-9]{0,79})$"
+          },
+          "available": {
+            "type": "boolean",
+            "default": true
+          },
+          "format": {
+            "$ref": "#/components/schemas/FieldFormat",
+            "default": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            }
+          },
+          "missing": {
+            "type": "string",
+            "enum": [
+              "ERROR",
+              "EMPTY",
+              "DEFAULT"
+            ],
+            "default": "ERROR"
+          },
+          "defaultValue": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "同类型常量；NUMBER为精确十进制字符串，DATE/DATE_TIME为规定字符串；非DEFAULT须null。",
+            "default": null
+          },
+          "displayOrder": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "datasetKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9]{0,79}$",
+            "nullable": true,
+            "default": null
+          }
+        },
+        "required": [
+          "fieldId",
+          "fieldKey",
+          "label",
+          "dataType",
+          "sourcePath",
+          "displayOrder"
+        ],
+        "description": "key安全字母数字；集合字段datasetKey固定所属组；主字段null；displayOrder+fieldId排序，fieldId不可变。",
+        "example": {
+          "fieldId": "qtyField",
+          "fieldKey": "receivedQty",
+          "label": "实收数量",
+          "dataType": "NUMBER",
+          "sourcePath": {
+            "nodeId": "items",
+            "catalogFieldId": "receivedQty"
+          },
+          "displayOrder": 0,
+          "dataGroup": "items",
+          "datasetKey": "items",
+          "format": {
+            "kind": "NUMBER",
+            "scale": 3,
+            "roundingMode": "HALF_UP",
+            "dateStyle": null
+          }
+        }
+      },
+      "SourceConfiguration": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "mainCatalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "parameterDeclarations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParameterDeclaration"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "joins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JoinNode"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldMapping"
+            },
+            "minItems": 1,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "sourceName",
+          "mainCatalogId",
+          "parameterDeclarations",
+          "joins",
+          "fields"
+        ],
+        "description": "严格hash投影；无status；填齐规范缺省，拒绝未知字段；joins/fields按displayOrder/稳定ID排序。",
+        "example": {
+          "schemaVersion": 1,
+          "sourceName": "收货数据源",
+          "mainCatalogId": "wms.receipt",
+          "parameterDeclarations": [
+            {
+              "name": "recordId",
+              "source": "DOCUMENT_ID",
+              "contextKey": null
+            }
+          ],
+          "joins": [
+            {
+              "nodeId": "items",
+              "label": "收货明细",
+              "parentNodeId": "main",
+              "catalogId": "wms.receiptItem",
+              "knownRelationId": "receipt.items",
+              "cardinality": "1:N",
+              "keys": [
+                {
+                  "parentFieldId": "id",
+                  "targetFieldId": "receiptId"
+                }
+              ],
+              "displayOrder": 0,
+              "datasetKey": "items",
+              "sort": []
+            }
+          ],
+          "fields": [
+            {
+              "fieldId": "qtyField",
+              "fieldKey": "receivedQty",
+              "label": "实收数量",
+              "dataType": "NUMBER",
+              "sourcePath": {
+                "nodeId": "items",
+                "catalogFieldId": "receivedQty"
+              },
+              "displayOrder": 0,
+              "dataGroup": "items",
+              "datasetKey": "items",
+              "format": {
+                "kind": "NUMBER",
+                "scale": 3,
+                "roundingMode": "HALF_UP",
+                "dateStyle": null
+              }
+            }
+          ]
+        }
+      },
+      "SourceDraftRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "businessTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "uniqueItems": true
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/SourceConfiguration"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "expectedVersion",
+          "sourceName",
+          "businessTypes",
+          "configuration",
+          "reason"
+        ],
+        "description": "完整替换草稿；sourceCode不可借PUT修改；binding集合原子检查；unknown fields拒绝。",
+        "example": {
+          "expectedVersion": 2,
+          "sourceName": "收货数据源",
+          "businessTypes": [
+            "WMS_RECEIPT"
+          ],
+          "configuration": {
+            "schemaVersion": 1,
+            "sourceName": "收货数据源",
+            "mainCatalogId": "wms.receipt",
+            "parameterDeclarations": [
+              {
+                "name": "recordId",
+                "source": "DOCUMENT_ID",
+                "contextKey": null
+              }
+            ],
+            "joins": [
+              {
+                "nodeId": "items",
+                "label": "收货明细",
+                "parentNodeId": "main",
+                "catalogId": "wms.receiptItem",
+                "knownRelationId": "receipt.items",
+                "cardinality": "1:N",
+                "keys": [
+                  {
+                    "parentFieldId": "id",
+                    "targetFieldId": "receiptId"
+                  }
+                ],
+                "displayOrder": 0,
+                "datasetKey": "items",
+                "sort": []
+              }
+            ],
+            "fields": [
+              {
+                "fieldId": "qtyField",
+                "fieldKey": "receivedQty",
+                "label": "实收数量",
+                "dataType": "NUMBER",
+                "sourcePath": {
+                  "nodeId": "items",
+                  "catalogFieldId": "receivedQty"
+                },
+                "displayOrder": 0,
+                "dataGroup": "items",
+                "datasetKey": "items",
+                "format": {
+                  "kind": "NUMBER",
+                  "scale": 3,
+                  "roundingMode": "HALF_UP",
+                  "dateStyle": null
+                }
+              }
+            ]
+          },
+          "reason": "调整显示字段"
+        }
+      },
+      "SourceCreateRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceCode": {
+            "type": "string",
+            "maxLength": 60,
+            "pattern": "^[A-Za-z0-9_-]{1,60}$"
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "businessTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "uniqueItems": true
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/SourceConfiguration"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "sourceCode",
+          "sourceName",
+          "businessTypes",
+          "configuration",
+          "reason"
+        ],
+        "example": {
+          "sourceCode": "RECEIPT_SOURCE",
+          "sourceName": "收货数据源",
+          "businessTypes": [
+            "WMS_RECEIPT"
+          ],
+          "configuration": {
+            "schemaVersion": 1,
+            "sourceName": "收货数据源",
+            "mainCatalogId": "wms.receipt",
+            "parameterDeclarations": [
+              {
+                "name": "recordId",
+                "source": "DOCUMENT_ID",
+                "contextKey": null
+              }
+            ],
+            "joins": [
+              {
+                "nodeId": "items",
+                "label": "收货明细",
+                "parentNodeId": "main",
+                "catalogId": "wms.receiptItem",
+                "knownRelationId": "receipt.items",
+                "cardinality": "1:N",
+                "keys": [
+                  {
+                    "parentFieldId": "id",
+                    "targetFieldId": "receiptId"
+                  }
+                ],
+                "displayOrder": 0,
+                "datasetKey": "items",
+                "sort": []
+              }
+            ],
+            "fields": [
+              {
+                "fieldId": "qtyField",
+                "fieldKey": "receivedQty",
+                "label": "实收数量",
+                "dataType": "NUMBER",
+                "sourcePath": {
+                  "nodeId": "items",
+                  "catalogFieldId": "receivedQty"
+                },
+                "displayOrder": 0,
+                "dataGroup": "items",
+                "datasetKey": "items",
+                "format": {
+                  "kind": "NUMBER",
+                  "scale": 3,
+                  "roundingMode": "HALF_UP",
+                  "dateStyle": null
+                }
+              }
+            ]
+          },
+          "reason": "新增配置"
+        }
+      },
+      "VersionReasonRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "expectedVersion",
+          "reason"
+        ],
+        "example": {
+          "expectedVersion": 0,
+          "reason": "sample"
+        }
+      },
+      "PublishRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "validationId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "revisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "expectedVersion",
+          "validationId",
+          "reason",
+          "revisionId",
+          "configHash"
+        ],
+        "description": "明确目标源修订与摘要；同目标重复发布，仍重查当前源/样本权限。",
+        "example": {
+          "expectedVersion": 3,
+          "validationId": "201",
+          "reason": "发布已验证修订",
+          "revisionId": "102",
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "ValidationSample": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "recordId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "businessType",
+          "recordId"
+        ],
+        "example": {
+          "businessType": "WMS_RECEIPT",
+          "recordId": "101"
+        }
+      },
+      "ValidationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "samples": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationSample"
+            },
+            "minItems": 1,
+            "maxItems": 200
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "expectedVersion",
+          "samples",
+          "reason"
+        ],
+        "description": "每个当前绑定类型恰一条有权限真实样本；不允许业务正文/组织覆盖。",
+        "example": {
+          "expectedVersion": 0,
+          "samples": [
+            {
+              "businessType": "WMS_RECEIPT",
+              "recordId": "101"
+            }
+          ],
+          "reason": "sample"
+        }
+      },
+      "SourceRevision": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "revisionNo": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED"
+            ]
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          },
+          "mainCatalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "parameterDeclarations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParameterDeclaration"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/SourceConfiguration"
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "publishedBusinessTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "nullable": true
+          },
+          "publishedBindingSetHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "nullable": true
+          },
+          "publishedCatalogVersion": {
+            "type": "string",
+            "maxLength": 80,
+            "nullable": true
+          },
+          "publishedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "publicationEvidenceHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "nullable": true
+          },
+          "typeMetadataSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeMetadataSnapshot"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "sourceId",
+          "revisionNo",
+          "versionNo",
+          "status",
+          "schemaVersion",
+          "mainCatalogId",
+          "parameterDeclarations",
+          "configuration",
+          "configHash",
+          "publishedBusinessTypes",
+          "publishedBindingSetHash",
+          "publishedCatalogVersion",
+          "publishedBy",
+          "publishedAt",
+          "publicationEvidenceHash",
+          "typeMetadataSnapshots"
+        ],
+        "description": "PUBLISHED不可变；发布信息仅已发布版非null。",
+        "example": {
+          "id": "101",
+          "sourceId": "101",
+          "revisionNo": 1,
+          "versionNo": 0,
+          "status": "DRAFT",
+          "schemaVersion": 1,
+          "mainCatalogId": "sample",
+          "parameterDeclarations": [
+            {
+              "name": "sample",
+              "source": "DOCUMENT_ID",
+              "contextKey": null
+            }
+          ],
+          "configuration": {
+            "schemaVersion": 1,
+            "sourceName": "收货数据源",
+            "mainCatalogId": "sample",
+            "parameterDeclarations": [
+              {
+                "name": "sample",
+                "source": "DOCUMENT_ID",
+                "contextKey": null
+              }
+            ],
+            "joins": [],
+            "fields": [
+              {
+                "fieldId": "sample",
+                "fieldKey": "sample",
+                "label": "中文字段",
+                "dataType": "TEXT",
+                "sourcePath": {
+                  "nodeId": "sample",
+                  "catalogFieldId": "sample"
+                },
+                "displayOrder": 0
+              }
+            ]
+          },
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "publishedBusinessTypes": null,
+          "publishedBindingSetHash": null,
+          "publishedCatalogVersion": null,
+          "publishedBy": null,
+          "publishedAt": null,
+          "publicationEvidenceHash": null,
+          "typeMetadataSnapshots": null
+        }
+      },
+      "TypeBinding": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "businessType",
+          "label",
+          "sourceId",
+          "versionNo"
+        ],
+        "example": {
+          "businessType": "WMS_RECEIPT",
+          "label": "中文字段",
+          "sourceId": "101",
+          "versionNo": 0
+        }
+      },
+      "Dependency": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "PUBLISHED_TEMPLATE",
+              "ARTIFACT",
+              "BATCH"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "label"
+        ],
+        "example": {
+          "kind": "PUBLISHED_TEMPLATE",
+          "id": "101",
+          "label": "中文字段"
+        }
+      },
+      "ValidationSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceVersionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bindingSetHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "catalogVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL"
+            ]
+          },
+          "validatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "validatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invalidatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "publicationEvidenceHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "typeMetadataSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeMetadataSnapshot"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "id",
+          "sourceRevisionId",
+          "sourceVersionNo",
+          "configHash",
+          "bindingSetHash",
+          "catalogVersion",
+          "result",
+          "validatedBy",
+          "validatedAt",
+          "expiresAt",
+          "invalidatedAt",
+          "publicationEvidenceHash",
+          "typeMetadataSnapshots"
+        ],
+        "example": {
+          "id": "101",
+          "sourceRevisionId": "101",
+          "sourceVersionNo": 0,
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "bindingSetHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "catalogVersion": "sample",
+          "result": "PASS",
+          "validatedBy": "101",
+          "validatedAt": "2026-10-10T12:00:00.000Z",
+          "expiresAt": "2026-10-10T12:00:00.000Z",
+          "invalidatedAt": null,
+          "publicationEvidenceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "typeMetadataSnapshots": []
+        }
+      },
+      "SourceDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "sourceCode": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ENABLED",
+              "DISABLED"
+            ]
+          },
+          "draftRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "publishedRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "businessTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeBinding"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "draft": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SourceRevision"
+              }
+            ],
+            "nullable": true
+          },
+          "published": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SourceRevision"
+              }
+            ],
+            "nullable": true
+          },
+          "validation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ValidationSummary"
+              }
+            ],
+            "nullable": true
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Dependency"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EDIT",
+                "VALIDATE",
+                "PUBLISH",
+                "DEACTIVATE",
+                "DELETE"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "createdBy",
+          "createdAt",
+          "updatedBy",
+          "updatedAt",
+          "versionNo",
+          "sourceCode",
+          "sourceName",
+          "status",
+          "draftRevisionId",
+          "publishedRevisionId",
+          "deletedAt",
+          "deletedBy",
+          "businessTypes",
+          "draft",
+          "published",
+          "validation",
+          "dependencies",
+          "allowedActions"
+        ],
+        "description": "当前源的服务器权威快照；查看只读；无当前草稿时draft=null。",
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z",
+          "updatedBy": "101",
+          "updatedAt": "2026-10-10T12:00:00.000Z",
+          "versionNo": 0,
+          "sourceCode": "sample",
+          "sourceName": "收货数据源",
+          "status": "ENABLED",
+          "draftRevisionId": null,
+          "publishedRevisionId": null,
+          "deletedAt": null,
+          "deletedBy": null,
+          "businessTypes": [],
+          "draft": null,
+          "published": null,
+          "validation": null,
+          "dependencies": [],
+          "allowedActions": []
+        }
+      },
+      "SourceListItem": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "sourceCode": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "sourceName": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ENABLED",
+              "DISABLED"
+            ]
+          },
+          "draftRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "publishedRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "businessTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeBinding"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EDIT",
+                "VALIDATE",
+                "PUBLISH",
+                "DEACTIVATE",
+                "DELETE"
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "createdBy",
+          "createdAt",
+          "updatedBy",
+          "updatedAt",
+          "versionNo",
+          "sourceCode",
+          "sourceName",
+          "status",
+          "draftRevisionId",
+          "publishedRevisionId",
+          "deletedAt",
+          "deletedBy",
+          "businessTypes",
+          "allowedActions"
+        ],
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z",
+          "updatedBy": "101",
+          "updatedAt": "2026-10-10T12:00:00.000Z",
+          "versionNo": 0,
+          "sourceCode": "sample",
+          "sourceName": "收货数据源",
+          "status": "ENABLED",
+          "draftRevisionId": null,
+          "publishedRevisionId": null,
+          "deletedAt": null,
+          "deletedBy": null,
+          "businessTypes": [],
+          "allowedActions": []
+        }
+      },
+      "SourcePage": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceListItem"
+            },
+            "minItems": 0,
+            "maxItems": 100
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size"
+        ],
+        "example": {
+          "items": [],
+          "total": 0,
+          "page": 0,
+          "size": 1
+        }
+      },
+      "PreviewFieldValue": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldId": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "fieldKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "dataType": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "DATE",
+              "DATETIME",
+              "BOOLEAN"
+            ]
+          },
+          "rawValue": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "同类型常量；NUMBER为精确十进制字符串，DATE/DATE_TIME为规定字符串；非DEFAULT须null。"
+          },
+          "displayValue": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "fieldId",
+          "fieldKey",
+          "label",
+          "dataType",
+          "rawValue",
+          "displayValue",
+          "issues"
+        ],
+        "description": "瞬时内存响应；rawValue为字符串/boolean/null，BigDecimal不经过double。",
+        "example": {
+          "fieldId": "sample",
+          "fieldKey": "sample",
+          "label": "中文字段",
+          "dataType": "TEXT",
+          "rawValue": null,
+          "displayValue": "sample",
+          "issues": []
+        }
+      },
+      "PreviewRow": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "rowId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreviewFieldValue"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "rowId",
+          "fields"
+        ],
+        "example": {
+          "rowId": "101",
+          "fields": []
+        }
+      },
+      "DetailGroupPreview": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nodeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreviewRow"
+            },
+            "minItems": 0,
+            "maxItems": 2000
+          }
+        },
+        "required": [
+          "nodeId",
+          "label",
+          "rows"
+        ],
+        "example": {
+          "nodeId": "sample",
+          "label": "中文字段",
+          "rows": []
+        }
+      },
+      "TypePreview": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "recordId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "main": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PreviewFieldValue"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "detailGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetailGroupPreview"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          }
+        },
+        "required": [
+          "businessType",
+          "recordId",
+          "main",
+          "detailGroups"
+        ],
+        "example": {
+          "businessType": "WMS_RECEIPT",
+          "recordId": "101",
+          "main": [],
+          "detailGroups": []
+        }
+      },
+      "TypeValidationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "recordId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "recordDigest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "nullable": true
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL"
+            ]
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "businessType",
+          "recordId",
+          "recordDigest",
+          "result",
+          "issues"
+        ],
+        "example": {
+          "businessType": "WMS_RECEIPT",
+          "recordId": "101",
+          "recordDigest": null,
+          "result": "PASS",
+          "issues": []
+        }
+      },
+      "ValidationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceVersionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bindingSetHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "catalogVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL"
+            ]
+          },
+          "validatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "validatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "invalidatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "typeResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeValidationResult"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "previewIncluded": {
+            "type": "boolean"
+          },
+          "preview": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypePreview"
+            },
+            "minItems": 0,
+            "maxItems": 200,
+            "nullable": true
+          },
+          "publicationEvidenceHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "typeMetadataSnapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeMetadataSnapshot"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "id",
+          "sourceRevisionId",
+          "sourceVersionNo",
+          "configHash",
+          "bindingSetHash",
+          "catalogVersion",
+          "result",
+          "validatedBy",
+          "validatedAt",
+          "expiresAt",
+          "invalidatedAt",
+          "typeResults",
+          "previewIncluded",
+          "preview",
+          "publicationEvidenceHash",
+          "typeMetadataSnapshots"
+        ],
+        "description": "有效期30分钟；持久化typeResults只有ID/摘要/错误；幂等重放preview=null,previewIncluded=false。",
+        "example": {
+          "id": "101",
+          "sourceRevisionId": "101",
+          "sourceVersionNo": 0,
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "bindingSetHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "catalogVersion": "sample",
+          "result": "PASS",
+          "validatedBy": "101",
+          "validatedAt": "2026-10-10T12:00:00.000Z",
+          "expiresAt": "2026-10-10T12:00:00.000Z",
+          "invalidatedAt": null,
+          "typeResults": [],
+          "previewIncluded": true,
+          "preview": null,
+          "publicationEvidenceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "typeMetadataSnapshots": []
+        }
+      },
+      "DeletionResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deletedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          }
+        },
+        "required": [
+          "id",
+          "versionNo",
+          "deletedAt",
+          "deletedBy"
+        ],
+        "description": "逻辑删除，保留编码和恢复证据；无自动恢复端点。",
+        "example": {
+          "id": "101",
+          "versionNo": 0,
+          "deletedAt": "2026-10-10T12:00:00.000Z",
+          "deletedBy": "101"
+        }
+      },
+      "FixedTypeFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "catalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "catalogFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "EQ"
+            ]
+          },
+          "value": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "description": "同类型常量；NUMBER为精确十进制字符串，DATE/DATE_TIME为规定字符串；非DEFAULT须null。"
+          }
+        },
+        "required": [
+          "catalogId",
+          "catalogFieldId",
+          "operator",
+          "value"
+        ],
+        "description": "类型策略批准且参数化；不能创建策略或绕过组织/软删。",
+        "example": {
+          "catalogId": "sample",
+          "catalogFieldId": "sample",
+          "operator": "EQ",
+          "value": null
+        }
+      },
+      "PrintDocumentTypeMetadata": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "dictItemId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "businessType": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "authorizationPolicyRef": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "compatibleMainCatalogIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            "minItems": 1,
+            "maxItems": 50
+          },
+          "fixedTypeFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FixedTypeFilter"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          },
+          "metadataVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "versionNo": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadataHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "authorizationPolicyVersion": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "dictItemId",
+          "businessType",
+          "authorizationPolicyRef",
+          "compatibleMainCatalogIds",
+          "fixedTypeFilters",
+          "metadataVersion",
+          "versionNo",
+          "createdBy",
+          "createdAt",
+          "updatedBy",
+          "updatedAt",
+          "metadataHash",
+          "authorizationPolicyVersion"
+        ],
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "dictItemId": "101",
+          "businessType": "WMS_RECEIPT",
+          "authorizationPolicyRef": "sample",
+          "compatibleMainCatalogIds": [
+            "sample"
+          ],
+          "fixedTypeFilters": [],
+          "metadataVersion": "sample",
+          "versionNo": 0,
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z",
+          "updatedBy": "101",
+          "updatedAt": "2026-10-10T12:00:00.000Z",
+          "metadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "authorizationPolicyVersion": "sample"
+        }
+      },
+      "DocumentTypeOption": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "parentId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "disabledReason": {
+            "type": "string",
+            "maxLength": 1000,
+            "nullable": true
+          },
+          "bindingSourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "bindingSourceName": {
+            "type": "string",
+            "maxLength": 120,
+            "nullable": true
+          },
+          "metadata": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PrintDocumentTypeMetadata"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "value",
+          "label",
+          "parentId",
+          "visible",
+          "disabled",
+          "disabledReason",
+          "bindingSourceId",
+          "bindingSourceName",
+          "metadata"
+        ],
+        "description": "不返回不可见项；本源已占类型不禁选，其他源占用给中文原因；无授权策略项disabled。",
+        "example": {
+          "value": "sample",
+          "label": "中文字段",
+          "parentId": null,
+          "visible": true,
+          "disabled": true,
+          "disabledReason": null,
+          "bindingSourceId": null,
+          "bindingSourceName": null,
+          "metadata": null
+        }
+      },
+      "CatalogField": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "dataType": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "NUMBER",
+              "DATE",
+              "DATETIME",
+              "BOOLEAN"
+            ]
+          },
+          "nullable": {
+            "type": "boolean"
+          },
+          "precision": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65,
+            "nullable": true
+          },
+          "scale": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "enum": [
+              "UTC"
+            ],
+            "nullable": true
+          },
+          "snapshotSemantic": {
+            "type": "string",
+            "enum": [
+              "BUSINESS_FROZEN",
+              "LIVE_LOOKUP",
+              "CURRENT_REFERENCE",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "sortable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "fieldId",
+          "label",
+          "dataType",
+          "nullable",
+          "precision",
+          "scale",
+          "timezone",
+          "snapshotSemantic",
+          "sortable"
+        ],
+        "description": "单位允许明确LIVE_LOOKUP：实际单据unitId经已授权单位字典读取，不由物料当前单位重算；默认缺失ERROR。界面标注非历史名称快照，归档固定解析结果。",
+        "example": {
+          "fieldId": "sample",
+          "label": "中文字段",
+          "dataType": "TEXT",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "timezone": null,
+          "snapshotSemantic": "BUSINESS_FROZEN",
+          "sortable": true
+        }
+      },
+      "KnownRelation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "relationId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "parentCatalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "targetCatalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "cardinality": {
+            "type": "string",
+            "enum": [
+              "1:1",
+              "N:1",
+              "1:N"
+            ]
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JoinKey"
+            },
+            "minItems": 1,
+            "maxItems": 4
+          }
+        },
+        "required": [
+          "relationId",
+          "parentCatalogId",
+          "targetCatalogId",
+          "cardinality",
+          "keys"
+        ],
+        "example": {
+          "relationId": "sample",
+          "parentCatalogId": "sample",
+          "targetCatalogId": "sample",
+          "cardinality": "1:1",
+          "keys": [
+            {
+              "parentFieldId": "sample",
+              "targetFieldId": "sample"
+            }
+          ]
+        }
+      },
+      "CatalogEntity": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "catalogId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "primaryKeyFieldId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogField"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KnownRelation"
+            },
+            "minItems": 0,
+            "maxItems": 100
+          },
+          "authorizationPolicyRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            "minItems": 0,
+            "maxItems": 50
+          },
+          "organizationFilterApplied": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "softDeleteFilterApplied": {
+            "type": "boolean"
+          },
+          "configurable": {
+            "type": "boolean"
+          },
+          "unavailableReason": {
+            "type": "string",
+            "maxLength": 1000,
+            "nullable": true
+          }
+        },
+        "required": [
+          "catalogId",
+          "label",
+          "primaryKeyFieldId",
+          "fields",
+          "relations",
+          "authorizationPolicyRefs",
+          "organizationFilterApplied",
+          "softDeleteFilterApplied",
+          "configurable",
+          "unavailableReason"
+        ],
+        "description": "不返回物理数据库连接/全库名称；catalog只含允许暴露实体和字段。",
+        "example": {
+          "catalogId": "sample",
+          "label": "中文字段",
+          "primaryKeyFieldId": "sample",
+          "fields": [],
+          "relations": [],
+          "authorizationPolicyRefs": [],
+          "organizationFilterApplied": true,
+          "softDeleteFilterApplied": true,
+          "configurable": true,
+          "unavailableReason": null
+        }
+      },
+      "CatalogMetadata": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "catalogVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CatalogEntity"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "limits": {
+            "$ref": "#/components/schemas/ResolverLimits"
+          }
+        },
+        "required": [
+          "catalogVersion",
+          "entities",
+          "limits"
+        ],
+        "example": {
+          "catalogVersion": "sample",
+          "entities": [],
+          "limits": {
+            "maxDepth": 4,
+            "maxJoinNodes": 12,
+            "maxFields": 200,
+            "maxRowsPerDetail": 2000,
+            "queryTimeoutSeconds": 5
+          }
+        }
+      },
+      "ResolverLimits": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "maxDepth": {
+            "type": "integer",
+            "enum": [
+              4
+            ]
+          },
+          "maxJoinNodes": {
+            "type": "integer",
+            "enum": [
+              12
+            ]
+          },
+          "maxFields": {
+            "type": "integer",
+            "enum": [
+              200
+            ]
+          },
+          "maxRowsPerDetail": {
+            "type": "integer",
+            "enum": [
+              2000
+            ]
+          },
+          "queryTimeoutSeconds": {
+            "type": "integer",
+            "enum": [
+              5
+            ]
+          }
+        },
+        "required": [
+          "maxDepth",
+          "maxJoinNodes",
+          "maxFields",
+          "maxRowsPerDetail",
+          "queryTimeoutSeconds"
+        ],
+        "example": {
+          "maxDepth": 4,
+          "maxJoinNodes": 12,
+          "maxFields": 200,
+          "maxRowsPerDetail": 2000,
+          "queryTimeoutSeconds": 5
+        }
+      },
+      "SourceRevisionReference": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "CONFIGURED",
+              "LEGACY_PROVIDER"
+            ]
+          }
+        },
+        "required": [
+          "sourceId",
+          "sourceRevisionId",
+          "configHash",
+          "executionMode"
+        ],
+        "example": {
+          "sourceId": "101",
+          "sourceRevisionId": "101",
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "executionMode": "CONFIGURED"
+        }
+      },
+      "TemplateSourceReference": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceExecutionMode": {
+            "type": "string",
+            "enum": [
+              "LEGACY_PROVIDER",
+              "CONFIGURED"
+            ]
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceConfigHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "nullable": true
+          }
+        },
+        "required": [
+          "sourceExecutionMode",
+          "sourceId",
+          "sourceRevisionId",
+          "sourceConfigHash"
+        ],
+        "description": "配置模式三引用非null；历史legacy三引用null。模板版本追加只读元数据。",
+        "example": {
+          "sourceExecutionMode": "LEGACY_PROVIDER",
+          "sourceId": null,
+          "sourceRevisionId": null,
+          "sourceConfigHash": null
+        }
+      },
+      "LegacyPrintField": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "group": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "example": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "repeated": {
+            "type": "boolean"
+          },
+          "dataType": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "unitField": {
+            "type": "string",
+            "maxLength": 80,
+            "nullable": true
+          },
+          "datasetKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9]{0,79}$",
+            "nullable": true
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "group",
+          "description",
+          "example",
+          "repeated"
+        ],
+        "description": "旧repeated缺datasetKey兼容items；新增datasetKey只读。",
+        "example": {
+          "key": "sample",
+          "label": "中文字段",
+          "group": "sample",
+          "description": "sample",
+          "example": "sample",
+          "repeated": true
+        }
+      },
+      "CompatibleFieldResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "definitions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegacyPrintField"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "itemFields": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "example": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "合成示例，无业务读泄露"
+          },
+          "sourceRevision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SourceRevisionReference"
+              }
+            ],
+            "nullable": true
+          },
+          "datasets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DatasetDefinition"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          }
+        },
+        "required": [
+          "definitions",
+          "fields",
+          "itemFields",
+          "example"
+        ],
+        "description": "保留原required shape，datasets可选扩展；旧itemFields只items兼容投影。",
+        "example": {
+          "definitions": [],
+          "fields": [],
+          "itemFields": [],
+          "example": {}
+        }
+      },
+      "LegacyProviderSource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "module": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "value",
+          "module",
+          "label"
+        ],
+        "example": {
+          "value": "sample",
+          "module": "sample",
+          "label": "中文字段"
+        }
+      },
+      "SourceDetailResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SourceDetail"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "id": "101",
+            "orgId": "101",
+            "createdBy": "101",
+            "createdAt": "2026-10-10T12:00:00.000Z",
+            "updatedBy": "101",
+            "updatedAt": "2026-10-10T12:00:00.000Z",
+            "versionNo": 0,
+            "sourceCode": "sample",
+            "sourceName": "收货数据源",
+            "status": "ENABLED",
+            "draftRevisionId": null,
+            "publishedRevisionId": null,
+            "deletedAt": null,
+            "deletedBy": null,
+            "businessTypes": [],
+            "draft": null,
+            "published": null,
+            "validation": null,
+            "dependencies": [],
+            "allowedActions": []
+          },
+          "traceId": "sample"
+        }
+      },
+      "SourcePageResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SourcePage"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "items": [],
+            "total": 0,
+            "page": 0,
+            "size": 1
+          },
+          "traceId": "sample"
+        }
+      },
+      "SourceRevisionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SourceRevision"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "id": "101",
+            "sourceId": "101",
+            "revisionNo": 1,
+            "versionNo": 0,
+            "status": "DRAFT",
+            "schemaVersion": 1,
+            "mainCatalogId": "sample",
+            "parameterDeclarations": [
+              {
+                "name": "sample",
+                "source": "DOCUMENT_ID",
+                "contextKey": null
+              }
+            ],
+            "configuration": {
+              "schemaVersion": 1,
+              "sourceName": "收货数据源",
+              "mainCatalogId": "sample",
+              "parameterDeclarations": [
+                {
+                  "name": "sample",
+                  "source": "DOCUMENT_ID",
+                  "contextKey": null
+                }
+              ],
+              "joins": [],
+              "fields": [
+                {
+                  "fieldId": "sample",
+                  "fieldKey": "sample",
+                  "label": "中文字段",
+                  "dataType": "TEXT",
+                  "sourcePath": {
+                    "nodeId": "sample",
+                    "catalogFieldId": "sample"
+                  },
+                  "displayOrder": 0
+                }
+              ]
+            },
+            "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "publishedBusinessTypes": null,
+            "publishedBindingSetHash": null,
+            "publishedCatalogVersion": null,
+            "publishedBy": null,
+            "publishedAt": null,
+            "publicationEvidenceHash": null,
+            "typeMetadataSnapshots": null
+          },
+          "traceId": "sample"
+        }
+      },
+      "ValidationResultResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ValidationResult"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "id": "101",
+            "sourceRevisionId": "101",
+            "sourceVersionNo": 0,
+            "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "bindingSetHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "catalogVersion": "sample",
+            "result": "PASS",
+            "validatedBy": "101",
+            "validatedAt": "2026-10-10T12:00:00.000Z",
+            "expiresAt": "2026-10-10T12:00:00.000Z",
+            "invalidatedAt": null,
+            "typeResults": [],
+            "previewIncluded": true,
+            "preview": null,
+            "publicationEvidenceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "typeMetadataSnapshots": []
+          },
+          "traceId": "sample"
+        }
+      },
+      "DeletionResultResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DeletionResult"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "id": "101",
+            "versionNo": 0,
+            "deletedAt": "2026-10-10T12:00:00.000Z",
+            "deletedBy": "101"
+          },
+          "traceId": "sample"
+        }
+      },
+      "CatalogMetadataResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CatalogMetadata"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "catalogVersion": "sample",
+            "entities": [],
+            "limits": {
+              "maxDepth": 4,
+              "maxJoinNodes": 12,
+              "maxFields": 200,
+              "maxRowsPerDetail": 2000,
+              "queryTimeoutSeconds": 5
+            }
+          },
+          "traceId": "sample"
+        }
+      },
+      "CompatibleFieldResponseResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CompatibleFieldResponse"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "definitions": [],
+            "fields": [],
+            "itemFields": [],
+            "example": {}
+          },
+          "traceId": "sample"
+        }
+      },
+      "DocumentTypesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentTypeOption"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": [],
+          "traceId": "sample"
+        }
+      },
+      "ProviderSourcesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegacyProviderSource"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": [],
+          "traceId": "sample"
+        }
+      },
+      "TypeMetadataRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "expectedVersion": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "authorizationPolicyRef": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "compatibleMainCatalogIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            "minItems": 1,
+            "maxItems": 50,
+            "uniqueItems": true
+          },
+          "fixedTypeFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FixedTypeFilter"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "expectedVersion",
+          "authorizationPolicyRef",
+          "compatibleMainCatalogIds",
+          "fixedTypeFilters",
+          "reason"
+        ],
+        "description": "首建expectedVersion0锁字典项，已有首建拒绝；仅注册策略/可见catalog/filter，无org/hash/脚本。",
+        "example": {
+          "expectedVersion": 0,
+          "authorizationPolicyRef": "sample",
+          "compatibleMainCatalogIds": [
+            "sample"
+          ],
+          "fixedTypeFilters": [],
+          "reason": "sample"
+        }
+      },
+      "AuthorizationPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "policyRef": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "policyVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "compatibleMainCatalogIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            "minItems": 0,
+            "maxItems": 50
+          },
+          "businessReadPermissions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "minItems": 0,
+            "maxItems": 50
+          }
+        },
+        "required": [
+          "policyRef",
+          "label",
+          "description",
+          "policyVersion",
+          "enabled",
+          "compatibleMainCatalogIds",
+          "businessReadPermissions"
+        ],
+        "description": "受审后端注册目录；不公开实现类/脚本，不授读取权限。",
+        "example": {
+          "policyRef": "sample",
+          "label": "中文字段",
+          "description": "sample",
+          "policyVersion": "sample",
+          "enabled": true,
+          "compatibleMainCatalogIds": [],
+          "businessReadPermissions": []
+        }
+      },
+      "TypeMetadataSnapshot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "businessType": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$"
+          },
+          "metadataVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "metadataHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "authorizationPolicyRef": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+          },
+          "authorizationPolicyVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "compatibleMainCatalogIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,79}$"
+            },
+            "minItems": 1,
+            "maxItems": 50
+          },
+          "fixedTypeFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FixedTypeFilter"
+            },
+            "minItems": 0,
+            "maxItems": 12
+          }
+        },
+        "required": [
+          "businessType",
+          "metadataVersion",
+          "metadataHash",
+          "authorizationPolicyRef",
+          "authorizationPolicyVersion",
+          "compatibleMainCatalogIds",
+          "fixedTypeFilters"
+        ],
+        "description": "完整冻结取数定义，当前授权另检查；按businessType排序。",
+        "example": {
+          "businessType": "WMS_RECEIPT",
+          "metadataVersion": "sample",
+          "metadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "authorizationPolicyRef": "sample",
+          "authorizationPolicyVersion": "sample",
+          "compatibleMainCatalogIds": [
+            "sample"
+          ],
+          "fixedTypeFilters": []
+        }
+      },
+      "DatasetDefinition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "datasetKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9]{0,79}$"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LegacyPrintField"
+            },
+            "minItems": 0,
+            "maxItems": 200
+          }
+        },
+        "required": [
+          "datasetKey",
+          "label",
+          "fields"
+        ],
+        "description": "独立集合字段目录；DOCUMENT可多个，LIST仅抬头items。",
+        "example": {
+          "datasetKey": "sample",
+          "label": "中文字段",
+          "fields": []
+        }
+      },
+      "PrintArtifactSourceEvidence": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "artifactId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "typeMetadataHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "catalogVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "artifactId",
+          "sourceId",
+          "sourceRevisionId",
+          "configHash",
+          "typeMetadataHash",
+          "catalogVersion",
+          "createdBy",
+          "createdAt"
+        ],
+        "description": "不可变同组织一对一sidecar；新CONFIGURED输出同事务；旧legacy无证据不伪造。",
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "artifactId": "101",
+          "sourceId": "101",
+          "sourceRevisionId": "101",
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "typeMetadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "catalogVersion": "sample",
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z"
+        }
+      },
+      "PrintBatchSourceEvidence": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "orgId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "batchId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "configHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "typeMetadataHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "catalogVersion": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "createdBy": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "orgId",
+          "batchId",
+          "sourceId",
+          "sourceRevisionId",
+          "configHash",
+          "typeMetadataHash",
+          "catalogVersion",
+          "createdBy",
+          "createdAt"
+        ],
+        "description": "不可变同组织一对一sidecar；新CONFIGURED输出同事务；旧legacy无证据不伪造。",
+        "example": {
+          "id": "101",
+          "orgId": "101",
+          "batchId": "101",
+          "sourceId": "101",
+          "sourceRevisionId": "101",
+          "configHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "typeMetadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "catalogVersion": "sample",
+          "createdBy": "101",
+          "createdAt": "2026-10-10T12:00:00.000Z"
+        }
+      },
+      "TypeMetadataResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PrintDocumentTypeMetadata"
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "description": "",
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": {
+            "id": "101",
+            "orgId": "101",
+            "dictItemId": "101",
+            "businessType": "WMS_RECEIPT",
+            "authorizationPolicyRef": "sample",
+            "compatibleMainCatalogIds": [
+              "sample"
+            ],
+            "fixedTypeFilters": [],
+            "metadataVersion": "sample",
+            "versionNo": 0,
+            "createdBy": "101",
+            "createdAt": "2026-10-10T12:00:00.000Z",
+            "updatedBy": "101",
+            "updatedAt": "2026-10-10T12:00:00.000Z",
+            "metadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "authorizationPolicyVersion": "sample"
+          },
+          "traceId": "sample"
+        }
+      },
+      "AuthorizationPoliciesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuthorizationPolicy"
+            },
+            "minItems": 0,
+            "maxItems": 100
+          },
+          "traceId": {
+            "type": "string",
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "data",
+          "traceId"
+        ],
+        "description": "",
+        "example": {
+          "code": "OK",
+          "message": "sample",
+          "data": [],
+          "traceId": "sample"
+        }
+      },
+      "TemplateSourceSelection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "INHERIT",
+              "UPGRADE"
+            ],
+            "default": "INHERIT"
+          },
+          "targetSourceRevisionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "targetConfigHash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "nullable": true
+          }
+        },
+        "description": "INHERIT is default; UPGRADE requires baseTemplateVersionId and explicit target revision/hash, same source/type/current enabled binding, creates a new template revision after full field/dataset compatibility."
+      },
+      "NativeTemplateSaveRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "templateCode",
+          "templateName",
+          "businessType",
+          "reason",
+          "design"
+        ],
+        "properties": {
+          "templateCode": {
+            "type": "string"
+          },
+          "templateName": {
+            "type": "string"
+          },
+          "businessType": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "baseTemplateVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceSelection": {
+            "$ref": "#/components/schemas/TemplateSourceSelection"
+          },
+          "design": {
+            "type": "object",
+            "description": "Existing native design blocks; no redesign"
+          }
+        }
+      },
+      "WordTemplateSaveRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "templateCode",
+          "templateName",
+          "businessType",
+          "reason",
+          "file"
+        ],
+        "properties": {
+          "templateCode": {
+            "type": "string"
+          },
+          "templateName": {
+            "type": "string"
+          },
+          "businessType": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "baseTemplateVersionId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "nullable": true
+          },
+          "sourceSelection": {
+            "$ref": "#/components/schemas/TemplateSourceSelection"
+          },
+          "printType": {
+            "type": "string",
+            "enum": [
+              "DOCUMENT",
+              "LIST"
+            ],
+            "default": "DOCUMENT"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      }
+    }
+  },
+  "x-canonical-hash-contract": {
+    "algorithm": "RFC8785 JsonCanonicalizer 1.1 -> UTF-8 -> SHA-256 lowercase",
+    "goldenExamplesReference": "../development/PRINT_SOURCE_HASH_GOLDEN_V1.json",
+    "excludedProperties": [
+      "id",
+      "orgId",
+      "createdBy",
+      "createdAt",
+      "updatedBy",
+      "updatedAt",
+      "status",
+      "versionNo",
+      "validationId"
+    ],
+    "configProperties": [
+      "schemaVersion",
+      "sourceName",
+      "mainCatalogId",
+      "parameterDeclarations",
+      "joins",
+      "fields"
+    ],
+    "arrayOrdering": {
+      "joins": [
+        "displayOrder",
+        "nodeId"
+      ],
+      "fields": [
+        "displayOrder",
+        "fieldId"
+      ],
+      "businessTypes": "sorted unique",
+      "typeMetadataHashes": "businessType sorted"
+    }
+  }
+}

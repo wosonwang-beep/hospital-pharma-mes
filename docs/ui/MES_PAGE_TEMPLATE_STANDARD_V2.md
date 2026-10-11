@@ -10,6 +10,8 @@ Approved [shared-navigation supplement](../development/DCP-GLOBAL-NAVIGATION-001
 
 ## T1 — Query / List
 
+Approved menu-specific supplement2026-10-10: [DCP-MENU-CONFIGURATION-001](../development/DCP-MENU-CONFIGURATION-001-APPROVED.md), frozen T1 menu list and T2 full-page complex configuration; only this page overrides prior simple-edit modal. View route remains read-only; other templates/fields unchanged.
+
 Use for: Material, Supplier, Equipment, Production Order, Main Batch, QC lists, WMS lists.
 
 Structure:

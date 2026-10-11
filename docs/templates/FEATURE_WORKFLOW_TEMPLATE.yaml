@@ -1,0 +1,71 @@
+{
+  "schema": 2,
+  "feature": "<FEATURE_ID>",
+  "simulation": false,
+  "scope": {
+    "mode": "full",
+    "menu": false,
+    "baseline": "FINAL BASELINE COMPLETE v1.0.23",
+    "ui": "Global UI V2",
+    "requirements": [],
+    "write_paths": []
+  },
+  "reads": {},
+  "stages": {
+    "G1": {
+      "status": "NOT_STARTED",
+      "version": "1",
+      "commit": "",
+      "artifacts": {},
+      "source_files": [],
+      "test_plans": {},
+      "runs": {},
+      "blockers": [],
+      "approval": ""
+    },
+    "G2": {
+      "status": "NOT_STARTED",
+      "version": "1",
+      "commit": "",
+      "artifacts": {},
+      "source_files": [],
+      "test_plans": {},
+      "runs": {},
+      "blockers": [],
+      "approval": ""
+    },
+    "G3": {
+      "status": "NOT_STARTED",
+      "version": "1",
+      "commit": "",
+      "artifacts": {},
+      "source_files": [],
+      "test_plans": {},
+      "runs": {},
+      "blockers": [],
+      "approval": ""
+    },
+    "G4": {
+      "status": "NOT_STARTED",
+      "version": "1",
+      "commit": "",
+      "artifacts": {},
+      "source_files": [],
+      "test_plans": {},
+      "runs": {},
+      "blockers": [],
+      "approval": ""
+    },
+    "G5": {
+      "status": "NOT_STARTED",
+      "version": "1",
+      "commit": "",
+      "artifacts": {},
+      "source_files": [],
+      "test_plans": {},
+      "runs": {},
+      "blockers": [],
+      "approval": ""
+    }
+  }
+}

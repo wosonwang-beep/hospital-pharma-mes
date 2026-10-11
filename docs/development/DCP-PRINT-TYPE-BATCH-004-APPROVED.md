@@ -39,3 +39,9 @@ UI V2 不变：模板列表 T1 增加类型列/同行查询；canvas-editor T2 �
 当前增量 API 契约为 [print-type-batch.openapi.yaml](../api/print-type-batch.openapi.yaml)，仅覆盖上述有界变更，历史 controlled-printing.openapi.yaml 保留。隔离 Word 转换进程仅传入 Windows 系统定位变量，按大小写不敏感匹配保留 windir 以识别中文字体，不继承凭据或 JVM 注入变量。
 
 运行结果和 readiness 仅 MES_TASKS.md；验证证据记录 docs/review/PRINT_TYPE_BATCH_20261009.md。历史 DCP 和冻结发布不修改，不切换基线指针。
+
+## 2026-10-10 当前数据源设计增量引用（主设计复核中）
+
+本文件既有批准内容及历史状态保留。[同一打印详细设计有界增量005](DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED.md)补齐配置身份/修订、类型唯一源、catalog授权、字段映射、真实校验与历史兼容；按其§1列明本文件受影响段落。状态主设计复核中 MAIN DESIGN REVIEW，未替换本文件批准权威，原型已由用户确认但正式开发未开始。OpenAPI/跨域矩阵由005单一入口引用；不把旧多源原型或mock验收当正式契约。
+
+主设计已定稿类型元数据读写/策略目录、多独立dataset、安全键/显示顺序、专用停用启用恢复、不可变归档sidecar及现有RFC8785固定摘要样例；旧审批准则不改。用户已授权主对话批准，当前仍不编码，待准确差异复核下发。

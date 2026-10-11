@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>医院制剂 MES · 角色权限 PC 设计图</title><link rel="stylesheet" href="./角色权限-ProductDesign.css"></head>
+<body><div class="shell">
+<aside class="sidebar"><div class="logo"><span class="logo-icon">✚</span><div><div class="logo-title">医院制剂生产管理系统</div><div class="logo-sub">Hospital Pharma MES</div></div></div>
+<nav class="nav" aria-label="系统导航"><div class="nav-label">工作导航</div>
+<div class="nav-domain"><span class="navico">⌂</span>首页</div>
+<div class="nav-domain"><span class="navico">▤</span>基础管理<span class="chevron">⌄</span></div>
+<div class="nav-domain"><span class="navico">▦</span>WMS管理<span class="chevron">⌄</span></div>
+<div class="nav-domain"><span class="navico">◉</span>质量管理<span class="chevron">⌄</span></div>
+<div class="nav-domain"><span class="navico">▧</span>生产管理<span class="chevron">⌄</span></div>
+<div class="nav-domain"><span class="navico">▣</span>成品管理<span class="chevron">⌄</span></div>
+<div class="nav-domain expanded"><span class="navico">⚙</span>系统管理<span class="chevron">⌃</span></div>
+<div class="nav-entry">部门管理</div><div class="nav-entry">用户管理</div><div class="nav-entry">菜单管理</div><div class="nav-entry active">角色与权限</div><div class="nav-entry">数据字典</div>
+</nav></aside>
+<div class="core"><header class="topbar"><div class="topbar-left"><span class="collapse-icon">☰</span><div class="global-search">⌕　搜索菜单、功能...</div></div><div class="topright"><span class="bell">♧</span><span class="bell">♢</span><span class="profile"><span class="avatar">管</span>系统管理员　⌄</span></div></header>
+<div class="breadcrumb">首页　/　系统管理　/　角色与权限　/　<strong>编辑角色</strong></div>
+<main class="page role-design" data-ui-template="T2">
+<div class="backrow"><span class="back">← 返回角色列表</span></div>
+<div class="page-title-bar"><div class="page-heading"><h1>编辑角色</h1></div><div class="buttons"><button class="btn" type="button">取消</button><button class="btn btn-primary" type="button">保存角色与权限</button></div></div>
+<div class="role-layout">
+<section class="card role-basic"><div class="section-heading">角色信息</div><div class="basic-inner">
+<div class="role-fields"><label class="role-field"><span class="field-label">角色编码</span><input value="ROLE_QC" disabled></label>
+<label class="role-field"><span class="field-label">角色名称 <em>*</em></span><input value="质量审核员"></label>
+<label class="role-field"><span class="field-label">状态</span><select><option selected>启用</option><option>停用</option></select></label></div>
+<div class="basic-separator"></div><div class="role-meta"><span>当前角色</span><strong>质量审核员</strong><small>角色编码创建后不可修改</small></div>
+</div></section>
+<section class="card grants"><div class="grants-top"><div class="section-heading">角色菜单权限分配</div><span class="grants-count">已选菜单 <b>5</b> 项　·　已选功能 <b>9</b> 项</span></div>
+<div class="grant-filter"><label><span class="field-label">搜索权限</span><input placeholder="输入菜单、权限名称或编码"></label><label class="only-selected"><input type="checkbox">仅看已选</label><span class="grant-utility">展开全部　　折叠全部</span></div>
+<div class="grant-help">勾选菜单决定可见范围；普通权限设置“只查看 / 增删改查”；特殊操作按权限目录单独配置。</div>
+<div class="grant-workspace">
+<div class="grant-tree"><div class="tree-title">菜单权限树 <span>按目录层级授权</span></div>
+<div class="tree-row"><span class="triangle">⌄</span><input type="checkbox" checked><span>首页</span></div>
+<div class="tree-row"><span class="triangle">›</span><input type="checkbox"><span>基础管理</span></div>
+<div class="tree-row"><span class="triangle">›</span><input type="checkbox"><span>WMS管理</span></div>
+<div class="tree-row"><span class="triangle">⌄</span><input type="checkbox" checked><span>质量管理</span></div>
+<div class="tree-row sub"><span class="triangle"></span><input type="checkbox" checked><span>请验单</span></div>
+<div class="tree-row sub chosen"><span class="triangle"></span><input type="checkbox" checked><span>检验报告</span></div>
+<div class="tree-row sub"><span class="triangle"></span><input type="checkbox" checked><span>QC质量标准</span></div>
+<div class="tree-row"><span class="triangle">›</span><input type="checkbox"><span>生产管理</span></div>
+<div class="tree-row"><span class="triangle">›</span><input type="checkbox"><span>成品管理</span></div>
+<div class="tree-row"><span class="triangle">⌄</span><input type="checkbox" checked><span>系统管理</span></div>
+<div class="tree-row sub"><span class="triangle"></span><input type="checkbox"><span>用户管理</span></div>
+<div class="tree-row sub"><span class="triangle"></span><input type="checkbox" checked><span>角色与权限</span></div>
+</div>
+<div class="grant-detail">
+<div class="detail-context"><div><span class="eyebrow">当前菜单</span><strong>质量管理　/　检验报告</strong></div><span class="tag green"><span class="dot"></span>菜单已授权</span></div>
+<div class="detail-section"><div class="detail-title">普通操作权限</div><div class="option-line"><span class="op-label">检验报告</span><div class="radio-seg"><label><input type="radio" name="acl" checked>只查看</label><label><input type="radio" name="acl">增删改查</label></div></div><div class="small-note">权限级别由现有权限目录决定；不可授予目录不存在的操作。</div></div>
+<div class="detail-section special"><div class="detail-title">特殊操作权限</div><div class="no-special">当前菜单无独立特殊操作权限；其它业务菜单的特殊操作在对应节点配置。</div></div>
+<div class="detail-section detail-note"><div class="detail-title">授权原则</div><div class="principle">菜单可见性与功能权限分别控制；保存时统一提交菜单编码和权限编码。</div></div>
+</div>
+</div>
+<div class="changes"><strong>本次权限变更</strong><span>新增 <b>2</b> 项　·　移除 <b>0</b> 项</span><span class="changes-link">核对变更明细　⌄</span></div>
+</section>
+</div></main></div></div></body></html>

@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info: { title: MES Menu Configuration Approved Supplement, version: 'DCP-MENU-CONFIGURATION-001' }
+paths:
+  /api/v1/menus/configuration:
+    post:
+      operationId: createMenuConfiguration
+      parameters:
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Configuration'}
+      responses:
+        '200': {description: Existing ApiResponse wrapper with IamMenuResponse}
+        '400': {description: Invalid configuration}
+        '403': {description: Insufficient menu or permission rights}
+        '409': {description: Duplicate or conflicting version/idempotency}
+  /api/v1/menus/{id}/configuration:
+    put:
+      operationId: updateMenuConfiguration
+      parameters:
+        - {in: path, name: id, required: true, schema: {type: string}}
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+        - {in: header, name: If-Match, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Configuration'}
+      responses:
+        '200': {description: Existing ApiResponse wrapper with IamMenuResponse}
+        '400': {description: Invalid configuration}
+        '403': {description: Insufficient menu or permission rights}
+        '404': {description: Menu outside current organization or missing}
+        '409': {description: Menu or permission version conflict/idempotency conflict}
+components:
+  schemas:
+    PermissionDescriptionSupplement:
+      description: Existing permission create/update/response DTOs gain this optional field; omitted update preserves existing description, empty string clears it.
+      type: object
+      properties:
+        description: {type: string, nullable: true, maxLength: 512}
+    Configuration:
+      type: object
+      required: [menu, permissionCodes, permissionChanges]
+      properties:
+        menu:
+          type: object
+          required: [menuCode, menuName, sortNo, status]
+          properties:
+            menuCode: {type: string, maxLength: 64}
+            menuName: {type: string, maxLength: 100}
+            routePath: {type: string, nullable: true, maxLength: 255}
+            parentId: {type: string, nullable: true}
+            sortNo: {type: integer, minimum: 0}
+            status: {type: string, enum: [ACTIVE, INACTIVE]}
+            permissionCode: {type: string, nullable: true}
+            requiredPermissions: {type: string, nullable: true}
+            reason: {type: string}
+        permissionCodes: {type: array, maxItems: 100, uniqueItems: true, items: {type: string}}
+        permissionChanges:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            required: [permissionCode, permissionName, status]
+            properties:
+              id: {type: string, nullable: true}
+              version: {type: integer, minimum: 0, nullable: true}
+              permissionCode: {type: string, maxLength: 160}
+              permissionName: {type: string, maxLength: 128}
+              description: {type: string, nullable: true, maxLength: 512}
+              status: {type: string, enum: [ACTIVE, INACTIVE]}

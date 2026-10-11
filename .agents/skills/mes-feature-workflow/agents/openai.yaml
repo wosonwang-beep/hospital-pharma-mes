@@ -1,0 +1,6 @@
+interface:
+  display_name: "MES 功能开发标准工作流"
+  short_description: "医院制剂 MES 五阶段治理、设计交接及可执行 G1–G5 门禁"
+  default_prompt: "使用 $mes-feature-workflow 启动指定 MES 功能，读取当前基线并检查上一阶段门禁。"
+policy:
+  allow_implicit_invocation: false

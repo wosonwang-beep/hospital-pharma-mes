@@ -51,6 +51,8 @@ Use a small consistent spacing scale: 4 / 8 / 12 / 16 / 20 / 24 / 32.
 
 ## 5. Surfaces
 
+Approved menu prototype reference2026-10-10: query/list headings share full-width1px neutral divider; [bounded menu supplement](../development/DCP-MENU-CONFIGURATION-001-APPROVED.md). No UI V3 or global shell redesign.
+
 - Cards: white or near-white.
 - Radius: 8–10 px.
 - Prefer subtle 1 px neutral borders and background separation over heavy shadows.

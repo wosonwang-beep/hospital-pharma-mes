@@ -1,0 +1,71 @@
+# DISABLED EXAMPLE: not under .github/workflows; explicit user choice.
+# Enable only after separate authorization and trusted PUBLIC signer configuration.
+name: MES Feature Workflow
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workflow-selftest:
+    name: Workflow self-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test ordered gates and negative controls
+        run: python .agents/skills/mes-feature-workflow/scripts/tests/test_workflow.py --output workflow-reports/selftest.json
+      - name: Publish actual test results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mes-workflow-selftest
+          path: workflow-reports/
+          if-no-files-found: error
+  feature-gates:
+    name: Feature acceptance gates
+    needs: workflow-selftest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Select changed feature scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p workflow-reports
+          base="$BASE_SHA"
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base="$(git rev-parse HEAD^)"
+          fi
+          git diff --name-only --no-renames "$base" HEAD > workflow-reports/changed-files.txt
+      - name: Verify signed evidence and prior-stage acceptance
+        env:
+          # Public allowed_signers text only; NEVER inject approval private keys into CI.
+          APPROVAL_SIGNERS_TEXT: ${{ vars.MES_WORKFLOW_APPROVAL_SIGNERS_TEXT }}
+          EVIDENCE_SIGNERS_TEXT: ${{ vars.MES_WORKFLOW_EVIDENCE_SIGNERS_TEXT }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$APPROVAL_SIGNERS_TEXT" > "$RUNNER_TEMP/mes-approval-signers"
+          printf '%s\n' "$EVIDENCE_SIGNERS_TEXT" > "$RUNNER_TEMP/mes-evidence-signers"
+          export MES_WORKFLOW_APPROVAL_SIGNERS="$RUNNER_TEMP/mes-approval-signers"
+          export MES_WORKFLOW_EVIDENCE_SIGNERS="$RUNNER_TEMP/mes-evidence-signers"
+          python .agents/skills/mes-feature-workflow/scripts/workflow.py ci --changed-files workflow-reports/changed-files.txt --output workflow-reports/ci-gates.json
+      - name: Publish gate reports even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mes-feature-gates
+          path: |
+            workflow-reports/
+            docs/features/*/evidence/*-gate.*
+          if-no-files-found: error

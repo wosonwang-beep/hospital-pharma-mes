@@ -1,0 +1,6 @@
+# Menu Configuration Cross-Document Review
+
+2026-10-10, pre-implementation contract review PASS (not runtime acceptance).
+Human-approved DCP-MENU-CONFIGURATION-001 and exact prototype hashes route to one bounded approved supplement. Database permission_description nullable512/append-only V051, Domain/State existing IAM only, aggregate API/DTO and per-object versions, Security existing iam rights, UI T1/T2 approved routes, Tests/RTM MENU-CONFIG-01–07, seed/no-grant preservation and direct dependencies all agree in the approved contract and OpenAPI. Previous frozen releases unchanged. Authority remains v1.0.23 plus this supplement, not a new general visual baseline. Implementation/test evidence pending; runtime status only MES_TASKS.md.
+
+2026-10-10 implementation review: approved nullable512 column/entity/mapper/DTO, outer transaction/idempotency/per-object CAS, existing permission/org checks, aggregate API and UI field mapping agree. V051 append-only seed links retain definitions/grants. Human-authorized shared layout/dev-proxy fix does not change business/security contracts. Runtime evidence is now MENU_CONFIGURATION_RUNTIME_20261010.md; original pre-implementation result remains historical. Remaining malformed-input response debt is explicitly recorded, not concealed by a blanket full-system PASS.

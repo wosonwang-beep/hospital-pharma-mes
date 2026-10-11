@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Portable CLI using the project's single validator implementation."""
+import runpy
+import sys
+from pathlib import Path
+sys.argv.insert(1, 'validate-workflow')
+runpy.run_path(str(Path(__file__).resolve().parents[1] / '.agents/skills/mes-feature-workflow/scripts/workflow.py'), run_name='__main__')

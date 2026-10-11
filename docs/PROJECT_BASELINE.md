@@ -7,6 +7,10 @@ This document is the compact, stable entry point for product and engineering con
 
 ## Authority
 
+Current printing design-review entry (2026-10-10): [DCP-PRINT-DATA-SOURCE-CONFIGURATION-005](development/DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED.md), same existing printing design, confirmed four-step mes-demo prototype and source hashes; domain/database/state/API/OpenAPI/UI/permission/audit/test/RTM/migration/integration/task mapping in its linked matrix. **MAIN DESIGN APPROVED**, the user authorized approval by the main design thread; metadata write/policy directory, independent datasets, dedicated lifecycle actions, immutable sidecar and RFC8785 golden vectors are specified. No authority-pointer switch or backend implementation claim. DCP005 and its explicitly approved source-selection supplement govern only the bounded printing increment alongside v1.0.23 and printing 001–004; prior releases remain immutable. Runtime progress only MES_TASKS.md.
+
+Approved bounded menu supplement (2026-10-10): [DCP-MENU-CONFIGURATION-001](development/DCP-MENU-CONFIGURATION-001-APPROVED.md), permission description and atomic menu configuration plus additive formal seed preservation only; [cross-document review](review/MENU_CONFIGURATION_CONSISTENCY_20261010.md). v1.0.23 and previous releases remain immutable, UI V2/T1–T6 unchanged; runtime readiness only MES_TASKS.md.
+
 Current authority is frozen FINAL BASELINE v1.0.23 plus approved bounded supplements. For basic audit/version controls and new production/eBR process bindings, [DCP-BASIC-NO-AUDIT-VERSION-001](development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes the affected clauses following [cross-document consistency PASS](review/DCP_BASIC_CURRENT_CONSISTENCY_REVIEW.md). All other frozen contracts and historical releases remain authoritative and immutable.
 
 ### Current approved navigation / real entry authority — 2026-10-07
@@ -135,3 +139,12 @@ Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](development/DCP-BASIC-NO-AUDIT-V
 ## Approved eBR template name supplement — 2026-10-09
 
 Human-approved [DCP-EBR-TEMPLATE-NAME-001](development/DCP-EBR-TEMPLATE-NAME-001-APPROVED.md) adds only the eBR template name and its current UI/API/storage/search/frozen-content contract. Historical null-name canonical definitions, signatures, snapshots and PDF evidence remain unchanged. No whole-book redesign or further audit/version removal is authorized. Current UI V2 remains. Runtime status is only MES_TASKS.md.
+
+
+## 主设计批准与实施下发 — 2026-10-10T13:02:40.670492+00:00
+
+MAIN DESIGN APPROVED / IMPLEMENTATION IN PROGRESS。来源：主对话01a115d2-8ace-7574-9a08-ac48dfc970cc本次委派，已审阅DCP005第1–11节及修正实体/API，批准同一文件及18操作/61schema契约作为实施基线。用户先前已明确授权主对话批准、任务做到收尾及必要DEV迁移/后端更新/测试；本记录不把主设计批准写成用户最终验收，不改历史审批。
+
+本次白名单：mes-reporting打印领域/API/应用/持久化及直接消费provider、mes-boot定向测试与新增Flyway、正式Vue打印页面/API/路由/现有导航入口、当前同一设计/契约/复核/任务索引。现有其他菜单/权限/UI未提交改动保留，开始清单和文件备份位于本机print-source-implementation/worktree-before.txt及file-backup/。不修改旧迁移、旧归档正文/hash/触发器、冻结releases、无关业务，不提交或推送。
+
+专项环境覆盖：本次主设计下发明确要求迁移先在隔离测试库验证，仅该验证允许专项隔离库；正式DEV仍为已有localhost:3306/hospital_pharma_mes_dev、Redis6379、后端8080、前端5173；不drop旧库、不repair旧checksum、不增加持久安全开关。真实目标/版本/备份可恢复确认后才执行DEV迁移。复杂打印集成初始预算90分钟，最多2轮自动修复，重复同根因立即报告；不改批准验收断言。当前实施开始，迁移/编译/业务/UI/PDF验证未运行，不能宣称验收或部署完成。

@@ -38,3 +38,9 @@ Formal acceptance still requires deploying new backend (with correct dependencie
 - Implementation: `backend/mes-reporting/.../NativePrintDesigner.java`, `Docx4jFopPdfConverter.java`, `PrintService.java`, `PrintController.java` and `frontend/mes-web/src/views/printing/NativePrintDesigner.vue`.
 - Tests: `NativePrintDesignerTest`, `PrintLifecycleTest.nativeVisualDesignerAppendsNewDraftWithoutOverwritingPublishedTemplate`, `PureJavaPdfSmokeTest`, `e2e/native-print-designer.tmp.spec.ts`.
 - Previous DCP-CONTROLLED-WORD-PRINTING-001 retained for immutable record, but its mandatory office-server deployment premise is superseded for native templates; no history deletion.
+
+## 2026-10-10 当前数据源设计增量引用（主设计复核中）
+
+本文件既有批准内容及历史状态保留。[同一打印详细设计有界增量005](DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED.md)补齐配置身份/修订、类型唯一源、catalog授权、字段映射、真实校验与历史兼容；按其§1列明本文件受影响段落。状态主设计复核中 MAIN DESIGN REVIEW，未替换本文件批准权威，原型已由用户确认但正式开发未开始。OpenAPI/跨域矩阵由005单一入口引用；不把旧多源原型或mock验收当正式契约。
+
+主设计已定稿类型元数据读写/策略目录、多独立dataset、安全键/显示顺序、专用停用启用恢复、不可变归档sidecar及现有RFC8785固定摘要样例；旧审批准则不改。用户已授权主对话批准，当前仍不编码，待准确差异复核下发。

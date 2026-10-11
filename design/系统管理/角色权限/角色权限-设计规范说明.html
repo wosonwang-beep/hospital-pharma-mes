@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>角色权限设计规范说明</title><style>
+*{box-sizing:border-box}body{margin:0;width:1600px;height:1040px;background:#f5f7fa;color:#24415f;font-family:Inter,"Microsoft YaHei","PingFang SC",Arial,sans-serif}
+.board{padding:24px 28px}.header{height:65px;display:flex;align-items:center;justify-content:space-between}.header h1{margin:0;font-size:25px;font-weight:700}.header p{margin:8px 0;color:#72869f;font-size:14px}.draft{padding:8px 14px;border:1px solid #cadae9;border-radius:6px;color:#5b7693;background:#fff;font-size:13px}
+.columns{display:grid;grid-template-columns:1135px 385px;gap:22px;margin-top:10px}.preview{height:738px;background:white;border:1px solid #dae4ef;padding:9px;border-radius:7px;box-shadow:0 2px 9px #223b5c08}.preview img{width:1115px;height:697px;display:block;object-fit:fill;border:1px solid #e2e9f1}.preview .note{font-size:12px;color:#8aa0b5;margin:8px 0 0 4px}
+.spec{height:738px;background:#fff;border:1px solid #dae4ef;border-radius:7px;padding:19px 19px 12px}.spec h2{font-size:17px;margin:0 0 17px;border-left:4px solid #2c5cdc;padding-left:10px}.item{margin-bottom:16px;line-height:1.6}.item b{font-size:14px;color:#2b4a6b}.item p{margin:4px 0 0;font-size:12px;color:#6a8099}.idx{display:inline-flex;width:23px;height:23px;justify-content:center;align-items:center;background:#e7f1ff;border-radius:50%;font-size:12px;color:#2c5cdc;margin-right:7px;font-weight:700}
+.foot{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.box{background:#fff;border:1px solid #dae4ef;border-radius:7px;padding:15px 18px;min-height:138px}.box h3{font-size:14px;margin:0 0 10px;color:#2d4a6a}.box p{font-size:12px;color:#70859f;line-height:1.75;margin:0}.blue{color:#246ed0;font-weight:600}
+</style></head><body><div class="board">
+<div class="header"><div><h1>角色与权限 · PC 页面设计规范说明</h1><p>医院制剂 MES　/　统一 Global UI V2　/　T2 编辑角色</p></div><div class="draft">设计阶段 · 待人工确认</div></div>
+<div class="columns"><div class="preview"><img src="./角色权限-完整PC设计图-1440x900.png" alt="角色与权限完整PC设计图"><div class="note">左侧为独立业务界面设计图（原始验收视口：1440 × 900），这里按比例缩小展示；可单独打开原图审查。</div></div>
+<div class="spec"><h2>设计约束与交互要点</h2>
+<div class="item"><b><span class="idx">1</span>全局导航</b><p>左侧 230 px，顶部 56 px，面包屑 42 px。七域菜单共用数据库配置与权限过滤，不增加第二套菜单。</p></div>
+<div class="item"><b><span class="idx">2</span>页面模板 T2</b><p>现有角色编辑路由；左侧角色信息，右侧菜单授权树与功能权限。同一路由承载权限配置。</p></div>
+<div class="item"><b><span class="idx">3</span>字段与同行规则</b><p>角色编码只读、角色名称可编辑、状态选择。所有标签与控件水平同行，禁用变更原因输入与版本控件。</p></div>
+<div class="item"><b><span class="idx">4</span>权限选择</b><p>菜单勾选控制可见性；普通权限仅“只查看 / 增删改查”；特殊操作从真实权限目录单独配置，不造权限代码。</p></div>
+<div class="item"><b><span class="idx">5</span>交互反馈</b><p>权限搜索、仅看已选、树展开/折叠、变更明细、保存/取消和离开提醒；受当前角色权限与组织隔离约束。</p></div>
+<div class="item"><b><span class="idx">6</span>保存及后续验收</b><p>后续原型以演示数据模拟；正式 MES 继续使用原 API 与乐观锁、权限检查，不直接套用模拟值。</p></div>
+</div></div>
+<div class="foot">
+<div class="box"><h3>视觉尺寸与排版</h3><p>原图 <span class="blue">1440 × 900</span>；侧栏 230 px；顶栏 56 px；内容留白 24 px；主区左右两列；输入框高约 35 px；文本 12–15 px；统一蓝色主按钮；白色轻边框卡片。<br>桌面与窄屏后续在交互原型阶段按 1440 / 1280 / 900 / 375 视口验证。</p></div>
+<div class="box"><h3>设计状态与来源</h3><p>权威基线：FINAL BASELINE v1.0.23 + approved DCP；Global UI Design System V2；Page Template Standard V2。<br>接口绑定：/roles、/permissions、/menus、/roles/{id}/permissions 和 /auth/navigation 的既有契约。所有角色及勾选状态均为<strong>设计示例</strong>，非当前数据库事实。</p></div>
+</div></div></body></html>

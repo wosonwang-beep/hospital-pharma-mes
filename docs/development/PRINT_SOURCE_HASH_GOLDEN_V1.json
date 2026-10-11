@@ -1,0 +1,491 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "RFC8785 JsonCanonicalizer 1.1 -> UTF-8 -> SHA-256 lowercase",
+  "decimalStringPolicy": "retain exact lexical precision: 0 != 0.000000; business decimals are strings; scale/order integers allowed",
+  "javaLibraryVerification": "MATCHED_7_VECTORS_EXIT_0",
+  "vectors": [
+    {
+      "name": "configChinese",
+      "kind": "configHash",
+      "input": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 0
+          },
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 1,
+            "missing": "DEFAULT",
+            "defaultValue": "0"
+          }
+        ]
+      },
+      "normalizedProjection": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 0,
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            },
+            "missing": "ERROR",
+            "defaultValue": null
+          },
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 1,
+            "missing": "DEFAULT",
+            "defaultValue": "0",
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            }
+          }
+        ]
+      },
+      "canonicalString": "{\"fields\":[{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"TEXT\",\"datasetKey\":null,\"defaultValue\":null,\"displayOrder\":0,\"fieldId\":\"codeField\",\"fieldKey\":\"receiptNo\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"收货编号\",\"missing\":\"ERROR\",\"sourcePath\":{\"catalogFieldId\":\"receiptNo\",\"nodeId\":\"main\"}},{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"NUMBER\",\"datasetKey\":null,\"defaultValue\":\"0\",\"displayOrder\":1,\"fieldId\":\"zeroField\",\"fieldKey\":\"recordCount\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"记录数\",\"missing\":\"DEFAULT\",\"sourcePath\":{\"catalogFieldId\":\"recordCount\",\"nodeId\":\"main\"}}],\"joins\":[],\"mainCatalogId\":\"wms.receipt\",\"parameterDeclarations\":[{\"contextKey\":null,\"name\":\"recordId\",\"source\":\"DOCUMENT_ID\"}],\"schemaVersion\":1,\"sourceName\":\"收货数据源\"}",
+      "sha256": "350c3143102230e1be7599a9ac0bff643368d6d0b7e45e85d2b9e51ce815854e"
+    },
+    {
+      "name": "configObjectKeyReordered",
+      "kind": "configHash",
+      "input": {
+        "fields": [
+          {
+            "displayOrder": 0,
+            "sourcePath": {
+              "catalogFieldId": "receiptNo",
+              "nodeId": "main"
+            },
+            "dataType": "TEXT",
+            "label": "收货编号",
+            "fieldKey": "receiptNo",
+            "fieldId": "codeField"
+          },
+          {
+            "defaultValue": "0",
+            "missing": "DEFAULT",
+            "displayOrder": 1,
+            "sourcePath": {
+              "catalogFieldId": "recordCount",
+              "nodeId": "main"
+            },
+            "dataType": "NUMBER",
+            "label": "记录数",
+            "fieldKey": "recordCount",
+            "fieldId": "zeroField"
+          }
+        ],
+        "joins": [],
+        "parameterDeclarations": [
+          {
+            "contextKey": null,
+            "source": "DOCUMENT_ID",
+            "name": "recordId"
+          }
+        ],
+        "mainCatalogId": "wms.receipt",
+        "sourceName": "收货数据源",
+        "schemaVersion": 1
+      },
+      "normalizedProjection": {
+        "fields": [
+          {
+            "displayOrder": 0,
+            "sourcePath": {
+              "catalogFieldId": "receiptNo",
+              "nodeId": "main"
+            },
+            "dataType": "TEXT",
+            "label": "收货编号",
+            "fieldKey": "receiptNo",
+            "fieldId": "codeField",
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            },
+            "missing": "ERROR",
+            "defaultValue": null
+          },
+          {
+            "defaultValue": "0",
+            "missing": "DEFAULT",
+            "displayOrder": 1,
+            "sourcePath": {
+              "catalogFieldId": "recordCount",
+              "nodeId": "main"
+            },
+            "dataType": "NUMBER",
+            "label": "记录数",
+            "fieldKey": "recordCount",
+            "fieldId": "zeroField",
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            }
+          }
+        ],
+        "joins": [],
+        "parameterDeclarations": [
+          {
+            "contextKey": null,
+            "source": "DOCUMENT_ID",
+            "name": "recordId"
+          }
+        ],
+        "mainCatalogId": "wms.receipt",
+        "sourceName": "收货数据源",
+        "schemaVersion": 1
+      },
+      "canonicalString": "{\"fields\":[{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"TEXT\",\"datasetKey\":null,\"defaultValue\":null,\"displayOrder\":0,\"fieldId\":\"codeField\",\"fieldKey\":\"receiptNo\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"收货编号\",\"missing\":\"ERROR\",\"sourcePath\":{\"catalogFieldId\":\"receiptNo\",\"nodeId\":\"main\"}},{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"NUMBER\",\"datasetKey\":null,\"defaultValue\":\"0\",\"displayOrder\":1,\"fieldId\":\"zeroField\",\"fieldKey\":\"recordCount\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"记录数\",\"missing\":\"DEFAULT\",\"sourcePath\":{\"catalogFieldId\":\"recordCount\",\"nodeId\":\"main\"}}],\"joins\":[],\"mainCatalogId\":\"wms.receipt\",\"parameterDeclarations\":[{\"contextKey\":null,\"name\":\"recordId\",\"source\":\"DOCUMENT_ID\"}],\"schemaVersion\":1,\"sourceName\":\"收货数据源\"}",
+      "sha256": "350c3143102230e1be7599a9ac0bff643368d6d0b7e45e85d2b9e51ce815854e"
+    },
+    {
+      "name": "configDisplayOrderChanged",
+      "kind": "configHash",
+      "input": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 1
+          },
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 0,
+            "missing": "DEFAULT",
+            "defaultValue": "0"
+          }
+        ]
+      },
+      "normalizedProjection": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 0,
+            "missing": "DEFAULT",
+            "defaultValue": "0",
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            }
+          },
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 1,
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            },
+            "missing": "ERROR",
+            "defaultValue": null
+          }
+        ]
+      },
+      "canonicalString": "{\"fields\":[{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"NUMBER\",\"datasetKey\":null,\"defaultValue\":\"0\",\"displayOrder\":0,\"fieldId\":\"zeroField\",\"fieldKey\":\"recordCount\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"记录数\",\"missing\":\"DEFAULT\",\"sourcePath\":{\"catalogFieldId\":\"recordCount\",\"nodeId\":\"main\"}},{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"TEXT\",\"datasetKey\":null,\"defaultValue\":null,\"displayOrder\":1,\"fieldId\":\"codeField\",\"fieldKey\":\"receiptNo\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"收货编号\",\"missing\":\"ERROR\",\"sourcePath\":{\"catalogFieldId\":\"receiptNo\",\"nodeId\":\"main\"}}],\"joins\":[],\"mainCatalogId\":\"wms.receipt\",\"parameterDeclarations\":[{\"contextKey\":null,\"name\":\"recordId\",\"source\":\"DOCUMENT_ID\"}],\"schemaVersion\":1,\"sourceName\":\"收货数据源\"}",
+      "sha256": "f104dfac6766e7805b7791e5693abe4d257ef0f5e523fb7caaf5a60f02172c10"
+    },
+    {
+      "name": "configDecimalStringPrecision",
+      "kind": "configHash",
+      "input": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 0
+          },
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 1,
+            "missing": "DEFAULT",
+            "defaultValue": "0.000000"
+          }
+        ]
+      },
+      "normalizedProjection": {
+        "schemaVersion": 1,
+        "sourceName": "收货数据源",
+        "mainCatalogId": "wms.receipt",
+        "parameterDeclarations": [
+          {
+            "name": "recordId",
+            "source": "DOCUMENT_ID",
+            "contextKey": null
+          }
+        ],
+        "joins": [],
+        "fields": [
+          {
+            "fieldId": "codeField",
+            "fieldKey": "receiptNo",
+            "label": "收货编号",
+            "dataType": "TEXT",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "receiptNo"
+            },
+            "displayOrder": 0,
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            },
+            "missing": "ERROR",
+            "defaultValue": null
+          },
+          {
+            "fieldId": "zeroField",
+            "fieldKey": "recordCount",
+            "label": "记录数",
+            "dataType": "NUMBER",
+            "sourcePath": {
+              "nodeId": "main",
+              "catalogFieldId": "recordCount"
+            },
+            "displayOrder": 1,
+            "missing": "DEFAULT",
+            "defaultValue": "0.000000",
+            "dataGroup": "MAIN",
+            "datasetKey": null,
+            "available": true,
+            "format": {
+              "kind": "RAW",
+              "scale": null,
+              "roundingMode": null,
+              "dateStyle": null
+            }
+          }
+        ]
+      },
+      "canonicalString": "{\"fields\":[{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"TEXT\",\"datasetKey\":null,\"defaultValue\":null,\"displayOrder\":0,\"fieldId\":\"codeField\",\"fieldKey\":\"receiptNo\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"收货编号\",\"missing\":\"ERROR\",\"sourcePath\":{\"catalogFieldId\":\"receiptNo\",\"nodeId\":\"main\"}},{\"available\":true,\"dataGroup\":\"MAIN\",\"dataType\":\"NUMBER\",\"datasetKey\":null,\"defaultValue\":\"0.000000\",\"displayOrder\":1,\"fieldId\":\"zeroField\",\"fieldKey\":\"recordCount\",\"format\":{\"dateStyle\":null,\"kind\":\"RAW\",\"roundingMode\":null,\"scale\":null},\"label\":\"记录数\",\"missing\":\"DEFAULT\",\"sourcePath\":{\"catalogFieldId\":\"recordCount\",\"nodeId\":\"main\"}}],\"joins\":[],\"mainCatalogId\":\"wms.receipt\",\"parameterDeclarations\":[{\"contextKey\":null,\"name\":\"recordId\",\"source\":\"DOCUMENT_ID\"}],\"schemaVersion\":1,\"sourceName\":\"收货数据源\"}",
+      "sha256": "eff678be8297c67df1dde7c930f1af7e3c6c0b7c72de8d540209467e370420a7"
+    },
+    {
+      "name": "bindingOrdered",
+      "kind": "bindingSetHash",
+      "input": [
+        "INSPECTION_REPORT",
+        "WMS_RECEIPT"
+      ],
+      "normalizedProjection": [
+        "INSPECTION_REPORT",
+        "WMS_RECEIPT"
+      ],
+      "canonicalString": "[\"INSPECTION_REPORT\",\"WMS_RECEIPT\"]",
+      "sha256": "4ffc34a8c3e1abc1f0e591b1d0b812950ca980ffe86d5c3b34b5c5362ad5f446"
+    },
+    {
+      "name": "bindingReorderedDuplicated",
+      "kind": "bindingSetHash",
+      "input": [
+        "WMS_RECEIPT",
+        "INSPECTION_REPORT",
+        "WMS_RECEIPT"
+      ],
+      "normalizedProjection": [
+        "INSPECTION_REPORT",
+        "WMS_RECEIPT"
+      ],
+      "canonicalString": "[\"INSPECTION_REPORT\",\"WMS_RECEIPT\"]",
+      "sha256": "4ffc34a8c3e1abc1f0e591b1d0b812950ca980ffe86d5c3b34b5c5362ad5f446"
+    },
+    {
+      "name": "publicationEvidence",
+      "kind": "publicationEvidenceHash",
+      "input": {
+        "configHash": "350c3143102230e1be7599a9ac0bff643368d6d0b7e45e85d2b9e51ce815854e",
+        "bindingSetHash": "4ffc34a8c3e1abc1f0e591b1d0b812950ca980ffe86d5c3b34b5c5362ad5f446",
+        "catalogVersion": "catalog-v1",
+        "typeMetadataHashes": [
+          {
+            "businessType": "WMS_RECEIPT",
+            "metadataHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          {
+            "businessType": "INSPECTION_REPORT",
+            "metadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "normalizedProjection": {
+        "configHash": "350c3143102230e1be7599a9ac0bff643368d6d0b7e45e85d2b9e51ce815854e",
+        "bindingSetHash": "4ffc34a8c3e1abc1f0e591b1d0b812950ca980ffe86d5c3b34b5c5362ad5f446",
+        "catalogVersion": "catalog-v1",
+        "typeMetadataHashes": [
+          {
+            "businessType": "INSPECTION_REPORT",
+            "metadataHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          {
+            "businessType": "WMS_RECEIPT",
+            "metadataHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        ]
+      },
+      "canonicalString": "{\"bindingSetHash\":\"4ffc34a8c3e1abc1f0e591b1d0b812950ca980ffe86d5c3b34b5c5362ad5f446\",\"catalogVersion\":\"catalog-v1\",\"configHash\":\"350c3143102230e1be7599a9ac0bff643368d6d0b7e45e85d2b9e51ce815854e\",\"typeMetadataHashes\":[{\"businessType\":\"INSPECTION_REPORT\",\"metadataHash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"businessType\":\"WMS_RECEIPT\",\"metadataHash\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]}",
+      "sha256": "8dfff998b4c2994de328d557b4ba597499b8a4c5841e4089c3059749e27cc686"
+    }
+  ],
+  "javaLibrary": "io.github.erdtman:java-json-canonicalization:1.1 (existing local Maven dependency)",
+  "verificationScope": "documentation fixtures only; no MES business code compiled/tested; original inputs and exact canonical/hash literals included"
+}
