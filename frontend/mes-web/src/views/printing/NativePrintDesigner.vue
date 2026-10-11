@@ -22,6 +22,7 @@ const autoFit=ref(true)
 let editor:Editor|null=null,previewEditor:Editor|null=null,exportEditor:Editor|null=null
 let resizeObserver:ResizeObserver|null=null
 let selectedTableId=''
+const sourceSelection=ref<{mode:'INHERIT'|'UPGRADE';targetSourceRevisionId?:string;targetConfigHash?:string}>({mode:'INHERIT'}),fixedSourceRef=ref<{executionMode:string;sourceId:string;sourceRevisionId:string;configHash:string}|null>(null)
 const existingId=typeof route.params.id==='string'?route.params.id:null
 const sourceOptions=computed(()=>sources.value)
 const currentSource=computed(()=>sourceOptions.value.find(source=>source.value===businessType.value))
@@ -33,7 +34,7 @@ const fieldGroups=computed(()=>groups.value.map(group=>({group,fields:visibleFie
 const selectedField=computed(()=>fields.value.find(field=>field.key===selectedFieldKey.value))
 const inspectedField=computed(()=>fields.value.find(field=>field.key===(activeBinding.value?.fieldKey??selectedFieldKey.value)))
 const inspectedGroup=computed(()=>inspectedField.value?.group??'')
-const inspectedValue=computed(()=>inspectedField.value?.repeated?(example.value.items as Record<string,unknown>[]|undefined)?.[0]?.[inspectedField.value.key]:example.value[inspectedField.value?.key??''])
+const inspectedValue=computed(()=>inspectedField.value?.repeated?(example.value[inspectedField.value.datasetKey??'items'] as Record<string,unknown>[]|undefined)?.[0]?.[inspectedField.value.key]:example.value[inspectedField.value?.key??''])
 const inspectedType=computed(()=>inspectedField.value?.dataType==='NUMBER'||typeof inspectedValue.value==='number'?'数值':typeof inspectedValue.value==='boolean'?'布尔值':'文本')
 const detailFields=computed(()=>fields.value.filter(f=>f.repeated&&picked.value.includes(f.key)))
 const missing=computed(()=>[...['modeLabel','reportNo'].filter(key=>fields.value.some(f=>f.key===key)&&!currentBindings.value.includes(key)),...(printType.value==='LIST'&&!fields.value.some(f=>f.repeated&&currentBindings.value.includes(f.key))?['items']:[])])
@@ -56,8 +57,8 @@ function createEditor(data:IEditorData,options?:IEditorResult['options']){
  updateBindings()
 }
 async function loadFields(type:string){
- const schema=await api<{definitions:PrintField[];example:Record<string,unknown>}>({url:'/printing/fields',params:{businessType:type,printType:printType.value}})
- fields.value=schema.definitions;example.value=schema.example;dataset.value='';selectedFieldKey.value='';picked.value=fields.value.filter(f=>f.repeated).slice(0,6).map(f=>f.key)
+ const schema=await api<{definitions:PrintField[];example:Record<string,unknown>;sourceRevisionRef?:{executionMode:string;sourceId:string;sourceRevisionId:string;configHash:string}}>({url:'/printing/fields',params:{businessType:type,printType:printType.value,templateVersionId:sourceSelection.value.mode==='INHERIT'?saved.value?.id??existingId:undefined}})
+ fields.value=schema.definitions;example.value=schema.example;fixedSourceRef.value=schema.sourceRevisionRef??null;dataset.value='';selectedFieldKey.value='';picked.value=fields.value.filter(f=>f.repeated).slice(0,6).map(f=>f.key)
 }
 async function initialize(){
  busy.value=true;error.value=''
@@ -97,7 +98,7 @@ function rememberTable(event:MouseEvent){selectedTableId=editor?.command.getPosi
 function repeatCurrentRow(){
  const context=editor?.command.getRangeContext(),table=selectedTableId?editor?.command.getElementById({id:selectedTableId})[0]:undefined,row=table?.trList?.[context?.trIndex??-1]
  if(!editor||!context?.isTable||!table||!row){message.warning('请先点击 Word 表格中需要自动填充明细的那一行');return}
- row.extension={businessType:businessType.value,dataset:'items',repeat:true}
+ const groups=new Set(bindingsIn({main:[table]}).filter(b=>b.repeated).map(b=>b.datasetKey??'items'));if(groups.size!==1){message.warning('请先在该表中绑定同一集合的明细字段');return}row.extension={businessType:businessType.value,dataset:[...groups][0],repeat:true}
  editor.command.executeUpdateElementById({id:selectedTableId,properties:{trList:table.trList}})
  dirty.value=true;updateBindings();message.success('当前行已绑定为明细循环行，可在单元格中插入明细字段')
 }
@@ -109,6 +110,7 @@ async function importWord(event:Event){
  if(dirty.value)Modal.confirm({title:'从 Word 导入',content:'导入会替换当前编辑内容。请先保存需要保留的草稿。',okText:'导入并替换',cancelText:'取消',onOk:perform});else await perform()
 }
 async function save():Promise<PrintTemplate|undefined>{
+ if(busy.value)return
  error.value='';if(!/^[A-Za-z0-9_-]{1,60}$/.test(templateCode.value)||!templateName.value.trim()){error.value='请填写模板编码（字母、数字、下划线或横线）和模板名称';return}
  busy.value=true
  try{
@@ -118,10 +120,13 @@ async function save():Promise<PrintTemplate|undefined>{
   try{exportEditor=new Editor(container,exportData(snapshot.data),snapshot.options);exportEditor.use(docxPlugin);output=await exportEditor.command.executeExportDocx({fileName:templateCode.value})}finally{exportEditor?.destroy();exportEditor=null;container.remove()}
   const blob=await embedCanvas(output!,{schema:'mes.canvas.print.v1',printType:printType.value,businessType:businessType.value,templateCode:templateCode.value,templateName:templateName.value.trim(),document:snapshot})
   if(blob.size>5*1024*1024)throw new Error('生成的 Word 模板超过 5MB')
-  const data=new FormData();Object.entries({templateCode:templateCode.value,templateName:templateName.value.trim(),businessType:businessType.value,printType:printType.value,reason:'Canvas 打印模板维护（系统记录）'}).forEach(([k,v])=>data.append(k,v));data.append('file',blob,`${templateCode.value}.docx`)
-  saved.value=await api<PrintTemplate>({url:'/printing/templates',method:'POST',data});dirty.value=false;message.success(`已保存第 ${saved.value.templateRevision} 版草稿`);return saved.value
+  const data=new FormData();Object.entries({templateCode:templateCode.value,templateName:templateName.value.trim(),businessType:businessType.value,printType:printType.value,reason:'Canvas 打印模板维护（系统记录）'}).forEach(([k,v])=>data.append(k,v));if(saved.value?.id??existingId)data.append('baseTemplateVersionId',saved.value?.id??existingId!);data.append('sourceSelection',JSON.stringify(sourceSelection.value));data.append('file',blob,`${templateCode.value}.docx`)
+  saved.value=await api<PrintTemplate>({url:'/printing/templates',method:'POST',data});dirty.value=false;sourceSelection.value={mode:'INHERIT'};message.success(`已保存第 ${saved.value.templateRevision} 版草稿`);return saved.value
  }catch(e){error.value=errorMessage(e)}finally{busy.value=false}
 }
+
+async function upgradeSource(){if(busy.value||!(saved.value?.id??existingId))return;busy.value=true;try{const next=await api<{definitions:PrintField[];example:Record<string,unknown>;sourceRevisionRef:{sourceId:string;sourceRevisionId:string;configHash:string}}>({url:'/printing/fields',params:{businessType:businessType.value,printType:printType.value}});validateBindings(capture().data,next.definitions,businessType.value);const prior=new Map(fields.value.map(f=>[f.key,f]));const changed=next.definitions.filter(f=>!prior.has(f.key)||prior.get(f.key)!.label!==f.label).map(f=>f.label);Modal.confirm({title:'升级数据源并另存模板新版本？',content:`当前：${fixedSourceRef.value?.configHash??'旧 provider'}；目标：${next.sourceRevisionRef.configHash}。新增或名称变化：${changed.join('、')||'无'}。字段与集合绑定已检查；服务端再次核对类型、固定源、版本与完整兼容性。`,okText:'使用该已发布版本',onOk:()=>{sourceSelection.value={mode:'UPGRADE',targetSourceRevisionId:next.sourceRevisionRef.sourceRevisionId,targetConfigHash:next.sourceRevisionRef.configHash};fields.value=next.definitions;example.value=next.example;fixedSourceRef.value={executionMode:'CONFIGURED',...next.sourceRevisionRef};dirty.value=true;message.info('目标已选定；保存时创建新模板版本')}})}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
+
 async function previewFill(){if(!editor)return;try{validateBindings(capture().data,fields.value,businessType.value);previewOpen.value=true;await nextTick();previewEditor?.destroy();if(previewHost.value)previewEditor=new Editor(previewHost.value,fillExample(capture().data,example.value),{...capture().options,mode:EditorMode.READONLY,scale:.8})}catch(e){error.value=errorMessage(e)}}
 async function verifyPdf(){if(saved.value?.previewHash&&!dirty.value){busy.value=true;try{pdfBlob.value=await templatePreview(saved.value.id);pdfOpen.value=true}catch(e){error.value=errorMessage(e)}finally{busy.value=false}return}let row=saved.value;if(!row||dirty.value)row=await save()??null;if(!row)return;busy.value=true;try{saved.value=await api<PrintTemplate>({url:`/printing/templates/${row.id}/validate`,method:'POST',data:{versionNo:row.versionNo,reason:'Canvas 模板真实 PDF 验证'}});pdfBlob.value=await templatePreview(row.id);pdfOpen.value=true}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
 function command(name:'executeBold'|'executeItalic'|'executeUnderline'|'executeUndo'|'executeRedo'|'executePageBreak'){editor?.command[name]()}
@@ -139,7 +144,7 @@ onBeforeUnmount(()=>{resizeObserver?.disconnect();editor?.destroy();previewEdito
  <main class="admin-page master-page canvas-designer" data-ui-template="T2">
   <header class="admin-page-header designer-heading">
    <div><a-button type="link" class="back" @click="router.push('/admin/print-templates')">← 返回打印模板</a-button><h1>{{existingId?'编辑打印模板 · 新草稿版本':'新增打印模板'}}</h1></div>
-   <a-space wrap><a-button :disabled="busy||!businessType" @click="fileInput?.click()">从 Word 导入</a-button><a-button :disabled="busy||!businessType" @click="previewFill">预览填充数据</a-button><a-button type="primary" :loading="busy" @click="save">保存草稿</a-button></a-space>
+   <a-space wrap><a-button v-if="existingId||saved" :disabled="busy" @click="upgradeSource">升级数据源版本</a-button><a-button :disabled="busy||!businessType" @click="fileInput?.click()">从 Word 导入</a-button><a-button :disabled="busy||!businessType" @click="previewFill">预览填充数据</a-button><a-button type="primary" :loading="busy" @click="save">保存草稿</a-button></a-space>
    <input ref="fileInput" class="file-input" type="file" accept=".docx" @change="importWord"/>
   </header>
   <a-alert v-if="error" type="error" show-icon :message="error" class="notice"/>
@@ -151,7 +156,7 @@ onBeforeUnmount(()=>{resizeObserver?.disconnect();editor?.destroy();previewEdito
    <label class="inline-pair"><span>打印类型 <i>*</i></span><a-select :value="printType" :disabled="busy||!businessType" :options="Object.entries(printTypeLabels).map(([value,label])=>({value,label}))" @change="selectPrintType($event as PrintType)"/></label>
    <div class="inline-pair"><span>输出规则</span><span class="meta-value">{{printType==='LIST'?'选中记录汇总为列表':'每条记录生成完整单据'}}</span></div>
   </section>
-  <a-spin :spinning="busy">
+  <a-alert v-if="sourceSelection.mode==='UPGRADE'" type="warning" show-icon message="已选择显式升级；保存将创建新模板版本，旧版本保持固定引用。"/><a-spin :spinning="busy">
    <div class="designer-workspace">
     <aside class="designer-side field-panel"><h2>数据字段</h2>
      <div class="panel-pair"><label for="print-module">业务功能</label><a-select id="print-module" :value="currentSource?.module" :options="modules.map(value=>({value,label:value}))" :disabled="busy||!!existingId" @change="selectModule($event as string)"/></div>

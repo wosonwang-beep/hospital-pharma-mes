@@ -42,6 +42,18 @@ public class NativePrintDesigner {
    """);}catch(Exception e){throw new IllegalStateException(e);}
  }
 
+ public JsonNode defaults(String title,List<PrintField> definitions){
+  var result=json.createObjectNode();var blocks=result.putArray("blocks");
+  blocks.addObject().put("id","heading").put("type","TITLE").put("text",title).put("fontSize",20).put("align","CENTER");
+  var groups=new LinkedHashMap<String,List<String>>();int counter=0;
+  for(var field:definitions){if(field.key().equals("items"))continue;
+   if(field.repeated()){groups.computeIfAbsent(Objects.toString(field.datasetKey(),"items"),k->new ArrayList<>()).add(field.key());}
+   else if(counter<30){blocks.addObject().put("id","field"+(++counter)).put("type","FIELD").put("fieldKey",field.key()).put("fontSize",11).put("align","LEFT");}
+  }
+  for(var group:groups.entrySet()){var block=blocks.addObject().put("id","table"+(++counter)).put("type","TABLE").put("datasetKey",group.getKey()).put("fontSize",10).put("align","LEFT");var cols=block.putArray("columns");group.getValue().stream().limit(8).forEach(cols::add);}
+  return result;
+ }
+
  public JsonNode extract(byte[] bytes){
   try(var doc=new XWPFDocument(new ByteArrayInputStream(bytes))){
    var property=doc.getProperties().getCustomProperties().getProperty(PROPERTY);
@@ -105,10 +117,11 @@ public class NativePrintDesigner {
       table.getRow(0).setRepeatHeader(true);
       for(var row:table.getRows())row.setCantSplitRow(true);
       for(int col=0;col<keys.size();col++){
+       String dataset=block.path("datasetKey").asText(keys.isEmpty()?"items":Objects.toString(repeated.get(keys.getFirst()).datasetKey(),"items"));if(!dataset.matches("[A-Za-z][A-Za-z0-9]{0,79}")||keys.stream().anyMatch(key->!dataset.equals(Objects.toString(repeated.get(key).datasetKey(),"items"))))throw new IllegalArgumentException("一个循环表只能绑定一个集合");
        var key=keys.get(col);
        setCell(table.getRow(0).getCell(col),repeated.get(key).label(),size,true);
        table.getRow(0).getCell(col).setColor("EAF0F8");
-       setCell(table.getRow(1).getCell(col),(col==0?"{{items}}":"")+"["+key+"]",size,false);
+       setCell(table.getRow(1).getCell(col),(col==0?"{{"+dataset+"}}":"")+"["+key+"]",size,false);
       }
       used.add("items");
      }

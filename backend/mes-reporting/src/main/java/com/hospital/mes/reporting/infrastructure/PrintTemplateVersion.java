@@ -3,6 +3,14 @@ import com.baomidou.mybatisplus.annotation.*;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("mes_print_template_version")
 public class PrintTemplateVersion extends ScopedEntity {
+ private String sourceExecutionMode;
+ public String getSourceExecutionMode(){return sourceExecutionMode;} public void setSourceExecutionMode(String value){sourceExecutionMode=value;}
+ private Long sourceId;
+ public Long getSourceId(){return sourceId;} public void setSourceId(Long value){sourceId=value;}
+ private Long sourceRevisionId;
+ public Long getSourceRevisionId(){return sourceRevisionId;} public void setSourceRevisionId(Long value){sourceRevisionId=value;}
+ private String sourceConfigHash;
+ public String getSourceConfigHash(){return sourceConfigHash;} public void setSourceConfigHash(String value){sourceConfigHash=value;}
  private String templateCode;
  public String getTemplateCode(){return templateCode;} public void setTemplateCode(String v){templateCode=v;}
  private String templateName;

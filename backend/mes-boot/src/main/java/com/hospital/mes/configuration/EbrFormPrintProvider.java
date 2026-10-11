@@ -2,6 +2,7 @@ package com.hospital.mes.configuration;
 import com.hospital.mes.reporting.application.*;import com.hospital.mes.ebr.application.*;import com.hospital.mes.masterdata.application.*;import com.hospital.mes.common.exception.*;import java.util.*;
 @org.springframework.stereotype.Component @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class EbrFormPrintProvider implements PrintDataProvider {
+ public Set<String> businessReadPermissions(){return Set.of("ebr:form:view");}
  private final EbrRuntimeService runtime;private final MasterMutation mutations;private final MasterQueryService units;
  public EbrFormPrintProvider(EbrRuntimeService runtime,MasterMutation mutations,MasterQueryService units){this.runtime=runtime;this.mutations=mutations;this.units=units;}
  public String moduleLabel(){return "生产管理";}

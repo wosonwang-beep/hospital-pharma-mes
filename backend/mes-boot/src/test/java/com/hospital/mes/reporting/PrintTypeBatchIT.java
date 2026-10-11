@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 /** New test-owned WMS records and real database/PDF, all writes rolled back. */
 @SpringBootTest @ActiveProfiles("ci") @Transactional
 class PrintTypeBatchIT {
- @Autowired PrintService printing;@Autowired PrintBatchService batches;@Autowired NativePrintDesigner designer;
+ @Autowired PrintDataSourceService sourceService;@Autowired PrintService printing;@Autowired PrintBatchService batches;@Autowired NativePrintDesigner designer;
  @Autowired JdbcTemplate jdbc;@Autowired ObjectMapper json;@Autowired WmsService wms;@Autowired MaterialService materials;
  @Autowired UnitService units;@Autowired SupplierService suppliers;@Autowired MaterialSupplierService links;
  @MockitoBean CurrentPlatformContextResolver contexts;
@@ -46,6 +46,7 @@ class PrintTypeBatchIT {
    var receipt=wms.createReceipt(new ReceiptCreate("BATCH"+suffix+i,supplier,"PO-"+i,null,warehouse,true,List.of(item)),key(),false);
    if(i==1)first=receipt.path("id").asText();else second=receipt.path("id").asText();
   }
+  PrintSourceIntegrationFixture.ensure(sourceService,printing,json,jdbc,contexts,actor,rights,"WMS_RECEIPT",first);
  }
  String key(){return UUID.randomUUID().toString();}
  void as(long org){when(contexts.current()).thenReturn(new CurrentPlatformContext(org,actor,Set.of("TEST"),rights,"batch-session","batch-request"));}

@@ -10,9 +10,12 @@ public class DocxRenderer {
  private final DocxGuard guard;
  public DocxRenderer(DocxGuard guard){this.guard=guard;}
  public byte[] render(byte[] template,Map<String,Object> data,Set<String> fields,Set<String> itemFields){
-  guard.validate(template,fields,itemFields);
-  template=ContentControlFields.normalize(template,fields,itemFields);
-  var config=Configure.builder().useDefaultEL(true).bind("items",new LoopRowTableRenderPolicy(true)).build();
+  return render(template,data,fields,Map.of("items",itemFields));
+ }
+ public byte[] render(byte[] template,Map<String,Object> data,Set<String> fields,Map<String,Set<String>> datasets){
+  guard.validate(template,fields,datasets);
+  template=ContentControlFields.normalize(template,fields,datasets);
+  var builder=Configure.builder().useDefaultEL(true);datasets.keySet().forEach(key->builder.bind(key,new LoopRowTableRenderPolicy(true)));var config=builder.build();
   try(var rendered=XWPFTemplate.compile(new ByteArrayInputStream(template),config).render(data);var out=new ByteArrayOutputStream()){
    rendered.write(out);return out.toByteArray();
   }catch(Exception e){throw new IllegalArgumentException("模板渲染失败",e);}

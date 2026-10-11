@@ -3,6 +3,7 @@ import com.hospital.mes.reporting.domain.PrintType;
 import java.util.*;
 /** LIST uses registered record-header fields; DOCUMENT retains the original provider contract. */
 public record PrintSchema(List<PrintField> definitions,Set<String> fields,Set<String> itemFields,Map<String,Object> example) {
+ public Map<String,Set<String>> datasets(){var map=new LinkedHashMap<String,Set<String>>();for(var f:definitions)if(f.repeated())map.computeIfAbsent(f.datasetKey()==null?"items":f.datasetKey(),k->new LinkedHashSet<>()).add(f.key());if(!itemFields.isEmpty())map.computeIfAbsent("items",k->new LinkedHashSet<>()).addAll(itemFields);return Collections.unmodifiableMap(map);}
  public static PrintSchema of(PrintDataProvider p,PrintType type){return of(p,type.name());}
  public static String recordKey(String key){return "record"+Character.toUpperCase(key.charAt(0))+key.substring(1);}
  public static PrintSchema of(PrintDataProvider p,String type){

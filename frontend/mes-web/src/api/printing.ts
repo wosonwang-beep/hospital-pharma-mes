@@ -2,9 +2,9 @@ import {api,http,type Page} from './http'
 export type PrintType = 'DOCUMENT' | 'LIST'
 export const printTypeLabels:Record<PrintType,string>={DOCUMENT:'单据',LIST:'列表'}
 export interface PrintSource {value:string;module:string;label:string}
-export interface PrintTemplate {printType:PrintType;id:string;templateCode:string;templateName:string;templateRevision:number;businessType:string;status:string;versionNo:number;previewHash?:string}
+export interface PrintTemplate {printType:PrintType;id:string;templateCode:string;templateName:string;templateRevision:number;businessType:string;status:string;versionNo:number;previewHash?:string;sourceExecutionMode?:string;sourceId?:string;sourceRevisionId?:string;sourceConfigHash?:string}
 export interface PrintArtifact {id:string;reportNo:string;businessVersion:string;templateRevision:number;formal:boolean;createdAt:string;pdfHash:string}
-export interface PrintField {key:string;label:string;group:string;description:string;example:string;repeated:boolean;dataType?:string;unitField?:string}
+export interface PrintField {key:string;label:string;group:string;description:string;example:string;repeated:boolean;dataType?:string;unitField?:string;datasetKey?:string}
 export const templates=(params:Record<string,unknown>)=>api<Page<PrintTemplate>>({url:'/printing/templates',params})
 export const applicable=()=>api<PrintTemplate[]>({url:'/printing/applicable',params:{businessType:'INSPECTION_REPORT'}}).then(rows=>rows.filter(row=>row.printType!=='LIST'))
 export const history=(businessId:string)=>api<PrintArtifact[]>({url:'/printing/artifacts',params:{businessType:'INSPECTION_REPORT',businessId}})

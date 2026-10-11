@@ -16,6 +16,7 @@ import java.util.*;
 /** Read adapter over authorized receipt facts. Confirmation snapshots take precedence. */
 @Component @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class WmsReceiptPrintProvider implements PrintDataProvider {
+ public Set<String> businessReadPermissions(){return Set.of("wms:receipt:view");}
  private final WmsService wms;private final WmsStore db;private final MasterMutation mutations;
  private final SupplierMapper suppliers;private final UnitMapper units;private final SysUserMapper users;
  public WmsReceiptPrintProvider(WmsService wms,WmsStore db,MasterMutation mutations,SupplierMapper suppliers,UnitMapper units,SysUserMapper users){this.wms=wms;this.db=db;this.mutations=mutations;this.suppliers=suppliers;this.units=units;this.users=users;}

@@ -17,6 +17,7 @@ import static com.hospital.mes.qms.infrastructure.IncomingStore.*;
 /** Report adapter: complete selected/original facts, organization scope and existing approval/signature gates. */
 @Component @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class InspectionPrintProvider implements PrintDataProvider {
+ public Set<String> businessReadPermissions(){return Set.of("qms:report:view");}
  private final IncomingQualityService quality;private final IncomingStore db;private final MaterialLotMapper lots;private final SysUserMapper users;private final MasterMutation mutations;private final SignatureTransactionService signatures;private final ObjectMapper json;private final com.hospital.mes.masterdata.infrastructure.UnitMapper units;
  public InspectionPrintProvider(IncomingQualityService quality,IncomingStore db,MaterialLotMapper lots,SysUserMapper users,MasterMutation mutations,SignatureTransactionService signatures,ObjectMapper json,com.hospital.mes.masterdata.infrastructure.UnitMapper units){this.quality=quality;this.db=db;this.lots=lots;this.users=users;this.mutations=mutations;this.signatures=signatures;this.json=json;this.units=units;}
  public String moduleLabel(){return "质量管理";}

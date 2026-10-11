@@ -2,12 +2,12 @@ import {ControlType,ElementType,RowFlex,type IEditorData,type IEditorResult,type
 import JSZip from 'jszip'
 import type {PrintField} from '../../api/printing'
 
-export interface PrintBinding {businessType:string;fieldKey:string;repeated:boolean;label:string;group:string}
+export interface PrintBinding {businessType:string;fieldKey:string;repeated:boolean;label:string;group:string;datasetKey?:string}
 export interface CanvasTemplate {printType?:'DOCUMENT'|'LIST';schema:'mes.canvas.print.v1';businessType:string;templateCode:string;templateName:string;document:IEditorResult}
 const PROPERTY='mes.canvas.print.v1'
 const escapeXml=(s:string)=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
 export function fieldElement(field:PrintField,businessType:string):IElement {
- return {type:ElementType.CONTROL,value:'',color:'#1677ff',control:{type:ControlType.TEXT,value:null,placeholder:field.label,conceptId:field.key,prefix:'【',postfix:'】',extension:{businessType,fieldKey:field.key,repeated:field.repeated,label:field.label,group:field.group} satisfies PrintBinding}}
+ return {type:ElementType.CONTROL,value:'',color:'#1677ff',control:{type:ControlType.TEXT,value:null,placeholder:field.label,conceptId:field.key,prefix:'【',postfix:'】',extension:{businessType,fieldKey:field.key,repeated:field.repeated,label:field.label,group:field.group,...(field.repeated?{datasetKey:field.datasetKey??'items'}:{})} satisfies PrintBinding}}
 }
 export function bindingOf(element:IElement):PrintBinding|null {
  const b=element.control?.extension as Partial<PrintBinding>|undefined
@@ -15,20 +15,21 @@ export function bindingOf(element:IElement):PrintBinding|null {
 }
 export function detailTable(fields:PrintField[],businessType:string):IElement {
  if(!fields.length||fields.length>8||fields.some(f=>!f.repeated))throw new Error('请选择 1–8 个当前数据源的明细字段')
+ const datasets=new Set(fields.map(f=>f.datasetKey??'items'));if(datasets.size!==1)throw new Error('同一循环表只能使用一个明细集合')
  const cell=(value:IElement[])=>({colspan:1,rowspan:1,value})
  return {type:ElementType.TABLE,value:'\n',colgroup:fields.map(()=>({width:650/fields.length})),trList:[
   {height:34,pagingRepeat:true,tdList:fields.map(f=>({...cell([{value:f.label,bold:true,font:'Microsoft YaHei',size:12}]),backgroundColor:'#f3f6fa'}))},
-  {height:34,extension:{businessType,dataset:'items',repeat:true},tdList:fields.map(f=>{const element=fieldElement(f,businessType);return cell([{...element,size:12,control:{...element.control!,size:12,font:'Microsoft YaHei'}}])})}
+  {height:34,extension:{businessType,dataset:fields[0]!.datasetKey??'items',repeat:true},tdList:fields.map(f=>{const element=fieldElement(f,businessType);return cell([{...element,size:12,control:{...element.control!,size:12,font:'Microsoft YaHei'}}])})}
  ]}
 }
-function walk(data:IEditorData,visitor:(element:IElement,inRepeat:boolean)=>void){
- function elements(list:IElement[],inRepeat=false){for(const e of list){visitor(e,inRepeat);if(e.type===ElementType.TABLE)for(const row of e.trList??[])for(const td of row.tdList)elements(td.value,!!(row.extension as {repeat?:boolean}|undefined)?.repeat);if(e.valueList)elements(e.valueList,inRepeat);if(e.control?.value)elements(e.control.value,inRepeat)}}
+function walk(data:IEditorData,visitor:(element:IElement,inRepeat:boolean,dataset?:string)=>void){
+ function elements(list:IElement[],inRepeat=false,dataset?:string){for(const e of list){visitor(e,inRepeat,dataset);if(e.type===ElementType.TABLE)for(const row of e.trList??[])for(const td of row.tdList)elements(td.value,inRepeat||!!(row.extension as {repeat?:boolean}|undefined)?.repeat,(row.extension as {repeat?:boolean;dataset?:string}|undefined)?.repeat?((row.extension as {dataset?:string}).dataset??'items'):dataset);if(e.valueList)elements(e.valueList,inRepeat,dataset);if(e.control?.value)elements(e.control.value,inRepeat,dataset)}}
  elements(data.header??[]);elements(data.main);elements(data.footer??[])
 }
 export function bindingsIn(data:IEditorData):PrintBinding[]{const found:PrintBinding[]=[];walk(data,e=>{const b=bindingOf(e);if(b)found.push(b)});return found}
 export function validateBindings(data:IEditorData,fields:PrintField[],type:string){
  const keys=new Map(fields.map(f=>[f.key,f]));let count=0
- walk(data,(e,inRepeat)=>{if(++count>20000)throw new Error('模板内容过多');if(e.type===ElementType.BLOCK||e.control?.compute||e.control?.cascade?.length)throw new Error('打印模板不支持活动内容或动态表达式');const b=bindingOf(e);if(!b)return;const field=keys.get(b.fieldKey);if(b.businessType!==type||!field||field.repeated!==b.repeated)throw new Error('模板中存在不属于当前业务数据源的字段，请重新绑定');if(b.repeated&&!inRepeat)throw new Error('明细字段必须放在明细表的循环行中')})
+ walk(data,(e,inRepeat,dataset)=>{if(++count>20000)throw new Error('模板内容过多');if(e.type===ElementType.BLOCK||e.control?.compute||e.control?.cascade?.length)throw new Error('打印模板不支持活动内容或动态表达式');const b=bindingOf(e);if(!b)return;const field=keys.get(b.fieldKey);if(b.businessType!==type||!field||field.repeated!==b.repeated)throw new Error('模板中存在不属于当前业务数据源的字段，请重新绑定');if(b.repeated&&(!inRepeat||dataset!==(field.datasetKey??'items')||(b.datasetKey??'items')!==(field.datasetKey??'items')))throw new Error('明细字段必须放在所属集合的循环行中')})
 }
 /** Prepare an independent export copy; never replace bindings in the live canvas. */
 export function exportData(data:IEditorData):IEditorData {
@@ -37,7 +38,7 @@ export function exportData(data:IEditorData):IEditorData {
   e.font??='Microsoft YaHei'
   const b=bindingOf(e)
   if(b){const {control,...style}=e;return {...style,type:ElementType.TEXT,value:b.repeated?`[${b.fieldKey}]`:`{{${b.fieldKey}}}`,size:e.size??control?.size,font:control?.font||e.font||'Microsoft YaHei',color:'#000000'}}
-  if(e.type===ElementType.TABLE){for(const row of e.trList??[]){for(const td of row.tdList)td.value=elements(td.value);if((row.extension as {repeat?:boolean}|undefined)?.repeat){const first=row.tdList[0];if(first)first.value.unshift({value:'{{items}}'})}}}
+  if(e.type===ElementType.TABLE){for(const row of e.trList??[]){for(const td of row.tdList)td.value=elements(td.value);if((row.extension as {repeat?:boolean}|undefined)?.repeat){const first=row.tdList[0];if(first)first.value.unshift({value:`{{${(row.extension as {dataset?:string}).dataset??'items'}}}`})}}}
   if(e.valueList)e.valueList=elements(e.valueList)
   return e
  })}
@@ -49,7 +50,7 @@ export function exportData(data:IEditorData):IEditorData {
 export function restoreBindings(data:IEditorData,fields:PrintField[],businessType:string):IEditorData {
  const copy=structuredClone(data),keys=new Map(fields.map(f=>[f.key,f]))
  function elements(list:IElement[],repeat=false):IElement[]{return list.flatMap(e=>{
-  if(e.type===ElementType.TABLE){for(const row of e.trList??[]){const loop=row.tdList.some(td=>td.value.some(v=>v.value.includes('{{items}}')))||(row.extension as {repeat?:boolean}|undefined)?.repeat;if(loop)row.extension={businessType,dataset:'items',repeat:true};for(const td of row.tdList)td.value=elements(td.value,!!loop)};return [e]}
+  if(e.type===ElementType.TABLE){for(const row of e.trList??[]){const datasets=new Set(fields.filter(f=>f.repeated).map(f=>f.datasetKey??'items'));const markers=row.tdList.flatMap(td=>td.value.flatMap(v=>[...v.value.matchAll(/\{\{([A-Za-z][A-Za-z0-9]*)}}/g)].map(m=>m[1]!))).filter(k=>datasets.has(k));const prior=row.extension as {repeat?:boolean;dataset?:string}|undefined;const dataset=markers[0]??prior?.dataset??'items';const loop=markers.length>0||prior?.repeat;if(new Set(markers).size>1)throw new Error('同一行不能包含多个明细集合');if(loop){row.extension={businessType,dataset,repeat:true};for(const td of row.tdList)for(const v of td.value)v.value=v.value.split(`{{${dataset}}}`).join('')}for(const td of row.tdList)td.value=elements(td.value,!!loop)};return [e]}
   if(e.valueList){e.valueList=elements(e.valueList,repeat);return [e]}
   if(e.type&&e.type!==ElementType.TEXT)return [e]
   const value=e.value.replace(repeat?/\{\{items}}/g:/(?!)/g,'');const result:IElement[]=[];let last=0
@@ -70,7 +71,7 @@ export function fillExample(data:IEditorData,example:Record<string,unknown>):IEd
   const b=bindingOf(e)
   if(b){const {control,...style}=e;return {...style,type:ElementType.TEXT,value:String((b.repeated?item?.[b.fieldKey]:example[b.fieldKey])??'—'),size:e.size??control?.size,font:control?.font||e.font,color:'#000000'}}
   if(e.type===ElementType.TABLE)e.trList=(e.trList??[]).flatMap(row=>{
-   const rows=(row.extension as {repeat?:boolean}|undefined)?.repeat?(Array.isArray(example.items)?example.items:[{}]):[null]
+   const dataset=(row.extension as {dataset?:string}|undefined)?.dataset??'items';const rows=(row.extension as {repeat?:boolean}|undefined)?.repeat?(Array.isArray(example[dataset])?example[dataset]:[{}]):[null]
    return rows.map(record=>{const r=structuredClone(row);delete r.id;for(const td of r.tdList){delete td.id;td.value=elements(td.value,record as Record<string,unknown>|undefined)}return r})
   })
   if(e.valueList)e.valueList=elements(e.valueList,item);return e
