@@ -1,3 +1,20 @@
+@media(max-width:900px){
+ #app .global-navigation-shell .header{left:0;height:56px;padding:0 12px!important;background:#fff!important;line-height:normal;flex-wrap:nowrap}
+ #app .global-navigation-shell .header-title{flex:1;min-width:0;gap:8px}
+ #app .global-navigation-shell .mobile-header-user{display:none}
+ #app .global-navigation-shell .dashboard-header-user{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-left:12px;color:#3c568a}
+ #app .global-navigation-shell .dashboard-account{display:flex;align-items:center;gap:8px;max-width:148px;height:40px;padding:0;white-space:nowrap}
+ #app .global-navigation-shell .dashboard-account>span:first-child{display:grid;min-width:0;line-height:18px;text-align:left}
+ #app .global-navigation-shell .dashboard-account strong{max-width:110px;overflow:hidden;text-overflow:ellipsis;font-size:13px;letter-spacing:0}
+ #app .global-navigation-shell .dashboard-account small{font-size:12px;color:#647a9d}
+ #app .global-navigation-shell .dashboard-menu-search{width:min(280px,calc(100% - 44px))}
+ #app .global-navigation-shell .mobile-navigation{flex-shrink:0;color:#3c568a!important}
+}
+@media(max-width:560px){
+ #app .global-navigation-shell .dashboard-menu-search{display:none}
+ #app .global-navigation-shell .dashboard-header-user>.anticon{display:none}
+ #app .global-navigation-shell .dashboard-header-user{gap:8px;margin-left:8px}
+}
 @media(min-width:901px){
  #app .global-navigation-shell{--mes-ui-sidebar-width:256px;--mes-ui-header-height:64px}
  #app .global-navigation-shell .sidebar{background:#fafcff!important;border-right:1px solid #edf3fb}

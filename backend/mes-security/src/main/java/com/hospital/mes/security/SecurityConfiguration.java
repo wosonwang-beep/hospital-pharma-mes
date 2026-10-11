@@ -172,7 +172,8 @@ public class SecurityConfiguration {
                     .hasAuthority("iam:permission:update")
                 .requestMatchers(HttpMethod.GET, "/api/v1/menus", "/api/v1/menus/{id}")
                     .hasAuthority("iam:menu:view")
-                .requestMatchers(HttpMethod.POST, "/api/v1/menus").hasAuthority("iam:menu:create")
+                .requestMatchers(HttpMethod.POST, "/api/v1/menus", "/api/v1/menus/configuration").hasAuthority("iam:menu:create")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/menus/{id}/configuration").hasAuthority("iam:menu:update")
                 .requestMatchers(HttpMethod.POST, "/api/v1/menus/{id}/permissions").hasAuthority("iam:menu:update")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/menus/{id}")
                     .hasAuthority("iam:menu:update")
@@ -346,6 +347,27 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/api/v1/ipc", "/api/v1/ipc/{id}").hasAuthority("qms:ipc:view")
                 .requestMatchers(HttpMethod.POST, "/api/v1/ipc", "/api/v1/ipc/{id}/submit-result").hasAuthority("qms:ipc:record")
                 .requestMatchers(HttpMethod.POST, "/api/v1/ipc/{id}/review-result").hasAuthority("qms:ipc:review")
+                // Source configuration has separate read, maintenance and publication permissions.
+                .requestMatchers(HttpMethod.GET,
+                    "/api/v1/printing/data-sources",
+                    "/api/v1/printing/data-sources/metadata/catalogs",
+                    "/api/v1/printing/data-sources/metadata/document-types",
+                    "/api/v1/printing/data-sources/metadata/authorization-policies",
+                    "/api/v1/printing/data-sources/{id}",
+                    "/api/v1/printing/data-sources/{id}/revisions/{revisionId}",
+                    "/api/v1/printing/document-types/{businessType}/metadata").hasAuthority("print:source:view")
+                .requestMatchers(HttpMethod.POST,
+                    "/api/v1/printing/data-sources",
+                    "/api/v1/printing/data-sources/{id}/validate",
+                    "/api/v1/printing/data-sources/{id}/restore").hasAuthority("print:source:manage")
+                .requestMatchers(HttpMethod.PUT,
+                    "/api/v1/printing/data-sources/{id}/draft",
+                    "/api/v1/printing/document-types/{businessType}/metadata").hasAuthority("print:source:manage")
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/printing/data-sources/{id}").hasAuthority("print:source:manage")
+                .requestMatchers(HttpMethod.POST,
+                    "/api/v1/printing/data-sources/{id}/publish",
+                    "/api/v1/printing/data-sources/{id}/deactivate",
+                    "/api/v1/printing/data-sources/{id}/reactivate").hasAuthority("print:source:publish")
                 // Controlled printing: explicit default-deny allowlist; service also checks org/business/QA evidence.
                 .requestMatchers(HttpMethod.GET,
                     "/api/v1/printing/types",

@@ -10,6 +10,7 @@ public interface SysPermissionMapper extends BaseMapper<SysPermissionEntity> {
     @Update("""
         UPDATE sys_permission SET permission_type = #{permissionType}, display_name = #{displayName},
           menu_route = #{menuRoute}, parent_permission_id = #{parentPermissionId}, enabled = #{enabled},
+          permission_description = COALESCE(#{description}, permission_description),
           version = version + 1, updated_at = CURRENT_TIMESTAMP(6)
         WHERE id = #{id} AND version = #{version}
         """)
@@ -18,5 +19,10 @@ public interface SysPermissionMapper extends BaseMapper<SysPermissionEntity> {
                        @Param("displayName") String displayName,
                        @Param("menuRoute") String menuRoute,
                        @Param("parentPermissionId") Long parentPermissionId,
-                       @Param("enabled") boolean enabled);
+                       @Param("enabled") boolean enabled, @Param("description") String description);
+
+    default int updateContract(long id, long version, String permissionType, String displayName,
+                               String menuRoute, Long parentPermissionId, boolean enabled) {
+        return updateContract(id, version, permissionType, displayName, menuRoute, parentPermissionId, enabled, null);
+    }
 }

@@ -14,6 +14,10 @@ public class SysPermissionEntity {
     private Long parentPermissionId;
     private Boolean enabled;
     private Long version;
+    private String permissionDescription;
+
+    public String getPermissionDescription() { return permissionDescription; }
+    public void setPermissionDescription(String value) { permissionDescription = value; }
 
     public Long getId() { return id; }
     public void setId(Long value) { id = value; }

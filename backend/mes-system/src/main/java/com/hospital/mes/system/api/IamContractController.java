@@ -183,6 +183,23 @@ public class IamContractController {
         return success(iam.listMenus(page, size, keyword, status, contexts.current().organizationId()));
     }
 
+    @PostMapping("/menus/configuration")
+    public ApiResponse<JsonNode> createMenuConfiguration(@RequestHeader("Idempotency-Key") String key,
+            @RequestBody IamContractService.MenuConfigurationRequest request) {
+        var context=contexts.current();
+        return success(mutations.execute(context,"createMenuConfiguration",key,request,"MENU",
+            ()->iam.saveMenuConfiguration(null,null,request,context,key),IamMenuResponse::id));
+    }
+
+    @PutMapping("/menus/{id}/configuration")
+    public ApiResponse<JsonNode> updateMenuConfiguration(@PathVariable("id") String id,
+            @RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String ifMatch,
+            @RequestBody IamContractService.MenuConfigurationRequest request) {
+        long resourceId=id(id),version=IamRequestVersion.parse(ifMatch);var context=contexts.current();
+        return success(mutations.execute(context,"updateMenuConfiguration",key,new MutationEnvelope(id,version,request),"MENU",
+            ()->iam.saveMenuConfiguration(resourceId,version,request,context,key),IamMenuResponse::id));
+    }
+
     @PostMapping("/menus")
     public ApiResponse<JsonNode> createMenus(@RequestHeader("Idempotency-Key") String key,
                                               @RequestBody CreateMenuRequest request) {

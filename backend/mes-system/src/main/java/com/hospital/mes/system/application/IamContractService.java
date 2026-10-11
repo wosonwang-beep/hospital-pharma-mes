@@ -3,6 +3,7 @@ package com.hospital.mes.system.application;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hospital.mes.audit.application.CurrentPlatformContext;
 import com.hospital.mes.common.exception.ResourceConflictException;
+import com.hospital.mes.common.exception.PermissionException;
 import com.hospital.mes.security.session.SessionStore;
 import com.hospital.mes.system.infrastructure.SysMenuEntity;
 import com.hospital.mes.system.infrastructure.SysMenuMapper;
@@ -50,11 +51,15 @@ public class IamContractService {
 
     public record CreatePermissionRequest(String permissionCode, String permissionName,
                                           String permissionType, String routePath, String status,
-                                          String reason) { }
+                                          String reason, String description) {
+        public CreatePermissionRequest(String code,String name,String type,String path,String status,String reason) { this(code,name,type,path,status,reason,null); }
+    }
     public record UpdatePermissionRequest(String permissionName, String permissionType,
-                                          String routePath, String status, String reason) { }
+                                          String routePath, String status, String reason, String description) {
+        public UpdatePermissionRequest(String name,String type,String path,String status,String reason) { this(name,type,path,status,reason,null); }
+    }
     public record IamPermissionResponse(String id, String permissionCode, String permissionName,
-                                 String permissionType, String routePath, String status, long version) { }
+                                 String permissionType, String routePath, String status, long version, String description) { }
 
     public record CreateMenuRequest(String menuCode, String menuName, String routePath,
                                     String parentId, Integer sortNo, String status, String reason, String permissionCode, String requiredPermissions) {
@@ -67,6 +72,8 @@ public class IamContractService {
     public record IamMenuResponse(String id, String menuCode, String menuName, String routePath,
                            String parentId, int sortNo, String status, long version, String permissionCode, String requiredPermissions, List<String> permissionCodes) { }
     public record AssignMenuPermissionsRequest(List<String> permissionCodes,String reason) { }
+    public record PermissionChange(String id,Long version,String permissionCode,String permissionName,String description,String status) { }
+    public record MenuConfigurationRequest(CreateMenuRequest menu,List<String> permissionCodes,List<PermissionChange> permissionChanges) { }
 
     private final SysUserMapper users;
     private final SysRoleMapper roles;
@@ -261,6 +268,7 @@ public class IamContractService {
         permission.setPermissionType(permissionType(request.permissionType()));
         permission.setMenuRoute(route(request.routePath()));
         permission.setEnabled(enabledRequired(request.status())); permission.setVersion(0L);
+        permission.setPermissionDescription(description(request.description()));
         permissions.insert(permission);
         IamPermissionResponse view = permissionView(permission);
         audit.append(context, "IAM_PERMISSION_CREATED", "PERMISSION", view.id(), null, view, request.reason(), key);
@@ -274,7 +282,7 @@ public class IamContractService {
         IamPermissionResponse before = getPermission(id);
         if (permissions.updateContract(id, version, permissionType(request.permissionType()),
             requiredText(request.permissionName(), 128), route(request.routePath()), null,
-            enabledRequired(request.status())) != 1) throw conflict();
+            enabledRequired(request.status()), description(request.description())) != 1) throw conflict();
         IamPermissionResponse after = getPermission(id);
         audit.append(context, "IAM_PERMISSION_UPDATED", "PERMISSION", after.id(), before, after,
             request.reason(), key);
@@ -287,7 +295,7 @@ public class IamContractService {
         LambdaQueryWrapper<SysMenuEntity> query = new LambdaQueryWrapper<SysMenuEntity>()
             .eq(SysMenuEntity::getOrgId, orgId)
             .and(text(keyword) != null, q -> q.like(SysMenuEntity::getMenuCode, text(keyword))
-                .or().like(SysMenuEntity::getMenuName, text(keyword)))
+                .or().like(SysMenuEntity::getMenuName, text(keyword)).or().like(SysMenuEntity::getRoutePath,text(keyword)))
             .eq(status(status) != null, SysMenuEntity::getStatus, status(status))
             .orderByAsc(SysMenuEntity::getSortNo).orderByAsc(SysMenuEntity::getId);
         long total = menus.selectCount(query);
@@ -348,7 +356,51 @@ public class IamContractService {
     private IamPermissionResponse permissionView(SysPermissionEntity permission) {
         return new IamPermissionResponse(Long.toString(permission.getId()), permission.getPermissionCode(),
             permission.getDisplayName(), permission.getPermissionType(), permission.getMenuRoute(),
-            state(Boolean.TRUE.equals(permission.getEnabled())), value(permission.getVersion()));
+            state(Boolean.TRUE.equals(permission.getEnabled())), value(permission.getVersion()),permission.getPermissionDescription());
+    }
+    @Transactional
+    public IamMenuResponse saveMenuConfiguration(Long id,Long version,MenuConfigurationRequest request,CurrentPlatformContext context,String key) {
+        require(request,"Configuration is required"); require(request.menu(),"Menu is required");
+        requireRight(context,id==null?"iam:menu:create":"iam:menu:update");
+        requireRight(context,"iam:permission:view");
+        require(request.permissionCodes(),"Bindings are required");
+        require(request.permissionChanges(),"Permission changes are required");
+        if(request.permissionCodes().size()>100||request.permissionChanges().size()>100)throw new IllegalArgumentException("Too many permissions");
+        var menu=request.menu();var codes=strings(request.permissionCodes(),160);
+        if(route(menu.routePath())==null&&(!codes.isEmpty()||!request.permissionChanges().isEmpty()))throw new IllegalArgumentException("Directory cannot have permissions");
+        IamMenuResponse before=id==null?null:getMenu(id,context.organizationId());
+        if(before!=null&&(!before.menuCode().equals(menu.menuCode())||version==null||version!=before.version()))throw conflict();
+        String view=route(menu.routePath())==null?null:menuPermission(route(menu.routePath()),menu.permissionCode(),before==null?menu.menuCode():before.permissionCode());
+        if(view!=null&&!codes.contains(view))throw new IllegalArgumentException("Menu view permission must remain bound");
+        var changed=new LinkedHashSet<String>();
+        for(var change:request.permissionChanges()) {
+            require(change,"Permission change is required");
+            if(!codes.contains(change.permissionCode())||!changed.add(change.permissionCode()))throw new IllegalArgumentException("Invalid or duplicate permission change");
+            if(change.id()==null) {
+                requireRight(context,"iam:permission:create");
+                createPermission(new CreatePermissionRequest(change.permissionCode(),change.permissionName(),"ACTION",null,change.status(),menu.reason(),change.description()),context,key);
+            } else {
+                requireRight(context,"iam:permission:update");
+                long permissionId=optionalId(change.id());var existing=getPermission(permissionId);
+                if(!existing.permissionCode().equals(change.permissionCode())||change.version()==null)throw new IllegalArgumentException("Permission identity/version mismatch");
+                updatePermission(permissionId,change.version(),new UpdatePermissionRequest(change.permissionName(),existing.permissionType(),existing.routePath(),change.status(),menu.reason(),change.description()),context,key);
+            }
+        }
+        codes.forEach(this::requirePermission);
+        IamMenuResponse saved=id==null?createMenu(menu,context,key):updateMenu(id,version,new UpdateMenuRequest(menu.menuName(),menu.routePath(),menu.parentId(),menu.sortNo(),menu.status(),menu.reason(),menu.permissionCode(),menu.requiredPermissions()),context,key);
+        menuPermissions.clear(Long.parseLong(saved.id()));
+        for(String code:codes)menuPermissions.bind(Long.parseLong(saved.id()),requirePermission(code).getId(),context.actorId());
+        var after=getMenu(Long.parseLong(saved.id()),context.organizationId());
+        audit.append(context,"IAM_MENU_CONFIGURATION_SAVED","MENU",after.id(),before,after,menu.reason(),key);
+        return after;
+    }
+    private static void requireRight(CurrentPlatformContext context,String code) {
+        if(!context.hasPermission(code))throw new PermissionException("PERMISSION_DENIED","Missing "+code);
+    }
+    private static String description(String value) {
+        if(value==null)return null;
+        if(value.length()>512||value.chars().anyMatch(Character::isISOControl))throw new IllegalArgumentException("Invalid permission description");
+        return value.strip();
     }
     @Transactional
     public IamMenuResponse assignMenuPermissions(long id,long version,AssignMenuPermissionsRequest request,CurrentPlatformContext context,String key) {
