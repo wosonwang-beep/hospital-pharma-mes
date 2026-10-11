@@ -1,3 +1,6 @@
+## QC_OBJECT_TYPE 固定基础字典与统一质量对象关系（2026-10-11）
+**IN PROGRESS / NOT ACCEPTED**：用户已确认统一质量平台及固定对象类型，DCP 见 [DCP-QC-OBJECT-TYPE-001](docs/development/DCP-QC-OBJECT-TYPE-001-APPROVED-PRINCIPLES.md)。V053 已应用至本地开发 MariaDB，53 个迁移校验通过，字典专项集成测试 2/2 PASS；固定字典专项负例、统一 QMS 对象解析器、组织隔离、提交快照冻结、既有 V016/V030 业务链兼容及全链集成验收尚未完成。不得将字典编译通过当作统一质量业务通过。保留已有用户工作区变更；不得清除质量历史记录或改变冻结业务状态机。
+
 # MES Task Status Index
 
 ## 全工作区代码提交与远端同步 — 2026-10-09

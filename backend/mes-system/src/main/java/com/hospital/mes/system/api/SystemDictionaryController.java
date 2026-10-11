@@ -29,6 +29,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 @ConditionalOnProperty(prefix="spring.datasource", name="url")
 public class SystemDictionaryController {
+    private static final String CONTROLLED_QC_OBJECT_TYPE="QC_OBJECT_TYPE";
+    private static final java.util.Set<String> CONTROLLED_QC_OBJECT_CODES=java.util.Set.of(
+        "MATERIAL","FINISHED_PRODUCT","INTERMEDIATE","ENVIRONMENT","PROCESS");
     private static final Pattern CODE=Pattern.compile("[A-Z][A-Z0-9_]{1,63}");
     private static final Pattern ITEM_CODE=Pattern.compile("[A-Za-z0-9_\\-]{1,80}");
     public record DictType(String id,String code,String name,String kind,String structure,String description,
@@ -184,6 +187,10 @@ public class SystemDictionaryController {
         DictType before=requireType(id);
         verify(before.code().equals(r.code()),"Dictionary code is immutable");
         verify(before.kind().equals(r.kind()),"Dictionary type cannot be changed after creation");
+        if(CONTROLLED_QC_OBJECT_TYPE.equals(before.code())){
+            verify("SYSTEM".equals(r.kind()) && "FLAT".equals(r.structure()) && "ACTIVE".equals(r.status()),
+                "QC inspection object type is a fixed active system dictionary");
+        }
         if(!before.structure().equals(r.structure())) {
             Long count=db.queryForObject("SELECT COUNT(*) FROM sys_dict_item WHERE org_id=? AND dict_type_id=?",Long.class,org(),id);
             verify(count!=null&&count==0,"Structure cannot change while items exist");
@@ -216,6 +223,8 @@ public class SystemDictionaryController {
     }
     private DictItem addItem(CurrentPlatformContext c,long typeId,ItemRequest r,String key){
         DictType t=requireType(typeId);Long parent=parent(t,r.parentId(),null);
+        verify(!CONTROLLED_QC_OBJECT_TYPE.equals(t.code()),
+            "QC inspection object codes require an approved design change");
         long id=generated("INSERT INTO sys_dict_item(org_id,dict_type_id,parent_id,item_code,item_label,description,sort_no,status,is_default,created_by,updated_by) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             org(),typeId,parent,r.code(),name(r.label()),desc(r.description()),sort(r.sortNo()),r.status(),Boolean.TRUE.equals(r.isDefault()),c.actorId(),c.actorId());
         if(Boolean.TRUE.equals(r.isDefault()))resetOtherDefaults(typeId,id);
@@ -238,6 +247,11 @@ public class SystemDictionaryController {
     private DictItem changeItem(CurrentPlatformContext c,long typeId,long itemId,long version,ItemRequest r,String key){
         DictType t=requireType(typeId);DictItem before=requireItem(typeId,itemId);
         verify(before.code().equals(r.code()),"Referenced item codes are immutable");
+        if(CONTROLLED_QC_OBJECT_TYPE.equals(t.code())){
+            verify(CONTROLLED_QC_OBJECT_CODES.contains(before.code()) && "ACTIVE".equals(r.status())
+                && (r.parentId()==null || r.parentId().isBlank()) && !Boolean.TRUE.equals(r.isDefault()),
+                "QC inspection object options are fixed active root codes");
+        }
         Long parent=parent(t,r.parentId(),itemId);
         notStale(db.update("UPDATE sys_dict_item SET item_label=?,description=?,parent_id=?,sort_no=?,status=?,is_default=?,updated_by=?,updated_at=CURRENT_TIMESTAMP(3),version_no=version_no+1 WHERE org_id=? AND dict_type_id=? AND id=? AND version_no=?",
             name(r.label()),desc(r.description()),parent,sort(r.sortNo()),status(r.status()),Boolean.TRUE.equals(r.isDefault()),c.actorId(),org(),typeId,itemId,version));

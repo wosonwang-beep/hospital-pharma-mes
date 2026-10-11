@@ -2,6 +2,9 @@
 
 This document is the compact, stable entry point for product and engineering context. It does not track task status or reproduce detailed domain design.
 
+## 2026-10-11 统一质量检验对象固定字典补充（业务原则已批准，实施中）
+用户确认质量管理共用，请验、取样、检验、报告按固定对象类型区分物料/成品/中间品/环境/过程；多态对象键必须经过后端解析、组织与状态检查并冻结快照。**正式设计记录：** [DCP-QC-OBJECT-TYPE-001](development/DCP-QC-OBJECT-TYPE-001-APPROVED-PRINCIPLES.md)。固定字典 `QC_OBJECT_TYPE` 的增量迁移为 V053（已在本地开发 MariaDB 应用并通过 2/2 字典集成测试），既有 V016/V030 质量单据及签名历史不可改写；跨单据多态关联改造尚未完成，不能宣称全系统质量对象已统一。FINAL BASELINE v1.0.23 的其他条款保持权威，未创建新的冻结发布版。运行进度仅在 MES_TASKS.md。
+
 ## Authority
 
 Current authority is frozen FINAL BASELINE v1.0.23 plus approved bounded supplements. For basic audit/version controls and new production/eBR process bindings, [DCP-BASIC-NO-AUDIT-VERSION-001](development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes the affected clauses following [cross-document consistency PASS](review/DCP_BASIC_CURRENT_CONSISTENCY_REVIEW.md). All other frozen contracts and historical releases remain authoritative and immutable.
