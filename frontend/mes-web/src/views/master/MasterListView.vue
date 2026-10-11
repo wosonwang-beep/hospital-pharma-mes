@@ -13,7 +13,7 @@ const data=ref<Page<MasterRecord>>({items:[],total:0,page:0,size:20}),busy=ref(f
 const query=reactive<Record<string,string>>({}),keyword=ref(''),sort=ref('id,desc')
 const columns=computed(()=>[...def.value.fields.map(f=>({title:f.label,dataIndex:f.key,sorter: f.kind!=='date' && !f.key.endsWith('Id') && f.key!=='baseUnitName' && f.key!=='storageCondition'})),...(def.value.key==='units'||def.value.key==='unit-conversions'?[]:[{title:'状态',dataIndex:def.value.key==='suppliers'?'qualificationStatus':'status',sorter:true}]),...(def.value.key==='materials'?[]:[{title:'更新时间',dataIndex:'updatedAt',sorter:true}]),{title:'操作',key:'actions'}])
 async function load(page=0){busy.value=true;error.value='';try{
- const params={keyword:keyword.value||undefined,...Object.fromEntries(Object.entries(query).filter(([,v])=>v)),page,size:20,sort:sort.value}
+ const params={keyword:keyword.value||undefined,...Object.fromEntries(Object.entries(query).filter(([,v])=>v)),...(def.value.key==='materials'?{excludeFinished:true}:{}),page,size:20,sort:sort.value}
  await router.replace({query:Object.fromEntries(Object.entries(params).map(([k,v])=>[k,v===undefined?undefined:String(v)]))})
  data.value=await api<Page<MasterRecord>>({url:`/${def.value.key}`,params})
 }catch(e){error.value=errorMessage(e)}finally{busy.value=false}}

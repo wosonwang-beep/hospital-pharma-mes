@@ -29,7 +29,7 @@ public class MaterialService {
  public JsonNode freezeUsable(long org,long id,Instant at){var m=materials.lock(org,id);MaterialRules.usable(m.getStatus(),m.getEffectiveFrom(),m.getEffectiveTo(),at);return view(m);}
  private JsonNode view(MaterialEntity m){
   var n=(ObjectNode)mutations.view(m);
-  n.retain(List.of("id","orgId","createdBy","createdAt","updatedBy","updatedAt","versionNo","allowedActions","status","materialCode","materialName","materialType","specification","gradePurity","appearance","baseUnitId","packSpec","packUnitId","manufacturerName","lotControlled","effectiveFrom","effectiveTo","remark","requiresIncomingInspection","storageCondition"));
+  n.retain(List.of("id","orgId","createdBy","createdAt","updatedBy","updatedAt","versionNo","allowedActions","status","materialCode","materialName","materialType","specification","gradePurity","appearance","baseUnitId","packSpec","packUnitId","manufacturerName","lotControlled","effectiveFrom","effectiveTo","remark","requiresIncomingInspection","storageCondition","shelfLifeDays"));
   if(MaterialRules.enabled(m.getStatus()))n.put("status","ACTIVE");
   var u=units.get(m.getOrgId(),m.getBaseUnitId());n.put("baseUnitName",u.getUnitName());n.put("baseUnitCode",u.getUnitCode());
   if(m.getPackUnitId()!=null)n.put("packUnitName",units.get(m.getOrgId(),m.getPackUnitId()).getUnitName());
@@ -40,7 +40,7 @@ public class MaterialService {
   return mutations.execute(c,"Material:CREATE",key,r,()->{
    var e=new MaterialEntity();e.setMaterialCode(MasterRules.text(r.materialCode(),50));
    if(materials.count(c.organizationId(),"material_code",e.getMaterialCode(),null)>0)throw new ResourceConflictException("MATERIAL_CODE_EXISTS","Material code already exists");
-   apply(e,new MaterialCommands.Update(null,null,r.materialName(),r.materialType(),r.specification(),r.gradePurity(),r.appearance(),r.baseUnitId(),r.packSpec(),r.packUnitId(),r.manufacturerName(),r.lotControlled(),r.effectiveFrom(),r.effectiveTo(),r.remark(),r.requiresIncomingInspection(),r.storageCondition()),c.organizationId());
+   apply(e,new MaterialCommands.Update(null,null,r.materialName(),r.materialType(),r.specification(),r.gradePurity(),r.appearance(),r.baseUnitId(),r.packSpec(),r.packUnitId(),r.manufacturerName(),r.lotControlled(),r.effectiveFrom(),r.effectiveTo(),r.remark(),r.requiresIncomingInspection(),r.storageCondition(),r.shelfLifeDays()),c.organizationId());
    e.setStatus("ACTIVE");materials.insert(e,c.organizationId(),c.actorId());
 
    events.publishEvent(new MaterialEvents.Created(c.organizationId(),e.getId()));return e;
@@ -51,7 +51,7 @@ public class MaterialService {
   return mutations.execute(c,"Material:UPDATE:"+id,key,Map.of("id",id,"version",expected,"body",r),()->{
    var e=materials.lock(c.organizationId(),MasterMutation.id(id));var before=mutations.view(e);
    apply(e,r,c.organizationId());if(MaterialRules.enabled(e.getStatus()))e.setStatus("ACTIVE");
-   materials.update(e,expected,c.actorId(),List.of("materialName","materialType","specification","gradePurity","appearance","baseUnitId","packSpec","packUnitId","manufacturerName","lotControlled","effectiveFrom","effectiveTo","remark","requiresIncomingInspection","storageCondition","status"));
+   materials.update(e,expected,c.actorId(),List.of("materialName","materialType","specification","gradePurity","appearance","baseUnitId","packSpec","packUnitId","manufacturerName","lotControlled","effectiveFrom","effectiveTo","remark","requiresIncomingInspection","storageCondition","shelfLifeDays","status"));
 
    events.publishEvent(new MaterialEvents.Updated(c.organizationId(),e.getId()));return e;
   },x->view((MaterialEntity)x),200);
@@ -68,6 +68,8 @@ public class MaterialService {
  private void apply(MaterialEntity e,MaterialCommands.Update r,long org){
   e.setMaterialName(MasterRules.text(r.materialName(),200));
   e.setStorageCondition(MasterRules.optional(r.storageCondition(),500));
+  if(r.shelfLifeDays()!=null && (r.shelfLifeDays()<1 || r.shelfLifeDays()>36500))throw new IllegalArgumentException("Effective shelf life must be 1..36500 days");
+  e.setShelfLifeDays(r.shelfLifeDays());
 e.setMaterialType(MasterRules.text(r.materialType(),30));
 e.setSpecification(MasterRules.optional(r.specification(),200));
 e.setGradePurity(MasterRules.optional(r.gradePurity(),100));

@@ -2,6 +2,18 @@ import {describe,it,expect} from 'vitest'
 import {initialMaterialForm,materialPayload,supplierPayload,type SupplierLink} from './material'
 function form(){return {...initialMaterialForm(),materialCode:'M1',materialName:'Material',materialType:'FINISHED',baseUnitId:'9007199254740993',lotControlled:true}}
 const link=(id:string,preferred:boolean):SupplierLink=>({supplierId:id,approved:true,preferred,validTo:null})
+describe('material shelf life in days',()=>{
+ it('accepts integer days and preserves unit semantics',()=>{
+  expect(materialPayload({...form(),shelfLifeDays:365}).shelfLifeDays).toBe(365)
+  expect(materialPayload({...form(),shelfLifeDays:'24'},true).shelfLifeDays).toBe(24)
+ })
+ it('rejects zero, negative, fraction, over-limit and invalid shelf life',()=>{
+  for(const value of [0,-1,1.5,36501,'abc'])expect(()=>materialPayload({...form(),shelfLifeDays:value})).toThrow()
+ })
+ it('allows legacy materials without shelf life',()=>{
+  expect(materialPayload({...form(),shelfLifeDays:null}).shelfLifeDays).toBeNull()
+ })
+})
 describe('basic material and one preferred supplier',()=>{
  it('flat DTO has exact ID and no business version/approval',()=>{const p=materialPayload(form());expect(p.baseUnitId).toBe('9007199254740993');expect(p.requiresIncomingInspection).toBe(true);for(const key of ['data','quality','storage','production','status','versionId','versionNoBusiness','genericName','englishName','aliasName'])expect(p).not.toHaveProperty(key)})
  it('hidden UI fields retain original values in the unchanged update contract',()=>{const existing={...form(),manufacturerName:'原厂家',appearance:'原外观',lotControlled:false,effectiveFrom:'2026-01-01T00:00:00',effectiveTo:'2028-01-01T00:00:00'};const p=materialPayload({...existing,materialName:'维护名称'},true);expect(p).toMatchObject({manufacturerName:'原厂家',appearance:'原外观',lotControlled:false,effectiveFrom:'2026-01-01T00:00:00.000Z',effectiveTo:'2028-01-01T00:00:00.000Z'});expect(p.storageCondition).toBeNull()})

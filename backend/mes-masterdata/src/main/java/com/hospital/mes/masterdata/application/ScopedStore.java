@@ -34,6 +34,7 @@ public class ScopedStore<E extends ScopedEntity> {
             q.and(w->{boolean first=true;for(String col:columns){if(!first)w.or();w.like(col,keyword.strip());first=false;}});
         }
         filters.forEach((key,col)->{String val=params.get(key);if(val!=null&&!val.isBlank())filter(q,key,col,val);});
+        applyAdditionalFilters(q,params);
         long count=mapper.selectCount(q);String sort=params.getOrDefault("sort","id,desc");String[] parts=sort.split(",");
         String col=parts[0].replaceAll("([a-z])([A-Z])","$1_$2").toLowerCase(Locale.ROOT);
         Set<String> sortable=new HashSet<>(columns);sortable.addAll(filters.values());sortable.addAll(List.of("id","updated_at","version_no"));
@@ -41,6 +42,7 @@ public class ScopedStore<E extends ScopedEntity> {
         q.orderBy(true,parts[1].equals("asc"),col);if(!col.equals("id"))q.orderByAsc("id");
         q.last("LIMIT "+((long)page*size)+","+size);return new PageData<>(mapper.selectList(q),count,page,size);
     }
+    protected void applyAdditionalFilters(QueryWrapper<E> query,Map<String,String> params){}
     protected void filter(QueryWrapper<E> query,String key,String column,String value){if(key.equals("calibrationDueDate"))query.le(column,LocalDate.parse(value));else query.eq(column,value);}
     public long count(long org,String col,Object value,String status){var q=new QueryWrapper<E>().eq("org_id",org).eq(col,value);if(status!=null)q.eq("status",status);return mapper.selectList(q.last("FOR UPDATE")).size();}
     public void insert(E e,long org,long actor){var now=LocalDateTime.now(ZoneOffset.UTC).truncatedTo(java.time.temporal.ChronoUnit.MILLIS);e.setOrgId(org);e.setCreatedBy(actor);e.setUpdatedBy(actor);e.setCreatedAt(now);e.setUpdatedAt(now);e.setVersionNo(0L);mapper.insert(e);}

@@ -11,8 +11,8 @@ import DictionarySelect from '../../components/DictionarySelect.vue'
 import MaterialConversions from './MaterialConversions.vue'
 interface Unit {id:string;unitCode:string;unitName:string}
 const route=useRoute(),router=useRouter(),auth=useAuthStore(),record=ref<MasterRecord|null>(null),form=reactive(initialMaterialForm()),units=ref<Unit[]>([]),error=ref(''),busy=ref(false),conflict=ref(false),reason=ref('')
-const activeTab=ref('basic')
-const visibleSections=computed(()=>materialDisplaySections.filter(s=>!readonly.value||activeTab.value==='basic'||activeTab.value==='quality'&&s.title==='管理 / 质量属性'))
+
+const visibleSections=computed(()=>materialDisplaySections)
 function sectionFields(keys:string[]){return keys.map(key=>materialDisplayFields.find(f=>f.key===key)!)}
 const create=computed(()=>route.meta.mode==='create'),readonly=computed(()=>route.meta.mode==='view')
 let pendingKey=idempotencyKey(),pendingBody=''
@@ -25,16 +25,16 @@ watch(()=>route.fullPath,load,{immediate:true})
 <!-- UI Template: T2 create/edit; T3 read-only material detail. Global UI V2. -->
 <template><main :data-ui-template="readonly?'T3':'T2'" class="admin-page master-page material-detail-page" :class="{'material-form-page':!readonly}"><header class="admin-page-header"><div><a-button type="link" @click="router.push({path:'/master/materials',query:route.query})">← 返回物料列表</a-button><h1>{{create?'新增物料':readonly?'物料基本信息':'维护物料基本信息'}}</h1><p v-if="record" class="material-object-summary"><strong>{{record.materialName}}</strong><span>{{record.materialCode}}</span><a-tag :color="record.status==='ACTIVE'?'green':undefined">{{statusLabel[String(record.status)]}}</a-tag></p></div><a-button v-if="readonly&&auth.can('master:material:update')" type="primary" @click="edit">维护基本信息</a-button></header>
 <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="conflict" type="warning" message="记录已变化，输入已保留，请重新加载后继续。"><template #action><a-button @click="load">重新加载</a-button></template></a-alert>
-<a-tabs v-if="readonly" v-model:active-key="activeTab"><a-tab-pane key="basic" tab="基本信息"/><a-tab-pane key="quality" tab="质量控制"/><a-tab-pane key="suppliers" tab="供应商"/><a-tab-pane key="usage" tab="使用范围"/></a-tabs><a-card v-if="!readonly||activeTab==='basic'||activeTab==='quality'"  class="form-section material-basic-card"><form id="material-basic-form" class="master-form" :class="{'material-quality-only':readonly&&activeTab==='quality'}" @submit.prevent="save()"><section v-for="(section,index) in visibleSections" :key="section.title" class="material-field-section" :class="`material-group-${index}`"><h3 class="material-section-title">{{section.title}}</h3><label v-for="f in sectionFields(section.keys)" :key="f.key" :class="{'form-full-row':f.key==='remark'}"><span class="form-field-label">{{f.label}}<span v-if="f.required&&!readonly" class="required-mark"> *</span></span>
+<a-card  class="form-section material-basic-card"><form id="material-basic-form" class="master-form" @submit.prevent="save()"><section v-for="(section,index) in visibleSections" :key="section.title" class="material-field-section" :class="`material-group-${index}`"><h3 class="material-section-title">{{section.title}}</h3><label v-for="f in sectionFields(section.keys)" :key="f.key" :class="{'form-full-row':f.key==='remark'}"><span class="form-field-label">{{f.label}}<span v-if="f.required&&!readonly" class="required-mark"> *</span></span>
 <span v-if="readonly" class="master-read-value">{{f.key==='baseUnitId'?record?.baseUnitName:f.key==='packUnitId'?(record?.packUnitName??'—'):form[f.key]===null?'—':typeof form[f.key]==='boolean'?(form[f.key]?'是':'否'):form[f.key]}}</span>
 <input v-else-if="f.kind==='boolean'" v-model="form[f.key]" type="checkbox"/>
 <a-select v-else-if="f.kind==='unit'" :value="typeof form[f.key]==='string'?String(form[f.key]):undefined" :aria-label="f.label" show-search :filter-option="false" :allow-clear="!f.required" :disabled="!auth.can('master:uom:view')" placeholder="选择单位" @search="searchUnits" @change="(v:unknown)=>form[f.key]=v==null?null:String(v)"><a-select-option v-for="u in units" :key="u.id" :value="u.id">{{u.unitName}} {{u.unitCode?`（${u.unitCode}）`:''}}</a-select-option></a-select>
-<DictionarySelect v-else-if="f.key==='materialType'" dict-code="MATERIAL_TYPE" :model-value="typeof form[f.key]==='string'?String(form[f.key]):null" :required="f.required" @update:model-value="value=>form[f.key]=value"/><textarea v-else-if="f.key==='remark'" :value="String(form[f.key]??'')" class="master-native-input" :maxlength="f.max??undefined" @input="form[f.key]=($event.target as HTMLTextAreaElement).value"/>
-<input v-else v-model="form[f.key]" class="master-native-input" :type="f.kind==='datetime'?'datetime-local':'text'" :required="f.required" :maxlength="f.max??undefined" :disabled="!create&&f.key==='materialCode'"/>
+<DictionarySelect v-else-if="f.key==='materialType'" dict-code="MATERIAL_TYPE" :model-value="typeof form[f.key]==='string'?String(form[f.key]):null" :required="f.required" @update:model-value="value=>form[f.key]=value"/><input v-else-if="f.key==='remark'" type="text" :value="String(form[f.key]??'')" class="master-native-input" :maxlength="f.max??undefined" @input="form[f.key]=($event.target as HTMLInputElement).value"/>
+<input v-else v-model="form[f.key]" class="master-native-input" :type="f.kind==='datetime'?'datetime-local':f.kind==='number'?'number':'text'" :required="f.required" :maxlength="f.max??undefined" :disabled="!create&&f.key==='materialCode'"/>
 </label></section></form></a-card>
-<template v-if="record"><MaterialConversions class="material-conversions-card" v-if="!readonly||activeTab==='basic'" :material-id="record.id" :base-unit-id="String(record.baseUnitId)" :writable="!readonly"/><MaterialSuppliers v-if="!readonly||activeTab==='suppliers'" :material-id="record.id" :material-name="String(record.materialName??record.materialCode)" :writable="!readonly&&record.status!=='INACTIVE'&&auth.can('master:material:update')" @updated="load"/>
-<a-card v-if="readonly&&activeTab==='usage'" title="使用范围" class="form-section"><a-empty description="当前记录未提供使用范围信息"/></a-card><a-card title="维护操作" class="form-section material-audit-card"><div class="material-audit-controls"><template v-if="readonly&&record.status==='ACTIVE'&&auth.can('master:material:disable')"><a-button danger :disabled="busy||conflict" @click="save(true)">停用物料</a-button></template></div></a-card></template>
-<p v-if="create" class="muted">保存基本信息后可维护单位换算、多个供应商和首选供应商。</p><footer v-if="!readonly" class="material-form-actions"><a-button @click="router.push('/master/materials')">取消</a-button><a-button type="primary" html-type="submit" form="material-basic-form" :loading="busy" :disabled="conflict">保存基本信息</a-button></footer></main></template>
+<template v-if="record"><MaterialConversions class="material-conversions-card"  :material-id="record.id" :base-unit-id="String(record.baseUnitId)" :writable="!readonly"/><MaterialSuppliers  :material-id="record.id" :material-name="String(record.materialName??record.materialCode)" :writable="!readonly&&record.status!=='INACTIVE'&&auth.can('master:material:update')" @updated="load"/>
+<a-card title="状态" class="form-section material-audit-card"><div class="material-audit-controls"><a-tag>{{statusLabel[String(record.status)]}}</a-tag><template v-if="readonly&&record.status==='ACTIVE'&&auth.can('master:material:disable')"><a-button danger :disabled="busy||conflict" @click="save(true)">停用物料</a-button></template></div></a-card></template>
+<a-card v-if="create" title="状态" class="form-section material-audit-card"><a-tag>启用（保存后）</a-tag></a-card><p v-if="create" class="muted">保存基本信息后可维护单位换算、多个供应商和首选供应商。</p><footer v-if="!readonly" class="material-form-actions"><a-button @click="router.push('/master/materials')">取消</a-button><a-button type="primary" html-type="submit" form="material-basic-form" :loading="busy" :disabled="conflict">保存基本信息</a-button></footer></main></template>
 
 <style>
 .material-detail-page .material-object-summary { display:flex; align-items:center; flex-wrap:wrap; gap:12px; }
@@ -70,4 +70,16 @@ watch(()=>route.fullPath,load,{immediate:true})
  #app .material-detail-page .material-field-section>label,
  #app .material-detail-page .material-basic-card .master-form>label { grid-template-columns:95px minmax(0,1fr); }
 }
+</style>
+
+<style>
+/* Approved material T2/T3: row-major 3-column fields, labels inline, one-line remark. */
+#app .material-detail-page .material-basic-card .master-form {max-width:none;display:block;}
+#app .material-detail-page .material-basic-card .material-field-section {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 18px;padding:16px 20px;border:0;}
+#app .material-detail-page .material-basic-card .material-field-section .material-section-title {grid-column:1/-1;}
+#app .material-detail-page .material-basic-card .material-field-section>label {display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px;min-width:0;align-items:center;}
+#app .material-detail-page .material-basic-card .material-field-section>label.form-full-row {grid-column:1/-1;}
+#app .material-detail-page .material-basic-card .material-field-section>label.form-full-row input {width:100%;min-height:34px;}
+@media(max-width:1150px){#app .material-detail-page .material-basic-card .material-field-section{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:760px){#app .material-detail-page .material-basic-card .material-field-section{grid-template-columns:1fr;}#app .material-detail-page .material-basic-card .material-field-section>label{grid-template-columns:96px minmax(0,1fr);}}
 </style>
