@@ -1,0 +1,20 @@
+from pathlib import Path
+p=Path(r'D:\codex\_project\gmp\hospital-pharma-mes\backend\mes-masterdata\src\main\java\com\hospital\mes\masterdata\application\MaterialCommands.java')
+s='''package com.hospital.mes.masterdata.application;
+public final class MaterialCommands {
+ private MaterialCommands(){}
+ public record Create(String materialCode,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection,String storageCondition,Integer shelfLifeDays){
+  public Create(String materialCode,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection,String storageCondition){this(materialCode,materialName,materialType,specification,gradePurity,appearance,baseUnitId,packSpec,packUnitId,manufacturerName,lotControlled,effectiveFrom,effectiveTo,remark,requiresIncomingInspection,storageCondition,null);}
+  public Create(String materialCode,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection){this(materialCode,materialName,materialType,specification,gradePurity,appearance,baseUnitId,packSpec,packUnitId,manufacturerName,lotControlled,effectiveFrom,effectiveTo,remark,requiresIncomingInspection,null,null);}
+  @com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}
+ }
+ public record Update(@com.fasterxml.jackson.annotation.JsonIgnore Long versionNo,String reason,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection,String storageCondition,Integer shelfLifeDays){
+  public Update(Long versionNo,String reason,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection,String storageCondition){this(versionNo,reason,materialName,materialType,specification,gradePurity,appearance,baseUnitId,packSpec,packUnitId,manufacturerName,lotControlled,effectiveFrom,effectiveTo,remark,requiresIncomingInspection,storageCondition,null);}
+  public Update(Long versionNo,String reason,String materialName,String materialType,String specification,String gradePurity,String appearance,String baseUnitId,String packSpec,String packUnitId,String manufacturerName,Boolean lotControlled,String effectiveFrom,String effectiveTo,String remark,Boolean requiresIncomingInspection){this(versionNo,reason,materialName,materialType,specification,gradePurity,appearance,baseUnitId,packSpec,packUnitId,manufacturerName,lotControlled,effectiveFrom,effectiveTo,remark,requiresIncomingInspection,null,null);}
+  @com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}
+ }
+ public record Disable(@com.fasterxml.jackson.annotation.JsonIgnore Long versionNo,String reason){@com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown field: "+name);}}
+}
+'''
+p.write_text(s,encoding='utf-8')
+print('corrected')

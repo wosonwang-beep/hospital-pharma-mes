@@ -80,12 +80,12 @@ watch(()=>route.params.id,()=>{blob.value=null;pdfOpen.value=false;selected.valu
   </a-card>
 
   <section v-if="book.legacy" class="legacy-box">
-   <a-alert type="info" :message="book.status==='DRAFT'?'批次尚未下达，尚未冻结电子批记录模板。':book.notice" show-icon/>
+   <a-alert type="info" :message="book.status==='DRAFT'?'批次尚未下达，尚未冻结批记录目录模板。':book.notice" show-icon/>
    <a-card title="历史批次">
-    <p>此批次继续使用原冻结 eBR 和历史归档证据，不自动套用新的电子批记录模板。</p>
+    <p>此批次继续使用原冻结 eBR 和历史归档证据，不自动套用新的批记录目录模板。</p>
     <a-space wrap>
      <a-button @click="router.push({path:'/production/batches/'+book.mainBatchId,query:{tab:'ebr'}})">查看原电子批记录</a-button>
-     <a-button v-if="auth.can('ebr:template:view')&&auth.can('process:package:view')" @click="router.push('/ebr/book-templates')">查看电子批记录模板</a-button>
+     <a-button v-if="auth.can('ebr:template:view')&&auth.can('process:package:view')" @click="router.push('/ebr/book-templates')">查看批记录目录模板</a-button>
      <a-button v-if="auth.can('qa:batch-review')" @click="router.push('/qa/batches/'+book.mainBatchId+'/review')">查看审核与归档证据</a-button>
     </a-space>
    </a-card>

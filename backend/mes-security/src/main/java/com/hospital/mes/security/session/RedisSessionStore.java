@@ -34,6 +34,8 @@ public class RedisSessionStore implements SessionStore {
         redis.call('HSET', KEYS[1], 'loginName', ARGV[3])
         redis.call('HSET', KEYS[1], 'displayName', ARGV[4])
         redis.call('HSET', KEYS[1], 'roleCodes', ARGV[5])
+        redis.call('HSET', KEYS[1], 'roleIds', ARGV[14])
+        redis.call('HSET', KEYS[1], 'identityFormatVersion', ARGV[15])
         redis.call('HSET', KEYS[1], 'permissionCodes', ARGV[6])
         redis.call('HSET', KEYS[1], 'mustChange', ARGV[7])
         redis.call('HSET', KEYS[1], 'createdAt', ARGV[8])
@@ -99,7 +101,7 @@ public class RedisSessionStore implements SessionStore {
             Boolean.toString(identity.mustChangePassword()), Long.toString(now.toEpochMilli()),
             Long.toString(snapshot.absoluteExpiresAt().toEpochMilli()),
             Long.toString(snapshot.idleExpiresAt().toEpochMilli()), digest(credential),
-            Long.toString(30 * 60 * 1000L), sessionId);
+            Long.toString(30 * 60 * 1000L), sessionId, toJson(identity.roleIds()), Integer.toString(identity.identityFormatVersion()));
         if (!Long.valueOf(1).equals(created)) throw new IllegalStateException("Session creation failed");
         return new SessionLease(sessionId, credential, snapshot);
     }
@@ -147,13 +149,15 @@ public class RedisSessionStore implements SessionStore {
         redis.execute(REVOKE_ALL, List.of(userKey(userId)), SESSION_PREFIX);
     }
 
-    private SessionSnapshot fromHash(String sessionId, Map<Object, Object> fields) {
+    SessionSnapshot fromHash(String sessionId, Map<Object, Object> fields) {
         try {
             long userId = Long.parseLong(value(fields, "userId"));
             LoginSnapshot identity = new LoginSnapshot(userId, Long.parseLong(value(fields, "organizationId")), value(fields, "loginName"),
                 value(fields, "displayName"), json.readValue(value(fields, "roleCodes"), CODE_SET),
                 json.readValue(value(fields, "permissionCodes"), CODE_SET),
-                Boolean.parseBoolean(value(fields, "mustChange")));
+                Boolean.parseBoolean(value(fields, "mustChange")),
+                fields.containsKey("roleIds")?json.readValue(value(fields,"roleIds"),CODE_SET):Set.of(),
+                fields.containsKey("roleIds")&&fields.containsKey("identityFormatVersion")?Integer.parseInt(value(fields,"identityFormatVersion")):1);
             return new SessionSnapshot(sessionId, identity,
                 Instant.ofEpochMilli(Long.parseLong(value(fields, "createdAt"))),
                 Instant.ofEpochMilli(Long.parseLong(value(fields, "absoluteExpiresAt"))),

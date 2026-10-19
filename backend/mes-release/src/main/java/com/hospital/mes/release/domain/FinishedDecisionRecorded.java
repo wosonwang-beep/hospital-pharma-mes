@@ -1,2 +1,2 @@
 package com.hospital.mes.release.domain;
-public record FinishedDecisionRecorded(long organizationId,long actorId,long decisionId,long mainBatchId,long finishedLotId,String decision,String evidenceDigest) {}
+public record FinishedDecisionRecorded(long organizationId,long actorId,long decisionId,long mainBatchId,Long finishedLotId,String decision,String evidenceDigest,int finishedSchemaVersion,Long productId){public FinishedDecisionRecorded(long organizationId,long actorId,long decisionId,long mainBatchId,long finishedLotId,String decision,String evidenceDigest){this(organizationId,actorId,decisionId,mainBatchId,finishedLotId,decision,evidenceDigest,1,null);}}

@@ -37,6 +37,7 @@ const standard=computed(()=>request.value?selectFacts(request.value,['qcSpecific
 const linked=computed(()=>Object.values(references.value).filter((r,i,all)=>r.route&&all.findIndex(x=>x.route===r.route)===i))
 const readFields=['createdBy','createdAt','updatedBy','updatedAt','versionNo','evidenceDigest']
 function facts(row:IncomingRow,keys:string[]){return selectFacts(row,keys)}
+function inspectionObjectDetailLabel(key:string){return props.resource==='inspection-requests'&&key==='materialLotId'?'检验对象':detailLabel(key)}
 function valueLabel(key:string,value:unknown){
  if(key==='status'&&invalidStatus.value&&value===props.record.status)return documentStatus(props.resource,props.record)
  const ref=references.value[`${key}:${value}`]
@@ -125,13 +126,13 @@ function gateText(row:IncomingRow){const code=String(row.code??'');const family=
  <InspectionRecordOverview v-if="resource==='inspection-tasks'" :record="record" :request="request" :lot="lot" :references="references" :value-label="valueLabel" @view-item="selectedItem=$event"/>
  <InspectionReportOverview v-if="resource==='inspection-reports'" :record="record" :request="request" :lot="lot" :references="references"/>
  <InspectionPrintPanel v-if="resource==='inspection-reports'&&record.id" :business-id="String(record.id)" :approved="record.status==='APPROVED'&&record.recordStatus==='APPROVED'"/>
- <a-card v-if="ordinary" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/><div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span></div></a-card>
+ <a-card v-if="ordinary" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="inspectionObjectDetailLabel" :value-formatter="valueLabel"/><div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span></div></a-card>
  <IncomingBusinessOverview v-if="ordinary" :record="record" :resource="resource" :value-label="valueLabel"/>
  <MaterialReleaseOverview v-if="qa" :record="record" :lot="lot" :gate-text="gateText"><template #actions><slot name="decision-actions"/></template></MaterialReleaseOverview>
  <button v-if="compact||ordinary" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
  <a-card v-if="ordinary||qa" title="关联记录与追溯" class="form-section"><a-space wrap><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space></a-card>
  <div v-show="moreOpen">
- <a-card v-if="!compact&&!ordinary&&!qa" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="detailLabel" :value-formatter="valueLabel"/>
+ <a-card v-if="!compact&&!ordinary&&!qa" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="inspectionObjectDetailLabel" :value-formatter="valueLabel"/>
   <div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span><span>库存状态：{{detailDisplay('inventoryStatus',lot.inventoryStatus)}}</span></div>
   <a-space v-if="!ordinary" wrap class="related-context"><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space>
   <details v-if="lookupNotices.length"><summary>关联信息读取说明</summary><p v-for="notice in lookupNotices" :key="notice">{{notice}}</p></details>

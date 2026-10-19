@@ -26,17 +26,17 @@ GATES = ('G1', 'G2', 'G3', 'G4', 'G5')
 STATES = ('NOT_STARTED', 'IN_PROGRESS', 'REVIEW_PENDING', 'BLOCKED', 'REJECTED', 'ACCEPTED')
 ARTIFACTS = {
     'G1': ('task_card', 'page_mapping', 'ui_design', 'annotations', 'layout_fields_buttons', 'interactions', 'responsive', 'ui_review'),
-    'G2': ('prototype_manifest', 'handoff', 'browser_review', 'screenshots'),
+    'G2': ('prototype_manifest', 'handoff', 'browser_review', 'screenshots', 'product_experience_review'),
     'G3': ('prd', 'functional_design', 'page_design', 'entities_erd', 'fields', 'dictionary', 'validation', 'state_machine', 'permission_matrix', 'api_contract', 'errors_idempotency', 'gxp', 'migration_plan', 'test_cases', 'rtm', 'contracts', 'freeze', 'design_lock'),
     'G4': ('implementation_review', 'lineage', 'real_api', 'no_mock', 'security_review', 'migration_validation', 'frozen_ui'),
-    'G5': ('integration_acceptance', 'visual_comparison', 'issues', 'regression_scope'),
+    'G5': ('integration_acceptance', 'visual_comparison', 'issues', 'regression_scope', 'product_experience_review'),
 }
 SUITES = {
     'G1': ('design-review',),
     'G2': ('prototype-build', 'prototype-browser', 'prototype-console', 'prototype-visual'),
     'G3': ('contract-consistency', 'rtm'),
     'G4': ('backend-compile', 'frontend-build', 'backend-unit', 'frontend-component', 'api-wiring', 'permission-validation', 'migration', 'security', 'ui-inheritance'),
-    'G5': ('backend-unit', 'frontend-component', 'api-integration', 'migration', 'role-permission', 'state-transition', 'real-business', 'browser-e2e', 'visual-comparison', 'boundary-negative', 'regression'),
+    'G5': ('backend-unit', 'frontend-component', 'api-integration', 'migration', 'role-permission', 'state-transition', 'real-business', 'browser-e2e', 'visual-comparison', 'ui-ux-audit', 'boundary-negative', 'regression'),
 }
 MANDATORY_READS = ('AGENTS.md', 'docs/development/MES_DEV_RULES.md', 'MES_TASKS.md', 'docs/PROJECT_BASELINE.md', 'docs/ui/MES_GLOBAL_UI_DESIGN_SYSTEM_V2.md', 'docs/ui/MES_PAGE_TEMPLATE_STANDARD_V2.md')
 FIELD_KEYS = ('id', 'label', 'entity', 'page', 'type', 'length', 'precision', 'required', 'default', 'source', 'validation', 'visible', 'editable', 'save_rule', 'error')
@@ -238,7 +238,7 @@ class Workflow:
                 require(waiver.get('suite') == name and waiver.get('cases') == stats['skipped'] and waiver.get('reason'), 'Skip exception does not cover cases')
             environment = receipt.get('environment', {})
             require(environment.get('kind') == plan.get('environment'), f'{name}: environment mismatch')
-            if gate == 'G2' and name in ('prototype-browser', 'prototype-console', 'prototype-visual') or gate == 'G4' and name == 'api-wiring' or gate == 'G5' and name in ('api-integration', 'real-business', 'browser-e2e', 'visual-comparison', 'role-permission', 'menu-authorization'):
+            if gate == 'G2' and name in ('prototype-browser', 'prototype-console', 'prototype-visual') or gate == 'G4' and name == 'api-wiring' or gate == 'G5' and name in ('api-integration', 'real-business', 'browser-e2e', 'visual-comparison', 'ui-ux-audit', 'role-permission', 'menu-authorization'):
                 require(environment.get('kind') == 'local-real', f'{name}: mocks cannot count as runtime acceptance')
                 require(environment.get('frontend') == ('http://localhost:5174' if gate == 'G2' else 'http://localhost:5173'), 'Wrong frontend runtime')
                 if gate in ('G4', 'G5'):
@@ -280,6 +280,57 @@ class Workflow:
             require(pair.get('viewport') in screenshots['viewports'] and pair.get('review'), 'Screenshot pair review missing')
         required_pairs = {(p['id'], v) for p in pages for v in set(p['viewports']) | {1440, 1280, 900, 375}}
         require(required_pairs <= {(p.get('page'), p.get('viewport')) for p in screenshots['pairs']}, 'Prototype screenshot pairs do not cover every page/viewport')
+
+        self.experience_review('G2')
+
+    def experience_review(self, gate):
+        review = self.document(gate, 'product_experience_review')
+        reviewer = review.get('reviewer', {})
+        require(reviewer.get('executor') == 'Codex SELF-REVIEW', f'{gate}: reviewer must disclose Codex SELF-REVIEW')
+        require(reviewer.get('skill') == 'mes-ui-ux-audit' and reviewer.get('skill_path') and reviewer.get('version'), f'{gate}: MES UI/UX audit skill provenance missing')
+        require(reviewer.get('ui_ux_pro_max_path') and reviewer.get('ui_ux_pro_max_sha256'), f'{gate}: UI UX Pro Max provenance missing')
+        require(review.get('visual_first') is True, f'{gate}: visual-first screenshot review missing')
+        require(review.get('adversarial_pass') is True, f'{gate}: adversarial experience review missing')
+        require(review.get('manifest_validation') == 'PASS', f'{gate}: audit manifest validation did not PASS')
+        self.ref(review.get('audit_manifest'))
+        runtime = review.get('runtime', {})
+        require(runtime.get('kind') == 'local-real' and runtime.get('frontend') == ('http://localhost:5174' if gate == 'G2' else 'http://localhost:5173'), f'{gate}: experience review needs running local page')
+        if gate == 'G5':
+            require(runtime.get('backend') == 'http://localhost:8080', 'G5: experience review needs real backend')
+        expected_source = self.document('G2', 'prototype_manifest')['tree_sha256'] if gate == 'G2' else digest(self.stage('G5')['source_files'])
+        require(review.get('source_sha256') == expected_source, f'{gate}: experience review source version mismatch')
+        for kind in ('requirements', 'detailed_design'):
+            refs = review.get('inputs', {}).get(kind)
+            require(isinstance(refs, list) and refs, f'{gate}: experience review input missing: {kind}')
+            for ref in refs:
+                self.ref(ref)
+        checks = review.get('checks')
+        require(isinstance(checks, list) and checks, f'{gate}: experience checks missing')
+        for check in checks:
+            require(check.get('scenario') and check.get('result') == 'PASS' and check.get('evidence'), f'{gate}: experience check incomplete or failed')
+            for ref in check['evidence']:
+                self.ref(ref)
+        required = {(p['id'], area) for p in self.document('G1', 'page_mapping')['pages'] for area in ('aesthetics', 'readability', 'interaction')}
+        require(required <= {(c.get('page'), c.get('area')) for c in checks}, f'{gate}: experience review does not cover every page/area')
+        issues = review.get('issues')
+        require(isinstance(issues, list), f'{gate}: experience issue list missing')
+        for issue in issues:
+            require(issue.get('id') and issue.get('scenario') and issue.get('severity') and isinstance(issue.get('blocking'), bool), f'{gate}: experience issue details missing')
+            if issue.get('resolved') is True:
+                require(issue.get('fix') and issue.get('recheck') and issue.get('rechecked_by') == 'Codex SELF-REVIEW', f'{gate}: experience repair/recheck evidence missing')
+                self.ref(issue['fix'])
+                self.ref(issue['recheck'])
+            else:
+                require(not issue['blocking'] and issue['severity'] in ('MEDIUM', 'LOW', 'P3', 'P4') and issue.get('deferred_reason'), f'{gate}: blocking or untriaged experience issue remains')
+
+        audit_path = self.ref(review['audit_manifest'])
+        audit = load_json(audit_path)
+        require(audit.get('source', {}).get('source_hash') == expected_source, f'{gate}: full audit source version mismatch')
+        require(audit.get('verdict') == ('PASS FOR PROTOTYPE' if gate == 'G2' else 'READY FOR ACCEPTANCE'), f'{gate}: full audit verdict is not ready')
+        validator = self.root / '.agents/skills/mes-ui-ux-audit/scripts/validate_audit_manifest.py'
+        require(validator.is_file(), 'DEPENDENCY_NOT_READY: full UI/UX audit validator missing')
+        result = subprocess.run([sys.executable, '-X', 'utf8', str(validator), str(audit_path)], cwd=self.root, capture_output=True, text=True, encoding='utf-8', timeout=30)
+        require(result.returncode == 0, f'{gate}: full-dimension audit invalid: ' + (result.stdout + result.stderr)[:1600])
 
     def contracts(self):
         contracts = self.document('G3', 'contracts')
@@ -349,7 +400,16 @@ class Workflow:
         pages = self.document('G1', 'page_mapping')['pages']
         required_pairs = {(p['id'], v) for p in pages for v in set(p['viewports']) | {1440, 1280, 900, 375}}
         require(required_pairs <= {(p.get('page'), p.get('viewport')) for p in visual['pairs']}, 'Formal screenshot pairs do not cover every page/viewport')
-        require(not self.document('G5', 'integration_acceptance').get('unapproved_contract_changes', ['unknown']), 'Unapproved database/API/permission change')
+        integration = self.document('G5', 'integration_acceptance')
+        require(not integration.get('unapproved_contract_changes', ['unknown']), 'Unapproved database/API/permission change')
+        ui_gate = integration.get('ui_ux_audit') or {}
+        require(ui_gate.get('status') == 'PASS', 'G5 integration acceptance requires UI/UX audit PASS')
+        require(ui_gate.get('verdict') == 'READY FOR ACCEPTANCE', 'G5 integration acceptance requires READY FOR ACCEPTANCE UI/UX verdict')
+        review = self.document('G5', 'product_experience_review')
+        require(ui_gate.get('audit_manifest') == review.get('audit_manifest'), 'G5 integration acceptance UI/UX manifest mismatch')
+        self.ref(ui_gate.get('audit_manifest'))
+
+        self.experience_review('G5')
 
     def check(self, gate):
         self.common(gate)

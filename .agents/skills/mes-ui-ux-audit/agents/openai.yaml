@@ -1,0 +1,4 @@
+interface:
+  display_name: "MES UI/UX 完整审查"
+  short_description: "用 UI UX Pro Max 对 MES 页面执行截图、栅格、交互、无障碍和响应式完整审查"
+  default_prompt: "使用 $mes-ui-ux-audit 对指定 MES 页面执行完整 UI/UX 审查并形成可验证报告。"

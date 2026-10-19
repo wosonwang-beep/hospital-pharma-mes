@@ -90,7 +90,7 @@ async function load(){
    templateCode.value=record.value.templateCode
    if(record.value.definition.processPackageId)definition.value=JSON.parse(JSON.stringify(record.value.definition))
    else{
-    definition.value={templateName:record.value.definition.varietyName||'历史电子批记录模板',entries:record.value.definition.entries.map((e,index)=>({...e,flowType:'BUSINESS',flowCode:'LEGACY_'+(index+1),flowName:e.chapter||'历史目录'}))}
+    definition.value={templateName:record.value.definition.varietyName||'历史批记录目录模板',entries:record.value.definition.entries.map((e,index)=>({...e,flowType:'BUSINESS',flowCode:'LEGACY_'+(index+1),flowName:e.chapter||'历史目录'}))}
    }
   }
   await loadEbrOptions()
@@ -108,7 +108,7 @@ async function save(){
  error.value='';notice.value=''
  if(!templateCode.value.trim()||!definition.value.templateName?.trim()){error.value='请填写模板编码和模板名称';return}
  if(!definition.value.processPackageId||!definition.value.ebrTemplateVersionId){error.value='请选择关联生产工艺及其已生效工序表单版本';return}
- if(!definition.value.entries.length){error.value='电子批记录模板至少需要一条表单记录';return}
+ if(!definition.value.entries.length){error.value='批记录目录模板至少需要一条目录记录';return}
  if(!reason.value.trim()){error.value='请填写本次版本原因';return}
  busy.value=true
  try{
@@ -123,7 +123,7 @@ async function publish(){
  if(!record.value||record.value.status!=='DRAFT'||!auth.can('ebr:template:publish'))return
  if(!reason.value.trim()){error.value='发布前请填写操作原因';return}
  busy.value=true;error.value=''
- try{record.value=await bookApi.transition(record.value,'publish',reason.value.trim());notice.value='电子批记录模板已发布并可供新生产批次冻结使用。'}
+ try{record.value=await bookApi.transition(record.value,'publish',reason.value.trim());notice.value='批记录目录模板已发布并可供新生产批次冻结使用。'}
  catch(e){error.value=errorMessage(e)}
  finally{busy.value=false}
 }
@@ -180,8 +180,8 @@ onMounted(load)
 <main data-ui-template="T2" class="admin-page master-page ebr-template-editor">
  <header class="admin-page-header editor-header">
   <div>
-   <a-button type="link" @click="close">← 电子批记录模板</a-button>
-   <h1>{{definition.templateName||'新建电子批记录模板'}}</h1>
+   <a-button type="link" @click="close">← 批记录目录模板</a-button>
+   <h1>{{definition.templateName||'新建批记录目录模板'}}</h1>
    <p>
     <a-tag v-if="record">V{{record.revision}}</a-tag>
     <a-tag :color="record?.status==='PUBLISHED'?'green':'orange'">{{record?statusLabels[record.status]||record.status:'新建'}}</a-tag>
@@ -196,7 +196,7 @@ onMounted(load)
   </a-space>
  </header>
 
- <a-alert v-if="legacy" type="warning" show-icon message="这是历史产品映射/目录结构，只读保留。新电子批记录模板按生产工艺、工序、业务流程和表单记录建立。"/>
+ <a-alert v-if="legacy" type="warning" show-icon message="这是历史产品映射/目录结构，只读保留。新批记录目录模板按生产工艺、工序、业务流程和表单记录建立。"/>
  <a-alert v-if="error" type="error" show-icon :message="error"/>
  <a-alert v-if="notice" type="success" show-icon :message="notice"/>
 
@@ -228,8 +228,8 @@ onMounted(load)
    <header class="records-head">
     <div><strong>{{currentFlow.name}}</strong><p>{{currentFlow.type==='PROCESS'?'来自关联生产工艺的工序，可引用该工序的一份或多份表单记录。':'业务流程只引用原业务模块记录，不重复创建单据。'}}</p></div>
     <a-space v-if="canEdit">
-     <a-button v-if="currentFlow.type==='PROCESS'" @click="openProcessForms">＋ 添加工序表单</a-button>
-     <a-button v-else @click="openBusiness">＋ 添加业务单据</a-button>
+     <a-button v-if="currentFlow.type==='PROCESS'" type="primary" @click="openProcessForms">＋ 添加工序表单</a-button>
+     <a-button v-else type="primary" @click="openBusiness">＋ 添加业务单据</a-button>
     </a-space>
    </header>
    <a-table :data-source="currentEntries" row-key="code" :pagination="false" size="middle" :scroll="{x:720}">
@@ -288,7 +288,7 @@ onMounted(load)
   </div>
  </a-modal>
 
- <a-modal v-model:open="previewOpen" title="电子批记录模板预览" width="820px" :footer="null">
+ <a-modal v-model:open="previewOpen" title="批记录目录模板预览" width="820px" :footer="null">
   <div class="preview-title"><strong>{{definition.templateName||'未命名模板'}}</strong><span>{{processLabel}}</span></div>
   <div v-for="[group,items] in previewGroups()" :key="group" class="preview-group">
    <h4>{{group}} <small>{{items.length}} 项</small></h4>

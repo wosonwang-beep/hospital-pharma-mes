@@ -2,6 +2,12 @@ package com.hospital.mes.wms.infrastructure;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("wms_finished_inbound_request") public class FinishedInboundRequestEntity extends ScopedEntity {
+ private Integer finishedSchemaVersion=1;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Integer getFinishedSchemaVersion(){return Integer.valueOf(2).equals(finishedSchemaVersion)?2:null;} public void setFinishedSchemaVersion(Integer v){finishedSchemaVersion=v;}
+
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) private Long finishedLedgerId;
+ public Long getFinishedLedgerId(){return finishedLedgerId;} public void setFinishedLedgerId(Long v){finishedLedgerId=v;}
+
  private String requestNo;
  public String getRequestNo(){return requestNo;} public void setRequestNo(String value){requestNo=value;}
  private Long mainBatchId;

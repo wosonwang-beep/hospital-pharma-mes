@@ -37,4 +37,14 @@ class EbrDefinitionRulesTest {
         var two=new Rule("R2","F","A","CALCULATION","ON_SUBMIT","2","BLOCK",null,null,false,true);
         assertThat(EbrDefinitionRules.lint(new Definition(d.sections(),d.forms(),List.of(one,two),List.of(),List.of()),true)).anySatisfy(i->assertThat(i.code()).isEqualTo("DUPLICATE_CALCULATION_TARGET"));
     }
+    @Test void cppConfigIsClosedAndBoundToCurrentForm() throws Exception {
+        var d=definition(field("A","NUMBER"),"");
+        String cfg="{\"kind\":\"CPP\",\"name\":\"关键参数\",\"description\":\"\",\"rootLogic\":\"AND\",\"groups\":[{\"id\":\"G1\",\"logic\":\"AND\",\"conditions\":[{\"id\":\"C1\",\"fieldCode\":\"A\",\"operator\":\">=\",\"value\":\"1\"}]}],\"actions\":[\"BLOCK_SUBMIT\"]}";
+        var valid=new Rule("CPP1","F",null,"VALIDATION","ON_CHANGE","((value('A') >= 1))","BLOCK","CPP_RULE_FAILED","范围异常",false,true,cfg);
+        assertThat(EbrDefinitionRules.lint(new Definition(d.sections(),d.forms(),List.of(valid),List.of(),List.of()),true)).noneMatch(i->i.code().startsWith("INVALID_CPP")||i.code().equals("CPP_CROSS_FORM_REFERENCE")||i.code().equals("CPP_EXPRESSION_MISMATCH"));
+        var invalidAction=new Rule("CPP2","F",null,"VALIDATION","ON_CHANGE","((value('A') >= 1))","BLOCK","CPP_RULE_FAILED","范围异常",false,true,cfg.replace("BLOCK_SUBMIT","EXEC_SCRIPT"));
+        assertThat(EbrDefinitionRules.lint(new Definition(d.sections(),d.forms(),List.of(invalidAction),List.of(),List.of()),true)).anySatisfy(i->assertThat(i.code()).isEqualTo("INVALID_CPP_ACTION"));
+        var mismatch=new Rule("CPP3","F",null,"VALIDATION","ON_CHANGE","value('A') >= 2","BLOCK","CPP_RULE_FAILED","范围异常",false,true,cfg);
+        assertThat(EbrDefinitionRules.lint(new Definition(d.sections(),d.forms(),List.of(mismatch),List.of(),List.of()),true)).anySatisfy(i->assertThat(i.code()).isEqualTo("CPP_EXPRESSION_MISMATCH"));
+    }
 }

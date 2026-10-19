@@ -8,7 +8,7 @@ test('requires the MES-002 login lifecycle before rendering the application shel
   render(App, { global: { plugins: [createPinia(), router, Antd] } })
   await router.isReady()
 
-  expect(screen.getByRole('heading', { name: '医院制剂 MES' })).toBeTruthy()
+  expect(screen.getByRole('heading', { name: /医院制剂GMP\s*生产管理系统/ })).toBeTruthy()
   expect(screen.getByLabelText('账号')).toBeTruthy()
   expect(screen.getByLabelText('密码')).toBeTruthy()
   expect(screen.getByRole('button', { name: /登\s*录/ })).toBeTruthy()

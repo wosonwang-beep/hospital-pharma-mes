@@ -200,7 +200,10 @@ public class SystemDictionaryController {
         DictType after=requireType(id);audit.append(c,"DICTIONARY_TYPE_UPDATED","DICT_TYPE",after.id(),before,after,"System dictionary maintenance",key);return after;
     }
     private void validateItem(ItemRequest r){
-        verify(r!=null,"Required dictionary item");code(r.code(),ITEM_CODE);name(r.label());status(r.status());
+        validateItemFields(r);code(r.code(),ITEM_CODE);
+    }
+    private void validateItemFields(ItemRequest r){
+        verify(r!=null,"Required dictionary item");name(r.label());status(r.status());
         sort(r.sortNo());desc(r.description());
     }
     @PostMapping("/dictionaries/{id}/items")
@@ -240,7 +243,9 @@ public class SystemDictionaryController {
     public ApiResponse<JsonNode> updateItem(@PathVariable("id") String id,@PathVariable("itemId") String itemId,
         @RequestHeader("If-Match")String match,@RequestHeader("Idempotency-Key")String key,@RequestBody ItemRequest r){
         long type=id(id),item=id(itemId),version=IamRequestVersion.parse(match);
-        validateItem(r);CurrentPlatformContext c=contexts.current();
+        // Existing seeded business codes may be Chinese. changeItem enforces exact
+        // stored-code equality inside the transaction; new codes still use validateItem.
+        validateItemFields(r);CurrentPlatformContext c=contexts.current();
         return ok(mutations.execute(c,"dictItemUpdate",key,new Revision(itemId,version,r),"DICT_ITEM",
             ()->changeItem(c,type,item,version,r,key),DictItem::id));
     }

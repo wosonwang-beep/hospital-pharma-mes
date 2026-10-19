@@ -63,10 +63,12 @@ Approved menu prototype reference2026-10-10: query/list headings share full-widt
 ## 6. Controls
 
 - Standard control height: 32–36 px.
+- Input/select/control boundaries use a neutral control-border token that maintains at least 3:1 non-text contrast against the control surface; card/table separators remain on the lighter structural border token.
 - Labels and controls stay horizontal on desktop and mobile unless the approved template explicitly requires another layout.
 - Standard edit label width: approximately 110–130 px depending on viewport/template.
 - Required fields use a restrained red marker.
 - One primary action per local decision area.
+- On create/edit pages, a child-table or child-record add action is the local primary action: place it at the right side of that section's title bar, use the blue primary treatment, and do not duplicate it below the child content. Read-only and unauthorized states do not expose it.
 - Secondary actions use default/ghost treatment.
 - Destructive/reject actions must be visually distinct but not compete with the primary safe action.
 - Disabled regulated actions must explain the unmet prerequisite nearby.
@@ -133,6 +135,8 @@ Codex/agents must not:
 The approved first QA Batch Release concept is the visual reference for hierarchy, density, status treatment, card restraint, evidence presentation and decision clarity. It is **T6 Decision Workbench**, not a universal page wireframe.
 
 All pages inherit this Design System and select exactly one approved page template from `MES_PAGE_TEMPLATE_STANDARD_V2.md`.
+
+User-approved ordinary-page mapping 2026-10-13: basic query/list surfaces are T1, ordinary create/edit surfaces are T2, and read-only views are T3. Special-purpose designers/workbenches keep their approved specialized composition while inheriting this global visual system. T1 uses `重置 → 查询`; ordinary T2 uses `取消 → 保存/提交`.
 
 
 Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.

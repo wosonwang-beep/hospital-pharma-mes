@@ -40,7 +40,7 @@ public class MaterialSupplierService {
    for(var item:input){
     long sid=MasterMutation.id(item.supplierId());if(!seen.add(sid))throw new IllegalArgumentException("Duplicate supplier assignment");
     var supplier=suppliers.lock(c.organizationId(),sid);
-    if(Boolean.TRUE.equals(item.approved()))SupplierRules.usable(supplier.getQualificationStatus(),supplier.getValidTo(),true,item.validTo(),Instant.now());
+    if(Boolean.TRUE.equals(item.approved()))SupplierRules.usable(supplier.getQualificationStatus(),Boolean.TRUE.equals(supplier.getEnabled()),supplier.getValidTo(),true,item.validTo(),Instant.now());
    }
    // Clear a revoked preferred first; then apply non-preferred before preferred to avoid transient unique-key collisions.
    for(var row:current)if(!seen.contains(row.getSupplierId())&&(Boolean.TRUE.equals(row.getApproved())||Boolean.TRUE.equals(row.getPreferred()))){
@@ -64,7 +64,7 @@ public class MaterialSupplierService {
   var m=materials.get(org,materialId);MaterialRules.usable(m.getStatus(),m.getEffectiveFrom(),m.getEffectiveTo(),at);
   var supplier=suppliers.get(org,supplierId);
   var row=store.relationships(org,materialId,false).stream().filter(e->e.getSupplierId()==supplierId).findFirst().orElseThrow(()->new MasterGateException("SUPPLIER_NOT_APPROVED","LINK_APPROVED_SUPPLIER"));
-  SupplierRules.usable(supplier.getQualificationStatus(),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);return mutations.view(row);
+  SupplierRules.usable(supplier.getQualificationStatus(),Boolean.TRUE.equals(supplier.getEnabled()),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);return mutations.view(row);
  }
  public void lockSources(long org,java.util.List<Long> materialIds,long supplierId){materialIds.stream().distinct().sorted().forEach(id->materials.lock(org,id));suppliers.lock(org,supplierId);}
  public JsonNode freezeSource(long org,long materialId,long supplierId,Instant at){
@@ -72,7 +72,7 @@ public class MaterialSupplierService {
   var material=materials.lock(org,materialId);MaterialRules.usable(material.getStatus(),material.getEffectiveFrom(),material.getEffectiveTo(),at);
   var supplier=suppliers.lock(org,supplierId);
   var row=store.relationships(org,materialId,true).stream().filter(e->e.getSupplierId()==supplierId).findFirst().orElseThrow(()->new MasterGateException("SUPPLIER_NOT_APPROVED","LINK_APPROVED_SUPPLIER"));
-  SupplierRules.usable(supplier.getQualificationStatus(),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);
+  SupplierRules.usable(supplier.getQualificationStatus(),Boolean.TRUE.equals(supplier.getEnabled()),supplier.getValidTo(),Boolean.TRUE.equals(row.getApproved()),row.getValidTo(),at);
   var relation=mutations.view(row);
   var source=com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.objectNode();
   source.put("relationshipId",relation.path("id").asText());source.put("materialId",Long.toString(materialId));source.put("supplierId",Long.toString(supplierId));

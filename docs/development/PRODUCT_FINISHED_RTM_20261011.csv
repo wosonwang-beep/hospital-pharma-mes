@@ -1,0 +1,15 @@
+id,requirement,implementation,test,gate
+PF-001,QC subject XOR schema1/2 historical branching,QcDefinitions/QcSpecificationQueryService/V056/V057,19 units plus migration subject negative guards,PASS_TARGETED
+PF-002,V2 plan direct-product DRAFT mode and product match,ProductionQualityPlanService/picker,Positive real service chain + isolated negative/history cases; UI component binding,PASS_TARGETED
+PF-003,Direct MainBatch composite product/baseunit FK and new1:1 legacy1:N,V056/prd_main_batch,round3 ProductFinishedMigrationIT,PASS_TARGETED
+PF-004,One independent append-only finished ledger,FinishedInventoryService/FinishedGoodsService/V056,"Real receipt/shipment replay, two ledger rows, balance695; full shipment competition not run",PARTIAL_CONCURRENCY
+PF-005,First OUTPUT freezes product attributes without stock,ProductionQuantityService/ProductionService,Final positive chain proves no stock before inbound and one owner QA update,PASS_TARGETED
+PF-006,Exact same-dimension global unit conversion,MasterQuery/MaterialBalance/product validators,positive lifecycle/baseunit FK; conversion negatives not run,PARTIAL
+PF-007,Legacy stored evidence remains intact,schema branches/archive,35 protection tables SHA equal; historical runtime canonical regeneration not run,PARTIAL
+PF-008,Typed direct batch/product consumer identities,quantity/sample/QMS/QA/WMS/trace/eBR,Positive chain and direct archive batch/product/ledger read; trace endpoint not separately exercised,PARTIAL_TRACE
+PF-009,Product standard and instruction UI field alignment,Vue quality/production/finished pages,27 component tests + typecheck/build pass; real5173/8080 not deployed,NOT_RUN_REAL_UI
+PF-010,Both seeds no17/18 reconstruction and no Commit,both RealisticProductionFinishedSeedIT entry points,Demo fixture3 cases pass/rollback; second inherited entry only compiled,PARTIAL_ALIAS_RUN
+PF-011,Preserve old MATERIAL trigger and add equivalent PRODUCT org guard,append-only V057,round3 old/new cross-org negative tests; rights protected SHA same,PASS_TARGETED
+PF-012,Isolated migrations before any DEV apply,ProductFinishedMigrationIT,isolated57 validate; rollback;402FK0orphans; DEV54 no task writes,PASS_TARGETED
+PF-013,Final real service lifecycle with archive/print read,rollback-only fixture,Separate negative transaction; final positive QA/archive/formal eBR provider read pass,PASS_TARGETED
+PF-014,OpenAPI RTM and review consistency,B supplement/source manifest,Bounded local refs/routes/HTTP/identity/RTM checks; full historical/UI review pending,PARTIAL

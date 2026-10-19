@@ -1,6 +1,8 @@
 # DCP-QC-OBJECT-TYPE-001 — 统一检验对象与固定基础字典
 
-状态：**业务原则已确认 / 详细数据契约审查中 / NOT ACCEPTED**。确认来源：2026-10-11 用户连续确认“质量管理共用、请验/取样/检验按对象类型区分、检验对象多态引用、固定基础字典”，并要求同步设计文档与基线。
+**最新用户决策（2026-10-11，实施范围覆盖，下方原拟定关联模型保留为历史，不再执行）：** 只在原有质量业务页面显示一个「检验对象」字段；物料/成品按现有物料批次 ID / 生产批次 ID 查询关联，请验→取样→检验→报告→放行流程不改。**取消独立 qms_inspection_object_binding 表、InspectionObjectBindingService 和新增冻结快照/双写方案。** 已执行 V055 不能篡改，由新增 V058 仅撤销无数据的独立表；五类 QC_OBJECT_TYPE 固定字典 V053 保留。最新详细锁定以 [QC_OBJECT_ASSOCIATION_20261011](decisions/QC_OBJECT_ASSOCIATION_20261011.md) 为准。既有签名、审核、原始质量标准快照、历史记录不变。
+
+状态：**HISTORICAL BROAD DESIGN SUPERSEDED / CURRENT MINIMAL SCOPE ACCEPTED**。2026-10-11 用户后续明确撤回本文件下方的独立多态绑定/冻结方案，当前唯一实施权威为 `decisions/QC_OBJECT_ASSOCIATION_20261011.md`：只显示一个“检验对象”字段，复用 materialLotId/mainBatchId 和原质量父子链。2026-10-12 收尾复核见 `docs/review/QC_OBJECT_TYPE_CLOSEOUT_20261012.md`。
 
 ## 适用权威及冲突
 - 上位基线：FINAL BASELINE COMPLETE v1.0.23；工程门禁：AGENTS.md、docs/development/MES_DEV_RULES.md；UI：Global UI V2 / T1–T6。
@@ -44,7 +46,7 @@
 
 ## 文件白名单与状态
 本阶段仅允许修改：V053、`SystemDictionaryController.java`、本 DCP、`docs/PROJECT_BASELINE.md`、`MES_TASKS.md`、针对固定字典的专项测试。其余 QMS/QA/WMS/EBR 源码及历史业务数据只读。
-当前状态：**IN PROGRESS**。未完成跨单据对象关联改造，不得声称统一质量管理实施完成。
+当前状态：**CLOSED FOR CURRENT MINIMAL SCOPE**。下方跨单据多态对象关联、解析器和冻结快照属于已撤回的历史目标，不再作为当前未完成项；现行范围以单字段设计锁定和已验收证据为准。成品质量新数据正向链归产品/成品完整链任务。
 
 ## 2026-10-11 实施与验证记录
 - `V053` 已通过 Spring Boot ci profile / Flyway 在本地开发 MariaDB `hospital_pharma_mes_dev` 执行：052 → 053；53 migrations validate PASS。

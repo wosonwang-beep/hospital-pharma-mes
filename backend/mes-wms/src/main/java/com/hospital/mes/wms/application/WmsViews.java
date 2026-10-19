@@ -25,7 +25,7 @@ public class WmsViews {
   if(e instanceof ReceiptItemEntity item){source=item.getSourceSnapshotJson();n.remove("sourceSnapshotJson");}
   else if(e instanceof MaterialLotEntity lot && lot.getReceiptItemId()!=null && receiptItems!=null){
    var item=receiptItems.selectOne(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<ReceiptItemEntity>().eq("org_id",lot.getOrgId()).eq("id",lot.getReceiptItemId()));
-   if(item==null)throw new IllegalStateException("Receipt source lineage missing");source=item.getSourceSnapshotJson();
+   if(item==null)throw new IllegalStateException("Receipt source lineage missing");source=item.getSourceSnapshotJson();n.put("manufacturerLotNo",item.getManufacturerLotNo());
   }
   if(e instanceof ReceiptItemEntity || e instanceof MaterialLotEntity){try{n.set("sourceSnapshot",source==null?NullNode.instance:json.readTree(source));}catch(Exception ex){throw new IllegalStateException("Invalid receipt source snapshot",ex);}}
   ArrayNode actions=n.putArray("allowedActions");

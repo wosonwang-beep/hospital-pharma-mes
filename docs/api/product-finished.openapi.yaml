@@ -1,0 +1,1264 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Approved product + direct MainBatch supplement B",
+    "version": "DCP-PRODUCT-FINISHED-ROOT-001-B",
+    "description": "Bounded supplement to immutable v1.0.23. This file documents affected contracts only; unlisted base APIs remain authoritative. No permissions, signatures or historical canonical documents rewritten. Migration drafts V056/V057 verified only in approved isolated schema. Runtime status remains MES_TASKS.md; real UI, full finished shipment competition and historical runtime archive regeneration remain separate unverified gates."
+  },
+  "paths": {
+    "/api/v1/main-batches": {
+      "post": {
+        "operationId": "createProductionInstruction",
+        "x-permission": "production:batch:create",
+        "description": "Atomically create internal Order + schema-2 MainBatch. No client productionOrderId; historical 1:N reads remain.",
+        "responses": {
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstructionCreate"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listProductionInstructions",
+        "x-permission": "production:batch:view",
+        "description": "Existing pagination; new mode filter is productionSchemaVersion=2; IDs are independent.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "name": "productionSchemaVersion",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                2
+              ]
+            }
+          },
+          {
+            "name": "productId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/main-batches/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "editProductionInstruction",
+        "x-permission": "production:batch:update",
+        "description": "New-mode edits preserve internal Order identity; legacy edit uses original schema-1 contract.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstructionUpdate"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getProductionInstruction",
+        "x-permission": "production:batch:view",
+        "description": "New mode exposes productionSchemaVersion=2 and nullable finished-prefixed attributes frozen at first valid OUTPUT.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        }
+      }
+    },
+    "/api/v1/production-orders": {
+      "post": {
+        "operationId": "rejectIndependentOrderCreate",
+        "deprecated": true,
+        "description": "PRODUCTION_ORDER_CREATE_DEPRECATED; create through main-batches. Historical GET and schema-1 records remain.",
+        "responses": {
+          "422": {
+            "description": "Independent production Order creation rejected"
+          }
+        }
+      }
+    },
+    "/api/v1/quality/production-plans": {
+      "post": {
+        "operationId": "createProductProductionPlan",
+        "x-permission": "qms:plan:create",
+        "description": "Requires schema-2 DRAFT batch; server derives product; PRODUCT standard must match batch product.",
+        "responses": {
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanCreateV2"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/quality/production-plans/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "editProductProductionPlan",
+        "x-permission": "qms:plan:update",
+        "description": "Legacy plans remain read-only; mainBatch cannot change; productId/finishedMaterialId input rejected.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanUpdateV2"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "readProductionPlanCompatibly",
+        "x-permission": "qms:plan:view",
+        "description": "Original schema-1 projection or explicit ProductPlanIdentity; no new finished lot ID.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        }
+      }
+    },
+    "/api/v1/quality/production-plans/{id}/approve": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "approveProductProductionPlan",
+        "x-permission": "qms:plan:approve",
+        "description": "Independent signed approval freezes matching product, schema-2 standard and balance DSL.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApprovePlan"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/quality/specifications": {
+      "post": {
+        "operationId": "createQcSpecificationSubject",
+        "x-permission": "qms:specification:create",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQcSpecification"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "listQcSpecificationSubjects",
+        "x-permission": "qms:specification:view",
+        "description": "Existing server pagination; mutually exclusive subject filters; legacy default MATERIAL canonical unchanged.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "name": "materialId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$"
+            }
+          },
+          {
+            "name": "subjectType",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "MATERIAL",
+                "PRODUCT"
+              ]
+            }
+          },
+          {
+            "name": "versionStatus",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "DRAFT",
+                "APPROVED",
+                "RETIRED"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/main-batches/{id}/quantity-events": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "recordDirectProductOutput",
+        "x-permission": "mes:quantity:record",
+        "description": "Mode-2 OUTPUT branch only: freezes dates/product/unit; no stock ledger and no materialLotId/lotNo. Other event kinds retain their existing contracts.",
+        "responses": {
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductOutput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/finished-inventory": {
+      "get": {
+        "operationId": "listDirectProductFinishedInventory",
+        "x-permission": "wms:inventory:view",
+        "description": "Only schema-2 batches with finished ledger; filters mainBatchId/productId/warehouseId/locationId/qualityStatus/inventoryStatus/keyword, page 0-based size 1..100.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        }
+      }
+    },
+    "/api/v1/finished-batches/{id}/chain": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getDirectProductFinishedChain",
+        "x-permission": "wms:inventory:view",
+        "description": "MainBatch identity. Permission-filtered source blocks; typed product ledger, OUTPUT, receiving, QC, QA and shipment. Legacy lot chain route unchanged.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        }
+      }
+    },
+    "/api/v1/finished-inbound-requests": {
+      "post": {
+        "operationId": "createDirectProductInbound",
+        "x-permission": "wms:finished-inbound:create",
+        "description": "Production completed batch; exclusively server-derived product, exact signed OUTPUT and base-unit quantity.",
+        "responses": {
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishedInboundCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/finished-inbound-requests/{id}/confirm": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "confirmDirectProductInbound",
+        "x-permission": "wms:finished-inbound:confirm",
+        "description": "Independent signed confirmation appends one positive wms_finished_inventory_ledger fact; old material ledger ID null.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishedInboundConfirm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/finished-shipments": {
+      "post": {
+        "operationId": "createDirectProductShipment",
+        "x-permission": "wms:finished-shipment:create",
+        "description": "QA released, unexpired batch; exact global conversion in frozen product base unit.",
+        "responses": {
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "201": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishedShipmentCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/finished-shipments/{id}/confirm": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Id"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "confirmDirectProductShipment",
+        "x-permission": "wms:finished-shipment:confirm",
+        "description": "Signed append-only negative finished ledger fact; same typed batch/product, no negative balance.",
+        "responses": {
+          "200": {
+            "description": "Existing API envelope with task-specific projection"
+          },
+          "400": {
+            "description": "Invalid/unknown fields or conflicting subject"
+          },
+          "409": {
+            "description": "State, subject, signature, evidence, exact-unit or optimistic-version conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishedConfirm"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/release-decisions": {
+      "post": {
+        "operationId": "decideDirectProductFinishedQa",
+        "x-permission": "qa:release",
+        "description": "Mode-2 MainBatch only; derived product, signature, independent QA and source digest. Legacy lot cannot be supplied. Historical schema-1 decision reads stay unchanged.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/IfMatch"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishedQaDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Signed QA decision; production and quality/inventory states updated by one MainBatch owner write"
+          },
+          "409": {
+            "description": "Evidence/signature/state/identity conflict"
+          },
+          "422": {
+            "description": "Existing ComplianceException gate rejection; HTTP mapping unchanged"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "IfMatch": {
+        "name": "If-Match",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "pattern": "^\"(0|[1-9][0-9]*)\"$"
+        }
+      }
+    },
+    "schemas": {
+      "Id": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "Reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "Version": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "Decimal": {
+        "type": "string",
+        "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$"
+      },
+      "Signature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reauthToken"
+        ],
+        "properties": {
+          "reauthToken": {
+            "type": "string",
+            "minLength": 1,
+            "writeOnly": true
+          }
+        }
+      },
+      "InstructionCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "batchNo",
+          "productId",
+          "plannedQty",
+          "unitId",
+          "reason"
+        ],
+        "properties": {
+          "batchNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "productId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "plannedQty": {
+            "$ref": "#/components/schemas/Decimal"
+          },
+          "unitId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "plannedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "subBatchPlan": {
+            "type": "array",
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "description": "Existing bounded SubBatch command contract; no internal Order ID."
+            }
+          }
+        }
+      },
+      "InstructionUpdate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "batchNo",
+          "productId",
+          "plannedQty",
+          "unitId",
+          "reason",
+          "versionNo"
+        ],
+        "properties": {
+          "batchNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "productId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "plannedQty": {
+            "$ref": "#/components/schemas/Decimal"
+          },
+          "unitId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "plannedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
+      "PlanCreateV2": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mainBatchId",
+          "qcSpecificationVersionId",
+          "balanceRules",
+          "reason"
+        ],
+        "properties": {
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "qcSpecificationVersionId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "balanceRules": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "description": "Existing bounded BalanceRule / non-executable expression DSL contract."
+            }
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          }
+        }
+      },
+      "PlanUpdateV2": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mainBatchId",
+          "qcSpecificationVersionId",
+          "balanceRules",
+          "reason",
+          "versionNo"
+        ],
+        "properties": {
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "qcSpecificationVersionId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "balanceRules": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "type": "object",
+              "description": "Existing bounded BalanceRule / non-executable expression DSL contract."
+            }
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
+      "ApprovePlan": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "versionNo",
+          "reason",
+          "signature"
+        ],
+        "properties": {
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          }
+        }
+      },
+      "CreateQcSpecification": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "specificationCode",
+          "specificationName",
+          "reason"
+        ],
+        "properties": {
+          "subjectType": {
+            "enum": [
+              "MATERIAL",
+              "PRODUCT"
+            ],
+            "default": "MATERIAL"
+          },
+          "materialId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "specificationCode": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "specificationName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "materialId"
+            ],
+            "properties": {
+              "subjectType": {
+                "const": "MATERIAL"
+              }
+            },
+            "not": {
+              "required": [
+                "productId"
+              ]
+            }
+          },
+          {
+            "required": [
+              "subjectType",
+              "productId"
+            ],
+            "properties": {
+              "subjectType": {
+                "const": "PRODUCT"
+              }
+            },
+            "not": {
+              "required": [
+                "materialId"
+              ]
+            }
+          }
+        ]
+      },
+      "ProductPlanIdentity": {
+        "type": "object",
+        "required": [
+          "planSchemaVersion",
+          "mainBatchId",
+          "productId",
+          "inspectionObjectType",
+          "inspectionObjectId"
+        ],
+        "properties": {
+          "planSchemaVersion": {
+            "const": 2
+          },
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "productId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "readOnly": true
+          },
+          "inspectionObjectType": {
+            "const": "FINISHED_PRODUCT",
+            "readOnly": true
+          },
+          "inspectionObjectId": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "readOnly": true
+          },
+          "productSnapshot": {
+            "type": "object",
+            "readOnly": true
+          }
+        }
+      },
+      "ProductOutput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "versionNo",
+          "eventType",
+          "amount",
+          "unitId",
+          "sourceRef",
+          "locationId",
+          "productionDate",
+          "expiryDate",
+          "reason",
+          "signature"
+        ],
+        "properties": {
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "eventType": {
+            "const": "OUTPUT"
+          },
+          "operationExecutionId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/Decimal"
+          },
+          "unitId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "sourceRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "locationId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "productionDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          }
+        }
+      },
+      "FinishedInboundCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "requestNo",
+          "mainBatchId",
+          "reason"
+        ],
+        "properties": {
+          "requestNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "createInspectionDraft": {
+            "type": "boolean"
+          },
+          "inspectionRequestNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "FinishedInboundConfirm": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "versionNo",
+          "locationId",
+          "reason",
+          "signature"
+        ],
+        "properties": {
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "locationId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          }
+        }
+      },
+      "FinishedShipmentCreate": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "shipmentNo",
+          "mainBatchId",
+          "locationId",
+          "quantity",
+          "unitId",
+          "receivingParty",
+          "reason"
+        ],
+        "properties": {
+          "shipmentNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "locationId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/Decimal"
+          },
+          "unitId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "receivingParty": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          }
+        }
+      },
+      "FinishedConfirm": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "versionNo",
+          "reason",
+          "signature"
+        ],
+        "properties": {
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          }
+        }
+      },
+      "FinishedQaDecision": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mainBatchId",
+          "versionNo",
+          "decision",
+          "releaseBasis",
+          "reason",
+          "reviewDigest",
+          "signature"
+        ],
+        "properties": {
+          "mainBatchId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "versionNo": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "decision": {
+            "enum": [
+              "RELEASED",
+              "REJECTED"
+            ]
+          },
+          "releaseBasis": {
+            "const": "FULL_INSPECTION"
+          },
+          "reviewDigest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "supersedesDecisionId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/Reason"
+          },
+          "signature": {
+            "$ref": "#/components/schemas/Signature"
+          }
+        }
+      }
+    }
+  }
+}

@@ -20,6 +20,10 @@ spec = importlib.util.spec_from_file_location('mes_workflow', SCRIPT)
 w = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(w)
 FIXTURE = Path(__file__).with_name('fixture_suite.py')
+AUDIT_SCRIPT = SCRIPT.parents[2] / 'mes-ui-ux-audit/scripts/validate_audit_manifest.py'
+audit_spec = importlib.util.spec_from_file_location('mes_audit_validator', AUDIT_SCRIPT)
+audit_rules = importlib.util.module_from_spec(audit_spec)
+audit_spec.loader.exec_module(audit_rules)
 
 
 class Gates(unittest.TestCase):
@@ -69,6 +73,7 @@ class Gates(unittest.TestCase):
         data['scope'].update(requirements=['REQ-SIM-1'], write_paths=['frontend/mes-web/src/views/simulation.vue'], menu=True)
         data['reads'] = {name: cls.ref(root, name, 'SIMULATION read evidence for ' + name) for name in w.MANDATORY_READS}
         cls.ref(root, 'tests/fixture_suite.py', FIXTURE.read_bytes())
+        cls.ref(root, '.agents/skills/mes-ui-ux-audit/scripts/validate_audit_manifest.py', AUDIT_SCRIPT.read_bytes())
         for gate in w.GATES:
             stage = data['stages'][gate]
             stage.update(status='REVIEW_PENDING', commit='SIMULATION-only-commit', version='SIMULATION-v1')
@@ -95,6 +100,33 @@ class Gates(unittest.TestCase):
         operation = {k: 'SIMULATION' for k in ('id', 'page_button', 'permission', 'backend_permission', 'api', 'state_validation', 'data_validation', 'success', 'failure')}
         operation.update(test_cases=['SIM-T1'], write=False, role='view')
         artifact('G3', 'contracts', {'fields': [field], 'projections': {k: {'name': shape} for k in ('page', 'database', 'api')}, 'operations': [operation], 'states': ['SIM-READY'], 'backend_states': ['SIM-READY'], 'rtm': {'REQ-SIM-1': ['SIM-T1']}, 'test_ids': ['SIM-T1'], 'prototype_sha256': proto_hash, 'conflicts': []})
+        def experience(gate):
+            audit_manifest = cls.ref(root, f'docs/features/WF-TEST-001/evidence/{gate}-ui-ux-audit-manifest.json', {
+                'simulation': True, 'audit_id': gate + '-WF-TEST',
+                'source': {'url': 'http://localhost:5174' if gate == 'G2' else 'http://localhost:5173', 'source_hash': proto_hash if gate == 'G2' else w.digest(data['stages']['G5']['source_files']), 'design_lock': 'SIMULATION-only'},
+                'reviewer': {'executor': 'Codex SELF-REVIEW', 'skill': 'mes-ui-ux-audit', 'ui_ux_pro_max_path': 'SIMULATION-only', 'ui_ux_pro_max_sha256': 'c' * 64},
+                'knowledge_queries': [{'group': group, 'query': 'SIMULATION-only', 'evidence': str(root / image['path'])} for group in ('product_style', 'layout', 'forms', 'tables_lists', 'modal_feedback', 'accessibility', 'typography_color', 'stack')],
+                'required_viewports': [1440, 1280, 900, 375],
+                'expected_surfaces': [{'surface': page, 'states': ['default']} for page in ('SIM-PAGE', 'SIM-DETAIL')],
+                'screenshots': [{'surface': page, 'state': 'default', 'viewport': v, 'path': str(root / image['path']), 'review': {c: {'status': 'PASS', 'note': 'SIMULATION-only fixture evidence'} for c in audit_rules.CATEGORIES}} for page in ('SIM-PAGE', 'SIM-DETAIL') for v in (1440, 1280, 900, 375)],
+                'dimension_reviews': [{'surface': page, 'dimension': dim, 'status': 'PASS', 'note': 'SIMULATION-only dimension evidence', 'evidence': str(root / image['path'])} for page in ('SIM-PAGE', 'SIM-DETAIL') for dim in audit_rules.DIMENSIONS],
+                'wcag22_checks': [{'criterion': criterion, 'status': 'PASS', 'note': 'SIMULATION-only WCAG fixture evidence', 'evidence': str(root / image['path'])} for criterion in audit_rules.WCAG22_CRITERIA],
+                'interaction_checks': [{'name': 'SIMULATION-only', 'status': 'PASS', 'evidence': str(root / image['path'])}],
+                'geometry_checks': [{'name': 'SIMULATION-only', 'status': 'PASS', 'evidence': str(root / image['path'])}],
+                'adversarial_pass': {'completed': True, **{key: 'SIMULATION-only evidence note' for key in ('alignment', 'whitespace', 'hierarchy', 'action_discoverability', 'recovery')}},
+                'issues': [], 'verdict': 'PASS FOR PROTOTYPE' if gate == 'G2' else 'READY FOR ACCEPTANCE'})
+            return {'simulation': True,
+                    'reviewer': {'executor': 'Codex SELF-REVIEW', 'skill': 'mes-ui-ux-audit', 'skill_path': 'SIMULATION/mes-ui-ux-audit/SKILL.md', 'version': 'SIMULATION-only', 'ui_ux_pro_max_path': 'SIMULATION/ui-ux-pro-max/SKILL.md', 'ui_ux_pro_max_sha256': 'c' * 64},
+                    'visual_first': True,
+                    'adversarial_pass': True,
+                    'manifest_validation': 'PASS',
+                    'audit_manifest': audit_manifest,
+                    'runtime': {'kind': 'local-real', 'frontend': 'http://localhost:5174' if gate == 'G2' else 'http://localhost:5173', 'backend': 'http://localhost:8080'},
+                    'source_sha256': proto_hash if gate == 'G2' else w.digest(data['stages']['G5']['source_files']),
+                    'inputs': {'requirements': [data['stages']['G3']['artifacts']['prd']], 'detailed_design': [data['stages']['G3']['artifacts']['functional_design']]},
+                    'checks': [{'page': page, 'area': area, 'scenario': 'SIMULATION-only workflow fixture', 'result': 'PASS', 'evidence': [image]} for page in ('SIM-PAGE', 'SIM-DETAIL') for area in ('aesthetics', 'readability', 'interaction')],
+                    'issues': [{'id': 'WF-TEST-UX-1', 'scenario': 'SIMULATION-only repaired issue', 'severity': 'P2', 'blocking': True, 'resolved': True, 'fix': image, 'recheck': image, 'rechecked_by': 'Codex SELF-REVIEW'}]}
+        artifact('G2', 'product_experience_review', experience('G2'))
         frozen_refs = [ref for gate in ('G1', 'G2', 'G3') for name, ref in data['stages'][gate]['artifacts'].items() if not (gate == 'G3' and name == 'freeze')]
         artifact('G3', 'freeze', {'simulation': True, 'status': 'FROZEN', 'id': 'WF-TEST-FREEZE', 'owner': 'SIMULATION', 'time': w.now(), 'commit': 'SIMULATION-only-commit', 'files': frozen_refs})
         implementation = cls.ref(root, 'frontend/mes-web/src/views/simulation.vue', '<!-- SIMULATION; not a business page -->')
@@ -105,9 +137,11 @@ class Gates(unittest.TestCase):
         artifact('G4', 'frozen_ui', {'files': [implementation], 'unapproved_changes': []})
         artifact('G4', 'real_api', {'simulation': True, 'backend': 'http://localhost:8080', 'operations': ['SIMULATION']})
         artifact('G4', 'no_mock', {'production_mock_paths': []})
+        g5_experience = experience('G5')
+        artifact('G5', 'product_experience_review', g5_experience)
         artifact('G5', 'issues', {'items': []})
         artifact('G5', 'visual_comparison', {'simulation': True, 'prototype_sha256': proto_hash, 'major_deviations': [], 'pairs': [{'page': page, 'prototype': image, 'formal': image, 'viewport': v, 'review': 'SIMULATION'} for page in ('SIM-PAGE', 'SIM-DETAIL') for v in (1440, 1280, 900, 375)]})
-        artifact('G5', 'integration_acceptance', {'simulation': True, 'unapproved_contract_changes': []})
+        artifact('G5', 'integration_acceptance', {'simulation': True, 'unapproved_contract_changes': [], 'ui_ux_audit': {'status': 'PASS', 'verdict': 'READY FOR ACCEPTANCE', 'audit_manifest': g5_experience['audit_manifest']}})
         w.write_json(root / f'docs/features/{feature}/workflow.yaml', data)
         wf = w.Workflow(root, feature, simulation=True)
         for gate in w.GATES:
@@ -164,6 +198,98 @@ class Gates(unittest.TestCase):
     def test_positive_all_five_gates(self):
         for gate in w.GATES:
             self.assertEqual('PASS', self.wf.validate(gate)['result'], gate)
+
+    def test_g2_missing_experience_review_blocks_advance(self):
+        del self.wf.stage('G2')['artifacts']['product_experience_review']
+        self.assert_fails('G2', 'missing artifact product_experience_review')
+        with self.assertRaises(w.GateError):
+            self.wf.advance('G2', 'ACCEPTED')
+
+    def test_g5_missing_experience_review_blocks_advance(self):
+        del self.wf.stage('G5')['artifacts']['product_experience_review']
+        self.assert_fails('G5', 'missing artifact product_experience_review')
+        with self.assertRaises(w.GateError):
+            self.wf.advance('G5', 'ACCEPTED')
+
+    def test_experience_review_rejects_static_or_mock_runtime(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d['runtime'].update(kind='mock'))
+                with self.assertRaisesRegex(w.GateError, 'needs running local page'):
+                    self.wf.experience_review(gate)
+
+    def test_experience_review_requires_complete_audit_manifest_gate(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d.update(manifest_validation='FAIL'))
+                with self.assertRaisesRegex(w.GateError, 'audit manifest validation did not PASS'):
+                    self.wf.experience_review(gate)
+
+    def test_experience_review_rejects_stale_source(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d.update(source_sha256='0' * 64))
+                with self.assertRaisesRegex(w.GateError, 'source version mismatch'):
+                    self.wf.experience_review(gate)
+
+    def test_experience_review_rejects_unresolved_blocker(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d['issues'][0].update(resolved=False))
+                with self.assertRaisesRegex(w.GateError, 'experience issue remains'):
+                    self.wf.experience_review(gate)
+
+    def test_experience_review_rejects_closed_issue_without_recheck(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d['issues'][0].pop('recheck'))
+                with self.assertRaisesRegex(w.GateError, 'repair/recheck evidence missing'):
+                    self.wf.experience_review(gate)
+
+    def test_experience_review_rejects_missing_page_coverage(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_artifact(gate, 'product_experience_review', lambda d: d.update(checks=d['checks'][:1]))
+                with self.assertRaisesRegex(w.GateError, 'cover every page/area'):
+                    self.wf.experience_review(gate)
+
+    def change_full_audit(self, gate, mutate):
+        ref = self.wf.document(gate, 'product_experience_review')['audit_manifest']
+        path = self.root / ref['path']
+        audit = w.load_json(path)
+        mutate(audit)
+        w.write_json(path, audit)
+        self.change_artifact(gate, 'product_experience_review', lambda d: d['audit_manifest'].update(sha256=w.file_hash(path)))
+
+    def test_all_full_review_dimensions_are_mandatory(self):
+        for gate in ('G2', 'G5'):
+            original = self.wf.document(gate, 'product_experience_review')['audit_manifest']
+            original_data = w.load_json(self.root / original['path'])
+            for dimension in audit_rules.DIMENSIONS:
+                with self.subTest(gate=gate, dimension=dimension):
+                    self.change_full_audit(gate, lambda d: d.update(dimension_reviews=[c for c in original_data['dimension_reviews'] if c['dimension'] != dimension]))
+                    with self.assertRaisesRegex(w.GateError, 'missing full-dimension coverage'):
+                        self.wf.experience_review(gate)
+            self.change_full_audit(gate, lambda d: d.update(dimension_reviews=original_data['dimension_reviews']))
+
+    def test_wcag22_checks_cannot_be_omitted(self):
+        for gate in ('G2', 'G5'):
+            with self.subTest(gate=gate):
+                self.change_full_audit(gate, lambda d: d.update(wcag22_checks=[]))
+                with self.assertRaisesRegex(w.GateError, 'missing WCAG 2.2 checks'):
+                    self.wf.experience_review(gate)
+
+    def test_dimension_cannot_be_skipped_or_not_run(self):
+        for status in ('N/A', 'NOT RUN'):
+            with self.subTest(status=status):
+                self.change_full_audit('G2', lambda d: d['dimension_reviews'][0].update(status=status))
+                with self.assertRaisesRegex(w.GateError, 'full-dimension audit invalid'):
+                    self.wf.experience_review('G2')
+
+    def test_full_audit_rejects_fake_validation_pass(self):
+        self.change_full_audit('G5', lambda d: d['dimension_reviews'][0].update(evidence='missing-evidence-file.txt'))
+        with self.assertRaisesRegex(w.GateError, 'evidence missing'):
+            self.wf.experience_review('G5')
 
     def test_g1_missing_design(self):
         del self.wf.stage('G1')['artifacts']['ui_design']
@@ -266,6 +392,20 @@ class Gates(unittest.TestCase):
         self.wf.stage('G5')['test_plans']['api-integration']['argv'].append('--fail')
         self.rebind('G5')
         self.assert_fails('G5', 'command failed')
+
+    def test_g5_ui_ux_audit_suite_missing(self):
+        del self.wf.stage('G5')['test_plans']['ui-ux-audit']
+        self.assert_fails('G5', 'ui-ux-audit missing')
+
+    def test_g5_integration_acceptance_requires_ui_ux_audit(self):
+        self.change_artifact('G5', 'integration_acceptance', lambda d: d.pop('ui_ux_audit'))
+        self.rebind('G5')
+        self.assert_fails('G5', 'integration acceptance requires UI/UX audit PASS')
+
+    def test_g5_integration_acceptance_rejects_mismatched_ui_ux_manifest(self):
+        self.change_artifact('G5', 'integration_acceptance', lambda d: d['ui_ux_audit'].update(audit_manifest={'path': 'wrong.json', 'version': 'x', 'sha256': '0' * 64}))
+        self.rebind('G5')
+        self.assert_fails('G5', 'UI/UX manifest mismatch')
 
     def test_g5_screenshot_pairs_must_cover_viewports(self):
         self.change_artifact('G5', 'visual_comparison', lambda d: d.update(pairs=d['pairs'][:1]))

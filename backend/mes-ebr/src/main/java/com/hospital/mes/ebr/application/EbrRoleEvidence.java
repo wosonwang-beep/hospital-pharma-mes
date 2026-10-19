@@ -15,18 +15,19 @@ public class EbrRoleEvidence {
  public EbrRoleEvidence(AuditApplicationService audit, AuditQueryService query) {this.audit=audit;this.query=query;}
  public void retain(CurrentPlatformContext context, SignatureRecord signature, SignatureRule rule) {
   if(signature.organizationId()!=context.organizationId()||signature.signerId()!=context.actorId())throw new IllegalArgumentException("Signature actor binding mismatch");
-  audit.append(new AuditCommand(context.organizationId(),context.actorId(),rule.requiredRole(),
+  audit.append(new AuditCommand(context.organizationId(),context.actorId(),roleCode(rule),
    "EBR_FORM_SIGNATURE_ROLE","EBR_SIGNATURE_POLICY",Long.toString(signature.id()),null,
    signature.recordDigest(),policy(rule),null,signature.signedAt(),UUID.randomUUID().toString(),
    context.requestId(),AuditSource.API,null));
  }
- private static String policy(SignatureRule rule) {return rule.meaning()+"|"+rule.objectScope()+"|"+rule.objectCode()+"|"+rule.sequenceNo();}
+ static String policy(SignatureRule rule) {String key=rule.meaning()+"|"+rule.objectScope()+"|"+rule.objectCode()+"|"+rule.sequenceNo();if(rule.requiredRoleId()==null)return key;return "2.0|"+rule.requiredRoleId()+"|"+key+"|"+com.hospital.mes.audit.idempotency.PlatformIdempotencyService.digest(rule.requiredRoleId()+"|"+key+"|"+rule.roleCodeSnapshot()+"|"+rule.roleNameSnapshot()+"|"+rule.reauthRequired()+"|"+rule.invalidateOnChange());}
+ private static String roleCode(SignatureRule rule){return rule.requiredRoleId()==null?rule.requiredRole():rule.roleCodeSnapshot();}
  public boolean matches(SignatureRecord signature, SignatureRule rule) {
   for(int page=0;;page++) {
    var result=query.query(signature.organizationId(),new AuditEventQuery(signature.signerId(),
     "EBR_FORM_SIGNATURE_ROLE","EBR_SIGNATURE_POLICY",Long.toString(signature.id()),AuditSource.API,null,null,null,null,page,200));
    if(result.items().stream().anyMatch(event->event.objectType().equals("EBR_SIGNATURE_POLICY")
-    &&event.objectId().equals(Long.toString(signature.id()))&&rule.requiredRole().equals(event.actorRole())
+    &&event.objectId().equals(Long.toString(signature.id()))&&java.util.Objects.equals(roleCode(rule),event.actorRole())
     &&policy(rule).equals(event.reason())&&signature.recordDigest().equals(event.newValueDigest())))return true;
    if((page+1L)*200>=result.total())return false;
   }

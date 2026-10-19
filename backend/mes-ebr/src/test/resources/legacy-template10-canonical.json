@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "templateVersionId": "10",
+  "packageVersionId": "12",
+  "templateCode": "KCL30-EBR-20261007230246",
+  "version": 1,
+  "definition": {
+    "sections": [],
+    "forms": [
+      {
+        "formCode": "MIX_RECORD",
+        "formName": "\u914d\u5236\u5de5\u5e8f\u7535\u5b50\u6279\u8bb0\u5f55",
+        "operationDefId": "29",
+        "schemaVersion": "1.0",
+        "sequenceNo": 1,
+        "fields": [
+          {
+            "fieldCode": "OBS",
+            "groupCode": null,
+            "label": "\u914d\u5236\u89c2\u5bdf\u8bb0\u5f55",
+            "fieldType": "TEXT",
+            "sourceType": "MANUAL",
+            "dataType": "STRING",
+            "unitId": null,
+            "precisionScale": null,
+            "requiredFlag": true,
+            "readonlyFlag": false,
+            "defaultExpr": null,
+            "placeholder": null,
+            "helpText": null,
+            "sequenceNo": 1,
+            "validationJson": null,
+            "options": []
+          }
+        ]
+      }
+    ],
+    "rules": [],
+    "signatureRules": [],
+    "reviewRules": []
+  }
+}

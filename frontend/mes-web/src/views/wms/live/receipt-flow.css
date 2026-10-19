@@ -1,0 +1,197 @@
+/* Receipt flow prototype: global styles needed by teleported modals/drawers. */
+.receipt-list-table th:nth-child(1),.receipt-list-table td:nth-child(1){min-width:170px;white-space:nowrap}
+.receipt-list-table th:nth-child(2),.receipt-list-table td:nth-child(2){min-width:190px}
+.receipt-list-table th:nth-child(3),.receipt-list-table td:nth-child(3){min-width:250px}
+.receipt-list-table th:nth-child(8),.receipt-list-table td:nth-child(8){min-width:110px;white-space:nowrap}
+
+.receipt-flow-table{table-layout:fixed;min-width:0}
+.receipt-flow-table th,.receipt-flow-table td{padding:11px 8px;white-space:normal;word-break:break-word;font-size:12px}
+.receipt-flow-table th{font-size:11px}
+.receipt-flow-table td small{display:block;margin-top:3px;color:#8fa0b2;font-size:10.5px;line-height:1.35}
+.receipt-flow-quality{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.receipt-flow-quality .ant-tag{margin:0;font-size:10px;line-height:17px;padding:0 5px}
+
+.receipt-check-tag{display:inline-block;margin:1px 3px 1px 0;padding:0 4px;border-radius:3px;font-size:10px;line-height:17px;background:#e9f7ee;color:#25744b}
+.receipt-check-tag.bad{background:#fdecec;color:#b33a3a}
+
+.receipt-modal-field{display:flex;flex-direction:column;gap:5px;margin:0;color:#5d7084;font-size:12px;text-align:left}
+.receipt-modal-field>span{text-align:left}
+.receipt-modal-field>.ant-select,.receipt-modal-field>.ant-input,.receipt-modal-field>.ant-input-number,.receipt-modal-field>.ant-picker{width:100%!important;min-width:0}
+.receipt-modal-field em{color:#d04a4a;font-style:normal}
+.receipt-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin:12px 0}
+.receipt-modal-full{grid-column:1/-1}
+.receipt-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.receipt-modal>div:not(.receipt-modal-grid):not(.receipt-modal-actions){display:flex;gap:8px;padding:5px 0;font-size:12px;color:#6b7d91}
+.receipt-modal>div:not(.receipt-modal-grid):not(.receipt-modal-actions)>label{flex:0 0 82px;color:#8a99aa}
+.receipt-modal-grid>label{flex:none;width:auto}
+.receipt-drawer-tip{font-size:12px;color:#7c8b9d;line-height:1.6}
+.receipt-drawer-row{padding:10px 0;border-bottom:1px solid #edf2f7}
+.receipt-drawer-row>div{display:flex;gap:8px;align-items:center}
+.receipt-drawer-row small{display:block;color:#8a99aa;margin-top:3px}
+
+/* RECEIPT-CLOSEOUT-001: faithful compact region structure with approved business field corrections. */
+.receipt-bpm{font:14px/1.5 "Microsoft YaHei", "Segoe UI", sans-serif;color:#263b56;background:#f3f8fe}
+.receipt-bpm .receipt-nav{flex-basis:200px;width:200px;background:#f5f9ff}
+.receipt-bpm .receipt-main{padding:18px 18px 12px;max-width:none}
+.receipt-bpm .receipt-card{border-radius:8px;margin-bottom:16px;border-color:#e4edf7;box-shadow:none}
+.receipt-bpm .receipt-card-head{padding:17px 20px;border:0;min-height:60px}
+.receipt-bpm .receipt-card-head h2{font-size:17px;font-weight:650;color:#162f50;padding-left:16px;position:relative}
+.receipt-bpm .receipt-card-head h2:before{content:'';position:absolute;left:0;top:4px;width:5px;height:20px;border-radius:4px;background:#1677ff}
+.receipt-bpm .bpm-breadcrumb{height:34px;color:#6b7f99;font-size:13px;display:flex;gap:12px;align-items:center}
+.receipt-bpm .bpm-form-title{margin:6px 0 20px;min-height:46px}
+.receipt-bpm .bpm-form-title>div{display:flex;gap:20px;align-items:center}
+.receipt-bpm h1{font-size:22px;font-weight:650;margin:0;color:#152d4c}
+.receipt-bpm .bpm-form-title>.ant-tag{padding:5px 24px;border:0;border-radius:20px;background:#e3ebf4;color:#395374}
+.receipt-bpm .bpm-basic-grid{padding:2px 24px 24px;display:grid;grid-template-columns:1.1fr 1fr .95fr;gap:20px 32px}
+.bpm-field{display:flex;align-items:center;gap:12px;min-width:0;margin:0}
+.bpm-field>span{flex:0 0 90px;text-align:right;white-space:nowrap;color:#30445f;font-size:13px}
+.bpm-field>span em{font-style:normal;color:#c23d43}
+.bpm-field>.ant-input,.bpm-field>.ant-select{width:100%;flex:1;min-width:0}
+.bpm-field .ant-select-selector{font-size:13px!important}
+.receipt-bpm .bpm-scroll{overflow:auto;margin:0 16px 20px;border:1px solid #e3edf8;border-radius:5px}
+.receipt-bpm .bpm-lines{border-collapse:collapse;table-layout:fixed;width:100%;min-width:1487px;font-size:12px}
+.receipt-bpm .bpm-lines th{padding:12px 7px;background:#f1f6fc;color:#3b4f69;font-size:12px;text-align:left;font-weight:600;white-space:nowrap}
+.receipt-bpm .bpm-lines td{padding:9px 6px;border-top:1px solid #e5edf7;border-right:1px solid #eef3f9;vertical-align:middle;overflow-wrap:anywhere}
+.receipt-bpm .bpm-lines tr.selected td{background:#f8fbff}
+.receipt-bpm .bpm-lines input{width:100%;box-sizing:border-box;height:32px;padding:4px 6px;border:1px solid #8895a5;border-radius:4px;background:white;color:#263b56;font:12px "Microsoft YaHei",sans-serif;min-width:0}
+.receipt-bpm .bpm-lines .bpm-readonly{border:0;background:transparent;padding:0;font-size:11px}
+.receipt-bpm .bpm-lines .ant-select,.receipt-bpm .bpm-lines .ant-input-number{width:100%;min-width:0;font-size:12px}
+.receipt-bpm .bpm-lines .ant-select-selector{padding:0 6px!important;font-size:12px!important}
+.receipt-bpm .bpm-lines td:last-child{position:sticky;right:0;background:#f8fbff;box-shadow:-1px 0 #e7eff8}
+.receipt-bpm .bpm-lines td:last-child button{padding:3px;min-height:24px}
+.receipt-bpm .bpm-muted{font-size:12px;color:#657993}
+.receipt-bpm .bpm-error{display:block;color:#a32331;font-size:12px}
+.receipt-bpm .bpm-errors{margin-bottom:16px}
+.receipt-bpm .bpm-quality-layout{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(240px,1fr);gap:24px;padding:0 20px 18px}
+.receipt-bpm .bpm-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.receipt-bpm .bpm-check-card{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 10px;background:#f8fbff;border:1px solid #e0eaf7;border-radius:5px;font-size:13px;min-width:0}
+.receipt-bpm .bpm-check-card span{white-space:nowrap}
+.receipt-bpm .bpm-check-card select{min-width:70px;max-width:90px;height:32px;border:1px solid #8895a5;background:#fff;border-radius:4px;color:#30445f;font-size:13px}
+.receipt-bpm .bpm-check-picker{width:380px;max-width:50%}
+.receipt-bpm .bpm-check-picker>span{flex-basis:60px}
+.receipt-bpm .bpm-check-note{font-size:12px;color:#657993;margin:12px 0 0}
+.receipt-bpm .bpm-business-note{background:#fffbef;border-radius:5px;padding:16px;color:#3e516b;font-size:13px}
+.receipt-bpm .bpm-business-note b{color:#2368a8;font-size:15px}.receipt-bpm .bpm-business-note p{margin:8px 0 0}
+.receipt-bpm .bpm-footer{border-radius:8px;padding:16px 20px;margin-top:0;min-height:70px}
+.receipt-bpm .receipt-proto-note{font-size:12px;color:#647891}
+.receipt-bpm .receipt-flow-table{min-width:1375px}.receipt-bpm .receipt-flow-table th{font-size:12px}.receipt-bpm .receipt-flow-table td small{font-size:12px;color:#62768d}
+.receipt-bpm .receipt-flow-quality .ant-tag{font-size:12px;line-height:20px}
+.receipt-bpm .receipt-check-tag{font-size:11px}.receipt-bpm .receipt-aux-row{flex-wrap:wrap}.receipt-bpm .receipt-aux-row small{color:#62768d;white-space:normal}
+.bpm-extra-fields{display:grid;gap:16px}.bpm-extra-fields>.ant-btn{justify-self:end}.bpm-dialog .bpm-field>span{flex-basis:120px}
+.receipt-modal-field{flex-direction:row;align-items:center}.receipt-modal-field>span{flex:0 0 100px}.receipt-modal-grid{grid-template-columns:1fr}
+.receipt-bpm input:focus-visible,.receipt-bpm button:focus-visible,.receipt-bpm select:focus-visible,.receipt-bpm .bpm-scroll:focus-visible{outline:2px solid #176fd1;outline-offset:2px}
+@media(min-width:1700px){.receipt-bpm .bpm-check-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.receipt-bpm .bpm-check-card{flex-wrap:wrap}.receipt-bpm .bpm-check-card span{flex:0 0 auto}}
+@media(max-width:1200px){.receipt-bpm .bpm-basic-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.receipt-bpm .bpm-basic-grid>div:empty{display:none}.receipt-bpm .bpm-quality-layout{grid-template-columns:1fr}.receipt-bpm .bpm-business-note{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.receipt-bpm .bpm-business-note p{margin:0}}
+@media(max-width:850px){.receipt-bpm .bpm-basic-grid{grid-template-columns:1fr}.receipt-bpm .receipt-titlebar{flex-wrap:wrap}.receipt-bpm .bpm-check-grid{grid-template-columns:1fr 1fr}.receipt-bpm .bpm-check-picker{max-width:100%;width:100%}.receipt-bpm .receipt-card-head{flex-wrap:wrap}.receipt-bpm .bpm-form-title>div{flex-wrap:wrap}.receipt-bpm .bpm-field>span{flex-basis:92px}}
+
+/* Continuation 01: source-reference fidelity fixes, scoped to the receipt prototype. */
+.receipt-bpm .bpm-lines{min-width:1130px}
+.receipt-bpm .bpm-lines th{white-space:normal;line-height:1.5;padding:10px 5px}
+.receipt-bpm .bpm-lines td{padding:9px 4px;line-height:1.55}
+.receipt-bpm .bpm-lines .bpm-readonly{font-size:12px;letter-spacing:-.2px}
+.receipt-bpm .bpm-lines th:last-child{position:sticky;right:0;background:#f1f6fc;z-index:1}
+.receipt-bpm .bpm-lines .ant-select-selection-item{font-size:12px!important}
+.receipt-bpm .bpm-lines input[type=date]{padding-left:3px;padding-right:1px;letter-spacing:-.25px}
+.receipt-bpm .bpm-lines tr.invalid td{background:#fff8f7}
+.receipt-bpm .bpm-lines [aria-invalid=true]{border-color:#b92e3e}
+.receipt-bpm .bpm-error-link{color:#a32331;text-align:left;padding:3px 0}
+.receipt-bpm .bpm-app-caption{font-size:13px;color:#617690}
+.receipt-bpm .receipt-flow-table{min-width:1130px;width:100%}
+@media(min-width:1500px){.receipt-bpm .bpm-check-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.receipt-bpm .bpm-check-card{padding:14px 5px;gap:4px;font-size:12px;flex-wrap:nowrap}.receipt-bpm .bpm-check-card select{min-width:58px;max-width:65px;font-size:12px}.receipt-bpm .bpm-check-card span{font-size:12px}.receipt-bpm .bpm-quality-layout{grid-template-columns:minmax(0,2.65fr) minmax(240px,1fr);gap:16px}}
+
+.receipt-bpm .receipt-check-tag.pending{background:#eef2f7;color:#52677f}
+
+/* G2 completeness: scoped teleported form alignment and evidence readability. */
+.bpm-dialog .receipt-modal-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0}
+.bpm-dialog .receipt-modal-field{display:flex;flex-direction:row;align-items:center;gap:12px;margin:4px 0;min-width:0;font-size:13px}
+.bpm-dialog .receipt-modal-field>span{flex:0 0 108px;text-align:right;color:#374c66}
+.bpm-dialog .receipt-modal-field>:last-child{flex:1;min-width:0;width:auto!important}
+.bpm-dialog .receipt-modal-field em{color:#b52d3b;font-style:normal}
+.bpm-dialog .receipt-modal-actions{display:flex;justify-content:flex-end;gap:8px}
+.bpm-dialog .bpm-request-errors{margin:0 0 12px}
+.receipt-bpm .bpm-control{flex:1;min-width:0}.receipt-bpm .bpm-control .ant-input{width:100%}
+.receipt-bpm .receipt-muted,.receipt-bpm .receipt-card-head>span,.receipt-bpm .receipt-recordline,.receipt-bpm .receipt-table-foot,.receipt-bpm .receipt-list-foot{color:#536780;font-size:12px}
+.receipt-bpm .receipt-flow-table th,.receipt-bpm .receipt-table th{color:#465e78;font-size:12px}
+.receipt-bpm .receipt-flow-table td{font-size:13px;line-height:1.5}
+.receipt-bpm .receipt-check-tag{font-size:12px;line-height:20px;white-space:nowrap}
+.receipt-bpm .receipt-list-table td,.receipt-bpm .receipt-list-table th{padding:12px 10px}
+.receipt-bpm .receipt-aux-row,.receipt-bpm .receipt-pair label{color:#536780}
+.receipt-bpm .receipt-link{min-height:24px;display:inline-flex;align-items:center}
+.bpm-dialog .ant-modal-body{max-height:calc(100vh - 180px);overflow:auto}
+
+/* G2 audit: retain blue/light design; fix low-contrast controls, focus and true input names. */
+.receipt-bpm input:not([readonly]):not(:disabled),.receipt-bpm select:not(:disabled),.receipt-bpm .ant-select:not(.ant-select-disabled) .ant-select-selector,.receipt-bpm .ant-input-number:not(.ant-input-number-disabled),.bpm-dialog .ant-input,.bpm-dialog .ant-select:not(.ant-select-disabled) .ant-select-selector,.bpm-dialog .ant-input-number{border-color:#8492a5}
+.receipt-bpm input::placeholder,.receipt-bpm textarea::placeholder,.receipt-bpm .ant-select-selection-placeholder,.bpm-dialog input::placeholder,.bpm-dialog textarea::placeholder,.bpm-dialog .ant-select-selection-placeholder{color:#64748b;opacity:1}
+.receipt-bpm .ant-btn-primary,.bpm-dialog .ant-btn-primary{background:#0969da;border-color:#0969da;color:#fff}
+.receipt-bpm .receipt-link{color:#0961c3}
+.receipt-bpm .receipt-flow-table .bpm-detail-checks{padding:8px 4px}
+.receipt-bpm .bpm-detail-checks .receipt-check-tag{font-size:12px;line-height:18px;margin:1px;white-space:normal}
+.receipt-bpm .receipt-flow-table th:last-child,.receipt-bpm .receipt-flow-table td:last-child,.receipt-bpm .receipt-list-table th:last-child,.receipt-bpm .receipt-list-table td:last-child{position:sticky;right:0;background:#f8fbff;z-index:1}
+.receipt-bpm .bpm-scroll:focus-within{scroll-padding-right:80px}
+.bpm-dialog :focus-visible{outline:2px solid #0969da;outline-offset:2px}
+.bpm-dialog .receipt-modal>div{color:#465c75!important;font-size:13px!important}.bpm-dialog .receipt-modal>div>label{color:#536780!important}
+@media(max-width:480px){.receipt-bpm .bpm-check-grid{grid-template-columns:1fr}.receipt-bpm .bpm-basic-grid{padding:4px 12px 18px}.receipt-bpm .bpm-check-picker{width:100%;max-width:100%;margin-top:8px}.bpm-dialog .receipt-modal-grid{display:flex!important;flex-direction:column;gap:10px}.bpm-dialog .receipt-modal-field{min-width:0;gap:8px}.bpm-dialog .receipt-modal-field>span{flex-basis:100px}.bpm-dialog .bpm-field>span{flex-basis:104px}.bpm-dialog .bpm-field{gap:8px}}
+
+/* Audited text contrast and T3 proportional columns; semantics and controls unchanged. */
+.receipt-prototype.receipt-bpm .receipt-logo small,.receipt-prototype.receipt-bpm .receipt-nav-caption,.receipt-prototype.receipt-bpm .receipt-nav-item,.receipt-prototype.receipt-bpm .receipt-proto-note,.receipt-prototype.receipt-bpm .bpm-check-note,.receipt-prototype.receipt-bpm .receipt-list-table td small,.receipt-prototype.receipt-bpm .receipt-flow-table td small,.receipt-prototype.receipt-bpm .receipt-material-head p,.receipt-prototype.receipt-bpm .receipt-accept label,.receipt-prototype.receipt-bpm .receipt-accept span{color:#536780!important}
+.receipt-bpm .ant-tag-green,.bpm-dialog .ant-tag-green{color:#216e39!important}
+.receipt-bpm .ant-tag-orange,.bpm-dialog .ant-tag-orange{color:#845000!important}
+.receipt-bpm .ant-tag-blue,.bpm-dialog .ant-tag-blue{color:#1758a8!important}
+.receipt-bpm .ant-tag-red,.bpm-dialog .ant-tag-red{color:#a82f36!important}
+.bpm-dialog .receipt-modal p,.bpm-dialog .ant-alert-message,.bpm-dialog .receipt-modal-field>span,.bpm-dialog .receipt-modal>div>label{color:#465c75!important}
+
+/* Continuation 04: existing reference structure; no global tokens or other prototypes affected. */
+.receipt-prototype.receipt-bpm .receipt-empty,.receipt-prototype.receipt-bpm .ant-empty-description,.receipt-prototype.receipt-bpm .receipt-flow-table td:first-child{color:#465c75!important}
+.bpm-quality-drawer .receipt-drawer-tip,.bpm-quality-drawer .receipt-drawer-row small{color:#465c75!important;font-size:13px!important;line-height:1.6}
+.bpm-quality-drawer .ant-tag-orange{color:#784800!important}.bpm-quality-drawer .ant-tag-green{color:#216e39!important}.bpm-quality-drawer .ant-tag-blue{color:#1758a8!important}.bpm-quality-drawer .ant-tag-red{color:#a82f36!important}
+.bpm-quality-drawer .ant-drawer-body{overflow:auto}.bpm-quality-drawer .ant-drawer-content-wrapper{max-width:100vw}
+.bpm-dialog .receipt-modal .receipt-modal-grid{align-items:stretch}
+.bpm-dialog .receipt-modal .receipt-modal-grid>.receipt-modal-field{display:flex!important;align-items:center;width:100%!important;min-width:0;box-sizing:border-box}
+.bpm-dialog .receipt-modal .receipt-modal-field>span{flex:0 0 106px!important;white-space:nowrap}
+.bpm-dialog .receipt-modal .receipt-modal-field>.ant-select,.bpm-dialog .receipt-modal .receipt-modal-field>.ant-input,.bpm-dialog .receipt-modal .receipt-modal-field>.ant-input-number{flex:1 1 0!important;width:100%!important;min-width:0!important}
+.bpm-dialog .receipt-modal .receipt-modal-field>b{flex:1;min-width:0;overflow-wrap:anywhere}
+.receipt-bpm .bpm-detail-facts{display:grid;grid-template-columns:1.1fr .85fr 1.3fr;gap:24px;padding:0 20px 20px;align-items:start}
+.receipt-bpm .bpm-fact-group{display:grid;gap:10px;min-width:0}.receipt-bpm .bpm-fact{display:flex;align-items:center;gap:10px;min-width:0;font-size:13px;min-height:32px}
+.receipt-bpm .bpm-fact>label{flex:0 0 64px;text-align:right;color:#344f70;white-space:nowrap}
+.receipt-bpm .bpm-fact>span{flex:1;min-width:0;padding:5px 10px;border:1px solid #e8eff8;border-radius:5px;background:#f5f9ff;color:#263f5f;overflow-wrap:anywhere;box-sizing:border-box;line-height:1.55}
+.receipt-bpm .bpm-fact .ant-tag{margin:0}.receipt-bpm .bpm-provenance-line{display:grid;grid-template-columns:.85fr 1.3fr;gap:12px}.receipt-bpm .bpm-provenance-line .bpm-fact{gap:8px;font-size:12px}
+.receipt-bpm .bpm-fact>span.bpm-acceptance{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt-bpm .bpm-document-no{font-size:20px;color:#162f50;font-weight:650;overflow-wrap:anywhere}
+.receipt-bpm .receipt-flow-table{min-width:1320px;border-collapse:collapse}
+.receipt-prototype.receipt-bpm .receipt-flow-table th{font-size:12px;padding:10px 5px;border-right:1px solid #edf3fa;white-space:normal}
+.receipt-prototype.receipt-bpm .receipt-flow-table td{font-size:12px;padding:9px 5px;border-right:1px solid #edf3fa;color:#263f5f;line-height:1.55;vertical-align:middle}
+.receipt-bpm .receipt-flow-table .bpm-quantity{text-align:right;font-variant-numeric:tabular-nums}
+.receipt-bpm .receipt-flow-table td:nth-last-child(2) small{font-size:12px;color:#536780}
+.receipt-bpm .receipt-flow-table .receipt-flow-quality .ant-tag{white-space:normal;word-break:normal;overflow-wrap:anywhere}
+.receipt-bpm .bpm-audit-wrap{padding:0 16px 16px;overflow:auto}.receipt-bpm .bpm-audit-table{width:100%;border-collapse:collapse;font-size:12px;color:#304765;table-layout:fixed}
+.receipt-bpm .bpm-audit-table th{background:#f3f8fe;text-align:left;padding:8px;color:#465c75}.receipt-bpm .bpm-audit-table td{padding:8px;border-bottom:1px solid #edf3fa;overflow-wrap:anywhere;vertical-align:top}
+.receipt-bpm .bpm-audit-table th:first-child{width:142px}.receipt-bpm .bpm-audit-table th:nth-child(2){width:64px}.receipt-bpm .bpm-audit-table small{display:block;color:#536780;font-size:12px;margin-top:4px}
+.receipt-bpm .receipt-flow-table th:last-child,.receipt-bpm .receipt-flow-table td:last-child{min-width:72px;box-shadow:-1px 0 #e6edf6}
+@media(max-width:1200px){.receipt-bpm .bpm-detail-facts{grid-template-columns:1fr 1fr}.receipt-bpm .bpm-provenance{grid-column:1/-1}.receipt-bpm .bpm-provenance-line{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.bpm-dialog .receipt-modal .receipt-modal-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px}.bpm-dialog .receipt-modal .receipt-modal-field>span{flex-basis:96px!important}.bpm-dialog .receipt-modal .receipt-modal-field{gap:10px!important}.receipt-bpm .bpm-detail-facts{grid-template-columns:minmax(0,1fr);padding:0 12px 16px}.receipt-bpm .bpm-provenance{grid-column:auto}.receipt-bpm .bpm-provenance-line{grid-template-columns:minmax(0,1fr)}.receipt-bpm .receipt-title{flex-wrap:wrap}.receipt-bpm .bpm-document-no{font-size:16px}.receipt-bpm .bpm-audit-table{min-width:340px}}
+
+.receipt-bpm .bpm-check-disclosure{position:relative}.receipt-bpm .bpm-check-disclosure summary{cursor:pointer;min-height:28px;line-height:28px;color:#344f70;white-space:nowrap}.receipt-bpm .bpm-check-disclosure[open]>div{position:absolute;right:0;top:30px;width:230px;padding:12px;background:#fff;border:1px solid #8492a5;border-radius:6px;box-shadow:0 4px 14px #203b5720;z-index:8;color:#304765}.receipt-bpm .bpm-check-disclosure summary:focus-visible{outline:2px solid #0969da;outline-offset:2px}.receipt-bpm .bpm-check-disclosure small{white-space:normal;overflow-wrap:anywhere}.receipt-bpm .receipt-flow-table td{height:44px}.receipt-bpm .bpm-detail-checks{overflow:visible}
+
+/* G2 final review: preserve two-dimensional table semantics rather than crushing 16 columns. */
+.receipt-prototype.receipt-bpm .receipt-flow-table{min-width:1320px!important}
+.receipt-prototype.receipt-bpm .receipt-flow-table th,.receipt-prototype.receipt-bpm .receipt-flow-table td{word-break:normal;overflow-wrap:anywhere}
+.receipt-prototype.receipt-bpm .receipt-table-overflow{overflow:auto;scroll-padding-right:90px}
+.receipt-prototype.receipt-bpm .receipt-table-overflow:focus-visible{outline:2px solid #0969da;outline-offset:2px}
+.receipt-prototype.receipt-bpm .bpm-table-scroll-hint{display:none;margin:0;padding:0 20px 10px;font-size:12px;color:#465c75}
+.receipt-prototype.receipt-bpm .bpm-check-disclosure[open]>div{position:relative;inset:auto;width:100%;box-sizing:border-box;min-width:0;padding:6px;box-shadow:none}
+.receipt-prototype.receipt-bpm .bpm-check-disclosure[open]{min-width:0}
+.receipt-prototype.receipt-bpm .bpm-check-disclosure summary{min-width:24px;min-height:28px}
+.receipt-prototype.receipt-bpm .bpm-lines button{min-width:24px}
+.receipt-prototype.receipt-bpm .ant-btn-primary:hover,.bpm-dialog .ant-btn-primary:hover{background:#095fc4;border-color:#095fc4;color:#fff}
+.receipt-prototype.receipt-bpm .bpm-acceptance{white-space:normal!important;overflow:visible!important}
+@media(max-width:1580px){.receipt-prototype.receipt-bpm .bpm-table-scroll-hint{display:block}}
+@media(max-width:1100px){.receipt-prototype.receipt-bpm .receipt-page-head{flex-wrap:wrap;gap:12px}.receipt-prototype.receipt-bpm .receipt-page-head>div:first-child{flex-basis:100%}.receipt-prototype.receipt-bpm .receipt-title h1{white-space:nowrap}}
+@media(max-width:600px){.receipt-prototype.receipt-bpm .bpm-audit-table{min-width:520px}}
+
+/* Adapt source-approved business surface to the existing official app shell. */
+.receipt-live.receipt-prototype{display:block;width:100%;min-height:0}.receipt-live .receipt-workspace{width:100%;min-width:0}.receipt-live .receipt-main{padding:0}.receipt-live .bpm-live-extra{padding:16px 20px;background:#fff;margin-bottom:16px;display:grid;gap:12px}.receipt-live .wms-lookup,.receipt-live .process-lookup{width:100%;min-width:0}
+
+/* Entity lookup wrappers are controls, not fixed-width text labels. */
+.receipt-live .bpm-field>span.wms-lookup,.receipt-live .bpm-field>span.process-lookup{flex:1 1 0;display:block;min-width:0;width:100%;text-align:left}
+.receipt-live .bpm-field>span.wms-lookup .ant-select,.receipt-live .bpm-field>span.process-lookup .ant-select{width:100%}
+.receipt-live .receipt-form-pair>span.wms-lookup{flex:1 1 0;display:block;min-width:0;width:100%}

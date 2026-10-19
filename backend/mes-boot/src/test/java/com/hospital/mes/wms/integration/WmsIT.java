@@ -80,9 +80,9 @@ class WmsIT {
    assertThat(jdbc.queryForObject("SELECT record_status FROM wms_material_receipt WHERE id=?",String.class,id)).isEqualTo("DRAFT");
   }
   String id=service.createReceipt(new ReceiptCreate("EXSOURCE"+suffix,supplier,null,null,warehouse,true,List.of(item("EXSLOT"+suffix,"5",unit,true))),key(),false).path("id").asText();
-  jdbc.update("UPDATE md_supplier SET qualification_status='UNAPPROVED' WHERE id=?",supplier);
+  jdbc.update("UPDATE md_supplier SET qualification_status='待评审' WHERE id=?",supplier);
   assertThatThrownBy(()->tx.execute(s->service.confirmReceipt(id,new Command(0L,"Unapproved source"),null,key()))).hasMessageContaining("SUPPLIER_NOT_APPROVED");
-  jdbc.update("UPDATE md_supplier SET qualification_status='APPROVED',valid_to=? WHERE id=?",LocalDate.now(ZoneOffset.UTC).minusDays(1),supplier);
+  jdbc.update("UPDATE md_supplier SET qualification_status='合格',valid_to=? WHERE id=?",LocalDate.now(ZoneOffset.UTC).minusDays(1),supplier);
   assertThatThrownBy(()->tx.execute(s->service.confirmReceipt(id,new Command(0L,"Expired source"),null,key()))).hasMessageContaining("SUPPLIER_NOT_APPROVED");
   jdbc.update("UPDATE md_supplier SET valid_to=? WHERE id=?",LocalDate.now(ZoneOffset.UTC).plusYears(1),supplier);
   jdbc.update("UPDATE md_material_supplier SET approved=0,preferred=0 WHERE material_id=? AND supplier_id=?",material,supplier);

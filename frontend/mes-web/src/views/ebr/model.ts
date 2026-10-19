@@ -1,4 +1,4 @@
-import type {EbrDefinition,EbrField,EbrInput,EbrIssue} from './types'
+import type {EbrDefinition,EbrField,EbrInput,EbrIssue,EbrRoleOption} from './types'
 export const states:Record<string,string>={DRAFT:'草稿',SUBMITTED:'已提交',APPROVED:'已批准',EFFECTIVE:'已生效',WITHDRAWN:'已撤回'}
 export const fieldTypes=['NUMBER','TEXT','TEXTAREA','ENUM','MULTI_ENUM','BOOLEAN','DATE','TIME','DATETIME','BARCODE','MATERIAL_LOT','CONTAINER','EQUIPMENT','PERSON','ATTACHMENT','IMAGE','TIMER','CALCULATED','INSTRUMENT_VALUE','SIGNATURE_PLACEHOLDER'] as const
 export const fieldLabels:Record<string,string>={NUMBER:'数值',TEXT:'文本',TEXTAREA:'多行文本',ENUM:'单选',MULTI_ENUM:'多选',BOOLEAN:'布尔',DATE:'日期',TIME:'时间',DATETIME:'日期时间',BARCODE:'条码',MATERIAL_LOT:'物料批',CONTAINER:'容器',EQUIPMENT:'设备',PERSON:'人员',ATTACHMENT:'附件',IMAGE:'图片',TIMER:'计时器',CALCULATED:'计算值',INSTRUMENT_VALUE:'仪器值',SIGNATURE_PLACEHOLDER:'签名占位'}
@@ -17,3 +17,24 @@ export function newField(code:string,type:EbrField['fieldType']):EbrField{return
 export function moveItem<T extends {sequenceNo:number}>(rows:T[],from:number,to:number){if(from<0||to<0||from>=rows.length||to>=rows.length)return;rows.splice(to,0,rows.splice(from,1)[0]!);rows.forEach((r,i)=>r.sequenceNo=i+1)}
 export interface SimulationRow {fieldCode:string;type:'string'|'number'|'boolean';value:string}
 export function simulationInputs(rows:SimulationRow[]):EbrInput[]{return rows.filter(r=>r.value!=='').map(r=>({fieldCode:r.fieldCode,values:r.value.split('\n').map(v=>{if(r.type==='string')return v;if(r.type==='number'){if(!v.trim()||!Number.isFinite(Number(v)))throw Error(`${r.fieldCode}：请输入有限数值`);return Number(v)}if(!['true','false'].includes(v))throw Error(`${r.fieldCode}：布尔值仅支持 true / false`);return v==='true'})}))}
+
+export function definitionForSave(definition:EbrDefinition):EbrDefinition{
+ const result=clone(definition)
+ result.schemaVersion='2.0'
+ for(const r of [...result.signatureRules,...result.reviewRules]){
+  if(!r.requiredRoleId||!/^[1-9][0-9]*$/.test(r.requiredRoleId))throw Error('Required role ID must be selected')
+  delete r.requiredRole;delete r.roleCodeSnapshot;delete r.roleNameSnapshot
+ }
+ return result
+}
+export function prepareDraftRoleIds(definition:EbrDefinition,options:EbrRoleOption[]){
+ if(definition.schemaVersion==='2.0')return
+ for(const rule of [...definition.signatureRules,...definition.reviewRules]){
+  const matches=options.filter(r=>r.enabled&&r.code===rule.requiredRole)
+  if(matches.length===1)rule.requiredRoleId=matches[0]!.id
+ }
+ definition.schemaVersion='2.0'
+}
+export function frozenRoleLabel(rule:{requiredRole?:string|null;roleCodeSnapshot?:string|null;roleNameSnapshot?:string|null}){
+ return rule.roleNameSnapshot?`${rule.roleNameSnapshot} (${rule.roleCodeSnapshot??''})`:rule.requiredRole??rule.roleCodeSnapshot??''
+}

@@ -13,6 +13,7 @@ public class EbrController {
     private final EbrService service;private final TraceIdProvider traces;
     public EbrController(EbrService service,TraceIdProvider traces){this.service=service;this.traces=traces;}
     private <T>ApiResponse<T> response(T data){return ApiResponse.success(data,traces.currentTraceId());}
+    @GetMapping("/role-options") public Object roles(@RequestParam(name="page",defaultValue="0")int page,@RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="keyword",required=false)String keyword){return response(service.roleOptions(page,size,keyword));}
     @GetMapping("/templates") public Object list(@RequestParam(name="page",defaultValue="0")int page,@RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="keyword",required=false)String keyword,@RequestParam Map<String,String> filters){return response(service.list(page,size,keyword,filters));}
     @GetMapping("/templates/{id}") public Object detail(@PathVariable("id")String id){return response(service.get(id));}
     @PostMapping("/templates") public Object create(@RequestBody Create request,@RequestHeader("Idempotency-Key")String key){return response(service.create(request,key));}

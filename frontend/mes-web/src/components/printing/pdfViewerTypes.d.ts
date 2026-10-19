@@ -1,0 +1,8 @@
+declare module 'pdfjs-dist/web/pdf_viewer.mjs' {
+  export { PDFViewer } from 'pdfjs-dist/types/web/pdf_viewer'
+  export { EventBus } from 'pdfjs-dist/types/web/event_utils'
+}
+declare module 'pdfjs-dist/build/pdf.worker.min.mjs?url' {
+  const url:string
+  export default url
+}

@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: "optional:file:./.env[.properties]"
   datasource:
     url: ${MES_DB_URL:jdbc:mariadb://localhost:3306/hospital_pharma_mes_dev}
     username: ${MES_DB_USERNAME:mes}
@@ -9,6 +11,19 @@ spring:
       port: ${MES_REDIS_PORT:6379}
       password: ${MES_REDIS_PASSWORD:redis_local_password}
 mes:
+  # Local DEV simulation only. Role-specific demo credentials are not GMP personnel training evidence.
+  qualification:
+    required-codes:
+      sample-execute: MES_DEMO_SAMPLING
+      test-execute: MES_DEMO_QC_EXECUTION
+      test-review: MES_DEMO_QC_REVIEW
+      qa-release: MES_DEMO_QA_RELEASE
+      operation-start: MES_DEMO_PRODUCTION
+      operation-resume: MES_DEMO_PRODUCTION
+      weigh-create: MES_DEMO_PRODUCTION
+      weigh-verify: MES_DEMO_WEIGH_REVIEW
+      charge-create: MES_DEMO_PRODUCTION
+      charge-reverse: MES_DEMO_PRODUCTION
   platform:
     organization-id: ${MES_PLATFORM_ORGANIZATION_ID:1}
   security:

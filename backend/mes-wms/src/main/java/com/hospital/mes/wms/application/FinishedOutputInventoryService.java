@@ -16,6 +16,13 @@ public class FinishedOutputInventoryService {
  public FinishedOutputInventoryService(WmsStore store,MaterialQueryService materials,MasterQueryService units,MasterMutation mutations,WmsViews views){this.store=store;this.materials=materials;this.units=units;this.mutations=mutations;this.views=views;}
  private static void gate(boolean ok,String code,String why){if(!ok)throw new ComplianceException(code,why);}
  @Transactional(propagation=Propagation.MANDATORY)
+ public com.fasterxml.jackson.databind.JsonNode validateProduct(CurrentPlatformContext c,long batch,com.fasterxml.jackson.databind.JsonNode product,BigDecimal amount,long unit,long location,LocalDate manufacture,LocalDate expiry){
+  mutations.context("mes:quantity:record");var today=LocalDate.now(ZoneOffset.UTC);gate(manufacture!=null&&expiry!=null&&!manufacture.isAfter(today)&&expiry.isAfter(today)&&expiry.isAfter(manufacture),"OUTPUT_DATES_INVALID","Actual manufacture/expiry dates required");
+  var destination=store.location().get(c.organizationId(),location);gate("ACTIVE".equals(destination.getStatus())&&"ACTIVE".equals(store.warehouse().get(c.organizationId(),destination.getWarehouseId()).getStatus()),"OUTPUT_DESTINATION_INVALID","Active location required");long base=product.path("baseUnitId").asLong();gate(base>0&&product.path("productId").asLong()>0,"PRODUCT_SNAPSHOT_REQUIRED","Frozen plan product required");
+  var conversion=units.convert(c.organizationId(),unit,base,null,amount);var exact=amount.multiply(new BigDecimal(conversion.factor()));gate(exact.compareTo(new BigDecimal(conversion.convertedValue()))==0,"QUANTITY_PRECISION_LOSS","Exact product conversion required");validateQuantity(exact);
+  var out=new com.fasterxml.jackson.databind.ObjectMapper().createObjectNode();out.put("baseUnitId",Long.toString(base));out.put("manufactureDate",manufacture.toString());out.put("expiryDate",expiry.toString());out.set("productSnapshot",product.deepCopy());out.put("productSnapshotDigest",mutations.digest(product));return out;
+ }
+ @Transactional(propagation=Propagation.MANDATORY)
  public long receive(CurrentPlatformContext c,long batch,Long existing,long material,BigDecimal amount,long unit,String lotNo,long location,LocalDate productionDate,LocalDate expiryDate,String source,String reason,String key){
   mutations.context("mes:quantity:record");var today=LocalDate.now(ZoneOffset.UTC);
   gate(productionDate!=null&&expiryDate!=null&&!productionDate.isAfter(today)&&expiryDate.isAfter(today)&&expiryDate.isAfter(productionDate),"OUTPUT_DATES_INVALID","Actual production/expiry dates required");

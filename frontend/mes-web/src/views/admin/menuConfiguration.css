@@ -86,3 +86,13 @@
 .menu-prototype>.ant-alert{margin-bottom:12px}
 @media(max-width:1150px){.menu-prototype :is(.menu-query,.menu-result){--menu-inset-x:16px;--menu-inset-y:16px}}
 @media(max-width:580px){.menu-prototype :is(.menu-query,.menu-result){--menu-inset-x:12px;--menu-inset-y:12px}.menu-prototype .menu-query-form .menu-pair .ant-input-affix-wrapper{flex:1;min-width:0;width:0}}
+
+/* 2026-10-13: ordinary menu list shell follows global T1; tree rows remain the approved specialized content. */
+.menu-prototype.t1-query-list .query-card,.menu-prototype.t1-query-list .result-card{padding:0;margin-bottom:16px;border-color:var(--mes-ui-border);border-radius:8px}
+.menu-prototype.t1-query-list .query-card>.ant-card-body,.menu-prototype.t1-query-list .result-card>.ant-card-body{padding:16px 20px}
+.menu-prototype.t1-query-list .menu-query-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 16px;align-items:center}
+.menu-prototype.t1-query-list .menu-query-form>.ant-space{justify-self:end}
+.menu-prototype.t1-query-list .menu-query-form .menu-pair{width:100%}
+.menu-prototype.t1-query-list .menu-query-form .menu-pair .ant-input-affix-wrapper{width:100%;flex:1}
+.menu-prototype.t1-query-list .menu-panel-header{margin:0 0 12px}
+@media(max-width:900px){.menu-prototype.t1-query-list .menu-query-form{grid-template-columns:1fr}.menu-prototype.t1-query-list .menu-query-form>.ant-space{width:100%;justify-self:stretch;justify-content:flex-end}}

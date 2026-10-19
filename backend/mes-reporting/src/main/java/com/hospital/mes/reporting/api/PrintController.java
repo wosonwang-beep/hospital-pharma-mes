@@ -33,9 +33,9 @@ public class PrintController {
  @PostMapping("/templates/{id}/publish") public ApiResponse<?> publish(@PathVariable("id") String id,@RequestBody VersionCommand c){return ok(service.publish(id,c.versionNo(),c.reason()));}
  @PostMapping("/templates/{id}/deactivate") public ApiResponse<?> deactivate(@PathVariable("id") String id,@RequestBody VersionCommand c){return ok(service.deactivate(id,c.versionNo(),c.reason()));}
  @PostMapping("/templates/{id}/bind") public ApiResponse<?> bind(@PathVariable("id") String id,@RequestBody BindCommand c){return ok(service.bind(id,c.businessType(),c.enabled(),c.reason()));}
- @PostMapping("/artifacts") public ApiResponse<?> generate(@RequestBody GenerateCommand c){return ok(service.generate(c.businessType(),c.businessId(),c.templateVersionId(),c.formal()));}
+ @PostMapping("/artifacts") public ResponseEntity<byte[]> generate(@RequestBody GenerateCommand c){return pdf(service.generate(c.businessType(),c.businessId(),c.templateVersionId(),c.formal()),"print.pdf",false);}
  public record BatchCommand(String businessType,List<String> recordIds,String templateVersionId,boolean formal){@com.fasterxml.jackson.annotation.JsonAnySetter public void unknown(String name,Object value){throw new IllegalArgumentException("Unknown print field: "+name);}}
- @PostMapping("/batches") public ApiResponse<?> batch(@RequestBody BatchCommand c){return ok(batches.generate(c.businessType(),c.recordIds(),c.templateVersionId(),c.formal()));}
+ @PostMapping("/batches") public ResponseEntity<byte[]> batch(@RequestBody BatchCommand c){return pdf(batches.generate(c.businessType(),c.recordIds(),c.templateVersionId(),c.formal()),"batch.pdf",false);}
  @GetMapping("/batches/{id}/pdf") public ResponseEntity<byte[]> batchPdf(@PathVariable("id") String id,@RequestParam(name="download",defaultValue="false") boolean download){return pdf(batches.pdf(id),"batch-"+id+".pdf",download);}
  @GetMapping("/artifacts") public ApiResponse<?> history(@RequestParam("businessType") String businessType,@RequestParam("businessId") String businessId){return ok(service.history(businessType,businessId));}
  @GetMapping("/artifacts/{id}/pdf") public ResponseEntity<byte[]> pdf(@PathVariable("id") String id,@RequestParam(name="download",defaultValue="false") boolean download){return pdf(service.pdf(id),"print-"+id+".pdf",download);}

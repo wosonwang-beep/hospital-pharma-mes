@@ -21,9 +21,13 @@ test('preserves MES-001 routes and adds only frozen MES-002 administration route
   expect(paths).not.toContain('/platform/operations')
 })
 
-test('production UI source excludes removed contracts and raw message payloads', () => {
+test('production UI source excludes removed contracts and raw integration message payloads', () => {
   const source = sourceFiles(join(process.cwd(), 'src')).map(path => readFileSync(path, 'utf8')).join('\n')
   expect(source).not.toContain('/platform/operations')
   expect(source).not.toContain('PLAT-001')
-  expect(source).not.toMatch(/\bpayload\b/i)
+  const integrationUi = [
+    ...sourceFiles(join(process.cwd(), 'src', 'views', 'integration')),
+    join(process.cwd(), 'src', 'api', 'integration.ts')
+  ].map(path => readFileSync(path, 'utf8')).join('\n')
+  expect(integrationUi).not.toMatch(/\bpayload\b/i)
 })

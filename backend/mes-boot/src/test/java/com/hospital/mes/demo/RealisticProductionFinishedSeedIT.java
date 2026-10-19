@@ -53,7 +53,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.annotation.Commit;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import static org.assertj.core.api.Assertions.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,8 +75,15 @@ import org.springframework.transaction.annotation.Transactional;
 })
 @ActiveProfiles("ci")
 @Transactional
-@Commit
-class RealisticProductionFinishedSeedIT {
+public class RealisticProductionFinishedSeedIT {
+    @DynamicPropertySource
+    static void isolatedOnly(DynamicPropertyRegistry registry) {
+        String url=System.getenv("MES_ISOLATED_URL");
+        if(!"jdbc:mariadb://127.0.0.1:3306/test_mes_product_finished_20261011_0640".equals(url))throw new IllegalStateException("This lifecycle fixture is authorized only in the existing isolated schema");
+        registry.add("spring.datasource.url",()->url);
+        registry.add("spring.datasource.username",()->System.getenv("MES_ISOLATED_USER"));
+        registry.add("spring.datasource.password",()->System.getenv("MES_ISOLATED_PASSWORD"));
+    }
     @Autowired JdbcTemplate jdbc;
     @Autowired ObjectMapper json;
     @Autowired PasswordService passwords;
@@ -106,6 +115,9 @@ class RealisticProductionFinishedSeedIT {
     @Autowired FinishedGoodsService finishedGoods;
     @Autowired FinishedInspectionService finishedInspection;
     @Autowired FinishedReleaseService finishedQa;
+    @Autowired com.hospital.mes.release.application.EbrArchiveService archive;
+    @Autowired com.hospital.mes.configuration.EbrFormPrintProvider formPrint;
+    @Autowired com.hospital.mes.qc.application.QcSpecificationQueryService specificationHistory;
 
     @MockitoBean CurrentPlatformContextResolver contexts;
     @MockitoBean ReauthenticationPort reauth;
@@ -114,20 +126,66 @@ class RealisticProductionFinishedSeedIT {
     long productionActor, warehouseActor, samplerActor, analystActor, reviewerActor, qaActor;
     String tag, packageVersionId, templateVersionId, finishedSpecVersionId;
     String kclLot, waterLot;
-    final String KCL="1", WATER="5", FINISHED="17", G="1", ML="3", PERCENT="7", PH="10";
+    String KCL,WATER,G,ML,PERCENT,PH,PRODUCT,FG_LOCATION;
+    private String material(String code){return jdbc.queryForObject("SELECT id FROM md_material WHERE org_id=1 AND material_code=?",String.class,code);}
+    private String unit(String code){return jdbc.queryForObject("SELECT id FROM md_unit WHERE org_id=1 AND unit_code=?",String.class,code);}
+    private void resolveReferences(){
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM md_material WHERE material_type='FINISHED'",Long.class)).isZero();
+        KCL=material("YL-0001");WATER=material("FL-0004");G=unit("g");ML=unit("ml");PERCENT=unit("PERCENT");PH=unit("PH");
+        PRODUCT=jdbc.queryForObject("SELECT id FROM md_product WHERE org_id=1 AND product_code='KCL30'",String.class);
+        FG_LOCATION=jdbc.queryForObject("SELECT id FROM wms_location WHERE org_id=1 AND location_code='FG-QC'",String.class);
+    }
+
+    @Autowired org.springframework.transaction.PlatformTransactionManager transactionManager;
 
     @Test
-    void seedProductionAndFinishedChain() {
+    @Transactional(propagation=org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
+    protected void competingInstructionCommandsWaitForRollbackAndLeaveNoData() throws Exception {
+        // No fixture commit: each worker owns one REQUIRED transaction and always rolls it back.
+        resolveReferences();tag="CONCUR_"+UUID.randomUUID().toString().replace("-","");
+        permissions=new HashSet<>(jdbc.queryForList("SELECT permission_code FROM sys_permission WHERE enabled=TRUE",String.class));
+        permissions.addAll(Set.of("production:batch:create","production:batch:view"));
+        productionActor=jdbc.queryForObject("SELECT created_by FROM md_product WHERE id=?",Long.class,PRODUCT);as(productionActor,"PRODUCTION");
+        var tx=new org.springframework.transaction.support.TransactionTemplate(transactionManager);tx.setTimeout(15);
+        var command=body("batchNo",tag,"productId",PRODUCT,"plannedQty","1000","unitId",ML,"reason","Competing isolated rollback-only instructions");String sharedKey=key();
+        var firstReady=new java.util.concurrent.CountDownLatch(1);var secondStarted=new java.util.concurrent.CountDownLatch(1);var secondDone=new java.util.concurrent.CountDownLatch(1);var release=new java.util.concurrent.CountDownLatch(1);
+        try(var workers=java.util.concurrent.Executors.newFixedThreadPool(2)){
+            var first=workers.submit(()->tx.execute(status->{try{var result=production.createInstruction(command.deepCopy(),sharedKey);firstReady.countDown();if(!release.await(10,java.util.concurrent.TimeUnit.SECONDS))throw new IllegalStateException("Release timeout");return result;}catch(InterruptedException ex){Thread.currentThread().interrupt();throw new IllegalStateException(ex);}finally{status.setRollbackOnly();}}));
+            assertThat(firstReady.await(8,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            var second=workers.submit(()->tx.execute(status->{try{secondStarted.countDown();return production.createInstruction(command.deepCopy(),sharedKey);}finally{status.setRollbackOnly();secondDone.countDown();}}));
+            try{assertThat(secondStarted.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();assertThat(secondDone.await(400,java.util.concurrent.TimeUnit.MILLISECONDS)).isFalse();}
+            finally{release.countDown();}
+            assertThat(first.get(10,java.util.concurrent.TimeUnit.SECONDS).path("productionSchemaVersion").asInt()).isEqualTo(2);
+            assertThat(second.get(10,java.util.concurrent.TimeUnit.SECONDS).path("productionSchemaVersion").asInt()).isEqualTo(2);
+        }finally{release.countDown();}
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM prd_main_batch WHERE batch_no=?",Long.class,tag)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM md_material WHERE material_type='FINISHED'",Long.class)).isZero();
+    }
+
+    @Test
+    protected void productStandardCannotEnterMaterialHistoricalReader() {
+        // An independent Spring test transaction owns its own fixture and rolls back at method end.
+        tag="NEG_"+UUID.randomUUID().toString().replace("-","");
+        resolveReferences();initActors();finishedSpecVersionId=createFinishedSpec();
+        assertThatThrownBy(()->specificationHistory.getHistorical(1,Long.parseLong(finishedSpecVersionId)))
+            .isInstanceOf(com.hospital.mes.common.exception.ResourceConflictException.class)
+            .hasMessageContaining("material reader");
+        // Do not run positive QA/business commands after the expected rollback-only boundary.
+    }
+
+    @Test
+    protected void seedProductionAndFinishedChain() {
+        BusinessSeedPayloadGuard.check(java.util.Map.of("qualificationCode", "MES_DEMO_GMP", "equipmentType", "DEMO_SCALE"));
         tag = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        resolveReferences();
         initActors();
-        normalizeFinishedMaterial();
         installWeighingPolicies();
 
         kclLot = jdbc.queryForObject("""
             SELECT id FROM md_material_lot
-            WHERE material_id=1 AND quality_status='RELEASED' AND inventory_status='AVAILABLE'
+            WHERE material_id=? AND quality_status='RELEASED' AND inventory_status='AVAILABLE'
             ORDER BY id DESC LIMIT 1
-            """, String.class);
+            """, String.class,KCL);
         waterLot = ensureReleasedPurifiedWater();
 
         prepareProcessAndEbr();
@@ -145,12 +203,31 @@ class RealisticProductionFinishedSeedIT {
         complete = releaseAndStart(complete, "ISS-KCL-"+tag+"-F");
         complete = executeAndCompleteProduction(complete);
 
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_finished_inventory_ledger WHERE main_batch_id=?",Long.class,id(complete))).isZero();
+        assertThat(specificationHistory.getProductHistorical(1,Long.parseLong(PRODUCT),Long.parseLong(finishedSpecVersionId)).productId()).isEqualTo(Long.parseLong(PRODUCT));
         JsonNode inbound = confirmFinishedInbound(complete);
         JsonNode finishedReport = completeFinishedInspection(inbound);
         JsonNode pendingQa = submitFinishedQa(complete);
         JsonNode release = releaseFinished(pendingQa);
         JsonNode shipment = shipFinished(pendingQa, inbound);
 
+        assertThat(shipment.path("status").asText()).isEqualTo("CONFIRMED");
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM md_material WHERE material_type='FINISHED'",Long.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_finished_inventory_ledger WHERE main_batch_id=?",Long.class,id(pendingQa))).isEqualTo(2);
+        assertThat(jdbc.queryForObject("SELECT SUM(delta_qty) FROM wms_finished_inventory_ledger WHERE main_batch_id=?",java.math.BigDecimal.class,id(pendingQa))).isEqualByComparingTo("695");
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_finished_inbound_request WHERE main_batch_id=? AND material_lot_id IS NOT NULL",Long.class,id(pendingQa))).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM prd_main_batch WHERE id=? AND production_schema_version=2 AND finished_lot_id IS NULL AND finished_quality_status='RELEASED'",Long.class,id(pendingQa))).isEqualTo(1);
+        JsonNode archiveFacts=archive.sourceEvidence(1,Long.parseLong(id(pendingQa)));
+        assertThat(archiveFacts.path("finishedInventory").path("mainBatchId").asText()).isEqualTo(id(pendingQa));
+        assertThat(archiveFacts.path("finishedInventory").path("productId").asText()).isEqualTo(PRODUCT);
+        assertThat(archiveFacts.path("finishedInventory").path("ledger").size()).isEqualTo(2);
+        as(productionActor,"PRODUCTION");
+        String executionId=production.batch(id(pendingQa)).path("executionUnits").get(0).path("id").asText();
+        JsonNode form=runtime.forms(executionId).get(0);
+        var printed=formPrint.load(id(form),true);
+        assertThat(printed.businessVersion()).isNotBlank();
+        assertThat(printed.data().get("definitionHash")).isEqualTo(form.path("definitionHash").asText());
+        assertThat(archive.sourceEvidence(1,Long.parseLong(id(pendingQa))).path("finishedInventory")).isEqualTo(archiveFacts.path("finishedInventory"));
         Map<String,Object> summary = new LinkedHashMap<>();
         summary.put("draftBatchId", id(draft));
         summary.put("draftBatchNo", draft.path("batchNo").asText());
@@ -158,7 +235,7 @@ class RealisticProductionFinishedSeedIT {
         summary.put("runningBatchNo", running.path("batchNo").asText());
         summary.put("releasedBatchId", id(pendingQa));
         summary.put("releasedBatchNo", pendingQa.path("batchNo").asText());
-        summary.put("finishedLotId", pendingQa.path("finishedLotId").asText());
+        summary.put("finishedMainBatchId", id(pendingQa));
         summary.put("finishedInboundId", id(inbound));
         summary.put("finishedReportId", id(finishedReport));
         summary.put("releaseDecisionId", id(release));
@@ -222,25 +299,6 @@ class RealisticProductionFinishedSeedIT {
             1,actor,Set.of(role),permissions,"demo-production-session","demo-production-"+tag));
     }
 
-    private void normalizeFinishedMaterial() {
-        as(productionActor,"MASTER_DATA");
-        JsonNode m=materials.get(FINISHED);
-        if("FINISHED".equals(m.path("materialType").asText())) return;
-        materials.update(FINISHED,new MaterialCommands.Update(
-            m.path("versionNo").asLong(),
-            "规范成品物料类型编码，使其符合生产质量计划业务契约",
-            m.path("materialName").asText(),
-            "FINISHED",
-            nullable(m,"specification"),nullable(m,"gradePurity"),nullable(m,"appearance"),
-            m.path("baseUnitId").asText(),nullable(m,"packSpec"),nullable(m,"packUnitId"),
-            nullable(m,"manufacturerName"),m.path("lotControlled").asBoolean(true),
-            nullable(m,"effectiveFrom"),nullable(m,"effectiveTo"),nullable(m,"remark"),
-            m.path("requiresIncomingInspection").asBoolean(true),nullable(m,"storageCondition")),
-            token(m),key());
-    }
-
-    private String nullable(JsonNode n,String field){return n.hasNonNull(field)?n.path(field).asText():null;}
-
     private void installWeighingPolicies() {
         Map<String,Object> p=new HashMap<>();
         policy(p,0,KCL,"0.001","0.5");
@@ -254,91 +312,12 @@ class RealisticProductionFinishedSeedIT {
     }
 
     private String ensureReleasedPurifiedWater() {
-        List<String> existing=jdbc.queryForList("""
-            SELECT id FROM md_material_lot
-            WHERE material_id=5 AND quality_status='RELEASED' AND inventory_status='AVAILABLE'
-            ORDER BY id DESC
-            """,String.class);
-        if(!existing.isEmpty()) return existing.getFirst();
-
-        as(productionActor,"MASTER_DATA");
-        JsonNode supplier=suppliers.get("7");
-        if("UNAPPROVED".equals(supplier.path("qualificationStatus").asText()))
-            suppliers.command("7",new SupplierCommands.Update("QUALIFY",supplier.path("versionNo").asLong(),
-                "院内制剂室纯化水供应资格确认",null,null),null,key());
-        JsonNode relations=materialSuppliers.get(WATER);
-        boolean ready=false;
-        for(JsonNode row:relations.path("suppliers"))
-            if("7".equals(row.path("supplierId").asText())&&row.path("approved").asBoolean()&&row.path("preferred").asBoolean())ready=true;
-        if(!ready) materialSuppliers.assign(WATER,new SupplierCommands.Assign(relations.path("versionNo").asLong(),
-            "院内纯化水作为首选合格来源",List.of(new SupplierCommands.Relationship("7",true,true,LocalDate.now().plusYears(1),"中山大学附属第三医院制剂室"))),null,key());
-
-        as(analystActor,"QC_ANALYST");
-        var root=qc.create(new QcCommands.CreateSpecification(WATER,"PW-"+tag,"纯化水入厂质量标准","建立纯化水检验标准"),key());
-        var draft=qc.createVersion(root.id(),new QcCommands.CreateVersion(1,List.of(
-            new QcCommands.Item("PH","pH",true,"NUMERIC","5.0","7.0",PH,null,"PH-METHOD","2025")
-        ),"依据纯化水质量标准"),key());
-        as(reviewerActor,"QC_REVIEWER");
-        String spec=qc.approveVersion(draft.id(),new QcCommands.SignVersion(draft.versionNo(),"独立批准纯化水标准","demo-reauth"),quote(draft.versionNo()),key()).id();
-
-        as(warehouseActor,"WAREHOUSE");
-        var item=new ReceiptItemInput(WATER,"PW-"+tag+"-01","PW-LOOP-"+tag,null,
-            LocalDate.now().toString(),LocalDate.now().plusDays(7).toString(),null,
-            "200000",ML,"100 L不锈钢储罐",2L,"1",null,true,true,true,true,true);
-        JsonNode receipt=wms.createReceipt(new ReceiptCreate("REC-PW-"+tag,"7","PW-INTERNAL-"+tag,"PW-DN-"+tag,"1",true,List.of(item)),key(),true);
-        String lot=receipt.path("items").get(0).path("materialLotId").asText();
-
-        as(analystActor,"QC_ANALYST");
-        JsonNode request=incoming.createRequest(body("materialLotId",lot,"qcSpecificationVersionId",spec,"requestType","INITIAL",
-            "reason","纯化水使用前质量确认","requestedQuantity","100","requestedUnitId",ML,"requestedPackageCount",1,
-            "requestedDate",LocalDate.now().toString(),"priority","NORMAL"),key());
-        request=incoming.requestAction(id(request),"submit",body("reason","提交纯化水请验"),token(request),key());
-        request=incoming.requestAction(id(request),"accept",body("reason","QC受理纯化水请验"),token(request),key());
-        JsonNode st=incoming.createSampling(body("inspectionRequestId",id(request),"inspectionRequestItemId",request.path("items").get(0).path("id").asText(),
-            "samplingPlan","循环水取样口冲洗后取代表性样","requiredPackageCount",1,"reason","纯化水取样计划"),key());
-        st=incoming.samplingAction(id(st),"assign",body("assignedTo",Long.toString(samplerActor),"reason","指派取样"),token(st),key());
-        as(samplerActor,"SAMPLER");
-        st=incoming.samplingAction(id(st),"start",body("reason","开始纯化水取样"),token(st),key());
-        st=incoming.samplingAction(id(st),"details",body("containerNo","PW-PORT-01","samplingPoint","纯化水循环回水取样点",
-            "sampleQuantity","100","unitId",ML,"sampledAt",Instant.now().minusSeconds(30).toString(),"packageResealed",true,
-            "samples",List.of(Map.of("sampleType","TEST_SAMPLE","quantity","80","storageLocation","QC待检"),
-                              Map.of("sampleType","RETENTION_SAMPLE","quantity","20","storageLocation","留样室")),
-            "reason","完成纯化水取样"),token(st),key());
-        st=incoming.samplingAction(id(st),"complete",body("reason","取样完成","reauthToken","demo-reauth"),token(st),key());
-        JsonNode sample=st.path("details").get(0).path("samples").get(0);
-        sample=incoming.sampleAction(id(sample),"receive",body("receivedAt",Instant.now().toString(),"storageLocation","QC水样区","reason","接收水样"),token(sample),key());
-
-        as(analystActor,"QC_ANALYST");
-        JsonNode task=incoming.createTask(body("inspectionRequestId",id(request),"sampleId",id(sample),"reason","执行pH检验"),key());
-        task=incoming.taskAction(id(task),"assign",body("assignedTo",Long.toString(analystActor),"reason","指派检验"),token(task),key());
-        task=incoming.taskAction(id(task),"start",body("reason","开始pH检验"),token(task),key());
-        JsonNode exec=incoming.execution(task.path("items").get(0).path("id").asText(),false,
-            body("rawData",Map.of("meter","PH-01","reading","6.2"),"calculationInput",Map.of(),
-                "startedAt",Instant.now().minusSeconds(20).toString(),"completedAt",Instant.now().minusSeconds(5).toString(),
-                "performedBy",Long.toString(analystActor),"reason","记录pH原始数据"),token(task),key());
-        JsonNode current=incoming.get("qms_inspection_task","qms:test:view",id(task));
-        JsonNode result=incoming.result(task.path("items").get(0).path("id").asText(),false,
-            body("testExecutionId",id(exec),"resultNumeric","6.2","resultUnitId",PH,"resultConclusion","PASS","reauthToken","demo-reauth"),token(current),key());
-        current=incoming.get("qms_inspection_task","qms:test:view",id(task));
-        current=incoming.taskAction(id(current),"submit-review",body("reason","提交pH结果复核"),token(current),key());
-        as(reviewerActor,"QC_REVIEWER");
-        incoming.taskAction(id(current),"review",body("resultRevisionIds",List.of(id(result)),"reauthToken","demo-reauth","reason","复核pH结果"),token(current),key());
-
-        as(analystActor,"QC_ANALYST");
-        JsonNode report=incoming.createReport(body("inspectionRequestId",id(request),"reason","汇总纯化水检验"),key());
-        as(reviewerActor,"QC_REVIEWER");
-        report=incoming.reportAction(id(report),"review",body("reason","QC复核纯化水报告"),token(report),key());
-        as(qaActor,"QA");
-        report=incoming.reportAction(id(report),"approve",body("reason","QA批准纯化水报告","reauthToken","demo-reauth"),token(report),key());
-        JsonNode gate=incoming.releaseReview(lot);
-        incoming.decideRelease(lot,body("decision","RELEASED","releaseBasis","FULL_INSPECTION","inspectionReportId",id(report),
-            "reason","纯化水检验合格，批准用于生产","reauthToken","demo-reauth"),token(gate),key());
-        return lot;
+        return jdbc.queryForObject("SELECT id FROM md_material_lot WHERE org_id=1 AND material_id=? AND quality_status='RELEASED' AND inventory_status='AVAILABLE' ORDER BY id DESC LIMIT 1",String.class,WATER);
     }
 
     private void prepareProcessAndEbr() {
         as(productionActor,"PRODUCTION");
-        JsonNode pkg=process.createPackage(new ProcessCommands.PackageCreate("1","KCL30-INT-"+tag),key());
+        JsonNode pkg=process.createPackage(new ProcessCommands.PackageCreate(PRODUCT,"KCL30-INT-"+tag),key());
         packageVersionId=pkg.path("id").asText();
         process.saveCurrentDefinition(packageVersionId,new com.hospital.mes.process.domain.ProcessCommands.CurrentDefinitionSave(null,null,null,new ProcessCommands.FormulaSave(0L,"建立氯化钾溶液1000mL标准处方","KCL30-F-"+tag,"1000",ML,
             List.of(new ProcessCommands.FormulaLine(1,KCL,"20",G,"0",true),
@@ -368,7 +347,7 @@ class RealisticProductionFinishedSeedIT {
 
     private String createFinishedSpec() {
         as(analystActor,"QC_ANALYST");
-        var root=qc.create(new QcCommands.CreateSpecification(FINISHED,"FG-KCL-"+tag,"氯化钾溶液成品质量标准","建立成品冻结标准"),key());
+        var root=qc.create(new QcCommands.CreateSpecification("PRODUCT",null,PRODUCT,"FG-KCL-"+tag,"氯化钾溶液成品质量标准","建立成品冻结标准"),key());
         var draft=qc.createVersion(root.id(),new QcCommands.CreateVersion(1,List.of(
             new QcCommands.Item("KCL_ASSAY","氯化钾含量",true,"NUMERIC","1.8","2.2",PERCENT,null,"ASSAY-METHOD","2025")
         ),"依据氯化钾溶液质量标准"),key());
@@ -378,13 +357,12 @@ class RealisticProductionFinishedSeedIT {
 
     private JsonNode createBatch(String batchNo,String orderNo,String qty) {
         as(productionActor,"PRODUCTION");
-        JsonNode order=production.createOrder(body("orderNo",orderNo,"productId","1","plannedQty",qty,"unitId",ML,"reason","医院制剂生产计划"),key());
-        return production.createBatch(body("batchNo",batchNo,"productionOrderId",id(order),"productId","1","plannedQty",qty,"unitId",ML,"reason","创建氯化钾溶液生产批"),key());
+        return production.createInstruction(body("batchNo",batchNo,"productId",PRODUCT,"plannedQty",qty,"unitId",ML,"reason","Isolated direct-product instruction"),key());
     }
 
     private void createApprovedPlan(JsonNode batch,boolean approve) {
         as(productionActor,"PRODUCTION");
-        JsonNode plan=plans.create(body("mainBatchId",id(batch),"finishedMaterialId",FINISHED,"qcSpecificationVersionId",finishedSpecVersionId,
+        JsonNode plan=plans.create(body("mainBatchId",id(batch),"qcSpecificationVersionId",finishedSpecVersionId,
             "balanceRules",List.of(Map.of(
                 "balanceCode","TOTAL","basis","BATCH","unitId",ML,
                 "formulaExpr",Map.of("dslVersion",1,"expected",Map.of("sum",List.of("OUTPUT")),"actual",Map.of("sum",List.of("OUTPUT","LOSS")),"metric","DIFFERENCE_PCT"),
@@ -455,7 +433,7 @@ class RealisticProductionFinishedSeedIT {
 
         JsonNode current=production.batch(bid);
         quantities.record(bid,body("versionNo",current.path("versionNo").asLong(),"eventType","OUTPUT","amount","995","unitId",ML,
-            "sourceRef","FG-OUTPUT-"+tag,"lotNo","FG-KCL-"+tag,"locationId","7","productionDate",LocalDate.now().toString(),
+            "sourceRef","FG-OUTPUT-"+tag,"locationId",FG_LOCATION,"productionDate",LocalDate.now().toString(),
             "expiryDate",LocalDate.now().plusMonths(6).toString(),"reason","记录成品实际产出","signature",Map.of("reauthToken","demo-reauth")),token(current),key());
         current=production.batch(bid);
         quantities.record(bid,body("versionNo",current.path("versionNo").asLong(),"eventType","LOSS","amount","5","unitId",ML,
@@ -464,9 +442,8 @@ class RealisticProductionFinishedSeedIT {
         balances.recalculate(bid,body("versionNo",current.path("versionNo").asLong(),"reason","计算批次物料平衡"),token(current),key());
 
         current=production.batch(bid);
-        String finishedLot=current.path("finishedLotId").asText();
         JsonNode sample=productionQuality.createSample(body("investigationScope","PRODUCTION","mainBatchId",bid,"sampleNo","IPC-FG-"+tag,
-            "sampleType","TEST_SAMPLE","materialLotId",finishedLot,"quantity","30","unitId",ML,"sourceRef","FG-QC-"+tag,"reason","生产完成前成品质量检验样"),key());
+            "sampleType","TEST_SAMPLE","quantity","30","unitId",ML,"sourceRef","FG-QC-"+tag,"reason","生产完成前成品质量检验样"),key());
         sample=productionQuality.receiveSample(id(sample),body("versionNo",sample.path("versionNo").asLong(),"reason","QC接收成品检验样"),token(sample),key());
         String specItem=productionQuery.batch(1,Long.parseLong(bid)).snapshot().path("qualityPlan").path("specification").path("items").get(0).path("specificationItemId").asText();
         JsonNode test=productionQuality.createTest(body("sampleId",id(sample),"specificationItemId",specItem,"reason","执行氯化钾含量检验"),key());
@@ -494,8 +471,11 @@ class RealisticProductionFinishedSeedIT {
         JsonNode r=finishedGoods.createInbound(body("requestNo","FG-IN-"+tag,"mainBatchId",id(completed),"reason","生产完成成品入库申请"),key());
         r=finishedGoods.inboundAction(id(r),"submit",body("versionNo",r.path("versionNo").asLong(),"reason","提交成品待检入库"),token(r),key());
         as(warehouseActor,"WAREHOUSE");
-        return finishedGoods.inboundAction(id(r),"confirm",body("versionNo",r.path("versionNo").asLong(),"locationId","7",
-            "reason","仓储复核实际产量并接收入成品待检区","signature",Map.of("reauthToken","demo-reauth")),token(r),key());
+        var command=body("versionNo",r.path("versionNo").asLong(),"locationId",FG_LOCATION,
+            "reason","仓储复核实际产量并接收入成品待检区","signature",Map.of("reauthToken","demo-reauth"));String confirmationKey=key();
+        var confirmed=finishedGoods.inboundAction(id(r),"confirm",command,token(r),confirmationKey);
+        assertThat(finishedGoods.inboundAction(id(r),"confirm",command,token(r),confirmationKey)).isEqualTo(confirmed);
+        return confirmed;
     }
 
     private JsonNode completeFinishedInspection(JsonNode inbound) {
@@ -537,7 +517,7 @@ class RealisticProductionFinishedSeedIT {
     private JsonNode releaseFinished(JsonNode pending) {
         as(qaActor,"QA");
         JsonNode review=finishedQa.review(id(pending));
-        ObjectNode command=body("mainBatchId",id(pending),"finishedLotId",pending.path("finishedLotId").asText(),
+        ObjectNode command=body("mainBatchId",id(pending),
             "versionNo",review.path("versionNo").asLong(),"decision","RELEASED","releaseBasis","FULL_INSPECTION",
             "reviewDigest",review.path("reviewDigest").asText(),"reason","QA最终审核通过，批准成品放行",
             "signature",Map.of("reauthToken","demo-reauth"));
@@ -549,8 +529,11 @@ class RealisticProductionFinishedSeedIT {
         JsonNode shipment=finishedGoods.createShipment(body("shipmentNo","FG-SHIP-"+tag,"mainBatchId",id(batch),
             "locationId",inbound.path("locationId").asText(),"quantity","300","unitId",ML,
             "receivingParty","门诊药房","reason","按已放行成品批次发货至门诊药房"),key());
-        return finishedGoods.shipmentAction(id(shipment),"confirm",body("versionNo",shipment.path("versionNo").asLong(),
-            "reason","复核成品放行状态、批号与发货数量","signature",Map.of("reauthToken","demo-reauth")),token(shipment),key());
+        var command=body("versionNo",shipment.path("versionNo").asLong(),
+            "reason","复核成品放行状态、批号与发货数量","signature",Map.of("reauthToken","demo-reauth"));String confirmationKey=key();
+        var confirmed=finishedGoods.shipmentAction(id(shipment),"confirm",command,token(shipment),confirmationKey);
+        assertThat(finishedGoods.shipmentAction(id(shipment),"confirm",command,token(shipment),confirmationKey)).isEqualTo(confirmed);
+        return confirmed;
     }
 
     private long count(String table){return jdbc.queryForObject("SELECT COUNT(*) FROM "+table,Long.class);}

@@ -1,0 +1,918 @@
+{
+  "captured_utc": "2026-10-11T07:21:17.378182+00:00",
+  "scope": "Explicit current-round, prior confirmed, and prior task script/declaration touch evidence are classified separately from other shared changes. Task-touched files can contain preserved concurrent edits; no exclusive ownership claim.",
+  "files": [
+    {
+      "path": "MES_TASKS.md",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 145109,
+      "sha256": "29d2590b2c065b36a10ef5868208eb81d4e0d7504b3833be2029645098c26117"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/FinishedChainAdapters.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1511,
+      "sha256": "50b6f7c98fe99721078928df78d1dc409dc88ae6e6a1500c5714a37f25f486c8"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/FinishedChainController.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1354,
+      "sha256": "bc54e0607ce6ae1b984246badf8c8efc741b48d79228a6a0beba01d347298902"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/FinishedChainQuery.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 6856,
+      "sha256": "6fde73e6f476c814035cba9ec03f7412f39998fa7bc9aff6bc1c88abeafbb924"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/FinishedInventoryQuery.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5814,
+      "sha256": "b7fa7205cf0fa1422046e88ec41dd5e4e1e840c6633ff1ca9af700e818da8807"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/IncomingRuntimeAdapters.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4979,
+      "sha256": "9b2d263ad2f227c3cebd7f38890a11030d8c4d409e9b3623abca0ea32f59526f"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/ProductionQuantityAdapters.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2126,
+      "sha256": "b47c440cfc9ae538cb9b33be8dd5aeb43e8824eb4e60fe7f56b51d93502c669d"
+    },
+    {
+      "path": "backend/mes-boot/src/main/java/com/hospital/mes/configuration/QcProductReferenceConfiguration.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 547,
+      "sha256": "ef3fbaff1d67accdec6b903096abd4547360a88976ad34ac68b4fe7587014174"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/application-ci.yml",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 240,
+      "sha256": "c977fc1e86ad2edb7eaacef0bd263b8e13b78e20971b9fc0f259a9757d630422"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/application-local.yml",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1249,
+      "sha256": "a9565923bbbdd1bb34de7b8c24101c836d828343d257182614357535f61a0373"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/db/migration/V054__supplier_qualification_chinese.sql",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2249,
+      "sha256": "e3b7f3c0cd548716c430e57f42cda0b7130ee218a371cb131e868f7b82a05e7f"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/db/migration/V055__qms_inspection_object_binding.sql",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2512,
+      "sha256": "93b07ae911e92131bb779825ae3df059ff33a99297dfca3fac42359a33fbdf23"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/db/migration/V056__product_finished_direct_batch.sql",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 12257,
+      "sha256": "416e07ac901bfa9895dfa52230331fbee4650c53e5fa14c418470c02a53f38d6"
+    },
+    {
+      "path": "backend/mes-boot/src/main/resources/db/migration/V057__qc_product_subject_organization_guard.sql",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 984,
+      "sha256": "d02da9c7c012f6b8995587310eaba854a8c1acdd40392d5c6c4e9d21d82abe55"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/demo/RealisticIntegrationSeedIT.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 20330,
+      "sha256": "edc8f4c1b6ef7946372ae9c07e9c745411af776b9c9bf16b760f76e72efd8d38"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/demo/RealisticProductionFinishedSeedIT.java",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 40084,
+      "sha256": "36d11df0f3e19b019e6c482d4391ee0833edb00ce340cd28e8271f4abef85004"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/master/integration/MaterialSupplierIT.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 25378,
+      "sha256": "0e16fd3bc4dad92f9d1693f78f82f180a73b3d79c7e9d91a2ef684e0ba41afef"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/productfinished/ProductFinishedMigrationIT.java",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 7203,
+      "sha256": "fab99f5dd4b0748dc278bec2f38810903733fd4eb160d8479d35125879ac24e3"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/production/RealisticProductionFinishedSeedIT.java",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 341,
+      "sha256": "cd35ade1fefdf7fc653425acad4cb591baeaf5d4772d62be2922631f97f32d73"
+    },
+    {
+      "path": "backend/mes-boot/src/test/java/com/hospital/mes/wms/integration/WmsIT.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 28028,
+      "sha256": "33631d84a1615ce869acd6e14baee00b071943a2ed75a39ecc0d52e521340a87"
+    },
+    {
+      "path": "backend/mes-execution/src/main/java/com/hospital/mes/execution/application/ExecutionOutputInventoryPort.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1459,
+      "sha256": "7cd6d69d0349a09c6aae48ad059355f2617f21a53ce3c798e83cd2cdb3d8ad58"
+    },
+    {
+      "path": "backend/mes-execution/src/main/java/com/hospital/mes/execution/application/ProductionQuantityService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 12323,
+      "sha256": "0740eb3538f8afe27f803c80559fab64b7f87cb8a2985d09746c88c1ed8ce04a"
+    },
+    {
+      "path": "backend/mes-execution/src/main/java/com/hospital/mes/execution/infrastructure/QuantityEventEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3019,
+      "sha256": "0fabe55b54905bf2be1d208d8300ff909ff06572b34dffda31f6c15a77f418f3"
+    },
+    {
+      "path": "backend/mes-masterdata/src/main/java/com/hospital/mes/masterdata/application/MaterialSupplierService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 7975,
+      "sha256": "a98fceeb0c1a13f25d54ec120602d32295100749678816e98fb448f73df2b817"
+    },
+    {
+      "path": "backend/mes-masterdata/src/main/java/com/hospital/mes/masterdata/application/SupplierService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5523,
+      "sha256": "b6d55b7f2760f201a5d22f1df9456e963ba3b298037816bf9fb5496afbd9ecb8"
+    },
+    {
+      "path": "backend/mes-masterdata/src/main/java/com/hospital/mes/masterdata/domain/SupplierRules.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2077,
+      "sha256": "599464ebd424a256082cf0f5047a01a891ba0286a79a861e4f6b4a291a8e80dd"
+    },
+    {
+      "path": "backend/mes-masterdata/src/main/java/com/hospital/mes/masterdata/infrastructure/SupplierEntity.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1775,
+      "sha256": "f37b77ab375d3225b003ae4e3256a6cc860d0d9a76f98602598cf73433e50e95"
+    },
+    {
+      "path": "backend/mes-masterdata/src/test/java/com/hospital/mes/masterdata/domain/MaterialSupplierRulesTest.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2163,
+      "sha256": "01917395ea371cc3493f890056428dc3e82b48200a39bd924b3fbac8e4812209"
+    },
+    {
+      "path": "backend/mes-masterdata/src/test/java/com/hospital/mes/masterdata/domain/SupplierQualificationRulesTest.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2919,
+      "sha256": "621b6a6587c3b2e0318c83778034379ff40913e4c9bfdf4528d00aa6beb5a677"
+    },
+    {
+      "path": "backend/mes-process/src/main/java/com/hospital/mes/process/application/ProcessQueryService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 7763,
+      "sha256": "18cb1753e9af16699518f4ad6f1963c00388ba3894049f272e7a3e3c682fe97a"
+    },
+    {
+      "path": "backend/mes-production/src/main/java/com/hospital/mes/production/api/ProductionController.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 5370,
+      "sha256": "71e6fdc693280cfa5bb36b21045074a0102c6cc4cc60df1490b06886ee22ad48"
+    },
+    {
+      "path": "backend/mes-production/src/main/java/com/hospital/mes/production/application/NavigationQueryService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5195,
+      "sha256": "3af952547e50574abce46744342f01cd25840baa50939c6430976c1de86b509e"
+    },
+    {
+      "path": "backend/mes-production/src/main/java/com/hospital/mes/production/application/ProductionService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 31440,
+      "sha256": "b2a86123bbff5da50748388d04d7ddaf70c1bb78475f05a4b22008d9c9b19928"
+    },
+    {
+      "path": "backend/mes-production/src/main/java/com/hospital/mes/production/application/ProductionViews.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 2343,
+      "sha256": "d76d952bf6e4f937023bd3386238934e56621d5cb70821ed1ec7e40d48ac03f6"
+    },
+    {
+      "path": "backend/mes-production/src/main/java/com/hospital/mes/production/infrastructure/BatchEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4650,
+      "sha256": "4e30aa313a099579766c0765771847c12086646fe8c19178694a6846c2dffff1"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/api/QcSpecificationController.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4190,
+      "sha256": "d573d065119a93ce051a65d57eab959bf05bef280e66ee2902b26ad914480773"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/application/QcDefinitions.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 9044,
+      "sha256": "35f65e105ae4c4cd51190d2f52c885ff55b422707a7b2a4745d7dbace9d4239d"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/application/QcProductReferencePort.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 304,
+      "sha256": "9ccd03070d08be8851efbfb23936530e04a1c1bd3aa0fa3854cc1fe700fb0b78"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/application/QcSpecificationQueryService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3364,
+      "sha256": "59c89b60e35d972a8a8f7b3b729d260e24d0483ece30f4fe06f7848d00ea6483"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/application/QcSpecificationService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 14303,
+      "sha256": "842acd1e8e43ad873c05a82e1f37728a54a30d1e7949e4185e02f2fe2c29890b"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/application/QcViews.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3877,
+      "sha256": "f08c9e7c8afa49a932913078cf31fa5f707111641771a716a3a2260c1f3888db"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/domain/ProductSpecificationSnapshot.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 595,
+      "sha256": "fe448d18ffd210ce09917fd10399f5e999d21340c259a551e57c7bf029f8d058"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/domain/QcCommands.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 1877,
+      "sha256": "5d72cfa0a12391f26d6e3dbc4e0455dcb14839207cb57ee7f12979121440595d"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/infrastructure/QcStore.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 5203,
+      "sha256": "815137bd20d984eee862d37d0776b8ad32983abe7c3f184d95624ec1cbe31802"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/infrastructure/SpecificationEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 1014,
+      "sha256": "8da4c246af2495e999b97fa6f1f020ad1cebfc12f9f063211acd92bffe211fb8"
+    },
+    {
+      "path": "backend/mes-qc/src/main/java/com/hospital/mes/qc/infrastructure/SpecificationVersionEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 2418,
+      "sha256": "0cd8fc8f5235800b1d26e2bd8086ce02cc6d957d7d97c6efa248080944b12a3e"
+    },
+    {
+      "path": "backend/mes-qc/src/test/java/com/hospital/mes/qc/application/QcSubjectHistoryTest.java",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 2197,
+      "sha256": "df42a951c1154555aaf031e6c6012bc62637ce2bf04ba4084c88b378a9460f65"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/FinishedInspectionService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 29119,
+      "sha256": "3f7dcb1b7627422f5095765e357b8c78ba957df2198f1c4dc93923ba105894f0"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/IncomingQualityService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 79243,
+      "sha256": "8ed33ce3ea706b3c8f433888d507ad996231b05d0ab9a4ad12406c5c7184ed2e"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/InspectionObjectBindingService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 15754,
+      "sha256": "f6007d8852eab29fbda5e2630b0176fcc36a99b1d979e75af21523f6325e8eaa"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/MaterialBalanceService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 22038,
+      "sha256": "8c29c65466e122bebcb995280fc009dee89a222fb344ef6d86163b3c6d6b92cf"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/ProductionQualityPlanService.java",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 20912,
+      "sha256": "43872012d16e51678550f4f3452b0314143d17165638ea5fd96287068d310ddc"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/application/ProductionQualityService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 44845,
+      "sha256": "826073fc9d4e7d09eaedd9c2d2cfdffdd200344872e3a89ead3b6e0735f39b84"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/infrastructure/FinishedInspectionRequestEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 2994,
+      "sha256": "90de5ca6208960a87f25cd3589426d1639bc14fcaafee00e3d751c25862999e0"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/infrastructure/FinishedSamplingRecordEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3064,
+      "sha256": "63f1a5605de657db3f86d96cd1c3af3140e3ebd1a5274e601e8b0c5038b4a5b3"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/infrastructure/ProductionPlanRow.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2416,
+      "sha256": "6632a917345873d5d49513b9883445a9eda65930143efa0cfecfdd919c25d842"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/infrastructure/ReleaseDecisionRow.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3464,
+      "sha256": "7381967c7794524b27ed8f77ada9481e7513ea65587ac68078b26c65adcdea9d"
+    },
+    {
+      "path": "backend/mes-qms/src/main/java/com/hospital/mes/qms/infrastructure/SampleRow.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4296,
+      "sha256": "1419d3d581892e0417d313ff5f788580fd62bdb54cce03f87dd153e4db64bebc"
+    },
+    {
+      "path": "backend/mes-release/src/main/java/com/hospital/mes/release/application/EbrArchiveService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 20397,
+      "sha256": "fd1af6f63bf77a18c9bf920880f650b8f9c8e8cf90e7adc38de308134f2dff1d"
+    },
+    {
+      "path": "backend/mes-release/src/main/java/com/hospital/mes/release/application/FinishedDecisionQuery.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3069,
+      "sha256": "2e6526fc1500c06cc5db6428d13ef95a55aaac886a28bdac50eb0ad0d274f117"
+    },
+    {
+      "path": "backend/mes-release/src/main/java/com/hospital/mes/release/application/FinishedReleaseService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 16544,
+      "sha256": "d248aa74a37364e0090e00f2f4b7258bb60ebd82cb45f6993442fdeabd963ef7"
+    },
+    {
+      "path": "backend/mes-release/src/main/java/com/hospital/mes/release/domain/FinishedDecisionRecorded.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 503,
+      "sha256": "ba85be0658aa0f5ce8993de87ec1b07e55c110c034cb2d4305aa934f38d2d9ac"
+    },
+    {
+      "path": "backend/mes-traceability/src/main/java/com/hospital/mes/traceability/application/FinishedTracePort.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 393,
+      "sha256": "59c7d527c320e451292c2793e31f2b346dab8c3efb97c45386b76fa89b3f9d64"
+    },
+    {
+      "path": "backend/mes-traceability/src/main/java/com/hospital/mes/traceability/application/TraceService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 19356,
+      "sha256": "702805f8dfaa9d8a717ca88ee3d6b964f1dd1c9ac3a7d1a6520499900d5d2c2c"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/application/FinishedGoodsService.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 31153,
+      "sha256": "20da594a52b5f06c6188246b4ec86a420ce92d4fa073bbd50d25ef62daa777f2"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/application/FinishedInventoryService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 3491,
+      "sha256": "1dd70503ad8bab6ed81d5bed243d0eb2a422feb63b9b7f5972428a1880f508b6"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/application/FinishedOutputInventoryService.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 8855,
+      "sha256": "1bfcb93bc5c5dc8763f268f77a3c297a47ee80963565818adf127baea52fda82"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/infrastructure/FinishedInboundRequestEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3552,
+      "sha256": "d9ae411b91108e07535f752e779afd89b217b9ea417c7dca5899a4e1ac1f7a22"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/infrastructure/FinishedInventoryLedgerEntity.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2673,
+      "sha256": "76a6f38aa5592d49ef57bee4923ddedc7fd76b148aa0da94ece02c1511ae0c0a"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/infrastructure/FinishedInventoryLedgerMapper.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 219,
+      "sha256": "7d54ef950f4fb14e9df6fab78b42aac2c682f687815076db76c2ff3eb4c7906e"
+    },
+    {
+      "path": "backend/mes-wms/src/main/java/com/hospital/mes/wms/infrastructure/FinishedShipmentEntity.java",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3309,
+      "sha256": "5efe821c02774083866afe47a42399858ffa1edd09b5e17e1aa202153d8528c4"
+    },
+    {
+      "path": "backend/mes-wms/src/test/java/com/hospital/mes/wms/domain/FinishedInventoryLedgerTest.java",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1748,
+      "sha256": "4731a3d22b2ae3d46e8de190bca68ef8a7fc746974b6dfb40bd98f37c0ef4a08"
+    },
+    {
+      "path": "docs/PROJECT_BASELINE.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 21294,
+      "sha256": "918a7a65ef5c223a716d9fe6af519cf115404e450312c3700406f206a46980d6"
+    },
+    {
+      "path": "docs/api/product-finished.openapi.yaml",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 38428,
+      "sha256": "f5e3536c3bb6d1b1fc4cb86e028e5242f84720775074de0751cc537f4c4284e5"
+    },
+    {
+      "path": "docs/architecture/PRODUCT_FINISHED_CONTRACT.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 4639,
+      "sha256": "d54cf5ecf566d6f86c5ec8e9922ecbe4f1e587cfdc81e548103dd552fcb399d1"
+    },
+    {
+      "path": "docs/development/DCP-PRODUCT-FINISHED-ROOT-001-APPROVED.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2394,
+      "sha256": "9ba2871f1a25a74286e9a8cec9fda38bd5c24593ac48b809150693a238bc963b"
+    },
+    {
+      "path": "docs/development/PRODUCT_FINISHED_RTM_20261011.csv",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 2557,
+      "sha256": "c345c340d07f3dd13c5307d62107cf00d352066c4f569a8a1e67477e7982365e"
+    },
+    {
+      "path": "docs/development/decisions/ORDER_BATCH_IDENTITY_ALIGNMENT_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 7001,
+      "sha256": "9072812fbb5fad0343c12bb5d265dc4d7806107bb4137e35c05a30f4b3a6839f"
+    },
+    {
+      "path": "docs/development/decisions/PRODUCT_FINISHED_DESIGN_LOCK_20261011.hashes.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 904,
+      "sha256": "5f17f1ffc023da5612e28b2c1bd12e396dc7e28a604cb61a98b4af5e8f428a65"
+    },
+    {
+      "path": "docs/development/decisions/PRODUCT_FINISHED_DESIGN_LOCK_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2724,
+      "sha256": "ec063fd8e7e2c249b3eb0e011efd9fe9ec63b8b453dc3fd550c9bc56fd216947"
+    },
+    {
+      "path": "docs/development/decisions/PRODUCT_FINISHED_DIRECT_BATCH_B_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 4187,
+      "sha256": "02a9daae8cc894ca39bcf5303027bbc90e1a7f4c08713bb52e522e257a62b113"
+    },
+    {
+      "path": "docs/development/decisions/PRODUCT_FINISHED_EXTRA_REPAIR_AUTHORIZATION_20261011.md",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 1440,
+      "sha256": "992fa68488b0b8b776e7166ab0c2271f6e3998a7e88aca09fbf86dc650793fca"
+    },
+    {
+      "path": "docs/development/decisions/PRODUCT_FINISHED_TRANSACTION_TEST_EXCEPTION_20261011.md",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 1182,
+      "sha256": "47b35c63db166b57f09e10f8722c5f4b52a7d4e126b3084d85c22d1b20538bc1"
+    },
+    {
+      "path": "docs/development/decisions/QC_OBJECT_ASSOCIATION_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 3868,
+      "sha256": "9957d0a7dea1a2d1684f51b22cb641103e28bfc8617edabbe5ab27ef64ed2155"
+    },
+    {
+      "path": "docs/development/decisions/SUPPLIER_QUALIFICATION_STATUS_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 2970,
+      "sha256": "9100a09708fde7398444b5d3add657352706c5af7ca5afbd98f8aa0855b08ac3"
+    },
+    {
+      "path": "docs/development/proposals/PRODUCT_FINISHED_CONTRACT_A_SUPERSEDED_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 26630,
+      "sha256": "09a6908828ed2d7ded71ee27109fa4845ddd48d8b835869c23cd5b1ae823793d"
+    },
+    {
+      "path": "docs/development/proposals/V054_PRODUCT_FINISHED_SUPERSEDED_DO_NOT_APPLY.sql",
+      "classification": "PRIOR_TASK_SCRIPT_REFERENCE",
+      "bytes": 9841,
+      "sha256": "18ad5f901638907989bebbb1c85ccb1dddd3ef82e96dba0e8b6b2283d86cb615"
+    },
+    {
+      "path": "docs/review/PRODUCT_FINISHED_B_EXTRA_REPAIR_20261011.md",
+      "classification": "CONFIRMED_THIS_CONTINUATION",
+      "bytes": 6433,
+      "sha256": "5832ed409c179d0ff0ea0f179d58fb97c8d949b1413b19f5f529ebd5fd74cac9"
+    },
+    {
+      "path": "docs/review/PRODUCT_FINISHED_B_IMPLEMENTATION_BLOCKED_20261011.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5041,
+      "sha256": "f63644071d66fcf2653e779da96bbbd736f72c2f870f81b210d19c7da026a008"
+    },
+    {
+      "path": "docs/review/PRODUCT_FINISHED_TRANSACTION_BOUNDARY_RETEST_20261011.md",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 4728,
+      "sha256": "dd5512d5d6955bb618de381d419d687b85e2734c6dc9586d355d685288a84655"
+    },
+    {
+      "path": "docs/review/PRODUCT_FINISHED_UI_DEPLOYMENT_PLAN_20261011.md",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 1871,
+      "sha256": "c20120c0ee8bff5128cc6a0092dac0505160f6e07060e4b6968bda3cc0f8e395"
+    },
+    {
+      "path": "docs/review/evidence/menu-configuration-20261010/interactions-selector-failure.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 439,
+      "sha256": "9b81a7f513f7e28a8536fbbb80bbeab797acb6cdd2869d026bab885bc1c89a3f"
+    },
+    {
+      "path": "docs/review/evidence/menu-configuration-20261010/interactions.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 927,
+      "sha256": "5ac33f7686bc780479269691a88077513488435ff1173ab98543366b8a358a8a"
+    },
+    {
+      "path": "docs/review/evidence/menu-configuration-20261010/result-first-failure.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 6338,
+      "sha256": "acaefda8d7d4005b2dbdbc8bea0ceb9fee8639ed35b5f03e1c083e2716113b82"
+    },
+    {
+      "path": "docs/review/evidence/menu-configuration-20261010/result.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 7215,
+      "sha256": "71ef2adb8ae2a2cde7e4e2eeaba9bfbcf6cbaf175a0cd620a8b357b8ce8e92d4"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/configuration-check.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 143,
+      "sha256": "9ac2141a85a202d008e54636d877f3334d64c4e8715a8876716d32fc199855b3"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/creator-validation.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 355,
+      "sha256": "57453ac0a85c21ec62458bc06a50f2218906a30e8a99f8b742e64786e9db8deb"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/discovery.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 1421,
+      "sha256": "62f3a7d86f3c6e63f1924ee9c96d98f742102dd91f0f8658dc547be81bf40287"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G1-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 321,
+      "sha256": "38e0df135dd567c6aba9c0a6ae8b072a4135fad16e1e05664423d31b5194d678"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G1-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 133,
+      "sha256": "0f626a0c63a895a03ec191096621eeffad96fe7d83792c703fb32e6c258d78ea"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G1-positive.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 281,
+      "sha256": "ad598707d2793600e88bd2b06a46eaf7ad2ac1a80809b00c2d0402e39cbae104"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G1-positive.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 101,
+      "sha256": "55803f9aadfd924f44412684a99b22c4731c6ad086d5d412cedb0b5077662d1e"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G2-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 332,
+      "sha256": "2de19777994c9b2e6e57e14367e826fd08d86e0acd2de768a5538dee530867a1"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G2-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 142,
+      "sha256": "6f887238ce162b8fbce8807ca4f6dbfafc36d81694a084fc03786b0c827ae55b"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G2-positive.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 280,
+      "sha256": "055c292b724fe2aeb2750a48fd2db7134a13381dff2678e2193896594d1e3c6b"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G2-positive.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 101,
+      "sha256": "ac1b4572dddbf4421f3e5b670eaab464002f49fba3b59af961047f7489cdbcf1"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G3-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 324,
+      "sha256": "1f14746966c311f250dc64a0cccf13bdf2b9b555211532c85b97cea3d1cc1952"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G3-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 134,
+      "sha256": "080352bedbd921caec4a280124c3df82f87a9594b599ddb275275f8cd828195c"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G3-positive.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 281,
+      "sha256": "3d968600a3295b850d9c3c697f5d8e73de60b2a59961c06674850e28e6c3bf15"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G3-positive.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 101,
+      "sha256": "c32d30aa65f09a9e3b7dcda5f54686e2612475fa414c1357b9ebf30f6579abab"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G4-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 314,
+      "sha256": "0f59b52f49e7668168a686d039c1541a5b662c4edb7d4748a92db71204fcc52e"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G4-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 124,
+      "sha256": "108fc9bed0b2a471abe4822b8b532f294ca27f1e7f983b77b1b81e0595a63899"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G4-positive.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 281,
+      "sha256": "3e02285f426d22a3ad99444a2dcd473ccf764252af4a68880f84f257abffad37"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G4-positive.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 101,
+      "sha256": "331b99290eac75eba1320c62d89841c49e01444b8848e9da68409ef6ecfa1554"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G5-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 324,
+      "sha256": "bf3b74802a1cc9e80e3f1a0a25148167e1c45f9920e3c21490b07e3a2edb32f1"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G5-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 134,
+      "sha256": "2e0e16284b3135b6e331c8fe6ea8c9554e4443e9852ffcd6eab98a6696fbea55"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G5-positive.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 281,
+      "sha256": "dca4ab2538ff7cbc8a3525ee32c2f5a6299989abdff078f617d15fc77eb7c0d7"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/G5-positive.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 101,
+      "sha256": "71e5769b01340dc2dba5823373226d1cd3e4d4019194530598dd6c6f2e01dadb"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/gates/gate-matrix.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 22430,
+      "sha256": "595cc13c5a9314184cca24bb72b6374604fdeae5b3c1943902db4182a6e6eb41"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/install-manifest.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 11728,
+      "sha256": "3924dd53014f150117178a74827a0cfc4a53a8f5659f851039781f3d3d5f3acf"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/missing-feature-gate.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 207,
+      "sha256": "e11689272e49aec8ff9782c7093b85d1a84092035d4d76b44ed414027f7c5b7b"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/missing-feature-gate.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 148,
+      "sha256": "afba7a18cc3951f33a5ec763bb7c4da4468d392d64f56428f2a5ac34078e65ed"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/portable-cli-negative.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 207,
+      "sha256": "e11689272e49aec8ff9782c7093b85d1a84092035d4d76b44ed414027f7c5b7b"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/portable-cli-negative.md",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 148,
+      "sha256": "afba7a18cc3951f33a5ec763bb7c4da4468d392d64f56428f2a5ac34078e65ed"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/scope-preservation.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 527,
+      "sha256": "1ed7971bb62e901f7a5d2546e909127dfddde9d6f2dd9e79942491acf4bceb95"
+    },
+    {
+      "path": "docs/review/evidence/mes-feature-workflow-install/selftest.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5887,
+      "sha256": "d68417970808e846ddfce593f15e9df804bf344fcf3d6c7132b73516e43d2b52"
+    },
+    {
+      "path": "docs/review/evidence/role-name-cleanup-20261010.json",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 37454,
+      "sha256": "721dc18cbac2608f63b13f9c2a728b834a46a13f1874c4487364596a16987db2"
+    },
+    {
+      "path": "frontend/mes-web/src/api/qcSpecifications.ts",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4101,
+      "sha256": "5fdf5df2d42d75dd4aee8bcad2bd1d55f01b052f6fcef35286272a326ab3bbe6"
+    },
+    {
+      "path": "frontend/mes-web/src/master/resources.ts",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5020,
+      "sha256": "4cb734e4394e792d043f1c930ef51415340592ab63069f44f54d151aa0e0999e"
+    },
+    {
+      "path": "frontend/mes-web/src/router/index.ts",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 33391,
+      "sha256": "bb0e6d3223ce7a12b2c1079938616c08db7ddd22b41f77ad9ea9c042b0804905"
+    },
+    {
+      "path": "frontend/mes-web/src/views/finished/FinishedDetailView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 26099,
+      "sha256": "fc5e8373f844639fe0813b10a3d9f8fbbf712d33d6ca8b4e3c6b557f0b9d01b4"
+    },
+    {
+      "path": "frontend/mes-web/src/views/finished/FinishedLotChain.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3398,
+      "sha256": "2831df556ddd69c5dde303c9d7b4502b57822704ab6fb024438c73f84b48be4d"
+    },
+    {
+      "path": "frontend/mes-web/src/views/master/MasterDetailView.vue",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 6029,
+      "sha256": "47ed31422e20bb1740323bc70f4cf8ba9c312c4c6bcde47f56e4791fd7d3ba6b"
+    },
+    {
+      "path": "frontend/mes-web/src/views/master/MasterListView.vue",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 7354,
+      "sha256": "2fabec9036e0a143ee2d468262a75a8397cd72212f2b56d10e1856ad41feae21"
+    },
+    {
+      "path": "frontend/mes-web/src/views/master/MaterialSuppliers.vue",
+      "classification": "SHARED_CHANGE_OWNER_NOT_ASSERTED",
+      "bytes": 5374,
+      "sha256": "80bba5742956b3f7d6a31fa0f78608d208179b35b356524aa25cbb1acee6138c"
+    },
+    {
+      "path": "frontend/mes-web/src/views/production/BatchOverview.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 26319,
+      "sha256": "c5d0a1bfd2906efb2a78a8bf69f28e0a0120795e9a1fc6bf6b609641e58ba872"
+    },
+    {
+      "path": "frontend/mes-web/src/views/production/ProductionDetailView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 6928,
+      "sha256": "46dd794d305c8a1b8f599047c197860fef16ca789f692cacbc2f97d8a42576a7"
+    },
+    {
+      "path": "frontend/mes-web/src/views/production/ProductionListView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 6543,
+      "sha256": "69e4409fd634615231dcb11fa5ebbd54e1108cf01212df79b1dfa6ca27dc8307"
+    },
+    {
+      "path": "frontend/mes-web/src/views/production/production-contract.json",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 76352,
+      "sha256": "120375b6a3338f622f7c156ef973c5c38f733e35a41930e567db9f3504a4be95"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/FinishedReleaseView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 25385,
+      "sha256": "ed4d58370b180cb248d35611106cf8e6b7156b106c2ed9ebdacd4d258f791b10"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/IncomingFormFields.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 7652,
+      "sha256": "024b020d6b609923d93e923778a9bb066b747100028d7c81faa99ae1810e5a23"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/IncomingReferencePicker.test.ts",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 5788,
+      "sha256": "d32995318c7ee55a9f2243e63fc9aa2c6dc3e8f509f5bdcaf9de39f8a02e8751"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/IncomingReferencePicker.vue",
+      "classification": "CONFIRMED_CURRENT_TWO_ROUNDS",
+      "bytes": 12382,
+      "sha256": "eedae3e72da0a1384abb570162a5d0fafb70d8964938d19fd3b96a9219fa50ea"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/ProductionQualityDetail.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 9399,
+      "sha256": "d301b740c32a30cdbfb39227fd24f3243b77d94e1f6618dfc42d5f9decfb38ac"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/ProductionQualityList.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 3701,
+      "sha256": "d0974e70b58d275555dab3d77cab94263e94adae0491bf954c0c8e1c34fc567e"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/QcSpecificationDetailView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 9644,
+      "sha256": "e0ccfa0674b86b1f453bb0c486b269ef9cb30fa7990fff327e2799f2a0d8a766"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/QcSpecificationListView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4407,
+      "sha256": "aeeebf0bc450022934e7d7555401d3608ead74df1f1e34c86f6fffad0e562cfb"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/QcSpecificationVersionView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 9288,
+      "sha256": "b0e227edefa5e08518cb22c53d7a8330af661c9f409ef2ca1eb89f817a7146b9"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/QualityCommandForm.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4528,
+      "sha256": "5124b99e15608a5c2a5688d28469c214ec9df26e17545ac9ea923d466f554ef2"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/finishedReleaseModel.ts",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 4557,
+      "sha256": "80f97346cb5b0288cd699fede474efc49ef5ef0a64f6fcf7b63e7c597654248c"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/production-quality-contract.json",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 28185,
+      "sha256": "98fd88e588c5532067b6c277bc78e49eafc95f5c97be2ba31b08a576b17f6cef"
+    },
+    {
+      "path": "frontend/mes-web/src/views/wms/WmsManagementListView.vue",
+      "classification": "TASK_TOUCHED_PRIOR_STAGE_SHARED_CONTENT_PRESERVED",
+      "bytes": 10878,
+      "sha256": "440556993a9fe230d899add95181e47d5af96a63beee5fd1d237edd81d87283d"
+    }
+  ]
+}

@@ -39,6 +39,7 @@ class DemoRoleQualificationSeedIT {
 
     @Test
     void installDistinctLocalDemonstrationQualifications() {
+        BusinessSeedPayloadGuard.check(java.util.Map.of("qualificationCodes", java.util.List.of("MES_DEMO_SAMPLING", "MES_DEMO_QC_EXECUTION", "MES_DEMO_QC_REVIEW", "MES_DEMO_QA_RELEASE", "MES_DEMO_PRODUCTION", "MES_DEMO_WEIGH_REVIEW")));
         long administrator = jdbc.queryForObject(
             "SELECT id FROM sys_user WHERE login_name_normalized='admin'", Long.class);
         when(contexts.current()).thenReturn(new CurrentPlatformContext(

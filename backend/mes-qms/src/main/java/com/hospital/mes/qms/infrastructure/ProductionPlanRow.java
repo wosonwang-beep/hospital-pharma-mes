@@ -2,6 +2,9 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.TableName;
 @TableName("qms_production_plan")
 public class ProductionPlanRow extends MutableIncomingRow {
+ private Integer planSchemaVersion = 1;
+ @com.fasterxml.jackson.annotation.JsonIgnore public Integer getPlanSchemaVersion(){return planSchemaVersion;} public void setPlanSchemaVersion(Integer v){planSchemaVersion=v;}
+
     private Long mainBatchId;
     public Long getMainBatchId() { return mainBatchId; }
     public void setMainBatchId(Long value) { mainBatchId = value; }

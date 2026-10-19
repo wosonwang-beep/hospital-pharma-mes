@@ -2,10 +2,30 @@ import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/vue'
 import {afterEach,it,expect,vi} from 'vitest'
 import Antd from 'ant-design-vue'
 import IncomingReferencePicker from './IncomingReferencePicker.vue'
+import IncomingFormFields from './IncomingFormFields.vue'
 const api=vi.hoisted(()=>vi.fn())
 vi.mock('../../api/http',()=>({api,errorMessage:String}))
 afterEach(()=>{cleanup();vi.clearAllMocks()})
 const mount=(props:any)=>render(IncomingReferencePicker,{props,global:{plugins:[Antd],stubs:{transition:false,'transition-group':false}}})
+it('keeps product-plan choices on direct-product draft instructions',async()=>{
+ api.mockResolvedValue({items:[],total:0})
+ mount({field:'mainBatchId',modelValue:'',context:{},queryFilters:{status:'DRAFT',productionSchemaVersion:2}})
+ await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/main-batches',params:expect.objectContaining({status:'DRAFT',productionSchemaVersion:2})})))
+})
+it('uses the selected instruction product for approved standards without a material query',async()=>{
+ api.mockImplementation(async(config:any)=>config.url==='/quality/specifications'?{items:[{id:'71',specificationCode:'PRODUCT-STD'}],total:1}:{id:'71',specificationCode:'PRODUCT-STD',versions:[{id:'72',status:'APPROVED',versionNoBusiness:1}]})
+ mount({field:'qcSpecificationVersionId',modelValue:'',context:{mainBatchId:'41',productId:'51'}})
+ await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/quality/specifications',params:expect.objectContaining({subjectType:'PRODUCT',productId:'51'})})))
+ expect(api.mock.calls.every(([config])=>!config.url.includes('material-lots')&&!config.params?.materialId)).toBe(true)
+})
+it('clears the legacy lot when switching the real quantity form to product OUTPUT',async()=>{
+ api.mockResolvedValue({items:[],total:0})
+ const view=render(IncomingFormFields,{props:{schema:{type:'object',properties:{eventType:{type:'string',enum:['LOSS','OUTPUT']},materialLotId:{type:'string'}}},modelValue:{eventType:'LOSS',materialLotId:'99'}},global:{plugins:[Antd]}})
+ await fireEvent.update(view.container.querySelector('select')!,'OUTPUT')
+ expect(view.emitted()['update:modelValue']).toEqual([[{eventType:'OUTPUT'}]])
+ await view.rerender({modelValue:{eventType:'OUTPUT'}})
+ expect(view.container.querySelector('.incoming-reference')).toBeNull()
+})
 it('offers current effective process packages without revision lookup',async()=>{
  api.mockResolvedValue({items:[{id:5,packageCode:'KCL30',currentDefinition:{status:'EFFECTIVE'}},{id:6,packageCode:'DRAFT-PACKAGE',currentDefinition:{status:'DRAFT'}}],total:2})
  mount({field:'processPackageId',modelValue:'',context:{productId:1},inputLabel:'生产工艺'})

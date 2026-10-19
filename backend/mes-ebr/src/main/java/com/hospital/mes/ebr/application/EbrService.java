@@ -20,19 +20,20 @@ public class EbrService {
     private final EbrStore db;private final EbrDefinitions definitions;private final EbrEngine engine;private final MasterMutation mutations;private final ProcessQueryService processes;private final MasterQueryService units;private final ObjectMapper json;private final org.springframework.context.ApplicationEventPublisher events;
     public EbrService(EbrStore db,EbrDefinitions definitions,EbrEngine engine,MasterMutation mutations,ProcessQueryService processes,MasterQueryService units,ObjectMapper json,org.springframework.context.ApplicationEventPublisher events){this.db=db;this.definitions=definitions;this.engine=engine;this.mutations=mutations;this.processes=processes;this.units=units;this.json=json;this.events=events;}
     public ScopedStore.PageData<Summary> list(int page,int size,String keyword,Map<String,String> filters){var c=mutations.context("ebr:template:view");var data=db.store(TemplateEntity.class).list(c.organizationId(),page,size,keyword,filters);return new ScopedStore.PageData<>(data.items().stream().map(this::summary).toList(),data.total(),page,size);}
+    public Object roleOptions(int page,int size,String keyword){mutations.context("ebr:template:view");return definitions.roleOptions(page,size,keyword);}
     public JsonNode get(String id){var c=mutations.context("ebr:template:view");return detail(db.store(TemplateEntity.class).get(c.organizationId(),MasterMutation.id(id)));}
     @Transactional public JsonNode create(Create request,String key){
         var c=mutations.context("ebr:template:create");return mutations.execute(c,"EbrTemplate:CREATE",key,request,()->{
             String code=text(request.templateCode(),64,"templateCode");String name=text(request.templateName(),100,"templateName");long process=MasterMutation.id(request.processPackageId());processes.currentSnapshot(c.organizationId(),process);
             if(!db.family(c.organizationId(),code).isEmpty())throw new ResourceConflictException("DUPLICATE_CODE","Template code already exists");
-            var row=new TemplateEntity();row.setTemplateCode(code);row.setTemplateName(name);row.setProcessPackageId(process);row.setBusinessVersion(1);row.setStatus("DRAFT");db.store(TemplateEntity.class).insert(row,c.organizationId(),c.actorId());
+            var row=new TemplateEntity();row.setTemplateCode(code);row.setTemplateName(name);row.setProcessPackageId(process);row.setBusinessVersion(1);row.setDefinitionSchemaVersion(2);row.setStatus("DRAFT");db.store(TemplateEntity.class).insert(row,c.organizationId(),c.actorId());definitions.requireValid(row,definitions.load(row),false);
             mutations.auditSnapshot(c,"EbrTemplate:CREATE","EbrTemplateVersion",row.getId(),null,detail(row),null,key);return row;
         },r->detail((TemplateEntity)r),200);
     }
     @Transactional public JsonNode save(String id,Save request,String header,String key){
         var c=mutations.context("ebr:template:update");long version=MasterMutation.version(header,request.versionNo());String reason=text(request.reason(),1000,"reason");
         return mutations.execute(c,"EbrTemplate:SAVE:"+id,key,Map.of("id",id,"version",version,"body",request),()->{
-            var row=db.lock(c.organizationId(),MasterMutation.id(id));expected(row,version);draft(row.getStatus());var before=detail(row);if(request.templateName()!=null)row.setTemplateName(text(request.templateName(),100,"templateName"));definitions.save(c,row,request.definition());db.store(TemplateEntity.class).update(row,version,c.actorId(),List.of("templateName"));mutations.auditSnapshot(c,"EbrTemplate:SAVE","EbrTemplateVersion",row.getId(),before,detail(row),reason,key);return row;
+            var row=db.lock(c.organizationId(),MasterMutation.id(id));expected(row,version);draft(row.getStatus());var before=detail(row);if(request.templateName()!=null)row.setTemplateName(text(request.templateName(),100,"templateName"));definitions.save(c,row,request.definition());row.setApprovedBy(null);row.setApprovedAt(null);row.setContentHash(null);db.store(TemplateEntity.class).update(row,version,c.actorId(),List.of("templateName","definitionSchemaVersion","approvedBy","approvedAt","contentHash"));mutations.auditSnapshot(c,"EbrTemplate:SAVE","EbrTemplateVersion",row.getId(),before,detail(row),reason,key);return row;
         },r->detail((TemplateEntity)r),200);
     }
     @Transactional public JsonNode version(String id,VersionCreate request,String header,String key){
@@ -40,12 +41,12 @@ public class EbrService {
         return mutations.execute(c,"EbrTemplate:VERSION:"+id,key,Map.of("id",id,"version",version,"body",request),()->{
             var source=db.lock(c.organizationId(),MasterMutation.id(id));expected(source,version);var family=db.family(c.organizationId(),source.getTemplateCode());if(family.stream().anyMatch(t->t.getStatus().equals("DRAFT")))throw new ResourceConflictException("DRAFT_EXISTS","Maintain the existing draft first");
             long packageId=source.getProcessPackageId()!=null?source.getProcessPackageId():MasterMutation.id(processes.snapshot(c.organizationId(),source.getPackageVersionId()).path("packageId").asText());processes.currentSnapshot(c.organizationId(),packageId);var copied=request.copyDefinition()?copyForCurrent(c.organizationId(),source,packageId):null;
-            var row=new TemplateEntity();row.setTemplateCode(source.getTemplateCode());row.setTemplateName(source.getTemplateName());row.setProcessPackageId(packageId);row.setBusinessVersion(family.stream().mapToInt(TemplateEntity::getBusinessVersion).max().orElseThrow()+1);row.setStatus("DRAFT");db.store(TemplateEntity.class).insert(row,c.organizationId(),c.actorId());if(request.copyDefinition())definitions.save(c,row,copied);mutations.auditSnapshot(c,"EbrTemplate:VERSION","EbrTemplateVersion",row.getId(),null,detail(row),reason,key);return row;
+            var row=new TemplateEntity();row.setTemplateCode(source.getTemplateCode());row.setTemplateName(source.getTemplateName());row.setProcessPackageId(packageId);row.setDefinitionSchemaVersion(2);row.setBusinessVersion(family.stream().mapToInt(TemplateEntity::getBusinessVersion).max().orElseThrow()+1);row.setStatus("DRAFT");db.store(TemplateEntity.class).insert(row,c.organizationId(),c.actorId());if(request.copyDefinition())definitions.save(c,row,copied);definitions.requireValid(row,definitions.load(row),false);mutations.auditSnapshot(c,"EbrTemplate:VERSION","EbrTemplateVersion",row.getId(),null,detail(row),reason,key);return row;
         },r->detail((TemplateEntity)r),200);
     }
     /** A new eBR revision binds the current package without mutating its archival predecessor. */
     private Definition copyForCurrent(long org,TemplateEntity source,long packageId){
-        var original=definitions.load(source);if(source.getProcessPackageId()!=null)return original;
+        var original=definitions.load(source);if(source.getProcessPackageId()!=null)return definitions.copyInput(original);
         var current=processes.currentOperations(org,packageId);
         var forms=original.forms().stream().map(f->{
             if(f.operationDefId()==null||f.operationDefId().isBlank())return f;
@@ -53,7 +54,7 @@ public class EbrService {
             var target=current.stream().filter(o->o.operationCode().equals(old.operationCode())).findFirst().orElseThrow(()->new ComplianceException("PROCESS_BINDING_REVIEW_REQUIRED","Historical operation missing from current route: "+old.operationCode()));
             return new Form(f.formCode(),f.formName(),target.id(),f.schemaVersion(),f.sequenceNo(),f.fields());
         }).toList();
-        return new Definition(original.sections(),forms,original.rules(),original.signatureRules(),original.reviewRules());
+        return definitions.copyInput(new Definition(original.sections(),forms,original.rules(),original.signatureRules(),original.reviewRules(),original.schemaVersion()));
     }
     @Transactional public JsonNode command(String id,String action,Command request,String header,String key){
         String permission=action.equals("LINT")?"ebr:designer:edit":"ebr:template:"+action.toLowerCase(Locale.ROOT);var c=mutations.context(permission);long version=MasterMutation.version(header,request.versionNo());String reason=text(request.reason(),1000,"reason");var result=new AtomicReference<JsonNode>();

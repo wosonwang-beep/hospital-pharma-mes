@@ -1,0 +1,39 @@
+# ROLE-ID-SIGNING-001 DEV deployment — 2026-10-12
+
+Latest authorized read-only supplement: [protected SELECT / expected401 / stable375 / remaining credentials](ROLE_ID_SIGNING_READONLY_CLOSEOUT_20261012.md). Initial375 capture failure remains historical evidence; stable geometry/screenshots no longer reproduce clipping. Nonadmin realHTTP403 remains NOT RUN.
+
+**DEPLOYED / DRAFT291 CONVERSION COMMITTED / ACCEPTANCE BLOCKED / NOT ACCEPTED.**
+
+Authority: human approval `Sentinel_28d083eeadf08191b027ac092db1e49d` (2026-10-11 12:20 UTC), resumed by `Sentinel_b064ad1879c881919bc7518c54146579` (2026-10-12), relayed by parent 01a115d2-8ace-7574-9a08-ac48dfc970cc. Scope remains the approved role-ID design and existing UI; Codex does not approve new business or page designs. Physically read AGENTS.md, MES_DEV_RULES.md, PROJECT_BASELINE.md, database-and-validation-strategy.md, MES_TASKS.md, ROLE_ID_SIGNING_DESIGN_LOCK_20261011.md, minimal DCP and previous implementation/isolation evidence. Business authority remains v1.0.23 plus this approved bounded supplement; UI V2 remains unchanged.
+
+## Deployment and database facts
+
+- Actual target: TCP127.0.0.1:3306/hospital_pharma_mes_dev on PC-202401011703, MariaDB13.0.2; all137 tables InnoDB; FK checks enabled. Existing V059 checksum `-503587429` and V058 checksum `946183528` matched. **No migration was applied or replayed this round.** Guard runtime validated59 migrations; final JAR startup pins Flyway target59.
+- Fresh native full backup: `C:\Users\Administrator\AppData\Local\Temp\mes-role-id-dev-deploy-20261012\20261012T004222Z\hospital_pharma_mes_dev-full-20261012T004222Z.sql`, 5,980,902B, SHA256 `53bcb335841d7423a1b25c24771c4928ddecd6b4b1b90298aa85c3fa264e6ceb`. 137tables/4175rows, dump exit0 and completion marker; equivalent full SQL reconstruction verifies every stored cell, SHOW CREATE and trigger definitions. Actual restore NOT RUN; no new database created. Dump and private snapshots remain local and are not committed.
+- Current `main` dirty checkout reused; all previous role-specific final source hashes match. All989 backend build inputs remained unchanged during package. Maven package PASS15.225s. JAR SHA256 `aa91ca37f03807263509d8cd53c73a341ce017f5c631bf9398acc3f3c4ce65d1`. Existing menu, IAM and quality changes preserved. No commit/push.
+- Verified prior local JAR PID32392 stopped. The test-source-only HTTP transaction guard served real security and real8080, without authentication mocks. After acceptance runtime exited0, formal JAR restarted hidden on sole8080, PID22620. Final health HTTP200/UP; final stored draft DRAFT/version_no3/business version1/schema2;50 signatures remain.
+
+## Actual conversion and retained evidence
+
+Fresh relationship-based candidate query rediscovered85 exact IDs and16 incoming FK edges, with no external referencing rows. Seven signature and seven review rules were still version1 and mapped uniquely to enabled290/291 with current MES codes.
+
+CUAWright registered Windows adapter0.2.0 / Playwright1.63.0 was invoked through its existing local Python implementation because no CUAWright MCP call was exposed to this executor. Actual admin login200/me200, role-options200, Chinese dropdown selection, operation reason and one real **PUT /api/v1/ebr/templates/291**, HTTP200. No additional grants, publishing or signatures were requested.
+
+Before outer transaction commit, existing strict checker verified all137 table cells and exact updates: ebr_template_version1, ebr_section_def6, ebr_group_def6, ebr_form_def6, ebr_field_def52, ebr_signature_rule7, ebr_review_rule7. Total85 (15business/70maintenance); child insert/delete0; all IDs/parents stable; six schema_json strings byte-identical; canonical/hash6/7/9/10 unchanged; signatures and all other existing rows protected. Only one new audit and one idempotency row. The response was held until actual COMMIT; afterCommit receipt and independent root read both confirm success. No replay.
+
+The native postcommit script successfully reached/passed its assertion comparing all137 tables with the committed transaction snapshot, in both invocations. **Its complete backup-protection gate did not pass:** initial failure classified legitimate new LOGIN security events; second failure is an incorrect expected sys_user column name (`version_no` vs actual `version`). The actual reported user-field difference is `version, updated_at`. Failed logs remain; no overall independent-protection PASS is claimed. Correcting this fixture and issuing its complete persisted report remains pending bounded review.
+
+## Real page coverage and remaining gates
+
+- Actual291 designer1440×900: Chinese role options and existing rule values visible, dropdown selectable, saved notice visible. Actual PUT payload contains role IDs, without client code/name snapshots; server response returns snapshots. Published template6 real page is readonly, has no save action and disabled editor controls; it has no legacy role rules. Four retained template hashes were verified in the transaction, not four separate browser journeys.
+- Actual375×900 screenshot **FAIL**: header/save controls are clipped and the role panel is outside the visible viewport. All14 role label/control DOM pairs are horizontal (delta0), but that does not constitute visual visibility acceptance. The generic label scanner finds0 pairs and reportsfalse; it is not a special-editor bypass. No page layout change was made; any layout/design decision belongs to the user-designated designer.
+- Browser console records401 resources despite successful login/GET/PUT. Exact failing resource cause is not resolved. Real nonadmin permission-denial403 and final-JAR authenticated page reload NOT RUN; no new credentials or permissions were introduced. Existing unit/component permission tests remain previous evidence only.
+- Temporary browser write mode switchedfalse and browser closed; final mode evidence saved. No production operation, account rename, signature deletion, material17/18 cleanup, product-chain writes or print-template changes.
+
+Two automatic execution/validation fixture corrections were used (root `.env` propagation to Maven test JVM; classification and strict preservation check for normal new LOGIN security events). The remaining user-column fixture failure is stopped under MES_DEV_RULES.md Section6A: **“每个任务最多执行 2 轮自动代码修复 … 达到上限仍不通过时立即 STOP: BLOCKED”**. No further automatic repair/retest or assertion relaxation. The formal service was restored as a safe closeout action. Required gate failures prevent READY FOR ACCEPTANCE.
+
+## Evidence and product-chain boundary
+
+[Evidence directory](evidence/role-id-dev-deploy-20261012/): backup-summary.json, build-source-before.json, build-result.json, preflight.json, DEV_PRECOMMIT_VALIDATION.json, DEV_COMMIT_RECEIPT.json, real-put291-http.json, final-runtime.json, browser-write-mode-off.json and real screenshots. Logs: role-id-dev-package-20261012.log, role-id-dev-guard-runtime-20261012.log, role-id-dev-guard-runtime-before-env-fix-20261012.log, role-id-dev-postcommit-20261012.log, role-id-dev-postcommit-auth-classified-20261012.log. Private full-cell snapshots/backup stay in Temp; credentials are not exported.
+
+Existing product-chain records still require an effective eBR consuming current process root12, normal independent approval/publication under separately authorized accounts, then batch230 issue/execution and downstream finished-quality, stock/dispatch and evidence checks. Those are historical pending gates, not newly reproduced failures this round. Compatibility source is now included in this JAR; its previous NOT DEPLOYED statement is historical. No product-chain resumption, new authority/grants or new design was performed. Reauth and route fixes are not re-listed as unpatched; print templates/data sources already accepted are not pending development.

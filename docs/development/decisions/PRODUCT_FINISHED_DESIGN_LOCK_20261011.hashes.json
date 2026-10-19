@@ -1,0 +1,22 @@
+{
+  "captured_utc": "2026-10-11T06:11:15.909970+00:00",
+  "contract_sha256": "6282b40d1603ded596b1237fe9a178334652efab255eccaa88a11d3b9a9a0019",
+  "original_ui_sources": [
+    {
+      "path": "frontend/mes-web/src/views/quality/ProductionQualityList.vue",
+      "sha256": "e3378168d023a9c77e5a45704a4b76594e70063df13309c481163d1c4c42a39b"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/ProductionQualityDetail.vue",
+      "sha256": "1f98cfcd999e346a48299f17de0c0938e0c74c639107af09deb3867f4af7da22"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/IncomingReferencePicker.vue",
+      "sha256": "83fde61122d45bec8b9f7042c695648bc7052e7b9f08efb71dca78370fd8e14b"
+    },
+    {
+      "path": "frontend/mes-web/src/views/quality/production-quality-contract.json",
+      "sha256": "4995c7cc5bc1603864694579ca03a80b0439fb9b34cbd8407b22befae78e6119"
+    }
+  ]
+}

@@ -41,6 +41,13 @@ class DatabaseMenuAuthorizationIT {
         assertThat(assigned.menuCodes()).containsExactly(first.menuCode()).doesNotContain(second.menuCode());
         assertThat(assigned.permissionCodes()).containsExactly("iam:user:view");
     }
+    @Test void existingMenuKeywordFiltersByChineseNameCodeAndEmptyResults(){
+        var byName=iam.listMenus(0,50,"物料主数据",null,1);
+        assertThat(byName.items()).isNotEmpty().allSatisfy(m -> assertThat(m.menuName()).contains("物料主数据"));
+        var byCode=iam.listMenus(0,50,"master:material:view",null,1);
+        assertThat(byCode.items()).isNotEmpty().allSatisfy(m -> assertThat(m.menuCode()).contains("master:material:view"));
+        assertThat(iam.listMenus(0,20,"不存在的编码XYZ9843",null,1).items()).isEmpty();
+    }
     @Test void ancestorCycleAndMissingMenuViewPermissionAreRejected(){
         var c=context();var root=directory(null,c);var child=directory(root.id(),c);
         assertThatThrownBy(()->iam.updateMenu(Long.parseLong(root.id()),root.version(),new UpdateMenuRequest("测试目录",null,child.id(),100,"ACTIVE","回滚测试",null,""),c,key())).isInstanceOf(IllegalArgumentException.class);

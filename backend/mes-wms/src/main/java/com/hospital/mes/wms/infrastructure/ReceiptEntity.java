@@ -27,4 +27,10 @@ public class ReceiptEntity extends ScopedEntity {
  public Long getConfirmedBy(){return confirmedBy;} public void setConfirmedBy(Long value){confirmedBy=value;}
  private LocalDateTime confirmedAt;
  public LocalDateTime getConfirmedAt(){return confirmedAt;} public void setConfirmedAt(LocalDateTime value){confirmedAt=value;}
+ private String inputContract;
+ public String getInputContract(){return inputContract;} public void setInputContract(String v){inputContract=v;}
+ private LocalDate arrivalDate;
+ public LocalDate getArrivalDate(){return arrivalDate;} public void setArrivalDate(LocalDate v){arrivalDate=v;}
+ private String acceptanceText;
+ public String getAcceptanceText(){return acceptanceText;} public void setAcceptanceText(String v){acceptanceText=v;}
 }

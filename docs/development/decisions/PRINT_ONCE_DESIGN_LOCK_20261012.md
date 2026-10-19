@@ -1,0 +1,25 @@
+# PRINT-ONCE-001 — APPROVED / FROZEN
+
+Approval: human Sentinel_6642032ed088819184d73710254d3ea9: “坚决执行”, following the exact proposed combined code/constraint/deletion change. Scope: workstation PC-202401011703, hospital_pharma_mes_dev only. Source evidence: [readonly impact](../../review/PRINT_HISTORY_TEMPLATE_READONLY_IMPACT_20261012.md) and its exact-ID JSON.
+
+## Bounded contract supplement
+
+FINAL BASELINE v1.0.23 and printing supplements 001–005 remain authoritative except generic print-result persistence and mandatory live-template dependency of historical downloads. Prior releases/migrations remain immutable. Current template + authorized current business data → render/merge PDF in memory → directly return/print → finish. No artifact, batch, source-evidence, snapshot, formal-key reuse, or print-content/template-use audit write. Template/source maintenance audit and all business approval/signature checks remain. Formal mode still calls the existing authoritative provider validation; LIST formal mode remains invalid.
+
+POST /api/v1/printing/artifacts and /batches keep current request/permission contracts and return application/pdf, no-store, directly instead of archive IDs. Existing GET history/PDF routes remain read-only compatibility for retained records; no new routes/permissions. Old downloads authorize organization and original business record through immutable existing source evidence for CONFIGURED records, otherwise the existing legacy provider. Never require the old template row or regenerate an old file. Hash verification remains mandatory.
+
+Database: append V060 after verified V059. Remove only fk_print_artifact_version and fk_print_batch_template; their unchanged historical numeric IDs are provenance, not live relations. Keep all archive bytes, snapshots, IDs, hashes, evidence guards, signatures, business records, dictionaries/users/rights. Replace only template/binding delete guards with exact org1/approved IDs/INACTIVE or disabled guards. All other template/content/state and binding identity protections remain. No nullable updates, new tables, generic deletion API, FK-check disabling, archive deletion or permission expansion. Existing binding/editor FK constraints stay enforced.
+
+Authorized DML only: template IDs 10,30,31,32,33,40,41,42,43,44 and disabled binding IDs 4,18,19,20,21,27,28,29,30,31 after fresh exact-state/reference checks. Single transaction, explicit rollback on error, fixed candidates, retained full-cell checks and orphan checks before commit; independent postcommit verification. DDL/Flyway and deletion DML are separate because MariaDB implicitly commits DDL. Recovery: local verified full backup and captured prechange definitions; never blindly restore over later parallel work or replay an uncertain commit.
+
+## UI / integration / test mapping
+
+Reuse current UI V2, T1 selection/list and T3 report detail, existing PdfPreview and print controls. This approved targeted workflow correction removes only the report print-history table and obsolete archive-reprint hint; no page redesign or new fields/layout. Single/batch controls, formal eligibility, errors, loading, template selection and PDF print/download remain. Frontend POST requests responseType blob; no subsequent new-ID GET. Template68 and 6 unpublished templates remain byte-identical.
+
+Approved changed test contracts: old generate→archive-ID/formal-reuse assertions become direct-PDF and zero-persistence assertions; old GET remains byte-exact and permission checked after template absence. Tests must preserve current shared data, use read-only current records or rollback-owned business values; do not run existing fixture generators emitting prohibited names. RTM: single, batch DOCUMENT/LIST ordering/25MB cap, formal approval/signature, authorization negative cases, historical 18 PDF downloads and hashes, zero archive/audit additions, exact deletion counts, retained business/system/eBR fingerprints, FK/orphan and Flyway validate, builds, G5 ui-ux-audit. Full UI acceptance requires the validated G5 manifest; otherwise IN PROGRESS/BLOCKED, never READY.
+
+Write whitelist: this lock; current baseline entry/OpenAPI supplement/task status/review evidence; PrintService, PrintBatchService, PrintSourceEvidenceService, PrintController; printing API/InspectionPrintPanel/BatchPrintButton; directly affected print tests; V060; task-specific preflight/execution/verification tools. Preserve all unrelated dirty files. No commit/push.
+
+Complex printing/migration budget: 90 minutes, initial implementation not a repair. Preserve prior cumulative 4 repairs; this delegation's stricter task ceiling is 10, despite current global20. Same-failure early stop applies. At limit return exact findings and unrun gates.
+
+Read gate: AGENTS.md, MES_DEV_RULES.md, MES_TASKS.md printing entries, PROJECT_BASELINE.md printing authority routing, database-and-validation-strategy.md, readonly impact and actual print service/controller/source evidence/provider/frontend/test/migration contracts. Cross-document review must precede the bounded baseline entry change; no historical release pointer rewrite.

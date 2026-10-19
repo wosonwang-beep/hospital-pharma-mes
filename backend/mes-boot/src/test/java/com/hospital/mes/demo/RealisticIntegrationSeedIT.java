@@ -70,6 +70,7 @@ class RealisticIntegrationSeedIT {
 
     @Test
     void seedRealisticIntegratedData() {
+        BusinessSeedPayloadGuard.check(java.util.Map.of("qualificationCode", "MES_DEMO_GMP"));
         runTag = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         permissions = new HashSet<>(jdbc.queryForList(
             "SELECT permission_code FROM sys_permission WHERE enabled=TRUE", String.class));
@@ -185,7 +186,7 @@ class RealisticIntegrationSeedIT {
     private void prepareApprovedSource(MaterialCase c) {
         as(masterActor, "MASTER_DATA");
         JsonNode supplier = suppliers.get(c.supplierId());
-        if ("UNAPPROVED".equals(supplier.path("qualificationStatus").asText())) {
+        if ("待评审".equals(supplier.path("qualificationStatus").asText())) {
             suppliers.command(c.supplierId(),
                 new SupplierCommands.Update("QUALIFY", supplier.path("versionNo").asLong(),
                     "年度供应商资质复核通过，用于医院制剂原辅料采购", null, null),
@@ -233,7 +234,7 @@ class RealisticIntegrationSeedIT {
         as(analystActor, "QC_ANALYST");
         var root = qc.create(new QcCommands.CreateSpecification(
             c.materialId(), "RM-"+c.materialCode()+"-"+runTag,
-            c.materialName()+"入厂质量标准", "建立本批集成测试冻结质量标准"), key());
+            c.materialName()+"入厂质量标准", "建立入厂检验质量标准"), key());
         var draft = qc.createVersion(root.id(), new QcCommands.CreateVersion(
             1, List.of(new QcCommands.Item(
                 "ASSAY", "含量", true, "NUMERIC",

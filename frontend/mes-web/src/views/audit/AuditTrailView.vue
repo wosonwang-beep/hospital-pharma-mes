@@ -54,18 +54,18 @@ watch(() => route.query, load, { immediate: true })
 </script>
 
 <template>
-  <main class="platform-page admin-page master-page" data-ui-template="Specialized">
+  <main class="platform-page admin-page master-page t1-query-list" data-ui-template="T1">
     <section v-if="!permitted" class="state-card forbidden" role="alert">无权查看 GMP Audit Trail</section>
     <template v-else>
-      <header class="page-heading">
+      <header class="admin-page-header">
         <div><h1>GMP Audit Trail</h1></div>
         <button class="secondary-button" type="button" :disabled="loading" @click="load">刷新</button>
       </header>
-      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in filterFields" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">来源</span><a-select show-search option-filter-prop="children" v-model:value="filters.source" aria-label="来源" class="master-native-input"><a-select-option value="">全部</a-select-option><a-select-option v-for="s in ['API','SCHEDULER','INTEGRATION','SYSTEM']" :key="s" :value="s">{{s}}</a-select-option></a-select></label><div class="query-actions"><button class="primary-button" :disabled="loading">查询</button><button class="secondary-button" type="button" @click="reset">重置</button></div></form></section>
+      <section class="data-card query-card"><form class="query-form" @submit.prevent="pageNumber=0;load()"><label v-for="[field,title] in filterFields" :key="field"><span class="form-field-label">{{title}}</span><input v-model="filters[field!]" :aria-label="title" :type="field!.startsWith('occurred')?'datetime-local':'text'" class="master-native-input"/></label><label><span class="form-field-label">来源</span><select v-model="filters.source" aria-label="来源" class="master-native-input"><option value="">全部</option><option v-for="s in ['API','SCHEDULER','INTEGRATION','SYSTEM']" :key="s" :value="s">{{s}}</option></select></label><div class="query-actions"><button class="secondary-button" type="button" @click="reset">重置</button><button class="primary-button" :disabled="loading">查询</button></div></form></section>
       <section class="metric-grid one">
         <article class="metric-card"><span>今日审计事件</span><strong>{{ loading ? '—' : todayTotal }}</strong><small>当前对象范围 · UTC 日</small></article>
       </section>
-      <section class="data-card">
+      <section class="data-card result-card">
         <header><strong>AuditEvent 查询</strong><span>按发生时间倒序</span></header>
         <div v-if="loading" class="table-state">正在加载审计事件…</div>
         <div v-else-if="failed" class="table-state error" role="alert">审计事件加载失败</div>

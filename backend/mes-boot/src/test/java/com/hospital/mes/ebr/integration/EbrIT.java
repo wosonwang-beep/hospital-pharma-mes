@@ -58,7 +58,7 @@ class EbrIT {
     Definition definition(){
         var field=new Field("WEIGHT","G","Weight","NUMBER","MANUAL","DECIMAL",unit,3,true,false,null,null,null,1,null,List.of());
         var rule=new Rule("LIMIT","F","WEIGHT","VALIDATION","ON_SUBMIT","value('WEIGHT') < 10","BLOCK","OUT_OF_RANGE","Outside range",true,true);
-        return new Definition(List.of(new Section("S","Section",1,"NONE",null,false,List.of(new Group("G","Group",1,2,"LIST",1,5)))),List.of(new Form("F","Form",operationId,"1.0",1,List.of(field))),List.of(rule),List.of(new SignatureRule("FORM","F","APPROVE",role,true,1,true)),List.of(new ReviewRule("FORM","F","VERIFY",role,true,1)));
+        return templateDefinitions.copyInput(new Definition(List.of(new Section("S","Section",1,"NONE",null,false,List.of(new Group("G","Group",1,2,"LIST",1,5)))),List.of(new Form("F","Form",operationId,"1.0",1,List.of(field))),List.of(rule),List.of(new SignatureRule("FORM","F","APPROVE",role,true,1,true)),List.of(new ReviewRule("FORM","F","VERIFY",role,true,1))));
     }
     JsonNode draft(){var row=service.create(new Create(processId,"ET"+suffix,"Test eBR template"),key());return service.save(row.path("id").asText(),new Save(0L,"Define template",definition()),null,key());}
     JsonNode command(JsonNode row,String action){return service.command(row.path("id").asText(),action,new Command(row.path("versionNo").asLong(),"Controlled "+action),null,key());}
@@ -129,13 +129,27 @@ class EbrIT {
         var row=draft();String id=row.path("id").asText();jdbc.update("UPDATE sys_role SET enabled=FALSE WHERE role_code=?",role);var lint=command(row,"LINT");assertThat(lint.path("valid").asBoolean()).isFalse();assertThat(lint.path("issues").toString()).contains("requiredRole");
         assertThatThrownBy(()->command(row,"SUBMIT")).isInstanceOf(ComplianceException.class);jdbc.update("UPDATE sys_role SET enabled=TRUE WHERE role_code=?",role);
         assertThatThrownBy(()->processQuery.requireCurrentOperation(1,Long.parseLong(processId),Long.MAX_VALUE)).isInstanceOf(NoSuchElementException.class);assertThatThrownBy(()->processQuery.currentOperations(2,Long.parseLong(processId))).isInstanceOf(NoSuchElementException.class);
-        var d=definition();var bad=new Definition(d.sections(),List.of(new Form("F","Form",Long.toString(Long.MAX_VALUE),"1.0",1,d.forms().getFirst().fields())),d.rules(),d.signatureRules(),d.reviewRules());assertThatThrownBy(()->service.save(id,new Save(1L,"Wrong operation",bad),null,key())).hasMessageContaining("operationDefId");
+        var d=definition();var bad=new Definition(d.sections(),List.of(new Form("F","Form",Long.toString(Long.MAX_VALUE),"1.0",1,d.forms().getFirst().fields())),d.rules(),d.signatureRules(),d.reviewRules(),d.schemaVersion());assertThatThrownBy(()->service.save(id,new Save(1L,"Wrong operation",bad),null,key())).hasMessageContaining("operationDefId");
         assertThat(service.get(id).path("status").asText()).isEqualTo("DRAFT");
     }
     @Test void independentApprovalHashAndUnsafeExpressionsFailClosed(){
         var row=draft();var submitted=command(row,"SUBMIT");assertThatThrownBy(()->command(submitted,"APPROVE")).hasMessageContaining("Independent");as(1,approver);var approved=command(submitted,"APPROVE");
         jdbc.update("UPDATE ebr_field_def f JOIN ebr_form_def d ON d.id=f.form_def_id SET f.label='Tampered fixture' WHERE d.template_version_id=?",row.path("id").asText());assertThatThrownBy(()->command(approved,"PUBLISH")).hasMessageContaining("hash");
-        as(1,creator);var newDraft=service.version(row.path("id").asText(),new VersionCreate(approved.path("versionNo").asLong(),"New empty",false),null,key());var d=definition();var malicious=new Rule("R",null,null,"VALIDATION","ON_SUBMIT","T(java.lang.Runtime)","BLOCK",null,null,false,true);var bad=new Definition(d.sections(),d.forms(),List.of(malicious),d.signatureRules(),d.reviewRules());assertThatThrownBy(()->service.save(newDraft.path("id").asText(),new Save(0L,"Unsafe",bad),null,key())).hasMessageContaining("DSL");
+        as(1,creator);var newDraft=service.version(row.path("id").asText(),new VersionCreate(approved.path("versionNo").asLong(),"New empty",false),null,key());var d=definition();var malicious=new Rule("R",null,null,"VALIDATION","ON_SUBMIT","T(java.lang.Runtime)","BLOCK",null,null,false,true);var bad=new Definition(d.sections(),d.forms(),List.of(malicious),d.signatureRules(),d.reviewRules(),d.schemaVersion());assertThatThrownBy(()->service.save(newDraft.path("id").asText(),new Save(0L,"Unsafe",bad),null,key())).hasMessageContaining("DSL");
+    }
+    @Test void cppVisualConfigPersistsInExistingRuleRowAndRoundTrips() throws Exception{
+        var row=service.create(new Create(processId,"CPP"+suffix,"CPP persistence fixture"),key());String id=row.path("id").asText();
+        var base=definition();
+        String config="{\"kind\":\"CPP\",\"name\":\"Weight range\",\"description\":\"Controlled range\",\"rootLogic\":\"AND\",\"groups\":[{\"id\":\"G1\",\"logic\":\"AND\",\"conditions\":[{\"id\":\"C1\",\"fieldCode\":\"WEIGHT\",\"operator\":\">=\",\"value\":\"1\"},{\"id\":\"C2\",\"fieldCode\":\"WEIGHT\",\"operator\":\"<=\",\"value\":\"10\"}]}],\"actions\":[\"MARK_EXCEPTION\",\"BLOCK_SUBMIT\"]}";
+        var cpp=new Rule("CPP_WEIGHT","F",null,"VALIDATION","ON_CHANGE","((value('WEIGHT') >= 1) && (value('WEIGHT') <= 10))","BLOCK","CPP_RULE_FAILED","Weight outside range",false,true,config);
+        var definition=new Definition(base.sections(),base.forms(),List.of(cpp),List.of(),List.of(),"2.0");
+        var saved=service.save(id,new Save(0L,"Persist visual CPP config",definition),null,key());
+        String stored=jdbc.queryForObject("SELECT cpp_config_json FROM ebr_rule_def WHERE template_version_id=? AND rule_code='CPP_WEIGHT'",String.class,id);
+        assertThat(json.readTree(stored)).isEqualTo(json.readTree(config));
+        var loaded=service.get(id).path("definition").path("rules").get(0);
+        assertThat(loaded.path("expression").asText()).isEqualTo(cpp.expression());
+        assertThat(json.readTree(loaded.path("cppConfigJson").asText())).isEqualTo(json.readTree(config));
+        assertThat(saved.path("definition").path("rules").get(0).path("cppConfigJson").asText()).isEqualTo(config);
     }
     @Test void simulationProducesBlockEvidenceWithoutRuntimeRows(){
         var row=draft();String id=row.path("id").asText();var command=new Simulation(1L,"Boundary test","ON_SUBMIT",List.of(new Input("WEIGHT",List.of(json.valueToTree(20)))));String k=key();var result=service.simulate(id,command,null,k);assertThat(result.path("allowed").asBoolean()).isFalse();assertThat(result.path("results").get(0).path("inputSnapshot")).hasSize(1);assertThat(service.simulate(id,command,null,k)).isEqualTo(result);assertThat(service.get(id).path("versionNo").asLong()).isEqualTo(1);

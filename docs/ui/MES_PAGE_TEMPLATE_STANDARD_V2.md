@@ -8,6 +8,13 @@ Every Vue business page must declare/select one of T1–T6. A page may contain s
 
 Approved [shared-navigation supplement](../development/DCP-GLOBAL-NAVIGATION-001-APPROVED.md): all T1–T6 shells, including Production Batch T4 and execution T5, inherit the same domain menu configuration, order and permission filtering. Page structures and routes remain unchanged.
 
+## Global ordinary-page mapping — user decision 2026-10-13
+
+- Every ordinary basic-function query/list page uses T1.
+- Every ordinary create/edit page uses T2; read-only view uses T3.
+- Special-purpose editors/workbenches may retain their approved specialized composition, but still inherit Global UI V2. See `docs/development/decisions/GLOBAL_T1_T2_UI_UNIFICATION_20261013.md`.
+- T1 query actions are globally ordered `重置 → 查询`; ordinary T2 form actions are globally ordered `取消 → 保存/提交`.
+
 ## T1 — Query / List
 
 Approved menu-specific supplement2026-10-10: [DCP-MENU-CONFIGURATION-001](../development/DCP-MENU-CONFIGURATION-001-APPROVED.md), frozen T1 menu list and T2 full-page complex configuration; only this page overrides prior simple-edit modal. View route remains read-only; other templates/fields unchanged.
@@ -41,6 +48,7 @@ Rules:
 - Label/control horizontal pairing.
 - Required/help/validation are local to the field.
 - Business references use selectors.
+- Every child-table or child-record add action belongs at the right side of its section/card title bar and uses the blue primary-button treatment. Do not repeat that add action below the table/body. Hide it in read-only state and preserve the existing permission/editability gate.
 - Do not mix read-only history into the editable form body unless necessary for the decision.
 
 ## T3 — Business Detail / Controlled Document

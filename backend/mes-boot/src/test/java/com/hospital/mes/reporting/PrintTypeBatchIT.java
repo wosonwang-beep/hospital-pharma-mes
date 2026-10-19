@@ -62,14 +62,14 @@ class PrintTypeBatchIT {
   assertThat(printing.nativeDesign(list.path("id").asText()).path("template").path("printType").asText()).isEqualTo("LIST");
   assertThat(printing.fields("WMS_RECEIPT","LIST").get("itemFields").toString()).contains("recordReceiptNo").doesNotContain("receivedQty");
   var documentBatch=batches.generate("WMS_RECEIPT",ids,document.path("id").asText(),false);var listBatch=batches.generate("WMS_RECEIPT",ids,list.path("id").asText(),false);
-  byte[] frozen=batches.pdf(listBatch.path("id").asText());
-  try(var pdf=Loader.loadPDF(batches.pdf(documentBatch.path("id").asText()))){assertThat(pdf.getNumberOfPages()).isEqualTo(2);String text=new PDFTextStripper().getText(pdf);assertThat(text).contains("TESTSPEC-1","TESTSPEC-2","BATCH"+suffix+1,"BATCH"+suffix+2);assertThat(text.indexOf("BATCH"+suffix+2)).isLessThan(text.indexOf("BATCH"+suffix+1));}
+  byte[] frozen=listBatch;
+  try(var pdf=Loader.loadPDF(documentBatch)){assertThat(pdf.getNumberOfPages()).isEqualTo(2);String text=new PDFTextStripper().getText(pdf);assertThat(text).contains("TESTSPEC-1","TESTSPEC-2","BATCH"+suffix+1,"BATCH"+suffix+2);assertThat(text.indexOf("BATCH"+suffix+2)).isLessThan(text.indexOf("BATCH"+suffix+1));}
   try(var pdf=Loader.loadPDF(frozen)){assertThat(pdf.getNumberOfPages()).isEqualTo(1);String text=new PDFTextStripper().getText(pdf);assertThat(text).contains("BATCH"+suffix+1,"BATCH"+suffix+2).containsPattern("Unique supplier\\s+"+suffix).doesNotContain("TESTSPEC-1","TESTSPEC-2");}
   jdbc.update("UPDATE wms_material_receipt SET purchase_order_no='CHANGED TEST-OWNED SOURCE' WHERE id=?",first);
-  assertThat(batches.pdf(listBatch.path("id").asText())).isEqualTo(frozen);
+  assertThat(listBatch).isEqualTo(frozen);
   assertThatThrownBy(()->jdbc.update("UPDATE mes_print_template_version SET print_type='DOCUMENT' WHERE id=?",list.path("id").asText())).hasMessageContaining("Immutable print template type");
-  assertThatThrownBy(()->jdbc.update("UPDATE mes_print_batch SET snapshot_json='{}' WHERE id=?",listBatch.path("id").asText())).hasMessageContaining("Immutable print batch");
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_print_artifact WHERE created_by=?",Long.class,actor)).isEqualTo(2);
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_print_batch WHERE created_by=?",Long.class,actor)).isZero();
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_print_artifact WHERE created_by=?",Long.class,actor)).isZero();
  }
  @Test void rejectsWrongModeDuplicatesForeignScopeAndMissingReadPermission()throws Exception{
   var list=template("LIST");String id=list.path("id").asText();

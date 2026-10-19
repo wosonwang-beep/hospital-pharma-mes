@@ -12,13 +12,14 @@ import java.util.*;
 @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(prefix="spring.datasource", name="url")
 public class EbrFormSignableProvider implements SignableObjectProvider {
  private final EbrRuntimeStore db;private final EbrRuntimeModel model;
+ private final EbrRoleAuthorization authority;
  private final SignatureCanonicalizer canonical;private final EbrRoleEvidence roles;private final SignatureRepository signatures;
- public EbrFormSignableProvider(EbrRuntimeStore db,EbrRuntimeModel model,SignatureCanonicalizer canonical,EbrRoleEvidence roles,SignatureRepository signatures){this.db=db;this.model=model;this.canonical=canonical;this.roles=roles;this.signatures=signatures;}
+ public EbrFormSignableProvider(EbrRuntimeStore db,EbrRuntimeModel model,SignatureCanonicalizer canonical,EbrRoleEvidence roles,SignatureRepository signatures,EbrRoleAuthorization authority){this.authority=authority;this.db=db;this.model=model;this.canonical=canonical;this.roles=roles;this.signatures=signatures;}
  public String objectType(){return "EBR_FORM_INSTANCE";}
  public Set<SignatureMeaning> allowedMeanings(){return Set.of(SignatureMeaning.VERIFY,SignatureMeaning.APPROVE);}
  public SignableObject loadForSignature(long org,String id){return model.formSignable(db.store(RuntimeFormEntity.class).get(org,MasterMutation.id(id)));}
  public void validateSignable(SignatureValidationContext context,SignableObject object){
-  var actor=context.platform();
+  var actor=authority.current(context.platform(),"ebr:sign");
   if(!actor.hasPermission("ebr:sign"))throw new PermissionException("PERMISSION_DENIED","ebr:sign required");
   var form=db.store(RuntimeFormEntity.class).get(actor.organizationId(),MasterMutation.id(object.objectId()));
   model.context(form,true);form=db.store(RuntimeFormEntity.class).lock(actor.organizationId(),form.getId());model.active(form);
@@ -29,14 +30,14 @@ public class EbrFormSignableProvider implements SignableObjectProvider {
  @org.springframework.context.event.EventListener
  public void signatureApplied(SignatureAppliedEvent event){
   var signature=event.signature();if(!signature.objectType().equals(objectType()))return;
-  var actor=event.context();var form=db.store(RuntimeFormEntity.class).get(actor.organizationId(),MasterMutation.id(signature.objectId()));
+  var actor=authority.current(event.context(),"ebr:sign");var form=db.store(RuntimeFormEntity.class).get(actor.organizationId(),MasterMutation.id(signature.objectId()));
   var object=model.formSignable(form);
   if(!canonical.digest(object).equals(signature.recordDigest()))throw new ResourceConflictException("RECORD_CHANGED","Inserted signature differs from locked form evidence");
   for(var rule:eligible(actor,signature.meaning(),object,form))roles.retain(actor,signature,rule);
  }
  private List<SignatureRule> eligible(CurrentPlatformContext actor,SignatureMeaning meaning,SignableObject object,RuntimeFormEntity form){
   var policies=model.signatureRules(form);
-  var matching=policies.stream().filter(rule->rule.meaning().equals(meaning.name())&&actor.roleCodes().contains(rule.requiredRole())).toList();
+  var matching=policies.stream().filter(rule->rule.meaning().equals(meaning.name())&&EbrRoleAuthorization.matches(model.definition(form).schemaVersion(),rule.requiredRoleId(),rule.requiredRole(),actor)).toList();
   if(matching.isEmpty())throw new PermissionException("PERMISSION_DENIED","Frozen signature role required");
   String digest=canonical.digest(object);var existing=signatures.findValid(actor.organizationId(),objectType(),object.objectId());
   var eligible=matching.stream().filter(rule->policies.stream()

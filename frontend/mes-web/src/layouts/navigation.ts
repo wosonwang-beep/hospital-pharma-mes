@@ -34,7 +34,9 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'production-orders-list', title: '生产订单', path: '/production/orders', permission: 'production:order:view' },
     { key: 'production-batches-list', title: '生产批', path: '/production/batches', permission: 'production:batch:view' },
     { key: 'production-execution', title: '生产执行', path: '/production/execution', permission: 'mes:execution:view', requiredPermissions: ['mes:operation:view'] },
-    {key:'ebr-book-templates',title:'电子批记录模板',path:'/ebr/book-templates',permission:'ebr:template:view'},
+    {key:'ebr-book-templates',title:'批记录目录模板',path:'/ebr/book-templates',permission:'ebr:template:view',requiredPermissions:['process:package:view']},
+    {key:'ebr-templates',title:'工序表单模板',path:'/ebr/templates',permission:'ebr:template:view',requiredPermissions:['process:package:view']},
+    {key:'ebr-batch-instances',title:'批记录实例',path:'/ebr/batches',permission:'ebr:form:view',requiredPermissions:['production:batch:view','master:product:view']},
     { key: 'production-balances', title: '物料平衡', path: '/production/balances', permission: 'balance:view' }
   ] },
   { key: 'finished', title: '成品管理', items: [

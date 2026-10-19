@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed,onMounted,reactive,ref} from 'vue'
+import {computed,nextTick,onMounted,reactive,ref} from 'vue'
 import {useRoute,useRouter} from 'vue-router'
 import {api,errorMessage,idempotencyKey,type Page} from '../../api/http'
 import {useAuthStore} from '../../stores/auth'
@@ -9,7 +9,8 @@ const router=useRouter(),route=useRoute(),auth=useAuthStore()
 const data=ref<Page<DictionaryType>>({items:[],total:0,page:0,size:20}),loading=ref(false),error=ref(''),notice=ref('')
 const filters=reactive({code:String(route.query.code??''),name:String(route.query.name??''),kind:String(route.query.kind??''),status:String(route.query.status??''),createdFrom:String(route.query.createdFrom??''),createdTo:String(route.query.createdTo??'')})
 const modal=ref(false),chosen=ref<DictionaryType|null>(null),items=ref<DictionaryItem[]>([]),itemLoading=ref(false),saving=ref(false),exporting=ref(false)
-const editItem=ref<DictionaryItem|null>(null),showEditor=ref(false),itemError=ref('')
+const editItem=ref<DictionaryItem|null>(null),showEditor=ref(false),itemError=ref(''),itemNotice=ref('')
+const itemCodeInput=ref<{focus:()=>void}|null>(null),itemNameInput=ref<{focus:()=>void}|null>(null)
 const itemForm=reactive<DictionaryItemPayload>({code:'',label:'',description:null,parentId:null,sortNo:10,status:'ACTIVE',isDefault:false})
 const importOpen=ref(false),importBusy=ref(false),importError=ref(''),importName=ref('')
 const importRows=ref<DictionaryImportRow[]>([]),importPreview=ref<DictionaryImportPreview|null>(null)
@@ -81,7 +82,7 @@ async function exportAll(){
 }
 function open(id?:string,mode='create'){void router.push({path:id?`/admin/dictionaries/${id}${mode==='edit'?'/edit':''}`:'/admin/dictionaries/create',query:route.query})}
 async function openItems(row:DictionaryType){
- chosen.value=row;modal.value=true;showEditor.value=false;itemError.value='';await refreshItems()
+ chosen.value=row;modal.value=true;showEditor.value=false;itemError.value='';itemNotice.value='';items.value=[];await refreshItems()
 }
 async function refreshItems(){
  if(!chosen.value)return
@@ -94,25 +95,30 @@ async function refreshItems(){
  finally{itemLoading.value=false}
 }
 function startEdit(item?:DictionaryItem) {
+ if(!auth.can('iam:dict:update')||saving.value||showEditor.value)return
  editItem.value=item??null;Object.assign(itemForm,item?{code:item.code,label:item.label,description:item.description,parentId:item.parentId,sortNo:item.sortNo,status:item.status,isDefault:item.isDefault}:
  {code:'',label:'',description:null,parentId:null,sortNo:10,status:'ACTIVE',isDefault:false})
- itemError.value='';showEditor.value=true
+ itemError.value='';itemNotice.value='';showEditor.value=true
+ void nextTick(()=>(item?itemNameInput.value:itemCodeInput.value)?.focus())
 }
 async function saveItem(){
  if(!chosen.value||saving.value)return
- if(!itemForm.code.trim()||!itemForm.label.trim()){itemError.value='请填写字典项编码与名称';return}
+ if(!itemForm.code.trim()||!itemForm.label.trim()){
+  itemError.value='请填写字典项编码与名称'
+  void nextTick(()=>(!itemForm.code.trim()?itemCodeInput.value:itemNameInput.value)?.focus());return
+ }
  saving.value=true;itemError.value=''
  try{
   await api<DictionaryItem>({method:editItem.value?'PUT':'POST',
    url:`/dictionaries/${chosen.value.id}/items${editItem.value?'/'+editItem.value.id:''}`,
    headers:{'Idempotency-Key':idempotencyKey(),...(editItem.value?{'If-Match':`"${editItem.value.version}"`}:{})},
    data:{...itemForm,code:itemForm.code.trim(),label:itemForm.label.trim()}})
-  showEditor.value=false;notice.value='字典项保存成功';await Promise.all([refreshItems(),refreshPage()])
+  showEditor.value=false;notice.value='字典项保存成功';await Promise.all([refreshItems(),refreshPage()]);itemNotice.value='字典项保存成功'
  }catch(e){itemError.value=errorMessage(e)}finally{saving.value=false}
 }
 async function refreshPage(){const pg=data.value.page;const fresh=await api<Page<DictionaryType>>({url:'/dictionaries',params:{...filters,page:pg,size:20}});data.value=fresh;chosen.value=fresh.items.find(x=>x.id===chosen.value?.id)??chosen.value}
 async function toggle(item:DictionaryItem) {
- if(!chosen.value||saving.value)return
+ if(!chosen.value||saving.value||showEditor.value||!auth.can('iam:dict:update'))return
  if(!window.confirm(`确认${item.status==='ACTIVE'?'停用':'启用'}字典项「${item.label}」？停用后新业务不能选择，历史值保持不变。`))return
  saving.value=true;itemError.value=''
  try{
@@ -121,36 +127,36 @@ async function toggle(item:DictionaryItem) {
   await refreshItems()
  }catch(e){itemError.value=errorMessage(e)}finally{saving.value=false}
 }
-const columns=[{title:'字典 CODE',dataIndex:'code',width:150},{title:'字典名称',dataIndex:'name',width:126},
+const columns=[{title:'字典 CODE',dataIndex:'code',width:260,ellipsis:true},{title:'字典名称',dataIndex:'name',width:160,ellipsis:true},
  {title:'字典类型',key:'kind',width:83},{title:'字典结构',key:'structure',width:83},
- {title:'字典项',key:'itemCount',width:74},{title:'字典描述',dataIndex:'description',ellipsis:true},
+ {title:'字典项',key:'itemCount',width:160},{title:'字典描述',dataIndex:'description',ellipsis:true},
  {title:'状态',key:'status',width:75},{title:'创建时间',key:'createdAt',width:103},{title:'更新时间',key:'updatedAt',width:103},{title:'操作',key:'action',width:120}]
 onMounted(()=>void load(Number(route.query.page??0)))
 </script>
 <template>
 <main data-ui-template="T1" class="admin-page t1-query-list dictionary-list">
- <header class="admin-page-header"><div><h1>数据字典</h1></div></header>
+ <header class="admin-page-header"><div><h1>数据字典</h1></div><a-button v-if="auth.can('iam:dict:create')" type="primary" @click="open()">＋ 新增字典</a-button></header>
  <a-card class="query-card" title="查询条件">
-  <form class="query-form dict-query" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px" @submit.prevent="load(0)">
-   <label><span>字典 CODE</span><a-input v-model:value="filters.code" allow-clear placeholder="请输入 CODE"/></label>
-   <label><span>字典名称</span><a-input v-model:value="filters.name" allow-clear placeholder="请输入名称"/></label>
-   <label><span>字典类型</span><a-select v-model:value="filters.kind" style="width:100%" :options="[{value:'',label:'全部类型'},{value:'SYSTEM',label:'系统级'},{value:'BUSINESS',label:'业务级'}]"/></label>
-   <label><span>状态</span><a-select v-model:value="filters.status" style="width:100%" :options="[{value:'',label:'全部状态'},{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
-   <label><span>创建日期</span><div class="dict-date-range"><input v-model="filters.createdFrom" class="master-native-input" type="date" aria-label="创建开始"/><span>至</span><input v-model="filters.createdTo" class="master-native-input" type="date" aria-label="创建结束"/></div></label>
+  <form class="query-form dict-query" @submit.prevent="load(0)">
+   <label><span class="form-field-label">字典 CODE</span><a-input v-model:value="filters.code" allow-clear placeholder="请输入 CODE"/></label>
+   <label><span class="form-field-label">字典名称</span><a-input v-model:value="filters.name" allow-clear placeholder="请输入名称"/></label>
+   <label><span class="form-field-label">字典类型</span><a-select v-model:value="filters.kind" style="width:100%" :options="[{value:'',label:'全部类型'},{value:'SYSTEM',label:'系统级'},{value:'BUSINESS',label:'业务级'}]"/></label>
+   <label><span class="form-field-label">状态</span><a-select v-model:value="filters.status" style="width:100%" :options="[{value:'',label:'全部状态'},{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
+   <label><span class="form-field-label">创建日期</span><div class="dict-date-range"><input v-model="filters.createdFrom" class="master-native-input" type="date" aria-label="创建开始"/><span>至</span><input v-model="filters.createdTo" class="master-native-input" type="date" aria-label="创建结束"/></div></label>
    <a-space class="dict-actions"><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
   </form>
  </a-card>
  <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="notice" type="success" :message="notice" show-icon closable @close="notice=''"/>
  <a-card title="字典列表" class="result-card">
   <div class="master-toolbar dict-toolbar">
-   <a-space><a-button v-if="auth.can('iam:dict:create')" type="primary" @click="open()">＋ 新增字典</a-button><a-button v-if="auth.can('iam:dict:create')" @click="importOpen=true">导入 CSV</a-button><a-button :loading="exporting" @click="exportAll">导出 CSV</a-button></a-space>
+   <a-space><a-button v-if="auth.can('iam:dict:create')" @click="importOpen=true">导入 CSV</a-button><a-button :loading="exporting" @click="exportAll">导出 CSV</a-button></a-space>
    <span>共 {{data.total}} 条</span>
   </div>
-  <a-table :columns="columns" :data-source="data.items" row-key="id" :loading="loading" :pagination="false" :scroll="{x:1000}">
+  <a-table :columns="columns" :data-source="data.items" row-key="id" :loading="loading" :pagination="false" :scroll="{x:1410}">
    <template #bodyCell="{column,record}">
     <template v-if="column.key==='kind'">{{kindLabel[record.kind as keyof typeof kindLabel]}}</template>
     <template v-else-if="column.key==='structure'">{{structureLabel[record.structure as keyof typeof structureLabel]}}</template>
-    <template v-else-if="column.key==='itemCount'"><a-button size="small" @click="openItems(record)">{{record.itemCount}} 项</a-button></template>
+    <template v-else-if="column.key==='itemCount'"><a-button size="small" @click="openItems(record)">管理字典项（{{record.itemCount}}）</a-button></template>
     <template v-else-if="column.key==='status'"><a-tag :color="record.status==='ACTIVE'?'success':'default'">{{statusLabel[record.status as keyof typeof statusLabel]}}</a-tag></template>
     <template v-else-if="column.key==='createdAt'">{{record.createdAt?.slice(0,10)??'—'}}</template>
     <template v-else-if="column.key==='updatedAt'">{{record.updatedAt?.slice(0,10)??'—'}}</template>
@@ -158,37 +164,41 @@ onMounted(()=>void load(Number(route.query.page??0)))
       <a-button type="link" @click="open(record.id,'view')">查看</a-button>
       <a-button v-if="auth.can('iam:dict:update')" type="link" @click="open(record.id,'edit')">编辑</a-button>
     </template>
-    <strong v-else-if="column.dataIndex==='name'">{{record.name}}</strong>
+    <strong v-else-if="column.dataIndex==='name'" :title="record.name">{{record.name}}</strong>
    </template>
   </a-table>
-  <div class="table-footer"><span>第 {{data.page+1}} 页</span><a-pagination :current="data.page+1" :page-size="data.size" :total="data.total" :show-size-changer="false" @change="(p:number)=>load(p-1)"/></div>
+  <div class="table-footer"><span>共 {{data.total}} 条</span><a-pagination :current="data.page+1" :page-size="data.size" :total="data.total" :show-size-changer="false" @change="(p:number)=>load(p-1)"/></div>
  </a-card>
- <a-modal v-model:open="modal" :title="`字典项信息　${chosen?.name??''}`" :width="920" :footer="null" :destroy-on-close="true" class="dictionary-modal">
-  <a-alert v-if="itemError" type="error" :message="itemError" show-icon/>
+ <a-modal v-model:open="modal" :title="`${chosen?.name??''} · 字典项管理`" :width="920" :footer="null" :destroy-on-close="true" class="dictionary-modal">
+  <a-alert v-if="itemError&&!showEditor" type="error" :message="itemError" show-icon/>
+  <a-alert v-if="itemNotice" type="success" :message="itemNotice" show-icon closable @close="itemNotice=''"/>
   <div class="dict-modal-toolbar"><span>编码：{{chosen?.code}}　·　{{chosen?.structure==='TREE'?'树形结构':'平级结构'}}</span>
-   <a-button v-if="auth.can('iam:dict:update')" @click="startEdit()">＋ 新增字典项</a-button>
+   <a-button v-if="auth.can('iam:dict:update')" type="primary" :disabled="itemLoading||saving||showEditor" @click="startEdit()">＋ 新增字典项</a-button>
   </div>
+  <div class="dict-existing-heading"><h3>现有字典项</h3><span v-if="!itemLoading">共 {{items.length}} 项 · 启用 {{items.filter(x=>x.status==='ACTIVE').length}} 项 · 停用 {{items.filter(x=>x.status==='INACTIVE').length}} 项</span></div>
   <div v-if="chosen?.structure==='TREE'" class="dict-tree-box">
     <div class="dict-tree-title">树形层级 · 点击节点编辑；新增时可选择上级</div>
     <a-tree :tree-data="treeNodes" :expanded-keys="expandedTreeKeys" @expand="(keys:(string|number)[])=>expandedTreeKeys=keys.map(String)" @select="selectTree"/>
   </div>
   <a-table :data-source="items" row-key="id" :loading="itemLoading" :pagination="false" :scroll="{x:760,y:250}" size="small">
-   <a-table-column title="选项值" data-index="code" :width="150"/>
-   <a-table-column title="选项名称" data-index="label" :width="120"/>
+   <a-table-column title="字典项编码" data-index="code" :width="200" :ellipsis="true"/>
+   <a-table-column title="字典项名称" data-index="label" :width="180" :ellipsis="true"/>
    <a-table-column title="字典项描述" data-index="description" :ellipsis="true"/>
    <a-table-column title="状态" :width="90"><template #default="{record}"><a-tag :color="record.status==='ACTIVE'?'success':'default'">{{statusLabel[record.status as keyof typeof statusLabel]}}</a-tag></template></a-table-column>
-   <a-table-column title="操作" :width="150"><template #default="{record}"><a-button type="link" :disabled="!auth.can('iam:dict:update')" @click="startEdit(record)">编辑</a-button><a-button type="link" :disabled="!auth.can('iam:dict:update')" @click="toggle(record)">{{record.status==='ACTIVE'?'停用':'启用'}}</a-button></template></a-table-column>
+   <a-table-column title="操作" :width="150"><template #default="{record}"><a-button type="link" :disabled="!auth.can('iam:dict:update')||saving||showEditor" @click="startEdit(record)">编辑</a-button><a-button type="link" :disabled="!auth.can('iam:dict:update')||saving||showEditor" @click="toggle(record)">{{record.status==='ACTIVE'?'停用':'启用'}}</a-button></template></a-table-column>
   </a-table>
   <section v-if="showEditor" class="dict-item-editor">
+   <h3>{{editItem?'编辑字典项':'新增字典项'}}</h3>
+   <a-alert v-if="itemError" type="error" :message="itemError" show-icon/>
    <div class="dict-item-grid">
-    <label><span class="form-field-label">选项编码</span><a-input v-model:value="itemForm.code" :disabled="!!editItem" placeholder="请输入编码"/></label>
-    <label><span class="form-field-label">选项名称</span><a-input v-model:value="itemForm.label" placeholder="请输入名称"/></label>
+    <label><span class="form-field-label">选项编码</span><a-input ref="itemCodeInput" v-model:value="itemForm.code" :disabled="!!editItem" placeholder="请输入编码"/></label>
+    <label><span class="form-field-label">选项名称</span><a-input ref="itemNameInput" v-model:value="itemForm.label" placeholder="请输入名称"/></label>
     <label><span class="form-field-label">排序</span><a-input-number v-model:value="itemForm.sortNo" :min="0" :max="999999" style="width:100%"/></label>
     <label><span class="form-field-label">状态</span><a-select v-model:value="itemForm.status" style="width:100%" :options="[{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
     <label v-if="chosen?.structure==='TREE'"><span class="form-field-label">上级选项</span><a-select v-model:value="itemForm.parentId" allow-clear style="width:100%" :options="[{value:null,label:'根节点'},...items.filter(x=>x.id!==editItem?.id).map(x=>({value:x.id,label:x.label}))]"/></label>
     <label><span class="form-field-label">默认选项</span><a-checkbox v-model:checked="itemForm.isDefault" aria-label="设为默认选项"/></label>
    </div>
-   <div class="dict-item-footer"><a-button @click="showEditor=false">取消</a-button><a-button type="primary" :loading="saving" @click="saveItem">保存选项</a-button></div>
+   <div class="dict-item-footer"><a-button @click="showEditor=false;itemError=''">取消</a-button><a-button type="primary" :loading="saving" @click="saveItem">{{editItem?'保存修改':'新增字典项'}}</a-button></div>
   </section>
  </a-modal>
  <a-modal v-model:open="importOpen" class="dictionary-import-modal" title="数据字典导入预检" :width="800" :footer="null" :mask-closable="!importBusy">
@@ -225,7 +235,11 @@ onMounted(()=>void load(Number(route.query.page??0)))
 .dict-actions{grid-column:1/-1;justify-self:end}
 .dict-date-range{display:flex;align-items:center;gap:5px;min-width:0;width:100%}.dict-date-range input{min-width:0;flex:1 1 0;width:0;font-size:12px;padding:2px}.dict-date-range span{color:#929baa}
 .dict-toolbar{display:flex;justify-content:space-between;align-items:center}
-.dict-modal-toolbar{display:flex;align-items:center;justify-content:space-between;margin:12px 0;color:#6b7886;font-size:13px}
+.dict-modal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0;color:#6b7886;font-size:13px}
+.dict-existing-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0}
+.dict-existing-heading h3,.dict-item-editor h3{margin:0;font-size:15px;font-weight:600}
+.dict-existing-heading>span{font-size:12px;color:#6b7886}
+.dict-item-editor h3{margin-bottom:12px}
 .dict-item-editor{border:1px solid #dbe5f1;background:#f8fbff;padding:15px;margin-top:14px;border-radius:4px}
 .dict-item-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .dict-item-grid label{display:grid;grid-template-columns:100px minmax(0,1fr);align-items:center;gap:10px}
@@ -243,4 +257,5 @@ onMounted(()=>void load(Number(route.query.page??0)))
 :global(.dictionary-import-modal .ant-modal-body){background:#fff!important}
 :global(.dictionary-import-modal .ant-btn-primary:not(:disabled)){background:#2c5cdc!important;border-color:#2c5cdc!important;color:#fff!important}
 @media(max-width:1200px){.dict-query{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){.dict-item-grid{grid-template-columns:minmax(0,1fr)}}
 </style>

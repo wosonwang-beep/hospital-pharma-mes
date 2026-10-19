@@ -31,4 +31,19 @@ class EbrEngineTest {
         assertThatThrownBy(()->engine.evaluate(d,List.of(new Input("A",List.of(json.valueToTree("text")))),"ON_SUBMIT",Set.of(),Map.of(),Instant.EPOCH,(n,a,b)->n,"1")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(()->engine.evaluate(d,List.of(),null,Set.of(),Map.of(),Instant.EPOCH,(n,a,b)->n,"1")).isInstanceOf(IllegalArgumentException.class);
     }
+    @Test void cppRuleEvaluatesDuringEntryAndBlocksOnlyOnSubmit(){
+        var fields=List.of(field("A","MANUAL",null),field("B","MANUAL",null));
+        var config="{\"kind\":\"CPP\",\"name\":\"灭菌参数\",\"description\":\"\",\"rootLogic\":\"AND\",\"groups\":[{\"id\":\"G1\",\"logic\":\"AND\",\"conditions\":[{\"id\":\"C1\",\"fieldCode\":\"A\",\"operator\":\">=\",\"value\":\"121\"},{\"id\":\"C2\",\"fieldCode\":\"A\",\"operator\":\"<=\",\"value\":\"125\"},{\"id\":\"C3\",\"fieldCode\":\"B\",\"operator\":\">=\",\"value\":\"20\"}]}],\"actions\":[\"MARK_EXCEPTION\",\"BLOCK_SUBMIT\"]}";
+        var cpp=new Rule("CPP1","F",null,"VALIDATION","ON_CHANGE","((value('A') >= 121) && (value('A') <= 125) && (value('B') >= 20))","BLOCK","CPP_RULE_FAILED","超出工艺范围",false,true,config);
+        var d=definition(fields,List.of(cpp));
+        var bad=List.of(new Input("A",List.of(json.valueToTree(128))),new Input("B",List.of(json.valueToTree(25))));
+        var onChange=engine.evaluate(d,bad,"ON_CHANGE",Set.of(),Map.of(),Instant.EPOCH,(n,a,b)->n,"1");
+        assertThat(onChange.allowed()).isTrue();
+        assertThat(onChange.results()).anySatisfy(r->{assertThat(r.ruleCode()).isEqualTo("CPP1");assertThat(r.passed()).isFalse();assertThat(r.severity()).isEqualTo("WARN");});
+        var onSubmit=engine.evaluate(d,bad,"ON_SUBMIT",Set.of(),Map.of(),Instant.EPOCH,(n,a,b)->n,"1");
+        assertThat(onSubmit.allowed()).isFalse();
+        assertThat(onSubmit.results()).anySatisfy(r->{assertThat(r.ruleCode()).isEqualTo("CPP1");assertThat(r.severity()).isEqualTo("BLOCK");});
+        var good=List.of(new Input("A",List.of(json.valueToTree(123))),new Input("B",List.of(json.valueToTree(25))));
+        assertThat(engine.evaluate(d,good,"ON_SUBMIT",Set.of(),Map.of(),Instant.EPOCH,(n,a,b)->n,"1").allowed()).isTrue();
+    }
 }

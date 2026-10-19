@@ -4,6 +4,12 @@ import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 import java.math.BigDecimal;
 import java.time.*;
 @TableName("mes_quantity_event") public class QuantityEventEntity extends ScopedEntity {
+ private Integer finishedSchemaVersion=1;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Integer getFinishedSchemaVersion(){return Integer.valueOf(2).equals(finishedSchemaVersion)?2:null;} public void setFinishedSchemaVersion(Integer v){finishedSchemaVersion=v;}
+ private Long productId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Long getProductId(){return productId;} public void setProductId(Long v){productId=v;}
+
+
  private Long reversalOfId;
  public Long getReversalOfId(){return reversalOfId;} public void setReversalOfId(Long value){reversalOfId=value;}
  private String reason;

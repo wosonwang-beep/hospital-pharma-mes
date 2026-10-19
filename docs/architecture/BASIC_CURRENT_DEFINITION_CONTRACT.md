@@ -50,3 +50,7 @@ Global UI V2 remains. Master/product details retain T3/T2, lists T1, and process
 | BASIC-NV-008 | Permission/org isolation, invalid definitions, retained item/operation identities and idempotent replay still hold |
 
 Obsolete CI expectations of audit appends/stale-version rejection in basic maintenance and process revision creation must be replaced by the approved assertions above. No regulated audit/signature/concurrency assertion may be weakened. Historical fixture compatibility and downstream integration suites must be reviewed; pending gates prevent READY FOR ACCEPTANCE. Runtime results and debt are recorded only in MES_TASKS.md.
+
+## Approved historical canonical compatibility clarification — 2026-10-11
+
+The Design Authority approved the bounded [historical schema evidence and controlled new revision design](../development/decisions/PRODUCT_FINISHED_EBR_COMPATIBILITY_REVISION_AUTHORIZATION_20261011.md). Only a retained archival form whose matching published schema demonstrably lacked canvasDocument may omit the newly reconstructed null in canonical input. Explicit null and real canvas remain fully hashed; saved hashes, historical definitions, signatures, bindings and independent approval remain unchanged. New revisions retain direct current-process binding and require normal independent publication. No schema/API/permission/UI change or migration. Runtime outcomes remain only MES_TASKS.md.

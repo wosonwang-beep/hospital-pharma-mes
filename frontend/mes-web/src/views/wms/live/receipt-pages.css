@@ -1,0 +1,48 @@
+/* Receipt T1/T2: extend the approved T3 visual language; prototype-only. */
+.receipt-t12 .receipt-page-head{margin-bottom:18px}
+.receipt-t12 .receipt-page-head .receipt-muted{display:block;margin-top:4px}
+.receipt-t12 .receipt-page-head h1{margin-top:0}
+.receipt-t12 .receipt-query-fields{padding:16px 18px;display:flex;gap:11px 12px;flex-wrap:wrap;align-items:center}
+.receipt-t12 .receipt-form-pair{display:flex;align-items:center;gap:9px;min-height:35px;min-width:0;color:#72839a;font-size:12px}
+.receipt-t12 .receipt-form-pair>span:first-child{display:block;white-space:nowrap;flex:0 0 92px;text-align:right}
+.receipt-t12 .receipt-query-fields .receipt-form-pair>span:first-child{flex:0 0 auto}
+.receipt-t12 .receipt-query-fields .receipt-form-pair{width:174px}
+.receipt-t12 .receipt-query-fields .receipt-form-pair:first-child{width:235px}
+.receipt-t12 .receipt-query-fields .receipt-form-pair:nth-child(3){width:280px}
+.receipt-t12 .receipt-form-pair>.ant-select,.receipt-t12 .receipt-form-pair>.ant-input,.receipt-t12 .receipt-form-pair>.ant-input-number{flex:1;min-width:0;width:100%}
+.receipt-t12 .receipt-query-actions{display:flex;gap:8px;align-items:center}
+.receipt-t12 .receipt-result-extra{display:flex;align-items:center;gap:14px}
+.receipt-t12 .receipt-list-table th{white-space:nowrap}
+.receipt-t12 .receipt-list-table td{vertical-align:middle;white-space:normal}
+.receipt-t12 .receipt-list-table td:nth-child(1),.receipt-t12 .receipt-list-table th:nth-child(1){width:40px}
+.receipt-t12 .receipt-list-table td:nth-child(2){min-width:155px}
+.receipt-t12 .receipt-list-table td:nth-child(3){min-width:190px}
+.receipt-t12 .receipt-list-table td:nth-child(4){min-width:180px}
+.receipt-t12 .receipt-list-table td:nth-child(6){min-width:100px}
+.receipt-t12 .receipt-list-table td:nth-child(8){min-width:132px}
+.receipt-t12 .receipt-list-table td:last-child{white-space:nowrap}
+.receipt-t12 .receipt-list-table td b{font-weight:560}
+.receipt-t12 .receipt-list-table td small{display:block;margin-top:4px;color:#9aa7b7}
+.receipt-t12 .receipt-strong-link{font-weight:590;text-align:left}
+.receipt-t12 .receipt-actions-cell{display:flex;gap:10px;align-items:center;padding-top:19px;padding-bottom:19px}
+.receipt-t12 .receipt-list-foot{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;color:#8e9faf;font-size:12px;border-top:1px solid #eff2f6}
+.receipt-t12 .receipt-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;row-gap:16px;padding:19px 24px 22px}
+.receipt-t12 .receipt-edit-grid .receipt-form-pair{width:100%}
+.receipt-t12 .receipt-edit-grid .receipt-form-pair>span:first-child{flex:0 0 90px}
+.receipt-t12 .receipt-inline-check{flex:1;display:flex;align-items:center;gap:12px;min-height:32px}
+.receipt-t12 .required:before{content:"*";color:#e45d5d;margin-right:4px}
+.receipt-t12 .receipt-edit-items{padding:17px 18px}
+.receipt-t12 .receipt-edit-item{border:1px solid #e9eff6;border-radius:7px;background:#fdfefe;margin-bottom:14px;overflow:hidden}
+.receipt-t12 .receipt-edit-item:last-child{margin-bottom:0}
+.receipt-t12 .receipt-edit-item-title{display:flex;justify-content:space-between;align-items:center;padding:8px 17px;background:#f8fafd;border-bottom:1px solid #eef2f6;color:#405674}
+.receipt-t12 .receipt-edit-item-title b{font-size:13px;font-weight:630}
+.receipt-t12 .receipt-edit-item .receipt-edit-grid{row-gap:12px;padding:16px 17px}
+.receipt-t12 .receipt-check-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px;margin:0 17px 17px;padding:12px 14px;background:#f6f9fc;border:1px solid #edf2f8;border-radius:5px}
+.receipt-t12 .receipt-check-row>span{color:#8090a1;margin-right:6px}
+.receipt-t12 .receipt-form-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;padding:12px 18px;background:#fff;border:1px solid #e6edf3;border-radius:7px;color:#91a0af}
+.receipt-t12 .receipt-form-alert{margin-bottom:14px}
+.receipt-t12 .receipt-form-alert .ant-alert-description{line-height:1.8}
+.receipt-t12 .receipt-query-fields .ant-select-selector,.receipt-t12 .receipt-edit-grid .ant-select-selector{border-radius:5px}
+.receipt-t12 .receipt-page-head .ant-btn-primary,.receipt-t12 .receipt-edit-item .ant-btn-primary{font-weight:560}
+@media(max-width:1180px){.receipt-t12 .receipt-edit-grid{column-gap:18px}.receipt-t12 .receipt-query-fields .receipt-form-pair,.receipt-t12 .receipt-query-fields .receipt-form-pair:first-child,.receipt-t12 .receipt-query-fields .receipt-form-pair:nth-child(3){width:calc(50% - 12px)}}
+@media(max-width:850px){.receipt-t12 .receipt-edit-grid{grid-template-columns:minmax(0,1fr)}.receipt-t12 .receipt-query-fields .receipt-form-pair,.receipt-t12 .receipt-query-fields .receipt-form-pair:first-child,.receipt-t12 .receipt-query-fields .receipt-form-pair:nth-child(3){width:100%}.receipt-t12 .receipt-form-footer{flex-wrap:wrap}.receipt-t12 .receipt-titlebar{align-items:flex-start}.receipt-t12 .receipt-list-foot{flex-wrap:wrap;gap:12px}}

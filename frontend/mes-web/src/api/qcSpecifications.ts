@@ -3,10 +3,10 @@ export type QcState='DRAFT'|'APPROVED'|'RETIRED'
 export const qcStates:Record<QcState,string>={DRAFT:'草稿',APPROVED:'已批准',RETIRED:'已退役'}
 export interface QcItem {specificationItemId?:string;itemCode:string;itemName:string;required:boolean;resultType:'NUMERIC'|'TEXT';lowerLimit:string|null;upperLimit:string|null;unitId:string|null;textAcceptanceCriteria:string|null;methodCode:string;methodVersion:string}
 export interface QcMeta {id:string;orgId:string;createdBy:string;createdAt:string;updatedBy:string;updatedAt:string;versionNo:number}
-export interface QcSpecification extends QcMeta {materialId:string;materialCode:string;materialName:string;specificationCode:string;specificationName:string}
+export interface QcSpecification extends QcMeta {materialId:string|null;materialCode:string|null;materialName:string|null;subjectType?:'MATERIAL'|'PRODUCT';productId?:string;productCode?:string;productName?:string;specificationCode:string;specificationName:string}
 export interface QcVersionSummary extends QcMeta {specificationId:string;versionNoBusiness:number;status:QcState;contentHash:string|null;approvedBy:string|null;approvedAt:string|null;approvalSignatureId:string|null;approvalReason:string|null;retiredBy:string|null;retiredAt:string|null;retirementSignatureId:string|null;retirementReason:string|null}
 export interface QcDetail extends QcSpecification {versions:QcVersionSummary[]}
-export interface QcVersion extends QcVersionSummary {specificationCode:string;specificationName:string;materialId:string;materialCode:string;materialName:string;items:QcItem[]}
+export interface QcVersion extends QcVersionSummary {specificationCode:string;specificationName:string;materialId:string|null;materialCode:string|null;materialName:string|null;subjectType?:'MATERIAL'|'PRODUCT';productId?:string;productCode?:string;productName?:string;items:QcItem[]}
 export function blankQcItem():QcItem{return {itemCode:'',itemName:'',required:true,resultType:'NUMERIC',lowerLimit:null,upperLimit:null,unitId:null,textAcceptanceCriteria:null,methodCode:'',methodVersion:''}}
 function text(value:string,max:number){const result=value.trim();if(!result||result.length>max)throw Error(`请输入不超过 ${max} 字的必填内容`);return result}
 function decimal(value:string|null){if(value===null||value==='')return null;if(!/^-?[0-9]{1,12}(\.[0-9]{1,6})?$/.test(value))throw Error('数值最多支持 12 位整数和 6 位小数');return value}

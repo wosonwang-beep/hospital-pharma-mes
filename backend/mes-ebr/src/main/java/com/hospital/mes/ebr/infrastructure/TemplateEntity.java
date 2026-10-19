@@ -2,6 +2,7 @@ package com.hospital.mes.ebr.infrastructure;
 import com.baomidou.mybatisplus.annotation.*;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("ebr_template_version") public class TemplateEntity extends ScopedEntity {
+private Integer definitionSchemaVersion; public Integer getDefinitionSchemaVersion(){return definitionSchemaVersion;} public void setDefinitionSchemaVersion(Integer value){definitionSchemaVersion=value;}
 private Long processPackageId; public Long getProcessPackageId(){return processPackageId;} public void setProcessPackageId(Long value){processPackageId=value;}
 private Long packageVersionId; public Long getPackageVersionId(){return packageVersionId;} public void setPackageVersionId(Long value){packageVersionId=value;}
 private String templateName; public String getTemplateName(){return templateName;} public void setTemplateName(String value){templateName=value;}

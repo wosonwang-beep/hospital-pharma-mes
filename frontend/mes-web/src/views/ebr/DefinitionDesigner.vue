@@ -2,6 +2,8 @@
 import {computed,nextTick,onBeforeUnmount,onMounted,ref,watch} from 'vue'
 import Editor,{ControlType,EditorMode,ElementType,RowFlex,type IEditorResult,type IElement} from '@hufe921/canvas-editor'
 import ProcessLookup from '../process/ProcessLookup.vue'
+import CppRuleDesigner from './CppRuleDesigner.vue'
+import {PlusOutlined} from '@ant-design/icons-vue'
 import {fieldLabels,newField} from './model'
 import type {EbrDefinition,EbrField,EbrForm,EbrOperationChoice,EbrCanvasDocument} from './types'
 
@@ -11,9 +13,11 @@ const host=ref<HTMLDivElement|null>(null)
 const selectedFormIndex=ref(0)
 const selectedFieldCode=ref('')
 const rightTab=ref('field')
+const designerTab=ref<'form'|'cpp'>('form')
 const viewMode=ref<'design'|'fill'>('design')
 const fontSize=ref(16)
 let editor:Editor|null=null
+let insertRange:{startIndex:number;endIndex:number;tableId?:string;startTdIndex?:number;endTdIndex?:number;startTrIndex?:number;endTrIndex?:number}|null=null
 
 const forms=computed(()=>props.definition.forms)
 const focusedFormMode=computed(()=>!!props.initialFormCode)
@@ -134,7 +138,18 @@ async function mountEditor(){
  editor.command.executeMode(props.editable?(viewMode.value==='design'?EditorMode.DESIGN:EditorMode.FORM):EditorMode.READONLY)
 }
 function selectForm(index:number){
- capture();selectedFormIndex.value=index;selectedFieldCode.value='';rightTab.value='form'
+ capture();insertRange=null;selectedFormIndex.value=index;selectedFieldCode.value='';rightTab.value='form'
+}
+function rememberInsertRange(){
+ if(!editor)return
+ const range=editor.command.getRange()
+ if(range.startIndex<0||range.endIndex<0)return
+ insertRange={startIndex:range.startIndex,endIndex:range.endIndex,tableId:range.tableId,startTdIndex:range.startTdIndex,endTdIndex:range.endTdIndex,startTrIndex:range.startTrIndex,endTrIndex:range.endTrIndex}
+}
+function restoreInsertRange(){
+ if(!editor||!insertRange)return
+ const r=insertRange
+ editor.command.executeSetRange(r.startIndex,r.endIndex,r.tableId,r.startTdIndex,r.endTdIndex,r.startTrIndex,r.endTrIndex)
 }
 function insertField(type:EbrField['fieldType'],label?:string,codeBase?:string,source?:EbrField['sourceType']){
  const form=selectedForm.value
@@ -148,7 +163,9 @@ function insertField(type:EbrField['fieldType'],label?:string,codeBase?:string,s
  form.fields.push(field)
  selectedFieldCode.value=field.fieldCode
  rightTab.value='field'
+ restoreInsertRange()
  editor?.command.executeInsertControl(controlElement(field))
+ rememberInsertRange()
  capture()
 }
 function insertBusiness(item:typeof businessFields[number]){insertField(item.type,item.label,item.code,item.source)}
@@ -195,6 +212,12 @@ function toolbar(action:string){
 }
 function changeSize(){editor?.command.executeSize(fontSize.value);capture()}
 function toggleMode(mode:'design'|'fill'){capture();viewMode.value=mode;editor?.command.executeMode(props.editable?(mode==='design'?EditorMode.DESIGN:EditorMode.FORM):EditorMode.READONLY)}
+function switchDesignerTab(tab:'form'|'cpp'){
+ if(tab===designerTab.value)return
+ if(designerTab.value==='form')capture()
+ designerTab.value=tab
+ if(tab==='form')void mountEditor()
+}
 function addRule(){
  if(!props.editable)return
  let n=props.definition.rules.length+1
@@ -223,12 +246,18 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
         <strong>表单模板设计器</strong>
         <span v-if="selectedForm">{{selectedForm.formName}} · {{selectedForm.formCode}}</span>
       </div>
-      <div class="mode-switch">
+      <div v-if="designerTab==='form'" class="mode-switch">
         <button type="button" :class="{active:viewMode==='design'}" :disabled="!editable" @click="toggleMode('design')">设计模式</button>
         <button type="button" :class="{active:viewMode==='fill'}" @click="toggleMode('fill')">填写预览</button>
       </div>
     </header>
 
+    <nav class="designer-main-tabs" aria-label="动态表单设计页签">
+      <button type="button" :class="{active:designerTab==='form'}" @click="switchDesignerTab('form')">表单设计</button>
+      <button type="button" :class="{active:designerTab==='cpp'}" :disabled="!selectedForm" @click="switchDesignerTab('cpp')">CPP规则设计</button>
+    </nav>
+
+    <template v-if="designerTab==='form'">
     <div class="designer-toolbar">
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('undo')">↶</a-button>
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('redo')">↷</a-button>
@@ -249,7 +278,7 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
 
     <div class="designer-grid">
       <aside class="palette">
-        <div class="panel-title">{{focusedFormMode?'组件库':'表单列表'}} <a-button v-if="editable&&!focusedFormMode" type="link" size="small" @click="newForm">＋新增</a-button></div>
+        <div class="panel-title">{{focusedFormMode?'组件库':'表单列表'}} <a-button v-if="editable&&!focusedFormMode" type="primary" size="small" @click="newForm">＋ 新增表单</a-button></div>
         <template v-if="!focusedFormMode">
           <button v-for="(form,index) in forms" :key="form.formCode" type="button" class="form-item" :class="{active:index===selectedFormIndex}" @click="selectForm(index)">
             <strong>{{form.formName}}</strong><small>{{form.formCode}} · {{operationChoices.find(o=>o.id===form.operationDefId)?.operationName||'未关联工序'}}</small>
@@ -258,15 +287,20 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
         </template>
 
         <template v-if="selectedForm">
+          <div class="insert-tip">先在画布定位插入位置，再点击字段前的 +</div>
           <div class="panel-title field-title">基础字段</div>
-          <div class="palette-grid">
-            <button v-for="item in basicFields" :key="item.type" type="button" :disabled="!editable" @click="insertField(item.type,item.label)">{{item.label}}</button>
+          <div class="insert-field-list">
+            <div v-for="item in basicFields" :key="item.type" class="insert-field-row">
+              <button type="button" class="field-add" :disabled="!editable" :aria-label="'插入'+item.label" :title="'插入'+item.label" @pointerdown.prevent="rememberInsertRange" @click="insertField(item.type,item.label)"><PlusOutlined/></button>
+              <span>{{item.label}}</span>
+            </div>
           </div>
           <div class="panel-title field-title">业务字段</div>
-          <div class="field-list">
-            <button v-for="item in businessFields" :key="item.code" type="button" :disabled="!editable" @click="insertBusiness(item)">
-              <span>{{item.label}}</span><small>{{item.source==='SYSTEM'?'自动取值':'受控填写'}}</small>
-            </button>
+          <div class="insert-field-list">
+            <div v-for="item in businessFields" :key="item.code" class="insert-field-row">
+              <button type="button" class="field-add" :disabled="!editable" :aria-label="'插入'+item.label" :title="'插入'+item.label" @pointerdown.prevent="rememberInsertRange" @click="insertBusiness(item)"><PlusOutlined/></button>
+              <span class="insert-field-name">{{item.label}}</span><small>{{item.source==='SYSTEM'?'自动取值':'受控填写'}}</small>
+            </div>
           </div>
           <div class="panel-title field-title">布局</div>
           <div class="palette-grid">
@@ -324,7 +358,7 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
           <a-tab-pane key="rules" tab="规则与签名">
             <div class="rules-panel">
               <div class="rules-head"><strong>校验/计算规则</strong><a-button v-if="editable" size="small" @click="addRule">＋</a-button></div>
-              <div v-for="rule in definition.rules" :key="rule.ruleCode" class="rule-card">
+              <div v-for="rule in definition.rules.filter(r=>!r.cppConfigJson)" :key="rule.ruleCode" class="rule-card">
                 <div><b>{{rule.ruleCode}}</b><span>{{rule.ruleType}}</span></div>
                 <a-input v-model:value="rule.expression" :disabled="!editable" size="small"/>
               </div>
@@ -343,24 +377,27 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
         </a-tabs>
       </aside>
     </div>
+    </template>
+    <CppRuleDesigner v-else :definition="definition" :form="selectedForm" :editable="editable"/>
   </section>
 </template>
 
 <style scoped>
-.canvas-ebr-designer{border:1px solid var(--mes-ui-border);border-radius:8px;background:#fff;overflow:hidden}
+.canvas-ebr-designer{container-type:inline-size;container-name:ebr-designer;border:1px solid var(--mes-ui-border);border-radius:8px;background:#fff;overflow:hidden}
 .designer-topbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--mes-ui-border);background:#fff}
 .designer-topbar>div:first-child{display:flex;align-items:baseline;gap:10px}.designer-topbar strong{font-size:16px}.designer-topbar span{font-size:12px;color:var(--mes-ui-secondary)}
 .mode-switch{display:flex;border:1px solid var(--mes-ui-border);border-radius:6px;overflow:hidden}.mode-switch button{border:0;background:#fff;padding:6px 13px;color:var(--mes-ui-secondary);cursor:pointer}.mode-switch button.active{background:var(--mes-ui-primary);color:#fff}.mode-switch button:disabled{opacity:.45}
+.designer-main-tabs{height:46px;display:flex;align-items:flex-end;gap:24px;padding:0 16px;border-bottom:1px solid var(--mes-ui-border);background:#fff}.designer-main-tabs button{height:46px;border:0;border-bottom:2px solid transparent;background:transparent;padding:0 4px;color:var(--mes-ui-secondary);cursor:pointer;font:inherit}.designer-main-tabs button.active{color:var(--mes-ui-primary);border-bottom-color:var(--mes-ui-primary);font-weight:650}.designer-main-tabs button:disabled{opacity:.45;cursor:not-allowed}
 .designer-toolbar{min-height:46px;display:flex;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid var(--mes-ui-border);background:#fbfcfe;overflow-x:auto}.tool-sep{height:24px;width:1px;background:var(--mes-ui-border);margin:0 3px}
 .designer-grid{display:grid;grid-template-columns:220px minmax(600px,1fr) 320px;min-height:720px}
 .palette{border-right:1px solid var(--mes-ui-border);padding:12px;background:#fcfdff;overflow:auto}.panel-title{font-size:12px;font-weight:650;color:var(--mes-ui-secondary);display:flex;align-items:center;justify-content:space-between;padding:4px 4px 9px}.field-title{margin-top:14px;border-top:1px solid var(--mes-ui-border);padding-top:13px}
 .form-item{width:100%;display:block;text-align:left;border:1px solid transparent;background:transparent;border-radius:6px;padding:8px;margin:2px 0;cursor:pointer;color:var(--mes-ui-text)}.form-item:hover,.form-item.active{background:#eaf2ff;border-color:#cfe0fb}.form-item strong,.form-item small{display:block}.form-item small{margin-top:3px;color:var(--mes-ui-secondary);font-size:11px;white-space:normal}
-.palette-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.palette-grid button,.field-list button{border:1px solid var(--mes-ui-border);background:#fff;border-radius:6px;min-height:34px;font:inherit;font-size:12px;color:var(--mes-ui-text);cursor:pointer}.palette-grid button:hover,.field-list button:hover{border-color:#91caff;background:#f0f7ff}.palette-grid button:disabled,.field-list button:disabled{opacity:.45;cursor:not-allowed}
-.field-list{display:grid;gap:5px}.field-list button{display:flex;align-items:center;justify-content:space-between;padding:7px 9px}.field-list small{color:var(--mes-ui-secondary);font-size:10px}
+.palette-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.palette-grid button{border:1px solid var(--mes-ui-border);background:#fff;border-radius:6px;min-height:34px;font:inherit;font-size:12px;color:var(--mes-ui-text);cursor:pointer}.palette-grid button:hover{border-color:#91caff;background:#f0f7ff}.palette-grid button:disabled{opacity:.45;cursor:not-allowed}
+.insert-tip{margin:10px 4px 2px;padding:7px 8px;border-radius:6px;background:#f0f6ff;color:#55718f;font-size:10px;line-height:1.45}.insert-field-list{display:grid;gap:5px}.insert-field-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:34px;padding:5px 7px;border:1px solid var(--mes-ui-border);border-radius:6px;background:#fff}.insert-field-row:hover{border-color:#91caff;background:#f8fbff}.field-add{width:22px;height:22px;display:grid;place-items:center;border:1px solid #91caff;border-radius:50%;background:#fff;color:var(--mes-ui-primary);padding:0;cursor:pointer;transition:.15s}.field-add:hover{background:var(--mes-ui-primary);border-color:var(--mes-ui-primary);color:#fff}.field-add:disabled{opacity:.4;cursor:not-allowed;background:#fff;color:var(--mes-ui-secondary)}.field-add :deep(svg){width:11px;height:11px}.insert-field-row>span{font-size:12px;color:var(--mes-ui-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.insert-field-row small{color:var(--mes-ui-secondary);font-size:10px;white-space:nowrap}.insert-field-name{min-width:0}
 .canvas-stage{background:#eef2f7;padding:18px 8px;overflow:auto;min-width:0}.canvas-host{min-height:680px}.canvas-host :deep(canvas){max-width:none}
 .inspector{border-left:1px solid var(--mes-ui-border);padding:8px 12px;background:#fff;overflow:auto}.property-form{display:flex;flex-direction:column;gap:11px}.property-form>label{display:flex;align-items:center;gap:8px;min-width:0}.property-form>label>span{flex:0 0 92px;color:var(--mes-ui-secondary);font-size:12px;white-space:nowrap}.property-form>label :deep(.ant-input),.property-form>label :deep(.ant-select),.property-form>label :deep(.ant-input-number),.property-form>label :deep(.process-lookup){flex:1;min-width:0}.empty-hint{color:var(--mes-ui-secondary);font-size:12px;line-height:1.8;padding:30px 8px;text-align:center}
 .option-box{border:1px solid var(--mes-ui-border);border-radius:6px;padding:8px}.option-row{display:flex;gap:4px;margin-bottom:6px}
 .rules-panel{display:grid;gap:8px}.rules-head{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--mes-ui-border)}.rule-card{border:1px solid var(--mes-ui-border);border-radius:6px;padding:8px}.rule-card>div{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:5px}.rule-card span{color:var(--mes-ui-secondary)}
-@media(max-width:1180px){.designer-grid{grid-template-columns:190px minmax(480px,1fr)}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--mes-ui-border);max-height:none}.property-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.designer-grid{grid-template-columns:1fr}.palette{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.canvas-stage{padding:8px;min-height:520px}.property-form{grid-template-columns:1fr}.designer-topbar{align-items:flex-start;height:auto;gap:10px;padding:10px;flex-direction:column}.designer-toolbar{position:sticky;top:0;z-index:2}}
+@container ebr-designer (max-width:1180px){.designer-grid{grid-template-columns:190px minmax(480px,1fr)}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--mes-ui-border);max-height:none}.property-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container ebr-designer (max-width:760px){.designer-grid{grid-template-columns:1fr}.palette{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.canvas-stage{padding:8px;min-height:520px}.property-form{grid-template-columns:1fr}.designer-topbar{align-items:flex-start;height:auto;gap:10px;padding:10px;flex-direction:column}.designer-toolbar{position:sticky;top:0;z-index:2}}
 </style>

@@ -50,7 +50,7 @@ public class IncomingRuntimeAdapters {
     requireQuality(quality.getObject().blockingCodes(org,batch,true));
     balances.getObject().requireCheckpoint(org,batch,"QA_RELEASE",null);
     finishedGoods.getObject().confirmedInbound(org,batch);var finished=finishedQuality.getObject().releaseEvidence(org,batch);var missing=new java.util.ArrayList<String>();finished.path("blockingCodes").forEach(x->missing.add(x.asText()));requireQuality(missing);
-    if(production.qualityIdentity(org,batch).finishedLotId()==null)throw new ComplianceException("FINISHED_OUTPUT_REQUIRED","Actual batch-owned finished output is required before QA");
+    if(production.qualityIdentity(org,batch).finishedLotId()==null&&!production.batchFact(org,batch).hasNonNull("finishedBaseUnitId"))throw new ComplianceException("FINISHED_OUTPUT_REQUIRED","Actual batch-owned finished output is required before QA");
    }
   };
  }

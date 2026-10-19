@@ -2,6 +2,12 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.*;
 @TableName("qms_release_decision")
 public class ReleaseDecisionRow extends IncomingRow {
+ private Integer finishedSchemaVersion=1;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Integer getFinishedSchemaVersion(){return Integer.valueOf(2).equals(finishedSchemaVersion)?2:null;} public void setFinishedSchemaVersion(Integer v){finishedSchemaVersion=v;}
+ private Long productId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Long getProductId(){return productId;} public void setProductId(Long v){productId=v;}
+
+
  private String releaseScope;
  public String getReleaseScope(){return releaseScope;} public void setReleaseScope(String value){releaseScope=value;}
  private Long mainBatchId;

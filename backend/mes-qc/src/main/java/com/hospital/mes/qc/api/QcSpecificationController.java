@@ -11,7 +11,7 @@ public class QcSpecificationController {
  private final QcSpecificationService service;private final TraceIdProvider traces;
  public QcSpecificationController(QcSpecificationService service,TraceIdProvider traces){this.service=service;this.traces=traces;}
  @GetMapping("/specifications") @PreAuthorize("hasAuthority('qms:specification:view')")
- public ApiResponse<QcViews.Page<QcViews.SpecificationSummary>> list(@RequestParam(name="page",defaultValue="0")int page,@RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="keyword",required=false)String keyword,@RequestParam(name="materialId",required=false)String material,@RequestParam(name="versionStatus",required=false)String state){return ok(service.list(page,size,keyword,material,state));}
+ public ApiResponse<QcViews.Page<QcViews.SpecificationSummary>> list(@RequestParam(name="page",defaultValue="0")int page,@RequestParam(name="size",defaultValue="20")int size,@RequestParam(name="keyword",required=false)String keyword,@RequestParam(name="materialId",required=false)String material,@RequestParam(name="productId",required=false)String product,@RequestParam(name="subjectType",required=false)String subject,@RequestParam(name="versionStatus",required=false)String state){return ok(service.list(page,size,keyword,material,product,subject,state));}
  @PostMapping("/specifications") @PreAuthorize("hasAuthority('qms:specification:create')") @ResponseStatus(HttpStatus.CREATED)
  public ApiResponse<QcViews.SpecificationDetail> create(@RequestBody QcCommands.CreateSpecification r,@RequestHeader("Idempotency-Key")String key){return ok(service.create(r,key));}
  @GetMapping("/specifications/{id}") @PreAuthorize("hasAuthority('qms:specification:view')")

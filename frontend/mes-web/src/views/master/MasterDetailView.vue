@@ -14,7 +14,8 @@ const form=reactive<Record<string,string|number|null>>({}),record=ref<MasterReco
 let pendingKey=idempotencyKey(),pendingBody=''
 async function load(){error.value='';conflict.value=false;record.value=null;for(const k of Object.keys(form))delete form[k];reason.value='';try{if(!create.value)record.value=await api<MasterRecord>({url:`/${def.value.key}/${route.params.id}`});for(const f of def.value.fields){const value=record.value?.[f.key];form[f.key]=typeof value==='string'||typeof value==='number'?value:f.kind==='number'?0:null}}catch(e){error.value=errorMessage(e)}}
 async function save(action='UPDATE'){busy.value=true;error.value='';try{
- const body=commandBody(def.value,form,!create.value,action,'基础资料维护（系统记录）')
+ if(def.value.key==='suppliers'&&['QUALIFY','REJECT','REVIEW'].includes(action)&&!reason.value.trim())throw new Error('请填写资格评审依据')
+ const body=commandBody(def.value,form,!create.value,action,def.value.key==='suppliers'&&reason.value.trim()?reason.value:'基础资料维护（系统记录）')
  const encoded=JSON.stringify({body});if(encoded!==pendingBody){pendingKey=idempotencyKey();pendingBody=encoded}
  const updated=await api<MasterRecord>({url:`/${def.value.key}${create.value?'':`/${route.params.id}`}`,method:create.value?'POST':'PUT',data:body,headers:{'Idempotency-Key':pendingKey,}})
  record.value=updated;pendingBody='';await router.push({path:`/master/${def.value.key}/${updated.id}`,query:route.query})
@@ -22,7 +23,7 @@ async function save(action='UPDATE'){busy.value=true;error.value='';try{
 function back(){void router.push({path:`/master/${def.value.key}`,query:route.query})}
 watch(()=>route.fullPath,load,{immediate:true})
 </script>
-<template><main :data-ui-template="readonly?'T3':'T2'" class="admin-page master-page"><header class="admin-page-header"><div><a-button type="link" @click="back">← 返回{{def.title}}列表</a-button><h1>{{create?'新增':readonly?'查看':'编辑'}}{{def.title}}</h1><p v-if="record">{{record.supplierCode??record.orgCode??record.unitCode??record.equipmentCode??record.qualificationCode??''}} · {{statusLabel[String(record.status??record.qualificationStatus??'')]??record.status??record.qualificationStatus}}</p></div><a-button v-if="readonly&&record?.allowedActions.includes('UPDATE')&&auth.can(`master:${def.permission}:update`)" type="primary" @click="router.push({path:`/master/${def.key}/${record?.id}/edit`,query:route.query})">编辑</a-button></header>
+<template><main :data-ui-template="readonly?'T3':'T2'" class="admin-page master-page"><header class="admin-page-header"><div><a-button type="link" @click="back">← 返回{{def.title}}列表</a-button><h1>{{create?'新增':readonly?'查看':'编辑'}}{{def.title}}</h1><p v-if="record">{{record.supplierCode??record.orgCode??record.unitCode??record.equipmentCode??record.qualificationCode??''}} · {{statusLabel[String(record.status??record.qualificationStatus??'')]??record.status??record.qualificationStatus}}</p></div><a-button v-if="readonly&&(record?.allowedActions.includes('UPDATE')||(def.key==='suppliers'&&!!record?.allowedActions.length))&&auth.can(`master:${def.permission}:update`)" type="primary" @click="router.push({path:`/master/${def.key}/${record?.id}/edit`,query:route.query})">编辑</a-button></header>
 <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="conflict" type="warning" message="记录发生冲突，请重新重新加载后再保存。"><template #action><a-button @click="load">重新加载</a-button></template></a-alert>
 <a-card title="基本信息" class="form-section"><form class="master-form" @submit.prevent="save()"><label v-for="f in def.fields" :key="f.key"><span class="form-field-label">{{f.label}}<span v-if="f.required" class="required-mark"> *</span></span>
 <span v-if="readonly&&['fromUnitId','toUnitId','materialId','userId','parentId'].includes(f.key)" class="master-read-value"><ReadReference :field="f.key" :value="form[f.key]"/></span><span v-else-if="readonly" class="master-read-value">{{form[f.key]===null?'—':statusLabel[String(form[f.key])]??form[f.key]}}</span>
@@ -30,5 +31,6 @@ watch(()=>route.fullPath,load,{immediate:true})
 <input v-else-if="f.kind==='number'" v-model.number="form[f.key]" class="master-native-input" type="number" min="0" max="12" step="1" :required="f.required"/>
 <input v-else v-model="form[f.key]" class="master-native-input" :type="f.kind==='date'?'date':'text'" :required="f.required" :maxlength="f.max" :disabled="!create&&f.immutable"/>
 </label>
-<a-space v-if="!readonly"><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">保存</a-button><a-button @click="back">取消</a-button><a-button v-for="action in record?.allowedActions.filter(v=>v!=='UPDATE'&&v!=='QUALIFY')??[]" :key="action" :disabled="busy||conflict" @click="save(action)">{{actionLabel[action]??action}}</a-button></a-space></form></a-card>
+<label v-if="!readonly&&def.key==='suppliers'"><span class="form-field-label">资格评审依据</span><input v-model="reason" class="master-native-input" maxlength="1000" placeholder="资格评审动作须填写具体依据"/></label>
+<a-space v-if="!readonly"><a-button @click="back">取消</a-button><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">保存</a-button><a-button v-for="action in record?.allowedActions.filter(v=>v!=='UPDATE')??[]" :key="action" :disabled="busy||conflict" @click="save(action)">{{actionLabel[action]??action}}</a-button></a-space></form></a-card>
 </main></template>

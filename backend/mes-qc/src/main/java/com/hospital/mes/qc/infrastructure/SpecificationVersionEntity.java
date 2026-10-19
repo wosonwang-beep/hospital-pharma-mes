@@ -3,6 +3,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("qc_specification_version")
 public class SpecificationVersionEntity extends ScopedEntity {
+ private Integer definitionSchemaVersion = 1;
+ public Integer getDefinitionSchemaVersion(){return definitionSchemaVersion;} public void setDefinitionSchemaVersion(Integer v){definitionSchemaVersion=v;}
+
  private Long specificationId;
  public Long getSpecificationId(){return specificationId;} public void setSpecificationId(Long value){specificationId=value;}
  private Integer versionNoBusiness;

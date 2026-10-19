@@ -6,5 +6,7 @@ public interface PlatformPrincipal {
     long userId();
     long organizationId();
     Set<String> roleCodes();
+    default Set<String> roleIds(){return Set.of();}
+    default int identityFormatVersion(){return 1;}
     Set<String> permissionCodes();
 }

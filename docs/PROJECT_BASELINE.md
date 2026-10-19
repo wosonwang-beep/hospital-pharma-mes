@@ -1,10 +1,30 @@
+Approved current receipt-template normalization (2026-10-12): [normal version workflow](development/decisions/PRINT_RECEIPT_NORMAL_VERSION_20261012.md), same human Sentinel_88767a63e37c81918a08f7c75b92cb38 plus parent authorization to use existing append/validate/publish/binding. Original published content remains immutable history, no extra deletion/guard/permission/design change. Runtime status only MES_TASKS.md.
+
+Approved bounded remaining print cleanup (2026-10-12): [six-ID decision](development/decisions/PRINT_REMAINING_CLEANUP_20261012.md), human Sentinel_88767a63e37c81918a08f7c75b92cb38; V061 exact unpublished delete exception only. Published-content update protections unchanged; current68 normalization has an explicit immutable-version conflict. Runtime status only MES_TASKS.md.
+
+Approved bounded printing correction (2026-10-12): [PRINT-ONCE-001](development/decisions/PRINT_ONCE_DESIGN_LOCK_20261012.md), explicit human Sentinel_6642032ed088819184d73710254d3ea9. Current-data PDF responses replace new generic print archives; old files stay immutable and template-independent. Exact ten-template/binding DEV cleanup only, no production/eBR/signature/permission change. [Current API supplement](api/print-once.openapi.json). Runtime status only MES_TASKS.md.
+
+## 2026-10-11 产品成品根因受控补充
+
+设计已由父对话授权设计负责人批准；[DCP-PRODUCT-FINISHED-ROOT-001](development/DCP-PRODUCT-FINISHED-ROOT-001-APPROVED.md)仅覆盖产品标准/V2计划/独立成品库存及必要消费者，v1.0.23历史不改；新流水应用层不可变，不新增触发器。部署须先隔离验证和父任务审核。运行进度仅MES_TASKS.md。
+
 # Hospital Pharmaceutical MES V2.0 Project Baseline
 
 This document is the compact, stable entry point for product and engineering context. It does not track task status or reproduce detailed domain design.
 
-## 2026-10-11 统一质量检验对象固定字典补充（业务原则已批准，实施中）
-用户确认质量管理共用，请验、取样、检验、报告按固定对象类型区分物料/成品/中间品/环境/过程；多态对象键必须经过后端解析、组织与状态检查并冻结快照。**正式设计记录：** [DCP-QC-OBJECT-TYPE-001](development/DCP-QC-OBJECT-TYPE-001-APPROVED-PRINCIPLES.md)。固定字典 `QC_OBJECT_TYPE` 的增量迁移为 V053（已在本地开发 MariaDB 应用并通过 2/2 字典集成测试），既有 V016/V030 质量单据及签名历史不可改写；跨单据多态关联改造尚未完成，不能宣称全系统质量对象已统一。FINAL BASELINE v1.0.23 的其他条款保持权威，未创建新的冻结发布版。运行进度仅在 MES_TASKS.md。
+## 2026-10-13 生产工艺动态表单 CPP 规则设计补充
 
+用户已批准生产工艺功能内的动态表单 CPP 规则设计基线。工序的动态表单设计器包含“表单设计”和“CPP规则设计”两个页签；表单设计字段库的每个可插入字段前统一显示独立 `+` 图标，点击 `+` 按当前 Canvas 光标/选区位置插入对应字段；CPP 规则只绑定当前动态表单字段，不直接绑定产品，适用产品关系继续由生产工艺维护。CPP 支持规则基本信息、AND/OR 与条件组的可视化条件配置、业务/系统规则预览及超限动作配置；设计页删除“运行校验效果”，真实判定和动作留在生产/eBR执行阶段。详细批准边界见 [DCP-PROCESS-DYNAMIC-FORM-CPP-001](development/DCP-PROCESS-DYNAMIC-FORM-CPP-001-APPROVED.md)，[需求](development/PROCESS_DYNAMIC_FORM_CPP_REQUIREMENTS.md)，[详细设计](architecture/PROCESS_DYNAMIC_FORM_CPP_DETAILED_DESIGN.md)和[一致性检查](review/PROCESS_DYNAMIC_FORM_CPP_CONSISTENCY_20261013.md)。本补充已获原型源码级批准并完成正式增量实现：复用现有 `DefinitionDesigner`、`ebr_rule_def`、安全 DSL 与运行证据机制，追加 V064 保存可视化 CPP 配置；不建立第二套表单设计器、规则引擎或产品适用关系。FINAL BASELINE v1.0.23 冻结历史保持不变，运行状态只见 `MES_TASKS.md`。
+
+## 2026-10-11 统一质量检验对象固定字典补充（业务原则已批准，实施中）
+用户最新确认：物料与成品沿用原请验、取样、检验、报告、放行流程，页面只显示一个「检验对象」字段，后台使用已存在的物料批次 ID 或生产批次 ID 查询关联；不建立第二套质量单据/独立绑定/新冻结快照。详细锁定见 [QC_OBJECT_ASSOCIATION_20261011](development/decisions/QC_OBJECT_ASSOCIATION_20261011.md)。原 [DCP-QC-OBJECT-TYPE-001](development/DCP-QC-OBJECT-TYPE-001-APPROVED-PRINCIPLES.md) 的复杂多态绑定方案已被用户最新决策收窄为历史。固定五类 QC_OBJECT_TYPE 字典 V053 保留，V055 历史迁移保留，V058 仅撤销其未使用的空表；V016/V030 既有质量单据及签名历史不改。此次不宣称已将原有两个内部质量服务完全合并为一套代码。FINAL BASELINE v1.0.23 的其他条款仍权威，运行状态见 MES_TASKS.md。
+
+## 2026-10-11 角色权限原型冻结与正式集成
+
+用户再次确认角色权限交互原型，冻结本机 `mes-demo/src/features/roles/RolePermissionsApproved.vue` 源码 SHA256 `26216113176821780456FC9336CC6DBFB2C376DDF383EFC745654231D6592A97`；[详细设计锁定](development/decisions/ROLE_PERMISSIONS_PROTOTYPE_FROZEN_20261011.md)。正式 MES 必须复用 T1/T2/T3，菜单名称前勾选可见、同一行只查看/管理互斥，初选管理不自动授予审核/签名/放行等独立特殊权限；历史权限和现有接口安全机制不重置。运行进度仅在 MES_TASKS.md。
+
+
+本轮实现及运行复核见 [MENU_ROLE_CLOSEOUT_20261011](review/MENU_ROLE_CLOSEOUT_20261011.md)。该记录不改变设计和业务基线，也不代表真实授权保存已通过；当前任务状态仅以MES_TASKS.md为准。
 ## Authority
 
 Current printing design-review entry (2026-10-10): [DCP-PRINT-DATA-SOURCE-CONFIGURATION-005](development/DCP-PRINT-DATA-SOURCE-CONFIGURATION-005-PROPOSED.md), same existing printing design, confirmed four-step mes-demo prototype and source hashes; domain/database/state/API/OpenAPI/UI/permission/audit/test/RTM/migration/integration/task mapping in its linked matrix. **MAIN DESIGN APPROVED**, the user authorized approval by the main design thread; metadata write/policy directory, independent datasets, dedicated lifecycle actions, immutable sidecar and RFC8785 golden vectors are specified. No authority-pointer switch or backend implementation claim. DCP005 and its explicitly approved source-selection supplement govern only the bounded printing increment alongside v1.0.23 and printing 001–004; prior releases remain immutable. Runtime progress only MES_TASKS.md.
@@ -148,3 +168,7 @@ MAIN DESIGN APPROVED / IMPLEMENTATION IN PROGRESS。来源：主对话01a115d2-8
 本次白名单：mes-reporting打印领域/API/应用/持久化及直接消费provider、mes-boot定向测试与新增Flyway、正式Vue打印页面/API/路由/现有导航入口、当前同一设计/契约/复核/任务索引。现有其他菜单/权限/UI未提交改动保留，开始清单和文件备份位于本机print-source-implementation/worktree-before.txt及file-backup/。不修改旧迁移、旧归档正文/hash/触发器、冻结releases、无关业务，不提交或推送。
 
 专项环境覆盖：本次主设计下发明确要求迁移先在隔离测试库验证，仅该验证允许专项隔离库；正式DEV仍为已有localhost:3306/hospital_pharma_mes_dev、Redis6379、后端8080、前端5173；不drop旧库、不repair旧checksum、不增加持久安全开关。真实目标/版本/备份可恢复确认后才执行DEV迁移。复杂打印集成初始预算90分钟，最多2轮自动修复，重复同根因立即报告；不改批准验收断言。当前实施开始，迁移/编译/业务/UI/PDF验证未运行，不能宣称验收或部署完成。
+
+## Approved bounded role-ID signing supplement — 2026-10-11
+
+FINAL BASELINE COMPLETE v1.0.23 and historical releases remain unchanged. The approved [minimal role-ID design](development/DCP-ROLE-ID-SIGNING-001-MINIMAL-DESIGN-20261011.md), [six constraints / DESIGN LOCK](development/decisions/ROLE_ID_SIGNING_DESIGN_LOCK_20261011.md), and [bounded database/domain/API/UI/GxP contract](architecture/ROLE_ID_SIGNING_CONTRACT.md) authorize code and an unapplied additive migration only. Current role IDs become rule identity, signer remains user ID, and legacy published canonical/evidence is immutable. No new global role/organization model, permissions, account rename or signature removal. [API supplement](api/role-id-signing.openapi.yaml) and [RTM](development/ROLE_ID_SIGNING_RTM_20261011.csv) carry the affected contracts. No authoritative frozen-release pointer is switched here; DEV migration/deployment/conversion remains a separate coordinated phase. Runtime status is only MES_TASKS.md.

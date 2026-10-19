@@ -7,7 +7,7 @@ function add(){emit('update:modelValue',[...props.modelValue,blankQcItem()])}
 function remove(index:number){emit('update:modelValue',props.modelValue.filter((_,i)=>i!==index))}
 function typeChanged(item:QcItem){if(item.resultType==='TEXT'){item.lowerLimit=null;item.upperLimit=null;item.unitId=null}else item.textAcceptanceCriteria=null}
 </script>
-<template><section class="qc-items"><a-empty v-if="!modelValue.length" description="尚未维护检验项目"/>
+<template><a-card title="检验项目" class="form-section qc-items"><template #extra><a-button v-if="!disabled" type="primary" @click="add">＋ 添加检验项目</a-button></template><a-empty v-if="!modelValue.length" description="尚未维护检验项目"/>
 <a-card v-for="(item,index) in modelValue" :key="item.specificationItemId??index" :title="`${index+1}. ${item.itemName||'检验项目'}`" class="form-section">
 <template #extra><a-button v-if="!disabled" danger @click="remove(index)">移除项目</a-button></template>
 <div class="master-form"><label><span class="form-field-label">项目编码</span><input v-model="item.itemCode" :aria-label="`项目编码 ${index+1}`" class="master-native-input" maxlength="100" :disabled="disabled||!!item.specificationItemId" required/></label>
@@ -20,5 +20,5 @@ function typeChanged(item:QcItem){if(item.resultType==='TEXT'){item.lowerLimit=n
 <label v-else class="form-full-row"><span class="form-field-label">文本合格标准</span><textarea v-model="item.textAcceptanceCriteria" :aria-label="`文本合格标准 ${index+1}`" class="master-native-input" maxlength="1000" :disabled="disabled" required/></label>
 <label><span class="form-field-label">方法编码</span><input v-model="item.methodCode" :aria-label="`方法编码 ${index+1}`" class="master-native-input" maxlength="100" :disabled="disabled" required/></label>
 <label><span class="form-field-label">方法版本</span><input v-model="item.methodVersion" :aria-label="`方法版本 ${index+1}`" class="master-native-input" maxlength="50" :disabled="disabled" required/></label></div></a-card>
-<a-button v-if="!disabled" @click="add">＋ 添加检验项目</a-button></section></template>
+</a-card></template>
 <style scoped>.qc-items{min-width:0}.qc-items :deep(.process-lookup){min-width:0;display:block;width:100%}.qc-items :deep(.ant-select){width:100%}.qc-items .master-form>label{grid-template-columns:110px minmax(0,1fr)}@media(max-width:560px){.qc-items .master-form>label{grid-template-columns:90px minmax(0,1fr);gap:0 8px}}</style>

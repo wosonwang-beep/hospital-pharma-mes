@@ -44,6 +44,14 @@ public class ProcessQueryService {
  }
  public java.util.List<OperationReference> currentOperations(long org,long packageId){var root=store.current(org,packageId);var route=store.route(org,root);if(route==null)return java.util.List.of();return store.operations(org,route.getId()).stream().map(o->new OperationReference(o.getId().toString(),o.getOperationCode(),o.getOperationName())).toList();}
  public OperationReference requireCurrentOperation(long org,long packageId,long operationId){return currentOperations(org,packageId).stream().filter(o->o.id().equals(Long.toString(operationId))).findFirst().orElseThrow(()->new java.util.NoSuchElementException("Operation not in current package"));}
+ public com.fasterxml.jackson.databind.JsonNode productReference(long org,long productId,boolean lock){
+  if(lock&&!TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Product lock requires transaction");
+  var p=lock?store.products().lock(org,productId):store.products().get(org,productId);
+  if(lock&&!"ACTIVE".equals(p.getStatus()))throw new com.hospital.mes.common.exception.ComplianceException("PRODUCT_NOT_USABLE","Active product required");
+  var n=com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.objectNode();
+  n.put("productId",p.getId().toString());n.put("orgId",Long.toString(org));n.put("productCode",p.getProductCode());n.put("productName",p.getProductName());
+  n.put("dosageForm",p.getDosageForm());n.put("specification",p.getSpecification());n.put("baseUnitId",p.getBaseUnitId().toString());return n;
+ }
  public void requireProduct(long org,long productId){if(!"ACTIVE".equals(store.products().get(org,productId).getStatus()))throw new com.hospital.mes.common.exception.ComplianceException("PRODUCT_NOT_USABLE","Active product required");}
  public record OperationReference(String id,String operationCode,String operationName){}
  public java.util.List<OperationReference> operations(long org,long versionId){

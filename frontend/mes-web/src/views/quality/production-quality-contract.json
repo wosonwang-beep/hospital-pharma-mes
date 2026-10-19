@@ -106,10 +106,6 @@
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
         },
-        "finishedMaterialId": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
         "qcSpecificationVersionId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
@@ -134,7 +130,6 @@
       },
       "required": [
         "mainBatchId",
-        "finishedMaterialId",
         "qcSpecificationVersionId",
         "balanceRules",
         "reason",
@@ -472,10 +467,6 @@
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
         },
-        "finishedMaterialId": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
         "qcSpecificationVersionId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
@@ -496,7 +487,6 @@
       },
       "required": [
         "mainBatchId",
-        "finishedMaterialId",
         "qcSpecificationVersionId",
         "balanceRules",
         "reason"
@@ -870,12 +860,6 @@
         },
         "signature": {
           "$ref": "#/components/schemas/ControlledActionSignature"
-        },
-        "lotNo": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 1000,
-          "nullable": true
         },
         "locationId": {
           "type": "string",

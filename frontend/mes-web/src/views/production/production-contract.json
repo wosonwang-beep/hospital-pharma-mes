@@ -540,10 +540,6 @@
           "type": "string",
           "minLength": 1
         },
-        "productionOrderId": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
         "productId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
@@ -577,7 +573,6 @@
       },
       "required": [
         "batchNo",
-        "productionOrderId",
         "productId",
         "plannedQty",
         "unitId",
@@ -695,10 +690,6 @@
           "type": "string",
           "minLength": 1
         },
-        "productionOrderId": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
         "productId": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
@@ -730,7 +721,6 @@
       },
       "required": [
         "batchNo",
-        "productionOrderId",
         "productId",
         "plannedQty",
         "unitId",
@@ -3085,6 +3075,57 @@
         "message",
         "fieldErrors",
         "allowedActions"
+      ]
+    },
+    "BatchLegacyEdit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "batchNo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productionOrderId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "productId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedQty": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+          "description": "Strictly positive exact decimal; no binary floating-point."
+        },
+        "unitId": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "plannedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "versionNo": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "batchNo",
+        "productionOrderId",
+        "productId",
+        "plannedQty",
+        "unitId",
+        "versionNo",
+        "reason"
       ]
     }
   },

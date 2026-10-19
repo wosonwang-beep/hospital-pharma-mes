@@ -29,6 +29,7 @@ import static com.hospital.mes.qms.infrastructure.IncomingStore.now;
 /** Owns the batch quality plan. ProcessSnapshot is the immutable consumer of approved evidence. */
 @Service @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class ProductionQualityPlanService implements ProductionQualityPlanPort {
+    @org.springframework.beans.factory.annotation.Autowired private com.hospital.mes.process.application.ProcessQueryService products;
     private static final String PLAN="qms_production_plan", RULE="mes_balance_rule";
     private final IncomingStore store;
     private final ProductionPlanRowMapper plans;
@@ -61,7 +62,7 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
     }
     @Transactional
     public JsonNode create(JsonNode body,String key) {
-        fields(body,"mainBatchId","finishedMaterialId","qcSpecificationVersionId","balanceRules","reason");
+        fields(body,"mainBatchId","qcSpecificationVersionId","balanceRules","reason");
         var c=mutations.context("qms:plan:create");String reason=text(body,"reason",1000);
         return mutate(c,"PRODUCTION_PLAN_CREATE",key,body,201,()->{
             long batch=id(body,"mainBatchId");draftBatch(c.organizationId(),batch);
@@ -72,16 +73,17 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
     }
     @Transactional
     public JsonNode update(String target,JsonNode body,String header,String key) {
-        fields(body,"mainBatchId","finishedMaterialId","qcSpecificationVersionId","balanceRules","reason","versionNo");
+        fields(body,"mainBatchId","qcSpecificationVersionId","balanceRules","reason","versionNo");
         var c=mutations.context("qms:plan:update");long expected=expected(body,header);String reason=text(body,"reason",1000);
         return mutate(c,"PRODUCTION_PLAN_UPDATE:"+target,key,Map.of("target",target,"body",body),200,()->{
             var found=(ProductionPlanRow)store.get(PLAN,c.organizationId(),MasterMutation.id(target));draftBatch(c.organizationId(),found.getMainBatchId());
             var row=(ProductionPlanRow)store.lock(PLAN,c.organizationId(),found.getId());
             com.hospital.mes.qms.domain.IncomingRules.version(row.getVersionNo(),expected);
+            gate(row.getPlanSchemaVersion()==2,"QUALITY_PLAN_LEGACY_READ_ONLY","Legacy plan is read-only");
             gate(row.getStatus().equals("DRAFT"),"QUALITY_PLAN_FROZEN","Approved plan cannot be edited");
             gate(id(body,"mainBatchId")==row.getMainBatchId(),"QUALITY_PLAN_BATCH_IMMUTABLE","A plan cannot be reassigned to another batch");
             var before=store.view(row);apply(c,row,body);
-            store.update(PLAN,row,expected,c.actorId(),"finishedMaterialId","qcSpecificationVersionId","planJson");
+            store.update(PLAN,row,expected,c.actorId(),"qcSpecificationVersionId","planJson");
             audit(c,"PRODUCTION_PLAN_UPDATE",row,before,reason,key);return row;
         });
     }
@@ -91,10 +93,12 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
         return mutate(c,"PRODUCTION_PLAN_APPROVE:"+target,key,Map.of("target",target,"body",body),200,()->{
             var found=(ProductionPlanRow)store.get(PLAN,c.organizationId(),MasterMutation.id(target));draftBatch(c.organizationId(),found.getMainBatchId());
             var row=(ProductionPlanRow)store.lock(PLAN,c.organizationId(),found.getId());com.hospital.mes.qms.domain.IncomingRules.version(row.getVersionNo(),expected);
+            gate(row.getPlanSchemaVersion()==2,"QUALITY_PLAN_LEGACY_READ_ONLY","Legacy plan is read-only");
             gate(row.getStatus().equals("DRAFT"),"QUALITY_PLAN_FROZEN","Approved plan cannot be approved again");
             gate(!Objects.equals(c.actorId(),row.getCreatedBy())&&!Objects.equals(c.actorId(),row.getUpdatedBy()),"INDEPENDENT_REVIEW_REQUIRED","Plan author/editor cannot approve it");
-            finishedMaterial(c.organizationId(),row.getFinishedMaterialId());
-            var spec=specs.requireSelectable(c.organizationId(),row.getFinishedMaterialId(),row.getQcSpecificationVersionId());
+            var product=product(c.organizationId(),row.getMainBatchId());
+            gate(parse(row.getPlanJson()).path("productId").asText().equals(product.path("productId").asText()),"QUALITY_PLAN_PRODUCT_CHANGED","Draft batch product changed; edit the plan");
+            var spec=specs.requireProductSelectable(c.organizationId(),product.path("productId").asLong(),row.getQcSpecificationVersionId());
             gate(signing.valid(c.organizationId(),spec.approvalSignatureId()),"QUALITY_STANDARD_SIGNATURE_INVALID","Quality standard approval signature invalid");
             var snapshot=(ObjectNode)json.valueToTree(spec);
             for(int i=0;i<spec.items().size();i++){
@@ -103,19 +107,20 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
                 if(item.upperLimit()!=null)node.put("upperLimit",item.upperLimit().toPlainString());
             }
             var before=store.view(row);row.setSpecificationSnapshotJson(snapshot.toString());
-            var frozen=json.createObjectNode().put("mainBatchId",row.getMainBatchId().toString()).put("finishedMaterialId",row.getFinishedMaterialId().toString())
-                    .put("qcSpecificationVersionId",row.getQcSpecificationVersionId().toString());
-            frozen.set("balanceRules",parse(row.getPlanJson()));frozen.set("specification",snapshot);
+            var definition=(ObjectNode)parse(row.getPlanJson());definition.set("productSnapshot",product);row.setPlanJson(definition.toString());
+            var frozen=json.createObjectNode().put("planSchemaVersion",2).put("mainBatchId",row.getMainBatchId().toString()).put("productId",product.path("productId").asText())
+                    .put("inspectionObjectType","FINISHED_PRODUCT").put("inspectionObjectId",row.getMainBatchId().toString()).put("qcSpecificationVersionId",row.getQcSpecificationVersionId().toString());
+            frozen.set("productSnapshot",product);frozen.set("balanceRules",rules(row));frozen.set("specification",snapshot);
             row.setContentHash(mutations.digest(frozen));row.setStatus("APPROVED");row.setApprovedBy(c.actorId());row.setApprovedAt(now());
             var evidence=signing.sign(c,"PRODUCTION_QUALITY_PLAN",target,expected,SignatureMeaning.APPROVE,row,body.get("signature"),key,List.of("MainBatch:"+row.getMainBatchId(),"QcSpecificationVersion:"+row.getQcSpecificationVersionId()));
             row.setSignatureId(evidence.id());row.setSignatureEvidenceJson(evidence.envelope());
-            store.update(PLAN,row,expected,c.actorId(),"specificationSnapshotJson","contentHash","status","approvedBy","approvedAt","signatureId","signatureEvidenceJson");
+            store.update(PLAN,row,expected,c.actorId(),"planJson","specificationSnapshotJson","contentHash","status","approvedBy","approvedAt","signatureId","signatureEvidenceJson");
             audit(c,"PRODUCTION_PLAN_APPROVE",row,before,reason,key);return row;
         });
     }
     private void apply(CurrentPlatformContext c,ProductionPlanRow row,JsonNode body) {
-        long material=id(body,"finishedMaterialId"),spec=id(body,"qcSpecificationVersionId");finishedMaterial(c.organizationId(),material);
-        specs.requireSelectable(c.organizationId(),material,spec);
+        long spec=id(body,"qcSpecificationVersionId");var product=product(c.organizationId(),row.getMainBatchId());
+        specs.requireProductSelectable(c.organizationId(),product.path("productId").asLong(),spec);
         JsonNode rules=body.get("balanceRules");if(rules==null||!rules.isArray()||rules.isEmpty()||rules.size()>1000)throw new IllegalArgumentException("Nonempty bounded balanceRules required");
         Set<String> codes=new HashSet<>();boolean completion=false;
         for(JsonNode rule:rules){
@@ -132,13 +137,18 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
             completion|=checkpoint.equals("BATCH_COMPLETE");
         }
         if(!completion)throw new IllegalArgumentException("At least one BATCH_COMPLETE rule required");
-        row.setFinishedMaterialId(material);row.setQcSpecificationVersionId(spec);row.setPlanJson(rules.toString());
+        row.setPlanSchemaVersion(2);row.setFinishedMaterialId(null);row.setQcSpecificationVersionId(spec);
+        var definition=json.createObjectNode().put("planSchemaVersion",2).put("productId",product.path("productId").asText());definition.set("productSnapshot",product);definition.set("balanceRules",rules);row.setPlanJson(definition.toString());
     }
-    private void finishedMaterial(long org,long material) {
-        var snapshot=materials.requireUsable(org,material,java.time.Instant.now());
-        gate(snapshot.path("materialType").asText().equals("FINISHED"),"QUALITY_PLAN_FINISHED_MATERIAL_REQUIRED","Plan requires a usable finished material");
+    private JsonNode product(long org,long batch){
+        var identity=production.qualityIdentity(org,batch);var p=products.productReference(org,identity.productId(),true);
+        var fact=production.batchFact(org,batch);gate(fact.path("productionSchemaVersion").asInt(1)==2,"QUALITY_PLAN_BATCH_MODE","Product plan requires the direct-product instruction mode");long base=p.path("baseUnitId").asLong();var from=units.unit(org,identity.unitId());var to=units.unit(org,base);
+        gate(from.dimension().equals(to.dimension()),"QUALITY_PLAN_UNIT_DIMENSION","Batch and product units must have the same dimension");
+        var quantity=new java.math.BigDecimal(fact.path("plannedQty").asText());var proof=units.convert(org,identity.unitId(),base,null,quantity);
+        gate(quantity.multiply(new java.math.BigDecimal(proof.factor())).compareTo(new java.math.BigDecimal(proof.convertedValue()))==0,"QUANTITY_PRECISION_LOSS","Exact batch/product conversion required");return p;
     }
-    private void draftBatch(long org,long id) { gate(production.lockBatch(org,id).status().equals("DRAFT"),"QUALITY_PLAN_FROZEN","Plan may change only while the batch is draft"); }
+    private JsonNode rules(ProductionPlanRow row){var n=parse(row.getPlanJson());return row.getPlanSchemaVersion()==2?n.path("balanceRules"):n;}
+    private void draftBatch(long org,long id) { gate(production.lockBatch(org,id).status().equals("DRAFT"),"QUALITY_PLAN_FROZEN","Plan may change only while the batch is draft");gate(production.batchFact(org,id).path("productionSchemaVersion").asInt(1)==2,"QUALITY_PLAN_BATCH_MODE","New product plans cannot bind legacy batches"); }
     public static long expected(JsonNode body,String header) {
         if(header==null||!header.matches("\"(?:0|[1-9][0-9]*)\""))throw new IllegalArgumentException("Exact quoted If-Match required");
         return SignedRecordSupport.expected(body,header);
@@ -148,8 +158,9 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
         var rows=store.lockedRows(PLAN,org,"mainBatchId",batch);if(rows.isEmpty())return null;
         var row=(ProductionPlanRow)rows.getFirst();gate(row.getStatus().equals("APPROVED"),"QUALITY_PLAN_NOT_APPROVED","Draft quality plan cannot be dispatched");
         gate(signing.valid(org,row.getSignatureId()),"QUALITY_PLAN_SIGNATURE_INVALID","Approved plan signature invalid");
+        if(row.getPlanSchemaVersion()==2){var actual=product(org,batch);var definition=parse(row.getPlanJson());gate(definition.path("productId").asText().equals(actual.path("productId").asText())&&mutations.digest(definition.path("productSnapshot")).equals(mutations.digest(actual)),"QUALITY_PLAN_PRODUCT_CHANGED","Approved product definition changed");specs.requireProductSelectable(org,actual.path("productId").asLong(),row.getQcSpecificationVersionId());}
         Set<String> codes=new HashSet<>();route.path("operations").forEach(x->codes.add(x.path("operationCode").asText()));
-        for(JsonNode rule:parse(row.getPlanJson()))if(rule.hasNonNull("operationCode"))gate(codes.contains(rule.path("operationCode").asText()),"QUALITY_PLAN_OPERATION_MISMATCH","Balance operation is absent from the dispatched route");
+        for(JsonNode rule:rules(row))if(rule.hasNonNull("operationCode"))gate(codes.contains(rule.path("operationCode").asText()),"QUALITY_PLAN_OPERATION_MISMATCH","Balance operation is absent from the dispatched route");
         ObjectNode result=view(row);result.set("specification",parse(row.getSpecificationSnapshotJson()));result.remove("allowedActions");return result;
     }
     @EventListener @Order(100) @Transactional(propagation=Propagation.MANDATORY)
@@ -178,8 +189,9 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
     @Transactional(readOnly=true) public JsonNode sourceEvidence(long org,long batch){production.batch(org,batch);var rows=json.createArrayNode();for(var row:store.rows(PLAN,org,"mainBatchId",batch))rows.add(store.view(row));return rows;}
     public JsonNode parse(String raw) {try{return json.readTree(raw);}catch(java.io.IOException e){throw new IllegalStateException("Corrupt frozen quality evidence",e);}}
     public ObjectNode view(ProductionPlanRow row) {
-        ObjectNode node=store.view(row);node.retain(List.of("id","orgId","createdBy","createdAt","updatedBy","updatedAt","versionNo","mainBatchId","finishedMaterialId","qcSpecificationVersionId","status","contentHash","approvedBy","approvedAt","signatureId"));node.set("balanceRules",parse(row.getPlanJson()));
-        var actions=node.putArray("allowedActions");if(row.getStatus().equals("DRAFT")&&production.batch(row.getOrgId(),row.getMainBatchId()).status().equals("DRAFT")){actions.add("EDIT");actions.add("APPROVE");}
+        ObjectNode node=store.view(row);node.retain(List.of("id","orgId","createdBy","createdAt","updatedBy","updatedAt","versionNo","mainBatchId","finishedMaterialId","qcSpecificationVersionId","status","contentHash","approvedBy","approvedAt","signatureId"));node.set("balanceRules",rules(row));
+        if(row.getPlanSchemaVersion()==2){node.remove("finishedMaterialId");var d=parse(row.getPlanJson());node.put("planSchemaVersion",2);node.put("productId",d.path("productId").asText());node.put("inspectionObjectType","FINISHED_PRODUCT");node.put("inspectionObjectId",row.getMainBatchId().toString());node.set("productSnapshot",d.path("productSnapshot"));}
+        var actions=node.putArray("allowedActions");if(row.getPlanSchemaVersion()==2&&row.getStatus().equals("DRAFT")&&production.batch(row.getOrgId(),row.getMainBatchId()).status().equals("DRAFT")){actions.add("EDIT");actions.add("APPROVE");}
         return node;
     }
     private void audit(CurrentPlatformContext c,String action,ProductionPlanRow row,JsonNode before,String reason,String key) {

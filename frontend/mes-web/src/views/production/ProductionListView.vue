@@ -12,7 +12,9 @@ import ReadReference from '../master/ReadReference.vue'
 const route=useRoute(),router=useRouter(),auth=useAuthStore(),request=useControlledRequest(),{busy,error}=request
 const rows=ref<Record<string,unknown>[]>([]),total=ref(0),page=ref(1)
 const query=reactive({keyword:'',status:'',productId:'',productionOrderId:'',plannedDateFrom:'',plannedDateTo:''})
-const batch=computed(()=>route.meta.resource==='batches'),title=computed(()=>batch.value?'生产批':'生产订单')
+const ebrInstances=computed(()=>route.meta.resource==='ebrInstances')
+const batch=computed(()=>route.meta.resource==='batches'||ebrInstances.value)
+const title=computed(()=>ebrInstances.value?'批记录实例':batch.value?'生产指令 / 生产批':'历史生产订单')
 const base=computed(()=>batch.value?'/main-batches':'/production-orders'),ui=computed(()=>batch.value?'/production/batches':'/production/orders'),permission=computed(()=>batch.value?'production:batch':'production:order')
 const states=computed(()=>schemas[batch.value?'MainBatch':'Order']?.properties?.status?.enum??[])
 function stateLabel(value:unknown){return ({PENDING_QA:'待 QA 审核',QA_RELEASED:'已 QA 放行'} as Record<string,string>)[String(value)]??display(value)}
@@ -24,13 +26,16 @@ async function load(){busy.value=true;request.clear();try{
 }catch(e){await request.failure(e)}finally{busy.value=false}}
 async function search(next=1){page.value=next;await router.replace({query:{...Object.fromEntries(Object.entries(query).filter(([k,v])=>v&&(batch.value||k!=='productionOrderId'))),page:String(page.value)}});await load()}
 function reset(){for(const key of Object.keys(query) as (keyof typeof query)[])query[key]='';void search(1)}
-function canEdit(row:Record<string,unknown>){return auth.can(`${permission.value}:update`)&&row.status==='DRAFT'&&serverAllows(row,'EDIT')}
-function open(id?:string,editing=false){void router.push({path:id?`${ui.value}/${id}${editing?'/edit':''}`:`${ui.value}/create`,query:route.query})}
+function canEdit(row:Record<string,unknown>){return !ebrInstances.value&&auth.can(`${permission.value}:update`)&&row.status==='DRAFT'&&serverAllows(row,'EDIT')}
+function open(id?:string,editing=false){
+ if(ebrInstances.value){if(id)void router.push({path:`/production/batches/${id}/book`,query:route.query});return}
+ void router.push({path:id?`${ui.value}/${id}${editing?'/edit':''}`:`${ui.value}/create`,query:route.query})
+}
 watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])query[key]=String(route.query[key]??'');const saved=Number(route.query.page??1);page.value=Number.isInteger(saved)&&saved>0?saved:1;void load()},{immediate:true})
 </script>
 <!-- UI Template: T1 Query/List. Frozen UI-ORD-Q/UI-BAT-Q filters and independent routes. -->
 <template><main data-ui-template="T1" class="admin-page master-page t1-query-list production-query-page t1-query-list">
- <header class="admin-page-header"><div><h1>{{title}}</h1></div><a-button v-if="auth.can(`${permission}:create`)" type="primary" @click="open()">新增{{title}}</a-button></header>
+ <header class="admin-page-header"><div><h1>{{title}}</h1><p v-if="ebrInstances">按实际生产批查看冻结后的完整电子批记录。</p></div><a-button v-if="batch&&!ebrInstances&&auth.can(`${permission}:create`)" type="primary" @click="open()">新增{{title}}</a-button></header>
  <a-alert v-if="error" type="error" :message="error" show-icon/>
  <a-card title="查询条件" class="query-card"><form class="query-form" @submit.prevent="search(1)">
   <label><span class="form-field-label">{{batch?'批号 / 关键字':'订单号 / 关键字'}}</span><input v-model="query.keyword" class="master-native-input" aria-label="关键字"/></label>
@@ -38,12 +43,12 @@ watch(base,()=>{for(const key of Object.keys(query) as (keyof typeof query)[])qu
   <label v-if="batch"><span class="form-field-label">生产订单</span><IncomingReferencePicker field="productionOrderId" v-model="query.productionOrderId" :context="{}"/></label>
   <label><span class="form-field-label">计划日期从</span><input v-model="query.plannedDateFrom" type="date" class="master-native-input" aria-label="计划日期从"/></label>
   <label><span class="form-field-label">计划日期至</span><input v-model="query.plannedDateTo" type="date" class="master-native-input" aria-label="计划日期至"/></label>
-  <label><span class="form-field-label">状态</span><a-select show-search option-filter-prop="children" v-model:value="query.status" class="master-native-input" aria-label="状态"><a-select-option value="">全部状态</a-select-option><a-select-option v-for="state in states" :key="String(state)" :value="String(state)">{{stateLabel(state)}}</a-select-option></a-select></label>
+  <label><span class="form-field-label">状态</span><a-select show-search option-filter-prop="children" v-model:value="query.status" class="production-status-select" aria-label="状态"><a-select-option value="">全部状态</a-select-option><a-select-option v-for="state in states" :key="String(state)" :value="String(state)">{{stateLabel(state)}}</a-select-option></a-select></label>
   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit" :loading="busy">查询</a-button></a-space>
  </form></a-card>
  <a-card title="数据列表" class="result-card"><div class="master-toolbar"><span>共 {{total}} 条记录</span></div>
-  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-space v-if="column.key==='actions'"><a-button type="link" @click="open(String(record.id))">查看</a-button><a-button v-if="canEdit(record)" type="link" @click="open(String(record.id),true)">编辑</a-button></a-space><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><ReadReference v-else-if="column.key==='productId'" field="productId" :value="record.productId"/><ReadReference v-else-if="column.key==='unitId'" field="unitId" :value="record.unitId"/><span v-else-if="column.key==='plannedQty'">{{formatQty(record.plannedQty)}}</span><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
+  <a-table :columns="columns" :data-source="rows" row-key="id" :loading="busy" :scroll="{x:850}" :pagination="false"><template #bodyCell="{column,record}"><a-space v-if="column.key==='actions'"><a-button type="link" @click="open(String(record.id))">{{ebrInstances?'查看批记录':'查看'}}</a-button><a-button v-if="canEdit(record)" type="link" @click="open(String(record.id),true)">编辑</a-button></a-space><strong v-else-if="column.key==='batchNo'||column.key==='orderNo'" class="t1-business-id">{{display(record[column.key])}}</strong><ReadReference v-else-if="column.key==='productId'" field="productId" :value="record.productId"/><ReadReference v-else-if="column.key==='unitId'" field="unitId" :value="record.unitId"/><span v-else-if="column.key==='plannedQty'">{{formatQty(record.plannedQty)}}</span><span v-else>{{column.key==='status'?stateLabel(record[column.key]):display(record[column.key])}}</span></template></a-table>
   <div class="table-footer"><span>第 {{page}} 页</span><a-pagination :current="page" :total="total" :page-size="20" :show-size-changer="false" @change="(p:number)=>search(p)"/></div>
  </a-card>
 </main></template>
-<style scoped>.query-form .process-lookup{min-width:0;flex:1}.query-form :deep(.process-lookup .ant-select){width:100%}</style>
+<style scoped>.query-form .process-lookup{min-width:0;flex:1}.query-form :deep(.process-lookup .ant-select){width:100%}.query-form .production-status-select{min-width:0;flex:1}</style>

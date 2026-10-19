@@ -96,9 +96,8 @@ onMounted(load)
    <h1>{{create?'新建生产处方':edit?'编辑生产处方':'生产处方详情'}}</h1>
    <p v-if="record">{{record.prescriptionCode}} · {{record.productName}} · {{prescriptionStatus[record.status]}}</p>
   </div>
-  <a-space wrap>
-   <a-button v-if="!create&&!edit&&record?.status==='DRAFT'&&auth.can('production:prescription:update')" @click="router.push('/production/prescriptions/'+record.id+'/edit')">编辑</a-button>
-   <a-button v-if="editable" type="primary" :loading="busy" @click="save">保存草稿</a-button>
+  <a-space v-if="!editable" wrap>
+   <a-button v-if="record?.status==='DRAFT'&&auth.can('production:prescription:update')" @click="router.push('/production/prescriptions/'+record.id+'/edit')">编辑</a-button>
    <a-button @click="back">关闭</a-button>
   </a-space>
  </header>
@@ -107,20 +106,24 @@ onMounted(load)
 
  <a-card title="处方基本信息" class="form-section">
   <div class="prescription-form">
-   <label><span>处方编码</span><a-input v-model:value="form.prescriptionCode" :disabled="!create" maxlength="64"/></label>
-   <label><span>处方名称</span><a-input v-model:value="form.prescriptionName" :disabled="!editable" maxlength="200"/></label>
-   <label><span>产品</span><ProcessLookup v-model="form.productId" resource="products" label="产品" :disabled="!create"/></label>
-   <label><span>生产工艺</span><a-select v-model:value="form.processPackageId" :disabled="!editable" show-search option-filter-prop="label" :options="processes.map(p=>({value:p.id,label:p.packageCode}))"/></label>
-   <label><span>标准批量</span><a-input v-model:value="form.batchBasisQty" :disabled="!editable" inputmode="decimal"/></label>
-   <label><span>批量单位</span><ProcessLookup v-model="form.unitId" resource="units" label="批量单位" :disabled="!editable"/></label>
-   <label v-if="record"><span>状态</span><a-tag :color="record.status==='ACTIVE'?'green':record.status==='DRAFT'?'orange':'default'">{{prescriptionStatus[record.status]}}</a-tag></label>
-   <label v-if="record?.effectiveFrom"><span>生效时间</span><span class="read-value">{{record.effectiveFrom}}</span></label>
+   <label><span class="form-field-label">处方编码</span><a-input v-model:value="form.prescriptionCode" :disabled="!create" maxlength="64"/></label>
+   <label><span class="form-field-label">处方名称</span><a-input v-model:value="form.prescriptionName" :disabled="!editable" maxlength="200"/></label>
+   <label><span class="form-field-label">产品</span><ProcessLookup v-model="form.productId" resource="products" label="产品" :disabled="!create"/></label>
+   <label><span class="form-field-label">生产工艺</span><a-select v-model:value="form.processPackageId" :disabled="!editable" show-search option-filter-prop="label" :options="processes.map(p=>({value:p.id,label:p.packageCode}))"/></label>
+   <label><span class="form-field-label">标准批量</span><a-input v-model:value="form.batchBasisQty" :disabled="!editable" inputmode="decimal"/></label>
+   <label><span class="form-field-label">批量单位</span><ProcessLookup v-model="form.unitId" resource="units" label="批量单位" :disabled="!editable"/></label>
+   <label v-if="record"><span class="form-field-label">状态</span><a-tag :color="record.status==='ACTIVE'?'green':record.status==='DRAFT'?'orange':'default'">{{prescriptionStatus[record.status]}}</a-tag></label>
+   <label v-if="record?.effectiveFrom"><span class="form-field-label">生效时间</span><span class="read-value">{{record.effectiveFrom}}</span></label>
   </div>
  </a-card>
 
  <a-card title="配料明细" class="form-section">
+  <template #extra><a-button v-if="editable" type="primary" @click="addItem">＋ 添加原辅料</a-button></template>
   <div class="table-scroll">
    <table class="prescription-table">
+    <colgroup>
+     <col class="col-sequence"/><col class="col-material"/><col class="col-quantity"/><col class="col-unit"/><col class="col-overage"/><col class="col-critical"/><col v-if="editable" class="col-actions"/>
+    </colgroup>
     <thead><tr><th>序号</th><th>原辅料</th><th>标准用量</th><th>单位</th><th>超量 %</th><th>关键物料</th><th v-if="editable">操作</th></tr></thead>
     <tbody>
      <tr v-for="(item,index) in form.items" :key="item.id??item.lineNo">
@@ -136,12 +139,11 @@ onMounted(load)
    </table>
   </div>
   <a-empty v-if="!form.items.length" description="尚未维护配料明细"/>
-  <a-button v-if="editable" @click="addItem">＋ 添加原辅料</a-button>
  </a-card>
 
  <a-card v-if="record" title="受控操作" class="form-section">
   <div class="prescription-actions">
-   <label><span>操作原因</span><a-input v-model:value="reason" maxlength="1000" placeholder="请输入修改、启用或停用原因"/></label>
+   <label><span class="form-field-label">操作原因</span><a-input v-model:value="reason" maxlength="1000" placeholder="请输入修改、启用或停用原因"/></label>
    <a-space>
     <a-button v-if="record.status==='DRAFT'&&auth.can('production:prescription:activate')" type="primary" :loading="busy" @click="transition('activate')">设为在用</a-button>
     <a-button v-if="record.status==='ACTIVE'&&auth.can('production:prescription:activate')" danger :loading="busy" @click="transition('deactivate')">停用处方</a-button>
@@ -150,6 +152,7 @@ onMounted(load)
  </a-card>
 
  <a-alert v-if="selectedProcess" type="info" show-icon :message="'当前处方采用生产工艺：'+selectedProcess.packageCode+'。工序和工序表单由生产工艺统一维护。'"/>
+ <footer v-if="editable" class="t2-form-actions prescription-footer"><a-button @click="back">取消</a-button><a-button type="primary" :loading="busy" @click="save">保存草稿</a-button></footer>
 </main>
 </template>
 
@@ -160,10 +163,18 @@ onMounted(load)
 .prescription-form label>span:first-child,.prescription-actions label>span:first-child{flex:0 0 100px;color:var(--mes-ui-secondary);font-size:13px;white-space:nowrap}
 .prescription-form :deep(.ant-input),.prescription-form :deep(.ant-select),.prescription-form :deep(.process-lookup),.prescription-actions :deep(.ant-input){flex:1;min-width:0}
 .read-value{color:var(--mes-ui-text)}
-.prescription-table{width:100%;border-collapse:collapse;min-width:850px}
+.prescription-table{width:100%;border-collapse:collapse;min-width:980px;table-layout:fixed}
+.prescription-table .col-sequence{width:56px}
+.prescription-table .col-material{width:250px}
+.prescription-table .col-quantity{width:180px}
+.prescription-table .col-unit{width:160px}
+.prescription-table .col-overage{width:130px}
+.prescription-table .col-critical{width:100px}
+.prescription-table .col-actions{width:72px}
 .prescription-table th,.prescription-table td{border-bottom:1px solid var(--mes-ui-border);padding:10px 8px;text-align:left}
 .prescription-table th{background:#f7f9fc;font-weight:600;font-size:13px}
 .prescription-table td{font-size:13px}
+.prescription-table :deep(.ant-input),.prescription-table :deep(.ant-select),.prescription-table :deep(.process-lookup){width:100%;min-width:0}
 .prescription-actions{display:flex;justify-content:space-between;gap:16px;align-items:center}
 .prescription-actions label{flex:1}
 @media(max-width:800px){.prescription-form{grid-template-columns:1fr}.prescription-actions{align-items:stretch;flex-direction:column}}

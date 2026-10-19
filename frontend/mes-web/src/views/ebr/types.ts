@@ -71,12 +71,16 @@ export interface EbrRule {
  messageTemplate:string|null
  deviationTrigger:boolean
  activeFlag:boolean
+ cppConfigJson?:string|null
 }
 export interface EbrSignatureRule {
  objectScope:string
  objectCode:string
  meaning:string
- requiredRole:string
+ requiredRole?:string|null
+ requiredRoleId?:string|null
+ roleCodeSnapshot?:string|null
+ roleNameSnapshot?:string|null
  reauthRequired:boolean
  sequenceNo:number
  invalidateOnChange:boolean
@@ -85,11 +89,16 @@ export interface EbrReviewRule {
  objectScope:string
  objectCode:string
  reviewType:"VERIFY"|"APPROVE"
- requiredRole:string
+ requiredRole?:string|null
+ requiredRoleId?:string|null
+ roleCodeSnapshot?:string|null
+ roleNameSnapshot?:string|null
  independentUserRequired:boolean
  sequenceNo:number
 }
+export interface EbrRoleOption {id:string;code:string;name:string;enabled:boolean}
 export interface EbrDefinition {
+ schemaVersion?:"1.0"|"2.0"
  sections:Array<EbrSection>
  forms:Array<EbrForm>
  rules:Array<EbrRule>

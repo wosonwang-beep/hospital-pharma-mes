@@ -19,7 +19,10 @@ import {
   SettingOutlined, QuestionCircleOutlined, HomeFilled, CodeSandboxOutlined, MedicineBoxOutlined, AuditOutlined, ClusterOutlined, ReconciliationOutlined
 } from '@ant-design/icons-vue'
 
-const collapsed = ref(window.matchMedia('(max-width: 900px)').matches)
+const mobileQuery = window.matchMedia('(max-width: 900px)')
+const mobile = ref(mobileQuery.matches)
+const collapsed = ref(mobile.value)
+function syncMobile(event: MediaQueryListEvent) { mobile.value = event.matches; if (event.matches) collapsed.value = true }
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
@@ -39,8 +42,8 @@ async function loadNavigation() {
   catch (cause) { if (generation === navigationGeneration) { navigationNodes.value = []; navigationError.value = errorMessage(cause) } }
 }
 watch(() => auth.identity, loadNavigation, { immediate: true })
-onMounted(() => window.addEventListener('mes-navigation-changed', loadNavigation))
-onUnmounted(() => { ++navigationGeneration; window.removeEventListener('mes-navigation-changed', loadNavigation) })
+onMounted(() => { window.addEventListener('mes-navigation-changed', loadNavigation); mobileQuery.addEventListener?.('change', syncMobile) })
+onUnmounted(() => { ++navigationGeneration; window.removeEventListener('mes-navigation-changed', loadNavigation); mobileQuery.removeEventListener?.('change', syncMobile) })
 const selectedKey = computed(() => selectedMenu(route.path, navigationNodes.value))
 const selectedKeys = computed(() => selectedKey.value ? [selectedKey.value] : [])
 const batchReference = computed(()=>route.name==='production-batches-view')
@@ -49,7 +52,9 @@ const dashboard = computed(()=>route.name==='dashboard')
 const dashboardSearch = ref('')
 const dashboardMenuOptions = computed(()=>dashboardSearch.value.trim()?menuLeaves(navigationNodes.value).filter(item=>item.title.includes(dashboardSearch.value.trim())).map(item=>({value:item.path,label:item.title})):[])
 const openGroups = ref<string[]>([])
-watch([selectedKey, navigationNodes], ([key, nodes]) => {
+watch([selectedKey, navigationNodes, collapsed], ([key, nodes, isCollapsed]) => {
+  // Controlled inline open keys become popup keys in collapsed mode.
+  if (isCollapsed) { openGroups.value = []; return }
   const allIds = new Set<string>(); const visit = (items: MenuNode[]) => items.forEach(item => { allIds.add(item.id); visit(item.children) }); visit(nodes)
   openGroups.value = [...new Set([...openGroups.value.filter(value => allIds.has(value)), ...menuAncestors(key,nodes)])]
 }, { immediate: true })
@@ -72,7 +77,7 @@ function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router
 
 <template>
   <a-layout class="shell global-navigation-shell" :class="{'execution-desktop-shell':executionWorkbench,'batch-reference-shell':batchReference,'dashboard-desktop-shell':dashboard}">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible :width="256" theme="light" class="sidebar">
+    <a-layout-sider v-if="!mobile" v-model:collapsed="collapsed" :trigger="null" collapsible :width="256" theme="light" class="sidebar">
       <div class="brand" :class="{ 'brand-collapsed': collapsed }">
         <img :src="dashboardLogo" class="dashboard-brand-logo" alt=""/><span v-if="!collapsed" class="dashboard-brand-copy"><strong>医院制剂生产管理系统</strong><small>Hospital Pharma MES</small></span>
       </div>

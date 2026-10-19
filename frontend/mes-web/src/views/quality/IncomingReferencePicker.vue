@@ -2,7 +2,7 @@
 import {ref,watch,computed,onBeforeUnmount} from 'vue'
 import {api,errorMessage,type Page} from '../../api/http'
 import {referenceRows,label,type IncomingRow,type ReferenceOption} from './incomingModel'
-const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productId?:string|null;materialId?:string|null;materialIds?:string[];status?:string|null}}>()
+const props=defineProps<{field:string;modelValue:unknown;context:IncomingRow;disabled?:boolean;required?:boolean;inputLabel?:string;queryFilters?:{productionSchemaVersion?:number;productId?:string|null;materialId?:string|null;materialIds?:string[];status?:string|null}}>()
 const emit=defineEmits<{'update:modelValue':[string];select:[IncomingRow]}>()
 const options=ref<ReferenceOption[]>([]),loading=ref(false),error=ref(''),search=ref(''),page=ref(0),hasMore=ref(false)
 let sequence=0
@@ -14,7 +14,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   const f=props.field,c=props.context;let rows:IncomingRow[]=[];let request:IncomingRow|undefined
   if(c.inspectionRequestId)request=await api<IncomingRow>({url:`/quality/inspection-requests/${c.inspectionRequestId}`})
   const lotId=c.materialLotId??request?.materialLotId
-  if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined,status:props.queryFilters?.status||undefined})
+  if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined,status:props.queryFilters?.status||undefined,productionSchemaVersion:props.queryFilters?.productionSchemaVersion})
   else if(['finishedMaterialId','materialId'].includes(f))rows=await list('/materials',f==='finishedMaterialId'?{materialType:'FINISHED',status:'ACTIVE'}:{status:'ACTIVE'})
   else if(['qcSpecificationItemId','specificationItemId'].includes(f)){if(c.sampleId){const sample=await api<IncomingRow>({url:`/samples/${c.sampleId}`});const spec=await api<IncomingRow>({url:`/quality/specification-versions/${sample.qcSpecificationVersionId}`});rows=((spec.items??[]) as IncomingRow[]).map(i=>({...i,id:i.specificationItemId??i.id}))}}
   else if(f==='productionTestInstanceId')rows=await list('/quality/production-tests',{mainBatchId:c.mainBatchId})
@@ -22,7 +22,7 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(f==='productId')rows=await list('/products',{status:'ACTIVE'})
   else if(f==='productionOrderId')rows=await list('/production-orders')
   else if(f==='processPackageId'){
-   const packages=await list('/process-packages');rows=packages.filter(root=>((root.currentDefinition??{}) as IncomingRow).status==='EFFECTIVE').map(root=>({...root,displayName:String(root.packageCode)}))
+   const packages=await list('/process-packages',{productId:c.productId||undefined});rows=packages.filter(root=>((root.currentDefinition??{}) as IncomingRow).status==='EFFECTIVE').map(root=>({...root,displayName:String(root.packageCode)}))
   }else if(f==='prescriptionId'){
    rows=(await list('/production-prescriptions',{productId:c.productId,status:'ACTIVE'})).map(root=>({...root,displayName:String(root.prescriptionName??root.prescriptionCode)+' · '+String(root.processCode??'')}))
   }else if(f==='ebrTemplateVersionId'){
@@ -38,8 +38,9 @@ async function load(append=false){const current=++sequence;loading.value=true;er
   else if(['equipmentId','scaleEquipmentId'].includes(f))rows=await list('/equipment',{status:'ACTIVE'})
   else if(f==='materialLotId'){const single=props.queryFilters?.materialId;const ids=single?[single]:[...new Set(props.queryFilters?.materialIds??[])];if(ids.length){const sets=await Promise.all(ids.map(materialId=>list('/wms/material-lots',{materialId})));rows=sets.flat()}else rows=await list('/wms/material-lots');if(c.investigationScope==='INCOMING_MATERIAL')rows=rows.filter(lot=>String((lot.materialSnapshot as IncomingRow|undefined)?.materialType??'')!=='FINISHED')}
   else if(f==='qcSpecificationVersionId'){
-   if(!lotId&&!c.finishedMaterialId){options.value=[];return}
-   const material=c.finishedMaterialId??(await api<IncomingRow>({url:`/wms/material-lots/${lotId}`})).materialId;const roots=await list('/quality/specifications',{materialId:material})
+   let roots:IncomingRow[]
+   if(c.mainBatchId){if(!c.productId){options.value=[];return}roots=await list('/quality/specifications',{subjectType:'PRODUCT',productId:c.productId})}
+   else{if(!lotId&&!c.finishedMaterialId){options.value=[];return}const material=c.finishedMaterialId??(await api<IncomingRow>({url:`/wms/material-lots/${lotId}`})).materialId;roots=await list('/quality/specifications',{subjectType:'MATERIAL',materialId:material})}
    const details=await Promise.all(roots.map(root=>api<IncomingRow>({url:`/quality/specifications/${root.id}`})))
    rows=details.flatMap(root=>((root.versions??[]) as IncomingRow[]).filter(v=>v.status==='APPROVED').map(v=>({...v,displayName:`${root.specificationCode} · V${v.versionNoBusiness}`})))
   }else if(['unitId','requestedUnitId','resultUnitId'].includes(f))rows=await list('/units')

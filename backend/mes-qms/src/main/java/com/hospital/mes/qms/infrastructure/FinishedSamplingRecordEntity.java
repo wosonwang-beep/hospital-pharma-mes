@@ -2,6 +2,14 @@ package com.hospital.mes.qms.infrastructure;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 @TableName("qms_finished_sampling_record") public class FinishedSamplingRecordEntity extends ScopedEntity {
+ private Integer finishedSchemaVersion=1;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Integer getFinishedSchemaVersion(){return Integer.valueOf(2).equals(finishedSchemaVersion)?2:null;} public void setFinishedSchemaVersion(Integer v){finishedSchemaVersion=v;}
+ private Long productId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Long getProductId(){return productId;} public void setProductId(Long v){productId=v;}
+ private Long mainBatchId;
+ @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL) public Long getMainBatchId(){return mainBatchId;} public void setMainBatchId(Long v){mainBatchId=v;}
+
+
  private Long inspectionRequestId;
  public Long getInspectionRequestId(){return inspectionRequestId;} public void setInspectionRequestId(Long value){inspectionRequestId=value;}
  private Long sampleId;

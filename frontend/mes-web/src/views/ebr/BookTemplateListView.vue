@@ -51,8 +51,8 @@ onMounted(load)
 <template>
 <main data-ui-template="T1" class="admin-page master-page t1-query-list ebr-template-list">
  <header class="admin-page-header">
-  <div><h1>电子批记录模板</h1><p>独立管理完整电子批记录的生产工序、业务流程和表单记录组织。</p></div>
-  <a-button v-if="auth.can('ebr:template:create')" type="primary" @click="open()">＋ 新建模板</a-button>
+  <div><h1>批记录目录模板</h1><p>定义完整生产批电子批记录的目录骨架，按生产工艺引用工序表单和各业务模块原始记录。</p></div>
+  <a-button v-if="auth.can('ebr:template:create')" type="primary" @click="open()">＋ 新建目录模板</a-button>
  </header>
 
  <a-alert v-if="error" type="error" :message="error" show-icon/>
@@ -75,7 +75,7 @@ onMounted(load)
    <a-table-column title="状态" width="105"><template #default="{record}"><a-tag :color="record.status==='PUBLISHED'?'green':record.status==='DRAFT'?'orange':'default'">{{statusLabels[record.status]||record.status}}</a-tag></template></a-table-column>
    <a-table-column title="创建人" data-index="createdBy" width="100"/>
    <a-table-column title="操作" width="150" fixed="right"><template #default="{record}"><a-space :size="2"><a-button type="link" @click="open(record.id,'view')">查看</a-button><a-button v-if="auth.can('ebr:template:create')" type="link" @click="open(record.id,'edit')">编辑</a-button></a-space></template></a-table-column>
-   <template #emptyText><a-empty description="暂无电子批记录模板"/></template>
+   <template #emptyText><a-empty description="暂无批记录目录模板"/></template>
   </a-table>
   <div class="table-footer"><span>共 {{filtered.length}} 条</span><a-pagination v-model:current="page" :page-size="size" :total="filtered.length" :show-size-changer="false"/></div>
  </a-card>

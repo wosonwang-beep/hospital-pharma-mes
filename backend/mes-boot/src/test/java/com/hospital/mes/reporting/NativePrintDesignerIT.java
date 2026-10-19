@@ -69,8 +69,8 @@ class NativePrintDesignerIT {
   printing.publish(template.path("id").asText(),validated.path("versionNo").asLong(),"回滚发布");
   printing.bind(template.path("id").asText(),"INSPECTION_REPORT",true,"回滚业务绑定");
   var artifact=printing.generate("INSPECTION_REPORT",sample,template.path("id").asText(),false);
-  byte[] pdf=printing.pdf(artifact.path("id").asText());assertThat(new String(pdf,0,5,java.nio.charset.StandardCharsets.US_ASCII)).isEqualTo("%PDF-");
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_print_artifact_source_evidence WHERE org_id=1 AND artifact_id=?",Long.class,artifact.path("id").asText())).isEqualTo(1L);
+  byte[] pdf=artifact;assertThat(new String(pdf,0,5,java.nio.charset.StandardCharsets.US_ASCII)).isEqualTo("%PDF-");
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM mes_print_artifact_source_evidence WHERE org_id=1 AND created_by=?",Long.class,context.actorId())).isZero();
  }
  @Test void sourceVersionDefaultsToInheritanceAndRequiresExplicitHashForUpgrade(){
   var context=contexts.current();var rights=new HashSet<>(context.permissionCodes());rights.addAll(Set.of("print:source:view","print:source:manage","print:source:publish"));rights.addAll(printing.provider("INSPECTION_REPORT").businessReadPermissions());

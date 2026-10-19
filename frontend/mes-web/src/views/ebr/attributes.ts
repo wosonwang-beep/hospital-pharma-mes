@@ -371,7 +371,7 @@ export const attributes:Record<string,Attribute[]>={
       "max": 100
     },
     {
-      "key": "requiredRole",
+      "key": "requiredRoleId",
       "type": "string",
       "nullable": false,
       "max": 64
@@ -416,7 +416,7 @@ export const attributes:Record<string,Attribute[]>={
       ]
     },
     {
-      "key": "requiredRole",
+      "key": "requiredRoleId",
       "type": "string",
       "nullable": false,
       "max": 64

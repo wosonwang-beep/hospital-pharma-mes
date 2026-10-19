@@ -1,0 +1,11 @@
+requirement,contract,implementation,evidence
+RID-001,Schema2 ID mandatory and server snapshots,EbrRoleSchema / EbrDefinitions,EbrRoleSchemaTest 12 passed
+RID-002,Legacy canonical unchanged,EbrCommands nullable field omission / EbrDefinitions,EbrCanonicalCompatibilityTest 8 passed; final four retained-row hash comparisons 4 passed
+RID-003,Current actor organization enabled roles concrete permission,SystemReferenceQuery / EbrRoleAuthorization,CurrentSigningAuthorityTest 6 and EbrRoleAuthorizationTest 5 passed; native transactional revocation integration NOT RUN
+RID-004,Legacy session relogin trusted role IDs,LoginSnapshot / RedisSessionStore / context resolver,RoleIdSessionCompatibilityTest 3 and context resolver 2 passed
+RID-005,Exact readonly route existing permission,SecurityConfiguration / EbrController,ProductionPlanRouteAuthorizationTest 20 passed including four added route cases
+RID-006,Historical evidence independent of current authority,EbrRoleEvidence / unchanged verify chain,EbrRuntimeBoundaryTest existing evidence case passed; final history and multirole separation suite 3 passed after explicitly authorized fixture type correction
+RID-007,Chinese inline role selector and ID payload,RolePicker / designer / model,RolePicker.test.ts 8 passed; final1440/375 component selection+ID-only payload+readonly/denied prop assertions PASS; real authenticated page gate NOT RUN
+RID-008,Additive FK RESTRICT no backfill,V059__ebr_required_role_identity.sql,existing isolation057->059 migration1/1 PASS; actual checksums58=946183528/59=-503587429; full validate and five integrity rollback cases PASS; DEV highest58 new columns0
+RID-009,No username permissions publication or regulated deletion,DESIGN LOCK / separate account plan,readonly DEV template291 DRAFT v2 / 14 rules v1 / 50 VALID signatures
+RID-010,Canvas omission versus explicit clear preserves retained semantic shape,EbrCommands.Form / EbrDefinitions,EbrCanvasPresenceCompatibilityTest3 PASS; final81/81 PASS; isolated controlled85-row strict diff/ID stability/six JSON byte equality and independent137-table rollback PASS

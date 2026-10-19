@@ -1,5 +1,130 @@
+## 物料收货正式开发与收尾 — 2026-10-19
+
+**CURRENT: DEVELOPMENT CLOSEOUT IN PROGRESS / 正式原辅料库收货→逐批请验→PDF→附件下载链已通过 / 尚未整体最终验收。** 承接原型直接开发授权及年月四位批号规则，不重做原型。本轮在正确原辅料库(ID1)新建SH-20261019-231415(ID485)，两批2026100003/0004已实际保存、刷新、编辑检查并确认；物料批459/460保持待验/BLOCKED。第一批常规、第二批加急请验220/221均真实DRAFT、采用已批准质量标准版本22；修复原型遗留HIGH值与正式URGENT合同不符，从既有schema派生选项。真实已发布模板69生成46,968字节PDF，预览/下载/附件132上传关联与下载SHA256一致。旧466仓库/确认事实保持不变。数量末尾零、UTC界面显示、历史到货空值、操作td背景、空态可见性、横滚提示、请验错误聚焦已修复；不改payload含义。后端隔离回滚21/21、最新前端3文件22/22、正确仓库实时收货9/9、文档链10/10、加急3/3、定向UI17/17及最新build通过，服务器最终只读校验通过。当前V066无新迁移，org1编号规则启用且不重置，未改角色/放行/发布模板历史，未提交Git。**剩余：模板69仍旧四列且原UTC日期，未完整包含生产企业/生产批号；需按既有追加版本流程对齐。完整正式G5/更广并发角色回归及用户最终验收未完成，不冒称ACCEPTED。** 见[本轮实际收尾](docs/review/RECEIPT_CLOSEOUT_20261019.md)、[编号批准](docs/development/decisions/RECEIPT_NUMBER_YYYYMM4_20261019.md)。所有历史失败/报告和其他工作区改动保留。
+
+## 全系统 T1/T2 UI 统一审查 — 2026-10-13
+
+**CURRENT: IN PROGRESS / HUMAN RECHECK REQUIRED。** 用户于 2026-10-13 追加确认：本项目只按桌面端处理，普通 T1 列表查询控件必须缩小，查询操作尽量与条件同行；所有新增/编辑页的子表新增动作统一放在对应标题栏右侧并使用蓝色主按钮，正文下方/左侧不得保留重复入口。已修改共享 Global UI V2 查询密度规则，并补齐字典下拉、业务引用、WMS/工艺/领料选择器等公共组件外层宽度，关闭供应商资格状态和物料类型下拉缩成箭头框的回归；随后补齐 `ProcessLookup` 组件自身的全宽契约，并固定生产处方配料表的业务列宽。子表标题栏规则已写入 Global UI V2、Page Template Standard V2 和 T1/T2 决策记录，并已应用到生产处方、WMS收货/出库/领料申请、物料供应商/单位换算、QC检验项目及eBR册编辑器。当前 typecheck PASS；此次源码哈希已经变化，原完整 G5 清单不再代表当前源码，尚未完成本次子表动作的真实5173全量桌面矩阵及完整 G5 manifest，因此不得沿用旧 `READY FOR ACCEPTANCE`。见 `docs/review/GLOBAL_T1_QUERY_DENSITY_20261013.md`、`docs/review/PRODUCTION_PRESCRIPTION_LOOKUP_WIDTH_20261013.md`、`docs/review/T2_CHILD_TABLE_HEADER_ACTIONS_20261013.md`。
+
+**历史变更前 G5 记录：** 用户确认普通列表全部 T1、普通新增/编辑全部 T2、特殊功能按业务职责保留 T4/T5/T6/专用编辑器。本轮已将该规则写入 Global UI V2/Page Template Standard 和独立决策记录，并实际整改用户/角色/部门/数据字典/菜单/打印数据源/生产处方/WMS/QC等偏差。部门管理原列表内新增/编辑弹窗已拆为独立 T2 create/edit 路由；生产执行模板标识纠正为 T5；手机端隐藏桌面 sider 仍生成 Ant popup 的幽灵菜单问题已关闭。最终真实5173矩阵：49个T1列表×4视口=196/196 PASS，30个普通T2×4视口=120/120 PASS，8个特殊页面×4视口=32/32 PASS，pageerror=0，mobile shell PASS；typecheck/build PASS。补审 GMP Audit Trail 与 Integration Operations 后，修复了 Integration 人工重试原因缺失/T1按钮顺序/状态筛选可测试性、Audit Trail T1壳层、移动导航幽灵菜单及测试契约漂移。最终全量前端 44/44 test files、186/186 tests PASS。完整 G5 manifest validator PASS，verdict=READY FOR ACCEPTANCE。见 docs/review/GLOBAL_T1_T2_UI_AUDIT_20261013.md。
+
+## 生产工艺动态表单 CPP 规则设计 — 2026-10-13
+
+**READY FOR ACCEPTANCE / HUMAN ACCEPTANCE PENDING。** 用户批准的动态表单 CPP 精确原型已完成正式增量集成：保留既有 Canvas Editor/字段/签名/复核，新增“表单设计 / CPP规则设计”双页签；CPP 只引用当前表单字段、不绑定产品、不含设计期运行结果。物理层复用 `ebr_rule_def`/安全 DSL，仅追加 V064 `cpp_config_json`，不建立第二套规则引擎或 CPP 三表。最终验证：前端 build PASS、44/44 test files / 186/186 tests PASS；`mes-ebr` 61/61 PASS；CPP配置真实数据库事务回滚往返 IT 1/1 PASS；mes-boot package PASS；DEV Flyway 64 migrations validate PASS、当前 V064；当前源码 8080 health=200；正式5173/8080 G5 20/20 screenshot coverage、manifest validator PASS，verdict=`READY FOR ACCEPTANCE`，console/page failures=0；2026-10-14 表单设计字段库已统一改为“字段前独立 + 图标 → 按当前 Canvas 光标/选区插入”，并重新 build/G5 PASS。当前正式 UI 组合 SHA-256 `0D5B011F24A6F81B0FBC119CA688E20F79F8CE692760872F3A7A04E9234D61EB`。待用户最终人验，未标记 `ACCEPTED`。见 [实现收尾](docs/review/PROCESS_DYNAMIC_FORM_CPP_IMPLEMENTATION_20261013.md) 和 [设计锁](docs/development/decisions/PROCESS_DYNAMIC_FORM_CPP_PROTOTYPE_20261013.md)。
+
+## 2026-10-12 收尾执行顺序（用户确认）
+
+严格按以下顺序执行，不并行开启后续业务任务：
+1. 角色/权限 T1+T2 整改与四视口复验；
+2. Global UI V2 公共缺陷修复与全局回归；
+3. 打印模板列表最终验收；
+4. ROLE-ID / 电子签名关闭；
+5. MES_TASKS 历史/当前状态清理；
+6. QC_OBJECT_TYPE 收尾；
+7. 基础资料有据补齐；
+8. 产品/成品完整链收尾。
+
+当前进度：第1～6项已完成/关闭。第7项基础资料的所有有据可执行维护已完成并复验；剩余储存条件、有效期、11条包装来源、8类供应商及羟苯乙酯供应商评审均缺真实外部资料，明确保留为空/待评审，不允许杜撰或自动批准。第8项已建立真实业务格式DEV场景：三种生产状态及一条完整成品链已持久化，5173/8080回读和业务命名扫描PASS；该场景用于页面/集成测试，不冒充实际生产或正式电子签名证据，正式全链仍待真实登录/真实二次认证端到端验收。
+
+## 当前权威状态索引 — 2026-10-13
+
+> 本节是 `MES_TASKS.md` 的当前状态唯一入口。下方同名任务的旧 `BLOCKED / IN PROGRESS / NOT ACCEPTED / READY` 段落均作为历史执行证据保留，**不得覆盖本节较新的状态**。后续状态变化只先更新本节，再追加证据记录。
+
+| 当前任务 | 当前状态 | 当前依据 |
+|---|---|---|
+| 生产工艺动态表单 CPP 规则设计 | READY FOR ACCEPTANCE / HUMAN ACCEPTANCE PENDING | 原型已批准并完成正式集成；V064/64 Flyway PASS，前端186/186、mes-ebr 61/61、CPP配置DB往返IT 1/1、mes-boot package PASS，8080 health200；正式5173/8080 G5 manifest 20/20 coverage PASS，当前 UI hash `0D5B011F24A6F81B0FBC119CA688E20F79F8CE692760872F3A7A04E9234D61EB`；仅待用户最终人验 |
+| 全系统普通 T1/T2 统一 | IN PROGRESS / HUMAN RECHECK REQUIRED | 2026-10-13已补齐T1查询和T2表单公共下拉/引用组件宽度，并将“新增/编辑页子表新增按钮位于标题栏右侧、蓝色主按钮、无正文重复入口”固化为全局规范并应用于已盘点普通页面和相关专用编辑器；typecheck、定向7文件/35测试PASS，真实5173已检查1440/900代表页面及新增行交互；当前源码尚未完成Formal G5全量桌面矩阵，旧READY仅对应变更前源码 |
+| 角色/权限 T1+T2 | READY FOR ACCEPTANCE | 已纳入全系统T1/T2统一矩阵；独立RoleDetailView 11/11；真实四视口/折叠/按钮对齐PASS |
+| Global UI V2 公共缺陷 | PASS / CLOSED | 控件边框 #8895a5≈3.048:1；结构边框不变；四视口与build PASS |
+| 打印模板列表 | READY FOR ACCEPTANCE | Formal G5 validator PASS；最终四视口/空态/动态播报证据齐全 |
+| 统一打印流程 | READY FOR ACCEPTANCE / HUMAN ACCEPTANCE PENDING | 当前源码单条/批量、预览/下载、重复/取消重开、断网/无模板、键盘、匿名401和既有受限账号真实403均有证据；文字对比度与200%纯文本缩放四视口PASS；Formal G5 36/36、validator PASS；无新增打印归档 |
+| ROLE-ID / 电子签名 | READY FOR ACCEPTANCE | 核心/安全/Redis/真实非管理员403/Formal G5 全部通过 |
+| MES_TASKS 状态清理 | PASS / CLOSED | 已建立顶部唯一当前状态入口；冲突旧段明确为历史/被最新验收覆盖 |
+| QC_OBJECT_TYPE | PASS / CLOSED | 单字段最小范围已用户验收；V058撤销空绑定表；当前Java无Binding运行时引用；QcInspectionObjectDictionaryIT 2/2，DEV Flyway 62 validate PASS |
+| 基础资料 | EXECUTABLE SCOPE CLOSED / EXTERNAL SOURCE GAPS | 有据7物料+2单位+10换算已落地；MATERIAL_TYPE成品项已停用；Legacy字典维护7/7 PASS；16条储存/有效期等缺真实来源继续留空 |
+| 产品/成品完整链 | REALISTIC DEV DATA SEEDED / LIVE-AUTH ACCEPTANCE PENDING | 已持久化DRAFT/IN_PROGRESS/QA_RELEASED三批及完整成品入库→请验→取样→检验→报告→QA放行→库存→发货链；5173/8080回读PASS；正式验收仍需真实登录/真实二次认证端到端 |
+| 打印数据源配置 | IMPLEMENTED / SEPARATE ACCEPTANCE HISTORY | 正式路由、页面、后端及数据源配置已存在；2026-10-10“正式开发未开始”仅为历史阶段记录 |
+
+
+
+## 打印模板列表 T1 验收 — 2026-10-12
+
+**READY FOR ACCEPTANCE / FORMAL G5 PASS / NOT HUMAN ACCEPTED。** 正式5173页面已按T1统一并移除标题说明；1440/1280/900/375最终截图、四筛选标签控件同行0px、Enter查询/空态/重置、真实printing接口200、JS错误0、typecheck/build PASS。Global UI V2独立控件边框#8895a5对白色约3.048:1；900/375增加左右滑动提示；结果计数role=status+aria-live真实从共1条更新至共0条。完整G5 manifest validator PASS，verdict=READY FOR ACCEPTANCE。见 docs/review/PRINT_TEMPLATE_LIST_ACCEPTANCE_20261012.md。
+
+## ROLE-ID / 电子签名验收 — 2026-10-12
+
+**READY FOR ACCEPTANCE / CORE FUNCTION + SECURITY + FORMAL UI G5 PASS / NOT HUMAN ACCEPTED。** 真实5173规则与签名页四视口14组角色选择器同行、无页面级横向溢出；管理员role-options 200，现有非管理员真实登录且无ebr:template:view时role-options 403。RolePicker8/8、前端定向57/57、EbrRoleSchema12/12、RoleIdSession3/3、CurrentSigningAuthority6/6、Signature13/13、Reauth2/2、真实Redis11/11全部PASS；8080 health200。ROLE-ID角色目录新增role=status+aria-live，控件边框#8895a5满足3:1；完整G5 manifest validator PASS，verdict=READY FOR ACCEPTANCE。旧one-shot guarded deployment harness本轮仅因正式8080占用而无法重复启动，未进入业务断言，不记产品回归失败。见 docs/review/ROLE_ID_SIGNING_ACCEPTANCE_20261012.md。
+
+## PRINT-ONCE-001 — 2026-10-12
+
+**2026-10-13 最新收尾：17条历史模板物理清理已完成／当前69已核实／完整打印流程G5仍未完成／NOT ACCEPTED。** [最终执行及恢复连接后只读复核](docs/review/PRINT_HISTORY68_FINAL_EXECUTION_20261012.md)。原17目标 `7,8,9,10,13,14,29,30,31,32,33,40,41,42,43,44,68` 实库均不存在；仅69“收货记录打印”第2版PUBLISHED、versionNo2，绑定50→69唯一启用，DOCX/预览摘要正确。最后68/49事务于2026-10-12 10:59:35UTC提交，各删除1行，137表保留字节与402外键独立检查通过；19份旧PDF598,008字节今日逐项只读匹配保存的下载/摘要证据。V060–V062成功记录/checksum匹配，当前最高V064属于后续工作，本轮不改迁移。保存的21项HTTP200及唯一69页面显示证据已核对；69干净正文渲染属于正常版本阶段证据，最后删除后新渲染断线未确认完成，本轮仅补文档不重跑。备份4,970,075字节/SHA256核验匹配，等效恢复重建通过、实际恢复未运行。累计修复仍7/10，不重放删除、不写业务数据、不改并行T1/其他代码、不提交推送。打印模板列表T1另有[独立G5通过记录](docs/review/PRINT_TEMPLATE_LIST_ACCEPTANCE_20261012.md)，仅限列表，予以保留；完整业务打印流程仍缺状态/视口、错误恢复、键盘焦点/WCAG、对抗复查及清单/集成绑定等证据，不冒称整体READY/ACCEPTED。
+
+**2026-10-15 统一打印当前状态：BLOCKED / G5 MANIFEST VALID / NOT ACCEPTED。** 用户批准追加修复窗口后，历史10轮保留，当前窗口9/10、累计19。现源码定向前端15/15、后端15/15、typecheck/build、真实HTTP7/7、CUAWright单条/批量/四视口错误恢复与键盘均PASS；PDF.js可见预览，单条及25→22双记录下载与响应SHA一致，双记录2页/中文正文/顺序确认；数据库和打印归档前后指纹相同，无新增artifact/batch/source-evidence/snapshot/signature/audit。完整27/27截图清单经validator exit0，但manifest verdict仍FAIL：无可用已授权受限账号，真实403 NOT RUN，匿名401不能替代；新鲜对比度与200%纯文本缩放亦保守NOT RUN。未创建账号或授权，未删除物料/模板，未增加页面级入口配置。详见[打印集成报告](docs/review/PRINT_INTEGRATION_20261015.md)、[追加修复报告](docs/review/PRINT_REPAIR_WINDOW_20261015.md)及`docs/review/evidence/print-repair-window-20261015/integration-acceptance.json`。
+
+**轮次最终纠正：** 上段打印状态中的“窗口9/10、累计19”是生成G5清单时的阶段值；窗口10仅纠正HTTP证据旧轮次元数据，最终为窗口10/10、累计20，已达上限并停止后续自动修复。功能、测试及BLOCKED结论不变。
+
+**2026-10-16 第三批准窗口最终状态：READY FOR ACCEPTANCE / HUMAN ACCEPTANCE PENDING。** 用户批准新窗口最多10轮，历史累计20保留；本窗口实际5/10、总累计25。最终源码真实CUAWright已补齐第二页正文浏览器截图、批量弹窗及检验报告面板四视口实际文字对比度与200%纯文本缩放；既有非管理员真实登录确认无打印生成权限后POST返回403。局部修复仅涉及三个共享打印组件的主按钮对比度、按钮/选择器内容驱动高度和placeholder可读性；前端定向15/15、build PASS，数据库/打印归档前后不变，无账号/权限/模板/数据源/物料/业务记录写入。Formal G5 manifest 36/36、validator exit0、verdict=`READY FOR ACCEPTANCE`，集成报告引用同一清单：`docs/review/evidence/print-repair-window3-20261016/`。未增加页面级打印入口配置或打印归档，尚待用户最终人验，未标记ACCEPTED。
+
+以下为2026-10-12分阶段历史事实，保留原文；其中旧68保留、规范化阻塞或删除待批准等描述已由上述最终收尾状态取代。
+
+**BLOCKED FOR FORMAL UI ACCEPTANCE / DEV CODE AND EXACT CLEANUP COMPLETED / NOT ACCEPTED.** [Execution report](docs/review/PRINT_ONCE_EXECUTION_20261012.md). V060 applied checksum-1875766076;2026-10-12 08:21:06 UTC exact10 templates+10 disabled bindings committed,137-table retained-byte and402-FK independent checksPASS;18 oldPDF549200B downloads200/hash unchanged; single/batch return directPDF with zero print persistence/audit additions. Backend23 units+3 DEV readonly IT/front3 tests/buildsPASS, current8080healthUP. Remaining7 templates explicitly preserved including6 test-named unpublished and68 published; targetIDs absent. G5 auditFAIL (matrix incomplete/embedded preview blank), so overallintegration acceptanceFAIL and noREADY. Prior repaircount4 retained; no production/signature/rights change or commit/push. Follow-up: actual frontend download saved/hash equal; two real selected records returned200 directPDF and nativePDFBox contents/order/CJK match live records. AnonymousGET401; real narrow-role403NOT RUN. Cumulative repairs5/10; nativePDFwindow DOM/URL checks still fail, item stopped. G5 remainsincomplete/FAIL;6-template deletion and68 rename pending approval, not executed. [Latest content/download proof](docs/review/evidence/print-once-20261012/pdf-render/content-checks.json).
+
+**2026-10-12 remaining cleanup: SIX DELETIONS COMMITTED /68 NORMALIZATION BLOCKED / NOT ACCEPTED.** Human Sentinel_88767a63e37c81918a08f7c75b92cb38;[report](docs/review/PRINT_REMAINING_EXECUTION_20261012.md).V061checksum-1234558906/61 migrationsvalidated;10:17:24UTC six exact unpublished templates7,8,9,13,14,29 deleted, other deletes/updates0;137-table retained-byte and402-FK independentchecksPASS.Only68PUBLISHED remains, all68/b49 bytes unchanged;19oldPDF598008B download200/hash equal.8080PID27736healthUP;single/batch directPDF200/no new persistence/signatures/print audits. Fresh full backup5361866B/equivalent reconstructionPASS. Prepared clean-titleDOCX candidate, checkerPASS;original68 immutable-name/DOCX guard andarchive27 provenance prevent in-place correction without violating constraints, normal append-version changesID/binding/disposition;DESIGN CHANGE REQUIRED. Repairs7/10 retained, no stoppedpopup retry/noT1style modification/no commitpush. G5 andclean68-title gatesnotpassed;noREADY/ACCEPTED.
+
+**Latest normal version update: CURRENT TEMPLATE69 CLEAN/PUBLISHED/ONE ENABLED BINDING — VERIFIED / NOT ACCEPTED.** Parent authorized normalversion workflow for sameapproved normalization;[execution](docs/review/PRINT_RECEIPT_NORMAL_VERSION_EXECUTION_20261012.md). Exactly one69revision2 created;6 normalAPIcommands200 (upload/realPDFvalidate/publish/newbind/oldunbind/deactivate68).69 name/body/native design title收货记录打印, same source19/revision22/DOCUMENT/fields/layout;binding50→69enabled,49→68disabled, onlyone active.Original68INACTIVE retainsoriginalname/DOCX/preview/hash/source/publication evidence; no deletion/guard bypass/newmigration. Single1page/batch2pages realPDF clean title/currentfacts/order verified locally, actualHTTP200/no newprint persistence.19oldPDF598008B download/hash andprotectedarchives/signatures50/rolepermissions/product/material/dictionary bytes unchanged;normaltemplate maintenanceaudit+6 allowed. Actual5173list shows69V2已发布 and68V1已停用 history; T1styles untouched. Repairs7/10 unchanged, no popupretry/commitpush. Current-name normalization blocker resolved;priorfullG5/reader/narrow403 unfinished, nofullUIREADY/ACCEPTED. Historical68 label retained by explicitscope, notglobalplaceholderzero.
+
+## 基础资料有据补齐 — 2026-10-12
+
+**PARTIAL / 有据增量已完成，整体缺资料项未关闭 / NOT ACCEPTED。** 用户要求处理基础资料补齐；已通过已有正式API新增桶/袋2个单位、补5种原辅料包装单位及规格、补2种标签用途规格、新增10条带materialId双向包装换算，共19次维护成功。五种外包装沿用既有开发收货场景，标签容量来自原批记录照片，不冒充供应商原始标签/资质。最终物料16且无成品，编号/ID/组织/原基础单位不变；产品2、供应商7/原8关系和资格结论完整保留；单位15、换算14，旧4通用换算不变，新5对乘积均1。独立新会话7条API回读+4次5173页面/刷新通过，JS错误0。storageCondition/shelfLifeDays16条仍缺来源，其他11条外包装未杜撰；8种药材/瓶/标签无供应商资料，羟苯乙酯现有供应商仍待评审，不自动批准。未改应用代码/迁移/环境/已验收权限、未重做成品清理，未提交推送；处方额外取数脚本被安全检查拒绝且未绕过，深层处方核验未完成。[数据边界与来源](docs/development/decisions/MASTER_DATA_COMPLETION_20261012.md)；[执行及剩余清单](docs/review/MASTER_DATA_COMPLETION_20261012.md)。本机before/after/逐操作journal及独立readback均保留。
+
+## ROLE-ID-SIGNING-001 bounded implementation — 2026-10-11
+
+**HISTORICAL / SUPERSEDED BY 2026-10-12 CURRENT ACCEPTANCE ABOVE。** [可决策核验记录](docs/review/ROLE_ID_SIGNING_READONLY_CLOSEOUT_20261012.md)。该段保留的是在真实非管理员403尚未补测时的阶段事实；后续已经使用现有非管理员账号完成真实登录并验证 /ebr/role-options=403，ROLE-ID/电子签名核心、安全、Redis与Formal G5均已达到 READY FOR ACCEPTANCE。原脚本FAIL和旧截图证据继续保留，不再作为当前状态。root12/eBR/成品链依赖仍属于产品成品完整链任务，不反向阻塞本 ROLE-ID/电子签名验收。
+
+以下为此前部署时点记录，后续只读结论以上段为准，原失败证据不删除。
+
+**IN PROGRESS / DEV JAR DEPLOYED / DRAFT291 CONVERSION COMMITTED / ACCEPTANCE BLOCKED / NOT ACCEPTED（2026-10-12）。** [本轮证据](docs/review/ROLE_ID_SIGNING_DEV_DEPLOYMENT_20261012.md)。现有DEV V059/checksum -503587429已校验，本轮未重复迁移。新完整本机备份5,980,902B，137表4175行等效恢复核验通过。当前main源码JAR打包PASS15.225s/989构建输入无漂移，正式8080 PID22620/health200 UP。真实CUAWright admin登录、角色选项和一次草稿291 PUT200，事务提交前137表严格比较：恰好85更新（15业务+70维护），子新增/删除0，6份schema_json原字节不变，4旧模板canonical/hash和50签名保留；COMMIT回调及独立根查询确认DRAFT/version_no3/businessVersion1/schema2。提交后原生137表快照比较断言通过，但完整备份保护脚本最终因sys_user实际version列被误写为version_no而FAIL；两次自动执行/验证修正后停止，不宣称完整保护PASS。真实1440选择/保存、发布模板6只读已检查；375截图裁切/角色面板不可见，视觉FAIL，14对角色标签控件DOM同行不足以代表验收。控制台401资源原因、真实非管理员403和正式JAR认证页面重开未完成。临时浏览器写模式false且关闭。仅测试事务守卫/本机执行脚本及证据新增，不改变既有页面设计/业务模型/授权；并行菜单/IAM/QC改动保留，无发布、增权、签名删除、成品链续跑、提交推送。
+
+历史最终代码与隔离证据：[81/81及严格85行回滚](docs/review/ROLE_ID_SIGNING_ISOLATION_VALIDATION_20261011.md)。此前DEV V058/未部署结论已被本轮实际部署事实取代；已有失败证据继续保留。用户指定设计者确认页面处理及有界验证fixture修正后，才可补齐剩余门禁。
+
+## 角色权限确认原型正式开发 — 2026-10-11
+
+**ACCEPTED — HUMAN CONFIRMED（2026-10-12，用户明确回复：权限可以了）。** 本次人工确认限定于角色与权限配置：菜单可见勾选、只查看/管理、独立特殊权限、保存及重开回显，不扩大到电子批记录角色签名、其他模块或全系统验收。此前构建、专项测试及真实保存/菜单刷新验证证据保留。独立SQL核验和非管理员真实账号检查仍为NOT RUN，不因人工确认改写成PASS，也不删除历史失败。本次仅记录确认，无源码/数据库/授权/配置变更，无测试重跑、迁移、重启、提交推送。此功能不再重复开发或要求重新确认原型；新缺陷及后续回归单独记录。见[收尾记录第7节](docs/review/MENU_ROLE_CLOSEOUT_20261011.md)。
+
+**视觉一致性回归修复（2026-10-12）：READY FOR ACCEPTANCE / TARGETED PASS。** 用户指出的正式页面与冻结原型差异已按回归缺陷整改：角色列表回归T1；新增/编辑T2底部四按钮同一Y；菜单树支持真实展开/收起（59→10节点）；1440/1280/900/375标签同行且无页面横向溢出。保留真实API、权限计算、乐观锁、安全提示和既有授权。typecheck PASS，RoleDetailView 11/11 PASS；Global UI V2控件对比度公共缺陷也已关闭。未写数据库/角色权限。当前状态以上方权威状态索引为准。见[回归修复记录](docs/review/ROLE_PERMISSIONS_PROTOTYPE_VISUAL_ALIGNMENT_20261012.md)。
+
+## 七个角色编码规范化 — 2026-10-11
+
+**READY FOR ACCEPTANCE（数据库改码范围） / DEV COMMITTED / NOT ACCEPTED（10:29 UTC独立复核）。** [精确用户/设计负责人授权](docs/development/decisions/ROLE_CODE_NORMALIZATION_AUTHORIZATION_20261011.md)，[事务及独立复核证据](docs/review/ROLE_CODE_NORMALIZATION_EXECUTION_20261011.md)。7个DEMO_MES_*角色编码改为对应MES_*，同roleID/中文名/成员/353权限关系不变；仅模板291的14条DRAFT规则同步，7+7子规则版本递增，根version_no1→2仍DRAFT/空批准hash。实际更新22行（7角色+14规则+1必要根元数据），真实本地维护安全审计追加22条、actor_user_id=NULL、不冒充API。首轮保护断言ROLLBACK；正常管理员LOGIN元数据漂移核查后按批准重试锁定同事务用户基线，COMMIT后解码异常先独立查证、无DML重放。137组保留检查无差异、402外键0孤儿；全部50签名完整内容与VALID状态、已发布模板/历史审计/归档不变。完整本机备份5947380B、SHA4a19a2f1…9810ded，137表4112行离线重构一致、未实际导入恢复。无账号登录名/凭据/权限变更、无迁移/部署/提交推送。受影响账号须正常重新登录；会话未自动刷新。role_id设计与签名清理仍独立未实施。
+
+## QC 检验对象单字段纠偏 — 2026-10-11
+
+**ACCEPTED — 用户于 2026-10-11 明确确认验收（仅本轮单字段纠偏）。** 用户明确仅增加一个可见「检验对象」字段，复用物料批次/成品生产批主键及原请验→取样→检验→报告→放行链。已精确撤回 IncomingQualityService 新增独立绑定逻辑、移出 InspectionObjectBindingService；旧 V055 不动，空绑定表经零行/零外键预检及备份后由 V058 撤销，Flyway58 validate PASS。Java test-compile/package PASS；质量后端定向单元13/13、字典集成2/2、前端定向24/24、typecheck/build PASS。真实 CUAWright 四视口单字段/标签同行、查询及新增对象选择 PASS；8080 原始请验/取样/检验/报告 13/11/9/5 行，指定 materialLotId=25 每链命中1条，孤儿数0、已批准报告5条保持；已更新后端新 JAR，health UP。成品请验现无记录，未执行成品质量完整新单据正向链，不宣称全系统验收。V056/V057 及其它并行未提交代码均保留，未提交/推送。锁定：[QC_OBJECT_ASSOCIATION_20261011](docs/development/decisions/QC_OBJECT_ASSOCIATION_20261011.md)；[本轮验收证据](docs/review/QC_OBJECT_ONE_FIELD_ACCEPTANCE_20261011.md)。
+
+## 产品成品全链根因修复 — 2026-10-11
+
+**兼容源代码首轮验证（09:15 UTC）：SOURCE TARGETED PASS / NOT DEPLOYED / BUSINESS WRITE BLOCKED / NOT ACCEPTED。** 设计负责人新批准最多2轮A–D，已记录有界设计；第1轮仅EbrDefinitions按保存发布schema字段存在性恢复历史canvas缺失输入，无试删hash/改旧摘要。原历史JCS及新canvas/篡改拒绝等18/18，实际DEV只读requirePublished(1,10)原hash1/1，0skip；无失败后修复重试。新完整备份5953960B/SHA d0ab4aca…e3249，138表4109行离线重建一致，未实际导入；25张保留表不变。版本创建/保存/lint/提交命令在启动前被自动审批拒绝：可识别人类授权仅数据库清理，受监管模板业务写入缺少直接授权；未绕过/重试，无新模板。同时仅admin有ebr模板批准权限，正常独立门禁不允许其自批，缺现有独立批准账号。230仍DRAFT/version0/无快照，633APPROVED/signature2021，DEV57；8080原JAR仍运行未部署本兼容源码。新版本与下游等待真实授权/账号依赖，未增加8项PASS。见[首轮源码与拒绝/账号证据](docs/review/PRODUCT_FINISHED_EBR_COMPATIBILITY_ROUND1_WRITE_BLOCKED_20261011.md)。
+
+**只读根因核对（09:02 UTC）：BLOCKED / NOT ACCEPTED。** 模板10→历史工艺版本12→工艺根12→产品1由实际FK证明，归属正确；Oct9提交3c24d2e新增重建MIX_RECORD.canvasDocument=null，离线仅移除此字段即精确复现原发布deaf7958…707f，属历史canonical兼容性缺陷，未覆盖hash。另有新生产要求直接processPackageId的独立消费阻塞，产品1无可直接消费的EFFECTIVE模板；现有root12模板251/252仍DRAFT。最小待批准方案为从10正常创建新业务版本2、按MIX将operation29映射332、正常独立批准发布，再下达现有230；尚未执行。已有非formal打印归档27原GET200/48808字节/hash一致；历史eBR PDF/manifest/snapshot均0，不能伪报通过。25张保留表完整字节内容一致（原编码诊断错误及纠正证据均保留）；独立库存/目标页面既有检查通过，全链下游仍NOT RUN。无新代码/模板/业务写入/迁移/提交推送。见[精确只读根因、候选、最小方案及八项边界](docs/review/PRODUCT_FINISHED_EBR_READONLY_ROOT_CAUSE_20261011.md)。
+
+**当前状态：BLOCKED / ROUTE UI DEPLOYED PASS / EBR DEFINITION DEPENDENCY / NOT ACCEPTED（08:48 UTC）。** 负责人批准路由/UI最多2轮，已用2轮；安全路由18/18、真实DEV跨组织消费查询1/1、前端10/10及typecheck/build通过，原失败保留。精确4条既有权限匹配已部署唯一8080 PID34308/JAR3aaf266a…b053e，health UP。实际计划633创建201/QA独立批准200（signature2021），库存GET200空态；实际无权限三写403/未登录401/批准计划PUT422冻结保护。移动列表6对及库存7对同排，详情390px无溢出/无内部工单外显。下达230现被422 LINT_FAILED Published definition hash mismatch阻塞：EFFECTIVE eBR10保存hash不符当前重建、实际仍旧package_version_id12且process_package_id NULL，无直接匹配现行root12发布模板；23张保留/EBR定义表内容不变。未覆盖hash或绕过门禁，批次DRAFT/version0/快照NULL、计划APPROVED、成品流水0，后续链未运行，见[本轮部署与新eBR阻塞](docs/review/PRODUCT_FINISHED_ROUTE_UI_DEPLOYED_EBR_BLOCKED_20261011.md)。两轮已用，新范围待负责人审核；未提交推送。
+
+**只读复核补充（08:31 UTC，仍BLOCKED）：** 三条计划写路由及qms:plan:create/update/approve同时存在于v1.0.23冻结API、当前补充和Service实际权限检查；SecurityConfiguration遗漏method/path匹配，未修改配置/授权记录。实际批次230读取200，库存API对有wms:inventory:view的管理员及仓储仍403（同类GET匹配遗漏，另列待审，不自动扩大）。完成3页x2视口6张实际截图并查看：库存7对查询两视口同排但接口FAIL；生产列表移动状态几何FAIL；详情移动610px溢出及内部订单外显。CUAWright写模式false/浏览器closed，未新增业务数据或推送，详情见[精确只读路由复核](docs/review/PRODUCT_FINISHED_PLAN_ROUTE_READONLY_REVIEW_20261011.md)。
+
+**当前状态：BLOCKED / REAUTH DEPLOYED PASS / PLAN HTTP403 / NOT ACCEPTED（08:26 UTC）。** 负责人明确追加仅1轮method写前非空校验；真实Redis11/11、相关安全9/9共20/20，0 skip，原失败断言保留。原checkout打包成功，唯一8080 PID31552/JAR4a15fc28…a5cfa，health UP；真实/auth/reauth200，标准316/版本314已独立签名批准（signature2020），正常批次230已创建DRAFT。管理员实际有qms:plan:create，质量计划POST仍403；SecurityConfiguration仅GET匹配，缺3条现有写操作权限映射落入denyAll。未自动修改安全配置或权限，停止后续链路待负责人决定。14张保留表内容不变，物料16/FINISHED0/产品2/FK1，计划及成品流水0。固定8项未整体完成，见[本轮部署及新阻塞证据](docs/review/PRODUCT_FINISHED_REAUTH_ROUND2_DEPLOYED_PLAN_BLOCKED_20261011.md)。历史失败和轮次保留。
+
+**当前状态：BLOCKED / REAUTH EXTRA ROUND1 13 OF 14 PASS / NOT ACCEPTED（08:13 UTC）。** 负责人已批准追加1轮，仅Redis3.0.504令牌存储兼容及PRODUCT详情标签；设计记录PRODUCT_FINISHED_REAUTH_REPAIR_AUTHORIZATION_20261011.md。本轮真实Redis4/5、既有安全回归9/9，唯一失败为新增实际Redis用例期望null method写入抛异常但实际未抛；保留断言并停止代码修改，建议只追加存储前置非空校验。标签typecheck/build通过，原MATERIAL保留。新后端未部署、8080/DEV57保持上一版本，标准316/314仍草稿、无下游业务；CUAWright只读false写模式。详情见[本轮精确结果](docs/review/PRODUCT_FINISHED_REAUTH_ROUND1_RESULT_20261011.md)。原失败和所有已用轮次保留。
+
+**当前状态：BLOCKED / REAL REAUTH HTTP503 / NOT ACCEPTED（2026-10-11真实验收续阶段）。** DEV V057和8080部署保持成功；新PRODUCT标准316/草稿版本314已真实创建并保留。独立审批人的/auth/reauth失败：本机Redis3.0.504不支持存储Lua的多字段HSET，Wrong number of args；未绕过签名，未创建后续批次/库存。14保留表完整内容复查无差异，物料16/FINISHED0/产品2，权限不改。CUAWright写模式已关闭并核验false。原2+3+2修复轮数已用完；请求最多1轮二次认证Redis兼容定向修复，并明确记录PRODUCT详情静态“物料”标签差异，均未修改实现。固定8项状态见[具体真实验收阻塞报告](docs/review/PRODUCT_FINISHED_REAL_ACCEPTANCE_REAUTH_BLOCKED_20261011.md)，历史隔离PASS不能替代当前失败。
+
+**IN PROGRESS / TARGETED ISOLATED VALIDATION PASS / NOT READY FOR FULL ACCEPTANCE / NOT ACCEPTED（07:18 UTC）。** 原2+3轮失败历史保留；父会话再批准最多2轮，已用2轮。正向全链和拒绝负例改为独立fixture/测试事务，各自回滚，正式业务异常传播不改。当前后端23/23 PASS（19单元、迁移IT、真实链/独立负例/指令竞争3案例），0 skip。实际归档MainBatch/Product/两条新流水和正式eBR provider读取已检查；入库/发运同键重放不重复。前端原沙箱EPERM经正常权限审核解决；发现原工艺productId筛选遗漏后补传已有参数，5文件27/27与typecheck/build PASS，断言未放宽。
+
+2026-10-11 用户07:40 UTC已批准[整体部署执行](docs/development/decisions/PRODUCT_FINISHED_DEPLOYMENT_AUTHORIZATION_20261011.md)。本机DEV已成功应用V055/V056/V057，checksum依次1211285628/-2096839805/1304788399；V054仍为供应商任务。已刷新完整本机备份并完成136表/4055行存储字节、表结构及触发器离线重建核验；此前实际恢复证据保留，新备份未实际导入、不另建环境。原工作区Java21打包成功，唯一8080已恢复health=UP、5173 HTTP200。CUAWright实际登录与生产批列表1440×900的6对查询标签同行检查通过；本次会话写模式已关闭并核验false。真实验收业务链尚未创建，固定八项验收仍未完成；不报告READY/ACCEPTED、不推送Git。旧归档再生/覆盖和新增成品报告专用打印已按用户决定移出本次待验范围，旧归档仅仅读取/hash，新成品报告独立生成。详见[部署阶段进度](docs/review/PRODUCT_FINISHED_DEPLOYMENT_PROGRESS_20261011.md)。
+
+独立只读复核35保护表摘要一致、隔离记录全回滚、402外键0孤儿；DEV16物料/0成品物料/2产品、外键开启。详见[当前复验报告](docs/review/PRODUCT_FINISHED_TRANSACTION_BOUNDARY_RETEST_20261011.md)、[文件归属清单](docs/review/PRODUCT_FINISHED_B_FILE_REVIEW_20261011.json)；原阻塞及三轮追加报告保留历史。不得拿早期一次全链PASS替代上述覆盖边界。
+
 ## QC_OBJECT_TYPE 固定基础字典与统一质量对象关系（2026-10-11）
-**IN PROGRESS / NOT ACCEPTED**：用户已确认统一质量平台及固定对象类型，DCP 见 [DCP-QC-OBJECT-TYPE-001](docs/development/DCP-QC-OBJECT-TYPE-001-APPROVED-PRINCIPLES.md)。V053 已应用至本地开发 MariaDB，53 个迁移校验通过，字典专项集成测试 2/2 PASS；固定字典专项负例、统一 QMS 对象解析器、组织隔离、提交快照冻结、既有 V016/V030 业务链兼容及全链集成验收尚未完成。不得将字典编译通过当作统一质量业务通过。保留已有用户工作区变更；不得清除质量历史记录或改变冻结业务状态机。
+**HISTORICAL BROAD DESIGN SUPERSEDED / CURRENT MINIMAL SCOPE CLOSED。** 本段原“统一QMS对象解析器/冻结快照/独立绑定模型”待办已被用户在2026-10-11明确撤回；当前范围仅为一个“检验对象”可见字段 + 既有 materialLotId/mainBatchId 主键关联，原请验→取样→检验→报告→放行链不变。单字段范围已用户确认验收；V058已撤销零行空绑定表；当前Java无InspectionObjectBinding运行时引用；2026-10-12重跑QcInspectionObjectDictionaryIT 2/2 PASS，DEV Flyway已validate 62 migrations/current 062。详见 [QC_OBJECT_TYPE_CLOSEOUT_20261012](docs/review/QC_OBJECT_TYPE_CLOSEOUT_20261012.md)。成品质量新数据正向链归“产品/成品完整链”任务。
 
 # MES Task Status Index
 
@@ -782,3 +907,60 @@ DEV已部署（后端PID25580/前端26676，8080/5173 HTTP200），V052与52迁�
 保留范围限制：PDF内嵌阅读器工具限制；真实窄权限账号/已有多行业务单据现场实机未验证（已批准事务fixture/隔离上下文补测）；空类型首次竞争赢家、发布压力及正式375视口未覆盖。不能写成生产验证或全系统回归完成。原2条FAIL、首轮夹具失败及后续批准补充21/21验证均保持原始历史，不改判旧报告。
 
 本次仅更新任务索引和最终交付报告；未运行新测试、打开浏览器、修改产品/权限/凭据/迁移、部署或扩张任务；未提交推送。完整最终报告：C:\Users\Administrator\Documents\Codex\2026-10-10\task\PRINT_SOURCE_FINAL_DEV_DELIVERY_20261010.md。既有入口http://127.0.0.1:5173/admin/print-data-sources；原型http://127.0.0.1:5174/#/printing/data-sources。
+
+## 业务测试数据禁用标识清理 — 2026-10-12
+
+**IN PROGRESS / NOT ACCEPTED。** 用户再次明确业务数据不得含Demo/Test、测试/演示/模拟/模似及明显占位词。正常API完整读取12类当前业务目录和7个字典项目，发现51处命中；已通过正式部门PUT逐条清除12个description中的精确“测试样例｜”前缀，12次HTTP200及GET回读一致，原ID/组织/父子关系/负责人/成员/状态/角色授权不变。剩余39处（部门代码12、资格代码13、登录名7、设备类型3、字典值4）明确未完成，不能只改显示或报清零。新增JSON业务载荷预检工具，14个正反例自检PASS；AGENTS和MES_DEV_RULES已按用户要求明确元数据不得混入业务字段。未改权限、凭据、资格判定、数据库结构或历史签名，未提交推送。详见[当前缺陷及执行记录](docs/review/BUSINESS_DATA_NAMING_20261012.md)和[用户要求/纠正边界](docs/development/decisions/BUSINESS_DATA_NAMING_20261012.md)。本任务优先于继续生成新业务数据。
+
+## 数据字典 CODE / 名称重叠局部修复 — 2026-10-12
+
+**ACCEPTED — 用户于2026-10-12明确回复“验收”，仅确认本次CODE / 名称重叠局部修复。** 用户截图要求修复CODE文字覆盖名称；仅将现有T1列表CODE/名称列加宽并复用ellipsis/title、表格内部横向滚动。源码三处显示调整，无API/路由/权限/业务值或数据库/Flyway变化，未提交推送。typecheck/build和diff-check exit0；真实5173/8080五视口70单元格边界/完整title检查及6项只读功能断言通过，4字典读取HTTP200。1452/1440/1280查询5对同行通过；900/375既有查询标签换行/拥挤、375全页宽384失败保留，故不宣称整页视觉验收完成。既有bundle警告与认证恢复401日志保留，自动修复轮0。依据[设计锁定](docs/development/decisions/DICTIONARY_COLUMN_OVERLAP_20261012.md)及[详细证据/范围评审](docs/review/DICTIONARY_COLUMN_OVERLAP_20261012.md)；截图/JSON位于 `C:/Users/Administrator/AppData/Local/Temp/mes-dictionary-overlap-20261012/`。
+
+验收登记：本次只更新任务状态和补充人工确认记录，沿用已有实机/构建/评审证据，未重跑测试、修改源码、部署、迁移或业务数据。原IN PROGRESS阶段和900/375失败证据在详细记录中保留；本次人工确认不改判旧失败、不豁免查询标签同行规则、不扩展到数据字典整页验收或其他任务，未提交推送。
+
+
+## 业务占位内容命名清理 — 2026-10-12
+
+**IN PROGRESS / BLOCKED AT TWO REPAIR LIMIT / 2 CURRENT SOURCE NAMES SAVED / NOT ACCEPTED。** 用户Sentinel_2536f5ce9be48191a843adb89ba7de7f明确启动；[执行及阻塞报告](docs/review/BUSINESS_NAMING_CLEANUP_EXECUTION_20261012.md)。新完整DEV本机备份6,065,025B/137表4249行等效恢复核验通过。全存储文本+17DOCX初扫188候选，98正常检验枚举逐值分类后90业务显示/标识命中，技术及不可变证据另列。真实Chrome（CUAWright二进制缺失后允许回退）正常保存源19/21为收货单打印数据/收货验收记录数据，version5/10，新草稿33/34，旧发布22/24/26和所有绑定ID/配置其它值不变。17模板/10artifact/9batch/50签名/菜单权限成员/字典/产品物料完整存储字节不变。原命中逐项SQL复读2已改/88仍在；不能宣称清零。13项名称API批处理0完成，数组适配/正式路由两次修正后首项400，根因If-Match未按现有IAM契约带引号；第三轮未修。打印原ID改名接口不存在、已发布及归档不得覆盖；菜单编码/资格设备/登录关联需受控成组处理。生成入口已识别但未纠正/未运行，规则禁止再运行，自动门禁接线未完成。无新迁移/重启/增权/签名/物理删除/提交推送；其它角色/成品链任务保持暂停。
+
+## 数据字典项目入口及新增表单可用性 — 2026-10-12
+
+**READY FOR ACCEPTANCE — 仅管理入口、现有项目展示及新增/编辑表单交互，未人工验收。** 用户要求已有项目清楚直观、方便新增，并调用ui-ux-pro-max授权评审后直接修改。现有T1及简单弹窗保留：显式“管理字典项（数量）”、字典名称及现有项目/启停统计、主新增按钮、新增/编辑标题与保存文案、焦点/必填反馈及小屏同行配对。最终typecheck/build通过；字典两项定向fixture回归2/2；真实5173/8080只读交互13/13及1440/1280/900/375弹窗几何通过。无迁移、业务写入、提交推送，未复测真实新增保存持久化。范围评审未发现新增阻断问题；既有全页窄屏查询失败、认证恢复401、大包警告及存量命名清理问题保留，不能宣称整页/全部CRUD验收完成。自动产品修复轮0；一次脚本按钮定位修正及原失败证据保留。依据[设计锁定](docs/development/decisions/DICTIONARY_ITEM_ENTRY_20261012.md)与[体验评审、验证及截图](docs/review/DICTIONARY_ITEM_ENTRY_20261012.md)。此前CODE/名称修复ACCEPTED不扩展至本条。
+
+### 正式项目复查及状态纠正 — 2026-10-12 13:28
+
+**当前状态 IN PROGRESS / NOT RELEASED / NOT ACCEPTED，取代上条局部READY结论。** 用户要求复查正式项目并询问打包发布。实际确认5173运行本checkout Vite新源码，8080为Java classpath开发服务；13:24:45已重新生成前端dist，未发布/重启。实机发现行编辑会覆盖新增未保存内容，补齐行/树/启停保护；弹窗内增加成功反馈。最终build通过、原2项+新增1项fixture回归3/3、真实只读17/17和四视口弹窗检查通过，diff-check通过。无迁移/业务数据写入/提交推送。真实新增保存、重开及持久化/窄权限负例仍NOT RUN；详情编辑只管基本信息、须返回列表管理项目的绕行和主列表横向操作仍存在，整页窄屏/存量命名债保留。不能把局部技术检查等同整体体验或功能交付；旧证据保留、不改判失败。详见[正式复查和交付判断纠正](docs/review/DICTIONARY_FORMAL_RECHECK_20261012.md)与[本轮有界修复记录](docs/development/decisions/DICTIONARY_FORMAL_RECHECK_20261012.md)。自动产品修复轮0，预算内收尾。
+
+## 数据字典功能界面MES标准流程重做 — 2026-10-12
+
+**PASS FOR PROTOTYPE / READY FOR HUMAN DESIGN CONFIRMATION / NOT FORMALLY INTEGRATED / NOT ACCEPTED。** 用户最终明确页面结构：列表每行“查看 / 修改 / 添加数据项”；新增/修改字典为独立T2表单页；查看字典为独立T3详情页并以列表展示数据项；数据项弹窗上方录入、下方已有列表，可连续添加。添加保存后字段清空、焦点回到编码、数量刷新、列表滚动并高亮最新行；同一字典编码按MariaDB大小写不敏感语义拒绝重复。按钮顺序按用户规则固定为查询/重置、保存/取消、添加保存/关闭；字段/API/权限/状态契约不变。首次原型功能检查和FAIL证据保留为历史；当前体验结论以最终复审清单为准。
+
+2026-10-12 已由 `Codex SELF-REVIEW` 使用[完整MES UI/UX审查技能](.agents/skills/mes-ui-ux-audit/SKILL.md)和 `ui-ux-pro-max` 完成5界面×4视口20张截图、45项维度、19项WCAG及动态交互审查。结论FAIL：UX-001新增/编辑描述行栅格断裂（HIGH）、UX-002桌面查询框过窄且断点反向（HIGH）、UX-003基础字典保存错误不可定位（HIGH）、UX-004详情搜索缺少可访问名称（MEDIUM）、UX-005编辑CODE低对比禁用态（MEDIUM）。数据项弹窗必填、大小写不敏感重复拒绝、连续新增、清空回焦和新行定位通过。清单校验器因2项交互和2项几何检查失败而exit1，未改规则或断言强制通过。详见[完整审查报告](docs/review/DICTIONARY_MES_UI_UX_COMPLETE_AUDIT_20261012.md)和[证据清单](docs/review/evidence/dictionary-ui-ux-audit-20261012/audit-manifest.json)。正式5173源码/服务未继续修改或发布，无迁移、数据库写入、提交或推送。
+
+经用户授权已直接修复上述5项，并在复审中补正默认主按钮文字、占位文字和输入边界对比度。最终源码SHA256 `62C7E714AD339FBFA7539DC270F7CEB38245D21A0E99C8B0D767DAC0DB903A25`；构建PASS；同一5×4矩阵重新生成20张最终截图，45项维度、19项WCAG、动态交互及几何检查满足通过条件，清单校验exit0，结论`PASS FOR PROTOTYPE`。原始FAIL及证据保留。等待用户确认精确哈希后才能正式集成；尚未发布、未验收。最终证据见[复审清单](docs/review/evidence/dictionary-ui-ux-audit-20261012/recheck/audit-manifest.json)。
+
+
+## MES UI/UX 完整审查技能与门禁 — 2026-10-12
+
+**IMPLEMENTED / VALIDATED / EFFECTIVE。** 用户要求减少反复补充审查规则并让`ui-ux-pro-max`执行完整审查，随后明确要求纳入集成测试验收。新增仓库技能`mes-ui-ux-audit`、外部权威参考、逐图八类评审矩阵和证据清单校验器；AGENTS、MES_DEV_RULES及MES五阶段G2/G5已强制接入。G5现在必须实际运行`ui-ux-audit`套件，且`integration_acceptance.ui_ux_audit`必须绑定与正式体验审查完全相同的验证清单和`READY FOR ACCEPTANCE`结论；缺失或不一致会使整个集成验收FAIL。审查者固定披露Codex SELF-REVIEW，Product Design不再冒充独立审查主体。技能结构校验PASS；清单正例exit0、缺栅格证据+开放HIGH反例exit1；工作流测试及新增G5负例通过；py_compile和diff-check PASS。无业务源码、数据库、迁移、服务、部署或发布变更。详见[变更与验证记录](docs/development/decisions/MES_UI_UX_COMPLETE_AUDIT_SKILL_20261012.md)。
+
+## 全项目自动修复上限更新及命名第3轮恢复 — 2026-10-12
+**规则10轮已写入 / BUSINESS NAMING LIVE EDIT BLOCKED BY AUTO REVIEW。** 用户最新Sentinel_8428024124d08191b12f4d19a70b82d3及Sentinel_87506368c214819183fb1b92917cb51f覆盖中间5轮指令；AGENTS.md、MES_DEV_RULES.md §6A、mes-feature-workflow技能及MES_FEATURE_WORKFLOW有效引用均更新10轮。第10轮失败先暂停报告问题/尝试/验证/原因，用户批准后再分析下一阶段；旧计数不清零，历史报告/其它安全和设计门禁不改。[文件摘要与原文快照](docs/development/decisions/AUTOMATIC_REPAIR_LIMIT_20261012.json)。原补丁工具读取报reparse point，本机精确目标/父目录属性检查为普通文件/目录，受审查native编辑获批并完成，无审批拒绝于规范编辑。
+
+业务命名已用2轮，授权恢复第3轮只修强ETag引号，代码已保存、断言不变、原备份摘要核验一致。实时13项API编辑启动被自动审批拒绝：审批仅认可直接用户DEV物料清理，未将委派历史视为可信命名写入授权。进程未创建、13条本轮新增写入0；没有默认权限或浏览器/其它脚本绕过。已请求直接人类确认具体13条菜单/字典/权限显示名编辑；确认前停止该写入，生成入口未执行，17模板及其它冻结数据未修改。上轮2条源名称真实保存与88处剩余事实保留，不报READY/ACCEPTED。证据round3-approval-block.json。
+
+## 全项目自动修复上限调整为20轮 — 2026-10-12
+
+**APPROVED / EFFECTIVE。** 用户明确删除最多两轮规则，并将全项目每任务自动修复上限调整为20轮，覆盖此前2/5/10轮全局指令。第20轮仍未通过时，任何后续修复前必须暂停并报告全部尝试、关键修改、验证结果、重复失败签名、已排除原因、剩余根因、下一阶段最小范围和风险；取得用户明确批准后才能继续，轮次累计不清零。已同步AGENTS.md、MES_DEV_RULES.md §6A、mes-demo/AGENTS.md、mes-feature-workflow技能、MES_FEATURE_WORKFLOW治理入口及当前数据字典原型未来执行约束；[批准记录](docs/development/decisions/AUTO_REPAIR_LIMIT_20_20261012.md)。普通UI十分钟、相同失败提前停止、设计/写入/视觉/验收门禁不变。历史任务报告、10轮快照及此前停止事实保留原文。本次未继续原型修复/验证，未改业务源码、数据库、迁移、服务或发布状态。
+
+
+## 业务命名清理第3/4轮恢复收尾 — 2026-10-12
+
+**IN PROGRESS / CURRENT NAMES15 VERIFIED / ORIGINAL HITS75 REMAIN / NOT ACCEPTED。** 全项目10轮有效，原2轮保留；第3轮强ETag格式修正后补交明确用户授权，同一工具只重试一次获批：菜单100/101、字典1/48/49和8权限显示名13次HTTP200/独立GET全部通过，累计15名称。第4轮只读核验fixture按实际source_revision_id归属修正，137表完整单元格保护PASS：50签名/17模板/10artifact/9batch/角色权限成员/旧发布源及绑定不变。当前4/10修复，没有重复写入。最新原命中SQL复读75仍在（部门12旧码当前仍存在），不宣称全库零。新13项Chrome回看两次请求头策略加载失败NOT RUN；源前轮截图保留。三持久化Java种子入口接现有命名checker，禁止遗留违规码再写；编译PASS10.290s/三码载荷预期拒绝，完整seed未运行/未造资格证据；其它生成入口未宣称全覆盖。17模板6未发布/10历史停用/1发布68，无原ID改名接口或冻结/归档约束，明确现有干净草稿/校验/发布/绑定替换可选下一阶段及需用户指定设计者确认的历史处置，尚未执行。审批阻塞已解除，不再重复确认已完成13项。无迁移/部署/删库/增权/签名/角色成品续跑/提交推送。详见BUSINESS_NAMING_CLEANUP_EXECUTION_20261012.md最新节及latest-closeout-summary.json。
+
+
+## 2026-10-15 生产工艺—工序—EBR—CPP 定向集成回归
+
+**ACCEPTED — 用户于2026-10-15 22:44（Asia/Shanghai）明确回复“验收”，确认本次生产工艺—工序—EBR表单—CPP定向集成回归及其修复。** 用户要求测试现有生产工艺、工序、EBR表单和CPP关联。实际本机同DEV：后端工艺5+EBR61=66/66；ProcessIT9+DirectProcessActivationIT5+EbrIT5=19/19，0失败/0错误/0跳过；前端定向7/7；最终typecheck/build PASS；真实5173/8080只读链路与面板边界16/16；5状态×4视口20图G5 manifest validator exit0。首轮19项4 errors源于旧EBR夹具schema2/角色ID输入未更新，修正构造后通过，68个原断言片段不变。修复CPP及Canvas属性栏按视口断点导致的侧栏展开裁切，改用编辑容器断点，未改业务合同。当前UI组合hash `C10BA53A8E6C78C5BE97260889977870A847C1E89E4BC95AA2009C96789EB567`；旧UI hash及验收记录为历史，不改判。64迁移validate PASS/当前V064，无新迁移；业务测试事务回滚，无浏览器业务保存、签名、权限或历史改写；启动现有8080/5173服务，未提交推送。
+
+范围限制：未跑真实生产批次完整填写/签名/偏差/QA放行、窄权限页面全矩阵、全工艺CRUD状态或全系统回归；生产工艺新版待批准原型未擅自集成。不能称全系统/真实生产全链验收。详见 [本轮证据与范围](docs/review/PROCESS_EBR_CPP_INTEGRATION_20261015.md)，`artifacts/process-integration-20261015/acceptance-summary.json` 绑定相同G5清单。本轮不改变其它已完成功能的人验状态。

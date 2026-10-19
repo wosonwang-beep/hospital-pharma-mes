@@ -1,0 +1,150 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PRINT-ONCE-001 bounded API supplement",
+    "version": "2026-10-12",
+    "description": "2026-10-15 authorized error-contract correction: preserves existing runtime and original controlled-printing 422 compliance mapping. 409 is reserved for existing version/state-transition conflicts; direct-PDF behavior unchanged."
+  },
+  "paths": {
+    "/api/v1/printing/artifacts": {
+      "post": {
+        "description": "Existing print:document:generate and original business read/formal checks unchanged. Returns current rendered PDF directly; creates no print-result records. Existing historical GET remains immutable/read-only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "businessType": {
+                    "type": "string"
+                  },
+                  "businessId": {
+                    "type": "string"
+                  },
+                  "templateVersionId": {
+                    "type": "string"
+                  },
+                  "formal": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "businessType",
+                  "businessId",
+                  "templateVersionId",
+                  "formal"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PDF; Cache-Control:no-store; X-Content-Type-Options:nosniff",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Existing business or print permission denied"
+          },
+          "409": {
+            "description": "Existing concurrent version/source-target conflict or state-transition conflict; no print result persisted"
+          },
+          "422": {
+            "description": "PRINT_STATE_INVALID: inactive, unbound or incompatible template; existing formal approval/signature compliance rejection; PDF integrity/conversion/output compliance failure. No print result persisted"
+          },
+          "400": {
+            "description": "Invalid request shape, IDs, duplicate selection or incompatible output/formal parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Referenced business record or template does not exist in the authorized scope"
+          }
+        }
+      }
+    },
+    "/api/v1/printing/batches": {
+      "post": {
+        "description": "Existing print:document:generate and original business read/formal checks unchanged. Returns current rendered PDF directly; creates no print-result records. Existing historical GET remains immutable/read-only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "businessType": {
+                    "type": "string"
+                  },
+                  "recordIds": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "templateVersionId": {
+                    "type": "string"
+                  },
+                  "formal": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "businessType",
+                  "recordIds",
+                  "templateVersionId",
+                  "formal"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PDF; Cache-Control:no-store; X-Content-Type-Options:nosniff",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Existing business or print permission denied"
+          },
+          "409": {
+            "description": "Existing concurrent version/source-target conflict or state-transition conflict; no print result persisted"
+          },
+          "422": {
+            "description": "PRINT_STATE_INVALID: inactive, unbound or incompatible template; existing formal approval/signature compliance rejection; PDF integrity/conversion/output compliance failure. No print result persisted"
+          },
+          "400": {
+            "description": "Invalid request shape, IDs, duplicate selection or incompatible output/formal parameters"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "404": {
+            "description": "Referenced business record or template does not exist in the authorized scope"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,15 +1,31 @@
 <script setup lang="ts">
-import {ref,watch} from 'vue'
+import {computed,onBeforeUnmount,ref,useId,watch} from 'vue'
+import {theme} from 'ant-design-vue'
 import {useAuthStore} from '../../stores/auth'
-import {applicable,history,generate,pdf,type PrintTemplate,type PrintArtifact} from '../../api/printing'
-import {errorMessage} from '../../api/http'
+import {applicable,generate,printErrorMessage,type PrintTemplate} from '../../api/printing'
 import PdfPreview from './PdfPreview.vue'
 const props=defineProps<{businessId:string;approved:boolean}>(),auth=useAuthStore()
-const choices=ref<PrintTemplate[]>([]),archives=ref<PrintArtifact[]>([]),selected=ref<string>(),formal=ref(false),busy=ref(false),error=ref(''),open=ref(false),blob=ref<Blob|null>(null),name=ref('检验报告.pdf')
-async function load(){if(!auth.can('print:document:generate'))return;try{[choices.value,archives.value]=await Promise.all([applicable(),history(props.businessId)]);selected.value=choices.value[0]?.id}catch(e){error.value=errorMessage(e)}}
-watch(()=>props.businessId,()=>{formal.value=false;void load()},{immediate:true})
-async function preview(a:PrintArtifact){busy.value=true;error.value='';try{blob.value=await pdf(a.id);name.value=`${a.reportNo}-${a.formal?'正式':'草稿'}-v${a.businessVersion}.pdf`;open.value=true}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
-async function create(){if(!selected.value)return;busy.value=true;error.value='';try{const a=await generate(props.businessId,selected.value,formal.value);await preview(a);archives.value=await history(props.businessId)}catch(e){error.value=errorMessage(e)}finally{busy.value=false}}
+const choices=ref<PrintTemplate[]>([]),selected=ref<string>(),formal=ref(false),busy=ref(false),error=ref(''),open=ref(false),blob=ref<Blob|null>(null),name=ref('检验报告.pdf')
+const templateId=useId(),{token}=theme.useToken(),modalZIndex=computed(()=>token.value.zIndexPopupBase+100)
+let generation=0
+function close(){++generation;open.value=false;blob.value=null;busy.value=false}
+async function load(){
+ close();formal.value=false;choices.value=[];selected.value=undefined;error.value=''
+ if(!auth.can('print:document:generate'))return
+ const ticket=generation;busy.value=true
+ try{const rows=await applicable();if(ticket===generation){choices.value=rows;selected.value=rows[0]?.id}}
+ catch(e){const message=await printErrorMessage(e);if(ticket===generation)error.value=message}
+ finally{if(ticket===generation)busy.value=false}
+}
+watch(()=>[props.businessId,auth.can('print:document:generate')],()=>void load(),{immediate:true})
+async function create(){
+ if(busy.value||!selected.value)return
+ const ticket=++generation,filename=`检验报告-${formal.value?'正式':'草稿'}.pdf`;busy.value=true;error.value=''
+ try{const result=await generate(props.businessId,selected.value,formal.value);if(ticket===generation){blob.value=result;name.value=filename;open.value=true}}
+ catch(e){const message=await printErrorMessage(e);if(ticket===generation)error.value=message}
+ finally{if(ticket===generation)busy.value=false}
+}
+onBeforeUnmount(()=>{++generation})
 </script>
-<template><a-card v-if="auth.can('print:document:generate')" title="报告打印" class="print-panel"><a-alert v-if="error" type="error" :message="error" show-icon/><a-space wrap><a-select show-search option-filter-prop="label" v-model:value="selected" placeholder="选择已发布的适用模板" style="min-width:260px" :options="choices.map(t=>({value:t.id,label:`${t.templateName} · 第 ${t.templateRevision} 版`}))"/><a-radio-group v-model:value="formal"><a-radio :value="false">草稿</a-radio><a-radio :value="true" :disabled="!approved">正式</a-radio></a-radio-group><a-button type="primary" :disabled="!selected" :loading="busy" @click="create">生成并预览 PDF</a-button></a-space><p class="hint">完整报告由服务端读取。正式报告需完成既有审核与电子签名；旧版本重打直接使用归档文件。</p><a-empty v-if="!choices.length" description="尚无已发布并绑定的适用模板"/><a-table v-if="archives.length" :data-source="archives" row-key="id" :pagination="false" size="small"><a-table-column title="业务版本" data-index="businessVersion"/><a-table-column title="模板版本" data-index="templateRevision"/><a-table-column title="类型"><template #default="{record}"><a-tag :color="record.formal?'green':'orange'">{{record.formal?'正式':'草稿'}}</a-tag></template></a-table-column><a-table-column title="生成时间" data-index="createdAt"/><a-table-column title="归档文件"><template #default="{record}"><a-button type="link" :loading="busy" @click="preview(record)">查看 / 重打</a-button></template></a-table-column></a-table><a-modal v-model:open="open" title="检验报告 PDF" width="90vw" :footer="null"><PdfPreview :blob="blob" :name="name"/></a-modal></a-card></template>
-<style scoped>.print-panel{margin-top:16px}.hint{color:#68758a;margin:14px 0;font-size:13px}</style>
+<template><a-card v-if="auth.can('print:document:generate')" title="报告打印" class="print-panel"><a-alert v-if="error" type="error" :message="error" show-icon/><a-space wrap><div class="print-template-pair"><label :for="templateId">打印模板</label><a-select :id="templateId" show-search option-filter-prop="label" v-model:value="selected" :disabled="busy" placeholder="选择已发布的适用模板" :options="choices.map(t=>({value:t.id,label:`${t.templateName} · 第 ${t.templateRevision} 版`}))"/></div><a-radio-group v-model:value="formal" :disabled="busy"><a-radio :value="false">草稿</a-radio><a-radio :value="true" :disabled="!approved">正式</a-radio></a-radio-group><a-button class="print-primary" type="primary" :disabled="!selected" :loading="busy" @click="create">生成并预览 PDF</a-button></a-space><p class="hint">完整报告由服务端读取。正式报告需完成既有审核与电子签名；打印完成后不保存本次打印内容。</p><a-empty v-if="!busy&&!error&&!choices.length" description="尚无已发布并绑定的适用模板"/><a-modal v-model:open="open" title="检验报告 PDF" width="90vw" :footer="null" :z-index="modalZIndex" destroy-on-close @cancel="close"><PdfPreview :blob="blob" :name="name"/></a-modal></a-card></template>
+<style scoped>.print-panel{margin-top:16px}.hint{color:#68758a;margin:14px 0;font-size:13px}.print-template-pair{display:flex;align-items:center;gap:12px;min-width:0}.print-template-pair>label{white-space:nowrap;flex:none}.print-template-pair>.ant-select{width:260px;min-width:0;height:auto}.print-panel :deep(.ant-btn){height:auto;min-height:32px;white-space:normal;line-height:1.5715;padding-block:4px}.print-template-pair :deep(.ant-select-selector){height:auto!important;min-height:32px;align-items:center}.print-template-pair :deep(.ant-select-selection-item),.print-template-pair :deep(.ant-select-selection-placeholder){line-height:1.5!important;white-space:normal;overflow:visible;text-overflow:clip}.print-template-pair :deep(.ant-select-selection-placeholder){color:#66778b}.print-primary:not(:disabled){background:#0958d9!important;border-color:#0958d9!important}.print-primary:not(:disabled):hover,.print-primary:not(:disabled):focus-visible{background:#003eb3!important;border-color:#003eb3!important}@media(max-width:600px){.print-template-pair>.ant-select{width:180px}}</style>

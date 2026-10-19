@@ -1,0 +1,33 @@
+{
+  "approval": [
+    "Sentinel_8428024124d08191b12f4d19a70b82d3",
+    "Sentinel_87506368c214819183fb1b92917cb51f"
+  ],
+  "effectiveLimit": 10,
+  "previous5Instruction": "superseded before write",
+  "oldCountsPreserved": true,
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "beforeSha256": "83c9cf950b37b1aeda296c766d4c4a1c48cd767d629ad3960a32eacda8863021",
+      "afterSha256": "4c1bea991c5e248cc92f564ce861588d112a6e2e54f2e8d985d983a411bbdfb4"
+    },
+    {
+      "path": "docs/development/MES_DEV_RULES.md",
+      "beforeSha256": "d406a583456f6f79c682d560aced3a9dc29e80a722cce1fd08e7c12e2404a22e",
+      "afterSha256": "a4ebde4e9c00a01b6a3516b0fe2a454006efdeb9c9bf20c2243e8178d538d9ef"
+    },
+    {
+      "path": ".agents/skills/mes-feature-workflow/SKILL.md",
+      "beforeSha256": "d10cfdefa406a554b847812a38962029044e4dc7fcd0cb500f2619a02d76706e",
+      "afterSha256": "3f122f5d8f17c20406b973c35f465fd845d4c7292680992a1c5cae8f353650e7"
+    },
+    {
+      "path": "docs/governance/MES_FEATURE_WORKFLOW.md",
+      "beforeSha256": "bc6862ce2e75054de5fd17cef9b12b7bbae45177ddeee0d10959dc5525d82ad2",
+      "afterSha256": "31527c3789b131b09923f0d406756c35aca3a398d91d100558e5e0ea87c46e40"
+    }
+  ],
+  "priorPatchError": "apply_patch reported reparse point; native path attributes/target check found regular files and directories; audited native edit used",
+  "snapshotFolder": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\mes-repair-limit-update-20261012"
+}

@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: Approved bounded eBR role identity supplement
+  version: '2026-10-11'
+  description: Existing controlled Form saves preserve canvasDocument presence. Omitted canvasDocument retains its prior value or absence; explicit null clears it; real JSON canvas remains editable. Canonical historical content and all other nullable fields remain unchanged.
+paths:
+  /api/v1/ebr/role-options:
+    get:
+      operationId: ebrRoleOptions
+      description: Existing ebr:template:view permission; no member or permission data. All unspecified methods/paths retain default deny.
+      security: [{bearerAuth: []}]
+      parameters:
+        - {in: query, name: page, schema: {type: integer, minimum: 0, default: 0}}
+        - {in: query, name: size, schema: {type: integer, minimum: 1, maximum: 100, default: 20}}
+        - {in: query, name: keyword, schema: {type: string, maxLength: 128}}
+      responses:
+        '200':
+          description: Standard API envelope with paged enabled role references
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code: {type: string}
+                  message: {type: string}
+                  traceId: {type: string}
+                  data:
+                    type: object
+                    required: [items, total, page, size]
+                    properties:
+                      items: {type: array, items: {$ref: '#/components/schemas/RoleOption'}}
+                      total: {type: integer, format: int64}
+                      page: {type: integer}
+                      size: {type: integer}
+        '401': {description: Authentication required}
+        '403': {description: Exact existing permission required}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
+  schemas:
+    RoleOption:
+      type: object
+      additionalProperties: false
+      required: [id, code, name, enabled]
+      properties:
+        id: {type: string, pattern: '^[1-9][0-9]*$'}
+        code: {type: string, maxLength: 64}
+        name: {type: string, maxLength: 128}
+        enabled: {type: boolean}
+    Schema2RuleRoleInput:
+      description: Role fragment of existing signature/review DTOs on controlled save. Other frozen rule fields are unchanged. Snapshot fields and legacy requiredRole are rejected on input.
+      type: object
+      required: [requiredRoleId]
+      properties:
+        requiredRoleId: {type: string, pattern: '^[1-9][0-9]*$'}
+    Schema2RuleRoleOutput:
+      type: object
+      required: [requiredRoleId, roleCodeSnapshot, roleNameSnapshot]
+      properties:
+        requiredRoleId: {type: string, pattern: '^[1-9][0-9]*$'}
+        roleCodeSnapshot: {type: string, readOnly: true, maxLength: 64}
+        roleNameSnapshot: {type: string, readOnly: true, maxLength: 128}

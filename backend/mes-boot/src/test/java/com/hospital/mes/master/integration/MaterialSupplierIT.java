@@ -29,8 +29,34 @@ class MaterialSupplierIT {
  MaterialCommands.Create request(String code,String base){var data=new HashMap<String,Object>();data.put("materialCode",code);data.put("materialName","Test material");data.put("materialType","FINISHED");data.put("specification","100 g");data.put("gradePurity","99.9%");data.put("appearance","White");data.put("baseUnitId",base);data.put("packSpec","1 box");data.put("packUnitId",base);data.put("manufacturerName","Test manufacturer");data.put("lotControlled",true);data.put("remark","Rollback evidence");return json.convertValue(data,MaterialCommands.Create.class);}
  MaterialCommands.Update edit(JsonNode m,String name,boolean policy){var r=request("ignored",m.get("baseUnitId").asText());var n=(ObjectNode)json.valueToTree(r);n.remove("materialCode");n.put("materialName",name);n.put("requiresIncomingInspection",policy);n.put("versionNo",m.path("versionNo").asLong());n.put("reason","basic maintenance");return json.convertValue(n,MaterialCommands.Update.class);}
  JsonNode material(){return materials.create(request("BASIC"+suffix,unit("KG","MASS").get("id").asText()),key());}
- JsonNode supplier(String code){var s=suppliers.create(new SupplierCommands.Create(code+suffix,"Supplier "+code,LocalDate.now(ZoneOffset.UTC).plusYears(1)),key());return s;}
+ JsonNode supplier(String code){var s=suppliers.create(new SupplierCommands.Create(code+suffix,"医用辅料供应企业"+code,LocalDate.now(ZoneOffset.UTC).plusYears(1)),key());assertThat(s.path("qualificationStatus").asText()).isEqualTo("待评审");return suppliers.command(s.path("id").asText(),new SupplierCommands.Update("QUALIFY",null,"资质文件与药用辅料供应范围评审合格",null,null),null,key());}
  SupplierCommands.Relationship link(JsonNode s,boolean preferred){return new SupplierCommands.Relationship(s.get("id").asText(),true,preferred,null);}
+ @Test void tcSup003ChineseQualificationLifecycleAndIndependentDisable() {
+  var s=suppliers.create(new SupplierCommands.Create("YLGS"+suffix,"华南医药辅料供应有限公司",LocalDate.now(ZoneOffset.UTC).plusYears(1)),key());
+  String id=s.path("id").asText();
+  assertThat(s.path("qualificationStatus").asText()).isEqualTo("待评审");
+  assertThat(s.path("enabled").asBoolean()).isTrue();
+  assertThat(jdbc.queryForObject("SELECT qualification_status FROM md_supplier WHERE id=?",String.class,id)).isEqualTo("待评审");
+  assertThatThrownBy(()->suppliers.command(id,new SupplierCommands.Update("QUALIFY",null,null,null,null),null,key())).hasMessageContaining("资格评审必须填写评审依据");
+  var rejected=suppliers.command(id,new SupplierCommands.Update("REJECT",null,"采购资质材料不符合规定",null,null),null,key());
+  assertThat(rejected.path("qualificationStatus").asText()).isEqualTo("不合格");
+  assertThatThrownBy(()->suppliers.command(id,new SupplierCommands.Update("QUALIFY",null,"不合格不得直接批准",null,null),null,key())).isInstanceOf(com.hospital.mes.common.exception.StateTransitionException.class).satisfies(e->assertThat(((com.hospital.mes.common.exception.MesException)e).code()).isEqualTo("INVALID_STATE"));
+  var review=suppliers.command(id,new SupplierCommands.Update("REVIEW",null,"补交所需证明材料",null,null),null,key());
+  assertThat(review.path("qualificationStatus").asText()).isEqualTo("待评审");
+  var qualified=suppliers.command(id,new SupplierCommands.Update("QUALIFY",null,"企业资质与供应范围审核通过",null,null),null,key());
+  assertThat(qualified.path("qualificationStatus").asText()).isEqualTo("合格");
+  var renamed=suppliers.command(id,new SupplierCommands.Update("UPDATE",null,"规范供应商名称","华南药用辅料供应有限公司",LocalDate.now(ZoneOffset.UTC).plusYears(1)),null,key());
+  assertThat(renamed.path("qualificationStatus").asText()).isEqualTo("合格");
+  var disabled=suppliers.command(id,new SupplierCommands.Update("DISABLE",null,"暂停供货合作",null,null),null,key());
+  assertThat(disabled.path("qualificationStatus").asText()).isEqualTo("合格");
+  assertThat(disabled.path("enabled").asBoolean()).isFalse();
+  assertThatThrownBy(()->com.hospital.mes.masterdata.domain.SupplierRules.usable("合格",false,null,true,null,Instant.now())).hasMessageContaining("SUPPLIER_NOT_APPROVED");
+  var enabled=suppliers.command(id,new SupplierCommands.Update("ENABLE",null,"恢复维护状态",null,null),null,key());
+  assertThat(enabled.path("enabled").asBoolean()).isTrue();
+  assertThat(enabled.path("qualificationStatus").asText()).isEqualTo("合格");
+  assertThat(jdbc.queryForObject("SELECT qualification_status FROM md_supplier WHERE id=?",String.class,id)).isEqualTo("合格");
+ }
+
  @Test void tcMat001BasicCreate201WithoutBusinessVersion() throws Exception {
   var r=request("BAPI"+suffix,unit("U","MASS").get("id").asText());String k=key();
   var result=mvc.perform(post("/api/v1/materials").with(user("test").authorities(new SimpleGrantedAuthority("master:material:create"))).header("Idempotency-Key",k).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(r))).andExpect(status().isCreated()).andExpect(jsonPath("$.data.status").value("ACTIVE")).andExpect(jsonPath("$.data.requiresIncomingInspection").value(true)).andExpect(jsonPath("$.data.selectedVersion").doesNotExist()).andExpect(jsonPath("$.data.versions").doesNotExist()).andReturn();

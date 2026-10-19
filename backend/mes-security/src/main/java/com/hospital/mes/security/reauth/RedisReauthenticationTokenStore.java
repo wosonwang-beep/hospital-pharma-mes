@@ -15,10 +15,27 @@ import org.springframework.stereotype.Component;
 public class RedisReauthenticationTokenStore implements ReauthenticationTokenStore {
     private static final String PREFIX="mes:signature:reauth:";
     private static final DefaultRedisScript<Long> PUT = new DefaultRedisScript<>("""
-        redis.call('HSET', KEYS[1], 'userId',ARGV[1], 'sessionId',ARGV[2], 'orgId',ARGV[3],
-          'objectType',ARGV[4], 'objectId',ARGV[5], 'meaning',ARGV[6], 'recordVersion',ARGV[7],
-          'issuedAt',ARGV[8], 'expiresAt',ARGV[9], 'method',ARGV[10])
-        redis.call('PEXPIRE', KEYS[1], 300000)
+        local fields={'userId','sessionId','orgId','objectType','objectId','meaning',
+          'recordVersion','issuedAt','expiresAt','method'}
+        if #KEYS ~= 1 or #ARGV ~= #fields then
+          return redis.error_reply('Invalid reauthentication token arguments')
+        end
+        local keyType=redis.call('TYPE',KEYS[1]).ok
+        if keyType ~= 'none' and keyType ~= 'hash' then
+          return redis.error_reply('Invalid reauthentication token key type')
+        end
+        local ok,err=pcall(function()
+          for i,field in ipairs(fields) do
+            redis.call('HSET',KEYS[1],field,ARGV[i])
+            if i == 1 and redis.call('PEXPIRE',KEYS[1],300000) ~= 1 then
+              error('Reauthentication token expiry could not be set')
+            end
+          end
+        end)
+        if not ok then
+          redis.call('DEL',KEYS[1])
+          return redis.error_reply(err)
+        end
         return 1
         """, Long.class);
     @SuppressWarnings("rawtypes")
@@ -31,6 +48,8 @@ public class RedisReauthenticationTokenStore implements ReauthenticationTokenSto
     private final StringRedisTemplate redis;
     public RedisReauthenticationTokenStore(StringRedisTemplate redis){this.redis=redis;}
     @Override public void put(String token, StoredReauthentication value){
+        if(value.method()==null||value.method().isBlank())
+            throw new IllegalArgumentException("reauthentication method is required");
         var b=value.binding();
         Long result=redis.execute(PUT,List.of(key(token)),Long.toString(b.userId()),b.sessionId(),
             Long.toString(b.organizationId()),b.objectType(),b.objectId(),b.meaning().name(),

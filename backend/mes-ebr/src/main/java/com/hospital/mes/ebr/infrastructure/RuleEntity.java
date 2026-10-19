@@ -14,4 +14,5 @@ private String errorCode; public String getErrorCode(){return errorCode;} public
 private String messageTemplate; public String getMessageTemplate(){return messageTemplate;} public void setMessageTemplate(String value){messageTemplate=value;}
 private Boolean deviationTrigger; public Boolean getDeviationTrigger(){return deviationTrigger;} public void setDeviationTrigger(Boolean value){deviationTrigger=value;}
 private Boolean activeFlag; public Boolean getActiveFlag(){return activeFlag;} public void setActiveFlag(Boolean value){activeFlag=value;}
+private String cppConfigJson; public String getCppConfigJson(){return cppConfigJson;} public void setCppConfigJson(String value){cppConfigJson=value;}
 }

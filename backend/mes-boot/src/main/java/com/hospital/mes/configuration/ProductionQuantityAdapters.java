@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Configuration @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class ProductionQuantityAdapters {
  @Bean ExecutionOutputInventoryPort finishedOutputInventory(FinishedOutputInventoryService outputs,WmsQueryService query){return new ExecutionOutputInventoryPort(){
+  public JsonNode validateProductOutput(CurrentPlatformContext c,ProductOutput o){return outputs.validateProduct(c,o.batchId(),o.productSnapshot(),o.amount(),o.unitId(),o.locationId(),o.productionDate(),o.expiryDate());}
   public long receiveOutput(CurrentPlatformContext c,Output o,String key){return outputs.receive(c,o.batchId(),o.finishedLotId(),o.materialId(),o.amount(),o.unitId(),o.lotNo(),o.locationId(),o.productionDate(),o.expiryDate(),o.sourceRef(),o.reason(),key);}
   public void reverseOutput(CurrentPlatformContext c,long lot,String original,BigDecimal amount,long unit,String source,String reason,String key){outputs.reverse(c,lot,original,amount,unit,source,reason,key);}
   public JsonNode lot(long org,long lot){return query.materialLot(org,lot);}

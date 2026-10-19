@@ -1,3 +1,4 @@
+<!-- Legacy unrouted compatibility reference. Current /ebr/book-templates routes use BookTemplateListView + BookTemplateEditorView. Do not restore the obsolete “章节/册模板” terminology into the active UI. -->
 <script setup lang="ts">
 import {ref,computed,onMounted} from 'vue'
 import {api,type Page} from '../../api/http'

@@ -18,11 +18,11 @@ class ProductionQualityPlanIT extends IncomingProductionIT {
     }
     JsonNode planBody(JsonNode batch) {
         as(author);
-        var material = materials.create(json.convertValue(Map.of("materialCode","F"+suffix,"materialName","Finished preparation","materialType","FINISHED","baseUnitId",unit,"lotControlled",true), MaterialCommands.Create.class),key());
-        var spec=qc.create(new QcCommands.CreateSpecification(id(material),"FQC"+suffix,"Finished quality","Frozen test standard"),key());
+        String batchProductId=batch.path("productId").asText();
+        var spec=qc.create(new QcCommands.CreateSpecification("PRODUCT",null,batchProductId,"FQC"+suffix,"Finished quality","Frozen product test standard"),key());
         var draft=qc.createVersion(spec.id(),new QcCommands.CreateVersion(1,List.of(new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"METHOD","1")),"Define finished standard"),key());
         as(approver);var approved=qc.approveVersion(draft.id(),new QcCommands.SignVersion(0L,"Approve standard","token"),"\"0\"",key());as(author);
-        return body("mainBatchId",id(batch),"finishedMaterialId",id(material),"qcSpecificationVersionId",approved.id(),
+        return body("mainBatchId",id(batch),"qcSpecificationVersionId",approved.id(),
                 "balanceRules",List.of(Map.of("balanceCode","TOTAL","basis","BATCH","unitId",unit,"formulaExpr",Map.of("dslVersion",1,"expected",Map.of("sum",List.of("CHARGE")),"actual",Map.of("sum",List.of("OUTPUT","LOSS")),"metric","DIFFERENCE_PCT"),"toleranceLow","-1","toleranceHigh","1","checkPoint","BATCH_COMPLETE")),"reason","Define controlled plan");
     }
     @Test void signedIndependentApprovalFreezesActualPlanInDispatchSnapshot() {

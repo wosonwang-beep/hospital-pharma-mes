@@ -93,7 +93,8 @@ public class SystemIdentityDirectory implements IdentityDirectory {
         return new LoginSnapshot(userId, organizations.organizationId(), user.getLoginName(), user.getDisplayName(),
             Set.copyOf(rolePermissions.activeRoleCodes(userId)),
             Set.copyOf(rolePermissions.activePermissionCodes(userId)),
-            Boolean.TRUE.equals(user.getMustChangePassword()));
+            Boolean.TRUE.equals(user.getMustChangePassword()),
+            rolePermissions.activeRoleIds(userId).stream().map(String::valueOf).collect(java.util.stream.Collectors.toUnmodifiableSet()),2);
     }
 
     @Override

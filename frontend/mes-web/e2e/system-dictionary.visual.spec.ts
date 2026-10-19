@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test'
 
-test('system dictionary PC reference geometry and item modal (fixture visual test)',async({page})=>{
+test('system dictionary PC reference geometry and item modal (fixture visual test)',async({page},testInfo)=>{
  await page.setViewportSize({width:1440,height:900})
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message))
  const example={id:'91',code:'EQUIPMENT_TYPE',name:'设备类型',kind:'BUSINESS',structure:'FLAT',description:'设备分类',sortNo:10,status:'ACTIVE',version:0,itemCount:2}
@@ -26,22 +26,22 @@ test('system dictionary PC reference geometry and item modal (fixture visual tes
  console.log('DICT_QUERY_ROWS',rows)
  expect(rows[0]).toBe(rows[1]);expect(rows[1]).toBe(rows[2]);expect(rows[3]).toBeGreaterThan(rows[0]);expect(rows[4]).toBe(rows[3])
  expect(checks.length).toBe(5);expect(checks.every(Boolean)).toBe(true)
- await page.screenshot({path:'../../design/系统管理/数据字典/review/数据字典-Vue查询-模拟数据.png',fullPage:false})
- await page.getByRole('button',{name:'2 项'}).click()
+ await page.screenshot({path:testInfo.outputPath('dictionary-query.png'),fullPage:false})
+ await page.getByRole('button',{name:'管理字典项（2）'}).click()
  await expect(page.getByRole('cell',{name:'混合设备',exact:true})).toBeVisible()
- await page.screenshot({path:'../../design/系统管理/数据字典/review/数据字典-Vue字典项-模拟数据.png',fullPage:false})
+ await page.screenshot({path:testInfo.outputPath('dictionary-items.png'),fullPage:false})
  await page.getByRole('button',{name:'＋ 新增字典项'}).click()
  const itemChecks=await check('.dict-item-grid>label')
  console.log('DICT_ITEM_INLINE',itemChecks)
  expect(itemChecks.every(Boolean)).toBe(true)
- await page.screenshot({path:'../../design/系统管理/数据字典/review/数据字典-Vue选项编辑-模拟数据.png',fullPage:false})
+ await page.screenshot({path:testInfo.outputPath('dictionary-item-editor.png'),fullPage:false})
  await page.keyboard.press('Escape')
  await page.getByRole('button',{name:'＋ 新增字典',exact:true}).click()
  await expect(page.getByRole('heading',{name:'新增数据字典'})).toBeVisible()
  const formChecks=await check('.dict-form>label')
  console.log('DICT_FORM_INLINE',formChecks)
  expect(formChecks.length).toBeGreaterThan(5);expect(formChecks.every(Boolean)).toBe(true)
- await page.screenshot({path:'../../design/系统管理/数据字典/review/数据字典-Vue新增-模拟数据.png',fullPage:false})
+ await page.screenshot({path:testInfo.outputPath('dictionary-create.png'),fullPage:false})
  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false)
  expect(errors).toEqual([])
 })

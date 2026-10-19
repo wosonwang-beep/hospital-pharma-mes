@@ -37,7 +37,7 @@ public class EbrEngine {
         Map<String,Rule> calculations=new LinkedHashMap<>();definition.rules().stream().filter(r->r.activeFlag()&&r.triggerPoint().equals(trigger)&&r.ruleType().equals("CALCULATION")).forEach(r->calculations.put(r.fieldCode(),r));
         List<RuleResult> results=new ArrayList<>();Set<String> computed=new HashSet<>(),visiting=new HashSet<>();
         for(String field:fields.keySet())compute(field,fields,calculations,context,computed,visiting,results,version);
-        for(var rule:definition.rules())if(rule.activeFlag()&&rule.triggerPoint().equals(trigger)&&!rule.ruleType().equals("CALCULATION"))results.add(execute(rule,context,version));
+        for(var rule:definition.rules())if(rule.activeFlag()&&applies(rule,trigger)&&!rule.ruleType().equals("CALCULATION"))results.add(execute(rule,context,version,trigger));
         for(var field:fields.values())if(field.requiredFlag()&&(!values.containsKey(field.fieldCode())||values.get(field.fieldCode()).stream().noneMatch(EbrRuntimeRules::hasValue)))results.add(new RuleResult("REQUIRED:"+field.fieldCode(),false,"BLOCK","Required field has no value",snapshot(values),json.nullNode(),at.toString(),EbrDsl.ENGINE_VERSION,version));
         return new RuntimeEvaluation(new SimulationResult(results.stream().noneMatch(r->!r.passed()&&"BLOCK".equals(r.severity())),List.copyOf(results)),snapshot(values));
     }
@@ -52,8 +52,9 @@ public class EbrEngine {
         visiting.remove(code);completed.add(code);
     }
     private Object primitive(JsonNode value){return value.isNumber()?value.decimalValue():value.isBoolean()?value.booleanValue():value.asText();}
-    private RuleResult execute(Rule rule,EbrDsl.Context context,String version){
-        var input=snapshot(context.values());String severity=rule.severity()==null?"BLOCK":rule.severity();
+    private RuleResult execute(Rule rule,EbrDsl.Context context,String version){return execute(rule,context,version,rule.triggerPoint());}
+    private RuleResult execute(Rule rule,EbrDsl.Context context,String version,String trigger){
+        var input=snapshot(context.values());String severity=rule.cppConfigJson()!=null?(cppActions(rule).contains("BLOCK_SUBMIT")&&"ON_SUBMIT".equals(trigger)?"BLOCK":"WARN"):(rule.severity()==null?"BLOCK":rule.severity());
         try{
             Object output=EbrDsl.parse(rule.expression()).evaluate(context);
             boolean passed=Set.of("CALCULATION","VISIBILITY","BRANCH","DEVIATION").contains(rule.ruleType())||EbrDsl.truth(output);
@@ -61,5 +62,7 @@ public class EbrEngine {
             return new RuleResult(rule.ruleCode(),passed,severity,passed?null:rule.messageTemplate(),input,json.valueToTree(output),context.time().toString(),EbrDsl.ENGINE_VERSION,version);
         }catch(IllegalArgumentException ex){return new RuleResult(rule.ruleCode(),false,severity,ex.getMessage(),input,json.nullNode(),context.time().toString(),EbrDsl.ENGINE_VERSION,version);}
     }
+    private boolean applies(Rule rule,String trigger){if(rule.cppConfigJson()==null)return rule.triggerPoint().equals(trigger);return Set.of("ON_CHANGE","ON_SAVE","ON_SUBMIT").contains(trigger);}
+    private Set<String> cppActions(Rule rule){if(rule.cppConfigJson()==null)return Set.of();try{JsonNode actions=json.readTree(rule.cppConfigJson()).path("actions");if(!actions.isArray())return Set.of();Set<String> result=new LinkedHashSet<>();actions.forEach(x->{if(x.isTextual())result.add(x.asText());});return Set.copyOf(result);}catch(Exception ex){return Set.of();}}
     private List<Input> snapshot(Map<String,List<Object>> values){return values.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(e->new Input(e.getKey(),e.getValue().stream().map(v->(JsonNode)json.valueToTree(v)).toList())).toList();}
 }

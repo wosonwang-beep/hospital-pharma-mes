@@ -28,6 +28,9 @@ public interface SysRolePermissionMapper {
     @Delete("DELETE FROM sys_role_permission WHERE role_id = #{roleId}")
     int deleteForRole(@Param("roleId") long roleId);
 
+    @Select("SELECT DISTINCT r.id FROM sys_role r JOIN sys_user_role ur ON ur.role_id=r.id WHERE ur.user_id=#{userId} AND r.enabled=TRUE")
+    List<Long> activeRoleIds(@Param("userId") long userId);
+
     @Select("""
         SELECT DISTINCT r.role_code FROM sys_role r
         JOIN sys_user_role ur ON ur.role_id = r.id

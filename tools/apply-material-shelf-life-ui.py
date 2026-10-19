@@ -1,0 +1,11 @@
+from pathlib import Path
+r=Path(r'D:\codex\_project\gmp\hospital-pharma-mes\frontend\mes-web\src')
+p=r/'master/material.ts';s=p.read_text(encoding='utf-8')
+s=s.replace("{key:'storageCondition',label:'存储环境',kind:'text',required:false,max:500},","{key:'storageCondition',label:'存储环境',kind:'text',required:false,max:500},\n {key:'shelfLifeDays',label:'有效期（天）',kind:'number',required:false,max:null},")
+s=s.replace("keys:['requiresIncomingInspection','storageCondition']","keys:['requiresIncomingInspection','storageCondition','shelfLifeDays']")
+s=s.replace("if(f.kind==='datetime'&&value!==null)","if(f.key==='shelfLifeDays'&&value!==null){const n=Number(value);if(!Number.isInteger(n)||n<1||n>36500)throw new Error('有效期须为1至36500天');value=n;}if(f.kind==='datetime'&&value!==null)")
+p.write_text(s,encoding='utf-8')
+p=r/'views/master/MaterialDetailView.vue';s=p.read_text(encoding='utf-8')
+s=s.replace(":type=\"f.kind==='datetime'?'datetime-local':'text'\"",":type=\"f.kind==='datetime'?'datetime-local':f.kind==='number'?'number':'text'\"")
+p.write_text(s,encoding='utf-8')
+print('front end updated')
