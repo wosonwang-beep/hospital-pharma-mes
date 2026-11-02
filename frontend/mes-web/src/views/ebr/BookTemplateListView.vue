@@ -61,7 +61,7 @@ onMounted(load)
    <label><span class="form-field-label">模板名称</span><a-input v-model:value="keyword" allow-clear placeholder="请输入模板名称或编码"/></label>
    <label><span class="form-field-label">关联工艺</span><a-select v-model:value="processId" allow-clear show-search option-filter-prop="label" placeholder="请选择" :options="processes.map(p=>({value:p.id,label:p.packageCode}))"/></label>
    <label><span class="form-field-label">状态</span><a-select v-model:value="status" allow-clear placeholder="请选择" :options="Object.entries(statusLabels).map(([value,label])=>({value,label}))"/></label>
-   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
+   <a-space><a-button type="primary" html-type="submit">查询</a-button><a-button @click="reset">重置</a-button></a-space>
   </form>
  </a-card>
 

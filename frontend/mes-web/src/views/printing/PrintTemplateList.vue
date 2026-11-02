@@ -125,8 +125,8 @@ function ask(row:PrintTemplate,action:string){bindingEnabled.value=true;command.
           />
         </label>
         <a-space class="query-actions">
-          <a-button @click="reset">重置</a-button>
           <a-button type="primary" html-type="submit" :loading="busy">查询</a-button>
+          <a-button @click="reset">重置</a-button>
         </a-space>
       </form>
     </a-card>

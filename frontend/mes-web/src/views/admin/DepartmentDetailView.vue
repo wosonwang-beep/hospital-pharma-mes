@@ -108,7 +108,7 @@ onBeforeUnmount(()=>{people.value=[]})
     <label><span class="form-field-label">状态</span><DictionarySelect :model-value="form.status" dict-code="DEPARTMENT_STATUS" required @update:model-value="form.status=($event??'ACTIVE') as DepartmentForm['status']"/></label>
     <label><span class="form-field-label">显示排序</span><a-input-number v-model:value="form.sortNo" :min="0" :max="999999" style="width:100%"/></label>
     <label class="form-full-row"><span class="form-field-label">备注</span><a-textarea v-model:value="form.description" :rows="3" :maxlength="500"/></label>
-    <a-space><a-button @click="back">取消</a-button><a-button type="primary" html-type="submit" :loading="busy">{{create?'创建部门':'保存部门'}}</a-button></a-space>
+    <a-space><a-button type="primary" html-type="submit" :loading="busy">{{create?'创建部门':'保存部门'}}</a-button><a-button @click="back">取消</a-button></a-space>
    </form>
   </a-card>
  </template>

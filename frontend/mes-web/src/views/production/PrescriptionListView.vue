@@ -38,7 +38,7 @@ onMounted(()=>load(Number(route.query.page??0)))
    <label><span class="form-field-label">处方名称 / 编码</span><a-input v-model:value="keyword" allow-clear placeholder="请输入处方名称或编码"/></label>
    <label><span class="form-field-label">产品</span><ProcessLookup v-model="productId" resource="products" label="产品" allow-clear/></label>
    <label><span class="form-field-label">状态</span><a-select v-model:value="status" allow-clear placeholder="全部状态" :options="Object.entries(prescriptionStatus).map(([value,label])=>({value,label}))"/></label>
-   <a-space><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
+   <a-space><a-button type="primary" html-type="submit">查询</a-button><a-button @click="reset">重置</a-button></a-space>
   </form>
  </a-card>
  <a-alert v-if="error" type="error" :message="error" show-icon/>

@@ -152,7 +152,7 @@ onMounted(load)
  </a-card>
 
  <a-alert v-if="selectedProcess" type="info" show-icon :message="'当前处方采用生产工艺：'+selectedProcess.packageCode+'。工序和工序表单由生产工艺统一维护。'"/>
- <footer v-if="editable" class="t2-form-actions prescription-footer"><a-button @click="back">取消</a-button><a-button type="primary" :loading="busy" @click="save">保存草稿</a-button></footer>
+ <footer v-if="editable" class="t2-form-actions prescription-footer"><a-button type="primary" :loading="busy" @click="save">保存草稿</a-button><a-button @click="back">取消</a-button></footer>
 </main>
 </template>
 

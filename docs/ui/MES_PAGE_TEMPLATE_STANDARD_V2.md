@@ -13,7 +13,7 @@ Approved [shared-navigation supplement](../development/DCP-GLOBAL-NAVIGATION-001
 - Every ordinary basic-function query/list page uses T1.
 - Every ordinary create/edit page uses T2; read-only view uses T3.
 - Special-purpose editors/workbenches may retain their approved specialized composition, but still inherit Global UI V2. See `docs/development/decisions/GLOBAL_T1_T2_UI_UNIFICATION_20261013.md`.
-- T1 query actions are globally ordered `重置 → 查询`; ordinary T2 form actions are globally ordered `取消 → 保存/提交`.
+- Button order rule (user-approved 2026-11-02, supersedes the 2026-10-13 order): the important action sits on the left and the auxiliary action on the right, both right aligned. T1 query actions are globally ordered `查询 → 重置`; ordinary T2 form actions are globally ordered `保存/提交 → 取消/返回`. See [BUTTON_ORDER_IMPORTANT_FIRST_20261102](../development/decisions/BUTTON_ORDER_IMPORTANT_FIRST_20261102.md).
 
 ## T1 — Query / List
 

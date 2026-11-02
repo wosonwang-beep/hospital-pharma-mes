@@ -32,5 +32,5 @@ watch(()=>route.fullPath,load,{immediate:true})
 <input v-else v-model="form[f.key]" class="master-native-input" :type="f.kind==='date'?'date':'text'" :required="f.required" :maxlength="f.max" :disabled="!create&&f.immutable"/>
 </label>
 <label v-if="!readonly&&def.key==='suppliers'"><span class="form-field-label">资格评审依据</span><input v-model="reason" class="master-native-input" maxlength="1000" placeholder="资格评审动作须填写具体依据"/></label>
-<a-space v-if="!readonly"><a-button @click="back">取消</a-button><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">保存</a-button><a-button v-for="action in record?.allowedActions.filter(v=>v!=='UPDATE')??[]" :key="action" :disabled="busy||conflict" @click="save(action)">{{actionLabel[action]??action}}</a-button></a-space></form></a-card>
+<a-space v-if="!readonly"><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">保存</a-button><a-button @click="back">取消</a-button><a-button v-for="action in record?.allowedActions.filter(v=>v!=='UPDATE')??[]" :key="action" :disabled="busy||conflict" @click="save(action)">{{actionLabel[action]??action}}</a-button></a-space></form></a-card>
 </main></template>

@@ -54,7 +54,7 @@ onMounted(load)
    <label><span class="form-field-label">部门编码</span><a-input v-model:value="filters.code" allow-clear placeholder="请输入部门编码"/></label>
    <label><span class="form-field-label">部门名称</span><a-input v-model:value="filters.name" allow-clear placeholder="请输入部门名称"/></label>
    <label><span class="form-field-label">状态</span><DictionarySelect :model-value="filters.status||null" dict-code="DEPARTMENT_STATUS" placeholder="全部状态" @update:model-value="filters.status=$event??''"/></label>
-   <a-space class="dept-query-actions"><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
+   <a-space class="dept-query-actions"><a-button type="primary" html-type="submit">查询</a-button><a-button @click="reset">重置</a-button></a-space>
   </form>
  </a-card>
  <a-alert v-if="error" type="error" show-icon :message="error"/>

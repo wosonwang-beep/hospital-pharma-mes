@@ -138,7 +138,7 @@ The approved first QA Batch Release concept is the visual reference for hierarch
 
 All pages inherit this Design System and select exactly one approved page template from `MES_PAGE_TEMPLATE_STANDARD_V2.md`.
 
-User-approved ordinary-page mapping 2026-10-13: basic query/list surfaces are T1, ordinary create/edit surfaces are T2, and read-only views are T3. Special-purpose designers/workbenches keep their approved specialized composition while inheriting this global visual system. T1 uses `重置 → 查询`; ordinary T2 uses `取消 → 保存/提交`.
+User-approved ordinary-page mapping 2026-10-13: basic query/list surfaces are T1, ordinary create/edit surfaces are T2, and read-only views are T3. Special-purpose designers/workbenches keep their approved specialized composition while inheriting this global visual system. Button order (user-approved 2026-11-02): important action left, auxiliary action right, both right aligned — T1 uses `查询 → 重置`; ordinary T2 uses `保存/提交 → 取消/返回`. Supersedes the 2026-10-13 order; see [BUTTON_ORDER_IMPORTANT_FIRST_20261102](../development/decisions/BUTTON_ORDER_IMPORTANT_FIRST_20261102.md).
 
 
 Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.

@@ -2,6 +2,8 @@
 
 Status: **USER APPROVED / ACTIVE**
 
+> **2026-11-02 动作顺序变更（用户决定）**：按钮改为「重要功能在左、辅助功能在右」，T1 为 `查询 → 重置`，普通 T2 为 `保存/提交 → 取消/返回`，均右对齐。本节第 15、26 行已按新决定更新，旧顺序作废。变更记录见 [BUTTON_ORDER_IMPORTANT_FIRST_20261102](BUTTON_ORDER_IMPORTANT_FIRST_20261102.md)。
+
 ## User decision
 All ordinary MES basic-function query/list pages use T1 Query/List. All ordinary create/edit pages use T2 Create/Edit Form. Special-purpose workbenches, controlled designers, visual editors, aggregate details and regulated decision surfaces may keep their approved special layout, but must still inherit Global UI V2 typography, controls, spacing, status and accessibility rules.
 
@@ -12,7 +14,7 @@ All ordinary MES basic-function query/list pages use T1 Query/List. All ordinary
 - Query controls use compact content-oriented widths instead of stretching to fill equal grid columns. Ordinary text inputs use approximately 170 px, selects approximately 150 px, and entity/reference pickers approximately 190 px; a page-specific wider control requires an approved business need.
 - The same widths apply to both direct Ant Design controls and shared wrapper components (dictionary selects, business references, process/WMS lookups and request/reference pickers); wrapper internals must fill the assigned width and must never collapse to an arrow-only control.
 - Query pairs flow left-to-right and wrap only as complete label/control groups. The action group stays on the same row whenever the available desktop width permits and otherwise wraps as one group without splitting its buttons.
-- Query actions use the approved order **重置 → 查询**, right aligned.
+- Query actions use the approved order **查询 → 重置** (important action left, auxiliary action right), right aligned.
 - One primary create action in the page header when permitted.
 - View/Edit navigate to independent routes; no inline whole-record editing.
 - Table/actions/pagination inherit shared Global UI V2 styling.
@@ -23,7 +25,7 @@ All ordinary MES basic-function query/list pages use T1 Query/List. All ordinary
 - Horizontal label/control pairing; long reason/comment rows may span full width.
 - Shared lookup/select components must fill the control column assigned by the form or editable table. Their outer wrapper and inner select both use the available width and must never collapse to an arrow-only control.
 - User-confirmed child-table action rule 2026-10-13: on every create/edit page, the action that adds a child row or child record is placed at the right side of that child section's title bar and uses the blue primary-button treatment. Do not leave a duplicate add action below or to the left of the child table. Read-only state hides the action; existing permission and editability checks remain authoritative.
-- Ordinary action area uses **取消 → 保存/提交**, right aligned and stable.
+- Ordinary action area uses **保存/提交 → 取消/返回** (important action left, auxiliary action right), right aligned and stable.
 - View-only routes use T3 rather than pretending to be editable T2.
 - Specialized editors may expose their own approved action set and composition.
 

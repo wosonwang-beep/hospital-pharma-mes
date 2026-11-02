@@ -73,7 +73,7 @@ watch(()=>route.fullPath,load,{immediate:true})
     <span v-if="readonly" class="master-read-value">{{form.description||'—'}}</span>
     <a-textarea v-else v-model:value="form.description" :rows="3" :maxlength="500"/>
    </label>
-   <a-space v-if="!readonly"><a-button @click="back">取消</a-button><a-button type="primary" html-type="submit" :loading="busy">保存字典</a-button></a-space>
+   <a-space v-if="!readonly"><a-button type="primary" html-type="submit" :loading="busy">保存字典</a-button><a-button @click="back">取消</a-button></a-space>
   </form>
  </a-card>
  <a-alert v-if="!readonly" type="info" message="字典和选项编码被业务引用后不可随意变更；停用不会删除历史业务数据。" show-icon/>

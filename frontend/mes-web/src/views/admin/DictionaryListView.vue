@@ -143,7 +143,7 @@ onMounted(()=>void load(Number(route.query.page??0)))
    <label><span class="form-field-label">字典类型</span><a-select v-model:value="filters.kind" style="width:100%" :options="[{value:'',label:'全部类型'},{value:'SYSTEM',label:'系统级'},{value:'BUSINESS',label:'业务级'}]"/></label>
    <label><span class="form-field-label">状态</span><a-select v-model:value="filters.status" style="width:100%" :options="[{value:'',label:'全部状态'},{value:'ACTIVE',label:'启用'},{value:'INACTIVE',label:'停用'}]"/></label>
    <label><span class="form-field-label">创建日期</span><div class="dict-date-range"><input v-model="filters.createdFrom" class="master-native-input" type="date" aria-label="创建开始"/><span>至</span><input v-model="filters.createdTo" class="master-native-input" type="date" aria-label="创建结束"/></div></label>
-   <a-space class="dict-actions"><a-button @click="reset">重置</a-button><a-button type="primary" html-type="submit">查询</a-button></a-space>
+   <a-space class="dict-actions"><a-button type="primary" html-type="submit">查询</a-button><a-button @click="reset">重置</a-button></a-space>
   </form>
  </a-card>
  <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="notice" type="success" :message="notice" show-icon closable @close="notice=''"/>
@@ -198,7 +198,7 @@ onMounted(()=>void load(Number(route.query.page??0)))
     <label v-if="chosen?.structure==='TREE'"><span class="form-field-label">上级选项</span><a-select v-model:value="itemForm.parentId" allow-clear style="width:100%" :options="[{value:null,label:'根节点'},...items.filter(x=>x.id!==editItem?.id).map(x=>({value:x.id,label:x.label}))]"/></label>
     <label><span class="form-field-label">默认选项</span><a-checkbox v-model:checked="itemForm.isDefault" aria-label="设为默认选项"/></label>
    </div>
-   <div class="dict-item-footer"><a-button @click="showEditor=false;itemError=''">取消</a-button><a-button type="primary" :loading="saving" @click="saveItem">{{editItem?'保存修改':'新增字典项'}}</a-button></div>
+   <div class="dict-item-footer"><a-button type="primary" :loading="saving" @click="saveItem">{{editItem?'保存修改':'新增字典项'}}</a-button><a-button @click="showEditor=false;itemError=''">取消</a-button></div>
   </section>
  </a-modal>
  <a-modal v-model:open="importOpen" class="dictionary-import-modal" title="数据字典导入预检" :width="800" :footer="null" :mask-closable="!importBusy">
@@ -220,10 +220,10 @@ onMounted(()=>void load(Number(route.query.page??0)))
    </a-table>
    <div class="dict-import-footer">
     <span>冲突项不会导入；正式提交时后端再次校验。</span>
-    <a-space><a-button :disabled="importBusy" @click="importOpen=false">取消</a-button>
-     <a-button type="primary" :loading="importBusy" :disabled="!importPreview?.accepted" @click="confirmImport">
+    <a-space><a-button type="primary" :loading="importBusy" :disabled="!importPreview?.accepted" @click="confirmImport">
        仅导入 {{importPreview?.accepted??0}} 条通过项
-     </a-button></a-space>
+     </a-button>
+     <a-button :disabled="importBusy" @click="importOpen=false">取消</a-button></a-space>
    </div>
  </a-modal>
 </main>

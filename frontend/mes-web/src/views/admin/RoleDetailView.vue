@@ -285,7 +285,7 @@ watch(() => [route.params.id, route.meta.mode], load, { immediate: true })
           </a-checkbox-group>
         </template>
       </section>
-      <footer v-if="!readonly" class="role-actionbar"><div class="role-footer-buttons"><a-button :disabled="busy" @click="router.push({ path: '/admin/roles', query: route.query })">取消</a-button><a-button :disabled="busy || !dirty" @click="load">重置</a-button><a-button :loading="busy" :disabled="loading || !baseline || !canSave" @click="save(true)">保存并返回</a-button><a-button type="primary" :loading="busy" :disabled="loading || !baseline || !canSave" @click="save()">保存</a-button></div></footer>
+      <footer v-if="!readonly" class="role-actionbar"><div class="role-footer-buttons"><a-button type="primary" :loading="busy" :disabled="loading || !baseline || !canSave" @click="save()">保存</a-button><a-button :loading="busy" :disabled="loading || !baseline || !canSave" @click="save(true)">保存并返回</a-button><a-button :disabled="busy || !dirty" @click="load">重置</a-button><a-button :disabled="busy" @click="router.push({ path: '/admin/roles', query: route.query })">取消</a-button></div></footer>
       </div>
     </a-spin>
   </main>
