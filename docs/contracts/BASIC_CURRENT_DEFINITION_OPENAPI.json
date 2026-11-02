@@ -3,7 +3,7 @@
   "info": {
     "title": "DCP-BASIC-NO-AUDIT-VERSION-001 bounded API supplement",
     "version": "2026-10-09",
-    "description": "Approved supplement to FINAL BASELINE v1.0.23. Only listed basic controls/process bindings supersede prior contracts. Historical evidence and regulated controls remain. Fully qualified schema IDs prevent Create/Update collisions without changing HTTP payload fields. DCP-EBR-TEMPLATE-NAME-001 adds required create templateName and controlled draft name editing; historical canonical content remains unchanged."
+    "description": "Approved supplement to FINAL BASELINE v1.0.23. Only listed basic controls/process bindings supersede prior contracts. Historical evidence and regulated controls remain. Fully qualified schema IDs prevent Create/Update collisions without changing HTTP payload fields. DCP-EBR-TEMPLATE-NAME-001 adds required create templateName and controlled draft name editing; historical canonical content remains unchanged. DCP-PROCESS-OPERATION-TYPE-001 adds optional persisted operationType without changing existing gates or historical content."
   },
   "servers": [
     {
@@ -3062,6 +3062,18 @@
             "items": {
               "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.IpcDefinition"
             }
+          },
+          "operationType": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "PRODUCTION",
+              "IPC",
+              null
+            ],
+            "description": "Approved DCP-PROCESS-OPERATION-TYPE-001. Optional persisted type. Missing/null input preserves a stored type; unmarked legacy values are omitted from responses."
           }
         },
         "additionalProperties": false

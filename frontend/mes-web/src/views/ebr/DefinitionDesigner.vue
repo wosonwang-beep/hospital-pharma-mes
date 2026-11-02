@@ -3,20 +3,42 @@ import {computed,nextTick,onBeforeUnmount,onMounted,ref,watch} from 'vue'
 import Editor,{ControlType,EditorMode,ElementType,RowFlex,type IEditorResult,type IElement} from '@hufe921/canvas-editor'
 import ProcessLookup from '../process/ProcessLookup.vue'
 import CppRuleDesigner from './CppRuleDesigner.vue'
+import RolePicker from './RolePicker.vue'
+import {ebrRoleOptions} from '../../api/ebrRoles'
 import {PlusOutlined} from '@ant-design/icons-vue'
+import {message} from 'ant-design-vue'
 import {fieldLabels,newField} from './model'
-import type {EbrDefinition,EbrField,EbrForm,EbrOperationChoice,EbrCanvasDocument} from './types'
+import type {EbrDefinition,EbrField,EbrForm,EbrOperationChoice,EbrCanvasDocument,EbrRoleOption} from './types'
 
 const props=defineProps<{definition:EbrDefinition;editable:boolean;operationChoices:EbrOperationChoice[];savedDefinition:EbrDefinition;initialFormCode?:string}>()
 
 const host=ref<HTMLDivElement|null>(null)
 const selectedFormIndex=ref(0)
 const selectedFieldCode=ref('')
+const canvasFieldCodes=new WeakMap<EbrField,string>()
 const rightTab=ref('field')
 const designerTab=ref<'form'|'cpp'>('form')
 const viewMode=ref<'design'|'fill'>('design')
 const fontSize=ref(16)
+const roleOptions=ref<EbrRoleOption[]>([])
+const roleLoading=ref(false)
+const roleError=ref('')
+const roleKeyword=ref('')
+let roleRequest=0
+async function loadRoleOptions(keyword=''){
+ if(!props.editable)return
+ const request=++roleRequest
+ roleKeyword.value=keyword;roleLoading.value=true;roleError.value=''
+ try{
+  const page=await ebrRoleOptions(keyword)
+  if(request===roleRequest)roleOptions.value=page.items
+ }catch{
+  if(request===roleRequest)roleError.value='角色选项加载失败，请重试。当前配置已保留。'
+ }finally{if(request===roleRequest)roleLoading.value=false}
+}
 let editor:Editor|null=null
+let initialCanvasValue=''
+let editorMountGeneration=0
 let insertRange:{startIndex:number;endIndex:number;tableId?:string;startTdIndex?:number;endTdIndex?:number;startTrIndex?:number;endTrIndex?:number}|null=null
 
 const forms=computed(()=>props.definition.forms)
@@ -118,11 +140,15 @@ function documentFor(form:EbrForm):IEditorResult{
 function capture(){
  const form=selectedForm.value
  if(!editor||!form||!props.editable)return
- form.canvasDocument=JSON.parse(JSON.stringify(editor.command.getValue())) as unknown as EbrCanvasDocument
+ const value=JSON.stringify(editor.command.getValue())
+ if(!form.canvasDocument&&value===initialCanvasValue)return
+ form.canvasDocument=JSON.parse(value) as unknown as EbrCanvasDocument
 }
 async function mountEditor(){
- editor?.destroy();editor=null
+ const generation=++editorMountGeneration
+ editor?.destroy();editor=null;initialCanvasValue=''
  await nextTick()
+ if(generation!==editorMountGeneration)return
  const form=selectedForm.value
  if(!host.value||!form)return
  editor=new Editor(host.value,documentFor(form).data,{
@@ -130,6 +156,7 @@ async function mountEditor(){
   locale:'zhCN',pageMode:'paging' as never,defaultFont:'Microsoft YaHei',defaultSize:16,
   margins:[70,70,70,70],historyMaxRecordCount:100
  })
+ initialCanvasValue=JSON.stringify(editor.command.getValue())
  editor.listener.contentChange=()=>capture()
  editor.listener.controlChange=payload=>{
    const code=payload.control.conceptId
@@ -151,9 +178,27 @@ function restoreInsertRange(){
  const r=insertRange
  editor.command.executeSetRange(r.startIndex,r.endIndex,r.tableId,r.startTdIndex,r.endTdIndex,r.startTrIndex,r.endTrIndex)
 }
+function focusCanvas(){
+ if(!editor||!props.editable||viewMode.value!=='design')return
+ const range=editor.command.getRange()
+ if(range.startIndex<0||range.endIndex<0){editor.command.executeSetRange(0,0);rememberInsertRange()}
+}
+function renameNewFieldCode(value:string){
+ const f=selectedField.value,form=selectedForm.value
+ if(!f||!form||!props.editable||savedField.value)return
+ if(form.fields.some(other=>other!==f&&other.fieldCode===value)){message.error('字段编码必须唯一');return}
+ const previous=canvasFieldCodes.get(f)??f.fieldCode
+ f.fieldCode=value;selectedFieldCode.value=value
+ if(editor&&value){
+  editor.command.executeSetControlProperties({conceptId:previous,properties:{conceptId:value,extension:{ebrFieldCode:value,ebrFieldType:f.fieldType,sourceType:f.sourceType}},isSubmitHistory:true})
+  canvasFieldCodes.set(f,value)
+ }else canvasFieldCodes.set(f,previous)
+ capture()
+}
 function insertField(type:EbrField['fieldType'],label?:string,codeBase?:string,source?:EbrField['sourceType']){
  const form=selectedForm.value
  if(!form||!props.editable)return
+ if(!editor||!insertRange){message.warning('请先在画布中选择插入位置');return}
  const code=uniqueCode(codeBase??'FIELD_'+(props.definition.forms.flatMap(f=>f.fields).length+1))
  const field=newField(code,type)
  field.label=label??fieldLabels[type]??'字段'
@@ -172,7 +217,7 @@ function insertBusiness(item:typeof businessFields[number]){insertField(item.typ
 function updateCanvasControl(){
  const f=selectedField.value
  if(!editor||!f)return
- editor.command.executeSetControlProperties({conceptId:f.fieldCode,properties:{
+ editor.command.executeSetControlProperties({conceptId:canvasFieldCodes.get(f)??f.fieldCode,properties:{
   type:controlType(f),placeholder:f.label,required:f.requiredFlag,disabled:f.readonlyFlag,
   extension:{ebrFieldCode:f.fieldCode,ebrFieldType:f.fieldType,sourceType:f.sourceType},
   valueSets:f.options.map(o=>({code:o.optionCode,value:o.optionLabel}))
@@ -182,7 +227,7 @@ function updateCanvasControl(){
 function removeNewField(){
  const form=selectedForm.value,f=selectedField.value
  if(!form||!f||savedField.value||!props.editable)return
- editor?.command.executeRemoveControl({conceptId:f.fieldCode})
+ editor?.command.executeRemoveControl({conceptId:canvasFieldCodes.get(f)??f.fieldCode})
  form.fields.splice(form.fields.indexOf(f),1)
  form.fields.forEach((x,i)=>x.sequenceNo=i+1)
  selectedFieldCode.value=''
@@ -233,10 +278,10 @@ function addReview(){
 }
 
 watch(()=>selectedFormIndex.value,()=>void mountEditor())
-watch(()=>props.editable,()=>void mountEditor())
+watch(()=>props.editable,()=>{void mountEditor();if(props.editable)void loadRoleOptions()})
 watch(()=>props.initialFormCode,()=>{capture();selectInitialForm();void mountEditor()})
-onMounted(()=>{selectInitialForm();void mountEditor()})
-onBeforeUnmount(()=>{capture();editor?.destroy()})
+onMounted(()=>{selectInitialForm();void mountEditor();if(props.editable)void loadRoleOptions()})
+onBeforeUnmount(()=>{roleRequest++;editorMountGeneration++;capture();editor?.destroy()})
 </script>
 
 <template>
@@ -311,7 +356,8 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
         </template>
       </aside>
 
-      <main class="canvas-stage">
+      <main class="canvas-stage" tabindex="0" aria-label="表单画布" @focus="focusCanvas">
+        <p class="canvas-scroll-hint">画布可左右滑动查看</p>
         <div v-if="selectedForm" ref="host" class="canvas-host"></div>
         <a-empty v-else description="新增表单后即可使用 Canvas Editor 设计"/>
       </main>
@@ -321,7 +367,7 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
           <a-tab-pane key="field" tab="字段属性">
             <div v-if="selectedField" class="property-form">
               <label><span>字段名称</span><a-input v-model:value="selectedField.label" :disabled="!editable" @change="updateCanvasControl"/></label>
-              <label><span>字段编码</span><a-input v-model:value="selectedField.fieldCode" :disabled="!editable||savedField"/></label>
+              <label><span>字段编码</span><a-input :value="selectedField.fieldCode" :disabled="!editable||savedField" @update:value="renameNewFieldCode"/></label>
               <label><span>字段类型</span><a-select v-model:value="selectedField.fieldType" :disabled="!editable" :options="Object.entries(fieldLabels).map(([value,label])=>({value,label}))" @change="updateCanvasControl"/></label>
               <label><span>数据来源</span><a-select v-model:value="selectedField.sourceType" :disabled="!editable" :options="[{value:'MANUAL',label:'人工填写'},{value:'SYSTEM',label:'系统自动'},{value:'BARCODE',label:'扫码'},{value:'INSTRUMENT',label:'仪器采集'},{value:'DERIVED',label:'计算派生'}]" @change="updateCanvasControl"/></label>
               <label><span>数据类型</span><a-input v-model:value="selectedField.dataType" :disabled="!editable"/></label>
@@ -357,6 +403,7 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
 
           <a-tab-pane key="rules" tab="规则与签名">
             <div class="rules-panel">
+              <a-alert v-if="roleError" type="error" :message="roleError" show-icon><template #action><a-button size="small" @click="loadRoleOptions(roleKeyword)">重试加载角色</a-button></template></a-alert>
               <div class="rules-head"><strong>校验/计算规则</strong><a-button v-if="editable" size="small" @click="addRule">＋</a-button></div>
               <div v-for="rule in definition.rules.filter(r=>!r.cppConfigJson)" :key="rule.ruleCode" class="rule-card">
                 <div><b>{{rule.ruleCode}}</b><span>{{rule.ruleType}}</span></div>
@@ -365,12 +412,12 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
               <div class="rules-head"><strong>电子签名规则</strong><a-button v-if="editable" size="small" @click="addSignature">＋</a-button></div>
               <div v-for="(rule,index) in definition.signatureRules" :key="index" class="rule-card">
                 <div><b>{{rule.objectCode}}</b><span>{{rule.meaning}}</span></div>
-                <a-input v-model:value="rule.requiredRole" :disabled="!editable" size="small" placeholder="角色编码"/>
+                <RolePicker v-model:role-id="rule.requiredRoleId" :editable="editable" :options="roleOptions" :loading="roleLoading" :legacy-code="rule.requiredRole" :code-snapshot="rule.roleCodeSnapshot" :name-snapshot="rule.roleNameSnapshot" @search="loadRoleOptions"/>
               </div>
               <div class="rules-head"><strong>复核规则</strong><a-button v-if="editable" size="small" @click="addReview">＋</a-button></div>
               <div v-for="(rule,index) in definition.reviewRules" :key="index" class="rule-card">
                 <div><b>{{rule.objectCode}}</b><span>{{rule.reviewType}}</span></div>
-                <a-input v-model:value="rule.requiredRole" :disabled="!editable" size="small" placeholder="角色编码"/>
+                <RolePicker v-model:role-id="rule.requiredRoleId" :editable="editable" :options="roleOptions" :loading="roleLoading" :legacy-code="rule.requiredRole" :code-snapshot="rule.roleCodeSnapshot" :name-snapshot="rule.roleNameSnapshot" @search="loadRoleOptions"/>
               </div>
             </div>
           </a-tab-pane>
@@ -394,10 +441,10 @@ onBeforeUnmount(()=>{capture();editor?.destroy()})
 .form-item{width:100%;display:block;text-align:left;border:1px solid transparent;background:transparent;border-radius:6px;padding:8px;margin:2px 0;cursor:pointer;color:var(--mes-ui-text)}.form-item:hover,.form-item.active{background:#eaf2ff;border-color:#cfe0fb}.form-item strong,.form-item small{display:block}.form-item small{margin-top:3px;color:var(--mes-ui-secondary);font-size:11px;white-space:normal}
 .palette-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.palette-grid button{border:1px solid var(--mes-ui-border);background:#fff;border-radius:6px;min-height:34px;font:inherit;font-size:12px;color:var(--mes-ui-text);cursor:pointer}.palette-grid button:hover{border-color:#91caff;background:#f0f7ff}.palette-grid button:disabled{opacity:.45;cursor:not-allowed}
 .insert-tip{margin:10px 4px 2px;padding:7px 8px;border-radius:6px;background:#f0f6ff;color:#55718f;font-size:10px;line-height:1.45}.insert-field-list{display:grid;gap:5px}.insert-field-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:34px;padding:5px 7px;border:1px solid var(--mes-ui-border);border-radius:6px;background:#fff}.insert-field-row:hover{border-color:#91caff;background:#f8fbff}.field-add{width:22px;height:22px;display:grid;place-items:center;border:1px solid #91caff;border-radius:50%;background:#fff;color:var(--mes-ui-primary);padding:0;cursor:pointer;transition:.15s}.field-add:hover{background:var(--mes-ui-primary);border-color:var(--mes-ui-primary);color:#fff}.field-add:disabled{opacity:.4;cursor:not-allowed;background:#fff;color:var(--mes-ui-secondary)}.field-add :deep(svg){width:11px;height:11px}.insert-field-row>span{font-size:12px;color:var(--mes-ui-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.insert-field-row small{color:var(--mes-ui-secondary);font-size:10px;white-space:nowrap}.insert-field-name{min-width:0}
-.canvas-stage{background:#eef2f7;padding:18px 8px;overflow:auto;min-width:0}.canvas-host{min-height:680px}.canvas-host :deep(canvas){max-width:none}
+.canvas-stage{background:#eef2f7;padding:18px 8px;overflow:auto;min-width:0}.canvas-scroll-hint{display:none}.canvas-host{min-height:680px}.canvas-host :deep(canvas){max-width:none}
 .inspector{border-left:1px solid var(--mes-ui-border);padding:8px 12px;background:#fff;overflow:auto}.property-form{display:flex;flex-direction:column;gap:11px}.property-form>label{display:flex;align-items:center;gap:8px;min-width:0}.property-form>label>span{flex:0 0 92px;color:var(--mes-ui-secondary);font-size:12px;white-space:nowrap}.property-form>label :deep(.ant-input),.property-form>label :deep(.ant-select),.property-form>label :deep(.ant-input-number),.property-form>label :deep(.process-lookup){flex:1;min-width:0}.empty-hint{color:var(--mes-ui-secondary);font-size:12px;line-height:1.8;padding:30px 8px;text-align:center}
 .option-box{border:1px solid var(--mes-ui-border);border-radius:6px;padding:8px}.option-row{display:flex;gap:4px;margin-bottom:6px}
 .rules-panel{display:grid;gap:8px}.rules-head{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--mes-ui-border)}.rule-card{border:1px solid var(--mes-ui-border);border-radius:6px;padding:8px}.rule-card>div{display:flex;justify-content:space-between;gap:8px;font-size:11px;margin-bottom:5px}.rule-card span{color:var(--mes-ui-secondary)}
 @container ebr-designer (max-width:1180px){.designer-grid{grid-template-columns:190px minmax(480px,1fr)}.inspector{grid-column:1/-1;border-left:0;border-top:1px solid var(--mes-ui-border);max-height:none}.property-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
-@container ebr-designer (max-width:760px){.designer-grid{grid-template-columns:1fr}.palette{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.canvas-stage{padding:8px;min-height:520px}.property-form{grid-template-columns:1fr}.designer-topbar{align-items:flex-start;height:auto;gap:10px;padding:10px;flex-direction:column}.designer-toolbar{position:sticky;top:0;z-index:2}}
+@container ebr-designer (max-width:760px){.designer-grid{grid-template-columns:1fr}.palette{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.canvas-stage{padding:8px;min-height:520px}.canvas-scroll-hint{display:block;position:sticky;left:0;width:max-content;max-width:100%;margin:0 0 8px;color:var(--mes-ui-secondary);font-size:12px}.property-form{grid-template-columns:1fr}.designer-topbar{align-items:flex-start;height:auto;gap:10px;padding:10px;flex-direction:column}.designer-toolbar{position:sticky;top:0;z-index:2}}
 </style>

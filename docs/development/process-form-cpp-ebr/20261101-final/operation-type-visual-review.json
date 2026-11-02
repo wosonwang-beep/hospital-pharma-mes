@@ -1,0 +1,20 @@
+{
+  "reviewer": "Codex SELF-REVIEW using mes-ui-ux-audit and ui-ux-pro-max",
+  "source_hashes": {
+    "frontend/mes-web/src/views/process/ProcessDetailView.vue": "E0162C8EFF5AE67D34C09D846598C3236A3B58AB8D340B6E3B19481CECF52371",
+    "frontend/mes-web/src/views/process/model.ts": "128643888A12C1758D093285375632DC68F4D82C1CBD4F323BA5764D69D5D92A"
+  },
+  "first_pass_viewed": 20,
+  "second_pass_viewed": 0,
+  "observations": {
+    "hierarchy": "Type field follows operation header; existing page hierarchy retained.",
+    "grid_alignment": "Former15px T2 drift corrected at900/375; label/control centers agree; full all-control audit remains pending.",
+    "spacing_density": "Dedicated row removes old18px margins; helper wraps with actual content.",
+    "typography_color": "Historical-unmarked text now visible at14px rather than zero-size; full color audit not certified.",
+    "controls_content": "Two actual radio inputs; old rows remain unchecked, new row only defaults to production.",
+    "actions": "Existing save/cancel and disabled logic retained; no business save executed in browser.",
+    "responsive": "20 originals at1440/1280/900/375 viewed; options wrap as complete input/label pairs.",
+    "interaction_accessibility": "Native checked/disabled states and visible keyboard ring observed; complete WCAG not done."
+  },
+  "status": "PARTIAL / NOT READY"
+}

@@ -1,3 +1,121 @@
+**最新2026-11-02第43–46批：IN PROGRESS / 工序类型真实保存已实现并定向验证 / 整体未验收。** 已获DCP具体批准，追加V071/V074并接通DTO、校验、保存回读及原型双单选局部控件；旧NULL不回填，缺省/NULL不清除已存类型，无全局IPC必检。后端18测试、前端7测试通过，真实运行页11检查/20图，现有整对象不变；本地8080已加载新JAR。46批修正提示零字号及T2窄屏15px偏移，typecheck和原组件断言通过。旧数据/事务回滚保留，未执行浏览器正向业务保存。累计46，不自动47；整页工序工作区移植、IPC岗位链及完整G5仍未完成。见[本轮开发结果](docs/development/process-form-cpp-ebr/20261101-final/OPERATION_TYPE_RESULT_20261102.md)。
+
+**最新2026-11-02第42批：IN PROGRESS / 已纠正原型全局IPC规则 / 正式移植未完成。** 用户要求继续按已识别工序工作区原型开发；本轮移除每套工艺必须有IPC的错误草稿校验，提示按当前工序配置及前置依赖生效，原路线带/工序清单/右配置布局保留。真实Vue校验函数7用例先3通过4失败，修正后7/7，原型typecheck/build退出0。累计41→42，不清零；无正式MES源码/DB/迁移/业务数据改动。工序类型当前DTO无持久化字段、完成条件及旧审批与当前定义的映射仍须闭合G3.5，不能冒称已正式交付。当前主组件70577B39...，完整G5仍FAIL。见[第42批结果](docs/development/process-form-cpp-ebr/20261101-final/ROUND42_RESULT.md)。
+
+**最新2026-11-02第40–41批：IN PROGRESS / 产品保真REWORK_REQUIRED / G5 FAIL。** CPP实际输入标签及获批主蓝三态已修，7套件29测试、typecheck/build和53真实检查通过；九文件同版170图首遍已看，结构化评审及第二遍未完成，validator实际exit1。用户识别本机mes-demo「上方路线带＋左侧工序＋右侧配置」；正式页未实现该工作区，IPC未纳入现需求/RTM/170格采证。另用户明确检验判断属具体工序及前置关系，不能全工艺强制IPC；旧原型相反校验登记HIGH。三项产品缺口保持OPEN，局部通过不代表生产工艺完成。累计41，两批耗尽，无第42批；无新迁移/正常业务写入。见[第41批结果](docs/development/process-form-cpp-ebr/20261101-final/ROUND41_RESULT.md)、[原型核对](docs/development/process-form-cpp-ebr/20261101-final/IPC_PROTOTYPE_TRACE_20261102.md)和[原图对照](docs/development/process-form-cpp-ebr/20261101-final/IPC_PROTOTYPE_COMPARE_20261102.html)。
+
+**最新2026-11-02第38–39轮：IN PROGRESS / 原五项问题有界关闭 / G5仍FAIL。** 在批准的40分钟、最多2批范围内修复所属模板长名串列、工序表单失败假空并增加重试、原导航Escape关闭及焦点返回；补齐原8下拉/12焦点/1导航状态证据。6套件26测试、typecheck/build、53项真实5173/8080检查通过，完整定义不变、无新迁移或正常业务保存。同版170原图两遍实际审查，1360逐图分类/81维/19WCAG登记；888抽样配对无同行/8px偏差失败、168格无document扩宽。新发现CPP实际combobox无名称及共享蓝字4.104:1两项HIGH，另历史3项局部修复待完整G5；原生缩放/完整键盘等、参考对照及完整锚点尚有NOT RUN，validator实测exit1。累计39，两批已用；下一CPP名称/V2对比度草案待批准，不改原断言，不标READY/ACCEPTED。见[第39轮结果](docs/development/process-form-cpp-ebr/20261101-final/ROUND39_RESULT.md)及[具体补充草案](docs/development/decisions/PROCESS_G5_A11Y_SUPPLEMENT_20261102_PROPOSED.md)。
+
+**历史2026-11-02首遍：IN PROGRESS / 170张原图首轮已审，五项HIGH未关闭。** 1360类观察已登记；发现模板长名串列、服务失败显示未配置，以及21格状态采证无效（8下拉、12焦点、1Escape关闭）。888条配对测量不替代完整UI验收；九维/WCAG及二次审查当时仍未完成，validator退出1，G5 FAIL。无业务代码/DB/迁移修改，累计37保留。见[逐图审查](docs/development/process-form-cpp-ebr/20261101-final/VISUAL_REVIEW_20261102.md)。
+
+## 2026-10-29 工序动态表单—CPP—eBR配置产品经理推进
+
+**最新2026-11-01第37轮：IN PROGRESS / 170格采证全部齐备 / 完整G5评审仍未完成。** 用户“批准，继续”授权一次仅采证修正；累计36→37，不改业务代码或170格断言。最终采证14检查通过、case errors0，同业务源码170/170截图齐备；403/409、返回、只读角色及末次完整对象相等均有证据。原中间失败保留，未缩减覆盖。运行23:50:17前结束；无新迁移或正常业务写入，既有20/20/typecheck/build不重跑。逐图八类、九维/WCAG及对抗审查尚未全部登记，validator仍退出1、集成必需ui-ux-audit继续FAIL；不得标READY/ACCEPTED。见[第37轮结果](docs/development/process-form-cpp-ebr/20261101-final/ROUND37_RESULT.md)。
+
+**最新2026-11-01 23:32：IN PROGRESS / 当前业务修复20/20、构建和真实403/409恢复通过 / 完整G5仍FAIL。** 用户批准22:33:26–23:33:26的60分钟、最多2轮窗口；实际累计34→36，不清零。已修新字段改码后的属性/Canvas身份断裂、画布键盘定位及375表单操作裁切；只改既有组件/测试，不改业务合同或迁移。5套件20测试、typecheck/build退出0，真实恢复/权限16检查通过；496仍7/DRAFT，最后SAVE29078，浏览器已关闭。正式G5先定170格，现126格、缺44格及完整评审；validator退出1，集成报告必需ui-ux-audit仍FAIL。原采证脚本错误/原图路径覆盖缺陷均如实留证，未改判PASS。2轮额度已耗尽，额外1次仅采证脚本修正申请待用户回复；未进行第37轮，不擅自延时。见[窗口结果](docs/development/process-form-cpp-ebr/20261101-final/FINAL_WINDOW_RESULT.md)。
+
+**最新2026-11-01晚间：IN PROGRESS / 角色服务错误恢复、真实409及重载已验证 / F-005中文角色名称回退已修复。** 原控件在选项失败/筛选后显示数字ID，现用已有名称缓存/服务端快照保留已选中文显示，缺失项禁选，不改ID/权限/DTO。新增2条先RED后GREEN，原三套件17/17、typecheck退出0，1440/375真实断网状态12名称复验通过。真实仓储会话登录200但被前端守卫拦回，服务端403尚未测到，整脚本exit1；完整UI/G5未完成。原32+包装装配修正1+控件修正1，保守累计34轮；无新增迁移/正常业务保存，496仍7/DRAFT、末次SAVE29078。最后渲染专项比十分钟窗口超19秒，已停止新UI运行并如实记录，不能宣称预算内或整体READY。见[收尾结果](docs/development/process-form-cpp-ebr/20261101-final/RESULT.md)。
+
+**最新2026-11-01：IN PROGRESS / CPP与签署、复核角色真实保存—工艺入口重开—恢复闭环已完成。** 496/OP03既有CPP四动作和两角色ID/服务端快照真实持久化，正常三次保存versionNo4→5→6→7；最终完整详情只版本元数据变化，definition与原基线严格相等。原MariaDB只读核对三条SAVE审计与前后摘要均保留，12/12证据检查exit0；缺原因阻止保存、填写后恢复成功。无新业务记录、迁移、源码修复或发布，原32轮保留。完整UI/G5及真实HTTP冲突/窄权限/服务错误恢复仍未完成；此前“CPP/角色持久化未验证”仅为历史。见[本轮结果](docs/development/process-form-cpp-ebr/20261029/persistence-result-20261101.md)。
+
+**最新续验2026-10-31 21:25：IN PROGRESS / CPP与签署、复核角色真实编辑已验证 / 整体验收未完成。** 真实5173页面完成CPP条件组OR预览、不完整配置拒绝、两类角色搜索选择与未保存关闭保护；完整详情多次重读一致、versionNo仍4。16/16记录证据检查exit0，无业务保存/新记录/迁移或源码修复，原32轮保留。窄屏初图处于侧栏过渡，稳定重拍后恢复；通用标签探针0对，不能判同行PASS。CPP/角色真实持久化、全UI/G5及原型/G3.5仍未完成，详见[本轮报告](docs/development/process-form-cpp-ebr/20261029/live-configuration-verification-20261031.md)。下方保留阶段历史。
+
+**最新：IN PROGRESS / 测试工具全部操作模式已生效 / 业务整体验收未完成。** 用户明确“测试工具允许所有的操作”；21:09–21:11（北京时间）仅注册CUAWright环境设ALLOW_MUTATIONS=1，标准客户端同步读取并真实返回mutating_requests_allowed=true。9项离线方法/按钮放行检查通过，无真实业务写入/删除/审批；未改MES权限、签名、审计或数据保护。旧宿主连接需正常重连，当前标准客户端已生效。累计32轮（原31+BOM修复）；无新增迁移。原496真实往返已通过，完整CPP/角色/UI/G5仍未完成。见[工具模式记录](docs/development/process-form-cpp-ebr/20261029/cuawright-full-operation-mode-20261031.md)。
+
+**最新：IN PROGRESS / 496真实保存、重开及恢复闭环通过 / 整体未验收。** 用户要求自行接入后，已用标准stdio MCP客户端连接同一CUAWright新服务，15工具发现与真实原生确认成功，默认全局只读保持。20:50:46–21:00:37（北京时间）窗口内完成两次精确批准的UI PUT，均HTTP200，versionNo2→3→4；分别离开后从工艺入口重开，最终原名恢复，完整响应除目标版本元数据外与基线严格一致。范围2次耗尽失效，已安全结束。新增客户端及长行参数修复保守计累计31轮；原server/helper45项离线测试实现未改。无新迁移/审批/发布/Git操作，完整CPP/角色/执行动作及UI/G3.5/G5仍未完成。见[真实闭环报告](docs/development/process-form-cpp-ebr/20261029/template496-real-roundtrip-20261031.md)。
+
+**最新：IN PROGRESS / 用户已重载，但当前回合仍连接旧MCP / NOT READY。** 2026-10-31 20:46开始续作，用户回复已重载；20:48状态仍为旧12工具且无mes_write_scope字段。只读检查注册配置确实指向已更新server_local.py；进程信息确认20:47:54启动新MCP，旧08:01进程同时仍存活。新进程启动已确认，但当前回合调用仍未切换，新增导出/范围/保存接口不可调用。本轮未杀进程、改配置或绕过，无业务保存/DB操作、无新修复（累计29）；需当前宿主连接切换后再核验能力及执行原已批准保存。离线45/45保持历史事实，不能当运行生效。详见continuation。
+
+**最新：IN PROGRESS / CUAWright通用受控编辑工具离线45/45 / 待正常重载与业务验收。** 用户20:16:27明确批准通用范围；20:18:05–20:33:23（北京时间）完成完整详情脱敏导出、原生人工确认短期编辑范围、真实UI专用保存通道的磁盘实现及离线测试。45/45、py_compile exit0；默认全局只读保持，错误目标/字段/额外定义、超额/过期/重开不续额均覆盖。保守累计29轮（原25+4组实施/补强），不清零。当前宿主仍原12工具、未重载，新能力仅离线注册15项；实际宿主确认未验证。本阶段真实登录/业务PUT/DB写入均0，496两次保存及完整G5未运行。见[离线实施结果](docs/development/process-form-cpp-ebr/20261029/cuawright-scoped-tools-offline-20261031.md)。
+
+**最新：IN PROGRESS / 两次保存已获批准，工具定向写通道缺失 / NOT READY。** 用户于2026-10-31 20:05:47（北京时间）明确批准模板496/OP01_RECORD名称修改保存、重开、恢复保存及重读，最多两次。沿用20:03:16–20:13:16窗口，不重置25轮；已有预检DRAFT/V1/versionNo2/schema2和角色快照一致，完整定义基线未取得。CUAWright现有保护同时阻止保存按钮和业务PUT，仅有全局放开开关、无两次定向能力；未点击保存或绕过，两个保存/重读均NOT RUN，原名未改变，无本轮版本增长/保存审计。详见[批准及停止点](docs/development/process-form-cpp-ebr/20261029/template496-controlled-save-authorization-20261031.md)。
+
+**最新：IN PROGRESS / 模板496保存预检完成部分，定向写能力未就绪 / NOT READY。** 2026-10-31 20:03–20:06（北京时间），CUAWright确认496草稿及名称属性；DEV只读SELECT确认DRAFT/V1/versionNo2/schema2，OP01_RECORD原名“称量与投料记录”，签署6/复核6角色快照完整且与当前角色一致。未取得完整定义基线，未点击保存。工具现有写保护开启且无两次定向放行接口，未全局放开或绕过。无业务源码/数据库/迁移/配置修改、无新单测；累计25轮，真实保存与完整G5仍未完成。见[预检及定向通道方案](docs/development/process-form-cpp-ebr/20261029/template496-save-preflight-20261031.md)。
+
+**最新：IN PROGRESS / CUAWright正式入口复验通过 / NOT READY。** 2026-10-31 19:53–19:56（北京时间），CUAWright从无活动会话正常建立会话，专用登录/身份HTTP200；列表KCL30“查看”、工序表单页签、同码两行来源展示均成功，分别进入模板496/291对应设计器并关闭返回，CPP及已有签名角色配置可见。旧工具无变化现象未复现，未改业务代码，累计修复25轮；业务写保护保持、无保存/迁移。真实保存、完整UI/权限、精确原型批准及G3.5/G5仍未完成。见[定向复验报告](docs/development/process-form-cpp-ebr/20261029/cuawright-entry-verification-20261031.md)。
+
+**最新：IN PROGRESS / 已重新登录，入口与页签无变化待诊断 / NOT READY。** 2026-10-31 18:40（北京时间）在同一正式5173新标签确认密码显示控件可切换，并依既有授权登录成功；直接打开工艺列表可见7条数据，但KCL30“查看”点击后无可见变化。直接打开其既有详情后，点击“工序表单”仍未切换；两处事件是否送达未知，不能判为应用缺陷，直接地址不代表列表入口通过。保留已登录详情页；未改业务代码/数据库/服务，累计修复25轮。来源列、真实保存、完整UI和G5仍未完成；详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 登录及交互诊断未闭环 / NOT READY。** 2026-10-31 18:39（北京时间），用户要求继续，首选CUAWright无活动会话，改用现有Chrome正式5173标签，按既有授权尝试登录；提交及回车后页面未跳转、未显示错误，无法判断请求是否发出或是否得到响应。页面`#app`带Vue挂载标记；点击密码显示图标前后输入类型未变，不能区分自动化事件未送达与应用未响应。已清空密码输入，未在任务记录保存凭据；未改业务代码/数据库/服务，修复累计25轮。正式页面验收和G5仍未完成，详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / eBR 隔离回归通过 / NOT READY。** 2026-10-31 15:50（本机时间）离线 Maven 定向运行历史模板规范化兼容、角色历史和职责分离、运行时边界三类测试，16/16 通过、0 失败/跳过；均为隔离测试，不证明真实页面或数据库保存。现有 5173 浏览器标签仍显示登录页，未诊断本次跳转原因。未修改业务代码、数据库或迁移，累计修复 25 轮不变；真实页面、完整 UI 审查、原型准确版本确认、G3.5/G5 和人工验收仍未完成。详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 会话状态只读补查 / NOT READY。** 原03:20:34–03:30:34 UTC诊断窗口续查，03:24:07–03:24:48完成并同步Planning revision 31：现页为`/login?redirect=/process/packages`，浏览器可见最近30条error/warn为空，未取得该次导航网络状态，不能认定401、会话过期或其与点击无变化存在因果关系。源码有身份缺失跳转逻辑但不是当次根因证据。已登录页面事件送达及列表入口仍NOT RUN；无源码/业务数据/服务操作，累计25轮。详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 两入口只读诊断部分受会话阻断 / NOT READY。** 用户批准最多10分钟、零修复；2026-10-31 03:20:34 UTC开始、03:30:34截止，03:21:41操作及Planning revision 30同步结束。详情工序表单页签可见、中心命中自身、pointer-events正常，键盘/点击后选中仍为工艺路线，事件是否送达及根因未知；准备列表核验时导航后显示登录页，未重新登录，列表本次NOT RUN。不改源码或业务数据，累计25轮；详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 只读复核页签未切换 / NOT READY。** 用户授权自行登录，现有会话已登录；工艺详情页视觉确认后点击工序表单页签仍未切换，最近可见浏览器error/warn日志为空。无法区分自动化与应用原因，未修改代码或业务数据，所属模板/设计器入口仍NOT RUN，累计25轮。见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 正式工艺只读检查未完成 / NOT READY。** 用户要求自行登录后已进入正式首页；工艺列表“查看”两次尝试无页面变化，历史详情URL可只读打开工艺，但“工序表单”页签点击后仍为工艺路线。原因未定位，不将直接URL当列表入口通过，所属模板列、同码与设计器入口仍NOT RUN。无业务数据写入/源码修复，累计25轮，Planning revision 28；详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 后端运行规则补充验证 / NOT READY。** 用户继续开发；正式5173现有标签地址仍为登录页，未登录或读取凭据。离线运行不加载Spring或数据库的 `EbrEngineTest`、`EbrRuntimeRulesTest`，2类9项通过（Maven 3.295秒），覆盖CPP超限提示/提交阻断及运行字段约束，Planning同步revision 27。未改源码/数据库/迁移/服务，累计25轮；真实保存、正式业务页面、完整UI与G5仍NOT RUN。详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 正式前端登录页局部只读检查 / NOT READY。** 用户要求前端页面检查；2026-10-31 00:43:21 UTC开始、00:53:21截止，00:44:17页面检查及Planning revision 26 同步结束。Chrome现有正式5173标签仍在登录页；可访问性树可识别标题、账号/密码文本框与登录按钮，1920×919下文档无横向溢出；不判定响应式或完整无障碍。不能安全证明凭据框为空，本次未截图、未读取输入值或登录；生产工艺来源列、同码及入口均NOT RUN。无源码/数据库/服务变化，累计25轮不变；完整UI及G5未完成。详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 后端隔离定向验证 / NOT READY。** 用户询问后端测试；2026-10-31 00:29:27 UTC开始、00:30:19结束并同步Planning revision 25，确认所选JUnit/Mockito不启动Spring或连接数据库后，离线Maven运行4类29项全部通过（定义规则6、DSL 6、角色schema 12、角色授权5；总4.822秒），未写DEV、不运行迁移或改源码，累计25轮不变。既往DEV回滚事务1/1为历史证据，本次未重跑；真实8080保存读回、版本冲突、正式页面及G5仍NOT RUN。见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 现有会话只读验收未运行 / NOT READY。** 用户批准限10分钟、需要登录则停止；2026-10-30 15:27:35 UTC开始、15:37:35截止，15:28:35核对及Planning同步结束、revision 24。CUAWright报告无活动会话，现有浏览器库存也未发现正式5173 MES标签；未创建会话或登录，现有其它隐含登录状态未知。正式来源识别、设计器入口和当前DRAFT/版本/权限/原值均NOT RUN，未核实可写候选；历史291/496不视为授权目标。未写数据库、改代码或操作服务，累计25轮不变。详见[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 用户批准来源识别局部实施 / NOT READY。** 用户明确批准现有工序表单子表显示同列模板名称及编码、模板ID＋表单编码复合行身份，限定一次修复及直接测试；2026-10-30 14:59:21 UTC开始、15:09:21截止，15:01:29实施验证和Planning同步结束、revision 23。正式页面已按有界批准修改，历史空名回退保留编码，入口权限/状态未改；预期RED缺少模板编码，实施后定向1文件1测试通过（10.91秒）、typecheck与diff-check退出0。该测试隔离API/路由，不证明真实页面；累计第25轮，未写数据库/迁移/操作服务。完整UI、真实保存、G3.5/G5仍未完成。见[批准记录](docs/development/decisions/PROCESS_FORM_TEMPLATE_IDENTITY_20261029.md)与[续验](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 原型验证受策略阻断 / NOT READY。** 用户批准单次限定服务切换重试；2026-10-30 12:22:19 UTC开始、12:32:19截止，原先被拒的整条切换/几何命令在创建进程前再次被自动审批以`blocked by policy`拒绝，未执行，未绕过。12:22:57只读核对正式5173仍PID23704、HTTP200，8080仍PID28928；无需恢复。只读核对及Planning同步12:23:17结束、revision 22。工具栏键盘、属性区、原型交互和几何本阶段NOT RUN，无业务代码/DB/迁移变化，累计24轮不变。详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 当前原型部分依赖版本清单 / NOT READY。** 继续原10:14:06–10:24:06 UTC窗口，本补充10:20:00开始、10:21:28完成核对和Planning同步至revision 21；静态递归记录31个本地源码、样式及包/TS配置文件SHA256并核对一致，输出[部分清单](docs/development/process-form-cpp-ebr/20261029/identity-source-inventory-20261030.json)，条目摘要`0d65104160f048f41c1492b0ee067b003d66252f84a55d6997a9599c75dc8694`；11项外部包/模块及动态引用、CSS资产、TS配置引用、插件与安装包内容未闭合，当前hash不证明旧截图版本或用户批准。历史清单未覆盖；完整依赖集、原型审查、G3.5与真实保存/G5仍未完成。未改业务代码/数据库/迁移，累计24轮不变；具体边界见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 来源识别交接缺口核对 / NOT READY。** 沿用10:14:06–10:24:06 UTC窗口，在定向验证后核对正式候选文件、既有名称/编码与读取路径、无新增迁移的有界合同及G3.5缺项；补充核对及Planning同步10:17:18结束、revision 20；未改业务代码。现有HANDOFF清单属于早期G0，不能代替当前原型或G3.5批准；历史source-evidence中的设计器hash与现源码不同，已记录版本边界，历史清单未更改。完整依赖集、原型审查和确切版本确认仍缺，真实保存需另行数据库写入授权；此前服务切换被策略拒绝，未重试。累计24轮不变。详见[交接准备](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 已批准角色配置当前源码定向验证 / NOT READY。** 用户已解除先前只读限制，授权按基线改源码和运行非数据库写入测试；不含数据库写入/迁移、发布或被拒服务切换。2026-10-30 10:14:06 UTC开始，普通UI截止10:24:06，验证及Planning同步10:16:05结束、revision 19；核对设计锁及当前源码后，角色设计器/控件/模型单测3文件15项通过（11.04秒，Canvas及HTTP隔离），typecheck退出0；无新源码修复，累计24轮不变。eBR类型已有模板名称/编码，但工艺表格来源识别的精确原型与G3.5尚未批准，不能提前正式接入；真实持久化、完整UI和G5仍NOT RUN。详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 列表12图限定静态复核 / NOT READY。** 用户批准最多10分钟，2026-10-30 05:04:48 UTC开始、05:14:48截止，05:06:41完成审查及Planning同步至revision 17；已原始分辨率查看工艺列表default/no-match/reset四视口12图并逐图记录。查询标签和输入在图中同行，无结果有说明，重置图有结果；900/375空态留白较大待进一步核对，不能由静图证明交互、无障碍或实际恢复。没有运行浏览器/validator、修改代码、数据库、迁移或断言，累计修复24轮；审查manifest及真实保存、设计锁、G3.5/G5仍未完成。[逐图记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / G2证据整理 / NOT READY。** 2026-10-30 04:17:25 UTC开始，截止04:27:25，04:24:38完成审查及Planning同步；按业务产品经理与Planning接续同一任务和24轮记录，恢复入口列明基线、批准、写入边界及压缩后重读清单。静态索引57/57文件存在，另查看工序表单四种状态、新建模板两种状态及工艺列表查询结果、各四视口共28张原图；空态纵向空间、375页签可达性及错误提示焦点待实测。manifest预期102单元、逐图登记0，validator复验退出1；源码核对确认来源识别尚未正式接入。Planning同步至revision 16；前次5173服务切换遭策略拒绝，未重试或绕过。未改业务代码、数据库或迁移；完整审查、真实保存、原型版本确认、G3.5/G5仍未完成。见[恢复与证据记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 局部视觉复核 / NOT READY。** 本次原图查看表单设计、CPP空态与新建三个状态各四视口，共12张；记录小屏工具栏溢出和属性区操作距离待核实，不能仅凭截图判定交互失败或完成视觉审查。计划临时切换5173原型测量时被系统自动审批拒绝，未绕过；正式5173和8080仍在运行。Planning同步至revision 13后发现超过普通UI预算31秒，停止新增审查测试并记录。未修改业务代码、数据库或迁移，累计修复24轮不变；完整逐图、交互/几何、设计锁、G3.5/G5仍未完成，详见[局部复核](docs/development/process-form-cpp-ebr/20261029/designer-partial-review-20261030.md)。
+
+**最新：IN PROGRESS / 原型重试稳定态已验证 / NOT READY。** 用户要求继续并完成重试及验收；当前原型1440/1280/900/375实测加载动画先出现再消失，模板B行可定位并进入对应设计器，4张原图已查看，均为内存数据。首次稳定验证的375截图仍含加载动画，第22轮仅补充等待动画出现后消失，保留原断言及原始截图；后续原图无动画。审查发现原型列表无结果缺少说明、900/375操作列不可见，第23轮加空态及窄屏行布局，第24轮将断点覆盖900，四视口定向检查通过；重新采集57张并保留旧证据。原型build及专用入口build退出0；未改正式业务页、数据库或迁移。累计24轮未清零。建立`IN PROGRESS`审查清单，validator退出1：逐图覆盖、完整交互、几何、对抗复查等未完成；不报原型PASS/G5/READY。首次自动阶段未及时记录起点且超过普通UI 10分钟预算，发现后停止新增修改和测试并恢复正式5173；详见[本轮记录](docs/development/process-form-cpp-ebr/20261029/retry-stable-audit-20261030.md)。
+
+**最新：IN PROGRESS / 第21轮采集完成但恢复稳定态未证 / NOT READY。** 用户批准最多10分钟、一次限定脚本定位修复；16:13:55–16:19:30 UTC（截止16:23:55）。错误态按钮实际DOM为 `<span>重 试</span>`，计算名称“重 试”；原“重试”角色定位0个，实际精确名称1个、可见且启用。第21轮只将同一采集脚本的重试定位限定于错误提示内实际名称；脚本退出0，生成57张截图和索引，无拦截请求/pageerror。四视口均出现重试后的列表，但1440和375原图仍有加载动画，未验证加载结束的稳定恢复，不得称该状态完整通过；本阶段只获一次修复授权，停止进一步补丁。截图不是审查manifest，完整逐图审查/validator、原型设计锁、真实5173/8080保存及G3.5/G5仍未完成。累计21轮不清零，详见[第21轮记录](docs/development/process-form-cpp-ebr/20261029/round21-retry-diagnosis.md)。
+
+**最新：STOP: BLOCKED / 第20轮未通过 / NOT READY。** 继续原任务；CPP/eBR MockMvc受控保存、读取、幂等重放、版本409和权限403在真实DEV事务内回归1/1通过，专属记录回滚，Flyway69验证、无迁移。原型截图采集首次“查询”定位失败，第20轮仅调整其及重置按钮的空白字符定位；重跑进入错误态后“重试”按钮定位超时，完整截图矩阵及manifest未生成。累计20轮未清零，停止任何第21轮修复；未修改验收断言、阈值、跳过条件或业务合同。所有轮次、失败、已排除原因和建议限定续诊范围见[第20轮停止报告](docs/development/process-form-cpp-ebr/20261029/round20-stop-report.md)。真实浏览器业务保存、确切原型锁、完整UI审查和G3.5/G5仍未完成。正式5173已恢复、HTTP200；8080保留。
+
+**最新：IN PROGRESS / 受控API事务回归通过 / NOT READY。** 在既有唯一事务回滚夹具中，增加MockMvc经正式安全过滤与控制器的CPP/eBR保存和读取：成功保存并读回规则与签署/复核角色ID；同幂等键重放返回相同结果，旧版本新键返回409、无查看权限返回403，版本保持不变。专属业务/角色、审计及幂等记录回滚后均为零；载荷checker通过，定向1/1通过（13.88秒），Flyway验证69且无迁移。此为进程内MockMvc与真实数据库事务，不是实际8080网络或浏览器保存。累计修复19轮未变；实体手机、完整原型/UI审查、真实5173/8080保存重读、G3.5/G5仍未完成。详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 触屏模拟插入定向验证通过 / NOT READY。** 用户批准限定续修；开始2026-10-29 14:34:27 UTC，截止14:44:27，验证和服务恢复结束14:39:20。OP02首次选择引发两个异步Canvas挂载，原触屏点击第一个实例、插入引用第二个实例；第19轮只为异步挂载增加代次校验和卸载失效。原触屏断言、鼠标有效选区插入与未保存提示、无选区保护均在隔离原型通过；OP01/OP02挂载各为一个实例，前端3文件15测试及build通过。累计19轮未清零；结果不代表实体手机、真实业务保存或整体验收，完整UI审查、原型版本确认、G3.5/G5仍未完成。详情见[触屏限定续修记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：BLOCKED / 触屏选区未解决 / NOT READY。** 第18轮修复既有设计器无有效选区时生成孤立字段：现提示选择插入位置，隔离复测无选区字段3→3，鼠标有效选区插入字段及画布内容通过。375触屏模拟左右滑动通过，但原触屏点击画布后插入仍不成功；修复前为字段增加而画布无字段，修复后为字段未增加，同一触屏目标未达成，按§6A重复失败停止。3文件/15项前端测试通过、build退出0，未修改验收断言；累计18轮。不是实体手机测试，触屏编辑、完整UI审查、真实浏览器业务保存及G3.5/G5未完成。详见[失败与根因证据](docs/development/process-form-cpp-ebr/20261029/canvas-touch-selection-failure.md)。
+
+**最新：IN PROGRESS / 原型新建闭环局部验证 / NOT READY。** 原型新建模板原先自动填入表单与字段，与现有正式流程不符；第16轮改为先创建空模板、再由用户新增表单，保持同一模板多表单和模板编码去重。隔离浏览器验证新增、关联OP02、保存后结果定位与重开；均为内存数据，无业务写请求。第17轮修正新建页操作与表单右边界对齐，四视口DOM和截图局部复核通过；原型类型检查和独立入口构建退出0。当前累计17轮，不得清零；完整UI审查、Canvas手机触屏、真实浏览器业务保存重读及G3.5/G5仍未完成。CPP/角色后端数据库事务回滚验证保持通过，详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 原型体验整改 / NOT READY。** CPP及签署/复核角色配置真实数据库事务回滚往返1/1通过，Flyway校验69、无新增迁移；只读401定位为认证刷新前首次身份请求。原型补采36张截图（9状态×4视口，仍非完整覆盖），部分原图自审发现窄屏CPP字段截断和Canvas横向内容缺少提示；第14轮修正CPP条件行后四视口几何复测及截图复查，第15轮增加画布横向滚动提示与键盘可聚焦滚动，375实测可滚动。Canvas仍无法在手机宽度完整同屏显示，触屏操作、完整矩阵及G5尚未验证；仅记录局部自审，不报完整PASS。定向3文件15测试、隔离交互脚本及前端build通过。累计修复15轮，详情见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / CPP与角色数据库往返已验证 / NOT READY。** 401定位为身份首次读取401后刷新200、再次读取身份200；本次只读链路到工艺详情成功，未观察业务接口失败。新增独立事务回滚夹具，以已通过业务载荷检查的自然业务值建立专属记录；CPP规则、签署及复核角色ID和快照可保存读回，回滚后核对模板/工艺/产品/物料/单位/角色记录均不存在。最终定向集成1/1通过、13.60秒，Flyway校验69项、当前V069且无迁移。首轮测试未找到载荷文件，修正模块工作目录相对路径后通过，累计修复13轮；既有EbrIT未运行、未改断言。真实浏览器业务保存重读、完整UI审查、G3.5/G5仍未完成。详情见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 画布误报定向修复 / NOT READY。** F-005已在既有设计器内增加初始化画布比对，原型隔离回归确认不编辑切CPP不误报、实际画布输入及新增字段仍提示未保存、同码不同模板内存隔离；请求守卫未记录业务写请求。修复前失败及复测证据保留，正式定向3文件/15测试通过、build退出0；真实5173/8080模板496只读切CPP后关闭可返回，浏览器记录一条401待定位。累计修复12轮；真实保存重读、完整UI审查、G3.5和G5仍未完成，不能报READY或ACCEPTED。无新增迁移或数据库业务写入；详情见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 新发现待修复 / NOT READY。** 用户继续推进；Playwright以禁止非GET/HEAD及非本地请求的隔离策略，验证原型CPP内存保存重开、放弃未保存修改和工艺编辑后的路线/表单入口更新；不能代表真实DB保存。进一步发现F-005：未修改时从表单切到CPP后关闭，默认Canvas被捕获为变更并弹未保存提示；已有复现脚本和失败日志，正式页面是否同样受影响待真实只读确认。累计修复11轮未变，未改断言；完整原型审查、G3.5和正式G5未完成。[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。
+
+**最新：IN PROGRESS / 原型局部验证 / NOT READY。** 用户明确要求持续开发、不再逐阶段请求批准；既有有界模板来源方向和修复计数保留。原型接入正式Canvas/CPP设计器及工艺编辑源码，接口改为内存数据；新增移动导航、未保存离开保护，完善各工序、IPC与参数入口。正式工艺页和数据库未改；原型不证明真实保存。mes-demo typecheck及专用原型入口构建均退出0，真实浏览器验证OP02与CPP入口、工艺编辑/取消及部分视口；修正移动端编辑字段挤压和模板名称裁切。累计修复按保守口径11轮，详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。完整设计器保存/重读、错误恢复、状态/视口矩阵、原图九维审查、manifest、G3.5及真实5173/8080 G5均未完成，禁止宣称完成或验收；Planning远端传输失败，待恢复同步。无新增迁移或业务写入。
+
+**最新：原型第二阶段 IN PROGRESS / NOT READY。** 用户明确批准10分钟继续，13:55:17起；沿现行T4及已批准来源识别方向，复用原型导航，补工艺列表查询/重置、返回、页签、新建入口/必填提示，未擅用包含越界动作/版本的旧CPP原型。mes-demo构建通过，八组知识查询退出0；原截图900/375操作列裁切，1轮修复为窄屏记录组，前后4视口图片保存，肉眼复查局部操作可见；累计修复5轮（历史4+本阶段1）。原型hash `D7189AED1FE6E842EDF6C6EB32B611E2EB01AFA6E0C8A9E89D6970FEC8AAE44B`，未获用户版本批准。Canvas设计器、其他工序/页签、工艺编辑入口及移动导航仍未完成；surface×state×viewport完整审查/manifest未完成，不能报PASS或正式集成。详见[原型设计说明](docs/development/process-form-cpp-ebr/20261029/identity-phase2-design-notes.md)及[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。单一5173原型检查后正式前端恢复PID33428；无正式业务源码/DB/迁移修改。下一阶段应继续在已批准方向内完善，累计轮次不清零。
+
+**最新：局部原型草稿 / IN PROGRESS / NOT READY。** 用户已批准“模板名称+编码、模板ID+表单编码”有界方向，设计确认记录已建；本机mes-demo新建局部Vue草稿，构建通过，真实浏览器只读验证第二行进入对应模板及返回、只读状态可达。草稿源hash FC8AAF4285D5376648139D6BB6F83A4017A6F65BB7250C0CB6C65A68EE46AB0C；局部截图自审发现导航与正式UI不一致、相关非范围按钮及完整设计器未实现，完整视口/状态/知识查询及G2 manifest NOT RUN，未获确切版本批准，禁止正式集成。复用单一5173暂时查看mes-demo后，正式前端已恢复PID22696；backend8080保留。普通UI10分钟预算达到，暂停新修改/测试，任务累计原4修复轮保留。详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。无新增迁移、业务数据写入或正式页面源码修改；下一阶段需明确预算并继续完善原型及完成完整审查。
+
+**用户批准方向：PROTOTYPE PENDING。** 用户明确批准工序表单列表展示现有eBR模板名称和编码、使用模板ID+表单编码区分行；具体布局和精确原型尚未批准，见[方向记录](docs/development/decisions/PROCESS_FORM_TEMPLATE_IDENTITY_20261029.md)。不得恢复旧工艺版本审批，也不得以方向批准代替DESIGN LOCK/G3.5或正式集成授权。其余状态保留，历史累计修复4轮不清零。
+
+**最新只读根因：IN PROGRESS / DESIGN REVIEW REQUIRED。** 用户继续推进；工艺1的OP01两行实际分别进入模板496和291，均为V1草稿，故是不同模板的同码表单，不是重复投影。当前列表缺少模板名称/编码，用户无法区别来源；已形成[有界产品候选](docs/development/process-form-cpp-ebr/20261029/F004-template-identity-proposal.md)，候选复用既有模板名称和编码及模板ID+表单编码行身份，尚未获具体设计确认，未改正式页面。现有EbrIT实际fixture片段经业务载荷checker退出1，命中模板名称`Test eBR template`；未对共享DEV运行该fixture，真实保存重读与G5仍NOT RUN。本轮仅记录证据/提案，业务源码/数据库/迁移未改，累计修复4轮保留；Planning先恢复revision4后待同步。
+
+**本次续验：IN PROGRESS / LIVE READ-ONLY / G5 NOT RUN。** 用户“继续开发”，沿用同一任务及累计4轮。DEV只读历史核对最高V069/69项/无待执行，当前源码后端package 21.019秒通过；启动同源8080/5173，Flyway校验69成功且无需迁移，后端health UP。CUAWright真实浏览器登录200：工艺1→工序表单→模板496对应工序→角色规则→CPP可访问；只读查看模板详情可见提交审批按钮，尚未验证自然返回路径及受控写入。实际列表OP01两行名称/编码/版本/字段数完全相同，F-004定位歧义已真实观察，重复投影与不同模板归属尚待确认，暂未擅自增加字段或改页面。既有EbrIT fixture在共享DEV写入占位式业务值，未完成载荷checker前未运行；真实保存重读、角色窄权限、完整矩阵、截图审查、G5集成及用户验收均NOT RUN。详见[续验记录](docs/development/process-form-cpp-ebr/20261029/continuation.md)。本轮未改业务源码、未运行迁移/写业务数据/签名审批发布；当前前后端服务运行，Planning resume连接失败，本轮尚未同步。
+
+**最新：IN PROGRESS / SOURCE FIX VERIFIED / G5 NOT RUN。** 用户再次明确批准最多10分钟限定诊断修复；10:14:26–10:19:47内实测角色input计算名为“签署或复核角色 请选择角色”，将同行容器与独立关联label分离后名称定位通过。原测试随后发现全局选项文字定位歧义（已选值/多个下拉同名）；仅按当前输入aria-controls限定选项菜单，11条原expect逐行一致，未削弱验收标准。3 suites / 15tests全部通过（0失败/跳过，6.48s），npm run build退出0（含vue-tsc；Vite17.05s，仅既有chunk警告），git diff --check退出0。日志role-stage3-name-diagnostic.log、role-stage3-green.log、role-stage3-final.log、role-stage3-build.log及修改前测试均保留，详见同一[完整记录](docs/development/process-form-cpp-ebr/20261029/analysis.md)。累计本轮4次修正：两次生产标签、两次测试构造/操作定位；历史及前两阶段失败不清零。已改业务源码仅DefinitionDesigner.vue/RolePicker.vue，角色ID校验、冻结历史、API/权限/布局合同不变。真实5173/8080保存重读、完整UI审查/G5和其余CPP/eBR候选仍NOT RUN，不报READY或ACCEPTED。没有新迁移、服务启动、数据库写入、签名、审批、发布、提交推送。以下暂停描述作为前阶段事实保留，不再表示等待此前已获得的授权。
+
+最新限定续修：用户直接批准下一阶段；扩大原失败DOM输出确认aria-label仅落Ant外层容器，实际combobox缺同名名称。RolePicker一次唯一ID/label关联修复后原定向仍14/15、退出1（role-stage2-green.log），同签名复现再次按§6A停止，当前等待用户批准“最多10分钟、先测实际可访问名称再修标签”的范围；未改断言/布局/角色ID合同。累计本轮夹具1+标签修复1，历史不清零；第二阶段尚未新typecheck/build/G5，不沿用前次类型检查冒充新验证。Planning连接恢复并同步revision3，早前传输失败保留。当前仍IN PROGRESS / PAUSED / NOT READY。
+
+**IN PROGRESS / ROLE CONTROL REPAIR PAUSED / NOT READY。** 用户要求使用business-product-manager推进生产工艺，明确聚焦“工序动态表单、CPP与eBR配置”，纳入Planning，并直接授权“修改不符合的地方”。已建立Planning计划`0df9356d-675b-4f37-8b7d-948948c8d694`（初始保存revision2，后续同步MCP传输错误，最新事实留存在本索引及仓库证据）；形成[G0规格/发现及暂停报告](docs/development/process-form-cpp-ebr/20261029/analysis.md)、完整规格、RTM、双设计任务包与ownership ledger。资料结构、RTM、双包、文件保真、ownership五项校验通过，仅证明资料自洽，不证明G0/功能/体验验收。整包G0仍IN REVIEW，G3.5/正式重设计均未获批准。
+
+源码确认角色输入仍写legacy requiredRole而保存要求requiredRoleId；纯内存两例复现拒绝编码/接受有效ID。按既有ROLE_ID_SIGNING_DESIGN_LOCK第5项已批准的同位替换例外，DefinitionDesigner接入现有RolePicker及ebrRoleOptions，保留冻结显示、搜索响应防乱序、加载失败重试和原ID保存校验；未改API/权限/数据库或历史证据。新增组件用例先3/3 RED；首次实现14/15，一轮仅调整测试输入响应式构造（原断言不变）后仍14/15，失败签名为角色combobox按“签署或复核角色”名称不可定位，因此按§6A提前停止后续补丁/测试，待用户批准限定下一阶段诊断。typecheck退出0；修复计数本轮夹具1，历史不清零。普通UI预算09:49:01起十分钟，没有自行延长。完整日志在同目录role-red.log、role-green.log、role-green-fixture.log、typecheck.log；未宣称根因已经证实。
+
+首次5173只读访问ERR_CONNECTION_REFUSED，8080/5173/5174未监听；本轮真实页面/API保存、服务启动、build、完整G5及数据库持久化均NOT RUN。无新迁移、业务数据写入、签名、审批、发布、提交或推送。CPP两级条件组与“嵌套”文义、模板生命周期可达性/多版本聚合为待验证项，未擅自扩充合同；未批准整页工艺原型仍不集成。后续从同一证据和累计计数继续，不重复实施历史ACCEPTED任务。
+
 ## 物料收货正式开发与收尾 — 2026-10-19
 
 **CURRENT: DEVELOPMENT CLOSEOUT IN PROGRESS / 正式原辅料库收货→逐批请验→PDF→附件下载链已通过 / 尚未整体最终验收。** 承接原型直接开发授权及年月四位批号规则，不重做原型。本轮在正确原辅料库(ID1)新建SH-20261019-231415(ID485)，两批2026100003/0004已实际保存、刷新、编辑检查并确认；物料批459/460保持待验/BLOCKED。第一批常规、第二批加急请验220/221均真实DRAFT、采用已批准质量标准版本22；修复原型遗留HIGH值与正式URGENT合同不符，从既有schema派生选项。真实已发布模板69生成46,968字节PDF，预览/下载/附件132上传关联与下载SHA256一致。旧466仓库/确认事实保持不变。数量末尾零、UTC界面显示、历史到货空值、操作td背景、空态可见性、横滚提示、请验错误聚焦已修复；不改payload含义。后端隔离回滚21/21、最新前端3文件22/22、正确仓库实时收货9/9、文档链10/10、加急3/3、定向UI17/17及最新build通过，服务器最终只读校验通过。当前V066无新迁移，org1编号规则启用且不重置，未改角色/放行/发布模板历史，未提交Git。**剩余：模板69仍旧四列且原UTC日期，未完整包含生产企业/生产批号；需按既有追加版本流程对齐。完整正式G5/更广并发角色回归及用户最终验收未完成，不冒称ACCEPTED。** 见[本轮实际收尾](docs/review/RECEIPT_CLOSEOUT_20261019.md)、[编号批准](docs/development/decisions/RECEIPT_NUMBER_YYYYMM4_20261019.md)。所有历史失败/报告和其他工作区改动保留。

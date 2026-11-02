@@ -54,3 +54,7 @@ Obsolete CI expectations of audit appends/stale-version rejection in basic maint
 ## Approved historical canonical compatibility clarification — 2026-10-11
 
 The Design Authority approved the bounded [historical schema evidence and controlled new revision design](../development/decisions/PRODUCT_FINISHED_EBR_COMPATIBILITY_REVISION_AUTHORIZATION_20261011.md). Only a retained archival form whose matching published schema demonstrably lacked canvasDocument may omit the newly reconstructed null in canonical input. Explicit null and real canvas remain fully hashed; saved hashes, historical definitions, signatures, bindings and independent approval remain unchanged. New revisions retain direct current-process binding and require normal independent publication. No schema/API/permission/UI change or migration. Runtime outcomes remain only MES_TASKS.md.
+
+## Approved operation type supplement — 2026-11-02
+
+Human-approved DCP-PROCESS-OPERATION-TYPE-001 adds only the nullable, persisted PRODUCTION/IPC operation type. [Bounded contract](PROCESS_OPERATION_TYPE_CONTRACT.md) defines database/domain/API/UI/permission/state/snapshot/RTM/migration/consumer behavior. Legacy NULL stays unmarked; missing/null writes preserve existing values. Per-operation gates and historical content remain unchanged. No process revision lifecycle is restored; task status remains only MES_TASKS.md.

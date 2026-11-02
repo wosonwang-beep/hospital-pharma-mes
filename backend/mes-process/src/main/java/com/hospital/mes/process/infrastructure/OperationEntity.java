@@ -9,6 +9,8 @@ public class OperationEntity extends ScopedEntity {
  public String getOperationCode(){return operationCode;} public void setOperationCode(String v){operationCode=v;}
  private String operationName;
  public String getOperationName(){return operationName;} public void setOperationName(String v){operationName=v;}
+ private String operationType;
+ public String getOperationType(){return operationType;} public void setOperationType(String v){operationType=v;}
  private Integer sequenceNo;
  public Integer getSequenceNo(){return sequenceNo;} public void setSequenceNo(Integer v){sequenceNo=v;}
  private String requiredRole;

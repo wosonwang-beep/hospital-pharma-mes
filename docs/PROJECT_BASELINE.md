@@ -172,3 +172,7 @@ MAIN DESIGN APPROVED / IMPLEMENTATION IN PROGRESS。来源：主对话01a115d2-8
 ## Approved bounded role-ID signing supplement — 2026-10-11
 
 FINAL BASELINE COMPLETE v1.0.23 and historical releases remain unchanged. The approved [minimal role-ID design](development/DCP-ROLE-ID-SIGNING-001-MINIMAL-DESIGN-20261011.md), [six constraints / DESIGN LOCK](development/decisions/ROLE_ID_SIGNING_DESIGN_LOCK_20261011.md), and [bounded database/domain/API/UI/GxP contract](architecture/ROLE_ID_SIGNING_CONTRACT.md) authorize code and an unapplied additive migration only. Current role IDs become rule identity, signer remains user ID, and legacy published canonical/evidence is immutable. No new global role/organization model, permissions, account rename or signature removal. [API supplement](api/role-id-signing.openapi.yaml) and [RTM](development/ROLE_ID_SIGNING_RTM_20261011.csv) carry the affected contracts. No authoritative frozen-release pointer is switched here; DEV migration/deployment/conversion remains a separate coordinated phase. Runtime status is only MES_TASKS.md.
+
+## 2026-11-02 工序类型真实保存补充
+
+用户明确批准 [DCP-PROCESS-OPERATION-TYPE-001](development/decisions/DCP-PROCESS-OPERATION-TYPE-001-APPROVED.md)，仅增加PRODUCTION/IPC可选持久化属性；[合同](architecture/PROCESS_OPERATION_TYPE_CONTRACT.md)与当前定义API补充保持一致。历史未标注不回填，已有逐工序检验/签名/前置关系和冻结证据不变，不恢复旧工艺版本审批。此为v1.0.23有界补充，非整页原型或全系统验收；运行状态仍只MES_TASKS.md。

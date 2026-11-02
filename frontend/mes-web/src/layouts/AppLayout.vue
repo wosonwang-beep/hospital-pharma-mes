@@ -22,6 +22,16 @@ import {
 const mobileQuery = window.matchMedia('(max-width: 900px)')
 const mobile = ref(mobileQuery.matches)
 const collapsed = ref(mobile.value)
+const mobileNavigationOpen = ref(false)
+const mobileNavigationButton = ref<{ $el: HTMLElement } | null>(null)
+function closeMobileNavigation(event: KeyboardEvent) {
+  if (event.key !== 'Escape' || !mobileNavigationOpen.value) return
+  event.preventDefault()
+  mobileNavigationOpen.value = false
+  mobileNavigationButton.value?.$el.focus()
+}
+onMounted(() => window.addEventListener('keydown', closeMobileNavigation, true))
+onUnmounted(() => window.removeEventListener('keydown', closeMobileNavigation, true))
 function syncMobile(event: MediaQueryListEvent) { mobile.value = event.matches; if (event.matches) collapsed.value = true }
 const route = useRoute()
 const router = useRouter()
@@ -61,7 +71,7 @@ watch([selectedKey, navigationNodes, collapsed], ([key, nodes, isCollapsed]) => 
 
 function navigate({ key }: { key: string }) {
   const destination = menuLeaves(navigationNodes.value).find(item => item.id === key)?.path
-  if (destination) void router.push(destination)
+  if (destination) { mobileNavigationOpen.value = false; void router.push(destination) }
 }
 async function logout() {
   loggingOut.value = true
@@ -88,8 +98,8 @@ function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router
     <a-layout class="main-shell" :class="{ 'main-shell-collapsed': collapsed }">
       <a-layout-header class="header" :class="{ 'header-collapsed': collapsed }">
         <div class="header-title" :class="{'dashboard-header-title':dashboard}">
-          <a-dropdown placement="bottomLeft" class="mobile-navigation" :trigger="['click']">
-            <a-button type="text" aria-label="打开导航"><AppstoreOutlined /></a-button>
+          <a-dropdown v-model:open="mobileNavigationOpen" placement="bottomLeft" class="mobile-navigation" :trigger="['click']" :auto-focus="true">
+            <a-button ref="mobileNavigationButton" type="text" aria-label="打开导航" aria-haspopup="menu" :aria-expanded="mobileNavigationOpen"><AppstoreOutlined /></a-button>
             <template #overlay>
               <a-menu :selectedKeys="selectedKeys" @click="navigate">
                 <DatabaseMenu :nodes="navigationNodes" />

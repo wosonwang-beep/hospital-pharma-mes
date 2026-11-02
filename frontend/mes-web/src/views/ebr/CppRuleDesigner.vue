@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed,onMounted,ref,watch} from 'vue'
+import {computed,onMounted,ref,useId,watch} from 'vue'
 import {DeleteOutlined,PlusOutlined} from '@ant-design/icons-vue'
 import {message} from 'ant-design-vue'
 import {api,type Page} from '../../api/http'
@@ -12,6 +12,7 @@ type CppGroup={id:string;logic:Logic;conditions:CppCondition[]}
 type CppConfig={kind:'CPP';name:string;description:string;rootLogic:Logic;groups:CppGroup[];actions:string[]}
 const props=defineProps<{definition:EbrDefinition;form:EbrForm|null;editable:boolean}>()
 const auth=useAuthStore()
+const inputId=useId()
 const selectedRuleCode=ref('')
 const fieldKeyword=ref('')
 const config=ref<CppConfig>(blankConfig())
@@ -188,15 +189,17 @@ onMounted(async()=>{
         </div>
         <div v-for="(g,gi) in config.groups" :key="g.id" class="condition-group">
           <div class="group-head">
-            <div><b>条件组 {{gi+1}}</b><a-select v-model:value="g.logic" :aria-label="'条件组'+(gi+1)+'逻辑'" :disabled="!editable" size="small" style="width:118px" :options="[{value:'AND',label:'组内 AND'},{value:'OR',label:'组内 OR'}]"/></div>
+            <div><b>条件组 {{gi+1}}</b><label class="cpp-accessible-label" :for="`${inputId}-${g.id}-logic`">{{'条件组'+(gi+1)+'逻辑'}}</label><a-select :id="`${inputId}-${g.id}-logic`" v-model:value="g.logic" :disabled="!editable" size="small" style="width:118px" :options="[{value:'AND',label:'组内 AND'},{value:'OR',label:'组内 OR'}]"/></div>
             <div><a-button type="link" :disabled="!editable" @click="addCondition(g)">+ 条件</a-button><a-button v-if="config.groups.length>1" type="link" danger :disabled="!editable" @click="removeGroup(gi)">删除组</a-button></div>
           </div>
           <template v-for="(c,ci) in g.conditions" :key="c.id">
             <div v-if="ci>0" class="logic-chip">{{g.logic}}</div>
             <div class="condition-row">
               <span class="condition-no">{{ci+1}}</span>
-              <a-select class="condition-field" v-model:value="c.fieldCode" :aria-label="'条件'+(ci+1)+'字段'" :disabled="!editable" :options="cppFields.map(f=>({value:f.fieldCode,label:f.label}))" @change="normalizeOperator(c)"/>
-              <a-select class="condition-operator" v-model:value="c.operator" :aria-label="'条件'+(ci+1)+'运算符'" :disabled="!editable" :options="operators(field(c.fieldCode))"/>
+              <label class="cpp-accessible-label" :for="`${inputId}-${c.id}-field`">{{'条件'+(ci+1)+'字段'}}</label>
+              <a-select :id="`${inputId}-${c.id}-field`" class="condition-field" v-model:value="c.fieldCode" :disabled="!editable" :options="cppFields.map(f=>({value:f.fieldCode,label:f.label}))" @change="normalizeOperator(c)"/>
+              <label class="cpp-accessible-label" :for="`${inputId}-${c.id}-operator`">{{'条件'+(ci+1)+'运算符'}}</label>
+              <a-select :id="`${inputId}-${c.id}-operator`" class="condition-operator" v-model:value="c.operator" :disabled="!editable" :options="operators(field(c.fieldCode))"/>
               <a-input class="condition-value" v-model:value="c.value" :aria-label="'条件'+(ci+1)+'比较值'" :disabled="!editable" placeholder="比较值"/>
               <span class="condition-unit">{{unit(field(c.fieldCode))||'—'}}</span>
               <a-button class="condition-delete" danger type="text" :aria-label="'删除条件'+(ci+1)" :disabled="!editable||g.conditions.length<=1" @click="removeCondition(g,ci)"><DeleteOutlined/></a-button>
@@ -246,6 +249,7 @@ onMounted(async()=>{
 </template>
 
 <style scoped>
+.cpp-accessible-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .cpp-rule-designer{display:grid;grid-template-columns:270px minmax(640px,1fr) 250px;gap:12px;min-height:720px;padding:12px;background:#f5f8fc}
 .cpp-fields,.cpp-help{padding:14px;background:#fff;border:1px solid var(--mes-ui-border);border-radius:8px}.cpp-help{display:flex;flex-direction:column;gap:10px}
 .cpp-builder{padding:0;min-width:0}.builder-head,.step-title,.group-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -263,7 +267,7 @@ onMounted(async()=>{
 @container ebr-designer (max-width:900px){
  .cpp-rule-designer{grid-template-columns:minmax(0,1fr);min-height:0}.cpp-fields{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.cpp-help{grid-column:auto;display:flex;border-left:0;border-top:1px solid var(--mes-ui-border)}
  .cpp-builder{padding:10px 8px}.builder-head,.step-title,.group-head{align-items:flex-start;flex-wrap:wrap}.cpp-step{padding:12px 10px 14px 44px}.step-badge{left:10px;top:12px}
- .condition-row{grid-template-columns:28px 76px minmax(0,1fr);grid-template-areas:'no field del' '. op value' '. unit unit';gap:7px}.condition-no{grid-area:no}.condition-field{grid-area:field;min-width:0}.condition-operator{grid-area:op;min-width:0}.condition-value{grid-area:value;min-width:0;width:100%}.condition-unit{grid-area:unit;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:right}.condition-delete{grid-area:del;justify-self:end}
+ .condition-row{grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 34px;grid-template-areas:'no field field del' '. op value value' '. unit unit unit';gap:7px}.condition-no{grid-area:no}.condition-field{grid-area:field;min-width:0}.condition-operator{grid-area:op;min-width:0}.condition-value{grid-area:value;min-width:0;width:100%}.condition-unit{grid-area:unit;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:right}.condition-delete{grid-area:del;justify-self:end}
  .action-grid{grid-template-columns:1fr}.inline-row>span{flex-basis:72px}.business-preview{font-size:15px;padding:12px}.field-list{max-height:360px}
 }
 </style>

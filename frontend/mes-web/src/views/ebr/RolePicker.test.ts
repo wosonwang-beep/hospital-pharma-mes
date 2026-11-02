@@ -5,6 +5,18 @@ import {definitionForSave,emptyDefinition,prepareDraftRoleIds,frozenRoleLabel} f
 afterEach(cleanup)
 const options=[{id:'290',code:'MES_QC_REVIEWER',name:'QC复核岗位',enabled:true},{id:'291',code:'MES_QA',name:'QA岗位',enabled:false}]
 describe('role ID control',()=>{
+ it('keeps the saved Chinese snapshot visible when current options fail',()=>{
+  const view=render(RolePicker,{props:{editable:true,options:[],roleId:'290',codeSnapshot:'OLD',nameSnapshot:'原复核岗位'}})
+  expect(screen.getByText('原复核岗位（OLD）')).toBeTruthy()
+  expect(view.emitted()['update:roleId']).toBeUndefined()
+ })
+ it('retains a newly selected role label across a filtered or failed option reload',async()=>{
+  const view=render(RolePicker,{props:{editable:true,roleId:'290',codeSnapshot:'OLD',nameSnapshot:'原复核岗位',options:[...options.map(r=>({...r,enabled:true}))]}})
+  await view.rerender({roleId:'291',options:[]})
+  expect(screen.getByText('QA岗位（MES_QA）')).toBeTruthy()
+  expect(screen.queryByText('原复核岗位（OLD）')).toBeNull()
+  expect(view.emitted()['update:roleId']).toBeUndefined()
+ })
  it('shows Chinese names and emits the selected ID',async()=>{
   const view=render(RolePicker,{props:{editable:true,options}})
   await fireEvent.mouseDown(screen.getByRole('combobox'))

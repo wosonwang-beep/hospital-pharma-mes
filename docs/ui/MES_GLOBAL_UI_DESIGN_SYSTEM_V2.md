@@ -75,6 +75,8 @@ Approved menu prototype reference2026-10-10: query/list headings share full-widt
 
 ## 7. Status semantics
 
+Approved bounded primary-blue accessibility supplement (2026-11-02): [exact approval and scope](../development/decisions/PROCESS_G5_A11Y_SUPPLEMENT_20261102_APPROVED.md). Primary normal `#1668dc`, hover `#0958d9`, active `#003eb3`; CSS and Ant theme/portals share these exact values. Normal-sized text and white-on-primary labels must meet 4.5:1 against their actual backgrounds. This changes only primary blue values; T1–T6, typography, spacing, heights, semantic meanings and all business/GxP contracts remain unchanged. Original historical release evidence retains its original colors.
+
 Canonical visual semantics:
 
 - Blue: primary action / active navigation / informational state.

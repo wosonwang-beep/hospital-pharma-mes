@@ -4,7 +4,9 @@
  */
 :root {
   --mes-ui-font: Inter, system-ui, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
-  --mes-ui-primary: #1677ff;
+  --mes-ui-primary: #1668dc;
+  --mes-ui-primary-hover: #0958d9;
+  --mes-ui-primary-active: #003eb3;
   --mes-ui-success: #279b62;
   --mes-ui-warning: #d48806;
   --mes-ui-danger: #cf3444;
@@ -94,8 +96,11 @@
 #app .ant-card-body { padding: var(--mes-ui-space-4) var(--mes-ui-space-5); }
 #app :is(.ant-btn,.secondary-button,.primary-button) { min-height: 32px; font-size: 14px; border-radius: 6px; box-shadow: none; }
 #app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous) { background: var(--mes-ui-primary); border-color: var(--mes-ui-primary); }
-#app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous):hover { background: #4096ff; border-color: #4096ff; }
+#app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous):hover { background: var(--mes-ui-primary-hover); border-color: var(--mes-ui-primary-hover); }
+#app .ant-btn-primary:not(:disabled):not(.ant-btn-dangerous):active { background: var(--mes-ui-primary-active); border-color: var(--mes-ui-primary-active); }
 #app .ant-btn-link { color: var(--mes-ui-primary); }
+#app .ant-btn-link:not(:disabled):not(.ant-btn-dangerous):hover { color: var(--mes-ui-primary-hover); }
+#app .ant-btn-link:not(:disabled):not(.ant-btn-dangerous):active { color: var(--mes-ui-primary-active); }
 #app .ant-btn-dangerous:not(.ant-btn-primary) { color: var(--mes-ui-danger); }
 #app :is(.query-form,.master-form,.detail-form) { gap: var(--mes-ui-space-4) var(--mes-ui-space-6); }
 #app :is(.query-form label,.master-form>label,.form-inline-row) { color: var(--mes-ui-secondary); font-size: 14px; }

@@ -6,7 +6,8 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
 const css = getComputedStyle(document.documentElement)
 const token = (name: string) => css.getPropertyValue(`--mes-ui-${name}`).trim()
 const theme = { token: {
-  colorPrimary: token('primary'), colorSuccess: token('success'),
+  colorPrimary: token('primary'), colorPrimaryHover: token('primary-hover'), colorPrimaryActive: token('primary-active'),
+  colorLink: token('primary'), colorLinkHover: token('primary-hover'), colorLinkActive: token('primary-active'), colorSuccess: token('success'),
   colorWarning: token('warning'), colorError: token('danger'),
   colorText: token('text'), colorTextSecondary: token('secondary'),
   colorBorder: token('border'), colorBgLayout: token('background'),

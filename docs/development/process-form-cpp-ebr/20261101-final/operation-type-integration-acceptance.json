@@ -1,0 +1,33 @@
+{
+  "feature": "persisted operation type",
+  "status": "IN PROGRESS / UI AUDIT NOT READY",
+  "repair_rounds": 46,
+  "backend_tests": 18,
+  "frontend_tests": 7,
+  "real_page_checks": 11,
+  "migration": [
+    "V071",
+    "V074"
+  ],
+  "running_backend": {
+    "Pid": 35120,
+    "JarSHA256": "7D5DB62974B9D0242CB6B7FDBA9802EFB509109B2E8304044BFE8AAA506539CA",
+    "Port": 8080
+  },
+  "required_suites": {
+    "ui-ux-audit": {
+      "required": true,
+      "status": "NOT READY",
+      "manifest": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261101-final\\operation-type-visual-review.json",
+      "validated": false,
+      "verdict": "NOT READY",
+      "note": "20 first-pass originals do not replace complete G5. Whole workbench still pending."
+    }
+  },
+  "live_evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261101-final\\operation-type-live\\20261102_120323\\result.json",
+  "source_hashes": {
+    "frontend/mes-web/src/views/process/ProcessDetailView.vue": "E0162C8EFF5AE67D34C09D846598C3236A3B58AB8D340B6E3B19481CECF52371",
+    "frontend/mes-web/src/views/process/model.ts": "128643888A12C1758D093285375632DC68F4D82C1CBD4F323BA5764D69D5D92A"
+  },
+  "full_process_accepted": false
+}
