@@ -964,3 +964,38 @@ DEV已部署（后端PID25580/前端26676，8080/5173 HTTP200），V052与52迁�
 **ACCEPTED — 用户于2026-10-15 22:44（Asia/Shanghai）明确回复“验收”，确认本次生产工艺—工序—EBR表单—CPP定向集成回归及其修复。** 用户要求测试现有生产工艺、工序、EBR表单和CPP关联。实际本机同DEV：后端工艺5+EBR61=66/66；ProcessIT9+DirectProcessActivationIT5+EbrIT5=19/19，0失败/0错误/0跳过；前端定向7/7；最终typecheck/build PASS；真实5173/8080只读链路与面板边界16/16；5状态×4视口20图G5 manifest validator exit0。首轮19项4 errors源于旧EBR夹具schema2/角色ID输入未更新，修正构造后通过，68个原断言片段不变。修复CPP及Canvas属性栏按视口断点导致的侧栏展开裁切，改用编辑容器断点，未改业务合同。当前UI组合hash `C10BA53A8E6C78C5BE97260889977870A847C1E89E4BC95AA2009C96789EB567`；旧UI hash及验收记录为历史，不改判。64迁移validate PASS/当前V064，无新迁移；业务测试事务回滚，无浏览器业务保存、签名、权限或历史改写；启动现有8080/5173服务，未提交推送。
 
 范围限制：未跑真实生产批次完整填写/签名/偏差/QA放行、窄权限页面全矩阵、全工艺CRUD状态或全系统回归；生产工艺新版待批准原型未擅自集成。不能称全系统/真实生产全链验收。详见 [本轮证据与范围](docs/review/PROCESS_EBR_CPP_INTEGRATION_20261015.md)，`artifacts/process-integration-20261015/acceptance-summary.json` 绑定相同G5清单。本轮不改变其它已完成功能的人验状态。
+
+## QC质量标准改造为基础信息库 — 2026-11-02
+
+**READY FOR ACCEPTANCE — 功能、契约、迁移与定向回归已完成，真实5173/8080页面人工验收 NOT RUN，未提交推送。** 用户于2026-11-02明确要求"检验标准只做为一个基础信息库维护，增删改查就可以，不涉到审批和批准。不需要做版本的管理。标准基础信息有一个标准的依据…还有标准适用于那些物料和产品，也需要管理"，并在同一日的设计确认中选定：标准库全量重构 + 下游全部改为「标准快照」冻结（授权删除历史签名证据）、保留检验项目、一个标准可同时挂多个物料和多个产品。授权与有界范围见[DCP-QC-SPEC-BASIC-LIBRARY-001](docs/development/DCP-QC-SPEC-BASIC-LIBRARY-001-APPROVED.md)，当前契约见[QC质量标准基础信息库契约](docs/development/qc-standard-basic-library-contract.md)、[OpenAPI补充](docs/development/qc-standard-basic-library-openapi.json)、[设计锁定](docs/development/decisions/QC-STANDARD-BASIC-LIBRARY-DESIGN-LOCK.md)。
+
+实现：`qc_specification` 成为唯一可变当前定义（新增 basis_type/basis_reference/effective_date/remark/status，移除 subject_type/product_id/单主体三触发器）；新增 `qc_specification_scope` 多对多适用范围、`qc_specification_revision` 维护记录（含前后状态与原因，删除条目后保留）；检验项目改为挂在标准上；删除 `qc_specification_version` 及其版本、审批、签名、内容摘要与独立性整套控件和 `qms:specification:approve|retire` 权限与 `ebr:sign` 要求；新增 `qms:specification:delete`；字典 `QC_STANDARD_BASIS` 7 项。API 收敛为7个端点（列表/创建/详情/改头/改范围/改项目/删除），全部带 ETag+If-Match+Idempotency-Key，未知字段（含任何审批/版本字段）一律 VALIDATION_ERROR。下游四表 `qms_inspection_request`/`qms_production_plan`/`qms_sample`/`qms_finished_inspection_request` 的既有引用列就地翻译为标准id并改建外键到 `qc_specification(id)`（列名按冻结契约保留，不改名）；来料请验、生产质量计划、成品检验与追溯改存标准id+冻结快照摘要，追溯节点类型改为 `QC_SPECIFICATION`。前端重做 T1 列表与 T2/T3 编辑详情（标准的依据用 DictionarySelect，适用范围用多选 QcScopePicker，维护记录展示），删除版本页与版本路由，并清理 ReadReference/IncomingDocument/IncomingReferencePicker/成品与生产质量计划中的旧端点与"版本"文案。
+
+迁移：新增并已成功应用 `V070__qc_standard_basic_library.sql`、`V072__qc_standard_revision_after_nullable.sql`、`V073__qc_standard_revision_trail_survives_deletion.sql`（DEV 最高 v073，均 success=1，未改动任何历史迁移、未 flyway repair、未重建库）。DEV 实测量：标准13、适用范围13、项目13、全部 basis 已填且 ACTIVE，version 表已删，四表引用值均落在标准id上。
+
+验证：后端 `mvn -o -DskipTests compile`、`mvn -o test-compile` BUILD SUCCESS；`QcSpecificationRulesTest` 7/7、`QcSpecificationIT` 7/7、`QcFinalContractIT` 13/13；下游回归 `IncomingClosureIT` 9/9、`IncomingQualityIT` 6/6、`IncomingCrossroleBatchAIT` 6/6、`IncomingCrossroleBatchBIT` 2/2、`IncomingFinalContractIT` 1/1、`IncomingQualityAcceptanceIT` 3/3、`IncomingCrossroleNegativeIT` 7/7、`IncomingCrossrolePreflightIT` 3/3、`IncomingProductionIT` 13/13。前端 `npx vue-tsc --noEmit` exit0；`QcSpecificationModel.test.ts` 6/6、`IncomingReferencePicker.test.ts` 7/7、production/trace/master/api 25/25（全量 vitest 95文件/229通过，RoleDetailView 与 printSourceAcceptance 两文件在并行下超时，单文件复跑 11/11、11/11 通过，属并发超时非回归）。`ProductionQualityPlanIT` 15项中我方的1项失败已修复，仍余2项 `New product plans cannot bind legacy batches`：属既有夹具用 schema1 批次建计划导致，与本改造无关，未改无关代码。
+
+范围限制：真实5173/8080页面交互、几何与视觉验收未执行，故不宣称正式验收通过；未跑全系统回归；按用户授权删除的仅限 QC 标准审批/版本证据，其它历史证据未动；工作区既有其它未提交改动全部保留。
+
+## QC质量标准新增/编辑页交互重构 — 2026-11-02
+
+**READY FOR ACCEPTANCE — 两页签（基本信息/适用范围）+ 检验项目常显的新增/编辑页，无删除标准、无底部操作条；列表页零改动；真实5173/8080保存链路已实测通过；未提交推送。** 用户当日原话："编缉的操作很不友好"、"适用物料/产品是一个列表，点击填加按钮出现弹窗选择物料或产品，不要维护记录。就是很简单的增删改查"、"是修改检验标准的编缉或新增页面，检验标准的列表页面不用修改"、"适用范围做成一个页签，编缉和新增，没有删除标准，还有［底部操作条截图］这个不要"、"检验项目是重要的，适用范围是次要的，适用范围可以做成页签，检验项目不需要"。设计确认记录见 [QC-STANDARD-EDIT-UX-DESIGN-LOCK](docs/development/decisions/QC-STANDARD-EDIT-UX-DESIGN-LOCK.md)，业务/数据/API/权限仍受 [DCP-QC-SPEC-BASIC-LIBRARY-001](docs/development/DCP-QC-SPEC-BASIC-LIBRARY-001-APPROVED.md) 约束，页面模板仍为 T2。
+
+改造内容：①适用范围由多选下拉改为「两者列表 + 主色添加入口 + 搜索/多选/分页选择弹窗」，列表显示名称/编码/行内移除，已选但不在搜索页的主体按 id 回读补全；②检验项目由「一项一张大卡」改为 8 列表格（编码/名称/必检/结果类型/合格标准/方法/操作），行编辑在 720 宽弹窗内完成，数值限值尾零归一、单边限值显示 ≥/≤ 并带单位名，移除走二次确认；③删除「维护记录」卡片（`qc_specification_revision` 后端照旧写入，仅前端不再展示）；④底部操作条（未保存状态点 + 维护原因 + 返回/保存）沉到内容流末尾，页头新增主色「保存标准」，两处入口消除"保存按钮难找"；⑤新增页不再预置空白检验项目，改显空态；⑥校验前移：本地校验给出首个错误并滚动定位到对应区块 + 1.6s 描边高亮，弹窗内错误就地显示。
+
+文件：`frontend/mes-web/src/views/quality/QcSpecificationDetailView.vue`、`QcSpecificationItems.vue`、`QcScopePicker.vue`；新增设计记录与验收页面；**未改** `QcSpecificationListView.vue`（mtime 保持 11:34，早于本次开工）、`src/api/qcSpecifications.ts` 契约、router、任何后端代码与迁移。
+
+验证：`npx vue-tsc -p tsconfig.app.json --noEmit` exit0；`vitest run src/views/quality` 12文件/53通过；真实 5173/8080 Playwright：清空限值后弹窗内拦截"数值项目至少填写一个限值"；搜索"氯化钾"勾选 2 个物料→列表 2 行→保存条转"有未保存的修改"；未填原因保存被拦"请填写本次维护原因（页面底部操作条）"；填原因真实保存 `versionNo 2→3`、后端 scopes 变为 `MATERIAL:YL-0001, MATERIAL:BZ-0003, PRODUCT:KCL30`；移除后再次保存 `versionNo 4`、scopes 复原为 `PRODUCT:KCL30`（matchesOriginal=true）。几何：1280 视口标签右边界 431/910、控件左边界 443/922，间距一致，标签与控件中心线偏差 0；页面三卡片无遮挡，操作列「编辑/移除」完整可见；新增页 0 项目空态、两个范围空态、无维护记录卡。截图与可复跑脚本在 `artifacts/qc-spec-edit-review-20261102/`。
+
+环境修复（非本次代码改动）：8080 原进程加载的仍是改造前打包（`mes-security` 内含 `qms:specification:approve|retire`），导致 PUT/DELETE 全部 403；已重新 `mvn -o package` 并重启，新包规则为 create/delete/edit/view，保存链路随之打通。该实例当前由本次会话启动，若会话结束被回收，按 `java -jar backend/mes-boot/target/mes-boot-0.1.0-SNAPSHOT.jar --spring.profiles.active=local --server.port=8080 --spring.flyway.target=074` 重启即可。
+
+第二轮（同日，页签化，用户截图指掉底部操作条）：页面由「三张卡片纵向堆叠 + 底部操作条」改为 **三页签**（基本信息 / 适用范围 / 检验项目），新增页与编辑页同构；删除页头「删除标准」入口（后端 DELETE 与 `qms:specification:delete` 权限码保留，仅本页不暴露）；移除底部操作条（未保存状态点 + 维护原因 + 返回列表 + 保存标准），保存入口只留页头主色按钮，未保存提示改为页头右侧小字；维护原因改为点保存后弹出的「确认保存标准」窗内必填，新增态不弹窗、`reason` 记「新增标准」。校验失败自动切到出错页签再描边定位。同轮修复既有缺陷：新增保存成功后 `router.replace` 被 `onBeforeRouteLeave`（`dirty=true` 时 `window.confirm`）拦截，导致创建成功却停在新增页且弹「放弃未保存内容」——改为创建成功后先同步 `original` 快照再跳转。
+
+第二轮验证：`vue-tsc` exit0；`vitest src/views/quality` 12文件/53通过；真实 5173/8080 Playwright：三页签渲染正常、两页均无删除标准与底部条、1280 视口页面高度 1586px→900px；清空标准名称点保存→alert「请填写标准名称」且自动切到基本信息页签；编辑保存弹「确认保存标准」，`versionNo 5→6`，复原后 `7→8`（remark 还原为 null）；新增完整链路（填表→加产品→加检验项目→保存）创建 `E2E-TABS-540188` 并自动跳转详情页，测试数据已 DELETE 清理。截图：`artifacts/qc-spec-edit-review-20261102/v7-tab-basic|scope|items.png`、`v6-validation-locate.png`、`v6-created.png`。
+
+第三轮（同日，检验项目移出页签）：按「检验项目是重要的，适用范围是次要的，适用范围可以做成页签，检验项目不需要」，页签缩为 **两项**（基本信息 / 适用范围），**检验项目改为页签区下方的常显卡片**，切换页签时始终可见；校验定位相应调整为「错误在页签内先切页签，错误在检验项目则保持当前页签只滚动过去」。
+
+第三轮验证：`vue-tsc` exit0；`vitest src/views/quality` 12文件/53通过；真实 5173/8080 Playwright：`tabTexts=["基本信息","适用范围"]`、基本信息页签下 `itemsVisible=true`（`itemsTop=565 > tabsBottom=549`，1 行数据）、切到适用范围后 `itemsRows=1` 仍在；清空名称且停在适用范围点保存→alert「请填写标准名称」+ 自动回基本信息 + 卡片描红；移除全部检验项目保存→alert「至少需要一个检验项目」且不切页签、检验项目卡片滚入视口；编辑保存 `versionNo 8→9`，复原 `9→10`（remark 回 null、scopes `PRODUCT:KCL30`、items 1 条不变）；新增链路创建 `E2E-TABS-922638`（scopes `PRODUCT:HYTEA100`、items `E2E_ASSAY`）自动跳详情，DELETE 清理 200。截图：`v8-edit-basic.png`、`v8-edit-scope.png`、`v8-validation-basic2.png`、`v8-create-basic.png`；脚本 `verify-items-persist.mjs`、`verify-edit-save.mjs`、`verify-tabs-flow.mjs`。
+
+范围限制：仅做前端交互重构，未加原型环节（用户已在对话中直接指定形态）；未跑后端 IT（未改后端）；未做 375 窄屏专项审查；验证期间对标准 521 产生 4 组真实维护原因记录（"验证适用范围维护交互（临时，验证后恢复）""恢复验证前的适用范围（验证收尾）""页签结构调整回归验证（稍后复原）""复原验证前的备注（验证收尾）"），业务数据已复原（`versionNo` 现为 10，`remark=null`，scopes/products 与原值一致），未删除审计痕迹。
+
