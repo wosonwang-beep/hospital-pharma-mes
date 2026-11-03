@@ -26,6 +26,12 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+      - name: Install Chinese PDF fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fontconfig
+          fc-cache -f
+          fc-list : family | grep -F 'Noto Sans CJK SC'
       - name: Test Maven reactor
         run: mvn -B -ntp test
       - name: Upload Maven reports on failure
@@ -55,7 +61,7 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
       - name: Run frontend tests
-        run: npm test -- --run
+        run: npm test -- --run --maxWorkers=2
       - name: Type check
         run: npm run typecheck
       - name: Build frontend
@@ -114,6 +120,12 @@ jobs:
         run: |
           docker exec "$REDIS_CONTAINER_ID" redis-cli CONFIG SET requirepass "$MES_REDIS_PASSWORD" > /dev/null
           docker exec "$REDIS_CONTAINER_ID" redis-cli -a "$MES_REDIS_PASSWORD" ping > /dev/null
+      - name: Install Chinese PDF fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fontconfig
+          fc-cache -f
+          fc-list : family | grep -F 'Noto Sans CJK SC'
       - name: Run infrastructure integration tests
         run: mvn -B -ntp -Pci-integration verify
       - name: Upload Maven reports on failure

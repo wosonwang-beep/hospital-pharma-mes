@@ -1,0 +1,133 @@
+{
+  "repair_rounds": 48,
+  "stage": "2026-11-03 15:00:40–15:40:40 Asia/Shanghai",
+  "automatic_repairs_stopped": true,
+  "stop_reason": "same RoleDetailView 5000ms timeout signature after worker cap",
+  "backend_reporting": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 5
+  },
+  "backend_cases": [
+    {
+      "name": "com.hospital.mes.reporting.application.EditorCallbackTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.ControlledDocxTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.Docx4jIsolationTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.EditorSafetyTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.IndependentDatasetDocxTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.infrastructure.ConverterEnvironmentTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.LibreOfficeIntegrationSmokeTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "1"
+    },
+    {
+      "name": "com.hospital.mes.reporting.NativePrintDesignerTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.PrintLifecycleTest",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.PrintOnceBatchTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.PrintSourceConfigurationTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.PureJavaPdfSmokeTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.hospital.mes.reporting.RealPdfTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "4"
+    },
+    {
+      "name": "com.hospital.mes.reporting.WordTableComposerTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "frontend": {
+    "tests": 234,
+    "passed": 232,
+    "failed": 2,
+    "files_passed": 54,
+    "files_failed": 1,
+    "failed_file_lines": [
+      150,
+      216
+    ],
+    "threshold_ms": 5000
+  },
+  "ci_policy_positive": "PASS",
+  "ci_policy_negative": "PASS after restoring repository LF; first failure retained",
+  "linux_font_validation": "NOT RUN",
+  "database_writes": 0,
+  "migrations": [],
+  "source_sha256": {
+    ".github/workflows/ci.yml": "393dbc4d92021624dafc51c0f6bddb96cc06d6d376d235d9344a850c8a6b7886",
+    "backend/mes-reporting/src/test/java/com/hospital/mes/reporting/application/EditorCallbackTest.java": "4b153d4fdc56102ea17bca04a0f8ec0f3495f6c111cb6cd7549690c0156638ed"
+  }
+}

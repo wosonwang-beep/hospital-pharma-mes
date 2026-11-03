@@ -1,0 +1,30 @@
+{
+  "round": 50,
+  "frontend_files": 55,
+  "frontend_tests": 234,
+  "frontend_failures": 0,
+  "frontend_duration_seconds": 103.19,
+  "typecheck_build_exit": 0,
+  "production_audit_exit": 0,
+  "production_vulnerabilities": 0,
+  "callback_tests": 4,
+  "callback_failures": 0,
+  "production_package_exception": {
+    "follow-redirects": {
+      "from": "1.16.0",
+      "to": "1.16.2"
+    }
+  },
+  "other_production_packages_unchanged": 123,
+  "role_source_changed": false,
+  "database_writes": 0,
+  "migrations": [],
+  "remote_ci": "PENDING",
+  "full_process_accepted": false,
+  "source_sha256": {
+    ".github/workflows/ci.yml": "393dbc4d92021624dafc51c0f6bddb96cc06d6d376d235d9344a850c8a6b7886",
+    "backend/mes-reporting/src/test/java/com/hospital/mes/reporting/application/EditorCallbackTest.java": "4b153d4fdc56102ea17bca04a0f8ec0f3495f6c111cb6cd7549690c0156638ed",
+    "frontend/mes-web/package.json": "45cf22f74221639ddbf766b83359223f2b1cbf2dadc2193347ff460a58dcc21f",
+    "frontend/mes-web/package-lock.json": "1ce60ad1e399f0422c1724ce79dd88d2d3fb714ad366a9a5dbd7ebdd3e28d310"
+  }
+}

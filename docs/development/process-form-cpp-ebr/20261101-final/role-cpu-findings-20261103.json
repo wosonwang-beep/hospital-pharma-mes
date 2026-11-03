@@ -1,0 +1,21 @@
+{
+  "profile": "docs\\development\\process-form-cpp-ebr\\20261101-final\\role-cpu-before-20261103\\role-48680.cpuprofile",
+  "profile_sha256": "186168c3d4997c7a01ba2f56e476e5247fce805110b404666eca1a411b7c1692",
+  "sampled_ms": 34702.95,
+  "getComputedStyle_inclusive_ms": 26385.69,
+  "getComputedStyle_percent": 76.03,
+  "role_component_inclusive_ms": 87.64,
+  "role_component_percent": 0.25,
+  "regexp_self_ms": 9417.01,
+  "app_source_unchanged": true,
+  "repair_rounds": 48,
+  "new_repairs_this_stage": 0,
+  "test_file_assertions_changed": false,
+  "installed_jsdom": "27.4.0",
+  "installed_dom_selector": "6.8.1",
+  "local_node": "24.19.0",
+  "candidate_jsdom": "30.1.3",
+  "candidate_requires_node": "^22.22.2 || ^24.15.0 || >=26.0.0",
+  "upstream_release": "https://github.com/jsdom/jsdom/releases/tag/v30.1.3",
+  "candidate_install_or_tested": false
+}

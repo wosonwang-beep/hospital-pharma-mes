@@ -1,0 +1,25 @@
+{
+  "round": 49,
+  "role_tests": 11,
+  "frontend_files": 55,
+  "frontend_tests": 234,
+  "frontend_failed": 0,
+  "focused_case_ms": [
+    782,
+    876
+  ],
+  "typecheck_build_exit": 0,
+  "callback_precommit_tests": 4,
+  "production_packages_unchanged": 124,
+  "audit_exit": 1,
+  "audit_package": "follow-redirects",
+  "audit_version": "1.16.0",
+  "candidate_version": "1.16.2",
+  "candidate_authorized_or_installed": false,
+  "remote_ci_run": false,
+  "source_sha256": {
+    "frontend/mes-web/package.json": "45cf22f74221639ddbf766b83359223f2b1cbf2dadc2193347ff460a58dcc21f",
+    "frontend/mes-web/package-lock.json": "ad67a83a63b622cb0b0f1878fe28e7ffb0cd1288c4bb1841b5ce66656ffa4d56",
+    "frontend/mes-web/src/views/admin/RoleDetailView.vue": "d52c10e3d947aaa478b2a00502693caeb4d34fa46ba259d1387407a8aef9d62f"
+  }
+}
