@@ -25,6 +25,9 @@ public final class Docx4jPdfWorker {
    // Use installed, licensed CJK fonts; never embed or redistribute proprietary font files.
    PhysicalFont chinese=PhysicalFonts.get("Microsoft YaHei");
    if(chinese==null)chinese=PhysicalFonts.get("Noto Sans CJK SC");
+   // Linux Noto CJK is a TTC; docx4j may not register its SC face by this name.
+   // The licensed WenQuanYi collection is discovered under its own physical name.
+   if(chinese==null)chinese=PhysicalFonts.get("WenQuanYi Micro Hei");
    if(chinese!=null){
     fonts.put("Microsoft YaHei",chinese);
     fonts.put("SimSun",chinese);

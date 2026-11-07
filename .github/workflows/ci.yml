@@ -29,7 +29,8 @@ jobs:
       - name: Install Chinese PDF fonts
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fontconfig
+          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fonts-wqy-microhei fontconfig
+          fc-list : family | grep -F 'WenQuanYi Micro Hei'
           fc-cache -f
           fc-list : family | grep -F 'Noto Sans CJK SC'
       - name: Test Maven reactor
@@ -123,7 +124,8 @@ jobs:
       - name: Install Chinese PDF fonts
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fontconfig
+          sudo apt-get install --no-install-recommends -y fonts-noto-cjk fonts-wqy-microhei fontconfig
+          fc-list : family | grep -F 'WenQuanYi Micro Hei'
           fc-cache -f
           fc-list : family | grep -F 'Noto Sans CJK SC'
       - name: Run infrastructure integration tests

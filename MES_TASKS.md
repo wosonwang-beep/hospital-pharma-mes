@@ -1431,3 +1431,7 @@ Planning唯一ID 0df9356d-675b-4f37-8b7d-948948c8d694 的 progress.md 因UTF-8 6
 
 ### 2026-11-07 18:34 已批准的生产工艺 PC_ONLY 正式路由修复
 实际在本机唯一main精确修复G5审核器的正式工艺URL映射：在用户原批准PC_ONLY文档及严格SHA检验下，仅允许本任务的正式 `/process/packages` 根URL（本机127/localhost:5173）和原 `#/processes` 使用1440/1280/900矩阵，所有其它模块/子路由/域/错误SHA仍要求原375，9/9组正负回归PASS（docs/development/process-form-cpp-ebr/20261107-formal-g5/scope-mapping-regression-result.json）。原 G5 validator如今不报范围/375错误，但仍因`interaction_checks[14]`真实读屏器语音NOT RUN而EXIT1。新增正式Chrome无障碍树动态状态专项：工艺编辑状态“配置已生效→有未保存的修改”、列表检索“共9→共1”通过role=status/live=polite/atomic=true编程树验证，不产生DB写，专项2/2PASS；合并正式浏览器套件16/16PASS，原功能不回归。系统有Narrator但未在用户桌面擅启；真正语音播报与完整19项WCAG/54维度及人工G5仍NOT RUN，禁止自动改成ACCEPTED。手工核验步骤已固化 G5_REMAINING_HUMAN_ACCEPTANCE.md。正式Vue/Java/DB源码不动、main HEAD1682fc5、工作区原未提交代码全保留，未stage/commit/push/建worktree。详情追加正式G5的RESULT.md。
+
+
+### 2026-11-07 22:33 — GitHub CI #56 中文 PDF 转换修复
+用户要求继续修复生产工艺推送后的CI。GitHub #56仓库合同PASS、后端/基础设施PDF与前端QC分别FAIL，前一个main的#54已有相同PDF四失败。使用独立Linux Ubuntu24 Noble Docker（Java21、Maven3.9.16、fonts-noto-cjk及fonts-wqy-microhei）原样复现mes-reporting的4/7中文PDF失败；docx4j PhysicalFonts.get("Noto Sans CJK SC")在Linux返回null，但物理扫描可识别WenQuanYi Micro Hei。正式Docx4jPdfWorker加文泉驿作为第三字体fallback（保持微软字体与Noto优先）、CI后端和MariaDB集成两job安装并验证该字体，原版7个测试不改断言、不跳过，Linux目标回归**7/7 PASS**（中文标题、长检验表格末行、Native Designer、合并单元格均通过）；scripts/verify-ci.ps1 PASS。证据：docs/development/ci/REPORTING_CJK_LINUX_20261107.md。前端CI问题由已提交QC详情页面对未提交QC基础标准API/数据迁移不一致造成，属独立受控重构，未为过编译而加stub/混合未验收QC文件。完整CI状态仍等待远端新run、暂不称绿灯或全模块ACCEPTED。
