@@ -1,0 +1,27 @@
+{
+  "chrome": "159.0.8130.0",
+  "extension": "local isolated temporary",
+  "headless": true,
+  "workers": [
+    "chrome-extension://niganpgedgifdickagkidblaobpoodmd/background.js"
+  ],
+  "extensionLoaded": true,
+  "before": {
+    "innerWidth": 1280,
+    "dpr": 1,
+    "outerWidth": 1280
+  },
+  "chromeTabsApi": {
+    "tabId": 1346270523,
+    "original": 1,
+    "newZoom": 2
+  },
+  "after": {
+    "innerWidth": 640,
+    "dpr": 2,
+    "outerWidth": 1280,
+    "visualScale": 1
+  },
+  "realZoomConfirmed": true,
+  "outcome": "CONFIRMED_NATIVE_TAB_ZOOM"
+}

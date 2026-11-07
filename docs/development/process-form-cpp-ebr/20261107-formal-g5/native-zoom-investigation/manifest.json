@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "MES Isolated Zoom Probe",
+  "version": "0.0.1",
+  "description": "Temporary local QA only: validate real native Chrome tab zoom",
+  "permissions": [
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

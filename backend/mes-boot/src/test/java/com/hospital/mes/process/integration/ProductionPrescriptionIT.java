@@ -57,9 +57,8 @@ class ProductionPrescriptionIT {
   var route=new RouteSave(null,null,"RXR"+suffix,List.of(new Operation("MIX","Mix",1,null,null,List.of(),null,false,List.of())));
   process.saveCurrentDefinition(processId,new CurrentDefinitionSave(null,null,null,null,route),null,key());
  }
- PrescriptionCreate command(String code,String qty){
-  return new PrescriptionCreate(code,"Prescription "+code,product,processId,"10",unit,List.of(new PrescriptionItem(1,material,qty,unit,"0",true)));
- }
+ PrescriptionCreate command(String code,String qty){return commandFor(product,code,qty);}
+ PrescriptionCreate commandFor(String productId,String code,String qty){return new PrescriptionCreate(code,"Prescription "+code,productId,processId,"10",unit,List.of(new PrescriptionItem(1,material,qty,unit,"0",true)));}
  JsonNode activate(JsonNode draft){
   return prescriptions.activate(draft.path("id").asText(),new PrescriptionAction(draft.path("versionNo").asLong(),"Activate prescription"),null,key());
  }
@@ -81,9 +80,19 @@ class ProductionPrescriptionIT {
   assertThatThrownBy(()->activate(second)).isInstanceOf(com.hospital.mes.common.exception.ResourceConflictException.class)
    .hasMessageContaining("active prescription");
  }
+ @Test void prescriptionCannotUseProcessOutsideItsApplicableProductScope(){
+  var other=process.createProduct(new ProductCreate("RXP2"+suffix,"硼酸溶液","溶液剂","100ml/瓶",unit),key()).path("id").asText();
+  var scopedRoute=new RouteSave(null,null,"RXR-SCOPE-ONLY"+suffix,List.of(new Operation("MIX","Mix",1,null,null,List.of(),null,false,List.of())));
+  process.saveCurrentDefinition(processId,new CurrentDefinitionSave(null,null,null,null,scopedRoute,null,List.of(product)),null,key());
+  assertThatThrownBy(()->prescriptions.create(commandFor(other,"RXN"+suffix,"2"),key()))
+   .isInstanceOf(com.hospital.mes.common.exception.ComplianceException.class)
+   .hasMessageContaining("not applicable to this product");
+ }
  @Test void batchReleaseFreezesPrescriptionAndProcessWithoutLegacyFormula(){
   var draft=prescriptions.create(command("RXF"+suffix,"2"),key());
   var active=activate(draft);
+  var scopedRoute=new RouteSave(null,null,"RXR-SCOPE"+suffix,List.of(new Operation("MIX","Mix",1,null,null,List.of(),null,false,List.of())));
+  process.saveCurrentDefinition(processId,new CurrentDefinitionSave(null,null,null,null,scopedRoute,null,List.of(product)),null,key());
   var template=ebr.create(new EbrCommands.Create(processId,"RXEBR"+suffix,"Prescription process form"),key());
   String templateId=template.path("id").asText();
   var published=json.createObjectNode().put("processPackageId",processId).put("templateVersionId",templateId).put("templateCode","RXEBR"+suffix).put("version",1).put("schemaVersion","1.0");
@@ -101,6 +110,7 @@ class ProductionPrescriptionIT {
   long snapshotId=released.path("processSnapshotId").asLong();
   var snapshot=productionQuery.batch(1,Long.parseLong(batch.path("id").asText())).snapshot();
   assertThat(snapshot.path("prescription").path("prescriptionId").asText()).isEqualTo(active.path("id").asText());
+  assertThat(snapshot.path("process").path("applicableProductIds").get(0).asText()).isEqualTo(product);
   assertThat(snapshot.path("prescription").path("items").get(0).path("requiredQty").asText()).isEqualTo("2");
   assertThat(snapshot.path("process").hasNonNull("formulaId")).isFalse();
   assertThat(jdbc.queryForObject("SELECT prescription_id FROM prd_process_snapshot WHERE id=?",Long.class,snapshotId)).isEqualTo(active.path("id").asLong());

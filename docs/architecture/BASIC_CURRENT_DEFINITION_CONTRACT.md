@@ -58,3 +58,7 @@ The Design Authority approved the bounded [historical schema evidence and contro
 ## Approved operation type supplement — 2026-11-02
 
 Human-approved DCP-PROCESS-OPERATION-TYPE-001 adds only the nullable, persisted PRODUCTION/IPC operation type. [Bounded contract](PROCESS_OPERATION_TYPE_CONTRACT.md) defines database/domain/API/UI/permission/state/snapshot/RTM/migration/consumer behavior. Legacy NULL stays unmarked; missing/null writes preserve existing values. Per-operation gates and historical content remain unchanged. No process revision lifecycle is restored; task status remains only MES_TASKS.md.
+
+## Approved current metadata and workspace supplement — 2026-11-04
+
+The human authorized direct formal-page implementation following the approved current-name/description direction. [Bounded metadata contract](PROCESS_CURRENT_METADATA_CONTRACT.md) binds V075, domain, API/OpenAPI, UI, compatibility, RTM and integration obligations. Metadata is current-only and saved atomically with the route. Historical rows remain NULL until explicitly maintained; frozen content and existing lifecycle/GxP rules remain unchanged. Runtime status and validation remain only MES_TASKS.md.

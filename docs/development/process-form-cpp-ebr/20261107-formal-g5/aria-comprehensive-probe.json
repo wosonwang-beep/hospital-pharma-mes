@@ -1,0 +1,55 @@
+{
+  "createdAt": "2026-11-07T04:37:14.149Z",
+  "scope": "Main admin process and EBR pages; automated text parser of Playwright ARIA snapshot; not a WCAG complete audit",
+  "results": [
+    {
+      "name": "process-list",
+      "url": "/process/packages",
+      "snapshotLength": 3941,
+      "missing": [],
+      "interactiveCount": 27
+    },
+    {
+      "name": "process-create",
+      "url": "/process/packages/create",
+      "snapshotLength": 263,
+      "missing": [],
+      "interactiveCount": 7
+    },
+    {
+      "name": "process-detail",
+      "url": "/process/packages/829",
+      "snapshotLength": 1529,
+      "missing": [],
+      "interactiveCount": 22
+    },
+    {
+      "name": "process-edit",
+      "url": "/process/packages/829/edit",
+      "snapshotLength": 1566,
+      "missing": [],
+      "interactiveCount": 26
+    },
+    {
+      "name": "ebr-cpp",
+      "url": "/ebr/templates/663/designer?processPackageId=829&formCode=OP1_RECORD&designerTab=cpp",
+      "snapshotLength": 2461,
+      "missing": [],
+      "interactiveCount": 29
+    },
+    {
+      "name": "ebr-form",
+      "url": "/ebr/templates/663/designer?processPackageId=829&formCode=OP1_RECORD&designerTab=form",
+      "snapshotLength": 1711,
+      "missing": [],
+      "interactiveCount": 43
+    },
+    {
+      "name": "product-dialog",
+      "url": "modal",
+      "snapshotLength": 251,
+      "missing": [],
+      "interactiveCount": 4
+    }
+  ]
+}

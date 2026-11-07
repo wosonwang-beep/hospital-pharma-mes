@@ -15,6 +15,8 @@ Approved [shared-navigation supplement](../development/DCP-GLOBAL-NAVIGATION-001
 - Special-purpose editors/workbenches may retain their approved specialized composition, but still inherit Global UI V2. See `docs/development/decisions/GLOBAL_T1_T2_UI_UNIFICATION_20261013.md`.
 - Button order rule (user-approved 2026-11-02, supersedes the 2026-10-13 order): the important action sits on the left and the auxiliary action on the right, both right aligned. T1 query actions are globally ordered `查询 → 重置`; ordinary T2 form actions are globally ordered `保存/提交 → 取消/返回`. See [BUTTON_ORDER_IMPORTANT_FIRST_20261102](../development/decisions/BUTTON_ORDER_IMPORTANT_FIRST_20261102.md).
 
+Approved 2026-11-02 global interaction: [MES_GLOBAL_UX_INTERACTION_20261102_APPROVED](../development/decisions/MES_GLOBAL_UX_INTERACTION_20261102_APPROVED.md). Applies to prototype, implementation, acceptance; specialist frozen workflows retain their specific approval.
+
 ## T1 — Query / List
 
 Approved menu-specific supplement2026-10-10: [DCP-MENU-CONFIGURATION-001](../development/DCP-MENU-CONFIGURATION-001-APPROVED.md), frozen T1 menu list and T2 full-page complex configuration; only this page overrides prior simple-edit modal. View route remains read-only; other templates/fields unchanged.
@@ -23,14 +25,14 @@ Use for: Material, Supplier, Equipment, Production Order, Main Batch, QC lists, 
 
 Structure:
 1. Page Header: title + short context + one primary create action when permitted.
-2. Query Card: compact filters, Reset + Query.
+2. Query Card: compact filters, Query + Reset.
 3. Result Card/Table.
 4. Pagination / result count.
 
 Rules:
 - Preserve filters/pagination where contract requires.
 - Use Select/Picker for controlled enums/references.
-- No inline full-record editing.
+- No inline full-record editing; ordinary T2 nested-list creation/editing also uses centered modal only.
 - View/Edit navigate to independent routes.
 
 ## T2 — Create / Edit Form
@@ -38,17 +40,17 @@ Rules:
 Use for: master data creation/edit, receipt editing, controlled definition editing.
 
 Structure:
-1. Back navigation + Page Header.
+1. Page Header: title only on ordinary create/edit pages; no header back-navigation or descriptive subtitle.
 2. Logical form sections.
 3. Two-column desktop form where appropriate.
 4. Full-width long text/reason areas.
-5. Sticky or stable action area: Cancel + Save/Submit.
+5. Sticky or stable action area: Save/Submit + Cancel (primary left, auxiliary right).
 
 Rules:
-- Label/control horizontal pairing.
+- Header shows title only: no descriptive text, back-to-list link/button or repeated object summary; details belong to the body. Cancel remains in the bottom action area and protects unsaved input.
 - Required/help/validation are local to the field.
 - Business references use selectors.
-- Every child-table or child-record add action belongs at the right side of its section/card title bar and uses the blue primary-button treatment. Do not repeat that add action below the table/body. Hide it in read-only state and preserve the existing permission/editability gate.
+- Every ordinary child-table add action belongs at the right side of the section/card title bar, uses primary treatment, and opens a centered create modal. Each child-row edit opens a centered edit modal; no inline controls or below-table create/edit forms. Modal footer order Save/Confirm -> Cancel; validate errors and preserve unsaved parent inputs. Hide unauthorized actions; preserve business rules and API transaction contracts.
 - Do not mix read-only history into the editable form body unless necessary for the decision.
 
 ## T3 — Business Detail / Controlled Document

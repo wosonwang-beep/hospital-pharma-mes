@@ -1,0 +1,58 @@
+{
+  "createdAt": "2026-11-07T10:28:18.297Z",
+  "scope": "Read-only admin IAM configuration inventory, not seven independent logins",
+  "total": 7,
+  "roles": [
+    {
+      "role": "demo.master",
+      "roleCodes": [
+        "MES_MASTER"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.warehouse",
+      "roleCodes": [
+        "MES_WAREHOUSE"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.sampler",
+      "roleCodes": [
+        "MES_SAMPLER"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.qc.analyst",
+      "roleCodes": [
+        "MES_QC_ANALYST"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.qc.reviewer",
+      "roleCodes": [
+        "MES_QC_REVIEWER"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.qa",
+      "roleCodes": [
+        "MES_QA"
+      ],
+      "rights": []
+    },
+    {
+      "role": "demo.production",
+      "roleCodes": [
+        "MES_PRODUCTION"
+      ],
+      "rights": [
+        "process:package:view"
+      ]
+    }
+  ]
+}

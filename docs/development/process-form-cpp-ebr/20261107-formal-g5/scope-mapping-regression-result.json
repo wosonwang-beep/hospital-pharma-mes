@@ -1,0 +1,133 @@
+{
+  "verdict": "PASS",
+  "description": "Exact approved production-process PC_ONLY mapping; other modules and altered approvals denied; screenreader gate unchanged.",
+  "tests": [
+    {
+      "case": "approved_formal_127",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": false,
+      "requires375": false,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "approved_formal_localhost",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": false,
+      "requires375": false,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "approved_formal_slash",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": false,
+      "requires375": false,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "approved_old_prototype",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": false,
+      "requires375": false,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_other_module",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": true,
+      "requires375": true,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_process_details",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": true,
+      "requires375": true,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_external_domain",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": true,
+      "requires375": true,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_unapproved_port",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": true,
+      "requires375": true,
+      "wrongHashRejected": false,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_unapproved_hash",
+      "result": "PASS",
+      "code": 1,
+      "deniedScope": false,
+      "requires375": true,
+      "wrongHashRejected": true,
+      "screenReaderGateStillEnforced": true,
+      "messages": [
+        "FAIL",
+        "- PC_ONLY requires the exact approved process-scope reference and SHA256",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ]
+    }
+  ]
+}

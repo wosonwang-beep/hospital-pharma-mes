@@ -1,0 +1,1225 @@
+{
+  "createdAt": "2026-11-07T06:38:28.475Z",
+  "browser": "Installed Playwright Chromium 1248",
+  "method": "Native chrome.tabs.setZoom(2) via temporary isolated MV3 extension; not CSS emulation",
+  "screens": [
+    {
+      "physical": 1440,
+      "kind": "process-list",
+      "filename": "1440-process-list-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "process-detail",
+      "filename": "1440-process-detail-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": 1325,
+        "formBottom": 1288,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 688,
+              "clientWidth": 688,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 141,
+              "right": 683,
+              "width": 542,
+              "scrollWidth": 540,
+              "clientWidth": 540,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 141,
+              "right": 683,
+              "width": 542,
+              "scrollWidth": 540,
+              "clientWidth": 540,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 17,
+              "right": 703,
+              "width": 686,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 17,
+              "right": 703,
+              "width": 686,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "process-edit",
+      "filename": "1440-process-edit-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": 1323,
+        "formBottom": 1286,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 688,
+              "clientWidth": 688,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 646,
+              "clientWidth": 646,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 141,
+              "right": 683,
+              "width": 542,
+              "scrollWidth": 540,
+              "clientWidth": 540,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 141,
+              "right": 683,
+              "width": 542,
+              "scrollWidth": 540,
+              "clientWidth": 540,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 16,
+              "right": 704,
+              "width": 688,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 17,
+              "right": 703,
+              "width": 686,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 17,
+              "right": 703,
+              "width": 686,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-cpp",
+      "filename": "1440-ebr-cpp-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [
+            {
+              "left": 17,
+              "right": 703,
+              "width": 686,
+              "scrollWidth": 686,
+              "clientWidth": 686,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-builder": [
+            {
+              "left": 29,
+              "right": 691,
+              "width": 662,
+              "scrollWidth": 662,
+              "clientWidth": 662,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-step": [
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 644,
+              "clientWidth": 644,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 683,
+              "width": 646,
+              "scrollWidth": 644,
+              "clientWidth": 644,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".business-preview": [
+            {
+              "left": 82,
+              "right": 672,
+              "width": 590,
+              "scrollWidth": 588,
+              "clientWidth": 588,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ]
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-canvas",
+      "filename": "1440-ebr-canvas-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "product-modal",
+      "filename": "1440-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "scrollWidth": 720,
+        "clientWidth": 720
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-list",
+      "filename": "1280-process-list-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-detail",
+      "filename": "1280-process-detail-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": 1325,
+        "formBottom": 1288,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 608,
+              "clientWidth": 608,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 141,
+              "right": 603,
+              "width": 462,
+              "scrollWidth": 460,
+              "clientWidth": 460,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 141,
+              "right": 603,
+              "width": 462,
+              "scrollWidth": 460,
+              "clientWidth": 460,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 17,
+              "right": 623,
+              "width": 606,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 17,
+              "right": 623,
+              "width": 606,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-edit",
+      "filename": "1280-process-edit-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": 1323,
+        "formBottom": 1286,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 608,
+              "clientWidth": 608,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 566,
+              "clientWidth": 566,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 141,
+              "right": 603,
+              "width": 462,
+              "scrollWidth": 460,
+              "clientWidth": 460,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 141,
+              "right": 603,
+              "width": 462,
+              "scrollWidth": 460,
+              "clientWidth": 460,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 16,
+              "right": 624,
+              "width": 608,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 17,
+              "right": 623,
+              "width": 606,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 17,
+              "right": 623,
+              "width": 606,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-cpp",
+      "filename": "1280-ebr-cpp-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [
+            {
+              "left": 17,
+              "right": 623,
+              "width": 606,
+              "scrollWidth": 606,
+              "clientWidth": 606,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-builder": [
+            {
+              "left": 29,
+              "right": 611,
+              "width": 582,
+              "scrollWidth": 582,
+              "clientWidth": 582,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-step": [
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 564,
+              "clientWidth": 564,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 37,
+              "right": 603,
+              "width": 566,
+              "scrollWidth": 564,
+              "clientWidth": 564,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".business-preview": [
+            {
+              "left": 82,
+              "right": 592,
+              "width": 510,
+              "scrollWidth": 508,
+              "clientWidth": 508,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ]
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-canvas",
+      "filename": "1280-ebr-canvas-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "product-modal",
+      "filename": "1280-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "scrollWidth": 640,
+        "clientWidth": 640
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-list",
+      "filename": "900-process-list-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-detail",
+      "filename": "900-process-detail-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": 1379,
+        "formBottom": 1342,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 426,
+              "clientWidth": 426,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 133,
+              "right": 421,
+              "width": 288,
+              "scrollWidth": 286,
+              "clientWidth": 286,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 133,
+              "right": 421,
+              "width": 288,
+              "scrollWidth": 286,
+              "clientWidth": 286,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 13,
+              "right": 437,
+              "width": 424,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 13,
+              "right": 437,
+              "width": 424,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-edit",
+      "filename": "900-process-edit-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": 1371,
+        "formBottom": 1334,
+        "geometry": {
+          "main.process-page": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 426,
+              "clientWidth": 426,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form": [
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form>label": [
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 29,
+              "right": 421,
+              "width": 392,
+              "scrollWidth": 392,
+              "clientWidth": 392,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".basic-card .master-form input": [
+            {
+              "left": 133,
+              "right": 421,
+              "width": 288,
+              "scrollWidth": 286,
+              "clientWidth": 286,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            },
+            {
+              "left": 133,
+              "right": 421,
+              "width": 288,
+              "scrollWidth": 286,
+              "clientWidth": 286,
+              "overflowX": "clip",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace": [
+            {
+              "left": 12,
+              "right": 438,
+              "width": 426,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "hidden",
+              "minWidth": "0px"
+            }
+          ],
+          ".workspace-body": [
+            {
+              "left": 13,
+              "right": 437,
+              "width": 424,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".operation-detail": [
+            {
+              "left": 13,
+              "right": 437,
+              "width": 424,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-cpp",
+      "filename": "900-ebr-cpp-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [
+            {
+              "left": 13,
+              "right": 437,
+              "width": 424,
+              "scrollWidth": 424,
+              "clientWidth": 424,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-builder": [
+            {
+              "left": 25,
+              "right": 425,
+              "width": 400,
+              "scrollWidth": 400,
+              "clientWidth": 400,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".cpp-step": [
+            {
+              "left": 33,
+              "right": 417,
+              "width": 384,
+              "scrollWidth": 382,
+              "clientWidth": 382,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            },
+            {
+              "left": 33,
+              "right": 417,
+              "width": 384,
+              "scrollWidth": 382,
+              "clientWidth": 382,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ],
+          ".business-preview": [
+            {
+              "left": 78,
+              "right": 406,
+              "width": 328,
+              "scrollWidth": 326,
+              "clientWidth": 326,
+              "overflowX": "visible",
+              "minWidth": "0px"
+            }
+          ]
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-canvas",
+      "filename": "900-ebr-canvas-native200-clipcheck.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null,
+        "geometry": {
+          "main.process-page": [],
+          ".basic-card": [],
+          ".basic-card .master-form": [],
+          ".basic-card .master-form>label": [],
+          ".basic-card .master-form input": [],
+          ".workspace": [],
+          ".workspace-body": [],
+          ".operation-detail": [],
+          ".cpp-rule-designer": [],
+          ".cpp-builder": [],
+          ".cpp-step": [],
+          ".business-preview": []
+        },
+        "clipped": []
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "product-modal",
+      "filename": "900-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "scrollWidth": 450,
+        "clientWidth": 450
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    }
+  ],
+  "errors": [],
+  "sourceHash": "e61faf54f9f0540e0f10b03a81b67de833806adfdb41112f242a0d0fd48b28ae",
+  "zoom": {
+    "tabId": 1949566845,
+    "before": 1,
+    "after": 2
+  },
+  "pass": true,
+  "status": "PASS FOR NATIVE CHROME TAB ZOOM TARGETED G5"
+}

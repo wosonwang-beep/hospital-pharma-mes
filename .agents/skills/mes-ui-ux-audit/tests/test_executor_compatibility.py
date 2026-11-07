@@ -75,6 +75,12 @@ class ExecutorCompatibilityTests(unittest.TestCase):
     def test_only_authorized_executor_statement_changed(self):
         old,new=BASELINE.read_bytes(),VALIDATOR.read_bytes()
         self.assertEqual(old.count(OLD_GUARD.encode()),1)
+        # Reverse only the exact user-approved process PC scope supplement.
+        supplement=json.loads((SKILL/'tests/fixtures/process_pc_scope_20261104.json').read_text(encoding='utf-8'))
+        approved=base64.b64decode(supplement['approved_block_base64'])
+        original=base64.b64decode(supplement['original_block_base64'])
+        self.assertEqual(new.count(approved),1)
+        new=new.replace(approved,original,1)
         self.assertEqual(new,old.replace(OLD_GUARD.encode(),NEW_GUARD.encode(),1))
     def test_current_real_manifest_errors_unchanged_except_identity(self):
         before=CURRENT.read_bytes()

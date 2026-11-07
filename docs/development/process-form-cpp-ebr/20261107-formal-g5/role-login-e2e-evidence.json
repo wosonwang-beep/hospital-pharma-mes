@@ -1,0 +1,58 @@
+{
+  "createdAt": "2026-11-07T10:28:30.703Z",
+  "kind": "Seven independent local business-user login sessions and actual server GET/UI route checks",
+  "total": 7,
+  "evidence": [
+    {
+      "login": "demo.production",
+      "permissions": [
+        "process:package:view"
+      ],
+      "server": 200,
+      "page": "/process/packages/829",
+      "editVisible": false
+    },
+    {
+      "login": "demo.warehouse",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    },
+    {
+      "login": "demo.sampler",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    },
+    {
+      "login": "demo.qc.analyst",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    },
+    {
+      "login": "demo.qc.reviewer",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    },
+    {
+      "login": "demo.qa",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    },
+    {
+      "login": "demo.master",
+      "permissions": [],
+      "server": 403,
+      "page": "/",
+      "editVisible": false
+    }
+  ]
+}

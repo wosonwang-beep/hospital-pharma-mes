@@ -1,0 +1,133 @@
+{
+  "status": "PROPOSAL ONLY -- actual validator unchanged",
+  "approved_scope_reference": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\decisions\\PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md",
+  "validator_source": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\.agents\\skills\\mes-ui-ux-audit\\scripts\\validate_audit_manifest.py",
+  "old_predicate": "process_scope = str(source.get(\"url\", \"\")).split(\"#\")[-1].rstrip(\"/\") == \"/processes\"",
+  "proposed_predicate": "process_scope = (\n                    str(source.get(\"url\", \"\")).split(\"#\")[-1].rstrip(\"/\") == \"/processes\"\n                    or str(source.get(\"url\", \"\")).rstrip(\"/\") in (\n                        \"http://127.0.0.1:5173/process/packages\",\n                        \"http://localhost:5173/process/packages\",\n                    )\n                )",
+  "cases": [
+    {
+      "case": "before_formal_root",
+      "validator": "original",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": true,
+      "viewport_error": true,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "after_formal_root",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": false,
+      "viewport_error": false,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "proposed_formal_localhost",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": false,
+      "viewport_error": false,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "proposed_original_prototype",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": false,
+      "viewport_error": false,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_other_module",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": true,
+      "viewport_error": true,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_nested_process_route",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": true,
+      "viewport_error": true,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_untrusted_host",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- PC_ONLY approval applies only to the process workspace",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": true,
+      "viewport_error": true,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    },
+    {
+      "case": "reject_modified_scope_hash",
+      "validator": "in-memory exact mapping",
+      "exit": 1,
+      "errors": [
+        "FAIL",
+        "- PC_ONLY requires the exact approved process-scope reference and SHA256",
+        "- required_viewports must include 1440, 1280, 900, 375",
+        "- interaction_checks[14] must PASS"
+      ],
+      "scope_error": false,
+      "viewport_error": true,
+      "remaining_gates": [
+        "- interaction_checks[14] must PASS"
+      ]
+    }
+  ],
+  "proof_passed": true,
+  "warning": "Positive formal cases still fail due to remaining real G5 checks; this probe cannot award READY."
+}

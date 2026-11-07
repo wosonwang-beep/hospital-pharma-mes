@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
 import com.hospital.mes.audit.application.*;
 import com.hospital.mes.process.application.*;
+import com.hospital.mes.masterdata.application.UnitService;
+import com.hospital.mes.masterdata.application.UnitCommands;
 import com.hospital.mes.process.domain.ProcessCommands.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest @ActiveProfiles("ci") @AutoConfigureMockMvc @Transactional
 class ProcessOperationTypePersistenceIT {
  @Autowired ProcessService service;
+ @Autowired UnitService units;
  @Autowired ProcessQueryService query;
  @Autowired ObjectMapper json;
  @Autowired JdbcTemplate jdbc;
@@ -39,7 +42,7 @@ class ProcessOperationTypePersistenceIT {
  @MockitoBean CurrentPlatformContextResolver contexts;
  String suffix,code,login,id;
  final List<String> keys=new ArrayList<>();
- final Set<String> permissions=Set.of("process:package:create","process:package:edit","process:package:view");
+ final Set<String> permissions=Set.of("process:package:create","process:package:edit","process:package:view","master:product:create","master:product:view","master:uom:create","master:uom:view");
 
  @BeforeEach void fixture() {
   suffix=UUID.randomUUID().toString().replace("-", "").substring(0,12);
@@ -76,6 +79,51 @@ class ProcessOperationTypePersistenceIT {
   for(String key:keys)assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM platform_idempotency_record WHERE idempotency_key=?",Long.class,key)).isZero();
  }
 
+ @Test void currentMetadataPersistsAndLegacyRouteOnlySaveRetainsIt() {
+  BusinessSeedPayloadGuard.check(Map.of("packageName","氯化钾溶液制备工艺","description","维护配制与过程检验要求"));
+  var dto=json.convertValue(route("PRODUCTION","IPC"),RouteSave.class);
+  service.saveCurrentDefinition(id,new CurrentDefinitionSave(null,null,null,null,dto,new PackageBasicInfo("氯化钾溶液制备工艺","维护配制与过程检验要求","V1.2","2026-06-01")),null,key());
+  assertThat(reread().path("packageName").asText()).isEqualTo("氯化钾溶液制备工艺");
+  assertThat(reread().path("description").asText()).isEqualTo("维护配制与过程检验要求");
+  assertThat(reread().path("processVersion").asText()).isEqualTo("V1.2");
+  assertThat(reread().path("effectiveApprovedDate").asText()).isEqualTo("2026-06-01");
+  save(route("PRODUCTION","IPC"));
+  assertThat(reread().path("packageName").asText()).isEqualTo("氯化钾溶液制备工艺");
+  assertThat(reread().path("processVersion").asText()).isEqualTo("V1.2");
+  assertThat(reread().path("effectiveApprovedDate").asText()).isEqualTo("2026-06-01");
+  service.saveCurrentDefinition(id,new CurrentDefinitionSave(null,null,null,null,dto,new PackageBasicInfo("氯化钾溶液制备工艺",null)),null,key());
+  assertThat(jdbc.queryForObject("SELECT description FROM proc_package WHERE id=?",String.class,Long.parseLong(id))).isNull();
+  assertThat(service.packages(0,100,"氯化钾溶液制备",Map.of()).items()).anyMatch(p->p.path("id").asText().equals(id));
+ }
+ @Test void oneProcessCanPersistMultipleApplicableProductsAndFreezeScope() {
+  var unit=units.create(new UnitCommands.Create("PROCUNIT"+suffix,"毫升","VOLUME",3),key()).path("id").asText();
+  var first=service.createProduct(new ProductCreate("KCL30-"+suffix,"氯化钾溶液","溶液剂","30ml:3g/瓶",unit),key()).path("id").asText();
+  var second=service.createProduct(new ProductCreate("BORIC-"+suffix,"硼酸溶液","溶液剂","100ml/瓶",unit),key()).path("id").asText();
+  var dto=json.convertValue(route("PRODUCTION","IPC"),RouteSave.class);
+  var basic=new PackageBasicInfo("氯化钾溶液制备工艺","适用于两种制剂产品","V1.2","2026-06-01");
+  var saved=service.saveCurrentDefinition(id,new CurrentDefinitionSave(null,null,null,null,dto,basic,List.of(first,second)),null,key());
+  assertThat(saved.path("productIds").isArray()).isTrue();
+  assertThat(saved.path("productIds").size()).isEqualTo(2);
+  assertThat(List.of(saved.path("productIds").get(0).asText(),saved.path("productIds").get(1).asText())).containsExactlyInAnyOrder(first,second);
+  assertThat(saved.path("applicableProducts").size()).isEqualTo(2);
+  assertThat(saved.path("productId").isNull()).isTrue();
+  var originalAssociationIds=jdbc.queryForList("SELECT id FROM proc_package_product WHERE org_id=? AND package_id=? ORDER BY product_id",Long.class,1,Long.parseLong(id));
+  service.saveCurrentDefinition(id,new CurrentDefinitionSave(null,null,null,null,dto,null,List.of(first,second)),null,key());
+  assertThat(jdbc.queryForList("SELECT id FROM proc_package_product WHERE org_id=? AND package_id=? ORDER BY product_id",Long.class,1,Long.parseLong(id))).isEqualTo(originalAssociationIds);
+  assertThat(service.packages(0,100,"",Map.of("productId",second)).items()).anyMatch(p->p.path("id").asText().equals(id));
+  var snapshot=service.currentSnapshot(1,Long.parseLong(id),false);
+  assertThat(snapshot.path("applicableProductIds").get(0).asText()).isEqualTo(first);
+  assertThat(snapshot.path("applicableProductIds").get(1).asText()).isEqualTo(second);
+  assertThat(reread().path("processVersion").asText()).isEqualTo("V1.2");
+  assertThat(reread().path("effectiveApprovedDate").asText()).isEqualTo("2026-06-01");
+ }
+ @Test void invalidMetadataRollsBackRouteAndNameTogether() {
+  save(route("PRODUCTION","IPC"));
+  var before=reread().deepCopy();
+  var changed=route("IPC","PRODUCTION");
+  assertThatThrownBy(()->nested(()->service.saveCurrentDefinition(id,new CurrentDefinitionSave(null,null,null,null,json.convertValue(changed,RouteSave.class),new PackageBasicInfo(" ","不能部分写入")),null,key()))).hasMessageContaining("packageName");
+  assertThat(reread()).isEqualTo(before);
+ }
  @Test void realControllerPutAndGetRetainEachOperationType() throws Exception {
   var body=json.createObjectNode().set("route",route("PRODUCTION","IPC"));
   mvc.perform(put("/api/v1/process-packages/"+id+"/current-definition").with(user(login).authorities(new SimpleGrantedAuthority("process:package:edit"))).header("Idempotency-Key",key()).contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(body)))

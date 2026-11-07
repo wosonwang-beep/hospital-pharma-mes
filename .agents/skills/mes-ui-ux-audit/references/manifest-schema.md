@@ -1,5 +1,9 @@
 # Audit manifest schema
 
+## Approved process PC scope (2026-11-04)
+
+The default remains `[1440,1280,900,375]`. Only the process workspace (`#/processes`) can use `applicability: {"mode":"PC_ONLY","approval":"<path to PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md>","approval_sha256":"2dfae1d451bff072d418ad843addc2b14f2794991d10ed50e710b0d327195d0e"}` with `[1440,1280,900]`. Approval paths resolve relative to the manifest and must identify the actual repository decision, whose hash is checked against the approved bytes. A missing, copied, changed or unrelated approval cannot activate the exception. All screenshot, dimension, WCAG, interaction, geometry, adversarial and open CRITICAL/HIGH gates remain unchanged. This does not grant prototype approval or formal acceptance. Authorization: `PROCESS_WORKSPACE_FINAL_GAPS_20261104_APPROVED.md`.
+
 `reviewer.executor` accepts exactly `Codex SELF-REVIEW` or `ChatGPT SELF-REVIEW`. Select the actual executor; both denote self-review, not independent QA or human acceptance. Empty, unknown, non-string, whitespace/case variants and independent-review claims are rejected. Historical Codex manifests remain unchanged. All other evidence, coverage, severity and acceptance rules are unchanged. See the approved `AUDIT_EXECUTOR_COMPATIBILITY_20261018.md` decision.
 
 The validator accepts a JSON object with this shape:

@@ -144,6 +144,16 @@ User-approved ordinary-page mapping 2026-10-13: basic query/list surfaces are T1
 Approved entry/navigation delta: DCP-PRODUCTION-FINISHED-ENTRY-001, frozen v1.0.23. Seven shared domains, production five/finished nine entries; new selectors select T1 exactly, existing details/workbenches retain T3/T5/T6. No new visual system, T7, business state, permission code or QA/signature rule.
 
 
+## 14. Global ordinary-page interaction — approved 2026-11-02
+
+Authority: [MES_GLOBAL_UX_INTERACTION_20261102_APPROVED](../development/decisions/MES_GLOBAL_UX_INTERACTION_20261102_APPROVED.md). Mandatory in **G1/G2 design and prototype, G3/G3.5 handoff, G4 implementation, G5 acceptance**; still Global UI V2, no UI V3.
+
+- T1 query actions: `查询 → 重置`, primary before auxiliary, right-aligned. Reset restores default filters/sort/first page and re-queries; responsive wrapping never reverses group order.
+- Ordinary T2 create/edit header: **title only**; no subtitle, explanation, header back-to-list or repeated object summary. Keep cancel in the bottom action group with unsaved-edit protection; T3 view uses its own approved detail header.
+- Ordinary T2 child-list add/edit: **centered modal** only; no table inline editor or below-table edit form. Add button stays on the right of the child section heading; modal footer `保存/确认 → 取消` must override Ant Design Vue defaults.
+- All action groups: primary on left, auxiliary to right, destructive last with its existing permission/confirmation. Every query/form label and control remain on the same horizontal row; narrow viewports wrap whole pairs only.
+- Opening, saving, canceling or refreshing a child modal and handling HTTP failures/409 MUST NOT clear unsaved main-form input. G1/G2/G5 include screenshot+DOM/button-order evidence, modal interaction, recovery and permissions. No change to business/GMP/API/state/audit contracts without bounded approval.
+
 ## Approved bounded control removal — 2026-10-09
 
 Human-approved [DCP-BASIC-NO-AUDIT-VERSION-001](../development/DCP-BASIC-NO-AUDIT-VERSION-001-APPROVED.md) supersedes only basic maintenance audit/version controls and the process binding of new production/eBR work. [Bounded contract](../architecture/BASIC_CURRENT_DEFINITION_CONTRACT.md) specifies database, domain, state, API, permissions, UI, migration, integration and RTM changes. Basic pages retain UI V2 and their existing T1–T6 templates, without audit panels, client version controls or process revision actions. Production/eBR retain their own audit, signatures, revision checks and immutable frozen evidence. Historical releases and evidence remain immutable. Runtime verification/status is only MES_TASKS.md. This approved supplement does not authorize any further business/UI redesign.

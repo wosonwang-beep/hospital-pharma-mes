@@ -1,0 +1,265 @@
+{
+  "createdAt": "2026-11-07T06:28:44.393Z",
+  "browser": "Installed Playwright Chromium 1248",
+  "method": "Native chrome.tabs.setZoom(2) via temporary isolated MV3 extension; not CSS emulation",
+  "screens": [
+    {
+      "physical": 1440,
+      "kind": "process-list",
+      "filename": "1440-process-list-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "process-detail",
+      "filename": "1440-process-detail-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": 1325,
+        "formBottom": 1288
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "process-edit",
+      "filename": "1440-process-edit-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": 1323,
+        "formBottom": 1286
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-cpp",
+      "filename": "1440-ebr-cpp-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-canvas",
+      "filename": "1440-ebr-canvas-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "dpr": 2,
+        "scrollWidth": 720,
+        "clientWidth": 720,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1440,
+      "kind": "product-modal",
+      "filename": "1440-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 720,
+        "scrollWidth": 720,
+        "clientWidth": 720
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-list",
+      "filename": "1280-process-list-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-detail",
+      "filename": "1280-process-detail-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": 1325,
+        "formBottom": 1288
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "process-edit",
+      "filename": "1280-process-edit-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": 1323,
+        "formBottom": 1286
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-cpp",
+      "filename": "1280-ebr-cpp-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-canvas",
+      "filename": "1280-ebr-canvas-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "dpr": 2,
+        "scrollWidth": 640,
+        "clientWidth": 640,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 1280,
+      "kind": "product-modal",
+      "filename": "1280-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 640,
+        "scrollWidth": 640,
+        "clientWidth": 640
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-list",
+      "filename": "900-process-list-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-detail",
+      "filename": "900-process-detail-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": 1379,
+        "formBottom": 1342
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "process-edit",
+      "filename": "900-process-edit-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": 1371,
+        "formBottom": 1334
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-cpp",
+      "filename": "900-ebr-cpp-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-canvas",
+      "filename": "900-ebr-canvas-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "dpr": 2,
+        "scrollWidth": 450,
+        "clientWidth": 450,
+        "footerTop": null,
+        "formBottom": null
+      },
+      "passed": true
+    },
+    {
+      "physical": 900,
+      "kind": "product-modal",
+      "filename": "900-product-modal-native200.png",
+      "metrics": {
+        "innerWidth": 450,
+        "scrollWidth": 450,
+        "clientWidth": 450
+      },
+      "passed": true,
+      "focusRestored": true,
+      "beforeEsc": true
+    }
+  ],
+  "errors": [],
+  "sourceHash": "e61faf54f9f0540e0f10b03a81b67de833806adfdb41112f242a0d0fd48b28ae",
+  "zoom": {
+    "tabId": 1570795366,
+    "before": 1,
+    "after": 2
+  },
+  "pass": true,
+  "status": "PASS FOR NATIVE CHROME TAB ZOOM TARGETED G5"
+}

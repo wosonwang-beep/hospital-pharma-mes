@@ -86,7 +86,37 @@ def main() -> int:
         require(isinstance(query, dict) and evidence_exists(manifest_path, query.get("evidence")), f"knowledge_queries[{index}] evidence file missing", errors)
 
     viewports = data.get("required_viewports") or []
-    require(all(width in viewports for width in (1440, 1280, 900, 375)), "required_viewports must include 1440, 1280, 900, 375", errors)
+    required_widths = (1440, 1280, 900, 375)
+    applicability = data.get("applicability") or {}
+    if applicability:
+        require(isinstance(applicability, dict), "applicability must be an object", errors)
+        if isinstance(applicability, dict):
+            require(applicability.get("mode") == "PC_ONLY", "unknown applicability mode", errors)
+            if applicability.get("mode") == "PC_ONLY":
+                # This is the one approved process-task exception, not a global mobile bypass.
+                import hashlib
+                approval = Path(__file__).resolve().parents[4] / "docs/development/decisions/PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md"
+                reference = applicability.get("approval")
+                linked = Path(reference) if isinstance(reference, str) and reference.strip() else None
+                if linked is not None and not linked.is_absolute():
+                    linked = manifest_path.parent / linked
+                approved = bool(linked is not None and linked.resolve() == approval.resolve() and approval.is_file())
+                expected_hash = "2dfae1d451bff072d418ad843addc2b14f2794991d10ed50e710b0d327195d0e"
+                approved = approved and hashlib.sha256(approval.read_bytes()).hexdigest() == expected_hash
+                approved = approved and applicability.get("approval_sha256") == expected_hash
+                require(approved, "PC_ONLY requires the exact approved process-scope reference and SHA256", errors)
+                process_url = str(source.get("url", "")).rstrip("/")
+                process_scope = (
+                    process_url.split("#")[-1] == "/processes"
+                    or process_url in (
+                        "http://127.0.0.1:5173/process/packages",
+                        "http://localhost:5173/process/packages",
+                    )
+                )
+                require(process_scope, "PC_ONLY approval applies only to the process workspace", errors)
+                if approved and process_scope:
+                    required_widths = (1440, 1280, 900)
+    require(all(width in viewports for width in required_widths), "required_viewports must include " + ", ".join(map(str, required_widths)), errors)
 
     expected: set[tuple[str, str, int]] = set()
     for item in data.get("expected_surfaces") or []:

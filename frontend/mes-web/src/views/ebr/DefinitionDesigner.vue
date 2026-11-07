@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import {computed,nextTick,onBeforeUnmount,onMounted,ref,watch} from 'vue'
+import {computed,nextTick,onBeforeUnmount,onMounted,ref,watch,useId} from 'vue'
 import Editor,{ControlType,EditorMode,ElementType,RowFlex,type IEditorResult,type IElement} from '@hufe921/canvas-editor'
 import ProcessLookup from '../process/ProcessLookup.vue'
 import CppRuleDesigner from './CppRuleDesigner.vue'
 import RolePicker from './RolePicker.vue'
+import {selectAccessibility as vSelectAccessibility} from './selectAccessibility'
 import {ebrRoleOptions} from '../../api/ebrRoles'
 import {PlusOutlined} from '@ant-design/icons-vue'
 import {message} from 'ant-design-vue'
 import {fieldLabels,newField} from './model'
 import type {EbrDefinition,EbrField,EbrForm,EbrOperationChoice,EbrCanvasDocument,EbrRoleOption} from './types'
 
-const props=defineProps<{definition:EbrDefinition;editable:boolean;operationChoices:EbrOperationChoice[];savedDefinition:EbrDefinition;initialFormCode?:string}>()
+const props=defineProps<{definition:EbrDefinition;editable:boolean;operationChoices:EbrOperationChoice[];savedDefinition:EbrDefinition;initialFormCode?:string;initialTab?:'form'|'cpp'}>()
 
 const host=ref<HTMLDivElement|null>(null)
+const fontSizeId=useId()
 const selectedFormIndex=ref(0)
 const selectedFieldCode=ref('')
 const canvasFieldCodes=new WeakMap<EbrField,string>()
 const rightTab=ref('field')
-const designerTab=ref<'form'|'cpp'>('form')
+const designerTab=ref<'form'|'cpp'>(props.initialTab??'form')
 const viewMode=ref<'design'|'fill'>('design')
 const fontSize=ref(16)
 const roleOptions=ref<EbrRoleOption[]>([])
@@ -156,6 +158,8 @@ async function mountEditor(){
   locale:'zhCN',pageMode:'paging' as never,defaultFont:'Microsoft YaHei',defaultSize:16,
   margins:[70,70,70,70],historyMaxRecordCount:100
  })
+ // Canvas Editor owns this input; label it after each editor mount.
+ host.value.querySelector('textarea.ce-inputarea')?.setAttribute('aria-label','表单画布输入')
  initialCanvasValue=JSON.stringify(editor.command.getValue())
  editor.listener.contentChange=()=>capture()
  editor.listener.controlChange=payload=>{
@@ -280,12 +284,13 @@ function addReview(){
 watch(()=>selectedFormIndex.value,()=>void mountEditor())
 watch(()=>props.editable,()=>{void mountEditor();if(props.editable)void loadRoleOptions()})
 watch(()=>props.initialFormCode,()=>{capture();selectInitialForm();void mountEditor()})
+watch(()=>props.initialTab,next=>{if(next&&next!==designerTab.value)switchDesignerTab(next)})
 onMounted(()=>{selectInitialForm();void mountEditor();if(props.editable)void loadRoleOptions()})
 onBeforeUnmount(()=>{roleRequest++;editorMountGeneration++;capture();editor?.destroy()})
 </script>
 
 <template>
-  <section data-ui-template="T2" class="canvas-ebr-designer">
+  <section v-select-accessibility data-ui-template="T2" class="canvas-ebr-designer">
     <header class="designer-topbar">
       <div>
         <strong>表单模板设计器</strong>
@@ -307,7 +312,8 @@ onBeforeUnmount(()=>{roleRequest++;editorMountGeneration++;capture();editor?.des
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('undo')">↶</a-button>
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('redo')">↷</a-button>
       <span class="tool-sep"></span>
-      <a-select v-model:value="fontSize" size="small" :disabled="!editable||viewMode!=='design'" style="width:78px" :options="[12,14,16,18,20,22,24,28].map(value=>({value,label:value+'px'}))" @change="changeSize"/>
+      <label :for="fontSizeId" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">字号</label>
+      <a-select :id="fontSizeId" v-model:value="fontSize" size="small" :disabled="!editable||viewMode!=='design'" style="width:78px" :options="[12,14,16,18,20,22,24,28].map(value=>({value,label:value+'px'}))" @change="changeSize"/>
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('bold')"><b>B</b></a-button>
       <a-button size="small" :disabled="!editable||viewMode!=='design'" @click="toolbar('italic')"><i>I</i></a-button>
       <span class="tool-sep"></span>
@@ -380,8 +386,8 @@ onBeforeUnmount(()=>{roleRequest++;editorMountGeneration++;capture();editor?.des
               <template v-if="['ENUM','MULTI_ENUM'].includes(selectedField.fieldType)">
                 <div class="option-box">
                   <div v-for="(option,index) in selectedField.options" :key="option.optionCode" class="option-row">
-                    <a-input v-model:value="option.optionLabel" :disabled="!editable" @change="updateCanvasControl"/>
-                    <a-button v-if="editable" danger type="text" @click="selectedField.options.splice(index,1);updateCanvasControl()">×</a-button>
+                    <a-input v-model:value="option.optionLabel" :aria-label="'选项'+(index+1)+'名称'" :disabled="!editable" @change="updateCanvasControl"/>
+                    <a-button v-if="editable" danger type="text" :aria-label="'删除选项'+(index+1)" @click="selectedField.options.splice(index,1);updateCanvasControl()">×</a-button>
                   </div>
                   <a-button v-if="editable" block @click="addOption">＋ 添加选项</a-button>
                 </div>
@@ -404,17 +410,17 @@ onBeforeUnmount(()=>{roleRequest++;editorMountGeneration++;capture();editor?.des
           <a-tab-pane key="rules" tab="规则与签名">
             <div class="rules-panel">
               <a-alert v-if="roleError" type="error" :message="roleError" show-icon><template #action><a-button size="small" @click="loadRoleOptions(roleKeyword)">重试加载角色</a-button></template></a-alert>
-              <div class="rules-head"><strong>校验/计算规则</strong><a-button v-if="editable" size="small" @click="addRule">＋</a-button></div>
+              <div class="rules-head"><strong>校验/计算规则</strong><a-button v-if="editable" size="small" aria-label="添加校验或计算规则" @click="addRule">＋</a-button></div>
               <div v-for="rule in definition.rules.filter(r=>!r.cppConfigJson)" :key="rule.ruleCode" class="rule-card">
                 <div><b>{{rule.ruleCode}}</b><span>{{rule.ruleType}}</span></div>
-                <a-input v-model:value="rule.expression" :disabled="!editable" size="small"/>
+                <a-input v-model:value="rule.expression" :aria-label="rule.ruleCode+'表达式'" :disabled="!editable" size="small"/>
               </div>
-              <div class="rules-head"><strong>电子签名规则</strong><a-button v-if="editable" size="small" @click="addSignature">＋</a-button></div>
+              <div class="rules-head"><strong>电子签名规则</strong><a-button v-if="editable" size="small" aria-label="添加电子签名规则" @click="addSignature">＋</a-button></div>
               <div v-for="(rule,index) in definition.signatureRules" :key="index" class="rule-card">
                 <div><b>{{rule.objectCode}}</b><span>{{rule.meaning}}</span></div>
                 <RolePicker v-model:role-id="rule.requiredRoleId" :editable="editable" :options="roleOptions" :loading="roleLoading" :legacy-code="rule.requiredRole" :code-snapshot="rule.roleCodeSnapshot" :name-snapshot="rule.roleNameSnapshot" @search="loadRoleOptions"/>
               </div>
-              <div class="rules-head"><strong>复核规则</strong><a-button v-if="editable" size="small" @click="addReview">＋</a-button></div>
+              <div class="rules-head"><strong>复核规则</strong><a-button v-if="editable" size="small" aria-label="添加复核规则" @click="addReview">＋</a-button></div>
               <div v-for="(rule,index) in definition.reviewRules" :key="index" class="rule-card">
                 <div><b>{{rule.objectCode}}</b><span>{{rule.reviewType}}</span></div>
                 <RolePicker v-model:role-id="rule.requiredRoleId" :editable="editable" :options="roleOptions" :loading="roleLoading" :legacy-code="rule.requiredRole" :code-snapshot="rule.roleCodeSnapshot" :name-snapshot="rule.roleNameSnapshot" @search="loadRoleOptions"/>

@@ -53,6 +53,8 @@ public class ProcessQueryService {
   n.put("dosageForm",p.getDosageForm());n.put("specification",p.getSpecification());n.put("baseUnitId",p.getBaseUnitId().toString());return n;
  }
  public void requireProduct(long org,long productId){if(!"ACTIVE".equals(store.products().get(org,productId).getStatus()))throw new com.hospital.mes.common.exception.ComplianceException("PRODUCT_NOT_USABLE","Active product required");}
+ public com.fasterxml.jackson.databind.JsonNode requireCurrentIdentified(long org,long packageId,long productId){if(!store.isApplicableToProduct(org,packageId,productId))throw new com.hospital.mes.common.exception.ComplianceException("PROCESS_PRODUCT_NOT_APPLICABLE","Selected process is not applicable to this product");return requireCurrentIdentified(org,packageId);}
+ public boolean isApplicableToProduct(long org,long packageId,long productId){return store.isApplicableToProduct(org,packageId,productId);}
  public record OperationReference(String id,String operationCode,String operationName){}
  public java.util.List<OperationReference> operations(long org,long versionId){
   store.versions().get(org,versionId);

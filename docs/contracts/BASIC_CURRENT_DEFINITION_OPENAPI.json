@@ -2259,16 +2259,31 @@
         "type": "object",
         "properties": {
           "formula": {
-            "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.FormulaSave"
+            "anyOf": [
+              {"$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.FormulaSave"},
+              {"type": "null"}
+            ]
           },
           "route": {
             "$ref": "#/components/schemas/com.hospital.mes.process.domain.ProcessCommands.RouteSave"
+          },
+          "basicInfo": {
+            "type": "object",
+            "properties": {
+              "packageName": {"type": "string", "maxLength": 200},
+              "description": {"type": "string", "maxLength": 1000},
+              "processVersion": {"type": "string", "maxLength": 32},
+              "effectiveApprovedDate": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          },
+          "productIds": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {"type": "string"}
           }
         },
-        "required": [
-          "formula",
-          "route"
-        ],
+        "required": ["route"],
         "additionalProperties": false
       },
       "com.hospital.mes.masterdata.application.SupplierCommands.Create": {
@@ -2580,13 +2595,15 @@
       "com.hospital.mes.process.domain.ProcessCommands.PackageCreate": {
         "type": "object",
         "properties": {
-          "productId": {
-            "type": "string"
-          },
-          "packageCode": {
-            "type": "string"
-          }
+          "productId": {"type": "string", "deprecated": true, "description": "Legacy single-product compatibility field."},
+          "productIds": {"type": "array", "maxItems": 100, "items": {"type": "string"}},
+          "packageCode": {"type": "string"},
+          "packageName": {"type": "string", "maxLength": 200},
+          "description": {"type": "string", "maxLength": 1000},
+          "processVersion": {"type": "string", "maxLength": 32},
+          "effectiveApprovedDate": {"type": "string", "format": "date"}
         },
+        "required": ["packageCode"],
         "additionalProperties": false
       },
       "com.hospital.mes.ebr.domain.EbrCommands.Create": {
@@ -3327,42 +3344,37 @@
       },
       "DcpCurrentPackage": {
         "type": "object",
-        "required": [
-          "id",
-          "packageCode",
-          "productId",
-          "status",
-          "currentDefinition"
-        ],
+        "required": ["id", "packageCode", "status", "currentDefinition"],
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "packageCode": {
-            "type": "string"
-          },
-          "productId": {
-            "type": "string"
-          },
-          "productName": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ACTIVE",
-              "INACTIVE"
-            ]
-          },
-          "currentDefinition": {
-            "$ref": "#/components/schemas/DcpCurrentDefinition"
-          },
-          "allowedActions": {
+          "id": {"type": "string"},
+          "packageCode": {"type": "string"},
+          "packageName": {"type": "string"},
+          "description": {"type": "string"},
+          "processVersion": {"type": "string"},
+          "effectiveApprovedDate": {"type": "string", "format": "date"},
+          "productId": {"type": ["string", "null"], "deprecated": true, "description": "Legacy single-product projection; null when zero or multiple applicable products."},
+          "productIds": {"type": "array", "items": {"type": "string"}},
+          "applicableProducts": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "object",
+              "required": ["id", "productId", "productCode", "productName", "status"],
+              "properties": {
+                "id": {"type": "string"},
+                "productId": {"type": "string"},
+                "productCode": {"type": "string"},
+                "productName": {"type": "string"},
+                "specification": {"type": ["string", "null"]},
+                "dosageForm": {"type": ["string", "null"]},
+                "status": {"type": "string"}
+              },
+              "additionalProperties": false
             }
-          }
+          },
+          "productName": {"type": "string"},
+          "status": {"type": "string", "enum": ["ACTIVE", "INACTIVE"]},
+          "currentDefinition": {"$ref": "#/components/schemas/DcpCurrentDefinition"},
+          "allowedActions": {"type": "array", "items": {"type": "string"}}
         },
         "not": {
           "anyOf": [

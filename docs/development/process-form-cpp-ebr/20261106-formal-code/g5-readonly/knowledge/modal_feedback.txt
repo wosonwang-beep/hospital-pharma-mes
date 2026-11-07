@@ -1,0 +1,36 @@
+## UI Pro Max Search Results
+**Domain:** ux | **Query:** modal focus confirmation cancel
+**Source:** ux-guidelines.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Interaction
+- **Issue:** Focus States
+- **Platform:** All
+- **Description:** Keyboard focus, including controls inside a modal, needs a visible indicator
+- **Do:** Use a visible focus ring on every interactive control, including modal controls
+- **Don't:** Remove focus outline without replacement
+- **Code Example Good:** focus:ring-2 focus:ring-blue-500
+- **Code Example Bad:** outline-none without alternative
+- **Severity:** High
+
+### Result 2
+- **Category:** Feedback
+- **Issue:** Confirmation Messages
+- **Platform:** All
+- **Description:** Confirm successful actions
+- **Do:** Brief success message
+- **Don't:** Silent success
+- **Code Example Good:** Saved successfully toast
+- **Code Example Bad:** No confirmation
+- **Severity:** Medium
+
+### Result 3
+- **Category:** Interaction
+- **Issue:** Confirmation Dialogs
+- **Platform:** All
+- **Description:** Prevent accidental destructive actions
+- **Do:** Confirm before delete/irreversible actions
+- **Don't:** Delete without confirmation
+- **Code Example Good:** Are you sure modal
+- **Code Example Bad:** Direct delete on click
+- **Severity:** High

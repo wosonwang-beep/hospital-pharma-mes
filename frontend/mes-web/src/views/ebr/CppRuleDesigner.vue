@@ -64,16 +64,18 @@ function addRule(){
  selectedRuleCode.value=rule.ruleCode
  message.success('已新增CPP规则，请配置条件')
 }
+
+
 function addCondition(group:CppGroup){group.conditions.push(blankCondition())}
 function addGroup(){config.value.groups.push(blankGroup())}
-function removeCondition(group:CppGroup,index:number){
- if(group.conditions.length<=1){message.warning('每个条件组至少保留一条条件');return}
- group.conditions.splice(index,1)
-}
-function removeGroup(index:number){
- if(config.value.groups.length<=1){message.warning('至少保留一个条件组');return}
- config.value.groups.splice(index,1)
-}
+
+function removeCondition(group:CppGroup,index:number){if(group.conditions.length<=1){message.warning('每个条件组至少保留一条条件');return}group.conditions.splice(index,1)}
+
+
+function removeGroup(index:number){if(config.value.groups.length<=1){message.warning('至少保留一个条件组');return}config.value.groups.splice(index,1)}
+
+
+
 function field(code:string){return currentFields.value.find(f=>f.fieldCode===code)}
 function operators(f:EbrField|undefined){
  const numeric=f&&['NUMBER','TIMER','CALCULATED','INSTRUMENT_VALUE'].includes(f.fieldType)
@@ -218,7 +220,7 @@ onMounted(async()=>{
         <div class="step-badge">4</div><h3>超限动作设置</h3>
         <div class="action-grid">
           <label v-for="[code,label,tip] in actionOptions" :key="code">
-            <a-checkbox :checked="config.actions.includes(code)" :disabled="!editable||(code==='REQUIRE_QA_REVIEW'&&!hasFormReviewRule)" @change="(e:any)=>toggleAction(code,e.target.checked)"/><span><b>{{label}}</b><small>{{tip}}{{code==='REQUIRE_QA_REVIEW'&&!hasFormReviewRule?'；请先在“规则与签名”配置表单复核规则':''}}</small></span>
+            <a-checkbox :aria-label="label" :checked="config.actions.includes(code)" :disabled="!editable||(code==='REQUIRE_QA_REVIEW'&&!hasFormReviewRule)" @change="(e:any)=>toggleAction(code,e.target.checked)"/><span><b>{{label}}</b><small>{{tip}}{{code==='REQUIRE_QA_REVIEW'&&!hasFormReviewRule?'；请先在“规则与签名”配置表单复核规则':''}}</small></span>
           </label>
         </div>
       </section>
@@ -262,7 +264,7 @@ onMounted(async()=>{
 .condition-row{display:grid;grid-template-columns:30px minmax(170px,1.45fr) 86px minmax(125px,1fr) 54px 34px;align-items:center;gap:8px}.condition-no{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#e9f2ff;color:var(--mes-ui-primary);font-weight:650}.condition-unit{font-size:12px;color:var(--mes-ui-secondary);text-align:center}.logic-chip{width:52px;margin:7px auto;text-align:center;border-radius:12px;background:#e9f2ff;color:var(--mes-ui-primary);font-size:11px;font-weight:700;padding:2px 8px}
 .business-preview{padding:15px;text-align:center;border-radius:6px;background:#eef6ff;border:1px solid #d4e8ff;color:#145fbd;font-size:18px;font-weight:700;overflow-wrap:anywhere}.system-expression{margin-top:9px;padding:9px 11px;background:#fafbfc;border-radius:6px;color:var(--mes-ui-secondary)}.system-expression code{display:block;margin-top:7px;color:var(--mes-ui-text);overflow-wrap:anywhere}
 .action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.action-grid label{display:flex;align-items:flex-start;gap:8px;min-height:58px;padding:10px;border:1px solid #dce4ee;border-radius:7px;background:#fff}.action-grid span{display:flex;flex-direction:column}.action-grid small{color:var(--mes-ui-secondary);font-size:11px;margin-top:3px}.builder-actions{display:flex;justify-content:flex-end;padding:0 2px 2px}
-.cpp-help section{border:1px solid var(--mes-ui-border);border-radius:7px;padding:11px;background:#fff}.cpp-help h3{margin:0;font-size:14px}.side-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.side-title span{font-size:11px;color:var(--mes-ui-secondary)}.rule-list-section{flex:0 0 auto}.rule-item{width:100%;display:flex;align-items:center;gap:8px;border:1px solid transparent;background:#fff;border-radius:6px;padding:5px 6px;margin:4px 0}.rule-item.active{background:#eaf3ff;border-color:#b6d5ff}.rule-select{flex:1;min-width:0;border:0;background:transparent;padding:4px 2px;text-align:left;cursor:pointer;color:inherit}.rule-select span{min-width:0}.rule-select b,.rule-select small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rule-select small{color:var(--mes-ui-secondary);font-size:11px;margin-top:2px}.retention-note{margin:8px 2px 0;font-size:11px;line-height:1.5;color:var(--mes-ui-secondary)}.compact-help{background:#fafcff!important}.compact-help p{margin:7px 0 0;font-size:11px;line-height:1.65;color:var(--mes-ui-secondary)}.context-section{margin-top:auto}.cpp-help dl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:7px;margin:9px 0 0;font-size:12px}.cpp-help dt{color:var(--mes-ui-secondary)}.cpp-help dd{margin:0;overflow-wrap:anywhere}
+.cpp-help section{border:1px solid var(--mes-ui-border);border-radius:7px;padding:11px;background:#fff}.cpp-help h3{margin:0;font-size:14px}.side-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.side-title span{font-size:11px;color:var(--mes-ui-secondary)}.rule-list-section{flex:0 0 auto}.rule-item{width:100%;display:flex;align-items:center;gap:8px;border:1px solid transparent;background:#fff;border-radius:6px;padding:5px 6px;margin:4px 0}.rule-item.active{background:#eaf3ff;border-color:#b6d5ff}.rule-select{flex:1;min-width:0;border:0;background:transparent;padding:4px 2px;text-align:left;cursor:pointer;color:inherit}.rule-select span{min-width:0}.rule-select b,.rule-select small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rule-select small{color:#51627a;font-size:11px;margin-top:2px}.retention-note{margin:8px 2px 0;font-size:11px;line-height:1.5;color:var(--mes-ui-secondary)}.compact-help{background:#fafcff!important}.compact-help p{margin:7px 0 0;font-size:11px;line-height:1.65;color:var(--mes-ui-secondary)}.context-section{margin-top:auto}.cpp-help dl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:7px;margin:9px 0 0;font-size:12px}.cpp-help dt{color:var(--mes-ui-secondary)}.cpp-help dd{margin:0;overflow-wrap:anywhere}
 @container ebr-designer (max-width:1200px){.cpp-rule-designer{grid-template-columns:230px minmax(560px,1fr)}.cpp-help{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(220px,.8fr) minmax(220px,.8fr)}.context-section{margin-top:0}}
 @container ebr-designer (max-width:900px){
  .cpp-rule-designer{grid-template-columns:minmax(0,1fr);min-height:0}.cpp-fields{border-right:0;border-bottom:1px solid var(--mes-ui-border)}.cpp-help{grid-column:auto;display:flex;border-left:0;border-top:1px solid var(--mes-ui-border)}

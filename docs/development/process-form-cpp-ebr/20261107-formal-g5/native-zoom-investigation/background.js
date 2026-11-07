@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener(()=>console.log('MES isolated zoom probe installed'));

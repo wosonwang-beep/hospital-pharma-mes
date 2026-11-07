@@ -1,0 +1,1982 @@
+{
+  "audit_id": "PROCESS-FORMAL-G5-20261106",
+  "reviewer": {
+    "executor": "ChatGPT SELF-REVIEW",
+    "skill": "mes-ui-ux-audit",
+    "ui_ux_pro_max_path": "C:/Users/Administrator/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "ui_ux_pro_max_sha256": "8b827fe03b349aeea99a7d6cf4ccd892e6065b672859fdb11e13a1919453eddc"
+  },
+  "source": {
+    "url": "http://127.0.0.1:5173/process/packages",
+    "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+    "design_lock": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\decisions\\PROCESS_FORMAL_DIRECT_IMPLEMENTATION_20261106.md",
+    "dependency_hashes": {
+      "frontend/mes-web/src/views/process/ProcessDetailView.vue": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "frontend/mes-web/src/views/ebr/DefinitionDesigner.vue": "4e8f85674467020eb055550a60e65cc0c7ade728df0fa39c6bb66a9ab2a3245b",
+      "frontend/mes-web/src/views/ebr/CppRuleDesigner.vue": "9c64523b14fb3fb24e2e4b98f04560f7637768f7533e1867d3a8549ff196ea75"
+    }
+  },
+  "scope_note": "正式 MES G5 PC_ONLY: 1440/1280/900。375px手机端已依用户2026-11-04批准撤出范围；不是将未审格算PASS。",
+  "applicability": {
+    "mode": "PC_ONLY",
+    "approval": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\decisions\\PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md",
+    "approval_sha256": "2dfae1d451bff072d418ad843addc2b14f2794991d10ed50e710b0d327195d0e"
+  },
+  "required_viewports": [
+    1440,
+    1280,
+    900
+  ],
+  "expected_surfaces": [
+    {
+      "surface": "list",
+      "states": [
+        "default",
+        "filtered"
+      ]
+    },
+    {
+      "surface": "create",
+      "states": [
+        "default",
+        "required-disabled"
+      ]
+    },
+    {
+      "surface": "detail",
+      "states": [
+        "forms",
+        "products"
+      ]
+    },
+    {
+      "surface": "edit",
+      "states": [
+        "forms",
+        "products"
+      ]
+    },
+    {
+      "surface": "ebr-cpp",
+      "states": [
+        "readback"
+      ]
+    },
+    {
+      "surface": "ebr-form",
+      "states": [
+        "canvas"
+      ]
+    }
+  ],
+  "knowledge_queries": [
+    {
+      "group": "product_style",
+      "query": "enterprise manufacturing admin",
+      "domain": "product",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\product_style.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "layout",
+      "query": "desktop responsive overflow grid",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\layout.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "forms",
+      "query": "form labels validation error recovery",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\forms_errors.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "tables_lists",
+      "query": "data table action visibility",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\table_actions.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "modal_feedback",
+      "query": "modal focus confirmation cancel",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\modal_feedback.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "accessibility",
+      "query": "focus keyboard wcag 2.2",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\a11y_keyboard.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "typography_color",
+      "query": "text contrast hierarchy",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\typography_color.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "stack",
+      "query": "form tables vue",
+      "domain": "stack",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\vue_stack.txt",
+      "exit_code": 0
+    }
+  ],
+  "screenshots": [
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-list-default.png",
+      "sha256": "e33feae0fadcf0ccff57e254d31d2ce4f06ab91c8d3b9258aab6c1b1a236de43",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list default 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-list-filtered.png",
+      "sha256": "697bc1a9c8572dec98df81ba91162f5c30289b9483709aa4afced5690758a028",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list filtered 1440px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-create-default.png",
+      "sha256": "338007f3b58aa37c2bfda46aced5d28aea75fd40416b07d0b8d03ae812218adf",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create default 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-create-required-disabled.png",
+      "sha256": "338007f3b58aa37c2bfda46aced5d28aea75fd40416b07d0b8d03ae812218adf",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create required-disabled 1440px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-detail-forms.png",
+      "sha256": "f89ce292ce3313d165d6047f1b836cc725eb272ced25b6e22fb2dd795beae846",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail forms 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-detail-products.png",
+      "sha256": "6a283ce3d428eda5f4bf4f8390228219fa7ae82ba6ef1fe8f8db3748e9d944bd",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail products 1440px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-edit-forms.png",
+      "sha256": "a1818afb97fab891e1021faa06b9bb2abbe1a60fc71b196cd52b6ee48f62606f",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit forms 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-edit-products.png",
+      "sha256": "ef8a6232bc8cc2a9141074903764bb3bf4b83622a277002fd70bb51655134fdc",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit products 1440px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-ebr-cpp-readback.png",
+      "sha256": "5b920e22fb204bdc84dd0ea2835672b016c81d2047c4702cdec3a7818e4202e7",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1440px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1440-ebr-form-canvas.png",
+      "sha256": "5cb0898e67f9098be04f6a52b25267a8ff6012bd6a237679a835e65fc09e02c6",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "FAIL",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 当前已保存的CPP业务字段标签紧贴Canvas标题，文书内容需独立校对并修正。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1440px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-list-default.png",
+      "sha256": "369cc604b548df3c33d85c1977f1f2708f093ca68999385ed1b97c58e92c015b",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list default 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-list-filtered.png",
+      "sha256": "2027d5710a82ae23c5de94cf88b9e412d6d22cf838f04fb5b8eb511e00394a9a",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list filtered 1280px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-create-default.png",
+      "sha256": "af423f78305f9145ebb03c4a4e0923984f57ff333b93b760e376cec792050990",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create default 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-create-required-disabled.png",
+      "sha256": "af423f78305f9145ebb03c4a4e0923984f57ff333b93b760e376cec792050990",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create required-disabled 1280px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-detail-forms.png",
+      "sha256": "d7c7f1d87a919f1444c26355b0e612a83868696cce92d898d4ab768c636364d8",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail forms 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-detail-products.png",
+      "sha256": "dc7a9d8fa696fff14cd5834ab6dc521912283dca68db482c752c4cf93f726223",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail products 1280px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-edit-forms.png",
+      "sha256": "ccb50cfeeb30f633b77ae0aca22000883ebbbaf3553f70548ce67695328ccc9a",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit forms 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-edit-products.png",
+      "sha256": "71488b5e6a5bb64172e017cd75a4804f9efb0092b9e266777430197ac4d8e20b",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit products 1280px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-ebr-cpp-readback.png",
+      "sha256": "0dd95ed26f041ca7c74a1c8111507a4eb9bc0d5fe6c24865c48fad4da3b75185",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 1280px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\1280-ebr-form-canvas.png",
+      "sha256": "f68e530f949bb2ecd020fe510edb323f749feeecfb603a9f42b4bd5673013941",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "FAIL",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 当前已保存的CPP业务字段标签紧贴Canvas标题，文书内容需独立校对并修正。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-form canvas 1280px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-list-default.png",
+      "sha256": "c8a474a618bc948a0a8b611bc4bdf0e993d5282506465491b0670e4623a5725e",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list default 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-list-filtered.png",
+      "sha256": "7713bc495aa2807b2427e8f27aaf0f2bb33955a5d63ee93e9e6471bc36157ead",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "list filtered 900px：T1标题、编码/状态/产品查询成组同行；结果表行高一致、右侧操作固定；1280/900内部横向可滚动查看隐藏列，整页无横溢出，长编码可换行。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-create-default.png",
+      "sha256": "215822d77c93347d5cc06837e1b289c916e9e1c5929d489ebeab29396da9e0fb",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create default 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-create-required-disabled.png",
+      "sha256": "215822d77c93347d5cc06837e1b289c916e9e1c5929d489ebeab29396da9e0fb",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "create required-disabled 900px：T2标题单独呈现，编码/名称/版本/日期以及跨列工艺说明排列明确；标签紧邻控件且同一行，必填未填时提交禁用；操作位于表单右下，纵向留白属于页面余量。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-detail-forms.png",
+      "sha256": "b1b305e8d6057df0083a541840495ef1018b09150e91f0963fffa1d344ffd0c2",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail forms 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-detail-products.png",
+      "sha256": "92436211fd4e661e4f5a69329932628421191ceca79e561fea2d16ed973746d3",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "detail products 900px：当前工艺只读字段灰底且保留完整值；普通工序清单与工序表单清晰分区，适用产品用产品卡表达；新稳定操作栏处于内容之后，不遮住工序表格。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-edit-forms.png",
+      "sha256": "603ac938cfc391426eb84e95da67010ec9390c1a99ff9dbcb3092013c4c57829",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit forms 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-edit-products.png",
+      "sha256": "637e43c03dec0abe7dc7aeb100d7116ac763cb0b11ad0851f8cd6f32c145cd58",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "edit products 900px：T2编辑基础资料两列或900单列；当前工序、表单关联、CPP入口和产品卡均可辨认；底部保存/取消在所有窗口于内容之后，未覆盖表单内容。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-ebr-cpp-readback.png",
+      "sha256": "56f6bd7fd417655f9443b3f888398184496a7db497ebdf1af9bb966f4c25912e",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 输入、数值、产品名称和状态内容未与相邻控件重叠。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-cpp readback 900px：EBR CPP字段列表、条件组、区间预览、超限动作与已保存规则分层；900由横列转竖向，字段/条件/预览/保存动作可见，页面无全局水平溢出。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-ebr-form-canvas.png",
+      "sha256": "f752dccc8c4dbca295a940913cd98c18203b411f6904361bced9fc6018c29485",
+      "source_hash": "252a1ee2fa90e1a03fff2f37f2331eb01ec694ed7b07811f51b57287a0d70256",
+      "review": {
+        "hierarchy": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主标题、卡片标题与次级文字层级可辨认。"
+        },
+        "grid_alignment": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 页面网格和跨列边界在当前宽度无明显断裂。"
+        },
+        "spacing_density": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 主要字段行距/卡片间距一致，A4留白属于Canvas文书尺寸。"
+        },
+        "typography_color": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 文本与主操作蓝色符合当前V2的视觉意图，尚不等于WCAG逐项对比度认证。"
+        },
+        "controls_content": {
+          "status": "FAIL",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 当前已保存的CPP业务字段标签紧贴Canvas标题，文书内容需独立校对并修正。"
+        },
+        "actions": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 查询→重置、保存→取消及行操作均可在当前宽度找到；工序页底栏不压表单。"
+        },
+        "responsive": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 无全页横向溢出；桌面窄窗口依赖内层表格横滚而非整页裁切。"
+        },
+        "interaction_accessibility": {
+          "status": "PASS",
+          "note": "ebr-form canvas 900px：表单设计器工具栏、字段插入区与Canvas内容区分清楚；900画布内适配纵向/内部滚动且页面无全局水平溢出；该演练草稿将MIX_TEMP标签插在标题文字前，文书版式仍需调整。 可见控件具文本标签或图标操作文本；全键盘/播报/缩放仍单独作为G5未完成项。"
+        }
+      }
+    }
+  ],
+  "interaction_checks": [
+    {
+      "name": "Actual Chrome process, EBR CPP, product scope, save and readback",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-formal-live.spec.ts"
+    },
+    {
+      "name": "Real restricted warehouse role HTTP403 and duplicate code HTTP409 with input preservation",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-real-rbac-live.spec.ts"
+    },
+    {
+      "name": "All role combinations and negative exception recovery",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "name": "Equivalent PC 200 percent zoom in Chrome at CSS 720, 640 and 450 with zero document overflow",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-pc-zoom-reflow.spec.ts"
+    },
+    {
+      "name": "Actual native zoom keyboard focus and live announcements",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    }
+  ],
+  "geometry_checks": [
+    {
+      "name": "No document overflow in all 30 PC original captures",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "name": "Footer follows form card at 1440/1280/900",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-formal-live.spec.ts"
+    },
+    {
+      "name": "One-line labels centered and description labels top aligned with multi-line textarea",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "name": "Equivalent 200 percent zoom does not overflow PC detail/edit and CPP pages",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-pc-zoom-reflow.spec.ts"
+    },
+    {
+      "name": "Native browser zoom and modal focus-trap geometry",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    }
+  ],
+  "adversarial_pass": {
+    "completed": false,
+    "alignment": "原图两批实际检查单/双列锚点；textarea标签相对控件中心差19px属于多行控件的顶部对齐，不可用单行中心线阈值直接判失败。",
+    "whitespace": "30张原分辨率各自查看，900的单卡空余为网格自然留白、Canvas A4大空白来自原始文书尺寸；仍需进一步缩放后的第二遍。",
+    "hierarchy": "观察到Canvas演练草稿MIX_TEMP文字靠近标题，登记MEDIUM为文书版式调整项，未把它伪装为已修复。",
+    "action_discoverability": "正式自定义产品弹窗确认→取消与下拉遮挡前后截图对比通过；工序底栏从覆盖表格修复为内容后方；内嵌表格操作固定可见。",
+    "recovery": "真实Chrome保存/回读、取消重试、403角色拒绝及409重复编码保值通过；原生200%缩放与并发409仍NOT RUN。"
+  },
+  "issues": [
+    {
+      "id": "G5-MODAL-ORDER-OCCLUSION",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-product-picker-before.png",
+      "recheck": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-product-picker-after.png"
+    },
+    {
+      "id": "G5-FULL-VISUAL-AND-A11Y",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json",
+      "note": "30张截图尚未逐图全维度及完整G5核对，不能关闭。"
+    },
+    {
+      "id": "G5-FOOTER-OCCLUSION",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-detail-forms.png",
+      "recheck": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-detail-forms.png",
+      "note": "原工序表单操作栏位于表格中间遮挡行内容；更改为内容后定位，在1440/1280/900三宽真实Chrome位置测量PASS。"
+    },
+    {
+      "id": "G5-DRAFT-CANVAS-FIELD-PLACEMENT",
+      "severity": "MEDIUM",
+      "status": "OPEN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\900-ebr-form-canvas.png",
+      "note": "演练草稿字段MIX_TEMP视觉位置靠近文书标题，保存表单设计前应在Canvas按实际业务记录版式重排；非全局页面布局错误。"
+    }
+  ],
+  "dimension_reviews": [
+    {
+      "surface": "list",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    }
+  ],
+  "wcag22_checks": [
+    {
+      "criterion": "1.3.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.4",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.10",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.11",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.1.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.1.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.7",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.11",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.7",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.8",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "4.1.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    },
+    {
+      "criterion": "4.1.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+    }
+  ],
+  "verdict": "IN PROGRESS"
+}

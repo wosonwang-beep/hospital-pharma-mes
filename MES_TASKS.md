@@ -1,3 +1,39 @@
+**2026-11-04用户否定当前正式交付：IN PROGRESS / REWORK_REQUIRED，累计81不变。** 已找到并实际查看用户识别的三张历史mes-demo原图，确认正式实现省略路线箭头、左工序角色/配置标记、页签计数，替换角色/清场控件并改变记录表单层级，原型保真不合格。先前“已按原型接入”的评价撤回；通过的技术验证事实不等于设计交付合格。本次仅来源核对与缺陷登记，无源码/业务/DB/测试/门槛修改；停止碎片补丁。后续以已识别原图及用户后续IPC规则还原正式页，历史数据不改。详见[保真返工记录](docs/development/process-form-cpp-ebr/20261101-final/today-closeout/DESIGN_FIDELITY_REWORK_20261104.md)。以下保留前阶段事实。
+
+**17:36屏幕返工准备：仍REWORK_REQUIRED / 累计81。** 新图libfile_640a4c026510819185ddf70bea308249（file_000000000ae481fdbdebace9da5b6ac1）本机Library能力不可用，未物化/未亲看，父方观察单独标注。已定位正式ProcessDetailView.vue第96行说明、第103行重复卡片、第108行所属模板；保留所属模板，字段数列已有，旧“未保留”判断已纠正。历史原图及本机旧正式截图实际重看，八组知识查询退出0；没有继续代码/测试/服务/DB操作。已形成[最小合并草案](docs/development/process-form-cpp-ebr/20261101-final/screen-rework-1736/MINIMAL_MERGED_PLAN.md)及[部分审查与图片状态](docs/development/process-form-cpp-ebr/20261101-final/screen-rework-1736/SCREEN_REWORK_REVIEW.md)，建议30分钟1批81→82尚未批准/启动；不按旧58重开，不以无新图阻塞源码/历史核对，也不冒充完整审查通过。
+
+**2026-11-04正式接入前阶段记录，累计81。** 真实保存及测试事实见[实施与证据](docs/development/process-form-cpp-ebr/20261101-final/today-closeout/FORMAL_INTEGRATION_PROGRESS.md)，设计评价受上方最新返工结论覆盖；完整G5未通过，无ACCEPTED，未Git发布。
+
+**2026-11-04今日集中收尾：IN PROGRESS / NOT READY，累计69。** 按用户“今天全部收尾、不反复确认”执行[集中授权](docs/development/decisions/PROCESS_TODAY_CLOSEOUT_20261104.md)。67集中修正空态、分页、配置分区语义、字段名称/可访问状态与文字对比度；68补空表提示继承色；69修实际聚焦输入被固定底栏遮挡。原32/32不改断言；共享11+7共18/18；两边typecheck及实际workspace构建通过。原型37项工艺交互、31项焦点恢复、12项分页/焦点、25项明确CPP双侧范围保存回读检查通过。81格首遍及第69批81格对抗二遍均逐张原尺寸复核；648标准标签配对无错行，81状态无整页横向溢出。清单校验PASS仅表示IN PROGRESS证据结构完整，不是完整UI/G2/G5通过；19条WCAG全表面审查仍有NOT RUN。原生200%检查被Computer Use因无法可靠识别窗口网址终止，已停止原生窗口操作，未改工具策略。Planning已成功同步revision65。整页原型具体版本尚未人工冻结，新版整页未正式接入5173/8080；无DB、迁移、历史数据或Git发布。[本轮实际交付与剩余项](docs/development/process-form-cpp-ebr/20261101-final/today-closeout/CLOSEOUT_RESULT.md)，[SELF-REVIEW记录](docs/development/process-form-cpp-ebr/20261101-final/today-closeout/review-notes.md)。
+
+**2026-11-04第66批：单批两项收尾完成，整体IN PROGRESS / NOT READY。** 原生隐藏label/useId已让真实字号input计算名称准确为“字号”，三电脑宽度可编辑/只读/键盘19项通过、6图复核，工具栏78px保持；历史校验器保留完整字节比对并仅逆变换已批准PC_ONLY区块，69/69通过。原32/32且四文件SHA不变，共享原5+新增1共6/6、两边typecheck、workspace构建通过。四个已知HIGH定向关闭；完整81格视觉/几何/对抗二遍及专项WCAG仍未闭合，当前清单FAIL，整页未冻结/G3.5/G5未通过。累计66，未67；无DB/迁移/历史/服务/CI/Git操作。[本批结果](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND66_RESULT_20261104.md)。
+
+**2026-11-04第62–65批：IN PROGRESS / NOT READY，累计65。** 用户批准完整剩余方案后，路线长名、原型链接三态、设计器背景焦点隔离/循环/恢复已在三电脑宽度复验；原32项、共享5项、两边typecheck、workspace构建与37+31项浏览器检查通过，原四测试SHA不变。PC_ONLY新7项通过，历史校验器61/62（旧唯一字节差异合同冲突）保留；字号外层aria-label未传实际input，Chrome计算名称仍空，同签名停止追加修补。重新捕获81格不等于完整视觉审查，当前manifest仍FAIL；旧债务/完整WCAG及G2/G3.5/G5未闭合。四批已用，未66；仅字号单点正式源码，DB/迁移/历史/服务/CI/Git未改。[结果与证据](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND62_65_RESULT_20261104.md)，[待批准单批收尾](docs/development/decisions/PROCESS_WORKSPACE_NAME_CLOSEOUT_20261104_PROPOSED.md)。
+
+**2026-11-04第60–61批：IN PROGRESS / 获批可用性修正已验证，整体NOT READY。** 12:04:48–12:44:48批准窗口内两批已用：表单固定操作列、空计数/新建标题、V2三态/禁用及包装层画布滚动已修；第61批修正scoped选择器编译问题。原4测试文件hash不变，32/32、typecheck及实际workspace构建通过；真实5174有37项显式检查通过、无pageerror/越界HTTP。当前81格全部选图两遍SELF-REVIEW（15动画帧保留并稳定补拍），390标准配对无错行；完整manifest仍FAIL：当前四项HIGH：900长路线名称叠压、设计器Tab聚焦被遮住底层、14px链接对比4.104:1、共享字号下拉无计算名称，部分WCAG未闭合，原校验器仍强制375与已批准电脑范围冲突。无第62批、正式源码/DB/历史/迁移/服务/CI/Git修改；G2/G3.5/G5未通过，整页确切版本未冻结。详见[第60–61批结果](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND60_61_RESULT_20261104.md)与[剩余缺陷及电脑适用性方案](docs/development/decisions/PROCESS_WORKSPACE_FINAL_GAPS_20261104_PROPOSED.md)。
+
+**2026-11-04第59批同窗口续查：IN PROGRESS / 原型可用性收尾待追加范围批准。** 同一组件SHA不变，新增33张原图首遍，当前69/81、余12格；查询/重置、模板必填取消、只读查看、新建校验、未保存主工艺保护已实际操作，完整审查validator仍退出1。已定位空结果1–0、新建标题仍编辑，已有主色/禁用/表单操作列及PC画布问题继续开放。[续查报告](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND59_CONTINUATION_20261104.md)与[具体收尾方案](docs/development/decisions/PROCESS_WORKSPACE_USABILITY_20261104_PROPOSED.md)已保存；方案拟40分钟/2批60–61，仅原型两个组件及必要验证，不改正式历史/原断言，等待明确追加。累计59，未60；原11:42:49截止不重置，无正式源码/DB/迁移/服务/CI/Git操作。
+
+**2026-11-04第59批最新澄清与实施：IN PROGRESS / 有界原型功能修正完成，整体NOT READY。** 用户确认“统一新增，工序内选择生产/IPC类型”，覆盖下文取消类型入口的历史解释。[最新批准](docs/development/decisions/PROCESS_INSPECTION_OWNERSHIP_REPAIR_20261104_APPROVED.md)已落实：统一新增、类型内选、六工序样例、OP04前置OP03、2104表单归OP03，正式历史/类型字段不变。原29项断言不改，追加3项后32/32、typecheck与实际workspace构建通过；真实5174验证类型/检验保存重开、取消保值、表单改名保存重开及停用查看。36张新原图首遍，当前81格缺45格；完整审查validator退出1，几何/键盘/恢复/二遍及已知色彩/操作列/画布问题仍开放。累计59，60–61未用，无正式源码/DB/迁移/服务切换/CI/Git发布。组件SHA8cf5bd4d36a4532b044fa458343b1b2fbf7a8f616ddfe9503d7ff9ef23f10005；确切整页原型未冻结，G2/G3.5/G5未通过。详见[第59批结果](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND59_RESULT_20261104.md)。
+
+**2026-11-04检验归属纠正：IN PROGRESS / 代码修正待有界方案批准，累计58不变。** 用户最新明确“没有IPC这个过程”，已固化[需求与旧合同冲突](docs/development/decisions/PROCESS_INSPECTION_OWNERSHIP_20261104.md)，不得继续按“IPC只是可选工序类型”开发。检验定义/结果/复核属于真实工序，与独立IPC路线节点不同；旧DCP类型批准、正式字段及历史证据保留待受控处理。已准备[具体修正方案](docs/development/decisions/PROCESS_INSPECTION_OWNERSHIP_REPAIR_20261104_PROPOSED.md)：原型取消独立IPC步骤/类型入口，样例检验表单2104拟归属OP03，保留附属检验及兼容元数据，明确原型测试合同纠正，最多40分钟/3批59–61。方案尚未批准/实施，业务方向无需再问；本次仅文档及原Planning，无代码/测试/浏览器/DB/迁移/服务/Git操作。原型SHA仍b931675c4a6c93c0258965dcf73573602cd90d4e8f41322a2fb9c338962d0e69，G2/G3.5/G5未通过，手机撤出与电脑75格/缺27格事实保留。
+
+**2026-11-04电脑端范围更正：IN PROGRESS / NOT READY，累计58不变。** 用户明确“手机列表不需要”“没有手机端”，已记录[本任务范围补充](docs/development/decisions/PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md)。旧100格逐格映射：375手机25格撤出（原有16、原缺9）；电脑1440/1280/900保留75格，原有48格、仍缺27格。“有截图”不是验收通过。WS58-LIST-MOBILE及WS58-CANVAS-NARROW的手机部分为用户撤出，非修复/非PASS；PC主色、空计数、禁用表现和键盘/恢复/几何/二遍等仍未闭合。历史100/64/36、95个证据文件及validator FAIL保留。本次仅文档和原Planning，无代码/测试/DB/迁移/服务/Git操作、无第59批或窗口重置。详见[适用性核对](docs/development/process-form-cpp-ebr/20261101-final/PROCESS_PC_SCOPE_RECONCILIATION_20261104.md)。G2/G3.5/G5未通过，确切原型版本未批准；下一代码修复仍需有界续修授权，手机范围无需再确认。
+
+**2026-11-04第56–58批：IN PROGRESS / 原型定向修正通过，完整审查FAIL，三批已用。** 获批09:26:01–10:06:01窗口执行56类型/计数/启停分离、57装配及唯一说明必填断言例外、58历史NULL点击/停用入口/空态图标/标题锚点修正；29/29、typecheck和默认/实际工作区构建通过。25条原型观察含纯生产路线和模板保存重开；当前64/100原图首遍查看，validator退出1，36格及几何/键盘/恢复/二遍缺失，手机列表和V2色彩有待修HIGH。没有第59批、正式集成、DB/迁移/CI/提交推送合并。准确结果见[第58批报告](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND58_RESULT_20261104.md)。G2/G3.5/G5未通过，确切原型版本未代签。
+
+**2026-11-04生产工艺续作核对：IN PROGRESS / 原型收尾范围待明确批准。** 实读当前源码确认历史空类型映射、第二工艺计数与空路线、启停/配置状态三项差异；说明可空的业务批准保留，旧说明必填断言尚未授权修改。已形成[一次性原型收尾方案](docs/development/decisions/PROCESS_WORKSPACE_CLOSEOUT_20261104_PROPOSED.md)，拟40分钟/最多3批56–58；当前累计55，未56，无代码/测试/DB/迁移修改。原Planning恢复revision53后已补同步54–55及测速/本次核对，成功revision54；G3.5/G5未通过。
+
+**2026-11-04正式页面有限测速：正式5173/8080已启动并保留，整体任务状态不变。** 显式关闭Flyway/SQL初始化/bootstrap，正常登录200；工艺列表/577只读详情/物料列表各3次重复打开与3次SPA切换，主接口处理时间已记录。浏览器精确资源/渲染计时不可用，工具往返不作页面加载值；无业务保存、源码/config/DB/迁移/CI修改。累计55，原G3.5/G5及IN PROGRESS / NOT READY保持。见[测速证据](docs/development/process-form-cpp-ebr/20261101-final/FORMAL_PAGE_SPEED_20261104.md)。
+
+**2026-11-03第54–55批：IN PROGRESS / 原型关联修复及改码回显已验证，整体未验收。** 原批准窗口22:40:54–23:10:54保持；两批已用，累计55。第55批修复重复/空编码拒绝后输入仍显示错误值的问题，新增直接检查后8/8通过、typecheck/build通过；真实5174已核对重复编码回显恢复及有效改码去空白。续查补充只读设计器、模板取消、复制参数独立性及说明可空证据；原21项20通过1失败（旧说明必填断言与批准可空冲突）保留，未改原断言。完整UI审查仍FAIL，正式MES/DB/迁移/CI未改，未提交推送合并。Planning传输错误后同步结果未知。见[第54–55批结果与交接](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND54_RESULT_20261103.md)。
+
+**2026-11-03第51–53批：IN PROGRESS / 工作区原型已改并运行，尚未达到交接条件。** 用户批准完整收尾方案后，保留路线带/左工序/右配置，接入当前定义保存/取消、多前置保留、IPC与参数弹窗、安全完成规则及现有Canvas设计器。53批typecheck/build、新增7项合同检查通过；原7项因截取到defineExpose在断言前报错，原断言未改。真实5174已进入IPC弹窗和设计器，三图局部查看；模板样本计数/实际定义、单位ID、复制子项、完整状态及审查仍有缺口。累计53，三批已用，不自动54；正式MES/DB/迁移未改，G3.5/G5未通过。见[本轮结果与剩余范围](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_ROUND53_RESULT_20261103.md)。
+
+**2026-11-03生产工艺主线复核：IN PROGRESS / 整页工作区尚未交付，完整收尾候选待确认。** 已重新实读 mes-demo 原型、正式页及保存/IPC/执行合同，形成[逐项交付核对](docs/development/process-form-cpp-ebr/20261101-final/WORKSPACE_DELIVERY_MAP_20261103.md)：正式页仍为全局四页签，旧原型还含未获准工艺版本审批、未持久化的名称/说明和自动线性改写依赖等冲突；工序类型字段已完成，不重复列为缺失。已准备[完整收尾方案](docs/development/decisions/PROCESS_WORKSPACE_COMPLETION_20261103_PROPOSED.md)，请求一次确认当前定义/真实名称说明/保留显式依赖及40分钟最多3批原型收拢边界。候选未批准，未改业务源码/原型/测试/DB/迁移、未运行新测试；累计50保留，无第51批，G3.5/整体G5尚未通过，原CI阻断保留。
+
+**2026-11-03第50批远端结果：IN PROGRESS / PR #7已推送并转草稿 / CI FAIL未合并。** 1682fc5仅本次21文件。远端51文件223/223通过、回调4/4通过，仓库合同通过；前端随后因main的QC页面/API/模型提交闭包缺失而typecheck失败，两个Maven字体安装检查已找到Noto SC但原4个中文PDF断言仍失败，未进入DB集成。累计50，原PDF同签名复现已停止，不第51批、不混入其他QC工作、不绕过CI。原Planning恢复并追加同步revision50。见[远端结果与停止记录](docs/development/process-form-cpp-ebr/20261101-final/ROUND50_REMOTE_CI_RESULT_20261103.md)，生产工艺整体仍未验收。
+
 **2026-11-03第50批：IN PROGRESS / CI修复本机验证通过并送审 / 生产工艺整体未验收。** 已批准单包follow-redirects1.16.2，Axios与其他123生产锁包不变；原55文件234/234、类型/构建、原生产审计0漏洞、回调4/4及仓库/CI正负策略通过。此前已批准JSDOM30.1.3及9参回调、字体/worker修正一并送原四CI，不冒称Linux字体或数据库集成在本机通过。无DB写入/迁移，其他任务/本机配置不提交；累计50，不自动51。原窗口过期及最新具体批准恢复执行均如实留证。见[50批本机送审记录](docs/development/process-form-cpp-ebr/20261101-final/ROUND50_LOCAL_RESULT_20261103.md)。
 
 **2026-11-03第49批：IN PROGRESS / 原前端超时已消除，234/234通过 / 原生产依赖HIGH审计阻断待单包例外。** 已批准JSDOM精确升30.1.3，原角色11/11、完整55文件234/234、类型/构建通过，重点用例782/876ms；124生产锁包及角色业务/测试断言/5000ms保持不变。原审计实际检出follow-redirects1.16.0高危，候选1.16.2，未擅自更新生产依赖或关闭审计。回调原4项提交前再次通过，无DB写入/迁移；Linux字体及原四CI尚未运行，本轮未提交推送。累计49，见[本轮结果](docs/development/process-form-cpp-ebr/20261101-final/ROUND49_JSDOM_RESULT_20261103.md)及[单包补充候选](docs/development/decisions/PROCESS_CI_REDIRECTS_SECURITY_20261103_PROPOSED.md)。
@@ -125,6 +161,88 @@
 源码确认角色输入仍写legacy requiredRole而保存要求requiredRoleId；纯内存两例复现拒绝编码/接受有效ID。按既有ROLE_ID_SIGNING_DESIGN_LOCK第5项已批准的同位替换例外，DefinitionDesigner接入现有RolePicker及ebrRoleOptions，保留冻结显示、搜索响应防乱序、加载失败重试和原ID保存校验；未改API/权限/数据库或历史证据。新增组件用例先3/3 RED；首次实现14/15，一轮仅调整测试输入响应式构造（原断言不变）后仍14/15，失败签名为角色combobox按“签署或复核角色”名称不可定位，因此按§6A提前停止后续补丁/测试，待用户批准限定下一阶段诊断。typecheck退出0；修复计数本轮夹具1，历史不清零。普通UI预算09:49:01起十分钟，没有自行延长。完整日志在同目录role-red.log、role-green.log、role-green-fixture.log、typecheck.log；未宣称根因已经证实。
 
 首次5173只读访问ERR_CONNECTION_REFUSED，8080/5173/5174未监听；本轮真实页面/API保存、服务启动、build、完整G5及数据库持久化均NOT RUN。无新迁移、业务数据写入、签名、审批、发布、提交或推送。CPP两级条件组与“嵌套”文义、模板生命周期可达性/多版本聚合为待验证项，未擅自扩充合同；未批准整页工艺原型仍不集成。后续从同一证据和累计计数继续，不重复实施历史ACCEPTED任务。
+
+## 2026-10-20 质量经理角色已创建（ID 404）
+
+**ROLE CREATED / NO PERMISSIONS / REPORT APPROVAL PENDING。** 按用户要求通过正式角色管理 API 创建并回读 `QUALITY_MANAGER`（质量经理，ID 404，启用，权限0），不修改其他用户/资格/签名/原报告；当前尚未绑定个人质量经理账号，报告265不具备真实独立复核及批准证据。详情见 [决策执行记录](docs/development/decisions/INCOMING_REPORT_QUALITY_MANAGER_REVIEW_20261020.md) 和 `docs/review/evidence/quality-manager-role-result-20261020.json`。
+
+## 2026-10-20 取样单与报告打印配置和实际PDF已打通
+
+**PRINT RUNTIME CONFIG + REAL PDF VERIFIED / 整体G5及新流程报告最终审批仍未关闭。** 本轮DC在真实5173/8080上补齐SAMPLING_RECORD及INSPECTION_REPORT数据源、元数据、默认模板校验/发布/绑定，已消除PRINT_SOURCE_UNBOUND。配置工具bootstrap及businessTypes对象数组幂等问题已修复，5/5回归；前端打印两文件9/9 PASS。实际打印首版发现时间列覆盖和中文页脚乱码，以普通DOCX新增V2修正：当前取样模板76、报告模板77；本轮旧74/75仅取消适用绑定，发布DOCX历史保留。最终真实打印9/9检查与四视口8图完成，PDF正文/页脚已单页目视；未批准报告265正式输出被422 PRINT_APPROVAL_REQUIRED拒绝，草稿PDF正常；既有已批准报告11真实正式打印200且原批准/签名98不变。**报告265仍DRAFT，不能当成已正式批准**：现有验收角色缺少与其制单人独立且有资格的报告复核人员，未改账号/角色/资格、未代签或自动QA放行。完整G5 UIUX清单及375取样预览动态缩放标题/焦点恢复仍需后续复核，不能标整体READY/ACCEPTED。未新建迁移、未改库存或原始检验事实，未Git提交推送。详见 [本轮打印收尾报告](docs/review/evidence/INCOMING_CROSSROLE_PRINT_CLOSEOUT_20261020-074616/PRINT_CLOSEOUT_REPORT.md) 与 [真实证据状态](docs/review/evidence/INCOMING_CROSSROLE_PRINT_CLOSEOUT_20261020-074616/PRINT_CLOSEOUT_STATUS.json)。下文“打印未绑定”仅为历史，不覆盖本条；已确认收货UI和原型不重开。
+
+## 2026-10-20 06:50 收尾状态校正：新后端已部署，主链到报告草稿，打印绑定仍缺
+
+**G4 DEPLOYED / LIVE CHAIN 15/15 TO REPORT DRAFT / PRINT CONFIGURATION BLOCKED / G5 FINAL PENDING。** 现场核对运行PID35116为2026-10-20 00:45新包，健康UP、Flyway69/current069；此前22:40条目的未部署状态已过时。真实开发环境已完成QC确认、取样提交、仓管独立签名扣库、收样绑定、逐项检验、独立复核到报告草稿的15项检查。新真库负向7/7、取样打印Provider4/4及DOCX/PDF集成1/1；取样打印Provider已存在，不能重复开发。当前认证只读打印探针仍返回422 `PRINT_SOURCE_UNBOUND`，SAMPLING_RECORD数据源0、默认模板0，需要现有配置API实际建立/发布/绑定再验证打印；报告265目前DRAFT，报告批准及打印和完整UIUX/最终用户验收未完成。事实详见 [当前收尾核查](docs/review/evidence/INCOMING_CROSSROLE_STATUS_20261020-065047/STATUS_VERIFIED.md)。本輪仅更新证据/任务状态，未改业务数据/源码、未提交推送。
+
+## 2026-10-19 22:40 来料质量闭环状态复核与前端环境复验
+
+**G4 SOURCE IMPLEMENTED / 本轮前端BUILD及定向TEST PASS / 整链G5未完成。** DC现场核对正式B实施报告、源文件及Surefire证据；重跑正式前端 `npm run build` exit0、四个来料Vitest文件 **22/22** exit0，先前sandbox esbuild spawn EPERM本轮未复现，未修改业务实现或断言。B源码已含取样提交、仓管签名扣库、样品绑定和复核后自动报告草稿；历史后端回归30/30、B合同/预检8/8、安全路由23/23和领域策略4/4保持原统计、不加总。V069已经测试应用，但运行中的8080仍是19:04启动旧服务，B版本尚未重新部署；取样单统一打印Provider尚缺，真正5173跨岗位签名/库存/报告PDF与完整UIUX尚未验收。不因构建通过标完成，不重复要求已批准原型确认。见 [本轮核查](docs/review/evidence/INCOMING_CROSSROLE_COMPLETION_20261019/DC_STATUS_CHECK_20261019_2240.md)。
+
+## 2026-10-19 来料质量闭环 B 正式工程适配
+
+**G4 SOURCE IMPLEMENTED / TARGETED BACKEND PASS / G5 AND HUMAN ACCEPTANCE PENDING。** 按本会话用户批准的 G2 九文件精确版本完成 B1–B4 正式适配：新链取样提交不动库存、仓管双权限/资格/独立签名后按来源明细原子扣减、收样后显式绑定检验任务、必检项复核完成自动建立报告草稿；旧手工链、既有 QA 放行和已签名历史保持不变。V068 已真实应用；V016 不可变触发器阻止受控 ledger 回写后，按追加迁移规则新增并应用 V069，V067/V068/V069 均不得再编辑。后端七个回归套件 30/30、B 合同/预检 8/8、安全路由 23/23、领域策略 4/4 通过；前端 vue-tsc exit 0。Vite/Vitest 均因当前 sandbox 无权启动 esbuild 子进程而 `spawn EPERM`，原始失败已保留；未启动/停止 8080，未运行真实 5173 登录签名、打印 PDF、浏览器 G5 或完整 UI/UX 清单，因此不得标记 READY FOR ACCEPTANCE/ACCEPTED。检验报告已有 `INSPECTION_REPORT` 统一打印 Provider；取样任务无已注册统一打印 businessType，本轮未虚构。证据与未完成矩阵见 [B 实施报告](docs/review/evidence/INCOMING_CROSSROLE_COMPLETION_20261019/BATCH_B_IMPLEMENTATION_REPORT.md)。下文 G3 阻塞条目为历史，不覆盖本条。
+
+## 2026-10-19 G3真实权限与原子库存审查（新增）
+
+**G3安全与事务审查进行中 / G3.5 BLOCKED / G4新仓库扣减未执行。** 本轮新增只读 `IncomingCrossroleSecurityPreflightIT.java`，真实MariaDB **3/3 PASS**；原权限已含 `qms:sampling:execute/complete`，但 `wms:sampling-outbound:confirm`不存在，`SAMPLE_OUT`流水0，WMS ledger已有 `uk_ledger(org_id,idempotency_key)`。详细源码核对发现 warehouse资格码及签名slot/Provider未实现，原QMS`complete`归检验取样员，普通WMS`move/adjust`不允许待验库存，绝不可直接复用。已完成 [G3双权限+资格+新签名+同事务多库位精确扣库审查](docs/development/INCOMING_CROSSROLE_002_G3_SECURITY_TRANSACTION_REVIEW.md)，并在 DO_NOT_RUN V067草案补QC首批自动双单的可空关联唯一键，避免将合法追加任务误判重复。既有66迁移历史及正式数据未修改，未启动真实仓库出库新接口；不得以预检PASS充作正式 G5。
+
+## 2026-10-19 G3真实MariaDB安全预检与历史兼容
+
+**READ-ONLY PREFLIGHT PASS 3/3; G3仍待签名/事务冻结；G3.5 BLOCKED。** 现有IncomingQualityIT Maven exit0、Flyway 66/current066，新增 `IncomingCrossrolePreflightIT.java` 真库只读3/3 PASS；INITIAL历史重复0、无样品非法状态历史0、源字段8/8存在、ledger delta_qty真实6位精度。已登记到 [G3详设候选](docs/development/INCOMING_CROSSROLE_002_G3_DETAILED_DESIGN_DRAFT.md) 和 [G3.5交接草案](docs/development/inspection-crossrole/g35-development-handoff-DRAFT.json)。新增DDL仍是DO_NOT_RUN草案，尚未变更真实QMS/WMS服务、DB、Flyway或权限；真正的仓管签名/审核权限、QMS与WMS原子库存事务仍需下一阶段核实，不以预检PASS代替整体G3/G5。
+
+## 2026-10-19 用户确认跨岗位G2准确版本 / G3合同设计进度
+
+**G2 HUMAN PROTOTYPE APPROVED (bounded)/G3 TECHNICAL DRAFT/G3.5 BLOCKED/G4 NOT STARTED FOR NEW CHAIN。** 用户明确“原型确认，继续开发”；已现场比对mes-demo九份源码 SHA256 9/9 MATCH，保存 [G2精确批准记录](docs/development/decisions/INCOMING_CROSSROLE_G2_20261019_APPROVED.md)，不扩大到未确认的检验结果/报告界面。已读取 V016 实际约束、既有 QMS 命令和 WMS 库位/容器/单位流水，形成 [G3受控详细设计候选](docs/development/INCOMING_CROSSROLE_002_G3_DETAILED_DESIGN_DRAFT.md)、[不可执行V067数据库迁移草案](docs/development/INCOMING_CROSSROLE_V067_PROPOSED_DO_NOT_RUN.sql)及 [G3.5交接草案](docs/development/inspection-crossrole/g35-development-handoff-DRAFT.json)；表结构与真实GxP角色/签名和DB preflight仍需核实，当前不能宣称G3/G3.5通过或执行正式库存写入。已有独立检验记录T1 READY FOR ACCEPTANCE保持原样。没有修改正式QMS/WMS代码、Flyway或数据库，没有Git提交/推送。
+
+## 2026-10-19 来料质量跨岗位G2定向回归 / 真实开发仍待冻结
+
+**G2 IN REVIEW / G3–G5 NOT READY。** 已在 mes-demo 复用确认的收货明细：逐批一键自动请验、成功变查看；QC补标准和计划并在隔离存储中同时登记取样单及待样品检验任务；取样员提交实际记录不扣库存，仓管确认后原型单次扣减；QC取样任务及待样品检验任务均可在原型列表定位，单位沿用该批收货单位；完整菜单已接入。回归 **19/19**、浏览器四尺寸六页 **24张截图**、整页溢出0、vue-tsc/Vite exit0。仍缺多来源库位/容器真实ledger及批准单位换算、正式六位精度、服务器权限/签名、样品接收后检验项目填写和报告批准打印、完整UIUX清单及本精确G2源码人工确认；正式QMS/WMS联调尚未执行。不能把隔离存储自动登记双单当作真实MariaDB原子事务、不能把原型扣减当作真库存。已有正式检验记录T1保持 READY FOR ACCEPTANCE/等待人工终验。产品经理本轮报告： [G2闭环进展](docs/review/INCOMING_CROSSROLE_G2_PROGRESS_20261019.md)，哈希/证据：`mes-demo/evidence/incoming-crossrole-sampling-g2-20261019/FINAL_G2_STATUS.json`。未提交Git、未改正式DB/Flyway/权限。
+
+## 2026-10-19 取样与仓管出库岗位拆分 G2 定向进展
+
+**G2 REWORK IN PROGRESS / 正式WMS扣减G4 NOT AUTHORIZED。** 按用户已确认的跨岗位来料质量流程，mes-demo原型已将旧“取样员完成立即扣库存”拆成检验员提交实际取样记录（库存不动）→仓管核对后独立确认扣减一次。vue-tsc/Vite build exit0，真实浏览器7/7定向正向检查通过；原型样例125.000kg→仓管确认实际取样0.200kg后124.800kg，刷新只保留一笔模拟流水，0真实API写。负向测试0/1：测试脚本误从未初始化sessionStorage读null发生TypeError，后续负向场景未执行，已留原错误，不作为PASS。完整菜单、受控单位换算/多库位、真实角色权限和电子签名、收货自动请验、QC确认两单及报告衔接尚未完成G2。完整G3/G3.5/G4/G5不得启动。已有正式检验记录T1 READY FOR ACCEPTANCE独立保留。见 [产品经理定向报告](docs/review/INCOMING_CROSSROLE_SAMPLING_G2_PROGRESS_20261019.md)。本轮没改正式MES业务代码、迁移、权限或数据库，没有Git提交/推送。
+
+## 2026-10-19 检验记录正式接入完成验证 / READY FOR ACCEPTANCE / 人工终验待确认
+
+用户已明确批准G2-20261019并授权补齐冻结只读合同、正式开发及验证。批准Vue组件与控制器逐字复用，正式5173检验记录列表已接8080真实API；样品来源业务名称、物料批号前两列，样品编号第三，检验单号使用实际关联报告号，不以任务号冒充。服务端筛选/计数/分页、多报告关联、组织隔离、原始FAIL和既有权限保持。后端9/9回滚集成测试、前端48文件209/209、正式build exit0；浏览器17项只读检查，四尺寸29截图加hover/focus两图均逐图复查，31/31完整性校验PASS；G3.5 READY。查询按钮第一次颜色覆盖未生效后按6A暂停，用户明确批准“仅修该项并完成复验”，第6轮局部主色恢复后default/hover/focus均5.72:1，测试构建重跑通过。零新增迁移、零业务数据写入、不改角色/全局CSS/既有签名命令，未提交推送，其他CR候选不扩权。保留两个非阻断提示：加载暂沿用通用空态说明、200%下紧凑下拉值需展开完整读取；不称无缺陷或人工产品经理已验收。证据：[正式交付结论](docs/review/INSPECTION_T1_FORMAL_ACCEPTANCE_20261019.json)、[审查报告](docs/review/INSPECTION_T1_FORMAL_REVIEW_20261019.md)、[RTM](docs/development/inspection-t1/formal-acceptance-rtm.csv)、[同一正式UIUX清单](docs/review/evidence/INSPECTION_T1_FORMAL_20261019/audit-manifest.json)。下文状态均为历史，不覆盖本条。
+
+## 2026-10-19 检验记录：G1已确认 / G2可操作版已实现 / 正式接入未完成（历史）
+
+用户“原型确认，继续开发到收尾”对应前一轮展示的G1 v0.7检验记录列表，已记录批准源哈希与范围，未扩展批准其他跨岗位页面。已实现可复用Vue T1列表、筛选/重置/分页/返回保持/空态/失败重试/请求竞态与动作能力检查，最终5/5模型测试与vue-tsc/Vite构建exit0，真实1440/1280/900/375截图已逐图审查。当前填写/复核仅对应身份摘要，**非正式工作流；G2精确Vue版本人验及完整UIUX/真实权限待完成，G3/G3.5未就绪、G4/G5未运行**。现有正式列表缺少样品业务名称/批号/关联报告号完整只读投影，不造字段或把任务号当报告号。未修改正式业务源码/API/数据库/迁移/权限，未提交推送，不冒称产品经理验收或开发收尾。详见 [G2交付及剩余合同](docs/review/INSPECTION_T1_G2_20261019.md) 和 [精确源版本](docs/review/INCOMING_CROSSROLE_002_DESIGN_HANDOFF.json)。以下旧状态仅历史。
+
+## 2026-10-19 G1-v0.7 检验记录最终设计提交审阅
+
+**G1 FINAL DESIGN SUBMITTED / AWAITING HUMAN REVIEW；G2–G5 NOT APPROVED。** 已按最新要求将样品名称、物料批号放在前两列，样品编号第三；检验单号显示关联报告report_no，未生成如实提示，任务号留详情。查询默认全部与四条记录一致，1440/1280查询重置同排；修正样品名称无来源后缀、总取样量/检验样数量混淆、T3原始判定旧文案及所有行打开首条样品。真实浏览器1440/1280/900/375四图HTTP200、JS0，已逐图审查；第二条样品身份对应核对完成。当前仅最终G1审阅稿，不宣称产品经理验收通过。静态稿查询/填写/复核/权限/错误恢复及正式DTO均待G2/G3；正式源码/API/DB/迁移未修改，既有数据和历史失败保留。证据：[v0.7审查清单](docs/review/evidence/INCOMING_INSPECTION_T1_G1_V07_AUDIT.json)，源SHA256 `37397CCD62E20E55BEE46DEED53D8EFC2557F2F1B1DD6F222920592DC8B438DC`。
+
+## 2026-10-19 G1-v0.6 检验记录T1用户视角业务审查
+
+**G1 REWORK IN PROGRESS / PRODUCT MANAGER APPROVAL NOT GRANTED / G2–G5 NOT AUTHORIZED。** 用户指出功能审查是第一关、业务审查同样必要，并明确样品名称和批号最重要、检验单号即检验报告号。真实1440浏览器首轮确认旧稿缺少样品名称/样品编号、查询拥挤、日期和操作裁切、让步接收提前覆盖原始不合格等关键缺陷。已仅修改未冻结 `mes-demo/public/design/incoming-crossrole-002.html` 与 G1规格/RTM/复核状态：样品名称→样品编号→物料批号置首，查询压缩为样品身份/任务状态/检验人/类型，操作列固定可见；样品名称明确为 `qms_sample` 检验对象/来源派生业务投影，不能把物料名称换标签；报告列表使用“检验单号（报告号）”，任务号仍为任务号。正式跨表只读DTO缺口标记G3 DESIGN_CHANGE_REQUIRED，未改正式源码/API/DB/权限。1440修后复查可见，完整四视口/状态/UIUX证据尚未完成，**不得宣称产品经理验收通过**。见 [G1规格](docs/development/INCOMING_CROSSROLE_002_G1_PAGE_SPEC.md)、[RTM](docs/development/INCOMING_CROSSROLE_002_RTM.csv)、[复核记录](docs/review/INCOMING_CROSSROLE_002_G1_STATIC_REVIEW.md)。
+
+## 2026-10-19 G1-v0.5 四张质量列表对齐正式物料列表及完整Demo菜单
+
+**PARTIALLY COMPLETED / G1 VISUAL REVIEW_REQUIRED / G2–G5 NOT APPROVED。** 用户批准QC四张列表按正式 \`MasterListView.vue\` 与Global UI V2 T1规范，整套Demo采用 \`prototype-navigation.ts\` 完整六组45叶子菜单。已调整 \`mes-demo/public/design/incoming-crossrole-002.html\` 的列表卡片、表格、筛选及菜单；基础1440px结构4/4 PASS，截图已目视审查。当前检验记录宽表的右侧操作列和日期筛选仍有截断，本轮两次针对性补丁遇相同脚本定位断言失败，未覆盖正式实现；遵守anti-loop门禁停止，G1不宣称通过。见 [本轮设计回顾](docs/review/INCOMING_CROSSROLE_002_G1_STATIC_REVIEW.md) 及 [G1版本状态](docs/review/INCOMING_CROSSROLE_002_DESIGN_HANDOFF.json)。未变更正式 MES 源码、API、数据库、权限或历史内容，未提交/推送。
+
+## 2026-10-19 G1-v0.4 四张 T1列表及综合检验结论补漏
+
+**G1 STATIC v0.4 GENERATED / G2 PROTOTYPE NOT APPROVED / G3–G5 NOT AUTHORIZED。** 用户指出此前G1仅有详情/操作稿，遗漏质量管理请验单、取样记录、检验记录、检验报告四张T1列表，新增检验单类型与合格/不合格/让步接收综合结论。已在`mes-demo/public/design/incoming-crossrole-002.html`加入四张列表，带查询状态/日期、数据列表/分页/查看入口；检验记录T1/T3含类型、批量、取样量及相关日期，综合结论有未完成待判定；让步接收作为需批准质量决定的G1候选，不覆盖FAIL、未获QA批准不放行。1440px静态浏览器4张列表+6张业务详情均完成基本布局检查，4/4+6/6、JS0；此为G1静态，不是可操作Vue G2和数据库集成验收。设计、DCP、RTM及源码hash更新于 [G1复核](docs/review/INCOMING_CROSSROLE_002_G1_STATIC_REVIEW.md)、[设计合同](docs/development/INCOMING_CROSSROLE_002_G1_PAGE_SPEC.md)、[交接状态](docs/review/INCOMING_CROSSROLE_002_DESIGN_HANDOFF.json)。保留既有质量菜单、正式WMS/QMS、已执行迁移及历史数据不变。
+
+## 2026-10-19 用户最新决定：收货一键生成请验单
+
+**G0 BUSINESS DECISION CONFIRMED / G1-v0.3 STATIC DRAFT / G2–G5 NOT RUN FOR THIS VERSION。** 已确认收货页面按明细物料批次直接「生成请验单」并自动提交QC，不需要弹窗/手动填写；成功后查看、允许时修改。QC继续原有请验单列表/编辑，QC确认标准、计划取样量、单位后同事务生成取样单及待样品检验任务；取样员记录实际量后由仓管核对出库扣真实库存；检验任务逐项目填写、综合判定、独立签名复核，检验报告可查询/统一打印。已将最新决策追加至 [DCP候选](docs/development/decisions/DCP-INCOMING-CROSSROLE-FLOW-002-PROPOSED.md)、[G1页面合同](docs/development/INCOMING_CROSSROLE_002_G1_PAGE_SPEC.md)、[RTM](docs/development/INCOMING_CROSSROLE_002_RTM.csv)；本机新版G1静态页面及6图核查记录见[设计复核](docs/review/INCOMING_CROSSROLE_002_G1_STATIC_REVIEW.md)，哈希见[交接状态](docs/review/INCOMING_CROSSROLE_002_DESIGN_HANDOFF.json)。尚未获得本版静态设计和可交互原型确认，**不得修改正式业务API/DB/迁移、权限或自动QA放行**。
+
+## 来料质量跨岗位流程修订 — 2026-10-19
+
+**G0 用户岗位与业务顺序已明确 / G1 PRODUCT DRAFT / G2 HUMAN APPROVAL PENDING / G3–G5 NOT AUTHORIZED。** 用户明确修正：仓管员填写并提交请验给QC（仓管不填质量标准）→QC补充批准检验依据/标准、计划取样数量及单位，**确认请验时同时生成取样单和待样品检验任务**→检验人员到仓库实际取样并提交取样明细→**仓管员**确认样品出库，按实取数量扣减来源物料批/库位库存→样品交接后检验人员逐项目填写原始数据、结果和判定→独立复核/批准检验报告，QA放行独立。此前DCP-INCOMING-SAMPLING-OUTBOUND-001中的“取样员完成即扣库存”候选被本次更新业务决定替代，旧证据保留。源代码核对发现当前请验创建即必填qcSpecificationVersionId、QC accept只改状态、检验任务create必填RECEIVED sampleId、取样complete由取样员直接完成，无仓库出库确认。已在新[受控DCP候选](docs/development/decisions/DCP-INCOMING-CROSSROLE-FLOW-002-PROPOSED.md)逐项记录CR-01..07、[G1页面合同](docs/development/INCOMING_CROSSROLE_002_G1_PAGE_SPEC.md)及[RTM](docs/development/INCOMING_CROSSROLE_002_RTM.csv)，并记录SHA256[交接状态](docs/review/INCOMING_CROSSROLE_002_DESIGN_HANDOFF.json)。严格先G1设计确认、再按同源规格G2 Vue交互原型及人验、G3/G3.5冻结/交接后才允许改正式API、库表、权限或WMS扣减。现有QMS/QA/eBR/收货验收不重开，本轮没有修改正式业务代码、数据库、迁移、权限或推送Git。
+## 取样出库A（待验原辅料按实际取样扣减）— 2026-10-19
+
+**G1/G2 候选原型已生成；G2人验及完整UIUX清单未完成，G3/G3.5/G4/G5未授权/未运行。** 用户已明确批准业务A；DCP仅PROPOSED。mes-demo新增取样出库T1/T2/T3交互原型，按已存在QMS取样任务显示批次与库存，保存明细不扣减、完成时原型一次扣减、仍待验禁用。原型构建exit0，浏览器主链11/11、负向4/4，产品规格/RTM/责任账本校验exit0。没有正式WMS/QMS源码、迁移、DB写入或Git提交。精确版本/截图/剩余审查见 [G1G2报告](docs/review/INCOMING_SAMPLING_OUTBOUND_A_G1G2_20261019.md)。
+
+## 取样出库 A 方案原型与合同门禁 — 2026-10-19
+
+**G0 BUSINESS A CONFIRMED / G1 DRAFT / G2 REWORK_REQUIRED / G3–G5 NOT READY。** 用户明确取样出库＝从待验原辅料物料批次按实际取样数量扣减库存，并关联取样任务/明细；已记录[有界DCP草案](docs/development/decisions/DCP-INCOMING-SAMPLING-OUTBOUND-001-PROPOSED.md)，未冻结。mes-demo 已存在 T1/T2/T3 隔离取样原型（#/quality/sampling-outbound/list）且 vue-tsc/Vite build PASS，但本轮浏览器 T2→T3 跳转及另一轮断言仍有缺陷；只能记 G2 返工。产品经理发现原型固定千克/3位精度以及未覆盖多库位容器，不能直接当正式WMS扣减合同。提出的“取样完成签名后同事务、按逐容器实际取样量扣减一次、足额检查、幂等、原批次继续待验/BLOCKED”目前为需与原型共同确认的 G1 候选，未修改正式API、迁移、权限或历史记录。完整[产品经理复验报告](docs/review/INCOMING_SAMPLING_OUTBOUND_A_PM_REVIEW_20261019.md)。禁止跳过精确G2人工验收和G3/G3.5基线冻结。
+## 来料请验—取样—检验—报告产品经理全链（2026-10-19）
+
+**G0 PARTIAL BLOCKED / 既有链路可定向复验；取样出库 DESIGN_CHANGE_REQUIRED。** 本轮已真实核对 v1.0.23、来料质量批准合同、QC对象单字段决策、现有四模块前后端路由及权限；前端定向22/22通过，后端隔离回滚IncomingQualityIT执行通过。已生成业务G0/RTM/双设计任务草案/责任账本。用户新增的取样出库未在冻结合同发现独立库存动作；必须先确认是原辅料取样扣库存还是样品从暂存区出库交检验室，不自行新增单据、迁移、权限或库存流水。未取得该决策及确切原型人验前，G3.5/G4/G5不可标完成。见 [产品经理G0](docs/review/INCOMING_QMS_BPM_G0_20261019.md)。
 
 ## 物料收货正式开发与收尾 — 2026-10-19
 
@@ -1127,3 +1245,189 @@ DEV已部署（后端PID25580/前端26676，8080/5173 HTTP200），V052与52迁�
 
 范围限制：仅做前端交互重构，未加原型环节（用户已在对话中直接指定形态）；未跑后端 IT（未改后端）；未做 375 窄屏专项审查；验证期间对标准 521 产生 4 组真实维护原因记录（"验证适用范围维护交互（临时，验证后恢复）""恢复验证前的适用范围（验证收尾）""页签结构调整回归验证（稍后复原）""复原验证前的备注（验证收尾）"），业务数据已复原（`versionNo` 现为 10，`remark=null`，scopes/products 与原值一致），未删除审计痕迹。
 
+
+
+## 2026-11-02 基础管理 UX 业务产品经理专项首批
+
+**IN PROGRESS / PARTIAL FIX / G2原型待确切版本人验 / G5 NOT RUN**。用户确认全局 UX 按钮次序、T2 标题栏、子列表居中弹窗及原型同步。已新增 docs/development/decisions/MES_GLOBAL_UX_INTERACTION_20261102_APPROVED.md 并更新 AGENTS/强制开发规范/Global UI V2/T1–T6；通用 MasterList 行操作改为编辑→查看，通用 MasterDetail 和物料 T2 头部简化，供应商保存不再整体刷新未保存主表。正式前端 typecheck 和2套件12单测通过。物料弹窗仅在 mes-demo 独立原型中实现，build 通过，1440本机 Chrome 正向弹窗/供应商保存保留主表草稿通过，未做真实 API、全视口/UIUX清单或正式弹窗改造；其他基础管理逐页走查待续。完整证据与剩余任务见 [产品经理首批审查报告](docs/review/MASTERDATA_UX_PM_FIRST_PASS_20261102.md)。不授权违反原型设计锁直接改正式业务页面，未提交/推送/改DB/迁移/生产数据。
+
+## 2026-11-03 物料编辑页两类子列表 G2 原型完善
+
+**G2 CANDIDATE / SOURCE HASH PENDING HUMAN APPROVAL / FORMAL INTEGRATION NOT AUTHORIZED / G5 NOT RUN**。从正式 `MaterialConversions.vue`、`MaterialSuppliers.vue` 及 `supplierPayload` 读取真实合同，按用户全局 UX 决策另建完整子表交互的 mes-demo 原型（原单位/目标单位/因子，合格供应商/厂家/关系有效/首选/有效期/撤销历史）。独立居中新增/编辑弹窗、保存→取消、取消草稿确认；供应商首选原子切换与整份清单 PUT 语义保留。原型 `npm run build` exit0；本机 Chrome 定向验证新增、编辑、供应商首选切换、撤销留痕、主表草稿保留和四视口基本无 JS 错误通过。**尚未改正式两个子表**；原型只使用内存数据，没有正式 API/DB 操作，未完成权限/409/全量 UIUX/G5。确切文件 SHA、映射及放行限制见 [G2 原型候选记录](docs/development/decisions/MATERIAL_CHILD_LIST_MODAL_G2_20261103_DRAFT.md)。保持原有未提交工作不变，不建 worktree，不提交/推送。
+
+## 2026-11-03 物料子列表正式移植 G3.5 开发前检查
+
+**G35 PREFLIGHT ONLY / G2 EXACT-SOURCE APPROVAL MISSING / G4 BLOCKED / G5 NOT RUN**。用户提出继续将已批准弹窗交互集成入正式 `MaterialConversions.vue` 和 `MaterialSuppliers.vue`；重新实读强制规则、候选 G2 原型、原生业务接口与受影响正式组件，核实前次原型 SHA256 `4B25E76B653B57039EF821B44EC865AC3EFB37276C12B2532239821C43717E8C`；候选原型记录仍明确为待针对确切源码人验，未取得 DESIGN LOCK / G3.5 放行。已新增 [精确字段/API/源码映射与实现前检查](docs/development/decisions/MATERIAL_CHILD_LIST_MODAL_G35_PREFLIGHT_20261103_DRAFT.md)，保留原生整份供应商关系 PUT、首选唯一、厂家/日期/权限、单位换算双单位+因子与主表未保存数据保护，后端/DB/API不变。**未修改正式子列表源码、后端或数据库**，原任务仍未正式验收；获得对应确切原型版本人验与完整门禁后才进入 G4。保留本机其他未提交工作，不创建 worktree。
+
+## 2026-11-03 物料主数据子列表弹窗正式集成
+
+**G3.5 有界映射已核对 / G4 INTEGRATED / SCOPED FRONTEND & CHROME CHECKS PASS / FULL G5 NOT RUN / AWAITING FINAL USER ACCEPTANCE。** 用户针对确切 `MaterialChildListsUX.vue` SHA256 `4B25E76B653B57039EF821B44EC865AC3EFB37276C12B2532239821C43717E8C` 明确批准；已冻结 [DESIGN LOCK](docs/development/decisions/MATERIAL_CHILD_LIST_MODAL_DESIGN_LOCK_20261103.md)。正式只修改 `MaterialConversions.vue`、`MaterialSuppliers.vue`：新增/编辑居中弹窗、保存→取消、字段横排、取消保护；保留单位换算原 POST/PUT 和供应商整份关系清单 PUT/唯一首选/撤销历史，权限/后端 API/DB/迁移不变，父页未保存值隔离。Typecheck exit0、定向单测12/12、最终build exit0；本机 Chrome 正式5173页面+隔离API回归exit0，含新增/编辑/首选/撤销/409保值+新幂等键恢复、权限负例；四宽1440/1280/900/375文档无横向溢出、两个弹窗375px宽度修复后343px、左16/right359，截图保存。**这是隔离API形状回归，真实8080/MariaDB写入、完整九维UIUX/WCAG、系统G5均未执行，不得宣称ACCEPTED。** 结果及确切目标源码 SHA：[报告](docs/review/MATERIAL_CHILD_MODAL_FORMAL_INTEGRATION_20261103.md)、[截图/脚本](docs/review/evidence/material-child-modal-formal-20261103/)。其他未提交内容保留；没有Git提交/推送/部署、未建立worktree。
+
+## 2026-11-03 物料子列表弹窗 G5 续验（真实后端事务与键盘）
+
+**G5 IN PROGRESS / Scoped backend transactional & UI keyboard verification PASS / Full G5 NOT READY / NOT ACCEPTED.** 确认 5173/8080 存活、8080健康200与未认证受保护端点401；同版本 Maven 纯业务规则 exit0，`MaterialSupplierIT` 针对供应商首选/撤销、单位换算、幂等权限、厂家来源四项实际连接本机 MariaDB，Surefire 4/4通过、使用默认 @Transactional 回滚测试事务，Flyway V074/74迁移有效，未执行新迁移。原型保真正式两个子组件修复真实 Chrome 暴露的焦点进入、Esc取消与关闭后触发按钮焦点恢复；四宽 1440/1280/900/375 的新增弹窗字段同行、键盘与页面几何定向检查27观察通过，无JS错误。原7次形状接口 mock 写入场景全回归仍PASS、正式前端typecheck/build与12单测通过。**8080已认证真实写入/读取、全状态九维与19条WCAG、完整UI manifest/G5仍 NOT RUN，禁止标最终验收。** 报告：[MATERIAL_CHILD_MODAL_G5_PROGRESS_20261103](docs/review/MATERIAL_CHILD_MODAL_G5_PROGRESS_20261103.md)，浏览器记录：[G5 partial evidence](docs/review/evidence/material-child-modal-formal-20261103/g5-partial/)。保留所有并行未提交更改，不建worktree，不提交/推送，不修改后端/权限/API/DB业务记录。
+
+
+## 2026-11-05 生产工艺表单优先改造 — Desktop Commander 本机第一轮
+
+**G2 PARTIAL / TYPECHECK BLOCKED / BROWSER NOT RUN / NOT ACCEPTED。** 用户确认表单优先设计并要求 DC 本机开发，已修改现有 mes-demo 的 `src/features/processes/ProcessPrototype.vue`：默认展示工序表单，工序新增/查看/编辑改居中弹窗且隔离父数据草稿，简化表单列表并沿用现有表单/CPP设计器。源码SHA256 `78e52715372f273365055fdf8ab56479f921dac4f9835295cfa47f8ebdac8939`。`npx vite build` exit0（6423 modules）；完整 `vue-tsc -b` exit1，仅剩正式 `ProcessDetailView.vue:9` 的 `ProcessLookup` 未使用导入，本轮未改该正式文件或降低检查。完整三栏视觉、表单元数据弹窗、设计器进出恢复及浏览器/CPP真实动作验收尚未完成；不是按图完整交付或正式MES集成。历史累计81及旧证据保留，本轮补丁脚本/原型修正另记，未清零；普通UI执行窗口结束后仅收尾记录。无正式源码/DB/迁移/权限/Git提交推送。详见 [DC局部实施记录](docs/review/PROCESS_FORM_FOCUS_DC_20261105_PARTIAL.md)。
+
+
+### 2026-11-05 生产工艺表单优先原型 DC 续作（仅 G2）
+**G2 PARTIAL / VISUAL REWORK_REQUIRED / G3–G5 NOT READY。** 用户续作授权下，DC 仅修改本机 `mes-demo/src/features/processes/ProcessPrototype.vue`，新增草稿表单资料查看/编辑居中弹窗与工序返回定位，保留原生设计器/CPP和 eBR 受控生命周期。实际原型文件 SHA256 `9A611B9F3652079178B94256A0B76184C6973327625BDFFE37D1DD454C56327C`。Vite 6423 模块打包 exit0；完整 typecheck 因正式 `ProcessDetailView.vue:9` 的现存未使用 `ProcessLookup` 导入 exit1（本轮未碰正式文件）。本机 Chrome `5174` 原型 12 步定向操作 exit0/0 finding，含表单信息弹窗、设计入口、CPP页签和返回；不代表真实后端持久化/G5。1440 首屏表单列表位置过低、375 表格滚动导致表单身份裁切为 HIGH OPEN；未完成视觉验收，不声明按图完成。截图、操作及差异详见 `docs/review/PROCESS_FORM_FOCUS_DC_20261105_PARTIAL.md` 与 `mes-demo/process-form-browser-20261105/`。保留原有累计81返工事实，不清零；无正式代码、DB、迁移、Git 发布改动。
+
+
+### 2026-11-05 生产工艺原型表单首屏与手机卡片修复（DC）
+**G2 SCOPED LAYOUT PASS / G2 FULL ACCEPTANCE PENDING / G3–G5 NOT READY。** 用户继续开发本轮仅在 `mes-demo/src/features/processes/ProcessPrototype.vue` 修改视觉/响应式：移除重复横向工序路线，左工序导航保持业务前置关系，压缩基本信息/工作台，900px及以下把当前工序表单宽表改为完整身份与动作卡片，桌面表格列宽整理；本机源文件 SHA256 `3BE81FBF48262D94DEFA51E9B3D51448FF865FC6C926617554C394ACFD1B3E7D`。本机 Chrome 1440/1280/900/375 布局检查 exit0、errors=[]（1440 表单标题 y563、375 卡片完整显示且无页面横溢）；12步定向业务点击回归 exit0；Vite打包前一版布局 exit0 6423 modules，最终 TS 仅被**未修改**正式 `ProcessDetailView.vue:9` 的 `ProcessLookup` TS6133 阻断。没有正式G4集成、G5真实API/DB、CPP执行四动作验收或整页原型来源哈希人验；旧累计81和全部未提交数据保留。证据：`docs/review/PROCESS_FORM_FOCUS_DC_20261105_PARTIAL.md`、mes-demo `process-form-layout-evidence-20261105/`。普通UI十分钟窗口已到，停止新修改/重测。
+
+### 2026-11-05 11:36–11:49 DC 生产工艺表单优先原型续作
+**G2 PARTIAL / exact source hash pending human approval / G3.5–G5 NOT READY。** 用户要求继续开发；仅在本机 mes-demo 修改 ProcessPrototype.vue，最终SHA256 6F372077FC074DCCC1267E0D2E881E9ED97CE7341B98B5939F85D164B1705640。工序信息改为轻量“工序设置”弹窗入口；左侧导航取消误导性绿色配置勾号；右侧保持表单列表主体；参数/检验项目补齐查看只读弹窗，编辑取消保值；表单设计仍进入独立工作区，CPP继续复用现有设计器。桌面视觉层次作小幅整理。
+Vite build 6423 modules PASS；原12步Chrome流程0 findings；参数弹窗专项4/4 PASS。npm run build/vue-tsc仍被未修改正式ProcessDetailView.vue:9的TS6133 ProcessLookup未使用阻断；本轮未修改正式MES文件。CPP当前数据结构仅rootLogic+groups[].conditions[]，不支持批准需求的嵌套条件组；四动作运行闭环未验收。浏览器仅为原型内存操作，不证明真实API/DB。截图与报告见 docs/review/PROCESS_FORM_FOCUS_DC_20261105_PARTIAL.md、mes-demo/process-form-browser-20261105/；Planning revision 72。
+本轮普通UI 10分钟预算从11:36:17至11:49:56，超时3分39秒，已停止新代码/测试。历史累计81不清零；未修改正式代码/DB/迁移/权限，未提交推送合并。main原有大量未提交内容保留不动。当前确切原型hash尚未获用户G2人工批准，不得直接进入新版正式页面集成。
+
+### 2026-11-05 12:24–12:40 CPP 嵌套条件组续作与开发预算变更
+用户明确要求取消普通 UI 任务10分钟限制，改为30分钟。已正式修改 docs/development/MES_DEV_RULES.md §6A，普通UI墙钟预算改为30分钟，包含等待、修复、重测；到时仍停止新修改/新测试。20轮自动修复上限、同根因停止、DESIGN LOCK、验收门禁均保持不变。AGENTS.md通过引用MES_DEV_RULES继承此规则；已核查两份治理文件无残留的现行10分钟条款。历史记录中的10分钟事实不回写。
+CPP嵌套条件组：
+- 正式 EbrDefinitionRules 允许旧组结构和可选递归 groups，严格封闭字段、校验当前表单字段归属、AND/OR、非空节点、每组最多20条件、全树最多20组、最大嵌套深度4；从同一树生成括号化安全DSL。未新增表、列、API或迁移。
+- EbrDefinitionRulesTest 新增嵌套AND/OR表达式匹配及空子组拒绝用例；Maven定向测试 PASS，8/8。
+- CppRuleDesigner.vue 增加递归条件组UI、添加/删除子组、旧JSON归一化兼容、递归DSL/业务预览/有效性校验、深度/数量限制和标签关联；修正根组新增事件把DOM Event误当父组的问题。
+- 新增 CppRuleDesigner.nested.test.ts；当前嵌套UI及原可访问性测试 2 files / 4 tests PASS。npx vue-tsc -b --pretty false 在最终源码上 exit0。
+- Vite build 4179 modules PASS（1m17s），但发生在最后两处小幅标签/根组点击处理修正之前；最终版本尚未再次跑完整Vite build。最终版本的vue-tsc与4项定向Vitest均通过。
+- Vitest输出仍有Ant Design Vue render-button default-slot性能警告，不影响本轮测试通过；尚未做真实5173/8080持久化、G5、四种超限动作全闭环运行验收。
+源码SHA：CppRuleDesigner.vue 49AAF6302F5D3ED0DF464711704B0FEA0044727D68D739478041A39C104FD204；EbrDefinitionRules.java B104780E3F26FB3E998D3EA68F31179D16DFA939FAB784C86C5B235A68C642E2；EbrDefinitionRulesTest.java 4501018ADDF8ED972AFB52FBD704D1F53655B55A63E90A956A3C685BE0FC3018；CppRuleDesigner.nested.test.ts B521A8EB5FB66AE0C71F96972F39C1D42EA5D42D0FFC3A8E90A1EE19ECEEE7AC。
+临时拼接脚本已清理。无DB/迁移/后端API变化，无Git stage/commit/push；main原有大量未提交修改保留。
+
+
+### 2026-11-05 DC生产工艺表单优先续作：编译恢复与PC原型定向通过
+**IN PROGRESS / G2 PARTIAL / G3.5–G5 NOT READY。** 用户明确持续授权；通过Desktop Commander在既有唯一工作区清理正式CppRuleDesigner.vue中先前未完成递归组辅助残留（7个TS6133）及正式ProcessDetailView.vue未使用ProcessLookup（1个TS6133），保留既有CPP两级组/DSL/旧JSON合同。正式前端vue-tsc -b exit0、Vite 4179模块构建exit0，原CPP无障碍及工艺草稿恢复两个Vitest文件通过。
+既有mes-demo ProcessPrototype.vue继续G2表单优先布局；处理900px工序名称被挤成竖排及基本信息高度，工序卡220px横滚、900px基本信息双列、700px以下单列；T2标题“生产工艺 / 新增或编辑”。最终原型SHA256 c6ae0b1792bc6f805b0085232d9da083fb4586a94ae91b1fd9522507fbec5b4c；npm run build（vue-tsc+Vite 6423模块）exit0。Chromium内存原型12步主链+4项参数弹窗+4项CPP保存/返回/重开共20项通过；已读取1440及900前后真实截图，900原竖排问题得到纠正。原型CPP保存重开不能替代正式8080/DB持久化、CPP四超限动作运行G5。完整PC UI审查、原型确切版本人验、G3.5、正式页保真集成和G5仍未完成；SELF-REVIEW，不冒称ACCEPTED。
+全程未修改DB、Flyway、已发布eBR、权限或GMP签名/快照；无Git提交/推送，新旧未提交文件全部保留。历史累计81及此前错误/修复事实不清零。详细5栏记录见 docs/review/PROCESS_FORM_FOCUS_DC_20261105_PARTIAL.md 新增同日章节。
+
+
+### 2026-11-05 18:46–19:15 生产工艺 G2 完整审查推进及 G3.5 预检
+**G2 IN PROGRESS / 审查校验 FAIL（证据未完成）/ EXACT HASH PENDING HUMAN APPROVAL / G3.5 DRAFT BLOCKED / G4–G5 NOT READY。** 依据已实际读取的AGENTS.md、MES_DEV_RULES §1/2A/4/6A、FINAL BASELINE v1.0.23、UI V2/T1–T6、PROCESS_WORKSPACE_COMPLETION_20261103_APPROVED、MES_GLOBAL_UX_INTERACTION_20261102_APPROVED及mes-ui-ux-audit/ui-ux-pro-max/BPM V2.5。PC范围1440/1280/900按PROCESS_PC_ONLY_SCOPE_20261104_APPROVED，手机375不计本功能G2。
+通过Desktop Commander在既有本机 mes-demo 原型继续整改：1280表单列表“字段数”隐藏、DRAFT三操作换行；900 T1列表“配置状态/工序数”隐藏；新建无效工艺取消不返回列表。全部改动仅 ProcessPrototype.vue（正式MES业务未改），源文件最终SHA256 **738cb39c3d49674916ae29207cb8a17122e2ec07da8ac1d69ff7f7dfc06b8410**。
+同版npm run build含Vue TS+Vite6423模块exit0，定向Chromium 1440/1280/900：15种区域状态×3共45截图，42项浏览器检查均PASS、0 pageerror/脚本错误，三个PC宽度document无整页溢出，四字段标签/控件中心偏差0px。真实读取多张原尺寸截图，修后表单身份/字段数/操作及900列表主要字段可见，弹窗过渡帧已改为稳定后截图。八组ui-ux-pro-max查询原文保留。完整九维/19条WCAG和逐图对抗二遍尚未核签：audit-manifest.json保留NOT RUN/open HIGH，验证器FAIL，不假报G2通过。
+证据：D:/codex/_project/gmp/mes-demo/process-g2-evidence-20261105/，含audit-partial.json/additional-partial.json、45 PNG、knowledge八组、source-hashes.json、audit-manifest.json。待人工确认版本记录 docs/development/decisions/PROCESS_FORM_FOCUS_G2_20261105_PENDING.md；G3.5预检草案 docs/development/process-form-cpp-ebr/20261105-g35-preflight/PRE_HANDOFF.md 包含逐页源码复用/Mock→正式API映射/阻断项，明确DRAFT不授权G4。生产工艺“适用产品”和版本/生效批准日期的旧期望与当前冻结合同关系待一致性审查，不自行扩DB/API/审批。
+未修改真实DB/Flyway/已发布eBR/签名/权限，没有新工作区或Git提交推送，保留main大量未提交变化和历史累计81不清零。下一步先完成剩余G2全维度验证/人验精确hash，再G3/G3.5冻结正式交接，随后忠实集成和5173/8080 G5；此前不得称ACCEPTED。
+
+
+## 2026-11-05 19:56 G2 扩展验收阶段收尾（NOT FROZEN）
+执行者：ChatGPT SELF-REVIEW using mes-ui-ux-audit and ui-ux-pro-max。已实际读取本机 AGENTS.md、MES_DEV_RULES.md、MES_TASKS.md、PROJECT_BASELINE.md、当前 PROCESS_FORM_FOCUS_G2_20261105_PENDING、G3.5预检、UI V2/T1–T6及PC范围批准记录。普通UI墙钟预算30分钟本轮已到，停止新业务源码变更和新测试，以下仅归档现有证据。
+当前确切原型：D:/codex/_project/gmp/mes-demo/src/features/processes/ProcessPrototype.vue；源码SHA256 7ac72a79d52b1c1774de250d35d909bac118523f2213dcb8bf6557d1f708d29f。唯一实际业务源修改是原型查看表单信息的只读值文字对比度优化，保留只读属性和业务数据合同；原型Vue TS+Vite 6423模块构建 exit0，PC 1440/1280/900 真实Chromium已采45张原始分辨率状态截图，定向交互42/42 PASS，另36/36键盘焦点及错误保值PASS，三宽专业设计器固定全屏盖住底层业务页、无全局水平溢出。额外320/400/450/640 CSS窄视口的T1、T2、设计器共12格文档无横向溢出；Canvas独立+字段插入实操成功，字段3→4并在CPP页显示FIELD_4。
+已完整逐张原图核对45张，给每张图填充8类观察共360条；对15个页面/弹窗状态填充9维审查共135条，视觉相关120项有观察和证据，未闭合的WCAG整维仍NOT RUN；八组ui-ux-pro-max知识检索和第二轮对抗审查有记录。重要文本配色抽检：正文12.92:1、次级5.74:1、代码4.76:1、状态5.44:1、只读业务值9.4:1；PC控件22px+图标属于WCAG2.2 2.5.8邻近目标间距例外，最小可命中目标中心距离28.4px。19个WCAG基本准则目前17项有专项结果，仍留 1.4.4（浏览器真实文字缩放）与1.4.11（完整非文本UI对比度）NOT RUN，未谎称完整认证。证据保存在 mes-demo/process-g2-evidence-20261105/：audit-manifest.json、45图、两个Chrome检查JSON、a11y-browser-checks.json、wcag-six-probe.json、reflow-small-css-viewport.json、pointer-spacing-minimum.json、field-add-keyboard-alternative.json、designer-viewport.json、source-hashes.json 和知识检索原文。
+已实际运行仓库 validator：PASS: PROCESS-FORM-G2-20261105-PENDING — IN PROGRESS; screenshots=45 coverage=45。**这是IN PROGRESS证据结构校验通过，不是G2整体验收通过。** 剩余长CODE、服务失败/409、权限变体等完整状态闭环、用户同hash人工批准和合同差异确认（适用产品、工艺版本/生效批准日期）未完成。G2 IN PROGRESS / PENDING HUMAN APPROVAL；G3 未冻结，G3.5 DRAFT/BLOCKED，G4/G5 NOT READY。没有更改正式MES功能/数据库/Flyway/权限/电子签名/历史快照，没有提交推送合并，保留历史累计81及工作区所有未提交改动。此记录只结束本轮30分钟窗口，不清零历史返工数。
+
+
+## 2026-11-05 21:26–21:56 DC G2 正式缩放/非文本对比度专项收尾
+本轮为新30分钟普通UI窗口。再次实际读取本机AGENTS.md、MES_DEV_RULES、MES_TASKS、PROJECT_BASELINE、已批准UI V2 §6、现有G2待批确认记录、G3.5预检、mes-ui-ux-audit以及原型AGENTS和实际源码；保留FINAL BASELINE v1.0.23/G1–G5、历史累计81和唯一本机工作区，用户授权继续不等于人工批准确切原型。
+**原型文件当前最终SHA256：f9a1492393fe1136f7bb8ef8e56c4d83865b28ac26b8348cba0fa605976ded24**（D:/codex/_project/gmp/mes-demo/src/features/processes/ProcessPrototype.vue）。本轮仅在此原型追加UI V2非文本边界中性 token #7d8a9b（输入、选择、单复选、Canvas字段插入按钮）及浏览器字体放大兼容的控件高度、工序导航弹性换行、弹窗标签flex宽度、长工序条件区域内部滚动样式。未改变工艺/CPP业务字段、API/DSL、表/迁移/权限/签名或Mock回写边界。
+**实际验证**：本轮源码npm run build含Vue TS+Vite6423模块 exit0；正式G2既有42项三PC宽浏览器操作、36项键盘焦点/错误保值专项，以及12项旧主链、4项普通弹窗、4项CPP草稿保存-返回-重开，全链连续运行 exit0（closing-main/additional/a11y/original/modal/cpp.log），保留所有失败历史。非文本边界修复前普通控件1.41:1、字段加号1.74:1；修复后1440/1280/900共18个操作状态117个可见控件边界实测最低3.51:1、低于3:1为0。浏览器隔离原生最小字体minimum_font_size=28px（常规body14px→200%）下发现原900工序竖排/保存按钮裁切并做受控修复，修复后1440/1280/900共18项关键操作、弹窗、全页设计器/CPP、工序不竖排、布局不全局横溢出均PASS；另等效浏览器200%缩放(半CSS视口+DPR2)15/15通过。原始前后PNG和JSON：mes-demo/process-g2-evidence-20261105/native-font28-regression.json、wcag-1411-all-controls.json、zoom200-equivalent-reflow.json、closing-*.log及对应截图。限定为G2原型证据，不代表全站WCAG认证/真实5173/8080G5。
+长名称专项：工序长名称在1440/1280/900 3/3保值且没有整页横溢出，停用工艺查看/禁编辑及重复工序编码拒绝等另9项成功；“先改父工序→未经父保存直接改表单资料”在三视口被原型正确保护并提示“请先保存工艺，再编辑表单信息”，该路径不该绕过；**父工艺保存后再次编辑长表单名仍NOT RUN**，不可据失败驱动脚本宣称它已通过。尝试调整针对该测试的定位/重试时工具安全检查拒绝，未换执行方式规避。无真实HTTP 409/403与不同角色RBAC执行证据。
+G2审查manifest现45张截图、逐图360条视觉观察、15种surface九维135条评审已登记；19项WCAG基础范围均有定向实测PASS，validator实际输出“PASS for IN PROGRESS; screenshots=45 coverage=45”。**G2仍IN PROGRESS/未获用户同hash人工批准，剩余长名称父保存→表单编辑回读、真实服务错误/权限负例及源设计合同差异确认；G3未冻结、G3.5仍DRAFT/BLOCKED，G4/G5不可放行**。源hash清单与G2/G3.5候选文档已更新本轮f9a...，旧版历史证据保留。未修改正式MES业务文件/数据库/Flyway，未Git提交、推送、合并。
+
+
+## 2026-11-05 22:07 DC G2 长名称/父草稿保护回归补齐（30分钟窗口到期收尾）
+用户要求“继续30分钟任务”。本轮沿用本机单一mes-demo与计划0df9356d-675b-4f37-8b7d-948948c8d694，实际重新读取AGENTS.md、MES_DEV_RULES.md、MES_TASKS.md、PROJECT_BASELINE.md、现有G2待批/G3.5预检、批准的全局UX交互规范及当前ProcessPrototype.vue、原型回归脚本和audit-manifest.json。当前原型SHA256复核 **f9a1492393fe1136f7bb8ef8e56c4d83865b28ac26b8348cba0fa605976ded24**，业务源码本轮零改动，正式MES/DB/Flyway/权限/受控快照零改动。
+本轮新增原型真实Chromium专项脚本 mes-demo/process_g2_parent_long_roundtrip_20261105.cjs；在PC 1440/1280/900的完整链路：编辑OP03长名称→未经父工艺保存点击表单编辑出现预期“请先保存工艺，再编辑表单信息”→保存父工艺并切到只读详情→再次进入编辑→修改同工序草稿表单的长名称→列表显示修改后名称→返回查看再重开编辑→对应表单行与只读查看弹窗完整名称一致。最终 **18/18 PASS、errors=[]、6张专项截图**；证据 mes-demo/process-g2-evidence-20261105/parent-save-long-form-roundtrip.json、g2-parent-form-long-*.png。初版专项脚本失败属于隐藏 Ant 表格行定位与底部取消按钮非唯一定位，修正为对应视口可见表单行与bottom-actions作用域后全部通过；保留前失败记录，不改业务断言、不降低阈值。原型自身保存结果仅内存，不等于8080真实持久化。
+审查manifest中的“长表单保存后回读NOT RUN”已经按本轮证据纠正，**G2仍IN PROGRESS**：正式HTTP409/403和不同角色权限负例没有专项证据，用户尚未对同哈希原型人工签核，G3详细设计与G3.5交接仍DRAFT/BLOCKED，G4/G5 NOT READY。历史修复累计81及新旧失败/状态均保留。
+执行窗口由本轮开始约21:26至实际记录约22:07，已超30分钟上限，已停止新增业务源码/测试，只允许补证据与交接记录。无Git stage/commit/push、无新worktree、未动其它未提交文件。
+
+
+## 2026-11-05 22:52 DC G2 原型409/403与VIEWER权限状态补齐（30分钟窗口）
+执行者：ChatGPT SELF-REVIEW using mes-ui-ux-audit and ui-ux-pro-max。沿用唯一 MES任务、v1.0.23与 UI V2，不新建工作区；真实读取 AGENTS.md、MES_DEV_RULES.md、MES_TASKS.md、PROJECT_BASELINE.md、已批准CPP及MES_GLOBAL_UX_INTERACTION_20261102、G2待批记录、G3.5草稿、正式 ProcessDetailView.vue/model.ts 和相关现有测试。代码白名单只有 mes-demo/src/features/processes/ProcessPrototype.vue 以及新增G2浏览器脚本；正式MES业务源/DB/迁移/角色/签名/历史记录未修改。
+**当前候选原型 SHA256：2bbbacd1b4c62be2fc31d3ad3f28fad6b36522ccf3e2ce0fc6ae90f44ec2b82b**。在仅 DEV 原型中通过URL参数 `__g2SaveStatus=409|403` 注入可控保存失败，`__g2Role=VIEWER` 表示只读人物；无页面新增业务按钮、权限定义、API/存储结构变更，**G4不可直接把这两个专用夹具迁移正式应用**。正式必须复用 auth.can()、Axios错误、真实REST、幂等及冲突重载保护。
+G2 Chrome实际验证：409/403×1440/1280/900共6组、0 errors，409输入保留/显示错误/模拟冲突解除后保存重读，403无虚假成功/未丢输入；VIEWER三PC宽21个状态检查（3×7）PASS，新增编辑入口隐藏、只读查看、工序弹窗禁用和草稿表单仅查看。两组专项分别有6及3张稳定截图。最初VIEWER图拍在弹窗关闭动画中，已保留误帧发现并修正脚本，等待稳定后重拍；只读业务值computed为#314364，对比度不靠渐变截图判断。npm run build (TS+Vite6423模块) PASS；重新连续执行G2 42操作、36键盘、12主链+4弹窗+4CPP及18长名回读，均成功退出0；正式前端已存在的ProcessDetailView只读/草稿恢复及CppRuleDesigner无障碍三Vitest文件6/6PASS，但仍有原有 maxlength prop type警告，不是G5证据。
+G2证据目录：D:/codex/_project/gmp/mes-demo/process-g2-evidence-20261105/，追加 prototype-fault-409-403.json、prototype-viewer-role.json、9张稳定截图、g2-next-*.log 及原45图/关联JSON；审查manifest现 **54张截图/54覆盖单元/162九维条目/51交互条目**，validator真实返回 PASS for IN PROGRESS (54/54)；G2-UNCLOSED-EXCEPTION-RBAC 仅就 **原型模拟UI范围** 有据关闭，真实HTTP409/403/实际角色权限仍归G5的独立验收，绝非后端PASS。G2-VERIFIED-HUMAN-HASH仍OPEN HIGH，故G2整体IN PROGRESS/PENDING HUMAN APPROVAL，G3未冻结，G3.5仅PRE_HANDOFF草案/DRAFT BLOCKED，G4/G5 NOT READY。
+G3.5预映射：工艺GET/POST/PUT复用ProcessDetailView.vue中load/createPackage/save/failure/reloadConfirmed，403由auth.can与服务端权限共同限制，409由conflict置位/重载前confirm保值，实际JWT、对象归属与current-definition原子提交不改变；eBR模板GET分页/草稿PUT保留templateId+formCode身份与版本/If-Match。复用OperationItemDialog、DefinitionDesigner与CppRuleDesigner，禁止用原型内存保存结果代替正式持久化。产品“适用产品”与版本/生效批准日期的合同差异及表单名称正式更新语义仍需G3决策，未经用户批准不扩库/审批。
+未Git stage/commit/push，没有清理其它未提交文件；此前累计修复81及本阶段事实保留，不清零。
+
+
+### 2026-11-05 22:56 新30分钟G2任务最终检查与Planning容量处理
+本轮当前源码SHA256于22:56再次核实为 2bbbacd1b4c62be2fc31d3ad3f28fad6b36522ccf3e2ce0fc6ae90f44ec2b82b，源闭包13/13匹配，G2 manifest审查validator PASS for IN PROGRESS（54截图/54覆盖、162九维、51交互条目），Git diff --check PASS。正式5173、8080 health HTTP200仅为只读环境预检；正式系统真实409/403/RBAC及持久化仍NOT RUN/G5。G3.5 PRE_HANDOFF追加了正式 TemplateDetailView.vue save()/load()/newVersion()的接口源码复用核验：PUT /ebr/templates/{id}带versionNo、reason、definitionForSave，草稿formName更名可使用现有端点，无需增API；但确切交互合同和多表单版本/审批影响仍须G3冻结决定。无正式MES业务代码、数据库、Flyway、权限或GMP历史改动，无Git提交推送合并。
+Planning唯一ID 0df9356d-675b-4f37-8b7d-948948c8d694 的 progress.md 因UTF-8 64KiB限制无法再append；本轮没有新建/重置Planning，改在同计划的task_plan.md与findings.md简要checkpoint并成功更新为 revision79；完整新过程事实继续以本文件MES_TASKS.md与G2审查报告为权威。保留progress.md历史及累计返工81，不把容量错误当丢失进度。
+当前门禁：G2 IN PROGRESS（唯一剩余HIGH为用户对当前具体源码hash的人工确认），G3/G3.5 DRAFT/BLOCKED，G4/G5 NOT READY。DEV测试夹具不可迁入正式应用。当前30分钟窗口约22:29开始，22:56已停止新增源码及测试，仅做归档。
+
+
+### 2026-11-06 生产工艺「检验作为普通工序」原型验证
+用户明确要求从生产工艺整体移除独立「检验项目」概念；检验仅作为工序流程中的普通工序，不特殊分类、不特殊着色、不设独立项目表或管理入口。沿用新决策记录 PROCESS_INSPECTION_AS_ORDINARY_OPERATION_20261106.md；旧 DCP-PROCESS-OPERATION-TYPE-001 保留为历史批准记录，不回写。
+当前 mes-demo 原型 ProcessPrototype.vue SHA256 `9802E4CF5F4DFBD01DACDBB411E392F7F0A60B6A0EECCA54FC897CC1E928E7BA`。当前 Operation 不含 operationType/ipcDefinitions/IPC参数类型；左侧七道工序同样式，OP04「中间检验」仅作为普通工序；关联普通 EBR 表单「中间检验记录」，表单设计和 CPP 走统一入口。工序内仅「记录表单」「工艺参数」，不显示独立检验项目。
+验证：npm.cmd run build PASS（vue-tsc PASS、Vite 6431 modules）；普通工序/中间检验/CPP/参数/产品专项 13+10+7+5+3 步均 PASS、0 errors，覆盖1440/1280/900无整页横溢出、普通工序新增/编辑/查看只读、取消恢复、产品多选取消/保存/重开/只读。截图和脚本见 mes-demo/process-inspection-normalization-20261106/、process-inspection-ordinary-*.png、process-inspection-ordinary-operation-smoke-20261106.cjs、process-operation-crud-smoke-20261106.cjs、process_inspection_normalization_smoke_20261106.cjs、process_product_scope_smoke_20261106.cjs。
+当前仅为原型专项验证，G2完整UI/UX审查及用户对精确hash人工确认仍待完成；G3/G3.5未冻结，正式集成未放行。正式 operationType/ipcDefinitions/数据库/API/历史快照/生产执行和QC/QMS仍保持兼容，本轮未改正式MES页面、后端、API、DB、Flyway、权限、签名、历史数据；未Git提交/推送。
+
+
+### 2026-11-06 生产工艺开发恢复核对（ChatGPT/DC）
+本轮恢复后重新实读本机 AGENTS.md、MES_DEV_RULES §2A/§4/§5/§6A、PROJECT_BASELINE、MES_TASKS、最新普通工序决策、mes-demo/AGENTS.md、mes-ui-ux-audit 与 UI V2。当前原型 ProcessPrototype.vue SHA256：`9802E4CF5F4DFBD01DACDBB411E392F7F0A60B6A0EECCA54FC897CC1E928E7BA`。已有普通工序/表单/CPP/参数/产品专项 13 步 errors=[]；仍仅是原型证据，G2 完整 UI/UX 审查和该哈希人工确认未完成，G3/G3.5未冻结，正式集成不得放行。
+只读核对发现：正式 ProcessDetailView 仍保留 IPC 工序类型及 IPC 专属区域；正式 ProcessService/ProcessCommands/ProcessStore 仍以单一 productId/product_id 关联产品。当前原型已改为工艺适用多产品，但 currentDefinitionPayload() 尚未包含 selectedProductIds，正式关系模型/API 映射需在 G3/G3.5明确。原型 mock Process 有 version/approvedAt 属性但编辑界面未展示；正式基础定义合同不含工艺版本生命周期，简单版本/生效日期元数据是否保留需在 G3明确，不得擅自恢复版本/审批流程。
+视觉证据复核：已查看1440/1280/900主界面及产品页。普通工序查看弹窗截图脚本在 dialog.waitFor() 后立即截图、未等待过渡动画，现有 process-inspection-ordinary-view-1440.png 不可作为稳定视觉证据；900产品截图含“当前工艺已保存”瞬态提示，需稳定重拍。900工序导航使用 overflow:auto 横向滚动，完整审查需验证末端工序鼠标/键盘可发现性。
+本轮无业务源码、API、数据库、Flyway、权限或测试断言修改。Git仍为唯一 main，HEAD 1682fc5，ahead 1；工作区547条状态项（108 modified、439 untracked），全部保留，未 stage/commit/push。下一步为当前哈希的完整G2审查与稳定证据补齐；完成后提交精确哈希供用户确认，再进入G3/G3.5。
+
+
+#### 2026-11-06 G2 稳定截图补证
+新增 `mes-demo/process-inspection-stable-evidence-20261106.cjs` 并实际运行，结果见 `mes-demo/process-inspection-stable-evidence-20261106/result.json`，绑定原型 SHA256 `9802E4CF5F4DFBD01DACDBB411E392F7F0A60B6A0EECCA54FC897CC1E928E7BA`。稳定截图为 `operation-view-stable-1440.png` 与 `product-scope-stable-900.png`。查看工序弹窗实测白色不透明背景、780×402；900产品页 documentWidth=900、无瞬态toast；900工序导航7项，键盘聚焦末项后自动滚动到OP07且完整可见；errors=[]。因此旧查看弹窗过渡帧和900成功toast截图不再作为视觉证据。此补证仅关闭截图稳定性与键盘到达末工序这两个局部问题，完整G2逐图/九维/WCAG/对抗审查仍未完成，G2仍IN PROGRESS。
+
+
+#### 2026-11-06 UI/UX Pro Max 定向检索
+按当前 MES V2/PC_ONLY 范围执行8组本地检索（enterprise admin/style、horizontal scroll/ux、form labels/ux、table row/ux、modal/ux、focus/ux、contrast/ux、forms/vue），全部 exitCode=0；结果保存在 `mes-demo/process-inspection-stable-evidence-20261106/knowledge/`。检索仅作为G2审查参考，不覆盖冻结 MES UI V2/T1–T6 token；重点核验可见焦点、表单标签/错误反馈、正文4.5:1对比度、窄视口表格卡片化、弹窗焦点。horizontal-scroll规则针对移动端；当前批准范围PC_ONLY，900px工序导航仍需检查指针发现性与键盘可达性（键盘末项已通过）。
+
+
+#### 2026-11-06 当前哈希 G2 部分清单
+新建 `mes-demo/process-inspection-stable-evidence-20261106/audit-manifest.json`，绑定当前原型哈希 `9802E4CF5F4DFBD01DACDBB411E392F7F0A60B6A0EECCA54FC897CC1E928E7BA`；Node JSON解析验证通过。当前登记8组知识检索、2张稳定截图、4项定向交互检查、9个审查维度、19项WCAG准则。为防止误报，9个完整维度和19项WCAG均明确标记NOT RUN，manifest verdict=IN PROGRESS；旧 `2bb.../f9a...` 哈希截图不复用为当前哈希的通过证据。
+
+
+## 2026-11-06 用户要求直接修改正式 MES 代码 — 正式实施开始
+用户明确指令：“继续开发到完成，对着正式代码修改”。已建立 [PROCESS_FORMAL_DIRECT_IMPLEMENTATION_20261106.md](docs/development/decisions/PROCESS_FORMAL_DIRECT_IMPLEMENTATION_20261106.md)。本次为生产工艺模块任务级直接实施授权：不再以 mes-demo 精确哈希 G2 人工签核作为正式代码修改前置条件；**不代表 G2 已通过或任何原型哈希获批**，G5真实验收和用户最终接受保留。
+业务边界：一个工艺可关联多个产品；工艺基本信息包含名称、当前版本标签、生效批准日期、说明；版本/日期是当前元数据，不新增工艺历史版本或审批生命周期。工序统一普通工序，隐藏IPC专属UI但保留历史operationType/ipcDefinitions兼容数据。每道工序复用现有EBR表单和CPP设计器/安全DSL，不另建引擎。处方与生产下达必须校验产品在工艺适用范围内。
+本轮开始保护唯一main与所有现有未提交改动。当前 HEAD 1682fc5、本地ahead 1；全工作区547条状态（108 modified、439 untracked），仅按决策白名单做精确补丁，不清理/覆盖/提交/推送。
+
+
+## 2026-11-06 正式代码实现与实测补充
+
+正式实施已落地：V076 已在 `hospital_pharma_mes_dev` 成功迁移、76 条 Flyway 已验证；多产品关系的创建、保存、查询与历史单产品兼容均已通过事务集成测试；生产处方和批次下达适用性检查、当前工艺资料（名称/版本/生效批准日期/说明）、工序与 EBR 表单/CPP 入口已进入正式 Java/Vue 代码。
+
+最终定向验收：Maven 20 模块 BUILD SUCCESS；前端 TypeScript + Vite 构建通过；全量前端 Vitest 249/249 PASS（111 suites）；定向 Java 24/24 PASS（ProcessOperationType 7、Prescription 3、CPP 1、Ebr 13）；真实 Chrome 生产工艺列表/详情/适用产品及工序表单操作 1 PASS。
+
+**G5 非全通过**：Chrome CPP 表单直达用例 1 SKIP，因为本机 9 条工艺均未找到已绑定的现有 EBR 表单。不制造、篡改用户业务表单数据；由真实 MariaDB 事务集成 CppControlledRoundTripIT 证明 CPP 写入/回读。完整证据：`docs/development/process-form-cpp-ebr/20261106-formal-code/RESULT.md`。
+
+未创建 worktree；单一 main；未 stage/commit/push；之前大量未提交源码保持原样。此轮任务级直接开发授权不等于原型 G2 已批准或 G5 产品已最终接受。
+
+
+### 2026-11-06 20:13：生产工艺/CPP 真实 Chrome 端到端闭环
+已在正式 DEV 库新增工艺829、工序OP1、EBR模板663、字段MIX_TEMP及CPP规则CPP_OP1_RECORD_1（配制温度20–25，MARK_EXCEPTION+BLOCK_SUBMIT），通过正式 UI 新增/关联/设计/保存及真实 HTTP GET 回读，实际 PUT HTTP 200。原 1 PASS/1 SKIP 的 Chrome 专项现为 **2 PASS/0 SKIP/0 FAIL**，已解决无表单造成的 CPP 验收空缺。详情与哈希证据：`docs/development/process-form-cpp-ebr/20261106-formal-code/RESULT.md`。本轮只在 DEV 留下业务语义明确的隔离核验记录，未改既有业务记录，仍为唯一main/未提交推送。G5 完整审查清单、用户最终 ACCEPTED 尚未完成，状态保留 IN PROGRESS/G5 PARTIAL。
+
+
+### 2026-11-06 21:32 G5 正式界面实审与产品弹窗修复
+唯一main正式代码修复适用产品弹窗确认→取消按钮顺序及900下拉遮挡footer（ProcessDetailView.vue SHA256 DF080891D4289BB939B5C500F6968F8186D00A3B9DF39E10C40F278F7B2C263C）。真实Chrome新增/取消/确认/保存KCL30产品关联后GET读回，正式Chrome 3/3 PASS、0 SKIP；全前端Vitest249/249 PASS，前端build通过。G5真实5173/8080 PC1440/1280/900共30截图、0整页横溢出、0业务API非401错误、0 pageerrors；8组知识检索exit0。g5-readonly/audit-manifest.json记录54九维、19WCAG未完，validator EXIT1 FAIL：正式路由PC_ONLY批准例外未在校验器范围、375矩阵缺项及逐图复评/权限/缩放未完成。不得称G5通过/READY/ACCEPTED。详见`docs/development/process-form-cpp-ebr/20261106-formal-code/RESULT.md`。未 stage/commit/push、不建worktree、不动原有业务记录。
+
+
+## 2026-11-06 22:04 G5 阶段续作
+正式 ProcessDetailView.vue 修复：重复工艺编码409不再触发伪版本冲突消息；工序保存栏position:static，避免覆盖表单行。受控源hash 252A1EE2FA90E1A03FFF2F37F2331EB01EC694ED7B07811F51B57287A0D70256。Chrome真实角色403+重复编码409 2PASS；生产工艺/EBR/CPP/产品关联/底栏6PASS；PC 200%等效3物理宽、共9页1PASS；vue-tsc+Vite BUILD PASS、全前端Vitest249/249PASS（111 files）。G5后照30张逐张八类review、九维54个条目与WCAG19项部分NOTRUN；validator EXIT1：PC_ONLY仅适配原型而不认正式路由、强制375，另完整对抗/全RBAC/原生缩放待审。G5 IN PROGRESS，不能称最终READY或ACCEPTED。详细报告：docs/development/process-form-cpp-ebr/20261106-formal-code/RESULT.md，截图和manifest：.../g5-footer-after。无Git提交推送、无新worktree、原有未提交文件仍全数保留。
+
+
+### 2026-11-06 23:17 当前正式源码的键盘与Canvas草稿修复
+正式单一 main/HEAD1682fc5：对DEV草稿EBR模板663通过受控PUT/GET把MIX_TEMP字段移到文书正文、保留CPP_OP1_RECORD_1（versionNo3、HTTP200），三宽1440/1280/900原图已查看，原Canvas MEDIUM关闭。正式ProcessDetailView.vue新增工艺/产品tab左/右/Home/End键及产品弹窗开闭焦点恢复，源码SHA E2B9E82F0650848B7F7D894E39CC0A6F8EB2040C1822C7083D7E6B4D6DCDC937。当前定向真实Chrome **10/10 PASS**、全前端Vitest **249/249 PASS**、TS/Vite BUILD PASS、diff--check EXIT0；重采当前源码PC 30图、0整页横溢出/0业务API错误/0pageerror。已批准工艺当前定义是最后合法保存生效，不应错误添加旧版本409门禁。审查器正式PC_ONLY路由范围冲突及19项WCAG全矩阵/原生缩放/全角色对抗复查仍未完成，G5 validator EXIT1 **IN PROGRESS/NOT READY**。详情 `docs/development/process-form-cpp-ebr/20261106-formal-code/RESULT.md` 及 `g5-current-20261106/audit-manifest.json`。本地工作区原未提交内容保护、未另建工作区、未git提交推送。
+
+
+### 2026-11-07 08:17–08:38 G5正式列表与产品弹窗二项可用性整改
+在本机唯一main正式代码，对生产工艺列表长名称穿越版本列问题修复：原170px名称td scrollWidth207，正式1440/1280/900 Chrome重新测得 scrollWidth=clientWidth=170，完整名称换行可见。正式适用产品多选弹窗添加可见同行标签、input aria-labelledby及局部v-select-accessibility，Chrome AX tree combobox名称稳定“适用产品”、展开状态false→true；无业务逻辑变更。最新完整真实Chrome 12/12 PASS，Vitest249/249 PASS（111 files），前端TS/Vite构建PASS，17项代表性颜色对比度均≥4.5:1（仅抽查）；1440/1280/900共30张当前源码原图无整页横溢出，当前 G5完整manifest在docs/development/process-form-cpp-ebr/20261107-formal-g5/final/audit-manifest.json。ProcessDetailView SHA D755132FA34DB1B34E15328C29FB7CE0081FF9DC1E86213EDF99271F8385DA24，ProcessListView SHA 5989133C54603D6D8041F65E12291585B89F401DAC29AADF2EB6F08949D6617A。G5 validator 真实EXIT1：PC_ONLY批准例外仅认原型路径、375依旧被强制，19项WCAG/全角色/对抗二审等未完成；未改门禁，G5 NOT READY/NOT ACCEPTED。完整报告 docs/development/process-form-cpp-ebr/20261107-formal-g5/RESULT.md。唯一main未stage/commit/push，不动历史生产记录、保留所有未提交文件。
+
+
+### 2026-11-07 10:05–10:33 正式生产工艺G5专项继续
+本机唯一main/HEAD1682fc5继续正式代码（无其它工作区、未Git提交推送、未清理原有未提交内容）。补充真实IAM GET 用户13/角色15中7类业务身份与工艺权限的只读配置核对：生产岗位只有process:package:view，其余六类岗位无工艺授权；这**不是七身份各自登录**。真实仓管403和重复工艺编码409输入保留已通过。PC1440/1280/900工艺和产品弹窗键盘Left/Right/Home/End、8次Tab焦点留在弹窗、Esc返回来源按钮、2px蓝色焦点轮廓通过。T1列表结果数量与T2工艺状态增role=status、aria-live=polite（是DOM/Chrome断言，不是假称真人读屏器播报）。正式ProcessDetailView的12处AntD maxlength字符串prop告警改数字绑定，长度阈值不变，定向Vitest通过。CPP目标尺寸扫描及WCAG专项证据已记（仍非19条全面PASS）。最终源码Detail hash E61FAF54F9F0540E0F10B03A81B67DE833806ADFDB41112F242A0D0FD48B28AE、List hash ECE7535B816B8CEA25DD4A8A48DCDB0C7910EA5D6E7DEE061C081548A8D80F47；按此源重新采PC三宽×10状态30张PNG，0整页水平溢出/0业务API错误/0pageerror。最后**完整Chrome13/13 PASS（2 workers）、完整Vitest249/249 PASS（111files，独立运行）、TS+Vite build PASS**；高并行时曾有一个Vitest5秒timeout和一个Chrome CPP5秒等待timeout，原断言未修改，分别单独重跑及2-worker全量复测通过。正式G5审查器原样EXIT1，PC_ONLY只认原型#/processes、不认正式/process/packages，同时完整19WCAG/七角色逐一登录/原生缩放及人工签核未完，绝不标READY/ACCEPTED。详细报告和提案：docs/development/process-form-cpp-ebr/20261107-formal-g5/RESULT.md、WCAG_TARGETED_EVIDENCE.md、G5_SCOPE_FIX_PROPOSAL.md、source-final/audit-manifest.json。
+
+
+### 2026-11-07 12:35 G5 七身份真实Chrome与对抗二次自审
+本机唯一main/HEAD1682fc5，真实正式UI/后端：新增七个现存业务身份各自真实登录、GET工艺829、直接页面权限E2E，生产岗200只读且无编辑，仓储/取样/QC分析/QC复核/QA/基础资料6岗403且页面阻止，1/1专项PASS，原“仅IAM授权配置核对”缺项关闭。整体真实Chrome 14/14 PASS（2 workers），原全前端249/249 PASS、TS/Vite BUILD PASS、Java定向24/24事实保持。正式源码SHA未变：Detail E61FAF54F9F0540E0F10B03A81B67DE833806ADFDB41112F242A0D0FD48B28AE、List ECE7535B816B8CEA25DD4A8A48DCDB0C7910EA5D6E7DEE061C081548A8D80F47。对当前源码30张PC1440/1280/900原图逐图进行了第二遍ChatGPT SELF-REVIEW（非独立QA），对齐/留白/层级/动作可发现性/恢复均有具体原缺陷修复对照，未发现新增HIGH。已更新 `docs/development/process-form-cpp-ebr/20261107-formal-g5/source-final/audit-manifest.json`：7身份actual sessions PASS、对抗自审completed=true，保留19WCAG全量、原生浏览器缩放NOT RUN。无头Chrome Ctrl+=不改变真实zoom尺度，不能替代native验证。G5 validator仍EXIT1：PC_ONLY例外不认正式route、强制375和native zoom/geometry缺项；不得伪造PASS。详见 `docs/development/process-form-cpp-ebr/20261107-formal-g5/RESULT.md`、`SECOND_PASS_20261107.md`、`role-login-e2e-evidence.json`。未提交/推送/另建工作区或覆盖原改动。
+
+
+### 2026-11-07 12:38 正式页面辅助技术名称定向扫描
+当前正式源码7页面/弹窗通过真实Chrome AX snapshot扫描，158项交互控制无未命名role项，原始证据`docs/development/process-form-cpp-ebr/20261107-formal-g5/aria-comprehensive-probe.json`。只证明可访问名称定向覆盖，不替代WCAG19条全矩阵或原生缩放。真实Chrome14/14、7身份各自登入、30图第二遍自审已通过；validator EXIT1，G5仍IN PROGRESS/NOT ACCEPTED。无源码、权限或数据库变更。
+
+
+
+### 2026-11-07 14:42 原生Chromium浏览器200%缩放实际验证完成
+本机Playwright Chromium1248通过独立临时MV3扩展调用chrome.tabs.setZoom(2)，浏览器真实getZoom从1→2，DPR1→2，PC1440/1280/900CSS可用宽720/640/450。按真实正式5173/8080/MariaDB验证工艺列表/详情/编辑/EBR CPP/Canvas/产品Modal三宽×六状态**18/18专项PASS**，关键控件DOM边界不出视口、0整页横溢出/0业务API错误/0JS错误，底栏正常、弹窗Escape焦点回归。Playwright page.screenshot的原生缩放截图存在CSS宽裁成半页的工具问题，已采用CDP Page.captureScreenshot生成**18张设备物理像素完整截图**并复核900列表/编辑/CPP/弹窗，原裁图仅保留作误诊追溯，不能列为有效视觉证据。G5 source-final/audit-manifest.json更新native zoom交互/几何PASS，实际屏幕阅读器播报保持NOT RUN。PC_ONLY路由校验器未改，8组正负验证scope-mapping-proof.py均PASS（仅精确正式路由可继承用户批准的三宽，历史其它路径/文件哈希拒绝仍有效），原validator依旧EXIT1：正式路由范围未映射/强制375+读屏实际播报未验；完整19WCAG/人工ACCEPTED尚未结案。正式源码/单一main/HEAD1682fc5不变，所有原未提交文件保护、无worktree/commit/push。证据docs/development/process-form-cpp-ebr/20261107-formal-g5/native-zoom-investigation/native-zoom-final-evidence.json和scope-mapping-proof.json；详情追加RESULT.md。
+
+
+### 2026-11-07 18:34 已批准的生产工艺 PC_ONLY 正式路由修复
+实际在本机唯一main精确修复G5审核器的正式工艺URL映射：在用户原批准PC_ONLY文档及严格SHA检验下，仅允许本任务的正式 `/process/packages` 根URL（本机127/localhost:5173）和原 `#/processes` 使用1440/1280/900矩阵，所有其它模块/子路由/域/错误SHA仍要求原375，9/9组正负回归PASS（docs/development/process-form-cpp-ebr/20261107-formal-g5/scope-mapping-regression-result.json）。原 G5 validator如今不报范围/375错误，但仍因`interaction_checks[14]`真实读屏器语音NOT RUN而EXIT1。新增正式Chrome无障碍树动态状态专项：工艺编辑状态“配置已生效→有未保存的修改”、列表检索“共9→共1”通过role=status/live=polite/atomic=true编程树验证，不产生DB写，专项2/2PASS；合并正式浏览器套件16/16PASS，原功能不回归。系统有Narrator但未在用户桌面擅启；真正语音播报与完整19项WCAG/54维度及人工G5仍NOT RUN，禁止自动改成ACCEPTED。手工核验步骤已固化 G5_REMAINING_HUMAN_ACCEPTANCE.md。正式Vue/Java/DB源码不动、main HEAD1682fc5、工作区原未提交代码全保留，未stage/commit/push/建worktree。详情追加正式G5的RESULT.md。

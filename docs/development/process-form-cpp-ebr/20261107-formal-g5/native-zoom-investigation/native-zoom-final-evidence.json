@@ -1,0 +1,201 @@
+{
+  "date": "2026-11-07T06:40:23.779Z",
+  "execution": "ChatGPT SELF-REVIEW using mes-ui-ux-audit and ui-ux-pro-max; no independent human acceptance",
+  "sourceHash": "e61faf54f9f0540e0f10b03a81b67de833806adfdb41112f242a0d0fd48b28ae",
+  "zoom": {
+    "api": "chrome.tabs.setZoom()",
+    "previous": 1,
+    "confirmed": 2
+  },
+  "browser": "Isolated headless Playwright Chromium 1248, temporary MV3 tab-zoom extension",
+  "method": "CDP Page.captureScreenshot native device pixels (900px physical window produces 900px screenshot at 200% zoom), corrected from misleading Playwright CSS-resolution captures",
+  "analyzed": {
+    "scenes": 18,
+    "physicalWindows": [
+      900,
+      1280,
+      1440
+    ],
+    "kinds": [
+      "process-list",
+      "process-detail",
+      "process-edit",
+      "ebr-cpp",
+      "ebr-canvas",
+      "product-modal"
+    ],
+    "actualDpr": 2,
+    "errors": 0,
+    "offscreenCriticalControls": 0,
+    "documentHorizontalOverflow": 0,
+    "footerOverlap": 0,
+    "modalFocusErrors": 0
+  },
+  "screenshotCaveat": "Previous native200.png generated through Playwright page.screenshot() at zoom2 had CSS-width raster cropping. They remain as raw troubleshooting evidence and MUST NOT be used for G5 visual assessment; use only *-native200-cdp.png images.",
+  "humanVisualReviewed": "900px physical original viewport: process edit, list, CPP rule design, product modal CDP images visually verified; other device-pixel images retained with DOM geometric checks, not claimed independently human-approved.",
+  "screens": [
+    {
+      "physical": 1440,
+      "kind": "process-list",
+      "filename": "1440-process-list-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "0e506080b7f76a25cb54689c33bb1bedb61e89d45809557d28ad0de9d0e3a321",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1440,
+      "kind": "process-detail",
+      "filename": "1440-process-detail-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "664a682ea0f9ec2ad3c9849af3a2bee33f46ff7a5f74fe89fdcaf1939befbac9",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1440,
+      "kind": "process-edit",
+      "filename": "1440-process-edit-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "75cf9572387b7da27821da5e0c4ff1fb2b32994794fbe662e086183372baba54",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-cpp",
+      "filename": "1440-ebr-cpp-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "54c042123e7cb73464e9f245f2ed760687dbf0ddb6660354ba5acfa8823617a4",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1440,
+      "kind": "ebr-canvas",
+      "filename": "1440-ebr-canvas-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "e4ab8ae4e6108bf63521938a667751b701d74ce87ae7ca327ad1d4d9e1d94bfc",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1440,
+      "kind": "product-modal",
+      "filename": "1440-product-modal-native200-cdp.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "9711efbf991addc3f15543e7f33b067bdb2cbc475f213f1a3527afb292b6b510",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "process-list",
+      "filename": "1280-process-list-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "c172c42ce9e8c84371dacb2de7aecc9b027ac81edc3d46381921e8072c84a70e",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "process-detail",
+      "filename": "1280-process-detail-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "868cf33bfec065b8116d1b2033427b77a8436c5602e76672ec1f881bad302885",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "process-edit",
+      "filename": "1280-process-edit-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "1f41001142af9f5749b0a21e1e38e1031883fb87c2cca0fe4405a1053a91cfb0",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-cpp",
+      "filename": "1280-ebr-cpp-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "ed7538f00f9e7fe647e69f6450c85143c5b75890a6af4eaf25a7888846d6fb12",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "ebr-canvas",
+      "filename": "1280-ebr-canvas-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "8cf6b47a3c08d8610cc803f5e4326321f9e9066884128dd1fd607ee7f63feb4e",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 1280,
+      "kind": "product-modal",
+      "filename": "1280-product-modal-native200-cdp.png",
+      "width": 1280,
+      "height": 900,
+      "sha256": "a1f758e42e487d449b38162f9d604a7f48110ee7eec0f2e34c05d72aac148c52",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "process-list",
+      "filename": "900-process-list-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "4332ec08d1014ca4042e35aff33918cb6826eb34ab0455ff629068e576d788fc",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "process-detail",
+      "filename": "900-process-detail-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "a730a9c14232418a88b742ab475774c2fed1dbd287e98b07bf8bb29c8fcca1f9",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "process-edit",
+      "filename": "900-process-edit-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "eee877e5b60fcef4d4df9a56477ac2535e71b0847d4355897482f3171c1f6839",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-cpp",
+      "filename": "900-ebr-cpp-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "ea663e13f4dcc82f878fb5e067bfd703ede2060b531911f7206a26b44038c91a",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "ebr-canvas",
+      "filename": "900-ebr-canvas-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "b48b71cfdfcc767ec75259c1d1e3f1c43e615145d85dbd6bbf72add28ae89e7e",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    },
+    {
+      "physical": 900,
+      "kind": "product-modal",
+      "filename": "900-product-modal-native200-cdp.png",
+      "width": 900,
+      "height": 900,
+      "sha256": "428bc8f260b9327c70818467054ca939b0023e0e21b41081e8f010652ddc991d",
+      "status": "PASS: native browser tab zoom device-pixel capture + geometry"
+    }
+  ],
+  "pass": true
+}

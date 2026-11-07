@@ -1,0 +1,362 @@
+{
+  "createdAt": "2026-11-07T00:28:23.404Z",
+  "results": [
+    {
+      "text": "生产工艺",
+      "fg": [
+        32,
+        50,
+        77
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "22px",
+      "weight": "650",
+      "width": 88,
+      "height": 30,
+      "visibility": "visible",
+      "ratio": 12.92,
+      "selector": ".admin-page-header h1",
+      "url": "/process/packages"
+    },
+    {
+      "text": "编码 / 关键字",
+      "fg": [
+        97,
+        113,
+        137
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 84.28125,
+      "height": 34,
+      "visibility": "visible",
+      "ratio": 4.96,
+      "selector": ".query-card .form-field-label",
+      "url": "/process/packages"
+    },
+    {
+      "text": "生产工艺编码",
+      "fg": [
+        97,
+        113,
+        137
+      ],
+      "bg": [
+        247,
+        249,
+        252
+      ],
+      "font": "13px",
+      "weight": "600",
+      "width": 170,
+      "height": 41.421875,
+      "visibility": "visible",
+      "ratio": 4.71,
+      "selector": ".result-card .ant-table-thead th",
+      "url": "/process/packages"
+    },
+    {
+      "text": "",
+      "fg": [
+        48,
+        49,
+        51
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "13px",
+      "weight": "400",
+      "width": 170,
+      "height": 0,
+      "visibility": "visible",
+      "ratio": 13.02,
+      "selector": ".result-card .ant-table-tbody td",
+      "url": "/process/packages"
+    },
+    {
+      "text": "查看",
+      "fg": [
+        22,
+        104,
+        220
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "13px",
+      "weight": "400",
+      "width": 44,
+      "height": 32,
+      "visibility": "visible",
+      "ratio": 5.19,
+      "selector": ".result-card .ant-btn-link",
+      "url": "/process/packages"
+    },
+    {
+      "text": "共 9 条",
+      "fg": [
+        97,
+        113,
+        137
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "12px",
+      "weight": "400",
+      "width": 38.140625,
+      "height": 18.84375,
+      "visibility": "visible",
+      "ratio": 4.96,
+      "selector": ".table-footer span",
+      "url": "/process/packages"
+    },
+    {
+      "text": "工艺编码",
+      "fg": [
+        97,
+        113,
+        137
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 84,
+      "height": 34,
+      "visibility": "visible",
+      "ratio": 4.96,
+      "selector": ".basic-card .form-field-label",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "工序与记录表单",
+      "fg": [
+        21,
+        84,
+        165
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "600",
+      "width": 126,
+      "height": 42,
+      "visibility": "visible",
+      "ratio": 7.39,
+      "selector": ".workspace-heading button.active",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "01溶液配制OP1 · 1 份表单",
+      "fg": [
+        32,
+        50,
+        77
+      ],
+      "bg": [
+        230,
+        244,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 231,
+      "height": 50.96875,
+      "visibility": "visible",
+      "ratio": 11.54,
+      "selector": ".operation-list button.active",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "OP1 · 1 份表单",
+      "fg": [
+        32,
+        50,
+        77
+      ],
+      "bg": [
+        230,
+        244,
+        255
+      ],
+      "font": "11.2px",
+      "weight": "400",
+      "width": 173.71875,
+      "height": 12.875,
+      "visibility": "visible",
+      "ratio": 11.54,
+      "selector": ".operation-list small",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "每道生产工序可配置一份或多份表单；表单使用 Canvas Editor 设计，生产执行时按工序自动带出。",
+      "fg": [
+        81,
+        98,
+        122
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "12px",
+      "weight": "400",
+      "width": 529.015625,
+      "height": 18.84375,
+      "visibility": "visible",
+      "ratio": 6.22,
+      "selector": ".process-form-toolbar p",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "当前配置已生效",
+      "fg": [
+        81,
+        98,
+        122
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 98,
+      "height": 16.09375,
+      "visibility": "visible",
+      "ratio": 6.22,
+      "selector": ".workspace-footer>span",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "设计表单",
+      "fg": [
+        22,
+        104,
+        220
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "13px",
+      "weight": "400",
+      "width": 70,
+      "height": 32,
+      "visibility": "visible",
+      "ratio": 5.19,
+      "selector": ".process-form-card .ant-btn-link",
+      "url": "/process/packages/829/edit"
+    },
+    {
+      "text": "工艺编码",
+      "fg": [
+        97,
+        113,
+        137
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 84,
+      "height": 34,
+      "visibility": "visible",
+      "ratio": 4.96,
+      "selector": ".basic-card .form-field-label",
+      "url": "/process/packages/829"
+    },
+    {
+      "text": "当前配置已生效",
+      "fg": [
+        81,
+        98,
+        122
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "14px",
+      "weight": "400",
+      "width": 98,
+      "height": 16.09375,
+      "visibility": "visible",
+      "ratio": 6.22,
+      "selector": ".workspace-footer>span",
+      "url": "/process/packages/829"
+    },
+    {
+      "text": "工序表单设计器",
+      "fg": [
+        32,
+        50,
+        77
+      ],
+      "bg": [
+        255,
+        255,
+        255
+      ],
+      "font": "22px",
+      "weight": "650",
+      "width": 154,
+      "height": 30,
+      "visibility": "visible",
+      "ratio": 12.92,
+      "selector": ".admin-page-header h1",
+      "url": "/ebr/templates/663/designer?processPackageId=829&formCode=OP1_RECORD&designerTab=cpp"
+    },
+    {
+      "text": "（20 ≤ 配制温度 ≤ 25）",
+      "fg": [
+        20,
+        95,
+        189
+      ],
+      "bg": [
+        238,
+        246,
+        255
+      ],
+      "font": "18px",
+      "weight": "700",
+      "width": 799,
+      "height": 52.6875,
+      "visibility": "visible",
+      "ratio": 5.66,
+      "selector": ".business-preview",
+      "url": "/ebr/templates/663/designer?processPackageId=829&formCode=OP1_RECORD&designerTab=cpp"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "before": {
+    "innerWidth": 1280,
+    "outerWidth": 1280,
+    "devicePixelRatio": 1,
+    "visualScale": 1,
+    "bodyWidth": 1280,
+    "mainWidth": 976,
+    "fontSize": "16px"
+  },
+  "after": {
+    "innerWidth": 1280,
+    "outerWidth": 1280,
+    "devicePixelRatio": 1,
+    "visualScale": 1,
+    "bodyWidth": 1280,
+    "mainWidth": 976,
+    "fontSize": "16px"
+  },
+  "reset": {
+    "innerWidth": 1280,
+    "outerWidth": 1280,
+    "devicePixelRatio": 1,
+    "visualScale": 1,
+    "bodyWidth": 1280,
+    "mainWidth": 976,
+    "fontSize": "16px"
+  },
+  "zoomChanged": false,
+  "method": "Headless Chrome Control+Equal four times; not equivalent to desktop native browser zoom if no actual change"
+}

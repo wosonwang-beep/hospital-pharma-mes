@@ -102,7 +102,7 @@ class EbrIT {
         var row=service.create(new Create(processId,"DUP"+suffix,"Test eBR template"),key());
         var d=definition();var form=d.forms().getFirst();
         var duplicate=new Form(form.formCode(),form.formName(),form.operationDefId(),form.schemaVersion(),form.sequenceNo(),List.of(form.fields().getFirst(),form.fields().getFirst()));
-        var request=new Save(0L,"Duplicate field validation",new Definition(d.sections(),List.of(duplicate),d.rules(),d.signatureRules(),d.reviewRules()));
+        var request=new Save(0L,"Duplicate field validation",new Definition(d.sections(),List.of(duplicate),d.rules(),d.signatureRules(),d.reviewRules(),d.schemaVersion()));
         mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/v1/ebr/templates/"+row.path("id").asText())
             .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user("designer").authorities(new org.springframework.security.core.authority.SimpleGrantedAuthority("ebr:template:update")))
             .header("If-Match","\"0\"").header("Idempotency-Key",key()).contentType(org.springframework.http.MediaType.APPLICATION_JSON).content(json.writeValueAsBytes(request)))
@@ -116,13 +116,13 @@ class EbrIT {
         var row=draft();String id=row.path("id").asText(),k=key();var request=new Save(1L,"Relabel",definition());var saved=service.save(id,request,null,k);assertThat(service.save(id,request,null,k)).isEqualTo(saved);
         assertThatThrownBy(()->service.save(id,new Save(1L,"Stale",definition()),null,key())).isInstanceOf(ResourceConflictException.class);
         assertThatThrownBy(()->service.save(id,new Save(2L,"Reused",definition()),null,k)).isInstanceOf(ResourceConflictException.class);
-        var empty=new Definition(List.of(),List.of(),List.of(),List.of(),List.of());assertThatThrownBy(()->service.save(id,new Save(2L,"Omit",empty),null,key())).hasMessageContaining("retained");
+        var empty=new Definition(List.of(),List.of(),List.of(),List.of(),List.of(),"2.0");assertThatThrownBy(()->service.save(id,new Save(2L,"Omit",empty),null,key())).hasMessageContaining("retained");
         var d=definition();var field=d.forms().getFirst().fields().getFirst();
         var moved=new Field(field.fieldCode(),null,field.label(),field.fieldType(),field.sourceType(),field.dataType(),field.unitId(),field.precisionScale(),field.requiredFlag(),field.readonlyFlag(),field.defaultExpr(),field.placeholder(),field.helpText(),field.sequenceNo(),field.validationJson(),field.options());
-        var movedDefinition=new Definition(d.sections(),List.of(new Form("F","Form",operationId,"1.0",1,List.of(moved))),d.rules(),d.signatureRules(),d.reviewRules());
+        var movedDefinition=new Definition(d.sections(),List.of(new Form("F","Form",operationId,"1.0",1,List.of(moved))),d.rules(),d.signatureRules(),d.reviewRules(),d.schemaVersion());
         assertThatThrownBy(()->service.save(id,new Save(2L,"Move group",movedDefinition),null,key())).hasMessageContaining("ownership");
         var rule=d.rules().getFirst();var movedRule=new Rule(rule.ruleCode(),null,null,rule.ruleType(),rule.triggerPoint(),rule.expression(),rule.severity(),rule.errorCode(),rule.messageTemplate(),rule.deviationTrigger(),rule.activeFlag());
-        assertThatThrownBy(()->service.save(id,new Save(2L,"Move rule",new Definition(d.sections(),d.forms(),List.of(movedRule),d.signatureRules(),d.reviewRules())),null,key())).hasMessageContaining("ownership");
+        assertThatThrownBy(()->service.save(id,new Save(2L,"Move rule",new Definition(d.sections(),d.forms(),List.of(movedRule),d.signatureRules(),d.reviewRules(),d.schemaVersion())),null,key())).hasMessageContaining("ownership");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM ebr_field_def f JOIN ebr_form_def d ON d.id=f.form_def_id WHERE d.template_version_id=?",Long.class,id)).isEqualTo(1);
     }
     @Test void disabledRoleAndForeignProcessOperationFailLintAndPreserveDraft(){

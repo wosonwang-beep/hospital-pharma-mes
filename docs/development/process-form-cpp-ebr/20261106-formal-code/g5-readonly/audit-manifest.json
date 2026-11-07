@@ -1,0 +1,1937 @@
+{
+  "audit_id": "PROCESS-FORMAL-G5-20261106",
+  "reviewer": {
+    "executor": "ChatGPT SELF-REVIEW",
+    "skill": "mes-ui-ux-audit",
+    "ui_ux_pro_max_path": "C:/Users/Administrator/.agents/skills/ui-ux-pro-max/SKILL.md",
+    "ui_ux_pro_max_sha256": "8b827fe03b349aeea99a7d6cf4ccd892e6065b672859fdb11e13a1919453eddc"
+  },
+  "source": {
+    "url": "http://127.0.0.1:5173/process/packages",
+    "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+    "design_lock": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\decisions\\PROCESS_FORMAL_DIRECT_IMPLEMENTATION_20261106.md",
+    "dependency_hashes": {
+      "frontend/mes-web/src/views/process/ProcessDetailView.vue": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "frontend/mes-web/src/views/ebr/DefinitionDesigner.vue": "4e8f85674467020eb055550a60e65cc0c7ade728df0fa39c6bb66a9ab2a3245b",
+      "frontend/mes-web/src/views/ebr/CppRuleDesigner.vue": "9c64523b14fb3fb24e2e4b98f04560f7637768f7533e1867d3a8549ff196ea75"
+    }
+  },
+  "scope_note": "正式 MES G5 PC_ONLY: 1440/1280/900。375px手机端已依用户2026-11-04批准撤出范围；不是将未审格算PASS。",
+  "applicability": {
+    "mode": "PC_ONLY",
+    "approval": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\decisions\\PROCESS_PC_ONLY_SCOPE_20261104_APPROVED.md",
+    "approval_sha256": "2dfae1d451bff072d418ad843addc2b14f2794991d10ed50e710b0d327195d0e"
+  },
+  "required_viewports": [
+    1440,
+    1280,
+    900
+  ],
+  "expected_surfaces": [
+    {
+      "surface": "list",
+      "states": [
+        "default",
+        "filtered"
+      ]
+    },
+    {
+      "surface": "create",
+      "states": [
+        "default",
+        "required-disabled"
+      ]
+    },
+    {
+      "surface": "detail",
+      "states": [
+        "forms",
+        "products"
+      ]
+    },
+    {
+      "surface": "edit",
+      "states": [
+        "forms",
+        "products"
+      ]
+    },
+    {
+      "surface": "ebr-cpp",
+      "states": [
+        "readback"
+      ]
+    },
+    {
+      "surface": "ebr-form",
+      "states": [
+        "canvas"
+      ]
+    }
+  ],
+  "knowledge_queries": [
+    {
+      "group": "product_style",
+      "query": "enterprise manufacturing admin",
+      "domain": "product",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\product_style.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "layout",
+      "query": "desktop responsive overflow grid",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\layout.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "forms_errors",
+      "query": "form labels validation error recovery",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\forms_errors.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "table_actions",
+      "query": "data table action visibility",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\table_actions.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "modal_feedback",
+      "query": "modal focus confirmation cancel",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\modal_feedback.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "a11y_keyboard",
+      "query": "focus keyboard wcag 2.2",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\a11y_keyboard.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "typography_color",
+      "query": "text contrast hierarchy",
+      "domain": "ux",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\typography_color.txt",
+      "exit_code": 0
+    },
+    {
+      "group": "vue_stack",
+      "query": "form tables vue",
+      "domain": "stack",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\knowledge\\vue_stack.txt",
+      "exit_code": 0
+    }
+  ],
+  "screenshots": [
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-list-default.png",
+      "sha256": "e33feae0fadcf0ccff57e254d31d2ce4f06ab91c8d3b9258aab6c1b1a236de43",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-list-filtered.png",
+      "sha256": "697bc1a9c8572dec98df81ba91162f5c30289b9483709aa4afced5690758a028",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-create-default.png",
+      "sha256": "338007f3b58aa37c2bfda46aced5d28aea75fd40416b07d0b8d03ae812218adf",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-create-required-disabled.png",
+      "sha256": "338007f3b58aa37c2bfda46aced5d28aea75fd40416b07d0b8d03ae812218adf",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-detail-forms.png",
+      "sha256": "cb72dfe450cd88569a14332f3ad6b1cf4cff8de5745cd2117c83425a1d685049",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-detail-products.png",
+      "sha256": "4fc0836e8744b17196fabadafa8108a59283c29599dd07553c8645a960cfdb90",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-edit-forms.png",
+      "sha256": "cf2b1dd92939b5e006fb5c448a672be6164bc97bde907d7c09aeef461212ace7",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-edit-products.png",
+      "sha256": "7a761e06a0cb1a6ecce81a950fbc63333c85aaf4cfe7bce9337f9577a1a06bfc",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-ebr-cpp-readback.png",
+      "sha256": "5b920e22fb204bdc84dd0ea2835672b016c81d2047c4702cdec3a7818e4202e7",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 1440,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1440-ebr-form-canvas.png",
+      "sha256": "5cb0898e67f9098be04f6a52b25267a8ff6012bd6a237679a835e65fc09e02c6",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-list-default.png",
+      "sha256": "369cc604b548df3c33d85c1977f1f2708f093ca68999385ed1b97c58e92c015b",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-list-filtered.png",
+      "sha256": "2027d5710a82ae23c5de94cf88b9e412d6d22cf838f04fb5b8eb511e00394a9a",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-create-default.png",
+      "sha256": "af423f78305f9145ebb03c4a4e0923984f57ff333b93b760e376cec792050990",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-create-required-disabled.png",
+      "sha256": "af423f78305f9145ebb03c4a4e0923984f57ff333b93b760e376cec792050990",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-detail-forms.png",
+      "sha256": "9743816a42a7690dc0bf48f361ec9f5774e4011058fe72b3c327bf385a491e7e",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-detail-products.png",
+      "sha256": "9cda6912c421bee4417bfa856ce83fc011806f6ca4935c161f958eb94e1296b6",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-edit-forms.png",
+      "sha256": "b7cac8a7b14ab0b6e3455701b7a6ef646296716116952f426c197474d4d19e42",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-edit-products.png",
+      "sha256": "6d70a106dd09db698b38324672a84d1d36111ea59f7239d5b0c86adeb2aa4879",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-ebr-cpp-readback.png",
+      "sha256": "0dd95ed26f041ca7c74a1c8111507a4eb9bc0d5fe6c24865c48fad4da3b75185",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 1280,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\1280-ebr-form-canvas.png",
+      "sha256": "f68e530f949bb2ecd020fe510edb323f749feeecfb603a9f42b4bd5673013941",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "default",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-list-default.png",
+      "sha256": "c8a474a618bc948a0a8b611bc4bdf0e993d5282506465491b0670e4623a5725e",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "list",
+      "state": "filtered",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-list-filtered.png",
+      "sha256": "7713bc495aa2807b2427e8f27aaf0f2bb33955a5d63ee93e9e6471bc36157ead",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "default",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-create-default.png",
+      "sha256": "215822d77c93347d5cc06837e1b289c916e9e1c5929d489ebeab29396da9e0fb",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "create",
+      "state": "required-disabled",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-create-required-disabled.png",
+      "sha256": "215822d77c93347d5cc06837e1b289c916e9e1c5929d489ebeab29396da9e0fb",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "forms",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-detail-forms.png",
+      "sha256": "01b803871a6ff64b8a8db25f408be6c909be6ca4c94321364bffd26e071aecf0",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "detail",
+      "state": "products",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-detail-products.png",
+      "sha256": "b078d2eed8b26f0828b64c2999a0ee4a4c359a95ad020a0c3e1fadc6a4b6c41d",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "forms",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-edit-forms.png",
+      "sha256": "898d6a6cd587fd817844dd60ead5070480cfeef7c649df2658086066a3374c4d",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "edit",
+      "state": "products",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-edit-products.png",
+      "sha256": "3088e421fa65e1f34a2f046eee3da4559faa14fc0c174500d99a067d80364fd4",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-ebr-cpp-readback.png",
+      "sha256": "56f6bd7fd417655f9443b3f888398184496a7db497ebdf1af9bb966f4c25912e",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    },
+    {
+      "surface": "ebr-form",
+      "state": "canvas",
+      "viewport": 900,
+      "path": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-ebr-form-canvas.png",
+      "sha256": "f752dccc8c4dbca295a940913cd98c18203b411f6904361bced9fc6018c29485",
+      "source_hash": "df080891d4289bb939b5c500f6968f8186d00a3b9df39e10c40f278f7b2c263c",
+      "review": {
+        "hierarchy": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "grid_alignment": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "spacing_density": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "typography_color": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "controls_content": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "actions": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "responsive": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        },
+        "interaction_accessibility": {
+          "status": "NOT RUN",
+          "note": "实际正式页面截图已采集，但这一截图的独立原尺寸八类审查及二次对抗复核尚未全部完成；不得替代通过证据。"
+        }
+      }
+    }
+  ],
+  "interaction_checks": [
+    {
+      "name": "Live Chrome form, CPP real GET/PUT roundtrip and product picker save/cancel",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-formal-live.spec.ts"
+    },
+    {
+      "name": "Complete permissions, 409/403 and zoom recovery",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    }
+  ],
+  "geometry_checks": [
+    {
+      "name": "Document scrollWidth equals viewport for all 30 PC captures",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "name": "Full label anchor/textarea contrast and 900px sticky footer adversarial pass",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    }
+  ],
+  "adversarial_pass": {
+    "completed": false,
+    "alignment": "真实几何已抓取，但30格全量标签锚点二次复核尚未完成。",
+    "whitespace": "未完成30格原始截图第二遍。",
+    "hierarchy": "部分原图已检查，不能代替全部30格的第二遍。",
+    "action_discoverability": "900产品选择弹窗按钮遮挡与反序已发现并修复，余全矩阵未完成。",
+    "recovery": "真实Chrome取消、保存与重读通过；全部失败/权限恢复矩阵未完成。"
+  },
+  "issues": [
+    {
+      "id": "G5-MODAL-ORDER-OCCLUSION",
+      "severity": "HIGH",
+      "status": "RESOLVED",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-product-picker-before.png",
+      "recheck": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\900-product-picker-after.png"
+    },
+    {
+      "id": "G5-FULL-VISUAL-AND-A11Y",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json",
+      "note": "30张截图尚未逐图全维度及完整G5核对，不能关闭。"
+    }
+  ],
+  "dimension_reviews": [
+    {
+      "surface": "list",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "list",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "create",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "detail",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "edit",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-cpp",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "layout",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "typography",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "spacing_alignment",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "forms",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "tables_lists",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "query_filters",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "component_interaction",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "component_states",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "surface": "ebr-form",
+      "dimension": "wcag22",
+      "status": "NOT RUN",
+      "note": "本轮只完成正式页面采集与部分视觉核对；该表面九维完整人工审查仍需独立完成。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    }
+  ],
+  "wcag22_checks": [
+    {
+      "criterion": "1.3.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.4",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.10",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "1.4.11",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.1.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.1.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.7",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.4.11",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.7",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "2.5.8",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.1",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "3.3.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "4.1.2",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    },
+    {
+      "criterion": "4.1.3",
+      "status": "NOT RUN",
+      "note": "仅部分键盘/标签/可视性检查；该WCAG条款未完成全场景核对。",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-readonly\\browser-capture.json"
+    }
+  ],
+  "verdict": "IN PROGRESS"
+}

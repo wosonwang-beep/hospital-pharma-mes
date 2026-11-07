@@ -66,6 +66,7 @@ public class PrescriptionService {
  private void validate(long org,String code,String name,String productId,String packageId,String basis,String unitId,List<PrescriptionItem> items){
   text(code,64,"prescriptionCode");text(name,200,"prescriptionName");long product=MasterMutation.id(productId),pkg=MasterMutation.id(packageId);process.requireProduct(org,product);
   var processPackage=processDb.packages().get(org,pkg);if(!"ACTIVE".equals(processPackage.getStatus()))throw new ComplianceException("PROCESS_NOT_ACTIVE","Active production process required");
+  if(!process.isApplicableToProduct(org,pkg,product))throw new ComplianceException("PROCESS_PRODUCT_NOT_APPLICABLE","Selected process is not applicable to this product");
   process.requireCurrent(org,pkg);
   if(items==null||items.isEmpty())throw new ComplianceException("PRESCRIPTION_ITEMS_REQUIRED","At least one prescription material is required");
   definitions.validateFormula(org,new FormulaSave(null,null,code,basis,unitId,items.stream().map(i->new FormulaLine(i.lineNo(),i.materialId(),i.requiredQty(),i.unitId(),i.overagePct(),i.critical())).toList()));

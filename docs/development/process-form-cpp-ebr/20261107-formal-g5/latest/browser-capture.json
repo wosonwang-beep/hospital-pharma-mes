@@ -1,0 +1,5819 @@
+{
+  "createdAt": "2026-11-07T02:20:08.202Z",
+  "screens": [
+    {
+      "width": 1440,
+      "surface": "list",
+      "state": "default",
+      "file": "1440-list-default.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 951
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "状态",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 579,
+            "controlLeft": 615
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 781,
+            "controlLeft": 845
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 1317,
+              "y": 136,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 1011,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 1083,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 524,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 524,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 585,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 585,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 647,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 647,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 709,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 709,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 771,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 771,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 833,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 833,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 890,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 890,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 943,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 943,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 1019,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1361,
+              "y": 1019,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 1094,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "list",
+      "state": "filtered",
+      "file": "1440-list-filtered.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 474
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "状态",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 579,
+            "controlLeft": 615
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 781,
+            "controlLeft": 845
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 1317,
+              "y": 136,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 1011,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 1083,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1321,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1277,
+              "y": 542,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1361,
+              "y": 542,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 1094,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<button data-v-36ec73f8=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-btn ant-btn-primary\" type=\"submit\"><div style=\"position: absolute; left: 0px"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "create",
+      "state": "default",
+      "file": "1440-create-default.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 478
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 860,
+            "controlLeft": 1002
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 860,
+            "controlLeft": 1002
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 387,
+            "controlCenter": 406,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 443
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 1207,
+              "y": 458,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1331,
+              "y": 458,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "create",
+      "state": "required-disabled",
+      "file": "1440-create-required-disabled.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 478
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 860,
+            "controlLeft": 1002
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 860,
+            "controlLeft": 1002
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 387,
+            "controlCenter": 406,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 443
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 1207,
+              "y": 458,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1331,
+              "y": 458,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "detail",
+      "state": "forms",
+      "file": "1440-detail-forms.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 1070
+        },
+        "footer": {
+          "x": 280,
+          "y": 1042,
+          "width": 1136,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "版本",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 458,
+            "controlCenter": 458,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 1307,
+              "y": 136,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 540,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 540,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 295,
+              "y": 649,
+              "width": 231,
+              "height": 51
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 1261,
+              "y": 759,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 1246,
+              "y": 940,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 1316,
+              "y": 940,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 1184,
+              "y": 1055,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 1280,
+              "y": 1055,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 792,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T4",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "detail",
+      "state": "products",
+      "file": "1440-detail-products.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 1000
+        },
+        "footer": {
+          "x": 280,
+          "y": 972,
+          "width": 1136,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "版本",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 458,
+            "controlCenter": 458,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 1307,
+              "y": 136,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 540,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 540,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 1184,
+              "y": 985,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 1280,
+              "y": 985,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T4",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "edit",
+      "state": "forms",
+      "file": "1440-edit-forms.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 1068
+        },
+        "footer": {
+          "x": 280,
+          "y": 1040,
+          "width": 1136,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "版本",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 437,
+            "controlCenter": 456,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 538,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 538,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 添加工序",
+            "title": null,
+            "r": {
+              "x": 1289,
+              "y": 543,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 295,
+              "y": 647,
+              "width": 231,
+              "height": 51
+            }
+          },
+          {
+            "text": "上 移",
+            "title": null,
+            "r": {
+              "x": 1114,
+              "y": 609,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "下 移",
+            "title": null,
+            "r": {
+              "x": 1187,
+              "y": 609,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "复 制",
+            "title": null,
+            "r": {
+              "x": 1259,
+              "y": 609,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "移 除",
+            "title": null,
+            "r": {
+              "x": 1331,
+              "y": 609,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 1261,
+              "y": 757,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 1246,
+              "y": 938,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 1316,
+              "y": 938,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 1222,
+              "y": 1053,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1332,
+              "y": 1053,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 792,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "edit",
+      "state": "products",
+      "file": "1440-edit-products.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 998
+        },
+        "footer": {
+          "x": 280,
+          "y": 970,
+          "width": 1136,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "版本",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 674,
+            "controlLeft": 778
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 1046,
+            "controlLeft": 1150
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 437,
+            "controlCenter": 456,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 538,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 538,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 选择产品",
+            "title": null,
+            "r": {
+              "x": 1285,
+              "y": 613,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "移除",
+            "title": null,
+            "r": {
+              "x": 595,
+              "y": 687,
+              "width": 46,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 1222,
+              "y": 983,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1332,
+              "y": 983,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "file": "1440-ebr-cpp-readback.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 1355
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "规则名称",
+            "labelCenter": 480,
+            "controlCenter": 480,
+            "centerDelta": 0,
+            "labelLeft": 588,
+            "controlLeft": 674
+          },
+          {
+            "text": "规则描述",
+            "labelCenter": 534,
+            "controlCenter": 534,
+            "centerDelta": 0,
+            "labelLeft": 588,
+            "controlLeft": 674
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 1015,
+            "controlLeft": 1015
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 1015,
+            "controlLeft": 1015
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 1015,
+            "controlLeft": 1015
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 1015,
+            "controlLeft": 1015
+          }
+        ],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 139,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 1171,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 1267,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 943,
+              "y": 178,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 297,
+              "y": 287,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 385,
+              "y": 287,
+              "width": 92,
+              "height": 46
+            }
+          },
+          {
+            "text": "新建规则",
+            "title": null,
+            "r": {
+              "x": 1280,
+              "y": 360,
+              "width": 108,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件",
+            "title": null,
+            "r": {
+              "x": 1153,
+              "y": 616,
+              "width": 110,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件组",
+            "title": null,
+            "r": {
+              "x": 1263,
+              "y": 616,
+              "width": 124,
+              "height": 32
+            }
+          },
+          {
+            "text": "+ 条件",
+            "title": null,
+            "r": {
+              "x": 1315,
+              "y": 659,
+              "width": 61,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件1",
+            "r": {
+              "x": 1342,
+              "y": 698,
+              "width": 34,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件2",
+            "r": {
+              "x": 1342,
+              "y": 763,
+              "width": 34,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存规则配置",
+            "title": null,
+            "r": {
+              "x": 1285,
+              "y": 1260,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "配制温度控制范围CPP_OP1_RECORD_1",
+            "title": null,
+            "r": {
+              "x": 327,
+              "y": 1364,
+              "width": 437,
+              "height": 39
+            }
+          },
+          {
+            "text": "",
+            "title": "启用规则 配制温度控制范围",
+            "r": {
+              "x": 772,
+              "y": 1375,
+              "width": 30,
+              "height": 17
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1440,
+      "surface": "ebr-form",
+      "state": "canvas",
+      "file": "1440-ebr-form-canvas.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 1440,
+          "client": 1440,
+          "body": 1440
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 1136,
+          "height": 1595
+        },
+        "footer": null,
+        "labels": [],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 139,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 1171,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 1267,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 943,
+              "y": 178,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计模式",
+            "title": null,
+            "r": {
+              "x": 1236,
+              "y": 247,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "填写预览",
+            "title": null,
+            "r": {
+              "x": 1318,
+              "y": 247,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 297,
+              "y": 287,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 385,
+              "y": 287,
+              "width": 91,
+              "height": 46
+            }
+          },
+          {
+            "text": "↶",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 341,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "↷",
+            "title": null,
+            "r": {
+              "x": 326,
+              "y": 341,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "B",
+            "title": null,
+            "r": {
+              "x": 457,
+              "y": 341,
+              "width": 26,
+              "height": 32
+            }
+          },
+          {
+            "text": "I",
+            "title": null,
+            "r": {
+              "x": 488,
+              "y": 341,
+              "width": 20,
+              "height": 32
+            }
+          },
+          {
+            "text": "插入表格",
+            "title": null,
+            "r": {
+              "x": 527,
+              "y": 341,
+              "width": 72,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋行",
+            "title": null,
+            "r": {
+              "x": 605,
+              "y": 341,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋列",
+            "title": null,
+            "r": {
+              "x": 655,
+              "y": 341,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "合 并",
+            "title": null,
+            "r": {
+              "x": 705,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "拆 分",
+            "title": null,
+            "r": {
+              "x": 760,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 827,
+              "y": 341,
+              "width": 58,
+              "height": 32
+            }
+          },
+          {
+            "text": "分 页",
+            "title": null,
+            "r": {
+              "x": 891,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "插入文本输入",
+            "r": {
+              "x": 301,
+              "y": 529,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入数值 + 单位",
+            "r": {
+              "x": 301,
+              "y": 568,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入日期",
+            "r": {
+              "x": 301,
+              "y": 607,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入下拉选择",
+            "r": {
+              "x": 301,
+              "y": 646,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入复选",
+            "r": {
+              "x": 301,
+              "y": 685,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入公式计算",
+            "r": {
+              "x": 301,
+              "y": 724,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入批号",
+            "r": {
+              "x": 301,
+              "y": 809,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入产品名称",
+            "r": {
+              "x": 301,
+              "y": 848,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入规格",
+            "r": {
+              "x": 301,
+              "y": 887,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入物料批次",
+            "r": {
+              "x": 301,
+              "y": 926,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入设备",
+            "r": {
+              "x": 301,
+              "y": 965,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入操作人",
+            "r": {
+              "x": 301,
+              "y": 1004,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入电子签名",
+            "r": {
+              "x": 301,
+              "y": 1043,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "表格",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 1122,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 379,
+              "y": 1122,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "字段分组",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 1163,
+              "width": 79,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "list",
+      "state": "default",
+      "file": "1280-list-default.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 951
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "状态",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 579,
+            "controlLeft": 615
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 781,
+            "controlLeft": 845
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 1157,
+              "y": 136,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 1011,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 1083,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 524,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 524,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 585,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 585,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 647,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 647,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 709,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 709,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 771,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 771,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 833,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 833,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 890,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 890,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 943,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 943,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 1019,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1201,
+              "y": 1019,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 934,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "list",
+      "state": "filtered",
+      "file": "1280-list-filtered.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 474
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "状态",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 579,
+            "controlLeft": 615
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 781,
+            "controlLeft": 845
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 1157,
+              "y": 136,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 1011,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 1083,
+              "y": 271,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 1161,
+              "y": 462,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1117,
+              "y": 542,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 1201,
+              "y": 542,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 934,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<button data-v-36ec73f8=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-btn ant-btn-primary\" type=\"submit\"><div style=\"position: absolute; left: 0px"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "create",
+      "state": "default",
+      "file": "1280-create-default.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 478
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 922
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 922
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 387,
+            "controlCenter": 406,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 443
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 1047,
+              "y": 458,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1171,
+              "y": 458,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "create",
+      "state": "required-disabled",
+      "file": "1280-create-required-disabled.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 478
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 922
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 443
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 922
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 387,
+            "controlCenter": 406,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 443
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 1047,
+              "y": 458,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1171,
+              "y": 458,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "detail",
+      "state": "forms",
+      "file": "1280-detail-forms.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1139
+        },
+        "footer": {
+          "x": 280,
+          "y": 1111,
+          "width": 976,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "版本",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 439,
+            "controlCenter": 439,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 508,
+            "controlCenter": 508,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 1147,
+              "y": 136,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 590,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 590,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 295,
+              "y": 699,
+              "width": 231,
+              "height": 51
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 1101,
+              "y": 818,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 1086,
+              "y": 1009,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 1156,
+              "y": 1009,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 1024,
+              "y": 1124,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 1120,
+              "y": 1124,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 632,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T4",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "detail",
+      "state": "products",
+      "file": "1280-detail-products.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1050
+        },
+        "footer": {
+          "x": 280,
+          "y": 1022,
+          "width": 976,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 287,
+            "controlCenter": 287,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "版本",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 338,
+            "controlCenter": 338,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 389,
+            "controlCenter": 389,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 439,
+            "controlCenter": 439,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 508,
+            "controlCenter": 508,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 1147,
+              "y": 136,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 590,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 590,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 1024,
+              "y": 1035,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 1120,
+              "y": 1035,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T4",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "edit",
+      "state": "forms",
+      "file": "1280-edit-forms.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1137
+        },
+        "footer": {
+          "x": 280,
+          "y": 1109,
+          "width": 976,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 437,
+            "controlCenter": 437,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 487,
+            "controlCenter": 506,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 588,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 588,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 添加工序",
+            "title": null,
+            "r": {
+              "x": 1129,
+              "y": 593,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 295,
+              "y": 697,
+              "width": 231,
+              "height": 51
+            }
+          },
+          {
+            "text": "上 移",
+            "title": null,
+            "r": {
+              "x": 954,
+              "y": 659,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "下 移",
+            "title": null,
+            "r": {
+              "x": 1027,
+              "y": 659,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "复 制",
+            "title": null,
+            "r": {
+              "x": 1099,
+              "y": 659,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "移 除",
+            "title": null,
+            "r": {
+              "x": 1171,
+              "y": 659,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 1101,
+              "y": 816,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 1086,
+              "y": 1007,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 1156,
+              "y": 1007,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 1062,
+              "y": 1122,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1172,
+              "y": 1122,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 632,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "edit",
+      "state": "products",
+      "file": "1280-edit-products.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1048
+        },
+        "footer": {
+          "x": 280,
+          "y": 1020,
+          "width": 976,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 285,
+            "controlCenter": 285,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "版本",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 336,
+            "controlCenter": 336,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 387,
+            "controlCenter": 387,
+            "centerDelta": 0,
+            "labelLeft": 780,
+            "controlLeft": 884
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 437,
+            "controlCenter": 437,
+            "centerDelta": 0,
+            "labelLeft": 301,
+            "controlLeft": 405
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 487,
+            "controlCenter": 506,
+            "centerDelta": 19,
+            "labelLeft": 301,
+            "controlLeft": 405
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 588,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 431,
+              "y": 588,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 选择产品",
+            "title": null,
+            "r": {
+              "x": 1125,
+              "y": 663,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "移除",
+            "title": null,
+            "r": {
+              "x": 541,
+              "y": 737,
+              "width": 46,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 1062,
+              "y": 1033,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 1172,
+              "y": 1033,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "file": "1280-ebr-cpp-readback.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1355
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "规则名称",
+            "labelCenter": 480,
+            "controlCenter": 480,
+            "centerDelta": 0,
+            "labelLeft": 588,
+            "controlLeft": 674
+          },
+          {
+            "text": "规则描述",
+            "labelCenter": 534,
+            "controlCenter": 534,
+            "centerDelta": 0,
+            "labelLeft": 588,
+            "controlLeft": 674
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 935,
+            "controlLeft": 935
+          },
+          {
+            "text": "",
+            "labelCenter": 1101,
+            "controlCenter": 1101,
+            "centerDelta": 0,
+            "labelLeft": 935,
+            "controlLeft": 935
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 610,
+            "controlLeft": 610
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 935,
+            "controlLeft": 935
+          },
+          {
+            "text": "",
+            "labelCenter": 1191,
+            "controlCenter": 1191,
+            "centerDelta": 0,
+            "labelLeft": 935,
+            "controlLeft": 935
+          }
+        ],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 139,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 1079,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 851,
+              "y": 178,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 947,
+              "y": 178,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 297,
+              "y": 287,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 385,
+              "y": 287,
+              "width": 92,
+              "height": 46
+            }
+          },
+          {
+            "text": "新建规则",
+            "title": null,
+            "r": {
+              "x": 1120,
+              "y": 360,
+              "width": 108,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件",
+            "title": null,
+            "r": {
+              "x": 993,
+              "y": 616,
+              "width": 110,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件组",
+            "title": null,
+            "r": {
+              "x": 1103,
+              "y": 616,
+              "width": 124,
+              "height": 32
+            }
+          },
+          {
+            "text": "+ 条件",
+            "title": null,
+            "r": {
+              "x": 1155,
+              "y": 659,
+              "width": 61,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件1",
+            "r": {
+              "x": 1182,
+              "y": 698,
+              "width": 34,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件2",
+            "r": {
+              "x": 1182,
+              "y": 763,
+              "width": 34,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存规则配置",
+            "title": null,
+            "r": {
+              "x": 1125,
+              "y": 1260,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "配制温度控制范围CPP_OP1_RECORD_1",
+            "title": null,
+            "r": {
+              "x": 327,
+              "y": 1364,
+              "width": 359,
+              "height": 39
+            }
+          },
+          {
+            "text": "",
+            "title": "启用规则 配制温度控制范围",
+            "r": {
+              "x": 694,
+              "y": 1375,
+              "width": 30,
+              "height": 17
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 1280,
+      "surface": "ebr-form",
+      "state": "canvas",
+      "file": "1280-ebr-form-canvas.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 1280,
+          "client": 1280,
+          "body": 1280
+        },
+        "main": {
+          "x": 280,
+          "y": 119,
+          "width": 976,
+          "height": 1595
+        },
+        "footer": null,
+        "labels": [],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 301,
+              "y": 139,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 1079,
+              "y": 137,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 851,
+              "y": 178,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 947,
+              "y": 178,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计模式",
+            "title": null,
+            "r": {
+              "x": 1076,
+              "y": 247,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "填写预览",
+            "title": null,
+            "r": {
+              "x": 1158,
+              "y": 247,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 297,
+              "y": 287,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 385,
+              "y": 287,
+              "width": 91,
+              "height": 46
+            }
+          },
+          {
+            "text": "↶",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 341,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "↷",
+            "title": null,
+            "r": {
+              "x": 326,
+              "y": 341,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "B",
+            "title": null,
+            "r": {
+              "x": 457,
+              "y": 341,
+              "width": 26,
+              "height": 32
+            }
+          },
+          {
+            "text": "I",
+            "title": null,
+            "r": {
+              "x": 488,
+              "y": 341,
+              "width": 20,
+              "height": 32
+            }
+          },
+          {
+            "text": "插入表格",
+            "title": null,
+            "r": {
+              "x": 527,
+              "y": 341,
+              "width": 72,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋行",
+            "title": null,
+            "r": {
+              "x": 605,
+              "y": 341,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋列",
+            "title": null,
+            "r": {
+              "x": 655,
+              "y": 341,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "合 并",
+            "title": null,
+            "r": {
+              "x": 705,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "拆 分",
+            "title": null,
+            "r": {
+              "x": 760,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 827,
+              "y": 341,
+              "width": 58,
+              "height": 32
+            }
+          },
+          {
+            "text": "分 页",
+            "title": null,
+            "r": {
+              "x": 891,
+              "y": 341,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "插入文本输入",
+            "r": {
+              "x": 301,
+              "y": 529,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入数值 + 单位",
+            "r": {
+              "x": 301,
+              "y": 568,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入日期",
+            "r": {
+              "x": 301,
+              "y": 607,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入下拉选择",
+            "r": {
+              "x": 301,
+              "y": 646,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入复选",
+            "r": {
+              "x": 301,
+              "y": 685,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入公式计算",
+            "r": {
+              "x": 301,
+              "y": 724,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入批号",
+            "r": {
+              "x": 301,
+              "y": 809,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入产品名称",
+            "r": {
+              "x": 301,
+              "y": 848,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入规格",
+            "r": {
+              "x": 301,
+              "y": 887,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入物料批次",
+            "r": {
+              "x": 301,
+              "y": 926,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入设备",
+            "r": {
+              "x": 301,
+              "y": 965,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入操作人",
+            "r": {
+              "x": 301,
+              "y": 1004,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入电子签名",
+            "r": {
+              "x": 301,
+              "y": 1043,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "表格",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 1122,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 379,
+              "y": 1122,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "字段分组",
+            "title": null,
+            "r": {
+              "x": 293,
+              "y": 1163,
+              "width": 79,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout ant-layout-has-sider shell global-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "list",
+      "state": "default",
+      "file": "900-list-default.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 568
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "状态",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 315,
+            "controlLeft": 351
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 517,
+            "controlLeft": 581
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 785,
+              "y": 120,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 300,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 109,
+              "y": 300,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 749,
+              "y": 620,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 833,
+              "y": 620,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 834,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "list",
+      "state": "filtered",
+      "file": "900-list-filtered.png",
+      "metrics": {
+        "url": "/process/packages",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 518
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "编码 / 关键字",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "状态",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 315,
+            "controlLeft": 351
+          },
+          {
+            "text": "适用产品",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 517,
+            "controlLeft": 581
+          }
+        ],
+        "buttons": [
+          {
+            "text": "＋ 新增",
+            "title": null,
+            "r": {
+              "x": 785,
+              "y": 120,
+              "width": 78,
+              "height": 32
+            }
+          },
+          {
+            "text": "查 询",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 300,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "重 置",
+            "title": null,
+            "r": {
+              "x": 109,
+              "y": 300,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "查看",
+            "title": null,
+            "r": {
+              "x": 749,
+              "y": 490,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "编辑",
+            "title": null,
+            "r": {
+              "x": 793,
+              "y": 490,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 749,
+              "y": 570,
+              "width": 34,
+              "height": 34
+            }
+          },
+          {
+            "text": "",
+            "title": null,
+            "r": {
+              "x": 833,
+              "y": 570,
+              "width": 34,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 834,
+            "scrollWidth": 1270,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T1",
+        "focus": "<button data-v-36ec73f8=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-btn ant-btn-primary\" type=\"submit\"><div style=\"position: absolute; left: 0px"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "create",
+      "state": "default",
+      "file": "900-create-default.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 578
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 269,
+            "controlCenter": 269,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 319,
+            "controlCenter": 319,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "版本",
+            "labelCenter": 369,
+            "controlCenter": 369,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 420,
+            "controlCenter": 420,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 471,
+            "controlCenter": 490,
+            "centerDelta": 19,
+            "labelLeft": 37,
+            "controlLeft": 144
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 675,
+              "y": 542,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 799,
+              "y": 542,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "create",
+      "state": "required-disabled",
+      "file": "900-create-required-disabled.png",
+      "metrics": {
+        "url": "/process/packages/create",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 578
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 269,
+            "controlCenter": 269,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 319,
+            "controlCenter": 319,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "版本",
+            "labelCenter": 369,
+            "controlCenter": 369,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 420,
+            "controlCenter": 420,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 144
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 471,
+            "controlCenter": 490,
+            "centerDelta": 19,
+            "labelLeft": 37,
+            "controlLeft": 144
+          }
+        ],
+        "buttons": [
+          {
+            "text": "创建生产工艺",
+            "title": null,
+            "r": {
+              "x": 675,
+              "y": 542,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 799,
+              "y": 542,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "detail",
+      "state": "forms",
+      "file": "900-detail-forms.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 1350
+        },
+        "footer": {
+          "x": 16,
+          "y": 1306,
+          "width": 868,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 321,
+            "controlCenter": 321,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "版本",
+            "labelCenter": 371,
+            "controlCenter": 371,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 422,
+            "controlCenter": 422,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 473,
+            "controlCenter": 473,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 523,
+            "controlCenter": 523,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 573,
+            "controlCenter": 573,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 642,
+            "controlCenter": 642,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 775,
+              "y": 120,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 724,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 167,
+              "y": 724,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 31,
+              "y": 793,
+              "width": 190,
+              "height": 51
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 729,
+              "y": 1023,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 714,
+              "y": 1204,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 784,
+              "y": 1204,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 652,
+              "y": 1319,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 748,
+              "y": 1319,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 784,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T4",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "detail",
+      "state": "products",
+      "file": "900-detail-products.png",
+      "metrics": {
+        "url": "/process/packages/829",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 1200
+        },
+        "footer": {
+          "x": 16,
+          "y": 1156,
+          "width": 868,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 271,
+            "controlCenter": 271,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 321,
+            "controlCenter": 321,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "版本",
+            "labelCenter": 371,
+            "controlCenter": 371,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 422,
+            "controlCenter": 422,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 473,
+            "controlCenter": 473,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 523,
+            "controlCenter": 523,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 573,
+            "controlCenter": 573,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 642,
+            "controlCenter": 642,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          }
+        ],
+        "buttons": [
+          {
+            "text": "编辑工艺",
+            "title": null,
+            "r": {
+              "x": 775,
+              "y": 120,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 724,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 167,
+              "y": 724,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "返回列表",
+            "title": null,
+            "r": {
+              "x": 652,
+              "y": 1169,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "停用生产工艺",
+            "title": null,
+            "r": {
+              "x": 748,
+              "y": 1169,
+              "width": 116,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T4",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "edit",
+      "state": "forms",
+      "file": "900-edit-forms.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 1348
+        },
+        "footer": {
+          "x": 16,
+          "y": 1304,
+          "width": 868,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 269,
+            "controlCenter": 269,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 319,
+            "controlCenter": 319,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "版本",
+            "labelCenter": 369,
+            "controlCenter": 369,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 420,
+            "controlCenter": 420,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 471,
+            "controlCenter": 471,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 521,
+            "controlCenter": 521,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 571,
+            "controlCenter": 571,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 621,
+            "controlCenter": 640,
+            "centerDelta": 19,
+            "labelLeft": 37,
+            "controlLeft": 141
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 722,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 167,
+              "y": 722,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 添加工序",
+            "title": null,
+            "r": {
+              "x": 757,
+              "y": 727,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "01溶液配制OP1 · 1 份表单",
+            "title": null,
+            "r": {
+              "x": 31,
+              "y": 791,
+              "width": 190,
+              "height": 51
+            }
+          },
+          {
+            "text": "上 移",
+            "title": null,
+            "r": {
+              "x": 582,
+              "y": 873,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "下 移",
+            "title": null,
+            "r": {
+              "x": 655,
+              "y": 873,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "复 制",
+            "title": null,
+            "r": {
+              "x": 727,
+              "y": 873,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "移 除",
+            "title": null,
+            "r": {
+              "x": 799,
+              "y": 873,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋ 新建工序表单",
+            "title": null,
+            "r": {
+              "x": 729,
+              "y": 1021,
+              "width": 134,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计表单",
+            "title": null,
+            "r": {
+              "x": 714,
+              "y": 1202,
+              "width": 70,
+              "height": 32
+            }
+          },
+          {
+            "text": "定义CPP规则",
+            "title": null,
+            "r": {
+              "x": 784,
+              "y": 1202,
+              "width": 95,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 690,
+              "y": 1317,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 800,
+              "y": 1317,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [
+          {
+            "clientWidth": 784,
+            "scrollWidth": 1017,
+            "scrollLeft": 0
+          }
+        ],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "edit",
+      "state": "products",
+      "file": "900-edit-products.png",
+      "metrics": {
+        "url": "/process/packages/829/edit",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 1198
+        },
+        "footer": {
+          "x": 16,
+          "y": 1154,
+          "width": 868,
+          "height": 57
+        },
+        "labels": [
+          {
+            "text": "工艺编码",
+            "labelCenter": 269,
+            "controlCenter": 269,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺名称",
+            "labelCenter": 319,
+            "controlCenter": 319,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "版本",
+            "labelCenter": 369,
+            "controlCenter": 369,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "生效批准日期",
+            "labelCenter": 420,
+            "controlCenter": 420,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "路线代码",
+            "labelCenter": 471,
+            "controlCenter": 471,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "启停状态",
+            "labelCenter": 521,
+            "controlCenter": 521,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "配置状态",
+            "labelCenter": 571,
+            "controlCenter": 571,
+            "centerDelta": 0,
+            "labelLeft": 37,
+            "controlLeft": 141
+          },
+          {
+            "text": "工艺说明",
+            "labelCenter": 621,
+            "controlCenter": 640,
+            "centerDelta": 19,
+            "labelLeft": 37,
+            "controlLeft": 141
+          }
+        ],
+        "buttons": [
+          {
+            "text": "工序与记录表单",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 722,
+              "width": 126,
+              "height": 42
+            }
+          },
+          {
+            "text": "适用产品 1",
+            "title": null,
+            "r": {
+              "x": 167,
+              "y": 722,
+              "width": 101,
+              "height": 42
+            }
+          },
+          {
+            "text": "＋ 选择产品",
+            "title": null,
+            "r": {
+              "x": 753,
+              "y": 797,
+              "width": 106,
+              "height": 32
+            }
+          },
+          {
+            "text": "移除",
+            "title": null,
+            "r": {
+              "x": 380,
+              "y": 871,
+              "width": 46,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存并生效",
+            "title": null,
+            "r": {
+              "x": 690,
+              "y": 1167,
+              "width": 102,
+              "height": 32
+            }
+          },
+          {
+            "text": "取 消",
+            "title": null,
+            "r": {
+              "x": 800,
+              "y": 1167,
+              "width": 64,
+              "height": 32
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<button data-v-6c4371b3=\"\" type=\"button\" role=\"tab\" tabindex=\"0\" aria-selected=\"true\" class=\"active\">适用产品 <span data-v-6c4371b3=\"\">1</span></button>"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "ebr-cpp",
+      "state": "readback",
+      "file": "900-ebr-cpp-readback.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 2066
+        },
+        "footer": null,
+        "labels": [
+          {
+            "text": "规则名称",
+            "labelCenter": 699,
+            "controlCenter": 699,
+            "centerDelta": 0,
+            "labelLeft": 82,
+            "controlLeft": 164
+          },
+          {
+            "text": "规则描述",
+            "labelCenter": 753,
+            "controlCenter": 753,
+            "centerDelta": 0,
+            "labelLeft": 82,
+            "controlLeft": 164
+          },
+          {
+            "text": "",
+            "labelCenter": 1419,
+            "controlCenter": 1419,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1419,
+            "controlCenter": 1419,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1509,
+            "controlCenter": 1509,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1509,
+            "controlCenter": 1509,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1599,
+            "controlCenter": 1599,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1599,
+            "controlCenter": 1599,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1689,
+            "controlCenter": 1689,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          },
+          {
+            "text": "",
+            "labelCenter": 1689,
+            "controlCenter": 1689,
+            "centerDelta": 0,
+            "labelLeft": 104,
+            "controlLeft": 104
+          }
+        ],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 123,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 750,
+              "y": 121,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 522,
+              "y": 162,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 618,
+              "y": 162,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 33,
+              "y": 271,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 121,
+              "y": 271,
+              "width": 92,
+              "height": 46
+            }
+          },
+          {
+            "text": "新建规则",
+            "title": null,
+            "r": {
+              "x": 740,
+              "y": 579,
+              "width": 108,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件",
+            "title": null,
+            "r": {
+              "x": 618,
+              "y": 830,
+              "width": 110,
+              "height": 32
+            }
+          },
+          {
+            "text": "添加条件组",
+            "title": null,
+            "r": {
+              "x": 728,
+              "y": 830,
+              "width": 124,
+              "height": 32
+            }
+          },
+          {
+            "text": "+ 条件",
+            "title": null,
+            "r": {
+              "x": 780,
+              "y": 873,
+              "width": 61,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件1",
+            "r": {
+              "x": 795,
+              "y": 912,
+              "width": 46,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "删除条件2",
+            "r": {
+              "x": 795,
+              "y": 1038,
+              "width": 46,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存规则配置",
+            "title": null,
+            "r": {
+              "x": 745,
+              "y": 1756,
+              "width": 116,
+              "height": 32
+            }
+          },
+          {
+            "text": "配制温度控制范围CPP_OP1_RECORD_1",
+            "title": null,
+            "r": {
+              "x": 62,
+              "y": 1870,
+              "width": 737,
+              "height": 39
+            }
+          },
+          {
+            "text": "",
+            "title": "启用规则 配制温度控制范围",
+            "r": {
+              "x": 807,
+              "y": 1881,
+              "width": 30,
+              "height": 17
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    },
+    {
+      "width": 900,
+      "surface": "ebr-form",
+      "state": "canvas",
+      "file": "900-ebr-form-canvas.png",
+      "metrics": {
+        "url": "/ebr/templates/663/designer",
+        "bodyScroll": {
+          "width": 900,
+          "client": 900,
+          "body": 900
+        },
+        "main": {
+          "x": 16,
+          "y": 103,
+          "width": 868,
+          "height": 1595
+        },
+        "footer": null,
+        "labels": [],
+        "buttons": [
+          {
+            "text": "← 返回生产工艺",
+            "title": null,
+            "r": {
+              "x": 37,
+              "y": 123,
+              "width": 120,
+              "height": 32
+            }
+          },
+          {
+            "text": "保存草稿",
+            "title": null,
+            "r": {
+              "x": 750,
+              "y": 121,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "检查模板",
+            "title": null,
+            "r": {
+              "x": 522,
+              "y": 162,
+              "width": 88,
+              "height": 32
+            }
+          },
+          {
+            "text": "关 闭",
+            "title": null,
+            "r": {
+              "x": 618,
+              "y": 162,
+              "width": 64,
+              "height": 32
+            }
+          },
+          {
+            "text": "设计模式",
+            "title": null,
+            "r": {
+              "x": 704,
+              "y": 231,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "填写预览",
+            "title": null,
+            "r": {
+              "x": 786,
+              "y": 231,
+              "width": 82,
+              "height": 28
+            }
+          },
+          {
+            "text": "表单设计",
+            "title": null,
+            "r": {
+              "x": 33,
+              "y": 271,
+              "width": 64,
+              "height": 46
+            }
+          },
+          {
+            "text": "CPP规则设计",
+            "title": null,
+            "r": {
+              "x": 121,
+              "y": 271,
+              "width": 91,
+              "height": 46
+            }
+          },
+          {
+            "text": "↶",
+            "title": null,
+            "r": {
+              "x": 29,
+              "y": 325,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "↷",
+            "title": null,
+            "r": {
+              "x": 62,
+              "y": 325,
+              "width": 27,
+              "height": 32
+            }
+          },
+          {
+            "text": "B",
+            "title": null,
+            "r": {
+              "x": 193,
+              "y": 325,
+              "width": 26,
+              "height": 32
+            }
+          },
+          {
+            "text": "I",
+            "title": null,
+            "r": {
+              "x": 224,
+              "y": 325,
+              "width": 20,
+              "height": 32
+            }
+          },
+          {
+            "text": "插入表格",
+            "title": null,
+            "r": {
+              "x": 263,
+              "y": 325,
+              "width": 72,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋行",
+            "title": null,
+            "r": {
+              "x": 341,
+              "y": 325,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "＋列",
+            "title": null,
+            "r": {
+              "x": 391,
+              "y": 325,
+              "width": 44,
+              "height": 32
+            }
+          },
+          {
+            "text": "合 并",
+            "title": null,
+            "r": {
+              "x": 441,
+              "y": 325,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "拆 分",
+            "title": null,
+            "r": {
+              "x": 496,
+              "y": 325,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 563,
+              "y": 325,
+              "width": 58,
+              "height": 32
+            }
+          },
+          {
+            "text": "分 页",
+            "title": null,
+            "r": {
+              "x": 627,
+              "y": 325,
+              "width": 48,
+              "height": 32
+            }
+          },
+          {
+            "text": "",
+            "title": "插入文本输入",
+            "r": {
+              "x": 37,
+              "y": 513,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入数值 + 单位",
+            "r": {
+              "x": 37,
+              "y": 552,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入日期",
+            "r": {
+              "x": 37,
+              "y": 591,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入下拉选择",
+            "r": {
+              "x": 37,
+              "y": 630,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入复选",
+            "r": {
+              "x": 37,
+              "y": 669,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入公式计算",
+            "r": {
+              "x": 37,
+              "y": 708,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入批号",
+            "r": {
+              "x": 37,
+              "y": 793,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入产品名称",
+            "r": {
+              "x": 37,
+              "y": 832,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入规格",
+            "r": {
+              "x": 37,
+              "y": 871,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入物料批次",
+            "r": {
+              "x": 37,
+              "y": 910,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入设备",
+            "r": {
+              "x": 37,
+              "y": 949,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入操作人",
+            "r": {
+              "x": 37,
+              "y": 988,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "",
+            "title": "插入电子签名",
+            "r": {
+              "x": 37,
+              "y": 1027,
+              "width": 22,
+              "height": 22
+            }
+          },
+          {
+            "text": "表格",
+            "title": null,
+            "r": {
+              "x": 29,
+              "y": 1106,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "分隔线",
+            "title": null,
+            "r": {
+              "x": 115,
+              "y": 1106,
+              "width": 79,
+              "height": 34
+            }
+          },
+          {
+            "text": "字段分组",
+            "title": null,
+            "r": {
+              "x": 29,
+              "y": 1147,
+              "width": 79,
+              "height": 34
+            }
+          }
+        ],
+        "tables": [],
+        "pageTemplate": "T2",
+        "focus": "<body><div id=\"app\" data-v-app=\"\"><section data-v-e7291ef4=\"\" class=\"css-dev-only-do-not-override-l9jxsd ant-layout shell global-navigation-shell\"><!-"
+      }
+    }
+  ],
+  "errors": [],
+  "authChallenges": [
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/refresh"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1440,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/refresh"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 1280,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/refresh"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    },
+    {
+      "width": 900,
+      "apiStatus": 401,
+      "url": "http://127.0.0.1:5173/api/v1/auth/me"
+    }
+  ]
+}
