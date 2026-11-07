@@ -1435,3 +1435,7 @@ Planning唯一ID 0df9356d-675b-4f37-8b7d-948948c8d694 的 progress.md 因UTF-8 6
 
 ### 2026-11-07 22:33 — GitHub CI #56 中文 PDF 转换修复
 用户要求继续修复生产工艺推送后的CI。GitHub #56仓库合同PASS、后端/基础设施PDF与前端QC分别FAIL，前一个main的#54已有相同PDF四失败。使用独立Linux Ubuntu24 Noble Docker（Java21、Maven3.9.16、fonts-noto-cjk及fonts-wqy-microhei）原样复现mes-reporting的4/7中文PDF失败；docx4j PhysicalFonts.get("Noto Sans CJK SC")在Linux返回null，但物理扫描可识别WenQuanYi Micro Hei。正式Docx4jPdfWorker加文泉驿作为第三字体fallback（保持微软字体与Noto优先）、CI后端和MariaDB集成两job安装并验证该字体，原版7个测试不改断言、不跳过，Linux目标回归**7/7 PASS**（中文标题、长检验表格末行、Native Designer、合并单元格均通过）；scripts/verify-ci.ps1 PASS。证据：docs/development/ci/REPORTING_CJK_LINUX_20261107.md。前端CI问题由已提交QC详情页面对未提交QC基础标准API/数据迁移不一致造成，属独立受控重构，未为过编译而加stub/混合未验收QC文件。完整CI状态仍等待远端新run、暂不称绿灯或全模块ACCEPTED。
+
+
+### 2026-11-07 22:40 — GitHub CI #57 EBR 角色标识异常契约修复
+Linux中文PDF字体回退补丁合并到main后，远端CI#57的mes-reporting报告54项0失败，后端进一步运行至mes-ebr并发现既有EbrRoleSchemaTest.missingIdNeverFallsBackToMatchingCode期望IllegalArgumentException，而先前代码将所有schema2 lint错误均返回ComplianceException("LINT_FAILED")。按冻结schema2角色身份规则，缺必填requiredRoleId时保留IllegalArgumentException且绝不按旧角色code回退；其它表单/CPP shape问题仍保留LINT_FAILED。仅改正式EbrRoleSchema.prepare异常分类，不更改断言、签名/审批/生产记录。现有本机真实Java21 Maven定向 EbrRoleSchemaTest12/12 + EbrIT13/13，合计 **25/25 PASS / BUILD SUCCESS**。证据docs/development/ci/EBR_ROLE_SCHEMA_CI_20261107.md。前端QC新标准库API/正式页面不一致仍需独立成套G5交付，未混合未验收QC变更；完整远端CI不得提前称绿。
