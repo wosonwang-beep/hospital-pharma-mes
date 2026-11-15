@@ -165,6 +165,46 @@
       "reason"
     ]
   },
+  "ConfirmAndGenerateIncomingCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "qcSpecificationVersionId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "plannedSamplingQuantity": {
+        "type": "string",
+        "pattern": "^[0-9]+(\\.[0-9]{1,8})?$"
+      },
+      "plannedSamplingUnitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "requiredPackageCount": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "samplingPlan": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": [
+      "qcSpecificationVersionId",
+      "plannedSamplingQuantity",
+      "plannedSamplingUnitId",
+      "requiredPackageCount",
+      "samplingPlan",
+      "reason"
+    ]
+  },
   "SamplingDetailCommand": {
     "type": "object",
     "additionalProperties": false,
@@ -184,6 +224,14 @@
         "pattern": "^-?[0-9]+(\\.[0-9]{1,8})?$"
       },
       "unitId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "sourceLocationId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "sourceContainerId": {
         "type": "string",
         "pattern": "^[1-9][0-9]*$"
       },
@@ -246,6 +294,22 @@
       "quantity"
     ]
   },
+  "BindSampleCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "sampleId": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]*$"
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "required": ["sampleId", "reason"]
+  },
   "ReceiveSample": {
     "type": "object",
     "additionalProperties": false,
@@ -290,6 +354,17 @@
       "storageLocation",
       "reason"
     ]
+  },
+  "SamplingPlanUpdateCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "versionNo": {"type":"integer","minimum":0},
+      "plannedSamplingQuantity": {"type":"string","pattern":"^(?:0|[1-9][0-9]*)(?:\\.[0-9]{1,8})?$"},
+      "plannedUnitId": {"type":"string","pattern":"^[1-9][0-9]*$"},
+      "reason": {"type":"string","minLength":1,"maxLength":1000}
+    },
+    "required":["versionNo","plannedSamplingQuantity","plannedUnitId","reason"]
   },
   "InspectionTaskCommand": {
     "type": "object",

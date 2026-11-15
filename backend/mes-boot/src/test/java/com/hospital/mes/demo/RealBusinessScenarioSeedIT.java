@@ -158,13 +158,15 @@ public class RealBusinessScenarioSeedIT {
     }
 
     @Test
-    protected void productStandardCannotEnterMaterialHistoricalReader() {
+    protected void productStandardCannotBeSelectedForAnIncomingMaterial() {
         // An independent Spring test transaction owns its own fixture and rolls back at method end.
         tag="NEG_"+UUID.randomUUID().toString().replace("-","");
         resolveReferences();initActors();finishedSpecVersionId=createFinishedSpec();
-        assertThatThrownBy(()->specificationHistory.getHistorical(1,Long.parseLong(finishedSpecVersionId)))
+        long id=Long.parseLong(finishedSpecVersionId);
+        assertThat(specificationHistory.read(1,id).products()).containsExactly(PRODUCT);
+        assertThatThrownBy(()->specificationHistory.requireSelectable(1,Long.parseLong(KCL),id))
             .isInstanceOf(com.hospital.mes.common.exception.ResourceConflictException.class)
-            .hasMessageContaining("material reader");
+            .hasMessageContaining("does not apply");
         // Do not run positive QA/business commands after the expected rollback-only boundary.
     }
 
@@ -200,7 +202,7 @@ public class RealBusinessScenarioSeedIT {
         complete = executeAndCompleteProduction(complete);
 
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wms_finished_inventory_ledger WHERE main_batch_id=?",Long.class,id(complete))).isZero();
-        assertThat(specificationHistory.getProductHistorical(1,Long.parseLong(PRODUCT),Long.parseLong(finishedSpecVersionId)).productId()).isEqualTo(Long.parseLong(PRODUCT));
+        assertThat(specificationHistory.requireProductSelectable(1,Long.parseLong(PRODUCT),Long.parseLong(finishedSpecVersionId)).products()).containsExactly(PRODUCT);
         JsonNode inbound = confirmFinishedInbound(complete);
         JsonNode finishedReport = completeFinishedInspection(inbound);
         JsonNode pendingQa = submitFinishedQa(complete);
@@ -339,12 +341,10 @@ public class RealBusinessScenarioSeedIT {
 
     private String createFinishedSpec() {
         as(analystActor,"QC_ANALYST");
-        var root=qc.create(new QcCommands.CreateSpecification("PRODUCT",null,PRODUCT,"FG-KCL-"+tag,"氯化钾溶液成品质量标准","建立成品冻结标准"),key());
-        var draft=qc.createVersion(root.id(),new QcCommands.CreateVersion(1,List.of(
+        var root=qc.create(new QcCommands.Create("FG-KCL-"+tag,"氯化钾溶液成品质量标准","DRUG_REGISTRATION_STANDARD","药品注册标准（氯化钾溶液）",null,"成品检验标准",List.of(),List.of(PRODUCT),List.of(
             new QcCommands.Item("KCL_ASSAY","氯化钾含量",true,"NUMERIC","9.5","10.5",PERCENT,null,"ASSAY-METHOD","2025")
         ),"依据氯化钾溶液质量标准"),key());
-        as(reviewerActor,"QC_REVIEWER");
-        return qc.approveVersion(draft.id(),new QcCommands.SignVersion(draft.versionNo(),"独立批准成品标准","reauth-evidence"),quote(draft.versionNo()),key()).id();
+        return id(root);
     }
 
     private JsonNode createBatch(String batchNo,String orderNo,String qty) {

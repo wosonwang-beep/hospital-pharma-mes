@@ -40,14 +40,12 @@ test('T2 create families retain horizontal labels and bounded form width',async(
  expect(errors).toEqual([])
 })
 
-test('Specialized trace and audit plus T1 integration expose only existing evidence',async({page})=>{
+test('Specialized trace and integration expose only existing evidence',async({page})=>{
  const errors=await emptyFixture(page)
- const audit={id:'9',orgId:'1',actorId:'8',actorRole:'QA',action:'SIGN',objectType:'MaterialLot',objectId:'61',oldValueDigest:'previous-digest',newValueDigest:'current-digest',reason:'批次质量审核',clientInfo:'Chromium',occurredAt:'2026-10-05T01:00:00Z',transactionId:'tx-9',requestId:'request-9',source:'API'}
  const message={messageRef:'OUTBOX:7',direction:'OUTBOX',messageId:'release-7',sourceSystem:'MES',targetSystem:'WMS',eventType:'MATERIAL_RELEASED',aggregateType:'MaterialLot',aggregateId:'61',status:'DEAD_LETTER',retryCount:3,nextRetryAt:null,lastErrorCode:'TIMEOUT',lastErrorMessage:'目标系统响应超时',occurredAt:'2026-10-05T01:00:00Z',completedAt:null,versionNo:4}
- await page.route('**/api/v1/audit-events**',r=>r.fulfill({json:{code:'OK',data:{items:[audit],total:1,page:0,size:50}}}))
  await page.route('**/api/v1/integration/messages**',r=>r.fulfill({json:{code:'OK',data:{items:[message],total:1,page:0,size:50}}}))
  await page.route('**/api/v1/trace**',r=>r.fulfill({json:{code:'OK',data:{nodes:[{type:'MATERIAL_LOT',id:'61',label:'ML-20261005-001',status:'RELEASED'},{type:'INSPECTION_REQUEST',id:'71',label:'IR-20261005-001',status:'COMPLETED'},{type:'REPORT',id:'91',label:'TR-20261005-001',status:'APPROVED'}],edges:[{sourceType:'MATERIAL_LOT',sourceId:'61',targetType:'INSPECTION_REQUEST',targetId:'71',relation:'SUBMITTED_FOR_INSPECTION'},{sourceType:'INSPECTION_REQUEST',sourceId:'71',targetType:'REPORT',targetId:'91',relation:'REPORTED_BY'}]}}}))
- for(const [path,name] of [['/trace?materialLotId=61','trace'],['/audit','audit'],['/integration/operations','integration']]){
+ for(const [path,name] of [['/trace?materialLotId=61','trace'],['/integration/operations','integration']]){
   await page.goto(path!);await expect(page.locator('main[data-ui-template]')).toBeVisible()
   if(name==='trace')await expect(page.locator('.trace-node')).toHaveCount(3)
   else await expect(page.getByRole('button',{name:'查看详情',exact:true})).toBeVisible()
@@ -64,8 +62,8 @@ test('Specialized trace and audit plus T1 integration expose only existing evide
 test('Consistency closeout renders populated IAM master WMS and production facts',async({page})=>{
  const errors=await emptyFixture(page)
  const fixtures:Record<string,unknown>={
- '/roles/1':{id:'1',roleCode:'QA',roleName:'质量审核员',status:'ACTIVE',version:3,permissionCodes:['qms:test:view','audit:view'],menuCodes:[]},
- '/permissions':{items:[{id:'1',permissionCode:'qms:test:view',permissionName:'查看检验记录',permissionType:'MENU',status:'ACTIVE'},{id:'2',permissionCode:'audit:view',permissionName:'查看审计事件',permissionType:'MENU',status:'ACTIVE'}],total:2},
+ '/roles/1':{id:'1',roleCode:'QA',roleName:'质量审核员',status:'ACTIVE',version:3,permissionCodes:['qms:test:view'],menuCodes:[]},
+ '/permissions':{items:[{id:'1',permissionCode:'qms:test:view',permissionName:'查看检验记录',permissionType:'MENU',status:'ACTIVE'},{id:'2',permissionCode:permissionName:'查看审计事件',permissionType:'MENU',status:'ACTIVE'}],total:2},
  '/unit-conversions/1':{id:'1',fromUnitId:'10',toUnitId:'11',factor:'1000',materialId:null,versionNo:2,allowedActions:['UPDATE']},
  '/units/10':{id:'10',unitCode:'kg',unitName:'千克'},'/units/11':{id:'11',unitCode:'g',unitName:'克'},
  '/main-batches/100':{id:'100',batchNo:'PB-20261005-001',status:'IN_PROGRESS',productId:'5',processSnapshot:{snapshot:{process:{formula:{items:[{formulaItemId:'31',materialId:'20',requiredQty:'10'}]}},materials:[{id:'20',materialName:'原料A'}]}}},

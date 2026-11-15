@@ -14,5 +14,5 @@ private String contentHash; public String getContentHash(){return contentHash;} 
 private java.time.LocalDateTime effectiveFrom; public java.time.LocalDateTime getEffectiveFrom(){return effectiveFrom;} public void setEffectiveFrom(java.time.LocalDateTime value){effectiveFrom=value;}
 private Long approvedBy; public Long getApprovedBy(){return approvedBy;} public void setApprovedBy(Long value){approvedBy=value;}
 private java.time.LocalDateTime approvedAt; public java.time.LocalDateTime getApprovedAt(){return approvedAt;} public void setApprovedAt(java.time.LocalDateTime value){approvedAt=value;}
-@Override public java.util.List<String> allowedActions(){return switch(status){case "DRAFT"->java.util.List.of("EDIT","LINT","SIMULATE","SUBMIT");case "SUBMITTED"->java.util.List.of("APPROVE","NEW_VERSION");case "APPROVED"->java.util.List.of("PUBLISH","NEW_VERSION");default->java.util.List.of("NEW_VERSION");};}
+@Override public java.util.List<String> allowedActions(){return switch(status){case "DRAFT"->java.util.List.of("EDIT","LINT","SIMULATE","PUBLISH");case "SUBMITTED"->java.util.List.of("PUBLISH","NEW_VERSION");case "APPROVED"->java.util.List.of("PUBLISH","NEW_VERSION");default->java.util.List.of("NEW_VERSION");};}
 }

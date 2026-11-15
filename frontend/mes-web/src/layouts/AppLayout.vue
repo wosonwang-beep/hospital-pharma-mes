@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import DatabaseMenu from './DatabaseMenu.vue'
+import {menuAccessibility as vMenuAccessibility} from './menuAccessibility'
+import {selectAccessibility as vSelectAccessibility} from '../views/ebr/selectAccessibility'
 import { menuLeaves, menuAncestors, selectedMenu, type MenuNode } from './databaseNavigation'
 import { api, errorMessage } from '../api/http'
 import { useRoute, useRouter } from 'vue-router'
@@ -86,7 +88,7 @@ function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router
 </script>
 
 <template>
-  <a-layout class="shell global-navigation-shell" :class="{'execution-desktop-shell':executionWorkbench,'batch-reference-shell':batchReference,'dashboard-desktop-shell':dashboard}">
+  <a-layout v-menu-accessibility v-select-accessibility class="shell global-navigation-shell" :class="{'execution-desktop-shell':executionWorkbench,'batch-reference-shell':batchReference,'dashboard-desktop-shell':dashboard}">
     <a-layout-sider v-if="!mobile" v-model:collapsed="collapsed" :trigger="null" collapsible :width="256" theme="light" class="sidebar">
       <div class="brand" :class="{ 'brand-collapsed': collapsed }">
         <img :src="dashboardLogo" class="dashboard-brand-logo" alt=""/><span v-if="!collapsed" class="dashboard-brand-copy"><strong>医院制剂生产管理系统</strong><small>Hospital Pharma MES</small></span>
@@ -127,6 +129,7 @@ function selectDashboardMenu(value:unknown){dashboardSearch.value='';void router
 </template>
 
 <style scoped>
+#app .global-navigation-shell :deep(.dashboard-brand-copy small),#app .global-navigation-shell :deep(.dashboard-account small){color:var(--mes-ui-secondary)}
 .sidebar :deep(.ant-layout-sider-children){display:flex;flex-direction:column;height:100%}
 .sidebar .brand{flex-shrink:0}
 .sidebar .nav{flex:1;min-height:0;overflow-y:auto}

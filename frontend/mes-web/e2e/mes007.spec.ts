@@ -16,7 +16,7 @@ test('duplicate edited field code is located before saving or server lint',async
  await expect(page.getByLabel('字段编码',{exact:true})).toHaveValue('FIELD1')
 })
 async function setup(page:Page,conflict=false,readonly=false,numeric=false){
- const permissions=['ebr:template:view','master:product:view','process:package:view','master:uom:view','audit:view',...(!readonly?['ebr:template:create','ebr:template:update','ebr:designer:edit','ebr:template:submit','ebr:template:approve','ebr:template:publish']:[])]
+ const permissions=['ebr:template:view','master:product:view','process:package:view','master:uom:view',...(!readonly?['ebr:template:create','ebr:template:update','ebr:designer:edit','ebr:template:submit','ebr:template:approve','ebr:template:publish']:[])]
  let detail:any={id:'31',templateCode:'EBR-1',packageVersionId:'21',version:1,status:'DRAFT',versionNo:0,contentHash:null,effectiveFrom:null,approvedBy:null,approvedAt:null,allowedActions:['EDIT','LINT','SIMULATE','SUBMIT'],definition:{sections:[],forms:[],rules:[],signatureRules:[],reviewRules:[]},operationChoices:[{id:'22',operationCode:'MIX',operationName:'配液'}],versions:[]}
  if(numeric)detail.definition.forms=[{formCode:'FORM1',formName:'设备参数',operationDefId:null,schemaVersion:'1.0',sequenceNo:1,fields:[{fieldCode:'DEVICE',groupCode:null,label:'设备值',fieldType:'INSTRUMENT_VALUE',sourceType:'INSTRUMENT',dataType:'DECIMAL',unitId:null,precisionScale:null,requiredFlag:false,readonlyFlag:false,defaultExpr:'1',placeholder:null,helpText:null,sequenceNo:1,validationJson:'{}',options:[]}]}];
  const get=()=>({...detail,versions:[{...detail,definition:undefined,versions:undefined}]})

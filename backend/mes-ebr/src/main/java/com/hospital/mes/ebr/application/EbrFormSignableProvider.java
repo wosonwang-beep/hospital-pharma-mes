@@ -26,7 +26,7 @@ public class EbrFormSignableProvider implements SignableObjectProvider {
   if(form.getStatus().equals("DRAFT")||!model.formSignable(form).equals(object))throw new ResourceConflictException("RECORD_CHANGED","Submit current form before signing");
   eligible(actor,context.meaning(),object,form);
  }
- /** Synchronous domain event: an audit failure rolls back the inserted signature and idempotency together. */
+ /** Signature context is checked synchronously before the signature transaction completes. */
  @org.springframework.context.event.EventListener
  public void signatureApplied(SignatureAppliedEvent event){
   var signature=event.signature();if(!signature.objectType().equals(objectType()))return;
@@ -35,7 +35,11 @@ public class EbrFormSignableProvider implements SignableObjectProvider {
   if(!canonical.digest(object).equals(signature.recordDigest()))throw new ResourceConflictException("RECORD_CHANGED","Inserted signature differs from locked form evidence");
   for(var rule:eligible(actor,signature.meaning(),object,form))roles.retain(actor,signature,rule);
  }
- private List<SignatureRule> eligible(CurrentPlatformContext actor,SignatureMeaning meaning,SignableObject object,RuntimeFormEntity form){
+ @Override public java.util.Map<String,Object> signatureContext(SignatureValidationContext context,SignableObject object){
+  var actor=authority.current(context.platform(),"ebr:sign");
+  var form=db.store(RuntimeFormEntity.class).get(actor.organizationId(),MasterMutation.id(object.objectId()));
+  return java.util.Map.of("rolePolicies",eligible(actor,context.meaning(),object,form).stream().map(EbrRoleEvidence::policy).toList());
+ } private List<SignatureRule> eligible(CurrentPlatformContext actor,SignatureMeaning meaning,SignableObject object,RuntimeFormEntity form){
   var policies=model.signatureRules(form);
   var matching=policies.stream().filter(rule->rule.meaning().equals(meaning.name())&&EbrRoleAuthorization.matches(model.definition(form).schemaVersion(),rule.requiredRoleId(),rule.requiredRole(),actor)).toList();
   if(matching.isEmpty())throw new PermissionException("PERMISSION_DENIED","Frozen signature role required");

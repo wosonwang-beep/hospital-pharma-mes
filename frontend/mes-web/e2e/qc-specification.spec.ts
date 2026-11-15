@@ -3,7 +3,7 @@ import {resolve} from 'node:path'
 // Browser plugin not available; API mocks provide supplemental UI evidence only.
 test('QC query horizontal labels and signed version retry preserve binding',async({page},info)=>{
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message))
- const permissions=['qms:specification:view','qms:specification:create','qms:specification:edit','qms:specification:approve','qms:specification:retire','ebr:sign','audit:view']
+ const permissions=['qms:specification:view','qms:specification:create','qms:specification:edit','qms:specification:approve','qms:specification:retire','ebr:sign',]
  let v={id:'21',orgId:'1',specificationId:'20',materialId:'11',materialCode:'RAW-11',materialName:'原辅料',specificationCode:'QC-20',specificationName:'来料质量标准',versionNoBusiness:1,versionNo:0,status:'DRAFT',createdBy:'4',items:[{specificationItemId:'31',itemCode:'ASSAY',itemName:'含量',required:true,resultType:'NUMERIC',lowerLimit:'1.000000',upperLimit:'3.000000',unitId:'10',methodCode:'M1',methodVersion:'1'}]}
  let refreshes=0
  const attempts:Record<string,unknown>[]=[];const bindings:Record<string,unknown>[]=[]

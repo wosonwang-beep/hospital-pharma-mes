@@ -21,6 +21,8 @@ class EbrDefinitionRulesTest {
         assertThat(EbrDefinitionRules.lint(d,true)).anySatisfy(i->assertThat(i.code()).isEqualTo("UNKNOWN_FIELD"));
     }
     @Test void immutableLifecycleAndEmptyPublicationAreBlocked() {
+        assertThat(EbrDefinitionRules.transition("DRAFT","PUBLISH")).isEqualTo("EFFECTIVE");
+        assertThat(EbrDefinitionRules.transition("SUBMITTED","PUBLISH")).isEqualTo("EFFECTIVE");
         assertThat(EbrDefinitionRules.transition("DRAFT","SUBMIT")).isEqualTo("SUBMITTED");
         assertThat(EbrDefinitionRules.transition("SUBMITTED","APPROVE")).isEqualTo("APPROVED");
         assertThat(EbrDefinitionRules.transition("APPROVED","PUBLISH")).isEqualTo("EFFECTIVE");

@@ -3,8 +3,6 @@ import {computed,ref,watch,onMounted,onBeforeUnmount} from 'vue'
 import {useRouter} from 'vue-router'
 import {useAuthStore} from '../../stores/auth'
 import {api,type Page} from '../../api/http'
-import {queryAuditEvents} from '../../api/audit'
-import type {AuditEvent} from '../../types/audit'
 import {FileTextOutlined,ExperimentOutlined,WarningOutlined,CodeSandboxOutlined,RightOutlined,FileAddOutlined,ShoppingCartOutlined,HomeOutlined,CarOutlined,CalendarOutlined,NotificationOutlined,MedicineBoxOutlined} from '@ant-design/icons-vue'
 import * as echarts from 'echarts/core'
 import {LineChart,BarChart,PieChart} from 'echarts/charts'
@@ -13,7 +11,7 @@ import {CanvasRenderer} from 'echarts/renderers'
 import {datedTrend,businessDay,completeRows,inProductionCount,pendingTestSampleCount,abnormalInventoryCount,inventoryStatusSummary} from './dashboardReadModel'
 echarts.use([LineChart,BarChart,PieChart,GridComponent,TooltipComponent,GraphicComponent,CanvasRenderer])
 const router=useRouter(),auth=useAuthStore()
-const now=ref(new Date()),activity=ref<AuditEvent[]>([]),activityError=ref(''),loadError=ref(''),loading=ref(true)
+const now=ref(new Date()),loadError=ref(''),loading=ref(true)
 const batches=ref<Record<string,unknown>[]|null>(null),samples=ref<Record<string,unknown>[]|null>(null),investigations=ref<Record<string,unknown>[]|null>(null),inventory=ref<Record<string,unknown>[]|null>(null)
 const trendNode=ref<HTMLDivElement>(),qualityNode=ref<HTMLDivElement>(),inventoryNode=ref<HTMLDivElement>()
 const charts=new Map<HTMLDivElement,echarts.ECharts>()
@@ -52,7 +50,7 @@ function drawTrends(){chart(trendNode.value,batches.value,'#1677ff','line','prod
 watch(()=>businessDay(now.value),()=>{if(active&&!loading.value)drawTrends()})
 const clock=window.setInterval(()=>{now.value=new Date()},60000)
 onMounted(async()=>{
- await Promise.all([read('/main-batches','production:batch:view',batches),read('/quality/samples','qms:test:view',samples),read('/deviations','qms:deviation:view',investigations),read('/wms/inventory','wms:inventory:view',inventory),(async()=>{if(auth.can('audit:view'))try{activity.value=(await queryAuditEvents({page:0,size:5})).items}catch{activityError.value='近期受控活动暂时无法加载'}})()])
+ await Promise.all([read('/main-batches','production:batch:view',batches),read('/quality/samples','qms:test:view',samples),read('/deviations','qms:deviation:view',investigations),read('/wms/inventory','wms:inventory:view',inventory) ])
  if(!active)return
  loading.value=false
  drawTrends()
@@ -69,7 +67,7 @@ onBeforeUnmount(()=>{active=false;clearInterval(clock);sizeObserver?.disconnect(
   <div class="dashboard-columns"><section class="dashboard-left">
    <section class="dashboard-panel dashboard-shortcuts"><h2>快捷操作</h2><div class="dashboard-shortcut-grid"><button v-for="item in actions" :key="item.path" :disabled="!item.enabled" @click="router.push(item.path)"><component :is="item.icon"/><span>{{item.title}}</span></button></div></section>
    <section class="dashboard-panel dashboard-todos"><header><h2><MedicineBoxOutlined/>我的待办</h2></header><div class="dashboard-table-wrap"><table><thead><tr><th>任务类型</th><th>单据编号</th><th>标题</th><th>当前节点</th><th>到期时间</th><th>操作</th></tr></thead><tbody><tr><td colspan="6" class="dashboard-empty">暂无可用的个人待办数据</td></tr></tbody></table></div></section>
-   <section class="dashboard-panel dashboard-notices"><header><h2><NotificationOutlined/>系统公告</h2></header><div class="dashboard-empty">暂无公告</div><details v-if="auth.can('audit:view')" class="dashboard-activity"><summary>近期受控活动</summary><p v-if="activityError">{{activityError}}</p><p v-else-if="!activity.length">暂无受控活动</p><ul v-else><li v-for="item in activity" :key="item.id"><span>{{item.reason??item.objectType}} · {{item.occurredAt}}</span><a-button type="link" @click="router.push({path:'/audit',query:{objectType:item.objectType,objectId:item.objectId}})">查看审计</a-button></li></ul></details></section>
+   <section class="dashboard-panel dashboard-notices"><header><h2><NotificationOutlined/>系统公告</h2></header><div class="dashboard-empty">暂无公告</div></section>
   </section><aside class="dashboard-right">
    <section class="dashboard-panel dashboard-trend"><header><h2>生产批次趋势</h2><span class="dashboard-period"><CalendarOutlined/>近7天</span></header><div ref="trendNode" class="dashboard-chart" role="img" aria-label="近七天创建的生产批次趋势"/></section>
    <section class="dashboard-panel dashboard-stock"><header><h2>库存状态概览</h2><span class="dashboard-legend"><i class="blue"/>可用<i class="orange"/>冻结<i class="red"/>阻断</span></header><div class="dashboard-stock-body"><div ref="inventoryNode" class="dashboard-donut" role="img" aria-label="当前可见库存批次状态分布"/><div class="dashboard-stock-values"><span><i class="blue"/>可用<b>{{inventorySummary?.available??'—'}}</b><small>{{inventorySummary?inventoryPercent(inventorySummary.available):'—'}}</small></span><span><i class="orange"/>冻结<b>{{inventorySummary?.frozen??'—'}}</b><small>{{inventorySummary?inventoryPercent(inventorySummary.frozen):'—'}}</small></span><span><i class="red"/>阻断<b>{{inventorySummary?(inventorySummary.blocked+inventorySummary.other):'—'}}</b><small>{{inventorySummary?inventoryPercent(inventorySummary.blocked+inventorySummary.other):'—'}}</small></span></div></div></section>

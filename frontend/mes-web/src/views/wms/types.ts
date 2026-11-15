@@ -175,6 +175,13 @@ export interface Receipt {
  confirmedBy?:string
  confirmedAt?:string
 }
+export interface ReceiptInspectionStatus {
+ receiptId:string
+ receiptItemId:string
+ materialLotId:string
+ canCreate:boolean
+ inspectionRequest:({id?:string;requestNo?:string;status?:string}|null)
+}
 export interface MaterialLot {
  id?:string
  orgId?:string

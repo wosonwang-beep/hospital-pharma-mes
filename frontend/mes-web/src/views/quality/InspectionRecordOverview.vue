@@ -5,10 +5,12 @@ import {ExclamationCircleOutlined,CheckCircleOutlined} from '@ant-design/icons-v
 import {useAuthStore} from '../../stores/auth'
 import {type IncomingRow} from './incomingModel'
 import {rows,inspectionSummaryRows,detailDisplay} from './incomingDetailModel'
+import {inspectionIdentityFacts} from './inspectionIdentityFacts'
 const props=defineProps<{record:IncomingRow;request?:IncomingRow;lot?:IncomingRow;references:Record<string,{name:string;row:IncomingRow;route?:string}>;valueLabel:(key:string,value:unknown)=>string}>()
 const emit=defineEmits<{viewItem:[IncomingRow]}>()
 const router=useRouter(),auth=useAuthStore()
 const items=computed(()=>inspectionSummaryRows(rows(props.record.items)))
+const identityFacts=computed(()=>inspectionIdentityFacts(props.record,props.request,props.lot,props.references))
 const executions=computed(()=>rows(props.record.items).flatMap(i=>rows(i.executions)))
 const analysts=computed(()=>[...new Set(executions.value.map(e=>String(e.performedBy)).filter(x=>x!=='undefined'&&x!=='null'))])
 const investigations=computed(()=>Object.entries(props.references).filter(([key,value])=>['approvedInvestigationId','dispositionInvestigationId'].includes(key.split(':')[0]!)&&value.route).map(([,v])=>v).filter((v,i,all)=>all.findIndex(x=>x.route===v.route)===i))
@@ -29,7 +31,7 @@ const columns=[{title:'序号',key:'index',width:64},{title:'检验项目',key:'
   <section><h3>检验标准</h3><strong>{{name('qcSpecificationVersionId',request?.qcSpecificationVersionId)}}</strong><p>请验时冻结版本</p></section>
   <section><h3>检验人</h3><strong>{{analysts.length?analysts.map(id=>name('performedBy',id)).join('、'):'—'}}</strong><p v-if="record.assignedTo">指派：{{name('assignedTo',record.assignedTo)}}</p></section>
   <section><h3>检验时间（UTC）</h3><template v-if="executions.length"><p v-for="e in executions" :key="String(e.id)" class="execution-time">{{time(e.startedAt)}} — {{time(e.completedAt)}}</p></template><strong v-else>—</strong></section>
- </div></a-card>
+ </div><div class="identity-facts"><section v-for="fact in identityFacts" :key="fact.label"><h3>{{fact.label}}</h3><strong>{{fact.value}}</strong></section></div></a-card>
  <a-card class="form-section inspection-results"><template #title><span>检验项目与结果 <small>共 {{items.length}} 项</small></span></template>
   <a-table :columns="columns" :data-source="items" :row-key="(row:ReturnType<typeof inspectionSummaryRows>[number])=>String(row.item.id)" :pagination="false" :scroll="{x:850}" :row-class-name="(row:ReturnType<typeof inspectionSummaryRows>[number])=>row.results.some(r=>r.revision.resultConclusion==='FAIL')?'inspection-failed-row':''">
    <template #bodyCell="{column,record:row,index}">
@@ -49,9 +51,13 @@ const columns=[{title:'序号',key:'index',width:64},{title:'检验项目',key:'
   <section><h3>复核人</h3><strong>{{name('reviewedBy',record.reviewedBy)}}</strong></section>
   <section><h3>复核时间（UTC）</h3><span>{{time(record.reviewedAt)}}</span></section>
  </div><p v-if="record.status==='QC_PASSED'" class="review-note">QC合格不代表物料已获QA放行。</p></a-card>
- <div v-if="auth.can('audit:view')||auth.can('trace:view')" class="compact-evidence-links"><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_inspection_task',objectId:String(record.id)}})">审计追踪</a-button><a-button v-if="(record.materialLotId??request?.materialLotId)&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(record.materialLotId??request?.materialLotId)}})">完整来料追溯</a-button></div>
+ <div v-if="auth.can('trace:view')" class="compact-evidence-links"><a-button v-if="(record.materialLotId??request?.materialLotId)&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(record.materialLotId??request?.materialLotId)}})">完整来料追溯</a-button></div>
 </template>
 <style scoped>
+.identity-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid #edf1f6}.identity-facts section{min-width:0;display:flex;align-items:center;gap:10px}.identity-facts h3{margin:0;flex:none}.identity-facts strong{min-width:0}@media(max-width:1100px){.identity-facts{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.identity-facts{grid-template-columns:1fr}}
+
+.context-grid :deep(.ant-btn-link){max-width:100%;min-width:0}
+.context-grid :deep(.ant-btn-link>span){min-width:0;white-space:normal;overflow-wrap:anywhere}
 .inspection-results :deep(.ant-tag-red){background:#ffe7e7;color:#c72b30;border:0;border-radius:4px;padding:3px 12px;font-weight:600}.inspection-results :deep(.ant-tag-green){background:#e1f7e9;color:#23834b;border:0;border-radius:4px;padding:3px 12px;font-weight:600}.current-conclusion .conclusion-icon{padding:10px;background:#fff0f1;border-radius:50%;font-size:24px;box-sizing:content-box}.current-conclusion .conclusion-icon.passed{background:#edf9f0}.inspection-context :deep(.ant-card-body){padding:20px}.review-grid>section:nth-child(3){border-left:1px solid #edf1f6;padding-left:20px}
 .context-grid{display:grid;grid-template-columns:1.1fr 1.1fr 1fr 1fr .8fr 1.2fr;gap:16px}.context-grid>section{min-width:0;border-right:1px solid #edf1f6;padding-right:12px}.context-grid>section:last-child{border:0;padding:0}h3{font-size:12px;font-weight:500;color:var(--mes-ui-secondary,#66758a);margin:0 0 8px}strong{font-size:13px;font-weight:600;overflow-wrap:anywhere}.context-grid p{font-size:12px;color:var(--mes-ui-secondary,#66758a);margin:8px 0 0;overflow-wrap:anywhere}.context-grid :deep(.ant-btn-link),.review-grid :deep(.ant-btn-link){padding:0;height:auto;white-space:normal;text-align:left;font-weight:600}.execution-time{color:#25344a!important}.inspection-results small{font-size:12px;color:#66758a;font-weight:400;margin-left:12px}.inspection-results :deep(.inspection-failed-row>td){background:#fff5f5}.inspection-results :deep(.ant-table-cell){font-size:13px;padding:12px 16px}.inspection-results :deep(.ant-tag){margin:0}.inspection-results :deep(td small){display:block;font-size:11px;margin:4px 0 0}.review-grid{display:grid;grid-template-columns:1.1fr 1.5fr 1fr 1fr 1.4fr;gap:20px;align-items:start}.current-conclusion{display:flex;gap:14px;align-items:center}.conclusion-icon{font-size:24px}.failed{color:#cf252e}.passed{color:#248b52}.review-note{font-size:12px;color:#66758a;margin:16px 0 0}.compact-evidence-links{text-align:right;margin:-8px 0 8px}@media(max-width:1100px){.context-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.context-grid>section:nth-child(3){border:0}}@media(max-width:767px){.context-grid,.review-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.context-grid>section{border:0;padding:0}.inspection-results :deep(.ant-table-cell){padding:10px 12px}.review-grid>section:last-child{grid-column:1/-1}.compact-evidence-links{text-align:left}}
 </style>

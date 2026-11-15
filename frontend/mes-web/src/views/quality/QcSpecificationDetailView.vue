@@ -10,10 +10,14 @@ import QcScopePicker from './QcScopePicker.vue'
 import QcSpecificationItems from './QcSpecificationItems.vue'
 const route=useRoute(),router=useRouter(),auth=useAuthStore()
 const create=computed(()=>route.meta.mode==='create'||route.path.endsWith('/create'))
+const editable=computed(()=>auth.can(create.value?'qms:specification:create':'qms:specification:edit'))
 type Block='basic'|'scope'|'items'
-const detail=ref<QcDetail|null>(null),busy=ref(false),error=ref(''),conflictState=ref(false),confirmOpen=ref(false),tab=ref<'basic'|'scope'>('basic'),loaded=ref('')
+const detail=ref<QcDetail|null>(null),busy=ref(false),error=ref(''),conflictState=ref(false),confirmOpen=ref(false),removeOpen=ref(false),removeReason=ref(''),tab=ref<'basic'|'scope'>('basic'),loaded=ref('')
 const form=reactive({specificationCode:'',specificationName:'',basisType:null as string|null,basisReference:'',effectiveDate:'',remark:'',status:'ACTIVE' as 'ACTIVE'|'INACTIVE',materialIds:[] as string[],productIds:[] as string[],reason:''})
 const items=ref<QcItem[]>([]),requests=qcCommandHeaders()
+const revisionLabels:Record<string,string>={CREATE:'新增',UPDATE:'修改',DELETE:'删除'}
+const revisionColumns=[{title:'操作',dataIndex:'revisionType',key:'type',width:110},{title:'维护原因',dataIndex:'revisionReason',key:'reason'},{title:'维护时间',dataIndex:'revisedAt',key:'time',width:220}]
+function revisedAt(value:string){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?value:date.toLocaleString('zh-CN',{hour12:false})}
 const original=ref('')
 const dirty=computed(()=>JSON.stringify(snapshot())!==original.value)
 const seededMaterials=computed(()=>scopesOf('MATERIAL').map(s=>({id:s.subjectId,name:s.subjectName??`#${s.subjectId}`,code:s.subjectCode??''})))
@@ -44,7 +48,7 @@ function localIssue():{message:string;block:Block}|null{
 }
 async function load(){error.value='';conflictState.value=false;if(create.value){original.value=JSON.stringify(snapshot());loaded.value='create';return}busy.value=true;try{detail.value=await qcApi.detail(String(route.params.id));fill(detail.value);loaded.value=detail.value.id}catch(e){failure(e)}finally{busy.value=false}}
 /** 保存入口：先本地校验，编辑态再要求填写变更原因。 */
-function save(){error.value='';conflictState.value=false;const issue=localIssue();if(issue){error.value=issue.message;pointTo(issue.block);return}if(create.value){void submit();return}if(!dirty.value){error.value='没有需要保存的修改';return}confirmOpen.value=true}
+function save(){if(!editable.value)return;error.value='';conflictState.value=false;const issue=localIssue();if(issue){error.value=issue.message;pointTo(issue.block);return}if(create.value){void submit();return}if(!dirty.value){error.value='没有需要保存的修改';return}confirmOpen.value=true}
 async function submit(){error.value='';if(!create.value&&!form.reason.trim()){error.value='请填写维护原因';return}confirmOpen.value=false;conflictState.value=false;busy.value=true;try{const reason=form.reason.trim()||'新增标准';if(create.value){const body=qcCreatePayload({...form,basisType:form.basisType??'',effectiveDate:form.effectiveDate,items:items.value,reason});const created=await qcApi.create(body,requests.forRequest('/quality/specifications',body));requests.complete();original.value=JSON.stringify(snapshot());await router.replace(`/quality/specifications/${created.id}`);return}
  const current=detail.value;if(!current)throw Error('标准尚未加载完成');const token=current.versionNo;let latest=current
  const headerChanged=form.specificationCode!==current.specificationCode||form.specificationName!==current.specificationName||(form.basisType??'')!==(current.basisType??'')||form.basisReference!==(current.basisReference??'')||form.effectiveDate!==(current.effectiveDate??'')||form.remark!==(current.remark??'')||form.status!==current.status
@@ -55,6 +59,20 @@ async function submit(){error.value='';if(!create.value&&!form.reason.trim()){er
  if(scopeChanged){const url=`/quality/specifications/${current.id}/scope`;const body={recordVersion:latest.versionNo,materialIds:form.materialIds,productIds:form.productIds,reason};latest=await qcApi.replaceScope(current.id,body,requests.forRequest(url,body,latest.versionNo))}
  if(itemsChanged){const url=`/quality/specifications/${current.id}/items`;const body={recordVersion:latest.versionNo,items:qcItemPayload(items.value),reason};latest=await qcApi.replaceItems(current.id,body,requests.forRequest(url,body,latest.versionNo))}
  requests.complete();detail.value=latest;fill(latest);form.reason=''}catch(e){failure(e)}finally{busy.value=false}}
+async function removeStandard(){
+ if(!auth.can('qms:specification:delete')||create.value||!detail.value)return
+ if(dirty.value){error.value='请先保存或放弃未保存的修改';return}
+ const reason=removeReason.value.trim();if(!reason){error.value='请填写删除原因';return}
+ busy.value=true;error.value=''
+ try{
+  const current=detail.value,url=`/quality/specifications/${current.id}`
+  const body={recordVersion:current.versionNo,reason}
+  const removed=await qcApi.remove(current.id,body,requests.forRequest(url,body,current.versionNo))
+  if(!removed.deleted)throw Error('标准删除未完成')
+  requests.complete();removeOpen.value=false
+  await router.replace('/quality/specifications')
+ }catch(e){failure(e)}finally{busy.value=false}
+}
 function snapshotOf(list:QcItem[]){return list.map(i=>({itemCode:i.itemCode,itemName:i.itemName,required:i.required,resultType:i.resultType,lowerLimit:i.lowerLimit,upperLimit:i.upperLimit,unitId:i.unitId,textAcceptanceCriteria:i.textAcceptanceCriteria,methodCode:i.methodCode,methodVersion:i.methodVersion}))}
 onBeforeRouteLeave(()=>!dirty.value||window.confirm('离开将放弃未保存内容，是否继续？'))
 watch(()=>route.fullPath,load,{immediate:true})
@@ -69,7 +87,8 @@ watch(()=>route.fullPath,load,{immediate:true})
     </div>
     <a-space>
       <span v-if="dirty" class="qc-dirty"><i class="qc-dot"/>有未保存的修改</span>
-      <a-button type="primary" :loading="busy" :disabled="!auth.can(create?'qms:specification:create':'qms:specification:edit')" @click="save">保存标准</a-button>
+      <a-button v-if="!create&&auth.can('qms:specification:delete')" danger :disabled="busy||dirty" :title="dirty?'请先保存或放弃未保存的修改':undefined" @click="error='';removeReason='';removeOpen=true">删除标准</a-button>
+      <a-button type="primary" :loading="busy" :disabled="busy||!editable" @click="save">保存标准</a-button>
     </a-space>
   </header>
   <a-alert v-if="error" type="error" :message="error" show-icon/>
@@ -79,13 +98,13 @@ watch(()=>route.fullPath,load,{immediate:true})
   <a-tab-pane key="basic" tab="基本信息">
   <a-card class="form-section qc-block-basic">
     <form class="master-form" @submit.prevent="save">
-      <label><span class="form-field-label">标准编码</span><input v-model="form.specificationCode" class="master-native-input" aria-label="标准编码" maxlength="100" :disabled="busy" required/></label>
-      <label><span class="form-field-label">标准名称</span><input v-model="form.specificationName" class="master-native-input" aria-label="标准名称" maxlength="200" :disabled="busy" required/></label>
-      <label><span class="form-field-label">标准的依据</span><DictionarySelect v-model="form.basisType" dict-code="QC_STANDARD_BASIS" placeholder="请选择标准的依据" :disabled="busy" required/></label>
-      <label><span class="form-field-label">依据说明</span><input v-model="form.basisReference" class="master-native-input" aria-label="依据说明" maxlength="300" placeholder="如《中国药典》2025年版四部 0301" :disabled="busy" required/></label>
-      <label><span class="form-field-label">生效日期</span><input v-model="form.effectiveDate" type="date" class="master-native-input" aria-label="生效日期" :disabled="busy"/></label>
-      <label><span class="form-field-label">状态</span><a-select v-model:value="form.status" aria-label="状态" :disabled="busy"><a-select-option v-for="(label,state) in qcStatuses" :key="state" :value="state">{{label}}</a-select-option></a-select></label>
-      <label class="form-full-row"><span class="form-field-label">备注</span><textarea v-model="form.remark" class="master-native-input" aria-label="备注" maxlength="1000" :disabled="busy"/></label>
+      <label><span class="form-field-label">标准编码</span><input v-model="form.specificationCode" class="master-native-input" aria-label="标准编码" maxlength="100" :disabled="busy||!editable" required/></label>
+      <label><span class="form-field-label">标准名称</span><input v-model="form.specificationName" class="master-native-input" aria-label="标准名称" maxlength="200" :disabled="busy||!editable" required/></label>
+      <label><span class="form-field-label">标准的依据</span><DictionarySelect v-model="form.basisType" dict-code="QC_STANDARD_BASIS" placeholder="请选择标准的依据" :disabled="busy||!editable" required/></label>
+      <label><span class="form-field-label">依据说明</span><input v-model="form.basisReference" class="master-native-input" aria-label="依据说明" maxlength="300" placeholder="如《中国药典》2025年版四部 0301" :disabled="busy||!editable" required/></label>
+      <label><span class="form-field-label">生效日期</span><input v-model="form.effectiveDate" type="date" class="master-native-input" aria-label="生效日期" :disabled="busy||!editable"/></label>
+      <label><span class="form-field-label">状态</span><a-select v-model:value="form.status" aria-label="状态" :disabled="busy||!editable"><a-select-option v-for="(label,state) in qcStatuses" :key="state" :value="state">{{label}}</a-select-option></a-select></label>
+      <label class="form-full-row"><span class="form-field-label">备注</span><textarea v-model="form.remark" class="master-native-input" aria-label="备注" maxlength="1000" :disabled="busy||!editable"/></label>
     </form>
   </a-card>
   </a-tab-pane>
@@ -94,18 +113,29 @@ watch(()=>route.fullPath,load,{immediate:true})
   <a-card class="form-section qc-block-scope">
     <p class="qc-hint">一个标准可以同时适用于多个物料和多个产品；下游请验时按物料或产品匹配。</p>
     <div class="qc-scope-grid">
-      <section class="qc-scope-section"><h3>适用物料</h3><QcScopePicker v-model="form.materialIds" resource="materials" label="适用物料" :disabled="busy" :seeded="seededMaterials"/></section>
-      <section class="qc-scope-section"><h3>适用产品</h3><QcScopePicker v-model="form.productIds" resource="products" label="适用产品" :disabled="busy" :seeded="seededProducts"/></section>
+      <section class="qc-scope-section"><h3>适用物料</h3><QcScopePicker v-model="form.materialIds" resource="materials" label="适用物料" :disabled="busy||!editable" :seeded="seededMaterials"/></section>
+      <section class="qc-scope-section"><h3>适用产品</h3><QcScopePicker v-model="form.productIds" resource="products" label="适用产品" :disabled="busy||!editable" :seeded="seededProducts"/></section>
     </div>
   </a-card>
   </a-tab-pane>
   </a-tabs>
 
-  <QcSpecificationItems class="qc-block-items" v-model="items" :disabled="busy"/>
+  <QcSpecificationItems class="qc-block-items" v-model="items" :disabled="busy||!editable"/>
+  <a-card v-if="!create&&detail" title="维护记录" class="form-section qc-revision-card">
+    <a-table :columns="revisionColumns" :data-source="detail.revisions" :pagination="false" row-key="revisionNo" size="small" :scroll="{x:680}">
+      <template #bodyCell="{column,record}"><span v-if="column.key==='type'">{{revisionLabels[record.revisionType]??record.revisionType}}</span><span v-else-if="column.key==='time'">{{revisedAt(record.revisedAt)}}</span><span v-else-if="column.key==='reason'">{{record.revisionReason}}</span></template>
+    </a-table>
+  </a-card>
 
   <a-modal :open="confirmOpen" title="确认保存标准" ok-text="确认保存" :confirm-loading="busy" :mask-closable="false" @ok="submit" @cancel="confirmOpen=false">
     <p class="qc-confirm-tip">保存后本次改动会记入维护记录，请说明变更原因。</p>
     <label class="master-form"><span class="form-field-label">维护原因</span><textarea v-model="form.reason" class="master-native-input" aria-label="维护原因" maxlength="500" placeholder="如：按2025年版药典修订含量测定限度"/></label>
+  </a-modal>
+  <a-modal :open="removeOpen" title="确认删除QC质量标准" :mask-closable="false" @cancel="removeOpen=false">
+    <p class="qc-confirm-tip">删除后该标准不能再被新增业务单据选择；已冻结的业务记录保持原快照，维护记录继续保留。</p>
+    <label class="master-form"><span class="form-field-label">删除原因</span><textarea v-model="removeReason" class="master-native-input" aria-label="删除原因" maxlength="500" placeholder="填写删除该标准的业务原因"/></label>
+    <a-alert v-if="error" type="error" :message="error" show-icon/>
+    <template #footer><a-button type="primary" danger :loading="busy" :disabled="!removeReason.trim()" @click="removeStandard">确认删除</a-button><a-button :disabled="busy" @click="removeOpen=false">取消</a-button></template>
   </a-modal>
 </main>
 </template>
@@ -122,6 +152,8 @@ watch(()=>route.fullPath,load,{immediate:true})
 .qc-dot{width:7px;height:7px;border-radius:50%;background:#e6a23c;display:inline-block}
 .qc-confirm-tip{margin:0 0 14px;color:#606266}
 .qc-tabs{margin-top:4px}
+.qc-revision-card{margin-top:16px}
+.qc-revision-card :deep(.ant-table-cell){overflow-wrap:anywhere}
 .qc-block-items{margin-top:16px}
 .master-read-value{overflow-wrap:anywhere}
 @media(max-width:900px){.qc-scope-grid{grid-template-columns:1fr}}

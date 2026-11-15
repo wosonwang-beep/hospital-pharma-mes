@@ -1749,7 +1749,7 @@
             "INVESTIGATION",
             "INSPECTION_TASK",
             "INSPECTION_ITEM",
-            "QC_SPECIFICATION_VERSION"
+            "QC_SPECIFICATION"
           ]
         },
         "id": {

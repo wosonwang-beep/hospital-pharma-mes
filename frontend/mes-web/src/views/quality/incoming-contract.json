@@ -247,6 +247,15 @@
       ],
       "description": "Samples form 1..N allocations; quantity sum equals sampleQuantity in unitId. OTHER_APPROVED requires signed plan name/reason."
     },
+    "BindSampleCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sampleId": {"type": "string", "pattern": "^[1-9][0-9]*$"},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 1000}
+      },
+      "required": ["sampleId", "reason"]
+    },
     "ReceiveSample": {
       "type": "object",
       "additionalProperties": false,
@@ -3685,6 +3694,24 @@
       "schema": "SignedCommand"
     },
     {
+      "path": "/quality/sampling-tasks/{id}/submit-to-warehouse",
+      "method": "POST",
+      "permission": "qms:sampling:execute",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/sampling-tasks/{id}/confirm-sample-outbound",
+      "method": "POST",
+      "permission": "qms:sampling:warehouse-confirm",
+      "schema": "SignedCommand"
+    },
+    {
+      "path": "/quality/inspection-tasks/{id}/bind-sample",
+      "method": "POST",
+      "permission": "qms:test:execute",
+      "schema": "BindSampleCommand"
+    },
+    {
       "path": "/quality/inspection-tasks/{id}/assign",
       "method": "POST",
       "permission": "qms:test:execute",
@@ -3837,7 +3864,7 @@
     {
       "path": "/quality/signature-evidence/{signatureId}",
       "method": "GET",
-      "permission": "audit:view",
+      "permission": "trace:view",
       "schema": ""
     }
   ]

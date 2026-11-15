@@ -5,10 +5,9 @@ import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { api, errorMessage, type Page } from '../../api/http'
 import { useControlledRequest } from '../../api/controlled'
 import { useAuthStore } from '../../stores/auth'
-import { useReceiptLiveRuntime, SOURCE_CONTRACT, localDate, checkText, checkValue, receiptDisplayQuantity, receiptDisplayTime, receiptRequestPriorityOptions, type RawRecord } from './receiptLiveRuntime'
+import { useReceiptLiveRuntime, SOURCE_CONTRACT, localDate, checkText, checkValue, receiptDisplayQuantity, receiptDisplayTime, type RawRecord } from './receiptLiveRuntime'
 import WmsLookup from './WmsLookup.vue'
 import ProcessLookup from '../process/ProcessLookup.vue'
-import IncomingReferencePicker from '../quality/IncomingReferencePicker.vue'
 import BatchPrintButton from '../../components/printing/BatchPrintButton.vue'
 import ReceiptAttachments from './ReceiptAttachments.vue'
 const router=useRouter(), vueRoute=useRoute(), auth=useAuthStore(), controlled=useControlledRequest(), live=useReceiptLiveRuntime()
@@ -78,6 +77,8 @@ interface Item {
   requestType?: string
 }
 
+interface ReceiptInspectionLink { receiptId:string; receiptItemId:string; materialLotId:string; canCreate:boolean; inspectionRequest:{id:string;requestNo:string;status:string}|null }
+
 interface Receipt {
   [key:string]:any
   id: string
@@ -143,6 +144,28 @@ const storageError=ref('')
 const receipts=ref<Receipt[]>([])
 const route=computed(()=>({mode:vueRoute.meta.mode==='create'?'create':vueRoute.meta.mode==='edit'?'edit':vueRoute.meta.mode==='view'?'detail':'list',id:String(vueRoute.params.id||'')}))
 const current=computed(()=>activeReceipt.value)
+const inspectionByItem=ref<Record<string,ReceiptInspectionLink>>({})
+const generatingInspectionItem=ref('')
+async function loadReceiptInspectionLinks(receipt:Receipt){
+  inspectionByItem.value={}
+  if(receipt.recordStatus!=='APPROVED'||!receipt.id)return
+  const linked=await Promise.all(receipt.items.filter(item=>item.id&&item.lotId).map(async item=>{
+    const detail=await api<ReceiptInspectionLink>({url:`/wms/receipts/${receipt.id}/items/${item.id}/inspection-request`})
+    return [item.id,detail] as const
+  }))
+  if(current.value?.id===receipt.id)inspectionByItem.value=Object.fromEntries(linked)
+}
+async function generateInspectionRequest(item:Item){
+  const r=current.value;if(!r?.id||generatingInspectionItem.value||r.recordStatus!=='APPROVED'||!inspectionByItem.value[item.id]?.canCreate)return
+  generatingInspectionItem.value=item.id
+  try{
+    const created=await controlled.mutate<{id:string;requestNo:string;status:string}>(`/wms/receipts/${r.id}/items/${item.id}/inspection-request`,'POST',{})
+    await loadReceiptInspectionLinks(r)
+    message.success('请验单已生成并提交检验部门：'+created.requestNo)
+  }catch(e){await controlled.failure(e);message.error(controlled.error.value);try{await loadReceiptInspectionLinks(r)}catch{}}
+  finally{generatingInspectionItem.value=''}
+}
+
 const isList=computed(()=>route.value.mode==='list')
 const isForm=computed(()=>['create','edit'].includes(route.value.mode))
 const formBlocked=computed(()=>loading.value||!can(route.value.mode==='edit'?'wms:receipt:update':'wms:receipt:create')||!!storageError.value||(route.value.mode==='edit'&&(!current.value||!current.value.allowedActions?.includes('UPDATE'))))
@@ -164,7 +187,7 @@ async function loadScreen(){
    activeReceipt.value=null;initForm()
   }else{
    const raw=await api<RawRecord>({url:'/wms/receipts/'+route.value.id});const mapped=await live.mapReceipt(raw);if(epoch!==loadEpoch)return
-   activeReceipt.value=mapped as Receipt;await live.locations(mapped.warehouse)
+   activeReceipt.value=mapped as Receipt;await live.locations(mapped.warehouse);await loadReceiptInspectionLinks(mapped as Receipt)
    if(route.value.mode==='edit')initForm()
   }
  }catch(e){if(epoch===loadEpoch){storageError.value=e instanceof Error?e.message:errorMessage(e)}}finally{if(epoch===loadEpoch)loading.value=false}
@@ -284,17 +307,7 @@ async function saveDraft(){
 /* detail actions */
 const confirmOpen = ref(false)
 const confirmReason = ref('')
-const requestOpen = ref(false)
-const requestDetailOpen = ref(false)
 const qualityOpen = ref(false)
-const activeItem = ref<Item | null>(null)
-const requestErrors=ref<string[]>([]), requestBusy=ref(false)
-watch(requestErrors,()=>nextTick(()=>{if(!requestOpen.value||!requestErrors.value.length)return;const alert=document.querySelector<HTMLElement>('.bpm-request-errors');alert?.closest('.ant-modal-body')?.scrollTo({top:0});alert?.scrollIntoView({block:'nearest'});alert?.setAttribute('tabindex','-1');alert?.focus({preventScroll:true})}))
-const requestForm = reactive({
-  qcSpecificationVersionId: '', requestedQuantity: '', requestedUnitId: '',
-  requestedPackageCount: 1, requestedDate: localDate(), priority: 'NORMAL',
-  requestType: 'INITIAL', reason: '',
-})
 const confirmErrors=ref<string[]>([])
 function openConfirm(){if(!can('wms:receipt:confirm'))return;confirmReason.value='';confirmErrors.value=[];confirmOpen.value=true}
 async function confirmReceipt(){
@@ -305,31 +318,8 @@ async function confirmReceipt(){
  catch(e){await controlled.failure(e);confirmErrors.value=[controlled.error.value]}finally{saving.value=false}
 }
 
-function openRequest(item: Item) {
-  if(!can('qms:inspection-request:create')||current.value?.recordStatus!=='APPROVED'||!item.lotId||item.requestNo){message.warning('当前批次不能重复发起请验');return}
-  activeItem.value = item
-  requestErrors.value=[]
-  requestForm.qcSpecificationVersionId = item.requestQualitySpec || ''
-  requestForm.requestedQuantity = item.requestQuantity || item.receivedQty
-  requestForm.requestedUnitId = item.requestUnit || item.unit
-  requestForm.requestedPackageCount = item.requestPackages || item.packageCount
-  requestForm.requestedDate = item.requestDate || localDate()
-  requestForm.priority = item.requestPriority || 'NORMAL'
-  requestForm.requestType = item.requestType || 'INITIAL'
-  requestForm.reason = ''
-  requestOpen.value = true
-}
-function showRequest(item: Item) { if(!can('qms:inspection-request:view'))return;activeItem.value = item; requestDetailOpen.value = true }
-async function submitRequest(){
- if(requestBusy.value||!activeItem.value||!current.value)return
- requestErrors.value=[]
- if(!requestForm.qcSpecificationVersionId||!requestForm.reason.trim()){requestErrors.value=['请选择适用质量标准并填写请验原因'];return}
- requestBusy.value=true
- try{await controlled.mutate('/quality/inspection-requests','POST',{materialLotId:activeItem.value.lotId,...requestForm});requestOpen.value=false;await loadScreen();message.success('请验草稿已保存，未自动提交或放行')}
- catch(e){await controlled.failure(e);requestErrors.value=[controlled.error.value]}finally{requestBusy.value=false}
-}
+function showRequest(item: Item) {const id=inspectionByItem.value[item.id]?.inspectionRequest?.id;if(!id){message.error('请验单关联尚未加载，请重新打开收货详情');return}void router.push({path:`/quality/inspection-requests/${id}`,query:vueRoute.query})}
 async function refreshAttachments(){await loadScreen()}
-function viewAudit(){if(current.value)void router.push({path:'/audit',query:{objectType:'MaterialReceipt',objectId:current.value.id}})}
 watch(()=>vueRoute.fullPath,()=>void loadScreen(),{immediate:true})
 
 function onQualityVisibility(open:boolean){if(!open)nextTick(()=>document.querySelector<HTMLElement>('[aria-label="批次质量情况"]')?.focus())}
@@ -366,7 +356,7 @@ function inventoryTag(status?: InventoryStatus) {
             <label class="receipt-form-pair"><span>记录状态</span><a-select v-model:value="query.status" aria-label="记录状态" :options="[{value:'',label:'全部状态'},{value:'DRAFT',label:'草稿'},{value:'APPROVED',label:'已确认'}]" /></label>
             <label class="receipt-form-pair"><span>供应商</span><WmsLookup v-model="query.supplier" resource="suppliers" label="供应商"/></label>
             <label class="receipt-form-pair"><span>仓库</span><WmsLookup v-model="query.warehouse" resource="warehouses" label="仓库"/></label>
-            <div class="receipt-query-actions"><a-button @click="resetQuery">重置</a-button><a-button type="primary" html-type="submit"><SearchOutlined /> 查询</a-button></div>
+            <div class="receipt-query-actions"><a-button type="primary" html-type="submit"><SearchOutlined /> 查询</a-button><a-button @click="resetQuery">重置</a-button></div>
           </form>
         </section>
         <section class="receipt-card">
@@ -448,7 +438,7 @@ function inventoryTag(status?: InventoryStatus) {
               <aside class="bpm-business-note"><b>收货业务提示</b><p>收货确认不等于质量放行。</p><p>内部批号由系统分配，生产批号依据实物核对。</p><p>确认后的必验物料保持待验，未放行不得生产使用。</p></aside>
             </div>
           </section>
-          <div class="bpm-live-extra"><label class="bpm-field"><span>验收信息</span><a-textarea v-model:value="form.acceptanceText" aria-label="验收信息" :rows="2" maxlength="1000"/></label><label v-if="route.mode==='edit'" class="bpm-field"><span>修改原因 *</span><a-textarea v-model:value="form.reason" aria-label="修改原因" :rows="2" maxlength="1000"/></label></div><div class="receipt-form-footer bpm-footer"><span class="bpm-muted">按批次核对来源、生产批号与数量</span><a-space><a-button @click="cancelForm">取消</a-button><a-button type="primary" html-type="submit" :loading="saving">保存草稿</a-button></a-space></div>
+          <div class="bpm-live-extra"><label class="bpm-field"><span>验收信息</span><a-textarea v-model:value="form.acceptanceText" aria-label="验收信息" :rows="2" maxlength="1000"/></label><label v-if="route.mode==='edit'" class="bpm-field"><span>修改原因 *</span><a-textarea v-model:value="form.reason" aria-label="修改原因" :rows="2" maxlength="1000"/></label></div><div class="receipt-form-footer bpm-footer"><span class="bpm-muted">按批次核对来源、生产批号与数量</span><a-space><a-button type="primary" html-type="submit" :loading="saving">保存草稿</a-button><a-button @click="cancelForm">取消</a-button></a-space></div>
         </form></template>
       </template>
 
@@ -494,10 +484,10 @@ function inventoryTag(status?: InventoryStatus) {
                   <td>{{it.lotNo}}</td><td>{{it.manufacturerName||'未记录'}}</td><td>{{it.manufacturerLotNo||'未记录生产批号'}}</td>
                   <td class="bpm-quantity">{{receiptDisplayQuantity(it.receivedQty)}}</td><td>{{unitLabel(it.unit)}}</td><td>{{it.packageCount}}</td>
                   <td><div class="receipt-flow-quality"><a-tag v-if="it.qualityStatus" :color="qualityTag(it.qualityStatus)">{{qualityLabels[it.qualityStatus]}}</a-tag><a-tag v-if="it.inventoryStatus" :color="inventoryTag(it.inventoryStatus)">{{inventoryLabels[it.inventoryStatus]}}</a-tag><span v-if="!it.qualityStatus" class="receipt-muted">未生成物料批</span></div></td>
-                  <td><a-tag v-if="it.requestNo" color="blue">{{it.requestStatus==='DRAFT'?'请验草稿':'已请验'}}</a-tag><a-tag v-else color="default">未请验</a-tag></td>
-                  <td>{{it.requestNo||'—'}}</td><td>{{it.expiryDate||'—'}}</td>
+                  <td><a-tag v-if="inspectionByItem[it.id]?.inspectionRequest" color="blue">已请验</a-tag><a-tag v-else color="default">未请验</a-tag></td>
+                  <td>{{inspectionByItem[it.id]?.inspectionRequest?.requestNo||'—'}}</td><td>{{it.expiryDate||'—'}}</td>
                   <td class="bpm-detail-checks"><details class="bpm-check-disclosure"><summary :aria-label="it.material+'到货检查明细：'+(checkLabels.some(([k])=>it[k]===false)?'不通过':checkLabels.some(([k])=>it[k]==null)?'待核对':'已通过')">{{checkLabels.some(([k])=>it[k]===false)?'不通过':checkLabels.some(([k])=>it[k]==null)?'待核对':'已通过'}}</summary><div><span v-for="[key,label] in checkLabels" :key="key" class="receipt-check-tag" :class="it[key]==null?'pending':it[key]?'ok':'bad'">{{label}}：{{checkText(it[key])}}</span><small>生产日期：{{it.manufactureDate||'—'}}</small><small>库位：{{it.location||'—'}}</small></div></details></td>
-                  <td><button v-if="current.recordStatus === 'APPROVED' && !it.requestNo && can('qms:inspection-request:create')" class="receipt-link" @click="openRequest(it)">发起请验</button><button v-else-if="it.requestNo && can('qms:inspection-request:view')" class="receipt-link" @click="showRequest(it)">查看请验</button><span v-else class="receipt-muted">{{current.recordStatus==='DRAFT'?'先确认收货':'无操作权限'}}</span></td>
+                  <td><button v-if="current.recordStatus === 'APPROVED' && inspectionByItem[it.id]?.canCreate" class="receipt-link" :disabled="!!generatingInspectionItem" :aria-label="'生成请验单 '+it.lotNo" @click="generateInspectionRequest(it)">生成请验单</button><button v-else-if="inspectionByItem[it.id]?.inspectionRequest?.id" class="receipt-link" :aria-label="'查看请验单 '+it.lotNo" @click="showRequest(it)">查看</button><span v-else class="receipt-muted">{{current.recordStatus==='DRAFT'?'先确认收货':'无操作权限或无需请验'}}</span></td>
                 </tr>
               </tbody>
             </table>
@@ -507,7 +497,6 @@ function inventoryTag(status?: InventoryStatus) {
 
         <div class="receipt-bottom">
           <section class="receipt-card"><ReceiptAttachments :receipt-id="current.id" :version-no="current.version||0" @reload="refreshAttachments"/></section>
-          <section class="receipt-card"><div class="receipt-card-head"><h2>操作记录</h2><a-button v-if="can('audit:view')" type="link" @click="viewAudit">查看审计追踪</a-button></div><div class="bpm-audit-wrap"><table class="bpm-audit-table"><thead><tr><th>时间</th><th>操作人</th><th>操作内容</th></tr></thead><tbody><tr v-for="(a,i) in current.audit" :key="i"><td>{{a.time}}</td><td>{{a.actor}}</td><td>{{a.action}}<small>{{a.detail}}</small></td></tr></tbody></table></div></section>
         </div>
       </template>
 
@@ -530,40 +519,7 @@ function inventoryTag(status?: InventoryStatus) {
     <p>确认后生成物料批与收货流水。质量和库存状态按该物料是否必验及已批准放行规则执行，不由页面直接判定。</p>
     <a-alert type="info" show-icon message="确认收货不等于质量放行；请验、取样、检验、QA 放行是后续独立流程。" />
     <label class="receipt-modal-field"><span>确认原因 <em>*</em></span><a-textarea v-model:value="confirmReason" aria-label="确认原因" :rows="3" placeholder="记录确认依据，如到货核对、运输检查、随货文件核对结果" /></label>
-    <div class="receipt-modal-actions"><a-button @click="confirmOpen = false">取消</a-button><a-button type="primary" @click="confirmReceipt">确认收货</a-button></div>
-  </a-modal>
-
-  <!-- request modal -->
-  <a-modal v-model:open="requestOpen" title="发起物料批请验" :footer="null" :width="650" wrap-class-name="bpm-dialog">
-    <a-alert v-if="requestErrors.length" role="alert" class="bpm-request-errors" type="error" :message="requestErrors.join('；')"/>
-    <div v-if="activeItem" class="receipt-modal">
-      <p>仅针对当前物料批次发起请验；请验不等于检验合格或 QA 放行。</p>
-      <div class="receipt-modal-grid">
-        <label class="receipt-modal-field"><span>物料批次</span><b>{{ activeItem.materialName }} · {{ activeItem.lotNo }}</b></label>
-        <label class="receipt-modal-field"><span>质量标准版本 <em>*</em></span><IncomingReferencePicker field="qcSpecificationVersionId" v-model="requestForm.qcSpecificationVersionId" input-label="质量标准版本" :context="{materialLotId:activeItem.lotId,materialId:activeItem.material}"/></label>
-        <label class="receipt-modal-field"><span>请验数量 <em>*</em></span><a-input v-model:value="requestForm.requestedQuantity" aria-label="请验数量" type="number" /></label>
-        <label class="receipt-modal-field"><span>请验单位 <em>*</em></span><a-select v-model:value="requestForm.requestedUnitId" aria-label="请验单位" :options="units.map(x => ({ value: x, label: unitLabel(x) }))" /></label>
-        <label class="receipt-modal-field"><span>请验件数 <em>*</em></span><a-input-number v-model:value="requestForm.requestedPackageCount" aria-label="请验件数" :min="1" :precision="0" style="width:100%" /></label>
-        <label class="receipt-modal-field"><span>请验日期 <em>*</em></span><a-input v-model:value="requestForm.requestedDate" aria-label="请验日期" type="date" /></label>
-        <label class="receipt-modal-field"><span>优先级</span><a-select v-model:value="requestForm.priority" aria-label="优先级" :options="receiptRequestPriorityOptions" /></label>
-        <label class="receipt-modal-field"><span>请验类型</span><a-select v-model:value="requestForm.requestType" aria-label="请验类型" :options="[{value:'INITIAL',label:'首次请验'}]" /></label>
-        <label class="receipt-modal-field receipt-modal-full"><span>请验原因 <em>*</em></span><a-textarea v-model:value="requestForm.reason" aria-label="请验原因" :rows="2" placeholder="说明请验依据" /></label>
-      </div>
-      <a-alert type="info" show-icon message="保存至正式请验模块，状态为草稿；不会自动提交、接受、取样或放行。" />
-      <div class="receipt-modal-actions"><a-button @click="requestOpen = false">取消</a-button><a-button type="primary" :loading="requestBusy" @click="submitRequest">确认请验</a-button></div>
-    </div>
-  </a-modal>
-
-  <!-- request detail -->
-  <a-modal v-model:open="requestDetailOpen" title="请验单信息" :footer="null" :width="480" wrap-class-name="bpm-dialog">
-    <div v-if="activeItem" class="receipt-modal">
-      <div><label>请验单号</label><b>{{ activeItem.requestNo }}</b></div>
-      <div><label>物料批次</label>{{ activeItem.materialName }} · {{ activeItem.lotNo }}</div>
-      <div><label>质量标准</label>{{ activeItem.requestQualitySpec }}</div><div><label>请验状态</label>{{activeItem.requestStatus==='DRAFT'?'草稿，未提交':'已有请验记录'}}</div>
-      <div><label>请验数量</label>{{ receiptDisplayQuantity(activeItem.requestQuantity) }} {{ unitLabel(activeItem.requestUnit||'') }} / {{ activeItem.requestPackages }} 件</div>
-      <div><label>质量状态</label><a-tag v-if="activeItem.qualityStatus" :color="qualityTag(activeItem.qualityStatus)">{{ qualityLabels[activeItem.qualityStatus] }}</a-tag></div>
-      <a-alert type="info" show-icon message="请验、取样、检验、报告和 QA 放行是不同业务动作；当前页面不提供放行。" />
-    </div>
+    <div class="receipt-modal-actions"><a-button type="primary" @click="confirmReceipt">确认收货</a-button><a-button @click="confirmOpen = false">取消</a-button></div>
   </a-modal>
 
   <!-- quality drawer -->

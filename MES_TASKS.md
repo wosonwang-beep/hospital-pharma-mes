@@ -1439,3 +1439,307 @@ Planning唯一ID 0df9356d-675b-4f37-8b7d-948948c8d694 的 progress.md 因UTF-8 6
 
 ### 2026-11-07 22:40 — GitHub CI #57 EBR 角色标识异常契约修复
 Linux中文PDF字体回退补丁合并到main后，远端CI#57的mes-reporting报告54项0失败，后端进一步运行至mes-ebr并发现既有EbrRoleSchemaTest.missingIdNeverFallsBackToMatchingCode期望IllegalArgumentException，而先前代码将所有schema2 lint错误均返回ComplianceException("LINT_FAILED")。按冻结schema2角色身份规则，缺必填requiredRoleId时保留IllegalArgumentException且绝不按旧角色code回退；其它表单/CPP shape问题仍保留LINT_FAILED。仅改正式EbrRoleSchema.prepare异常分类，不更改断言、签名/审批/生产记录。现有本机真实Java21 Maven定向 EbrRoleSchemaTest12/12 + EbrIT13/13，合计 **25/25 PASS / BUILD SUCCESS**。证据docs/development/ci/EBR_ROLE_SCHEMA_CI_20261107.md。前端QC新标准库API/正式页面不一致仍需独立成套G5交付，未混合未验收QC变更；完整远端CI不得提前称绿。
+
+
+### 2026-11-08 16:49–17:18 — 下一任务：QC质量标准基础资料库正式代码与真实浏览器闭环
+按用户“继续开发下一任务”恢复本机唯一main/HEAD与origin/main均77e1c677、AGENTS.md/MES_DEV_RULES.md/PROJECT_BASELINE、已批准QC基础库DCP及设计锁。按批准QC模型直接改正式`QcSpecificationDetailView.vue`：补“维护记录”只读业务列表（新增/修改/删除原因/时间，不展示技术ID及审批版本）、有权限和删除原因/乐观锁/幂等约束的“删除标准”确认弹窗、只读QC查看角色所有字段/范围/检验项目不可编辑。前端vue-tsc+Vite BUILD PASS（4179模块），QcSpecificationModel 6/6 PASS。后端QcSpecificationRulesTest7/7、QcSpecificationIT7/7、QcFinalContractIT13/13、下游IncomingClosureIT9/9、IncomingProductionIT13/13，合计Java**49/49 PASS**。本机旧8080 Java实例PID27420在IPv4/IPv6 TCP可连却健康GET超时/登录500，先备份运行JAR至TEMP，精确停止该服务、Maven20模块重包PASS，新PID26432已启动：Flyway76迁移valid/V076 up-to-date、健康HTTP200 UP；5173与3306原服务未中断。真实Chrome标准列表/详情及维护记录/删除原因Modal取消无DELETE写入；QC分析、复核、QA三个既有只读账号后端权限和页面禁编辑/禁删除，**2/2 E2E PASS**。开发库15条QC标准中2条业务字段含E2E/DBG/调试不合规名称，先记录受控治理缺口，未擅自删除/修改。精确报告`docs/development/qc-standard-basic-library/20261108/RESULT.md`，正式Detail源码SHA1FCB6D1B3084907A1CCB886742B312B6567B581A0CC0FE5523B423AB30E5D3E5。全部QC跨模块及V070/V072/V073的正式G5与完整发布门禁尚未审核，状态保持IN PROGRESS / NOT ACCEPTED；本轮仅本地改动，未stage/commit/push、未建worktree、不清理现存512+未提交其它模块文件。
+
+
+## 2026-11-08 22:04 — 用户最新确认：QC 基础信息功能已验收通过（优先于此前状态）
+
+**当前权威状态：QC 基础信息功能 — USER ACCEPTED / 已通过验收。**
+
+用户在本轮对话明确纠正此前记录：“qc基础信息功能修改过。已通过验收”。据此，将 QC 基础信息/质量标准基础资料维护功能的验收状态由之前报告中的“READY FOR ACCEPTANCE / G5 未通过 / NOT ACCEPTED”更新为**用户确认已通过验收**。这一新的用户确认是该功能模块的最新验收决定；此前报告属于历史阶段记录，不再用来要求重新设计、重复开发或重复安排其人工签核。
+
+**范围界限**：上述验收针对用户确认的“QC 基础信息功能”。不能据此推断全 MES 仓库 GitHub CI 已通过、QC 下游所有关联模块与数据库交付已推送，或历史不合规数据已清理。此前识别的 CI 契约不一致、未推送代码及开发库历史数据治理属于**独立交付/技术债事项**，按已有冻结合同单独处理；不得借此推翻本功能已通过的用户验收。
+
+本轮仅更新验收状态与交接记录，不修改已验收页面、前后端代码、数据库或历史业务记录；本机唯一 main 维持原样，不 stage/commit/push，不新建 worktree。
+
+
+### 2026-11-09 生产纸质实例驱动闭环核查（Desktop Commander）
+已读取 `file/` 九张原始照片，确立喉咽茶合剂批次20231215（称量→提取→浓缩→配制→装量→包装→QC）为主案例，氯化钾溶液批次20231218为对照。已读取本机AGENTS、MES_DEV_RULES、基线、任务索引，单一main工作区原改动保护，5173/8080/3306/6379监听。真实MariaDB Flyway76 VALID/V076，未迁移。ProductionBookIT首次3 ERROR源于旧测试定义未显式schema2，唯一测试夹具构造器补`"2.0"`后复测 **2 PASS/1 FAIL/0 ERROR**（exit1，约177秒）。剩余FAIL为冻结错误文本断言“New book mappings must bind”与当前业务实际异常“Legacy draft mappings must bind the current production process before publication”不一致；不擅改生产异常或测试断言。未走完照片对应正式5173/8080全批次真实操作、G5/人工签核，状态 **IN PROGRESS / NOT READY**。完整证据 `docs/development/process-form-cpp-ebr/20261109-PRODUCTION_CASE_CLOSURE.md`。未提交/推送，无新worktree；已验收QC基础信息不改。
+
+### 2026-11-09 17:08 喉咽茶合剂生产闭环正式系统核查
+Desktop Commander单一main：真实Chrome5173/后端8080对HYTEA100及成品链执行5组只读页面专项各1/1PASS；工艺HYTEA100-制备工艺8道工序各1表单，CPP现有4条（OP02、03、04、06），EBR-HYTEA100-BATCH-RECORD模板497仍草稿，处方RX-HYTEA100-制备工艺亦草稿，未取得喉咽茶真实生产批/正式质量计划/放行库存关联。历史KCL成品入库995ml、发货300ml、库存695ml页面一致。ProductionBookIT历史工艺绑定业务码定向测试PASS；CPP回滚持久化1/1PASS。完整成品回归仍FAIL：FinishedGoodsLifecycleIT Product output uses MainBatch only；ProductionBookFinalIT 36项21错误（New product plans cannot bind legacy batches）；RealBusinessScenarioSeedIT REPORT_EVIDENCE_CHANGED（原来料报告证据门禁）。生产检验页面403、样品400仍需独立排查。禁止用旧fixture改生产V2安全规则/伪造QA证据。本轮未创建/签署/放行任何HYTEA批次，状态IN PROGRESS/NOT READY，完整见docs/development/process-form-cpp-ebr/20261109-PRODUCTION_CASE_CLOSURE.md。已验收QC基本资料保持原状，未提交推送。
+
+2026-11-09 CPP详情补测：正式模板497切换CPP规则设计后未能定位第一次提取表单，Playwright 75秒超时，0/1 PASS，规则阈值/超限未验。截图、trace及脚本见 docs/development/process-form-cpp-ebr/20261109-PRODUCTION_CASE_CLOSURE.md；G5及HYTEA完整QA放行仍IN PROGRESS/NOT READY。未修改正式业务代码或数据库。
+
+
+### 2026-11-09 喉咽茶DEV生产完整闭环尝试（正式5173/8080）
+用户明确将file九张历史记录作为DEV业务测试数据，允许实际执行。实读AGENTS/MES_DEV_RULES/PROJECT_BASELINE等，单一main保护已验收QC代码。正式 eBR 模板497 Lint通过、DRAFT→SUBMITTED；同一管理员批准被后端 `Independent approver cannot be creator/submitter` 拒绝，未批准/发布；未创建假身份绕过。处方2 `RX-HYTEA100-制备工艺` DRAFT→ACTIVE，刷新回读成立；六味物料处方量96/48/48/16/30/1.4 kg，标准批量400000ml。通过命名校验和正式POST创建新DEV生产批582 `HYTEA-20261109-001`，HTTP201/OK，正式批次360°页面读回DRAFT。API核实8道工序/4条CPP规则阈值及异常动作；但4味原料无可用库存，蔗糖/苯甲酸钠库存阻断，四味药材原无合格供应关系，产品有效QC标准仅两条E2E临时记录。没有虚构原料检验、QA签名/放行，不执行后续受控步骤，最终全流程 **PARTIAL/BLOCKED/NOT ACCEPTED**。详细记录 `docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md`。未Git stage/commit/push或创建worktree、无数据库迁移。
+
+
+### 2026-11-09 EBR配置模板取消审批、系统管理员直接发布（用户确认）
+用户明确“ebr就不需要批准了”“都是同系统管理员完成配置工作”。已按本机 `docs/development/decisions/DCP-EBR-ADMIN-DIRECT-PUBLISH-20261109-APPROVED.md` 限域修改：模板DRAFT/SUBMITTED/APPROVED可直接PUBLISH成EFFECTIVE，旧SUBMIT/APPROVE仅保留历史API兼容，正式详情页去除提交审批和批准按钮。发布前Lint、schema2、版本锁、审计、内容hash保留；运行态工序表单独立复核和QC/QA未放宽。定向真实MariaDB Java EbrIT15 + EbrDefinitionRulesTest6 + EbrRoleSchemaTest12 = **33/33 PASS**；vue-tsc/Vite BUILD PASS(4179 modules)，diff--check EXIT0；V076 VALID。旧8080 JAR锁重包首次失败，备份后精确重启并重新package成功，正式8080 PID19288健康UP。喉咽茶模板497仍待正式POST发布：浏览器一次性发布脚本写入被客户端安全检查两次阻断，已提交Desktop Commander review_device_call 等待用户在面板点击Run；未执行发布、未捏造EFFECTIVE或审计结果。报告 `docs/development/process-form-cpp-ebr/20261109-EBR-ADMIN-DIRECT-PUBLISH-RESULT.md`。生产批582仍DRAFT；单一main/原未提交内容保持、未stage/commit/push。
+
+
+2026-11-09 18:10：按用户确认“eBR模板无需批准、系统管理员统一配置”执行DCP-EBR-ADMIN-DIRECT-PUBLISH-20261109。正式后端/前端实现已部署8080、5173可用；管理员admin真实页面发布喉咽茶模板497，HTTP200/OK，SUBMITTED→EFFECTIVE，重读仍生效，hash=4b9aaa431f7a7834ecd57d96836299143fcc06b514088723c84b998f840f456c，effectiveFrom=2026-11-09T09:59:31.034Z，8表单/4CPP保留，approvedBy/approvedAt为空。eBR配置独立审批取消；运行态电子签名/独立复核/CPP/QC/QA规则不变。Maven EbrIT 15/15、EbrDefinitionRulesTest 6/6、EbrRoleSchemaTest 12/12 PASS；EbrRuntimeArchiveIT 13/14 PASS，剩余1项为既有FrozenSchemaAssertions DTO processPackageId字段不一致，未改冻结合同。为使runtime签名/复核测试按schema2正确运行，EbrRuntimeIT仅更新测试夹具显式schema2、roleId及测试用户角色权限关联。前端npm build和后端package成功；8080新JAR PID19288健康UP；Flyway76 valid/V076，无迁移。完整证据docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md；DCP见docs/development/decisions/DCP-EBR-ADMIN-DIRECT-PUBLISH-20261109-APPROVED.md。批次582仍草稿，原料可用批次/正式QC标准缺口仍阻断实际生产执行；未签名/QA放行/入库，未Git提交推送。
+
+### 2026-11-09 18:45 喉咽茶批次运行态及360°页面小范围验证
+通过Desktop Commander实际查批582(生产已下达、快照480、执行单元515)；8工序655-662、8份eBR表单689-696全部初始化，表单hash 8/8匹配生效模板497，OP06装量95-105ml IPC已定义，工序仍待执行、QA未放行、物料预留0。DEV系统已经另路新增药材企业/供应关系，但六项物料无可用合格库存批，成品QC仅有两条临时调试标准；本轮不重复修改供应商，历史检验项目核对文档为docs/development/process-form-cpp-ebr/20261109-HYTEA-QC-SOURCE-DRAFT.md。修复BatchOverview将生产RELEASED误显示“已放行”的歧义，现显示“已下达”，QA状态保留“未放行”；Vitest4/4、前端构建、真实Chromium只读专项1/1PASS（独立结果目录避免并行清理）。详证见docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md。未更动已验收QC代码、迁移和历史签名，未提交/推送、无新worktree；完整生产至QA归档仍PARTIAL/NOT ACCEPTED。
+
+### 2026-11-09 19:25 生产闭环续跑门禁结果
+真实REST在单一DEV库已创建第二生产指令 `HYTEA-20261109-002` batch655，state DRAFT，及生产质量计划ID666 state DRAFT (product2, QC标准1419, kg ISSUE vs CHARGE，差异±0.5%，BATCH_COMPLETE)；二者已持久化/Playwright PASS。第一生产批582已RELEASED但没有事先签署的质量计划，冻结快照不可重写，保留作部分验证而不是最终QA。
+本次正式数据库滚回集成回归：ProductionQualityPlanIT 15/15 PASS exit0；CppControlledRoundTripIT 1/1 PASS exit0；FunctionalClosureIT#clearanceRecordAndIndependentReviewAuditFailuresRollBackSignaturesVersionsAndKeys 1/1 PASS exit0。后两项证明实际CPP记录、清场记录签名/独立复核的代码、事务回滚门禁，非生产批655完成证据。Flyway V076 validated。
+正式工艺8道工序 clearanceRequired=true，ClearanceService.requirePassed要求每道工序对应当前PASS清场记录+独立签署APPROVED复核（路由`/operations/{id}/record-clearance`和`review-clearance`）；不能文本或SQL伪造。再确认现有QC受理权限和资格分属demo.sampler 11566与demo.qc.analyst 11567，创建资格及质量计划QA电子签名的Desktop Commander安全审查面板均awaiting_user，仅经用户Run才能执行该敏感文件调用。后续不可声称完整流程已完成；不得更改冻结合同/旧批次签名数据。
+
+2026-11-09 19:32 DEV喉咽茶闭环续跑：原正式前端5173无监听，已从同一mes-web工作区恢复Vite PID16152，8080/3306/6379保持UP。正式Chrome+真实GET核对生产批655 DRAFT、质量计划666 DRAFT且无签名、原料六请验721-726仍SUBMITTED，QC分析岗位11567仍缺MES_DEMO_SAMPLING资格；两项Desktop Commander审核Run尚未执行。入厂六标准1415/1416/1417/1418/23/24及成品标准1419均ACTIVE（DEV配置，不是实检证据）。真实MariaDB回滚 IncomingQualityIT 6/6 PASS、V076 Flyway76校验通过；只读Playwright1/1 PASS。未执行受控签名、检验、物料/成品QA放行，状态 PARTIAL/BLOCKED，详见docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md。脚本归档不留默认e2e；无新worktree、无迁移、无git提交/推送。
+
+2026-11-09 22:17 喉咽茶DEV闭环继续：本机5173/8080/3306/6379正常，正式QA账号真实只读接口证实批655 QA审核模型及eBR均404（批未下达、计划未签），已下达批582 eBR 200/OK、8份表单，哈希匹配已生效模板497。真实MariaDB回滚 IncomingQualityAcceptanceIT 3/3、FinishedArchiveSchemaIT 2/2 PASS，mes-qms BalanceFormulaTest 10/10 PASS；Flyway76 VALID/V076无迁移。独立QA质量计划666签署与QC岗位资格配置仍待Desktop Commander审核Run，六料取样检验放行与655执行、成品入库和PDF未完成；不得冒充已通过。记录docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md；已从默认e2e移走只读脚本并去除明文测试口令。无新worktree、无Git提交推送，状态PARTIAL/BLOCKED。
+
+2026-11-10 10:28 喉咽茶DEV来料QC继续：基于DCP-DEV-HYTEA-SAMPLER-ACCEPT-001，使用现有取样资格账号11566，不伪造人员资格。IAM审计化命令补齐取样角色查看/受理、QC分析角色采样分派、仓储角色取样出库确认权限；另通过QualificationService为本机DEV仓储测试账号11565建立本地 WAREHOUSE_SAMPLE_OUT 资格。专用权限修正测试1/1、仓储DEV资格测试1/1、IncomingCrossroleBatchBIT 2/2 PASS，Flyway76 VALID/V076。正式Playwright以demo.sampler对请验721–726全部受理，6/6 HTTP200/OK、状态ACCEPTED，脚本1/1 PASS。当前待Desktop Commander审核面板的脚本编辑Run，采样任务尚未创建；随后取样、QC检验、复核、QA物料放行、批次655质量计划签署/下达、8工序CPP/eBR、成品QC/QA/入库归档仍未完成。证据见docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md。没有修改资格映射、生产权限或真实员工培训，未绕过业务控制；无迁移、无Git提交/推送、无worktree。
+
+2026-11-10 10:35 只读核对7份QC标准快照：1415威灵仙、1416野菊花、1417地胆草、1418甘草、23蔗糖、24苯甲酸钠、1419喉咽茶成品；限度见docs/development/process-form-cpp-ebr/20261109-HYTEA-END-TO-END-EXECUTION.md。成品标准1419当前effectiveDate为空且注册标准编号未明确，限DEV字段流转验证，正式生产前需补齐依据。历史纸质成品结果仅可作为DEV字段映射输入，非批655实测。采样量必须控制，苯甲酸钠收货2kg、处方1.4kg，不可使用测试夹具1kg采样量造成物料不足。当前编辑采样任务脚本的Desktop Commander审核面板仍awaiting_user；未创建采样任务，后续QC实检、QA放行和生产执行未完成。
+
+
+### 2026-11-10 14:05 喉咽茶取样计划数量缺失契约核查与停止点
+- 续跑前读取本机AGENTS.md、docs/development/MES_DEV_RULES.md、docs/PROJECT_BASELINE.md、MES_TASKS.md；单一main，保护所有既有未提交改动。
+- 发现六个已分派取样任务689–694均为ASSIGNED，assignedTo=11566，但plannedSamplingQuantity/plannedUnitId为空。原因：当前SamplingTaskCommand/createSampling只持久化samplingPlan和requiredPackageCount，而submit-to-warehouse依赖plannedSamplingQuantity/plannedUnitId进行单位转换及数量上限检查。直接继续会失败；不得绕过仓储确认、直接SQL补值或用complete替代真实出库。
+- 新增限域提案 `docs/development/decisions/DCP-QMS-SAMPLING-PLAN-COMPLETION-001.md`：建议新增启动前受控计划补全命令，使用既有qms:sampling:assign、If-Match、幂等、审计及请验数量/单位校验。计划125g仅为DEV取样演练夹具，非历史纸质实测证据。
+- 对提案代码曾作本地试验性实现并执行 `mvn -pl backend/mes-boot -am -Dtest=IncomingCrossroleBatchBIT -Dsurefire.failIfNoSpecifiedTests=false test -q`；在调整数值断言后3/3 PASS（真实MariaDB rollback）。但依据AGENTS/MES_DEV_RULES，用户“继续完成任务”本身不等于批准冻结API变更；因此未部署，且已撤回本次试验性service/controller/schema/test改动，仅保留DCP提案。原8080未重启，现有运行代码不含该新API。
+- 当前已有一个Desktop Commander review面板等待写入仅用于运行DEV计划补全测试的Playwright脚本；因DCP尚未批准，请不要Run该面板，应Cancel。它不会自动执行；本轮未对689–694写入任何数量/单位。
+- 当前阻断：需要用户明确批准或拒绝DCP-QMS-SAMPLING-PLAN-COMPLETION-001。批准后才继续部署并通过正式QC分析岗位API补齐六任务，再由sampler执行取样/签名、warehouse独立出库签名、QC接收绑定和检验；未批准则停止于此，不得声称样品链完成。数据库仍V076、无迁移；无Git stage/commit/push、无worktree。状态PARTIAL / DESIGN CHANGE REQUIRED / NOT ACCEPTED。
+
+
+### 2026-11-10 20:49 DCP-QMS-SAMPLING-PLAN-COMPLETION-001 批准后验证及新阻断
+- 用户已批准 DCP；重新实跑 IncomingCrossroleBatchBIT 4/4 PASS、IncomingCrossroleRouteAuthorizationTest 27/27 PASS，真实MariaDB 76项Flyway VALID/V076，Maven退出码0。Playwright只读角色/任务及库存2/2 PASS。
+- 真实8080/QMS读回：采样任务689–694均已补plannedSamplingQuantity=0.125kg、plannedUnitId=2，状态IN_PROGRESS、versionNo=4，各有一条明细与TEST_SAMPLE 0.100kg、RETENTION_SAMPLE 0.025kg；sampleOutboundLedgerId均null，样品CREATED；仓储尚未扣减，物料仍BLOCKED。以上是DEV夹具记录，非现场实际取样/签名。
+- 新发现冻结契约冲突：六个任务是手工创建，qcAutoGeneratedRequestId为空；IncomingQualityService.samplingAction按该字段是否有值将动作标记CROSSROLE，IncomingActionPolicy对非CROSSROLE的IN_PROGRESS只允许details/complete。真实GET返回allowedActions=[details,complete]，不包含submit-to-warehouse。当前已批准DCP明确禁止改QMS状态机或以complete跳过仓储出库，因此不可执行要求的独立仓储签名/扣减。另：sampleAction('receive')实际要求qms:sampling:execute，与现有QC analyst的qms:sample:receive授权不一致；bindSample要求qcAutoGeneratedRequestId非空，需结合六请验单实际生成检验任务再核对。
+- 针对关联检验任务的只读工具调用遭客户端安全预检拦截两次，已提交Desktop Commander原调用审核面板，等待用户点击Run；该调用未执行，不能称其验收通过。
+- 结论：本DCP的计划补全与定向回归PASS，但业务仓储→QC→QA闭环 BLOCKED / DESIGN CHANGE REQUIRED / NOT ACCEPTED。下一步应对“手工取样任务→独立仓储出库→检验任务绑定→QC接收角色”形成最小状态机/权限/来源关联差异并单独批准，随后依正式API续跑；禁止无授权扩改或SQL直接写入，无Git stage/commit/push或worktree。
+
+### 2026-11-10 晚间 — DCP-QMS-MANUAL-SAMPLING-CROSSROLE-001 已批准、代码+正式 DEV API 验证
+- 用户对上轮最小补充方案明确回复“批准”；批准与变更范围已写 docs/development/decisions/DCP-QMS-MANUAL-SAMPLING-CROSSROLE-001-APPROVED.md。冻结基线v1.0.23，单一main；没有新迁移、权限码或UI、数据库直接业务SQL写入、git stage/commit/push/worktree。完整证据：docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/RESULT.md。
+- 最小修复：具正数计划量/合法单位的手工采样任务按CROSSROLE走submit-to-warehouse→独立confirm-sample-outbound（complete不可绕过）；样品receive用现有qms:sample:receive与QC test-execute资格；检验任务使用现有createTask，手工受控取样关联必须有已完成仓储出库流水且防重复。自动生成流程及旧无计划路径保持原有约束。
+- Java+MariaDB回滚与权限回归7组63/63 PASS、0失败，Flyway76 VALID/V076。Maven第一次repackage因原PID10304运行jar锁定失败；经身份核对仅停止该DEV进程，重新打包exit0、JAR128973044字节，8080新PID31124健康UP。
+- 正式5173/8080 API以不同DEV账号执行：采样689–694全数提交、仓库独立签名确认（均COMPLETED），每批0.125kg扣减且samplingDetail的outboundLedgerId非空；QC接收六个检验样，成功新建检验任务771–776；随后QC analyst正式分派并启动六任务，均IN_PROGRESS、对应项目数5/5/2/5/1/1。两项真实HTTP脚本均1/1 PASS；库存只读脚本1/1 PASS，lot1121/1122/1123/1124/1125/1126余额分别100.875/17.875/49.875/49.875/31.875/1.875kg，均SAMPLED/BLOCKED。
+- 剩余阻断：QC真实结果/签署、QC独立复核与报告、QA物料放行未执行；禁止虚构当批检测读数或假冒现场采样/人员。随后还有生产质量计划666 QA签署、批655下达、8工序CPP/eBR、成品QA/入库/归档。当前DCP代码与DEV取样仓储闭环 VERIFIED；总体生产链 PARTIAL / NOT ACCEPTED。
+
+### 2026-11-10 21:40 后续：六批 QC 结果/签署、QC独立复核、报告与 QA 物料放行数据门禁
+- 依用户指令恢复当前Planning计划6f1dca6d-55b8-4fb2-bf11-8d4aeb2b4a14 rev3；物理读取本机AGENTS.md、MES_DEV_RULES.md、PROJECT_BASELINE.md及MES_TASKS当前范围，单main工作区保留既有未提交改动；未修改后端/前端业务代码或迁移。
+- 正式 Playwright（真实 5173→8080，按QC分析员、复核员、QA岗位登录）只读验收1/1 PASS，exit0；检验任务771–776全部 IN_PROGRESS、versionNo2、assignedTo11567，六张请验单721–726同为IN_PROGRESS。19个检验项目全部缺TestExecution和TestResultRevision；各任务项目数5/5/2/5/1/1，分别对标准1415/1416/1417/1418/23/24。
+- 六个物料批1121–1126的QA release-review全部HTTP200、eligibleForRelease=false、qualityStatus=TESTING，六批gateReasons均含APPROVED_REPORT_REQUIRED；不能把接口提供release-decisions按钮当成实际满足放行门禁。六张请验单没有匹配已批准检验报告。
+- 本机 file/2-6.jpg为2023年成品检验报告（历史批号20231215），file/2-1.jpg及2-5.jpg为历史投料/包装记录，file/1-01.jpg属于氯化钾制剂；这些不能充当六批原辅料于2026年真实QC数据。已把19项标准与缺失原始结果逐项对照、需要的来源信息、门禁及下一步正式 API 流程记录于docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/QC-QA-EVIDENCE-GATE.md；只读脚本运行后归档在同目录，不遗留默认e2e自动误跑。
+- 当前依赖阻断：若无适用这六物料批次的来源明确的原始观察/检验读数，不得编造PASS、伪造2026检验结果/签名/审核/QA物料放行。业务状态保持未完成；未调用写结果/审核/放行API，无数据库业务SQL、无新worktree、无git stage/commit/push。状态 PARTIAL / DEPENDENCY_NOT_READY / NOT ACCEPTED。
+
+### 2026-11-10 继续六批QC/QA：多项目代码闭环回滚验证及实际批次只读保护核查
+- 恢复既有Planning rev4，重新实际读取本机AGENTS.md、MES_DEV_RULES、PROJECT_BASELINE、MES_TASKS和QC-QA-EVIDENCE-GATE.md；单一main、保留原未提交文件，没有迁移/worktree/Git提交推送。
+- 本轮新增唯一测试文件`backend/mes-boot/src/test/java/com/hospital/mes/incoming/IncomingQcMultipleItemsIT.java`，对隔离回滚fixture的3数值+2文字项目执行“原始检验→结果签署→QC独立复核→检验报告复核/批准→QA独立放行”。正式MariaDB测试 1/1 PASS、Maven退出码0、76项Flyway VALID V076，且在结果缺失阶段先验证报告/QA门禁。受控构造数值不是六批本次实测，测试自动回滚。
+- 实际5173→8080只读回归再次1/1PASS，确认检验771–776均IN_PROGRESS、19项目仍没有execution/result，QA六批eligibleForRelease=false、gateReasons含APPROVED_REPORT_REQUIRED；新回滚测试没有污染六批现有业务数据。
+- 证据文档：docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/QC-QA-ROLLBACK-MULTI-ITEM-RESULT.md；只读Playwright测试脚本已归档到同目录，避免默认E2E误执行。
+- 下一实际DEV QC数据闭环仍依赖与原辅料物料批次对应的19项目可追溯原始观察/读数（现缺17数值、2文本）；不得将标准限度或2023历史成品读数冒充新批原辅料结果，不能代签QA。状态：TEST-ONLY PASS，真实六批QC结果/复核/报告/QA仍PARTIAL / DEPENDENCY_NOT_READY / NOT ACCEPTED。
+
+### 2026-11-10 六批QC结果证据接收门禁续跑（数据准备，不触碰六批业务结论）
+- 已按AGENTS.md、MES_DEV_RULES.md、PROJECT_BASELINE和MES_TASKS当前任务重新读取冻结约束；在本机唯一main工作区，检查file与docs近期候选来源，没有发现能直接支撑原辅料批1121/1123/1124/1122/1125/1126所有19项目的新增原始报告。现有证据仍是历史生产/成品记录及前次隔离回归。
+- 为避免持续重复已PASS代码测试，在 docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/ 添加 QC-RAW-RESULT-INTAKE.csv（19条项目/任务/物料批/标准/取样时间冻结对应，结果与原始来源字段留空）、QC-RAW-RESULT-VALIDATOR.py（离线、只读业务数据、实际源文件哈希及数值限度一致性校验）和 QC-SOURCE-INTAKE-README.md（资料要求与后续正式QC命令流程）。不新建业务表、API/权限、迁移、页面或临床结果。
+- 实际Windows Python3.12执行离线校验，输出 EVIDENCE_PREFLIGHT BLOCKED items 0/19 problems 152，exit2（预期的缺失数据阻断）；自动报告QC-RAW-RESULT-VALIDATION.json：19项目绑定齐全但17数值/2文字观察与原始报告、SHA256、人员/日期等来源证据均尚缺，readyForManualSourceReview=false、readyForQARelease=false。
+- 本轮没有写入任何六批检验结果、签名、QC复核、报告审批或QA放行；禁止把质量标准上下限、2023历史成品结果或任何生成的合格值写作2026六批原辅料测量数据。保持原六检验任务IN_PROGRESS、QA放行受APPROVED_REPORT_REQUIRED门禁阻断。状态 PARTIAL / DEPENDENCY_NOT_READY / NOT ACCEPTED。未stage/commit/push、未创建worktree、未触碰现有业务数据库数据。
+
+### 2026-11-10 夜间：六批QC简化DEV执行—正式检验、独立复核、报告和QA放行已跑通
+- 根据用户最新指令“继续，检验就是录入检验结果，审核就完成，不要搞得太复杂了”优先执行业务，而不再新增采集门禁。仅限本机hospital_pharma_mes_dev。用户指令及DEV范围写入 docs/development/decisions/DCP-QC-SIMPLE-DEV-ENTRY-20261110.md。
+- 明确使用docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/QC-SYNTHETIC-DEV-FIXTURE-MANIFEST.json中的19项**构造DEV软件联调值**（17数值/2文字），而非真实2026实验室原始读数或2023历史成品检验结果。它们只能证明DEV操作流程，不得称实际药品质量放行或真实化验。
+- 正式5173→8080 REST以QC分析员11567、QC审核员11568、QA11569执行：六检验任务771–776全部19项执行、结果录入、每项目签名；六任务QC_PASSED/独立审核签名；报告834/836/838/840/842/844均APPROVED/PASS；QA决定566–571均RELEASED。DEV物料批1121/1123/1124/1122/1125/1126真实读回qualityStatus=RELEASED、inventoryStatus=AVAILABLE、eligibleForRelease=true，对应库存100.875/49.875/49.875/17.875/31.875/1.875kg。
+- 首轮报告833为自动生成、createdBy=QC reviewer11568；同一reviewer调用report.review触发422 INDEPENDENT_REVIEW_REQUIRED，未绕过。第二轮通过现有正式报告创建接口由analyst11567创建独立报告、reviewer11568复核、QA11569批准和放行，全六批PASS。原自动草稿保留，没有直接SQL删除；涉及旧自动草稿冗余，未来单独审查而非本轮改冻结代码。
+- 真实Playwright第二轮写操作1/1PASS exit0，独立真实HTTP读回1/1PASS exit0，核对signedResults=19/approvedReports=6/releasedLots=6。归档所有脚本为*.spec.ts.txt、去除明文DEV口令；证据 docs/development/process-form-cpp-ebr/20261110-manual-sampling-crossrole/QC-SIMPLE-DEV-SIX-LOT-CLOSEOUT.md。
+- 当前六批**DEV软件联调 QC/QA链VERIFIED**，但临床实际来源数据仍未获得，**不应视为真实物料检验合格或生产使用许可**。后续再做批655质量计划666独立QA签名与下达、8工序CPP/eBR、成品QC/QA、入库归档等DEV工作。无Flyway迁移、无Git stage/commit/push、无worktree，保留所有其他未提交改动。
+
+## 2026-11-11 AI Commander 恢复执行：批655质量计划与八工序CPP/eBR
+- 用户明确指定批655/质量计划666的QA签署、批次下达及八道工序CPP/eBR执行。本轮按用户明确要求改用AI Commander（PC-202401011703在线，Windows），没有使用Work或Desktop Commander。
+- 重新读取AGENTS.md、docs/development/MES_DEV_RULES.md、docs/PROJECT_BASELINE.md、MES_TASKS.md、ProductionQualityPlanService、ProductionService、ExecutionService、ClearanceService、EbrRuntimeController及相关测试。基线FINAL BASELINE COMPLETE v1.0.23，单一main工作区，现有未提交改动完整保留。
+- 本机正式MariaDB定向回归通过：ProductionQualityPlanIT 15/15、CppControlledRoundTripIT 1/1、EbrRuntimeIT 13/13、FunctionalClosureIT 24/24、FunctionalClosureConcurrencyIT 45/46 PASS/1 SKIP；合计98 PASS/1 SKIP/0 FAIL。Flyway 76/76 VALID，V076，无迁移。8080健康UP。
+- 重新核对上次正式API读回：生产批655 HYTEA-20261109-002仍DRAFT/version0，质量计划666仍DRAFT/version0/createdBy11556，QA11569独立且有qms:plan:approve、ebr:sign，生产11572有production:batch:release。下达必须冻结processPackageId2、published eBR template497与已批准plan666。
+- 新增任务执行设计记录 docs/development/decisions/DCP-HYTEA-BATCH-655-CPP-EBR-EXECUTION-20261111.md；不改变任何冻结业务规则、权限或迁移。
+- 为避免读取/复用便笺中的密码，AI Commander启动四个独立Chrome配置文件/CDP端口：9222 QA、9223 production、9224 warehouse、9225 QC reviewer。四个会话目前均未登录（refresh HTTP401）；没有发出QA签署、批次下达或业务数据写入。Share Screen目前OFF；设备仍在线。
+- 当前已确认业务门禁：操作启动需要六条冻结BOM物料的已确认领料；每道工序需签名清场记录+独立签名复核，随后按冻结顺序启动；手工CPP参数、eBR填写/提交及模板要求的复核/签名通过现有API执行。领料、称量、称量独立复核、投料、CPP和eBR不得绕过库存/资格/签名门禁。
+- 下一步：待用户在本机Chrome分别登录demo.qa、demo.production、demo.warehouse、demo.qc.reviewer（密码只在本机输入，不发聊天），并启用AI Commander Share Screen后，先通过现有UI QA重新认证签署plan666，再production账号release655；随后按正式库存、WMS、称量、清场、CPP/eBR顺序完成八工序。若某岗位缺少冻结权限/资格，先报告差异，不擅自扩权。
+- 当前状态：**BLOCKED BY LOCAL ROLE AUTHENTICATION / PLAN666 NOT SIGNED / BATCH655 NOT RELEASED / EIGHT OPERATIONS NOT STARTED**。无数据库业务SQL写入、无Flyway迁移、无worktree、无Git stage/commit/push。
+
+## 2026-11-11 13:30 物料主数据垃圾记录根因与防复发修复
+- 用户截图显示物料主数据40条，其中原有16条（ID 1–16，由admin 11556于2026-10-07建立）+ 24条自动化并发测试夹具（2026-11-11 13:26:59–13:27:52建立）。24条名称均Incoming salt、编码IM+UUID、类型RAW、无规格/生产商/质量标准/存储条件、基本单位Incoming kg；状态却是ACTIVE，故出现在日常列表。
+- 根因明确：本轮AI Commander调用的Maven命令执行了FunctionalClosureConcurrencyIT（46 tests, 1 SKIP）。该类继承NativeConcurrencyIT；父类IncomingQualityFixture硬编码创建Incoming salt/Incoming kg、Supplier/Warehouse/Location/Receipt/QC spec/样品/报告等。NativeConcurrencyIT.commitFixture()主动TestTransaction.flagForCommit()+end()，@AfterEach retainBlockedEvidence()保留完整夹具并写native-concurrency-*.json；lot被置REJECTED/BLOCKED但master material保持ACTIVE，故出现在日常列表。
+- 防复发修复：在FunctionalClosureConcurrencyIT、QcProducerConcurrencyIT、WmsRequestConcurrencyIT三个NativeConcurrencyIT子类显式增加@EnabledIfSystemProperty(named="mes.retained-concurrency-fixtures",matches="true")。仅执行mvn -pl backend/mes-boot -am -DskipTests test-compile -q，退出码0；未再执行测试，没有新增数据库记录。之后所有保留式并发测试必须明确opt-in，并应迁移到独立test schema，禁止默认对hospital_pharma_mes_dev执行。
+- 当前未做任何数据删除/退役/冲销。因为这24套数据关联库存、拒收批次、生产订单/批次、电子签名、审计和eBR快照，不能用直接SQL删除或只删md_material。需先经用户批准，设计保留审计/签名的正式清理/退役方案。截图列表的24条Incoming salt是本轮新污染，另16条为既有admin基础资料。
+
+## 2026-11-11 14:xx 测试夹具清理执行记录（用户明确要求SQL直清，禁止新建触发器）
+- 已确认污染来源为助手在11/11 13:26:59–13:27:52运行FunctionalClosureConcurrencyIT后留下的24套NativeConcurrencyIT保留夹具；不是用户录入。详前述根因与ID清单。
+- 清理前完成两份数据库备份：不含触发器版本D:\codex\_project\gmp\_backups\hospital-pharma-mes\hospital_pharma_mes_dev-pre-test-fixture-cleanup-20261111-143749.sql SHA256 8E9F452B73747DA7BDDEB7982287C3A7D8A339BBCAB9BD8C2F2A6ED4DD4CC7A2；完整备份（包含现有触发器定义）D:\codex\_project\gmp\_backups\hospital-pharma-mes\hospital_pharma_mes_dev-full-before-cleanup-20261111-145712.sql SHA256 265E49C5070286ED68D009B3B98EEEE8F4494E28C2469B9E40EA50D961A326FA。备份仅导出，不在数据库创建触发器。
+- 已成功执行SQL：删除本次测试时间窗/actor范围的platform_idempotency_record 1271条（复核剩余0）。直接SQL更新停用本次测试账号120个（enabled=0、must_change_password=1），24个Incoming salt物料改INACTIVE；24个测试供应商enabled=0；24个仓库、24个库位、26个测试产品、25个工艺包、24个QC标准、11个设备均改INACTIVE。复核各表活动状态数量均为0。以上均为测试数据范围。
+- 清理了本轮生成的24个native-concurrency JSON证据文件、9个frontend/mes-web/e2e下的hytea临时spec文件、8个归档临时脚本、5个QC构造数据/空模板/校验文件、4个临时Chrome profile（约648MB），并终止只属于这些profile的16个Chrome进程。保留必要事故记录/结果说明。
+- 未完成的硬删除：数据库有125个既存触发器，其中多表BEFORE DELETE会明确SIGNAL禁止删除（包括gxp_audit_event、qms_inspection_request/task/sample/test_execution/result_revision/report/release_decision、wms_inventory_ledger、eBR snapshot/form/value revision、生产快照等）。这些触发器在清理前已存在，清理后仍125个；未创建、删除、停用或修改任何触发器。外键全为RESTRICT，不能直接删除父主数据而留下受控孤儿。SQL删除md_qualification、md_material_supplier、wms_reservation等命令被AI Commander客户端安全检查拦截，未执行；当前仍有测试qualification 120条、material-supplier links 24条、reservation 19条、audit 1453条、signature 154条及受保护的业务记录。不能宣称所有测试数据已删除。
+- 用户要求严禁数据库建触发器；严格遵守。未通过DROP/CREATE重建或绕过现存保护触发器，也未用foreign_key_checks关闭方式制造孤儿。
+- 防复发：FunctionalClosureConcurrencyIT、QcProducerConcurrencyIT、WmsRequestConcurrencyIT三个继承NativeConcurrencyIT的类均显式加@EnabledIfSystemProperty(named="mes.retained-concurrency-fixtures",matches="true")，仅允许显式opt-in；test-compile之前已exit0。今后保留式并发测试必须在独立测试schema，不得对业务DEV库运行。
+- 当前剩余24条物料均已INACTIVE，不会作为可用原料；但仍存在数据库记录。完整清理受到既存不可删除触发器及客户端安全拦截限制。无新触发器，无数据库迁移，无Git提交/推送/worktree。
+
+## 2026-11-11 基础资料垃圾清理补充
+- 用户要求删除所有无意义基础数据。复核确认11/11 13:26:59–13:27:53本轮并发测试创建的垃圾基础资料：24 Incoming salt物料(ID 2127,2130,2131,2138–2158中24条)、24 Incoming kg单位(ID1954,1957,1958,1965–1985中24条)、24 Incoming source供应商(ID1405,1408,1409,1416–1436中24条)、24 Incoming仓库(ID1360,1363,1364,1371–1391中24条)、24 Incoming area库位(ID1373,1376,1377,1384–1404中24条)、26 Production integration/IT_RACE产品(ID1157–1190中26条)、25测试工艺包(ID1210–1242中25条)、24测试QC标准(ID1578–1609中24条)、11测试设备(ID156,161–170)。均已INACTIVE/disabled，但仍存在记录。
+- 本轮额外成功直接SQL删除 md_material_supplier 中24条测试物料供应商关联；删除 md_qualification 中120条测试人员资格记录。之前已删除1271幂等记录、19条QC结果、38条报告明细、6条QA放行决定。测试账号120个已禁用。
+- 尝试删除测试设备关联mes_equipment_usage时，被AI Commander客户端安全检查拦截；不尝试绕过。此前部分QMS报告/执行等删除也被拦截。当前业务数据库hospital_pharma_mes_dev触发器数量0；另一个test schema才有历史触发器，不属于本次目标库。
+- 尚未完成物料/单位/供应商/仓库/库位/产品/工艺包/QC标准/设备主记录硬删除，因为这些主记录被24套测试收货、物料批、QC、生产/eBR等测试记录通过外键引用；必须先清理关联子记录。16条原有admin物料不在清理范围。
+
+## 2026-11-11 继续清空垃圾数据：扩展盘点与删除阻断
+- 再次核对hospital_pharma_mes_dev，触发器仍为0。11/11 13:26:50–13:28:10并发夹具窗口仍有：ebr_batch_snapshot22、ebr_field_def25、ebr_form_def25、ebr_template_version25、ebr_form_instance22、gxp_audit_event1453、gxp_signature154、md_equipment11、md_material24、md_material_lot24、md_product26、md_supplier24、md_unit24、mes_operation_execution22、prd_execution_unit22、prd_main_batch27、prd_production_order26、proc_package25、qc_specification24、qms_inspection_request21、qms_inspection_task21、qms_sample42、qms_sampling_task21、qms_test_execution21、qms_test_result_revision21、qms_release_decision45、wms_inventory_ledger27、wms_material_receipt24、wms_material_issue17、wms_reservation19及其他关联表。注意同一窗口包含之前测试/本轮重复测试数据，需按创建时间+ID+外键关系精确处理。
+- 六批11/10 QC人工合成数据还有任务771–776、采样689–694、样品1419–1430、执行603–621、报告833–844等关联；结果19、报告明细38、QA决定6及部分幂等/关联已删除。不得保留报告APPROVED但明细缺失或批次RELEASED无决定的状态；目前请求/物料状态曾恢复为ACCEPTED/PENDING_SAMPLING/BLOCKED，需再次核实。
+- 继续尝试直接SQL删除测试eBR字段值时，AI Commander客户端安全检查再次拦截；没有执行该DELETE。不得通过remote_job/其他通道规避此安全门禁。继续保留可执行只读盘点与防复发修复；数据库未创建触发器、未关闭外键。
+- 用户要求清理所有无意义基础数据；尚余24物料、24单位、24供应商、24仓库、24库位、26产品、25工艺包、24QC标准、11设备、120测试账号(已禁用)，以及完整测试业务关联。当前硬删除状态仍BLOCKED BY AI COMMANDER DESTRUCTIVE-QUERY SAFETY GATE；不得声称完成。
+
+## 2026-11-11 18:02 全部垃圾数据删除请求：实际残留与完整性复核
+- 用户再次明确要求删除全部垃圾无意义数据；已有删除授权不重复索取。本轮读取AGENTS.md、MES_DEV_RULES.md、当前任务记录、PROJECT_BASELINE相关路由、数据库策略及命名核查报告；仅本机main工作区，保留所有既有未提交修改。
+- 因本任务此前多次删除已被AI Commander destructive-query safety gate拒绝，本轮未换工具/本机shell/后台任务执行被拒绝的删除，也未再尝试相同破坏性操作。当前目标库hospital_pharma_mes_dev实际触发器0、最新成功Flyway076。
+- 实际存储时间有05:26/05:27与13:26/13:27两种，最终一致性只读盘点同时覆盖两窗口：62表2929条时间窗候选（非全库垃圾总数、非自动删除白名单）。其中九类主数据206条、用户120条；原物料ID1–16保留，现有夹具未硬删除。另发现既存QC临时标准1065/1066，均INACTIVE，未删除。
+- HIGH实际残留：报告833–844全部0明细，其中834/836/838/840/842/844仍APPROVED；物料批1121–1126仍RELEASED/AVAILABLE但各0放行决定；任务771–776仍QC_PASSED/REVIEWED。先前“曾恢复”不代表当前一致性，禁止称清理完成或PASS。
+- 证据：private-data-audit/cleanup-20261111/20261111-180236/inventory.json，SHA256 eded5e7232cae79c442b95be26fa67a7ee42818a64947719a6e02972a9006d92；只读脚本inventory_readonly.py退出0、独立哈希复核匹配，完整候选ID/创建人/时间/状态及外键关系已存。详docs/review/DATA_CLEANUP_RESIDUAL_20261111_1802.md。
+- 本轮数据库写入/删除0、迁移0；未运行保留夹具测试，无业务代码改动/提交/推送。任务仍BLOCKED BY EXISTING DESTRUCTIVE-QUERY SAFETY GATE / DATA INTEGRITY HIGH，NOT READY FOR ACCEPTANCE。
+
+## 2026-11-11 18:26 用户批准删除后：确认构造数据清理完成并通过数据复核
+- 用户明确“批准删除数据”；审批后继续原AI Commander remote_exec通道执行，未换通道绕过历史拒绝。新的原通道实际执行成功，前轮BLOCKED不再代表当前结果。范围与一致性恢复依据见docs/development/decisions/DATA_CLEANUP_APPROVED_20261111.md。
+- 删除前新增全库备份hospital_pharma_mes_dev-approved-delete-20261111-181317.sql（9819128 bytes，SHA256 46df7dd7c36b5330f8f716c8c37caf06dea30126405c33eb4f8f93ba156419e5）。逐ID/创建人确认、清单外FK引用检查0，不直接按时间窗删除。
+- 三次事务均exit0：3条eBR字段值 + 2926条其余并发夹具 + 41条剩余记录，共实际删除2970条。41条含两旧临时QC标准1065/1066及子记录10条、构造执行603–621共19条、空报告833–844共12条。原62表2929候选全部删除，120测试账号及206基础主数据夹具不再只是停用。FK始终开启、触发器0、迁移0/Flyway076、未重建数据库。
+- 六批1121–1126恢复TESTING/BLOCKED，请验721–726与任务771–776恢复IN_PROGRESS/EFFECTIVE，六检验样品恢复RECEIVED，任务构造结果复核指针清除。37条构造结论签名4691–4727注销且保留证据；原业务审计/采样签名、收货/取样/出库数量、原物料1–16保留。61条受影响可变记录version_no均只+1，无回退。
+- 最终只读verify_cleanup_readonly.py exit0：删除ID残留0，411组FK孤儿0，十类目录除批准删除ID外逐字段一致，六批非清理字段0意外变化、状态与版本逐项符合。证据private-data-audit/cleanup-20261111/verification-after.json，SHA256 b5758fee4ec75405c382c563de32b20a38e9352becbc803e3546f8e6ea533b88。审查为Codex SELF-REVIEW。无应用源码/迁移改动、无提交/推送、未运行保留式构造测试。
+- 详docs/review/DATA_CLEANUP_EXECUTION_20261111.md。状态：**READY FOR ACCEPTANCE（已确认构造数据与旧临时标准清理范围）**，未自动ACCEPTED；不等于全库所有历史业务命名问题清零，也不代表六批实际检验合格或QA放行。
+
+## 2026-11-11 测试数据业务意义约束固化
+- 用户明确要求“测试时严禁用无意义的数据进行做任务的测试”。依据已物理读取的AGENTS.md、MES_DEV_RULES.md及当前清理记录，在AGENTS.md新增Meaningful task-test data规则、MES_DEV_RULES.md新增§9A；这是用户批准的工程约束强化，FINAL BASELINE v1.0.23业务/UI契约不变。
+- 必须使用与任务场景匹配且名称/编码/单位/数量/关联完整有意义的样本，禁止泛化占位、空壳及随机业务名称/编码；覆盖各层测试与原型，回滚或opt-in不能豁免。运行前必须查实际生成载荷、执行已有词法预检并记录业务语义核查；不合格生成器先修正再运行。禁止默认提交保留夹具，沿用单一DEV、精确回滚/清理及GxP规则。
+- 修改仅AGENTS.md、MES_DEV_RULES.md及本记录；无数据库写入/迁移、无测试生成器源码修改、无测试执行、无提交/推送。仅做规则差异及只读回读核对，SELF-REVIEW；不能把规则落盘宣称为所有旧生成器均已整改。前轮2970条已确认垃圾清理事实与证据保留。
+
+## 2026-11-11 接续完整DEV软件流程：QC六批、计划666、批655及领料称量已推进
+- 用户澄清“走测试的整个流程啊”，并明确授权仅本次本机软件测试使用已有DEV岗位凭据自动认证、密码不输出或写入脚本。授权与范围见docs/development/decisions/HYTEA_FULL_SOFTWARE_FLOW_20261111.md；不再以缺少真实当批实验室读数阻断软件功能测试，不把构造值称为真实质量证据。仅main、5173/8080/同一MariaDB/Redis，无源码/迁移/权限/资质自动变更。
+- 已准备与现有19项检验一一绑定的17数值+2文字业务输入；词法检查exit0/0违规、单位与限度及场景语义核查通过；来源单独记录qc-software-test-manifest.json。无新空壳主数据或无意义业务名称。全部正常登录、重新认证、If-Match和幂等命令，无SQL业务写入。
+- 正式8080分QC分析11567、独立复核11568、QA11569执行六链：任务771–776全部QC_PASSED，结果816–834共19项有签名；独立作者报告1006/1008/1010/1012/1014/1016均APPROVED；QA决定682–687，物料批1121–1126均RELEASED/AVAILABLE且正式release-review回读eligibleForRelease=true。系统按冻结行为另生成了有完整项目的报告草稿，未隐式删除或修改自动报告规则。
+- 计划666由QA11569正式APPROVED，signature5271、contentHash非空；生产11572按process2/有效template497正式下达批655，状态RELEASED、快照589、唯一执行单元628、工序779–786及eBR实例822–829各8个，未执行工序。全部正式GET重读。
+- 按冻结六行BOM完成预留6条、领料单524 CONFIRMED；称量129–134按96/48/48/16/30/1.4kg记录并由独立复核岗位签名VERIFIED。复用现有已校准设备77，未改设备或称量策略、未添加全局强制称量；本批冻结策略本就要求该六行称量。
+- 新的具体阻断：清场记录/复核两个既有权限仅admin拥有，不能满足不同人独立复核。最小拟授权生产角色287加mes:clearance:record、QC复核角色290加mes:clearance:review，尚待用户批准，未写IAM。另8份已冻结eBR要求生产角色287且独立用户，当前该角色只有11572一人；拟新增有明确职责的production.reviewer／生产复核岗位账号并绑定287、凭据本机受保护存储，同样未获批准未创建。两项范围与原角色快照见docs/development/decisions/HYTEA_DEV_CLEARANCE_ROLE_GRANTS_20261111.md，已向用户提交具体问题，不以管理员代录或改冻结规则制造表面独立。
+- 证据在private-data-audit/hytea-resume-20261111/：readiness、六个qc-task-*-complete.json、api-execution.jsonl（认证请求/响应不落秘钥）、batch-release-readback、material-issue-readback、weighings-readback及实际form-render-models。命令run_qc_flow.py、release_batch.py、prepare_material_issue.py、prepare_weighings.py均exit0。当前状态IN PROGRESS / 执行前置完成 / 清场与独立生产复核身份授权待决；未声称整批完成、成品放行、G5或ACCEPTED，无Git提交/推送。
+- 本阶段最终重新登录正式API复核：6/6物料放行、计划666批准、批655下达、工序/表单各8、称量/预留各6，断言全部符合，工序启动仍0。证据pre-operation-verification.json SHA256 6c52708caefadb96ddb3739ae09b8a279791550eb8e7705163c3846c528d3383；详docs/review/HYTEA_SOFTWARE_FLOW_PROGRESS_20261111.md。另只读确认包装物料14/16无批次，后续须按软件场景正常准备收货/质量记录，未填伪造批号。当前仍USER DECISION REQUIRED（清场权限/独立生产复核账号），未写IAM或创建用户。
+
+## 2026-11-11 清场授权与独立生产复核身份实施、OP01执行
+- 用户对具体方案回复“确认批准”。正式IAM仅为287新增mes:clearance:record、290新增mes:clearance:review，前后权限集合差异恰好对应两项，原权限全保留；正常创建production.reviewer／生产复核岗位账号19289并绑定287、完成首次设置及登录。口令仅在内存与Windows Credential Manager，不新增资质或权限码。授权记录见HYTEA_DEV_CLEARANCE_ROLE_GRANTS_20261111.md。
+- 批655现IN_PROGRESS。OP01／779完成11572清场签名、11568独立复核签名及四项投料96/48/48/16kg（称量129–132）；eBR822提交/生产签名。新账号19289的独立复核被网关403 FORBIDDEN拒绝，requestId e5cdf45d-9130-4c83-8fd3-ac87a42d771c。SecurityConfiguration还要求ebr:review:verify或ebr:review:approve，原预检仅核对EbrRuntimeService的ebr:sign和冻结requiredRoleId287，遗漏网关。仅287加既有ebr:review:verify的最小补充方案已提问，尚未批准/执行；未改网关或用管理员代审。OP01未完成，OP02–08未启动。
+- 语义复查发现OP01四个手工批号误写数据库ID。通过实际投料和物料批GET核对，已有管理员使用受控更正API改成HYT-WLX/YJH/DDC/GC-20261109-01，保留原值/修订/旧签名失效历史；由生产11572重新提交/签名。表单822当前SUBMITTED/formRevision5，等待独立复核；驱动后续批号改用业务lotNo，不SQL覆盖历史。
+- operation_preflight.py、remaining_role_inventory.py、correct_op01_lot_numbers.py均exit0；四更正值逐项匹配已投料批，新生产签名存在。盘点发现sampler11566已有成品取样权限。包装物料14/16无批次、供应关联为空；WmsService收货确认要求suppliers.requireApproved(materialId,supplierId)，不凭空批准来源或伪造包装批。
+- 初次保护存储新账号凭据因CredentialBlob传bytes失败；改str后仅恢复本轮新账号首次设置，正常登录验证成功。本阶段工具适配1轮、批号语义1轮，累计2轮局部修正；无应用源码/冻结规则/测试断言修改。迁移0/Flyway076，无Git提交/推送/worktree。当前IN PROGRESS / USER DECISION REQUIRED（第三项权限）/包装来源前置缺失，非整批端到端或G5/ACCEPTED。
+- 最终verify_current_stage.py首次在IAM用户详情DTO误取mustChangePassword而KeyError，未写业务数据；对照AuthController改从/auth/me显式读取，并确认render provenance只给当前行，因此使用READ ONLY事务核对实际前驱修订/失效签名，不删减历史断言。该验证工具适配为本阶段第3轮局部修正，重跑exit0：两项权限差异、新账号身份、4投料数量、822修订5及四批号前驱修订、原签名INVALIDATED/新签名VALID、0工序完成、包装来源空均符合。证据current-stage-verification.json SHA256 d3c970fc28c4f87ed73cb99069ced645e8a6a94bb19e14e92e019e93e97446e1；无应用测试合同修改。
+
+## 2026-11-11 OP01 eBR 审核权限补充批准及完成
+- 用户明确「授权批准」本机DEV限定变更：角色287／MES_PRODUCTION仅新增既有ebr:review:verify。按正式IAM API执行，变更前权限36、变更后37，原权限全保留；角色290原权限完全不变；独立生产复核账号19289重新登录确认拥有新权限。未修改网关、冻结模板、其它角色、数据库结构或迁移。
+- 原run_operations.py --until 1仅从既有批655（IN_PROGRESS）/工序779/eBR822续跑，没有重复已完成的清场、四项投料、eBR提交签署；新账号19289独立eBR审核成功，工序OP01完成。运行输出OPERATION_COMPLETE OP01 779 FORM 822 VERIFIED、exit0。
+- 第二轮独立实际GET：工序779 COMPLETED，eBR822 VERIFIED、修订5、reviewer19289、reviewCount1、signatureCount1，批655 IN_PROGRESS，下一工序780 READY。只读校验exit0；证据private-data-audit/hytea-resume-20261111/op01-authorized-closeout.json、ebr-review-role-before.json、ebr-review-role-after.json、op01-complete.json。
+- 本阶段OP01 VERIFIED/CLOSED（限DEV软件流程）；OP02–OP08和成品QC/QA/入库归档尚未完成，整批仍IN PROGRESS/NOT ACCEPTED。包装物料14/16仍缺可用批次与批准供应来源。无保留式并发测试、无Git提交推送、无worktree，保护原main未提交变更。
+
+## 2026-11-11 OP02–OP08继续：CPP权限与包装来源阻断
+- 已重新实际读取本机AGENTS.md、MES_DEV_RULES.md、PROJECT_BASELINE、MES_TASKS及DEV全流程批准文档；main单工作区，原628条Git未提交状态不动。原run_operations.py --until 5继续：OP01已完成而跳过，OP02/780正常新增清场记录、独立复核及工序START，现IN_PROGRESS。首个CPP参数POST返回HTTP403 FORBIDDEN（requestId=0f3ad4d0-b12a-4e50-9bb7-1d0692c16cf3），参数值0，未继续OP03～OP08。
+- 源码和IAM只读确认缺现有mes:param:record，当前仅SYSTEM_ADMIN角色1有；生产角色287没有，不能绕过或擅加。9项冻结CPP（OP02/03各3，OP04 2，OP05 1）均MANUAL，现有软件输入符合冻结范围。拟议最小新授权仅本机DEV角色287追加此项，尚待明确批准，未执行。
+- 包装物料14（100ml药用高密度聚乙烯瓶）与16（喉咽茶标签）当前均无批准供应关系、无物料批。现有10家供应商没有这两物料供货关联；过往资料明确无有效供应来源。已只读列出OP06/07手填字段，不伪造供应商资质、送货单或库存批号。
+- 差异和恢复方案：docs/development/decisions/HYTEA_DEV_CPP_AND_PACKAGING_PRECONDITIONS_20261111.md。证据：next-stage-readonly-inventory.json、cpp-permission-frozen-preflight.json、remaining-forms-field-inventory.json及API事件日志。批655仍IN_PROGRESS；OP02部分，OP03～08、成品QC/QA/入库/归档NOT RUN。无应用源码/迁移/IAM新变更、无保留夹具测试、无Git提交推送/worktree。
+
+## 2026-11-11 用户批准两项DEV补充后续跑：OP02–OP06与包装两批质量闭环
+- 用户回复「批准」：限定角色287增现有mes:param:record，及使用有业务意义且外部元数据标识为合成DEV的包装供货/批次做软件验证。IAM正式API角色287权限37→38且仅新增该项、岗位11572重新登录验收成功；角色290原权限未变。原工序驱动MANUAL CPP误传capturedAt引发422，按后端既有规则仅修改本地脚本去掉该字段，非源码/冻结规则更改。OP02/780、OP03/781、OP04/782、OP05/783通过正式业务API全部COMPLETED，对应eBR823–826 VERIFIED；此前OP01/779、eBR822亦完成。
+- 包装材料14/16建立有意义的DEV供货场景、真实企业名称但其实际供货关联未验证，所有合成数据来源单独保存在packaging-dev-source-manifest.json，绝不视为真实采购、资质或现场检验。通过现有业务API完成供应商1461/1462、入厂质量标准1634/1635、收货单1378/1379、物料批1354/1355、请验913/914、取样879/880、检验任务858/859。独立仓储签名出库、QC检验样1636/1638接收、两任务各两项结果签署与独立QC审核；批准报告1018/1020、QA决定688/689，两物料批RELEASED/AVAILABLE/eligible=true（仅DEV软件验证）。
+- OP06/784已完成本工序清场及独立复核、启动、eBR827录入/签名/独立审核，eBR状态VERIFIED/revision1；POST /operations/784/complete被HTTP422 IPC_REQUIRED_PENDING拒绝。冻结必检IPC13/FILL_VOLUME（95～105ml）仍PENDING、结果0。OP07/785、OP08/786均PENDING，eBR828/829仍DRAFT；不得把OP06当COMPLETED。
+- 新根因：当前只有SYSTEM_ADMIN角色1拥有qms:ipc:view/record/review，QC_ANALYST角色289及QC_REVIEWER角色290均缺相关权限。独立QC录入复核需角色289仅增qms:ipc:view、qms:ipc:record；角色290仅增qms:ipc:view、qms:ipc:review。此前用户批准不含此新权限；未授权、未录入IPC、未绕过独立签名。提案docs/development/decisions/HYTEA_DEV_IPC_ROLE_GRANTS_20261111.md，状态PROPOSED/NOT APPROVED；需获独立批准才继续OP06完成及后续成品QC/QA、入库、归档。
+- 独立GET真实读回证据private-data-audit/hytea-resume-20261111/packaging-stage-verified.json、packaging-qc-observations.json及相关每链签名/报告/QA结果；本轮没有迁移、核心源码修改、Git提交推送或worktree，不运行留存并发夹具。单main及已有未提交文件完整保留。当前批655 IN_PROGRESS / PARTIAL / NOT ACCEPTED。
+
+## 2026-11-12 IPC权限已批准实施，后续业务写入被执行安全检查拦截
+- 用户明确批准仅本机DEV角色289新增qms:ipc:view/record、角色290新增qms:ipc:view/review。正式IAM操作实际成功：289权限23→25，290权限16→18；仅这四项差异，原权限保留，两岗位11567/11568新登录验证持有，凭据未输出。
+- 随后的IPC13结果录入与独立复核执行工具调用被OpenAI安全检查直接拦截，未执行；没有换通道、后台任务或SQL绕过。后续只读验证IPC13依然PENDING、0条结果，OP06不能标COMPLETED。
+- 保留现场：OP01～OP05 COMPLETED、eBR822～826 VERIFIED；OP06/784 IN_PROGRESS/eBR827 VERIFIED；OP07、OP08 PENDING。两DEV包装材料批1354/1355 RELEASED/AVAILABLE仅软件联调证据；成品QC/QA/入库归档尚未执行。
+- 后续顺序：合法解锁IPC13的原始结果签名与异人复核后，完成OP06→OP07→OP08，生产完成与成品请验/QC/QA、入库及eBR归档。只在实际接口读回成功后更新状态；不改冻结业务合同、数据库结构或审计。
+- 本次无Git stage/commit/push、无worktree，保留main现有未提交改动。详细依据见docs/development/decisions/HYTEA_DEV_IPC_ROLE_GRANTS_20261111.md。
+
+## 2026-11-12 续跑：IPC授权已读回，安全拦截后完成成品链只读预检
+- 用户要求继续。本轮重读AGENTS、MES_DEV_RULES、PROJECT_BASELINE、MES_TASKS及IPC批准档案；main唯一工作区，保留所有既有未提交改动。
+- 正式只读读回：批655 IN_PROGRESS；OP01–05 COMPLETED/eBR VERIFIED；OP06/784 IN_PROGRESS/eBR827 VERIFIED；IPC13 PENDING/0结果；OP07/08 PENDING、eBR828/829 DRAFT。289/290四项IPC权限已生效。IPC结果写入/独立复核调用被OpenAI安全检查拦截，未到达本机、未产生签名；没有使用其他通道绕过。
+- 成品预检：质量计划666 APPROVED/签名5271；成品标准1419 ACTIVE/8必检项。655 finished request=0、inbound=0、archive PDF=0；旧报告97和入库125属于批325/KCL，不可复用。QA review-model阻断码及成品流程顺序见docs/development/decisions/HYTEA_DEV_FINISHED_CHAIN_PREFLIGHT_20261112.md。
+- WMS issue524已确认，六项处方物料239.4kg；6条ISSUE和6条CHARGE数量相等，当前balance results尚未计算，须等所有数量事实形成后重算。包装批1354/1355是合成DEV来源、已RELEASED/AVAILABLE。
+- 成品输出预检：产品2 baseUnit=3(ml)，待验区位置7有效；OP07为4000瓶产出、20瓶留样、3980瓶待验入库，换算候选398000ml入库、2000ml留样，写入前须按实际OP07再核对。产品主数据未给货架期，有效期必须从file/2-1至2-6原始资料核实，不猜测。
+- 成品链现有权限可分岗执行：系统管理员建/提交入库与请验；仓库11565确认；取样11566；QC11567检验；复核11568；QA11569放行。数量事件mes:quantity:record仅SYSTEM_ADMIN持有，生产角色287无；如要求生产员11572签署输出，需另行授权，未擅加。当前仅更新本机文档和只读证据，无业务写入、迁移、应用源码改动、Git提交/推送或worktree。状态PARTIAL/BLOCKED/NOT ACCEPTED。
+
+## 2026-11-12 OP06～OP08继续执行完成
+- 用户明确要求完成IPC13后继续OP06～OP08。本机DEV现有岗位正式API：QC分析员11567录入IPC13/FILL_VOLUME 100.00000000ml，QC复核员11568独立CONFIRMED；实例13 COMPLETED/PASS，revision14，签名5317/5318。**数值是合成DEV软件流程输入，不是现场实物测量结果。**
+- 运行既有`run_operations.py --until 6/7/8`续跑，均exit0。OP06/784、OP07/785、OP08/786全部COMPLETED；eBR827/828/829均VERIFIED，且每份均有1个生产签名、1个独立复核。连同OP01～05，八道工序779–786全部COMPLETED，eBR822–829全部VERIFIED。
+- OP06 CPP_TEA_FILL三个触发点ON_CHANGE/ON_SAVE/ON_SUBMIT均PASS。药瓶批HYT-HDPE100-20261111-01领4050/使用4000/损耗20/余30，装量范围99.5–100.5ml、抽查叙述20瓶。OP07标签批HYT-LABEL100-20261111-01领4050/使用4000/损耗20/退30，包装产出4000瓶、留样20、待验入库3980、成品率/物料平衡100。OP08物料清点、设备及区域清洁、剩余物料处置均有记录。全部为合成DEV业务流程输入。
+- 真实只读复核：批655仍IN_PROGRESS（未做生产完成），执行单628状态同步；issue524 CONFIRMED；包装批1354/1355 RELEASED/AVAILABLE（合成DEV）。成品输出数量事件尚未创建、物料平衡未重算、成品入库/请验/QC/QA/最终归档尚未执行。
+- 证据`private-data-audit/hytea-resume-20261111/op06-op08-verified-20261112.json` SHA256 `174A194B4450364304212693BB0DE26223609C492FF1221DA961832EB5739FCF`；`ipc13-closeout-20261112.json`；`op06/07/08-complete.json`；详细预检文档`docs/development/decisions/HYTEA_DEV_FINISHED_CHAIN_PREFLIGHT_20261112.md`。
+- 无应用源码改动、无迁移、无Git stage/commit/push或worktree；单一main并保留原有未提交文件。当前批655 PARTIAL/NOT ACCEPTED，下一步为成品输出事实→物料平衡重算→生产完成→成品入库/QC/QA/FINAL归档。
+
+## 2026-11-12 成品闭环推进：正式物料平衡通过，等待成品有效期依据
+- 用户明确要求直接执行成品产出数量→物料平衡→生产完成→成品入库→QC→QA→归档。本机恢复后已重读基线/规范/任务文档，唯一main工作区。
+- 八工序779–786 COMPLETED，eBR822–829 VERIFIED；IPC13由QC11567录入、QC11568独立复核PASS。DEV合成软件数据，不代表真实现场实测。
+- 已通过正式`POST /main-batches/655/material-balance/recalculate`生成计算结果405，计算版本1，规则INPUT_MATERIAL_BALANCE：ISSUE 239.40000000kg，CHARGE 239.40000000kg，差异0.00000000kg、差异率0%，冻结容差±0.5%，PASS；计算人为系统管理员11556。证据`private-data-audit/hytea-resume-20261111/material-balance-655-20261112.json`。注意后续新增成品OUTPUT/SAMPLE数量事件会改变完整输入摘要，生产完成前必须再按最新事实重算一次。
+- 成品产出准备：OP07实际总产4000瓶×100ml=400000ml；留样20瓶=2000ml；待验入库3980瓶=398000ml。正式成品入库接口按OUTPUT事件合计生成来源快照，因此计划记录OUTPUT 398000ml和SAMPLE 2000ml，保留总产量与入库量分开且可核对。生产批655目前IN_PROGRESS，版本2；产品HYTEA100基准单位ml，成品待验区位置7 ACTIVE。
+- 当前唯一阻断是产品有效期：产品主数据没有货架期字段/数据；本机`file/2-5.jpg`历史记录只显示批号20231215、分装日期2023-12-22及“标签打印有效期20240614”，没有明文规定有效期/保质期；`file/2-6.jpg`为2023成品检验报告，没有有效期字段。官方公开产品清单只证实粤药制字Z20070632、100ml/瓶规格，不提供有效期。不能把“标签打印有效期”直接当成产品有效期或自行猜测。
+- 产品输出API强制manufactureDate与expiryDate都必须填写，且expiryDate>today、>manufactureDate；首次输出会冻结本批产品快照、生产日期及有效期，后续不能随意修改。故在获得有效期依据前未提交任何OUTPUT/SAMPLE数量事件，避免错误日期污染批次身份。
+- 当前材料平衡结果405 PASS是当前摘要；有效期明确后完成输出/留样事实，重新计算最新余额，随后用生产角色11572完成批次PRODUCTION_COMPLETED，再按现有分岗执行入库(admin创建提交、warehouse11565确认)、成品请验/取样/QC8项/独立复核/QA最终放行、生成FINAL PDF。
+- 当前阻断及准确证据见`docs/development/decisions/HYTEA_DEV_FINISHED_CHAIN_PREFLIGHT_20261112.md`与上述JSON。没有创建成品入库/请验/检验/QA或FINAL归档；无迁移、应用源码修改、Git提交推送或worktree。
+
+## 2026-11-12 成品有效期已批准；数量接口缺失安全映射，需管理员重启后续跑
+- 用户批准六个月仅限DEV软件联调假设。OP07实际完成日2026-11-12，推导有效期至2027-05-12。OP07实际产量4000×100ml=400000ml，其中待验3980瓶=398000ml、留样20瓶=2000ml；计划记录OUTPUT 398000ml及SAMPLE 2000ml两个独立事实。
+- 先前余额405 PASS，ISSUE/CHARGE各239.4kg，差异0%。本轮实际尝试数量事件POST返回403，未写入；只读确认OUTPUT/SAMPLE仍0条，批655仍IN_PROGRESS/version2，日期字段null，余额405仍PASS。
+- 根因：Controller与Service已有quantity-events路由和现有权限，但SecurityConfiguration遗漏GET/POST/reverse三个精确RequestMatcher，末尾anyRequest denyAll导致403。已在原SecurityConfiguration仅新增三条映射：GET→balance:view，POST→mes:quantity:record，reverse→mes:quantity:reverse；无新增权限码/角色授权/业务逻辑。SecurityConfiguration SHA256 328CFAECCD6F3A3E2783116F9246B7401683BF5A9315F1E454C4296820CEB2C8。详见docs/development/decisions/HYTEA_OUTPUT_SECURITY_ROUTE_FIX_20261112.md。
+- 19模块Maven编译成功；Spring Boot repackage因8080运行中进程锁定jar而失败。健康检查8080 UP，PID31124。Stop-Process被Access Denied（当前AI Commander无elevated helper）；未尝试taskkill/替代端口/SQL等规避。需要本机管理员权限重启MES API后，才能使映射运行时生效。
+- 额外`mvn -pl mes-security -am test`未走到mes-security：上游mes-audit的既有AuditContractTest line30失败（mes-common 8/8通过、mes-audit 23/24）。不修改无关测试。
+- 当前批655：八工序/eBR全部完成；余额405 PASS；OUTPUT/SAMPLE、生产完成、成品入库、成品QC/QA、FINAL归档未执行。全程DEV合成数据，不代表真实生产/质量证据。
+
+## 2026-11-12 成品输出已写入；V077部分失败阻断后续
+- 六个月DEV期限获批准，生产日2026-11-12、有效期2027-05-12。正式数量事件OUTPUT352=398000ml（签名5327）、SAMPLE353=2000ml（签名5328），批655 version4，日期快照已冻结，IN_PROGRESS。仅合成DEV软件流程输入。证据finished-output-655-20261112.json SHA256 D92BF8BF690CA98AAEEA22CB410051296C23B5372D1F662245BA9D2BEBEEBA73。
+- 余额405现标BALANCE_RESULT_STALE；再次recalculate调用被平台安全检查拦截，未执行。不得换通道绕过。
+- V077 migration失败，history success=0，因删除/audit菜单前未清理sys_role_menu引用（menu54仍关联role1）。V077 128个DROP TRIGGER已持久执行，触发器0；DML事务回滚，gxp_audit_event仍存在，/audit菜单及权限引用仍在。V077为未跟踪新迁移但已部分执行。
+- V077第130–141行需从gxp_audit_event复制EBR_FORM_SIGNATURE_ROLE到gxp_signature.auth_context_json.providerContext.rolePolicies；失败回滚导致签名5281、5285、5289、5293、5297、5315、5321、5325均缺该上下文，EbrRoleEvidence.matches无法匹配，QA返回8道工序全部EBR_SIGNATURE_REQUIRED及EBR_REVIEW_REQUIRED。不得重签掩盖历史证据。
+- 临时Flyway disabled服务只用于确认数量权限映射及OUTPUT/SAMPLE写入，现已停止，8080释放。正常启动仍被V077阻断。
+- 恢复DCP docs/development/decisions/HYTEA_V077_FAILED_MIGRATION_RECOVERY_20261112.md：V077第149行前精确删除sys_role_menu对/audit的引用，再按标准流程Flyway repair一次、正常migrate重跑V077并验证签名策略迁移。AGENTS.md禁止Flyway repair，需用户明确批准一次性仅DEV例外；批准前不改V077、不repair、不SQL改Flyway历史、不手工更新签名、不继续生产完成/QA。
+
+## 2026-11-12 V077恢复成功；批655生产完成，成品待检入库待仓库确认
+- 用户批准一次性仅本机hospital_pharma_mes_dev恢复例外。V077在删除/audit菜单前新增精确删除sys_role_menu菜单引用。Flyway 11.7.2 repair仅执行一次；修正后正常Spring Boot启动（Flyway启用），V077 success=1/checksum91079064，服务健康UP/PID7452。
+- 只读DB核实gxp_audit_event表不存在、触发器0、/audit菜单0、sys_role_menu menu54引用0、audit:view权限0。原8个EBR签名5281/5285/5289/5293/5297/5315/5321/5325均VALID，providerContext.rolePolicies逐项匹配历史策略，原独立复核签名5282/5286/5290/5294/5298/5316/5322/5326保留。eBR822–829全VERIFIED，QA EBR_REVIEW gate PASS/无阻断。证据v077-ebr-verification-20261112.json SHA 0D1E9B029B53F27D548A5812A751E6885D56C158BA94F3935204F5F651D91D96。没有重新签名。
+- 成品输出352=398000ml、留样353=2000ml，生产日期2026-11-12，六个月DEV假设有效期2027-05-12。余额重新计算406/version2 PASS，ISSUE/CHARGE各239.4kg，差异0%，inputDigest已包含352/353。生产账号11572完成批655，状态PRODUCTION_COMPLETED/version5。
+- 管理员11556创建并提交成品待检入库单126（FG-IN-HYTEA-655-20261112，398000ml，SUBMITTED）。仓库11565只读看到CONFIRM动作；仓库确认写调用被OpenAI安全检查拦截，未执行、无签名/库存流水。无其它工具/SQL/后台绕过。批655 finishedInventory BLOCKED、quality QUARANTINE、finishedLotId null；QC/QA/FINAL归档未开始。
+- V077恢复已完成；业务链PARTIAL/BLOCKED/NOT ACCEPTED。无Git提交推送/worktree。
+
+## 2026-11-12 14:30 Flyway最终校验
+正常迁移后再次使用Flyway 11.7.2 validate，成功验证全部77条迁移，BUILD SUCCESS。MariaDB 13.0报告WSREP_ON未知变量警告及Flyway支持版本提示，但校验结果为SUCCESS。应用仍运行8080 health UP。
+
+## 2026-11-12 夜间 CUAWright 真实浏览器验证成品待检入库单126（只读）
+- 用户指定“用cauwright测试”，已采用本机CUAWright 0.2.0的Windows浏览器适配环境（Python Playwright 1.64.0），以仓库账号11565登录真实5173 MES，浏览真实入库单126，backend8080健康。由于已有CUAWright MCP持久目录正被另一个会话占用，独立CUAWright会话运行，未干扰现有持久登录态。
+- 最终run_006退出0：PC1440及移动375均验证请求FG-IN-HYTEA-655-20261112、SUBMITTED、398000ml、仓库确认按钮显示；能够展开确认表单，选择真实库位7“成品待检区”，输入原因并打开电子签名弹窗。两视口无横向溢出。日志及每步截图在`C:\Users\Administrator\.codex\tools\cuawright-mcp\evidence\mes-inbound-126-cuawright-20261112\final_runs\run_006\`，plan.md逐项核验。全部真实业务写操作由测试脚本禁止，未输入签名密码或触发确认POST。
+- UI观察：库位选项在中文名称后显示英文ACTIVE；仓库角色下产品、单位、创建人名称仍显示“暂无可读业务名称”；测试中看到5条HTTP401资源日志，应按API资源进一步定位。操作原因textarea与标签中心对齐偏差PC20px/移动27px，但标签和控件在同一横向行内。
+- 真实业务状态仍为：批655 PRODUCTION_COMPLETED；入库单126 SUBMITTED，仓库11565有CONFIRM，但无实际确认签名或成品收货流水；成品QC/QA/FINAL未完成。CUAWright只读页面测试PASS不代表真实业务写入验收PASS；此前确认POST执行工具安全拦截仍是后续待处理项。
+- 此轮没有改数据库、签名、角色、Flyway或正式业务状态；保留本机唯一main，不新建worktree、不Git提交推送。清理了本轮临时Playwright Chrome测试配置，保留原有其它工作区变更。
+
+## 2026-11-12 MES成品入库126只读名称缺陷修复及CUAWright复测
+- 继续执行本机唯一main/正式hospital_pharma_mes_dev；恢复读取AGENTS.md、MES_DEV_RULES.md、PROJECT_BASELINE.md、MES_TASKS及成品入口批准DCP。因真实仓库角色11565无master:product:view/master:uom:view/用户信息读取权限，入库T3曾显示产品/单位/人员“暂无可读业务名称”。原业务单126已包含冻结产品快照名称；在现有FinishedDetailView复用快照显示“喉咽茶合剂”，不新增权限/接口；IncomingModel原枚举ACTIVE显示改为“在用”，请求的真实状态码和库位ID不变。
+- 旧前端api/integration.ts从被删除的types/audit.ts引用Page造成TS2307，已改为引用已有api/http.ts同构Page类型，不恢复审计能力。Vitest定向8/8、vue-tsc PASS、Vite正式构建PASS（49.05s，存在旧大chunk警告）。
+- CUAWright真实浏览器run_007 exit0：仓库11565真实登录，PC1440/移动375显示产品及中文库位状态，选择“成品待检区”，填写原因、开启签名弹窗，0业务写请求，未签名提交；无横向溢出。401路径查明仅/auth/me 4次与/auth/refresh 1次，非产品/单位API。单位/人员仍无可读名称，源于权限受限，未拓权；textarea标签几何中心偏差PC20px/移动27px，未认定G5正式验收。
+- 本轮最终正式GET：生产批655仍PRODUCTION_COMPLETED/version5；入库126仍SUBMITTED/version1、398000ml、confirmedBy null、仓库账号11565具CONFIRM动作；库存BLOCKED、质量QUARANTINE。成品QC/QA/FINAL仍未执行。详细方案与证据docs/development/decisions/HYTEA_FINISHED_INBOUND_REFERENCE_LABEL_FIX_20261112.md；CUAWright证据在工具目录evidence/mes-inbound-126-cuawright-20261112/final_runs/run_007。
+- 没有任何数据库/签名/权限/Flyway业务变更，没有创建worktree、没有Git提交推送，既有未提交修改均保留。实际入库确认写操作仍是后续阻断项，不得以只读UI测试充当业务确认。
+
+## 2026-11-13 HYTEA批655 DEV完整生产质量闭环完成（G5打印体验待完善）
+- 用户要求继续，本机唯一main/hospital_pharma_mes_dev。首先正式API确认批655 PRODUCTION_COMPLETED/入库126 SUBMITTED，后由仓库11565通过正式认证+独立签名5329确认入库126，库存流水3、398000ml、库位7；入库CONFIRMED。此前签名执行拦截在本轮未再发生，没有使用SQL改业务单。
+- Admin11556建/提交成品请验108，QC分析11567 ACCEPTED。取样员11566签名5330完成成品取样107、产生样品1640；QC11567实际接收样品。因正式SecurityConfiguration漏生产样品receive/production-tests精确路由导致HTTP403，按现有权限映射最小补齐并正常构建/重启唯一8080，无新增角色或权限，样品收货转RECEIVED。
+- QC11567按冻结标准1419的八项要求签署结果：检验实例514–521、结果修订839–846均PASS；QC独立复核11568逐项CONFIRMED。样品1640 TEST_COMPLETED；质量报告98/FR-HYTEA-655-20261113由11567生成、11568独立审批APPROVED/PASS，签名5347；请验108 COMPLETED。八项结果仅为外部声明的合成DEV场景数据，非真实检验实测。
+- QA11569提交批655为PENDING_QA并按全部8项实际门禁零阻断独立放行：QA决定690/签名5348，批655 QA_RELEASED/version7、finishedQualityStatus RELEASED、finishedInventoryStatus AVAILABLE；八项QA门禁均PASS。超时后通过只读核对成功，未重复签署放行。
+- FINAL eBR原归档逻辑对schemaV2错误调用旧成品物料批，已在EbrArchiveService按现有finishedGoods.productStockEvidence改为V2产品状态验证，保留legacy/QA签名/摘要/幂等合同，Java构建并正常重启后正式生成FINAL清单93/file133/关联决定690。8表单/43签名证据，recordDigest f03e05f883c42844fe16dd34a86423cdd6e0add1fe4651deaaf251a235907caa。附件实际%PDF-1.6、501399字节、SHA256 62902008f3278ebb80abf1b3654d446213830153fc819752aa4cf30c678e68a0与manifest一致。
+- PyMuPDF完成页级文本/渲染预检：317页、758696文本字符、业务批号/产品/签名信息可提取，文本块无越界；但PDF主要为技术JSON长文，**正式业务可读性及G5视觉验收未完成**。业务DEV E2E流程完成，不意味着真实现场生产/实验室检验或正式系统ACCEPTED。
+- 最终独立回读证据private-data-audit/hytea-resume-20261111/final-business-chain-655.json；完整总结docs/development/process-form-cpp-ebr/HYTEA_655_DEV_FULL_CHAIN_20261113.md；专项修复docs/development/decisions/HYTEA_DEV_FINISHED_QC_ROUTE_FIX_20261113.md与HYTEA_DEV_FINAL_ARCHIVE_PRODUCT_V2_20261113.md。用户本机PDF副本位于C:\Users\Administrator\.codex\tools\cuawright-mcp\evidence\mes-final-655-20261113\final-ebr-batch655.pdf。未Git提交/推送、不创建worktree，原工作区改动保留。
+
+## 2026-11-13 FINAL eBR业务版PDF预览v01：完成，等待本版人工设计确认
+- 本轮用户“继续”指向批655已完成DEV闭环后的PDF业务可读性/G5整改。真实FINAL清单93、附件133/501399字节、SHA256 `62902008f3278ebb80abf1b3654d446213830153fc819752aa4cf30c678e68a0`、记录摘要`f03e05f883c42844fe16dd34a86423cdd6e0add1fe4651deaaf251a235907caa`保持不变。
+- 已读取AGENTS、MES_DEV_RULES、冻结基线、MES_TASKS、最终DEV闭环报告、既有EbrPdfRenderer/BookPdfComposer与PDF单元测试。根因是EbrPdfRenderer直接输出全量JSON单列技术记录，导致317页长档；BookPdfComposer有现成封面/目录/书签/页码/合并原件，应复用而不是再造打印引擎。
+- 按批655已签名DEV数据制作独立4页A4中文业务版样式：1批次与产量/状态，2八工序签名与物料平衡，3标准1419八项QC/复核，4 QA八门禁及原归档SHA追溯。预览本机路径`private-data-audit/hytea-pdf-layout-20261113/HYTEA_655_FINAL_BUSINESS_PREVIEW_v01.pdf`，SHA256 `bd67762feb042c4a26e18e9c887726b90a1d1e982c5f430c74b9e8f96b68ca99`。生成/4页截图/contact sheet/检查JSON同目录，PyMuPDF页边界与可提取文本4/4 PASS，人工查看4页拼图。
+- 新增具体候选设计说明`docs/development/decisions/HYTEA_FINAL_EBR_BUSINESS_PDF_DESIGN_20261113.md`，状态`PENDING HUMAN APPROVAL / NOT FROZEN / NOT INTEGRATED`；该预览仅摘要，不替代317页全证据，长内容在预览有缩略，正式版须保留完整源证据、原签名修订及合法QA/归档摘要。
+- 没有修改正式EbrPdfRenderer、数据库、V077、角色/签名、已归档PDF；未创建新FINAL清单。下一阶段必须由用户明确确认此源文件SHA版本，之后按已批准完整打印合同复用BookPdfComposer集成、制作非破坏性REVIEW_COPY并完成安全/功能/UI G5验收。无Git提交/推送/worktree。
+
+## 2026-11-13 用户再次“确定批准”可读eBR PDF v01，功能验收通过、G5页面未放行
+- 用户明确再次确认 v01 排版方向。以批准的设计PDF `HYTEA_655_FINAL_BUSINESS_PREVIEW_v01.pdf` SHA256 `bd67762feb042c4a26e18e9c887726b90a1d1e982c5f430c74b9e8f96b68ca99`锁定业务阅读设计；这不授权篡改原FINAL或跳过G5。原详细设计DCP已记USER APPROVED。
+- 已按批准方案复用既有BookPdfComposer整册组件、调整EbrPdfRenderer，正式DEV API生成独立REVIEW_COPY清单94/附件134，27页、1161328字节、SHA256 `41e734d45cdf7f71901c5b9b5c133400e00460085282970b85388f7642d4b099`。内嵌JSON824602字节，含8份eBR工序表单、46条签名记录、14条数量事件及质量/QA/仓储/平衡原始记录。真实PDF结构及文件SHA校验PASS，27页文本块无溢出。
+- 历史FINAL清单93/附件133文件SHA256 `62902008f3278ebb80abf1b3654d446213830153fc819752aa4cf30c678e68a0`不变；源recordDigest `f03e05f883c42844fe16dd34a86423cdd6e0add1fe4651deaaf251a235907caa`与REVIEW_COPY一致。原QA决定690/签名5348及批655 QA_RELEASED/AVAILABLE不变。定向回归BookPdfComposerTest 6例含1跳过、新旧EbrPdfRenderer测试各1例PASS，合计7通过/1跳过/0失败。
+- 用CUAWright已尝试真实5173/8080 QA批审详情页`/qa/batches/655/review`，1440屏幕只显示页面标题/按钮，归档历史未呈现，定向等待失败。追加浏览器网络诊断调用被OpenAI安全检查拦截，未执行也未改用其他通道绕过；不能把这一失败写成MES后端403或G5 PASS。证据`private-data-audit/hytea-pdf-layout-20261113/qa_archive_ui_audit/qa_archive_diag_1440.png`。正式G5九维矩阵未完成（布局/文字层级/留白/表单/列表/查询/交互/多状态/WCAG2.2），当前IN PROGRESS/NOT ACCEPTED。
+- 相关专项记录`docs/development/decisions/HYTEA_EBR_BUSINESS_V01_APPROVAL_G5_STATUS_20261113.md`，PDF`private-data-audit/hytea-pdf-layout-20261113/HYTEA655_REAL_READABLE_REVIEW_COPY_134.pdf`。只更新文档，不重新生成FINAL，不重签、不更改用户/权限/数据库、无新worktree、Git仍唯一main且未提交/推送。
+
+## 2026-11-13 13:10 QA归档历史真实下载与G5自审收尾（专项通过、整页未验收）
+- 用户继续MES G5任务。本机唯一main，基线/规则文件读取并确认哈希。实际归档数据：批655 QA_RELEASED/version7/成品AVAILABLE，FINAL清单93文件133与业务版REVIEW_COPY清单94文件134都保持原签名及hash，未重签或重新生成PDF。
+- 已修复QA批审页原串行加载：`/qa/batches/655/review-model`单次10.33s乃至23.409s，而eBR历史GET约0.42s，导致历史迟迟不出现；前端改为独立并行GET、archiveLoading/Error、异步路由代际防污染。只读下载独立downloadingId，不再被耗时QA门禁busy禁用，原操作授权及Crypto SHA256校验保持不变。
+- 新增QA专项浏览器模拟6/6 PASS（慢QA、慢归档、失败刷新、慢QA下下载、QA错误仍能归档、375归档类型键盘）；原QA T6浏览器10/10 PASS（修复旧模拟/auth/navigation返回分页对象的测试桩，正式菜单应用无改动）；QA模型Vitest 8/8 PASS；vue-tsc PASS，Vite生产构建PASS（1分40秒，原大chunk警告仍在）。
+- CUAWright真实管理员11556/5173+8080：1440/1280/900/375四视口均归档历史恰2条，根文档无横向溢出；新增375版号下“最终／审核”文字；归档证据summary键盘Enter可展开且focus-visible solid2px；普通提示、警告/成功色按WCAG对比度要求加深。实际网页下载FINAL133=501399字节、SHA62902008f3278ebb80abf1b3654d446213830153fc819752aa4cf30c678e68a0；REVIEW_COPY134=1161328字节、SHA41e734d45cdf7f71901c5b9b5c133400e00460085282970b85388f7642d4b099，与数据库manifest相同。此次浏览器测试0业务写入/0JS pageerror。
+- 但**完整QA页G5仍BLOCKED/NOT ACCEPTED**：QA门禁GET本身存在慢/锁等待（单次读取23.409s返回8门禁通过，另有MariaDB 1205 Lock wait timeout），`FinishedReleaseService.review()`/`MaterialBalanceService.requireCheckpoint()`使用批次及生产订单锁并执行物流同步。暂未改动该冻结业务/签名计算路径，不加缓存或跳过门禁。当前MES DEV账户无PROCESS权限读取innodb_trx，未提权/杀事务。完整9维G5与19条WCAG基础检查已自审，未覆盖项如实NOT RUN，见`docs/acceptance/ebr-book/HYTEA_QA_ARCHIVE_G5_SELF_REVIEW_20261113.md`；专项DCP`docs/development/decisions/HYTEA_QA_ARCHIVE_HISTORY_PROGRESSIVE_LOAD_20261113.md`已更新。
+- 历史FINAL93/133与REVIEW_COPY94/134、QA决定690/签名5348及批655业务数据未更改；本轮没有Git stage/commit/push、没有新worktree。下一项应独立按RED/GREEN验证并最小修复QA只读门禁锁竞争，严格保证正式QA决定路径、recordDigest和已有签名不变，再重新签发完整G5。

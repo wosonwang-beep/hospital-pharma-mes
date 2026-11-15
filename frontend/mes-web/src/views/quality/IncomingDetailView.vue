@@ -1,18 +1,22 @@
 <script setup lang="ts">
-import {computed,ref,watch} from 'vue'
+import {computed,reactive,ref,watch} from 'vue'
 import {FileTextOutlined} from '@ant-design/icons-vue'
+import {message} from 'ant-design-vue'
 import {useRoute,useRouter,onBeforeRouteLeave} from 'vue-router'
 import {api,idempotencyKey} from '../../api/http'
 import {useControlledRequest} from '../../api/controlled'
 import {useAuthStore} from '../../stores/auth'
 import {schemas,operations,resources,actionLabels,commandBody,display,initial,selectSigningTarget,reviewResultIds,serverAllows,type SigningTarget,type Schema} from './incomingModel'
 import IncomingFormFields from './IncomingFormFields.vue'
+import IncomingReferencePicker from './IncomingReferencePicker.vue'
 import IncomingFacts from './IncomingFacts.vue'
 import IncomingDocument from './IncomingDocument.vue'
 import {documentNumber,documentStatus} from './incomingDetailModel'
 import ProductionDeviationControls from './ProductionDeviationControls.vue'
 import {deviationInitial} from '../production/workbenchFacts'
 import ProductionSampleControls from './ProductionSampleControls.vue'
+import BatchPrintButton from '../../components/printing/BatchPrintButton.vue'
+import {samplingPrintVisible} from './incomingPrintPolicy'
 type Row=Record<string,unknown>
 type Target=SigningTarget
 const route=useRoute(),router=useRouter(),auth=useAuthStore(),request=useControlledRequest(),{busy,error,conflict}=request
@@ -36,6 +40,26 @@ const executing=computed(()=>route.meta.mode==='execute')
 const itemRows=computed(()=>(record.value?.items??[]) as Row[])
 const title=computed(()=>production.value?(resource.value==='deviations'?'生产质量调查':'生产样品'):qa.value?'物料放行':def.value?.title??'来料质量')
 const signed=computed(()=>!!schema.value?.properties?.reauthToken)
+const samplingPrint=computed(()=>!create.value&&!production.value&&samplingPrintVisible(resource.value,permission=>auth.can(permission)))
+// QC-only continuation for receiving-origin FIRST inspection requests.
+const qcForm=reactive({qcSpecificationVersionId:'',plannedSamplingQuantity:'',plannedSamplingUnitId:'',requiredPackageCount:1,samplingPlan:'',reason:'确认检验依据与取样计划'})
+const qcGenerated=ref<{request?:Row;samplingTask?:Row;inspectionTask?:Row}|null>(null)
+const qcEligible=computed(()=>!create.value&&!production.value&&resource.value==='inspection-requests'&&!!record.value&&record.value.status==='SUBMITTED'&&auth.can('qms:inspection-request:accept')&&serverAllows(record.value,'confirm-and-generate'))
+async function qcConfirm(){
+ if(!qcEligible.value||busy.value||!record.value)return
+ const previous=record.value
+ if(!qcForm.qcSpecificationVersionId||!qcForm.plannedSamplingQuantity.trim()||!qcForm.plannedSamplingUnitId||!Number.isInteger(qcForm.requiredPackageCount)||qcForm.requiredPackageCount<1||!qcForm.samplingPlan.trim()){
+  error.value='请完整选择批准质量标准，填写计划取样数量、单位、件数及方案';return
+ }
+ busy.value=true;request.clear()
+ try{
+  const result=await request.mutate<{request:Row;samplingTask:Row;inspectionTask:Row}>(`${base.value}/${route.params.id}/confirm-and-generate`,'POST',{...qcForm},Number(previous.versionNo))
+  qcGenerated.value=result
+  message.success('QC确认成功，取样单与待样品检验任务已同时生成')
+  await load()
+ }catch(e){await request.failure(e)}finally{busy.value=false}
+}
+
 function available(action:string){return serverAllows(record.value,action)}
 const actions=computed(()=>{if(production.value)return [];const names=qa.value?['release-decisions']:def.value?.actions??[];return names.map(action=>({action,op:operations.find(o=>o.path===(qa.value?'/qa/material-lots/{lotId}':`${base.value}/{id}`)+`/${action}`)})).filter(x=>x.op&&auth.can(x.op.permission)&&available(x.action)&&(x.action!=='details'||executing.value))})
 function open(action:string,url:string,source:Row=record.value??{}){
@@ -70,17 +94,33 @@ async function save(){busy.value=true;error.value='';try{const body=commandBody(
  const result=await api<Row>({url,method:'POST',data:body,headers:{'Idempotency-Key':pendingKey,...(version===undefined?{}:{'If-Match':`"${version}"`})}});if(selected.value?.action==='label')labelResult.value=result;pendingFingerprint='';submitted.value=true;signatureOpen.value=false;selected.value=null;form.value={};if(create.value)await router.replace(`${base.value}/${result.id}`);else await load()
  }catch(e){await request.failure(e)}finally{password.value='';busy.value=false}}
 function can(permission:string){return auth.can(permission)}
+watch(()=>record.value?.id,()=>{if(record.value?.requestedUnitId)qcForm.plannedSamplingUnitId=String(record.value.requestedUnitId);qcGenerated.value=null})
 // Production commands use QualityCommandForm's own dirty/saved guard; the unused incoming form must not block successful navigation.
 onBeforeRouteLeave(()=>production.value||submitted.value||!Object.keys(form.value).length||window.confirm('离开将放弃未保存的输入，是否继续？'))
 watch(()=>route.fullPath,()=>{selected.value=null;labelResult.value=null;submitted.value=false;void load()},{immediate:true})
 </script>
 <!-- UI Template: T2 for create, T3 for incoming documents, T6 for material release review. -->
-<template><main class="admin-page master-page" :class="{'inspection-record-page':['inspection-tasks','inspection-reports'].includes(resource)&&!create&&!production}" :data-ui-template="create?'T2':qa?'T6':'T3'"><header class="admin-page-header"><div><a-button type="link" @click="router.push({path:qa?`/wms/material-lots/${route.params.id}`:base,query:route.query})">← 返回</a-button><h1><FileTextOutlined v-if="resource==='inspection-reports'&&!create" class="report-heading-icon"/>{{create?'新增':''}}{{title}}<template v-if="record&&['inspection-tasks','inspection-reports'].includes(resource)&&!production"> <span class="inspection-number">{{documentNumber(record)}}</span> <a-tag :color="(resource==='inspection-reports'?record.overallResult==='FAIL':record.status==='QC_FAILED')?'red':(resource==='inspection-reports'?record.overallResult==='PASS':record.status==='QC_PASSED')?'green':'blue'">{{resource==='inspection-reports'?display(record.overallResult):documentStatus(resource,record)}}</a-tag></template></h1><p v-if="record&&['inspection-tasks','inspection-reports'].includes(resource)&&!production" class="inspection-subtitle">来料检验 · 质量控制</p><p v-if="record&&!production&&!qa&&!['inspection-tasks','inspection-reports'].includes(resource)" class="object-identity">{{documentNumber(record)}} <a-tag>{{documentStatus(resource,record)}}</a-tag></p></div><a-space wrap><a-button v-for="a in qa?[]:actions" :key="a.action" :type="(resource==='inspection-tasks'&&a.action==='submit-review')||(resource==='inspection-reports'&&a.action==='approve')?'primary':'default'" @click="open(a.action,`${qa?base:`${base}/${route.params.id}`}/${a.action}`)">{{actionLabels[a.action]}}</a-button><a-button v-if="!create&&!executing&&['sampling-tasks','inspection-tasks'].includes(resource)&&(serverAllows(record,'details')||itemRows.some(item=>serverAllows(item,'executions')||serverAllows(item,'approved-retests')||executions(item).some(e=>serverAllows(e,'results')||serverAllows(e,'revisions'))))&&can(resource==='sampling-tasks'?'qms:sampling:execute':'qms:test:execute')" type="primary" @click="router.push(`${base}/${route.params.id}/execute`)">进入执行</a-button></a-space></header>
+<template><main class="admin-page master-page" :class="{'inspection-record-page':['inspection-tasks','inspection-reports'].includes(resource)&&!create&&!production}" :data-ui-template="create?'T2':qa?'T6':'T3'"><header class="admin-page-header"><div><a-button type="link" @click="router.push({path:qa?`/wms/material-lots/${route.params.id}`:base,query:route.query})">← 返回</a-button><h1><FileTextOutlined v-if="resource==='inspection-reports'&&!create" class="report-heading-icon"/>{{create?'新增':''}}{{title}}<template v-if="record&&['inspection-tasks','inspection-reports'].includes(resource)&&!production"> <span class="inspection-number">{{documentNumber(record)}}</span> <a-tag :color="(resource==='inspection-reports'?record.overallResult==='FAIL':record.status==='QC_FAILED')?'red':(resource==='inspection-reports'?record.overallResult==='PASS':record.status==='QC_PASSED')?'green':'blue'">{{resource==='inspection-reports'?display(record.overallResult):documentStatus(resource,record)}}</a-tag></template></h1><p v-if="record&&['inspection-tasks','inspection-reports'].includes(resource)&&!production" class="inspection-subtitle">来料检验 · 质量控制</p><p v-if="record&&!production&&!qa&&!['inspection-tasks','inspection-reports'].includes(resource)" class="object-identity">{{documentNumber(record)}} <a-tag>{{documentStatus(resource,record)}}</a-tag></p></div><a-space wrap><BatchPrintButton v-if="samplingPrint&&record?.id" business-type="SAMPLING_RECORD" :record-ids="[String(record.id)]"/><a-button v-for="a in qa?[]:actions" :key="a.action" :type="(resource==='inspection-tasks'&&a.action==='submit-review')||(resource==='inspection-reports'&&a.action==='approve')?'primary':'default'" @click="open(a.action,`${qa?base:`${base}/${route.params.id}`}/${a.action}`)">{{actionLabels[a.action]}}</a-button><a-button v-if="!create&&!executing&&['sampling-tasks','inspection-tasks'].includes(resource)&&(serverAllows(record,'details')||itemRows.some(item=>serverAllows(item,'executions')||serverAllows(item,'approved-retests')||executions(item).some(e=>serverAllows(e,'results')||serverAllows(e,'revisions'))))&&can(resource==='sampling-tasks'?'qms:sampling:execute':'qms:test:execute')" type="primary" @click="router.push({path:`${base}/${route.params.id}/execute`,query:route.query})">进入执行</a-button></a-space></header>
  <a-alert v-if="error" type="error" :message="error" show-icon/><a-alert v-if="conflict" type="warning" message="记录已变化。输入已保留，请核对最新记录后重试。"><template #action><a-button @click="load">重新加载</a-button></template></a-alert>
  <a-card v-if="labelResult" title="样品标签" class="form-section"><IncomingFacts :value="labelResult"/></a-card><IncomingDocument v-if="record&&!production" :record="record" :resource="resource"><template #decision-actions><a-space wrap><a-button v-for="a in actions" :key="a.action" @click="open(a.action,`${base}/${a.action}`)">{{actionLabels[a.action]}}</a-button></a-space></template></IncomingDocument><a-card v-else-if="record" :title="`${title}详情`" class="form-section"><IncomingFacts :value="record"/></a-card>
+ <a-card v-if="qcEligible" title="QC检验依据及取样计划" class="form-section">
+   <div class="master-form">
+     <label><span class="form-field-label">批准质量标准 *</span><IncomingReferencePicker v-model="qcForm.qcSpecificationVersionId" field="qcSpecificationVersionId" input-label="批准质量标准" :context="{materialLotId:record?.materialLotId}" :disabled="busy"/></label>
+     <label><span class="form-field-label">计划取样量 *</span><a-input v-model:value="qcForm.plannedSamplingQuantity" aria-label="计划取样量" :disabled="busy" placeholder="按批准方案填写实际单位下的十进制数量"/></label>
+     <label><span class="form-field-label">取样单位 *</span><IncomingReferencePicker v-model="qcForm.plannedSamplingUnitId" field="requestedUnitId" input-label="取样单位" :context="{materialLotId:record?.materialLotId}" :disabled="busy"/></label>
+     <label><span class="form-field-label">计划取样件数 *</span><a-input-number v-model:value="qcForm.requiredPackageCount" aria-label="计划取样件数" :min="1" :precision="0" :disabled="busy" style="width:100%"/></label>
+     <label class="form-full-row"><span class="form-field-label">批准取样方案 *</span><a-textarea v-model:value="qcForm.samplingPlan" aria-label="批准取样方案" :rows="2" :disabled="busy"/></label>
+   </div>
+   <p class="muted">QC确认时将批准标准与取样计划冻结，同时生成取样任务和待样品检验任务；样品接收前禁止填写检验结果。</p>
+   <a-space wrap><a-button type="primary" :loading="busy" :disabled="conflict" @click="qcConfirm">确认请验并生成取样单及检验任务</a-button></a-space>
+ </a-card>
+ <a-card v-if="qcGenerated?.samplingTask&&qcGenerated?.inspectionTask" title="本次生成的业务单据" class="form-section"><a-space wrap>
+    <a-button type="link" @click="router.push({path:`/quality/sampling-tasks/${qcGenerated?.samplingTask?.id}`})">取样单 {{qcGenerated?.samplingTask?.samplingTaskNo}}</a-button>
+    <a-button type="link" @click="router.push({path:`/quality/inspection-tasks/${qcGenerated?.inspectionTask?.id}`})">检验任务 {{qcGenerated?.inspectionTask?.inspectionTaskNo}}（待样品）</a-button>
+ </a-space></a-card>
  <template v-if="executing&&resource==='inspection-tasks'"><a-card v-for="item in itemRows" :key="String(item.id)" :title="String(item.itemName??item.id)" class="form-section"><a-space wrap><a-button v-if="serverAllows(item,'executions')&&can('qms:test:execute')" @click="open('executions',`/quality/inspection-items/${item.id}/executions`,item)">记录原始检验</a-button><a-button v-if="serverAllows(item,'approved-retests')&&can('qms:test:execute')" @click="open('approved-retests',`/quality/inspection-items/${item.id}/approved-retests`,item)">记录批准复检</a-button></a-space><div v-for="execution in executions(item)" :key="String(execution.id)"><p>检验执行 {{execution.id}}</p><a-button v-if="serverAllows(execution,'results')&&can('qms:test:execute')" @click="open('results',`/quality/inspection-items/${item.id}/results`,execution)">提交原始结果</a-button><a-button v-for="revision in revisions(execution).slice(-1)" v-show="serverAllows(revision,'revisions')&&serverAllows(execution,'revisions')&&can('qms:test:correct')" :key="String(revision.id)" @click="open('revisions',`/quality/test-results/${revision.id}/revisions`,execution)">更正结果（保留原始记录）</a-button></div></a-card></template>
  <ProductionDeviationControls v-if="production&&resource==='deviations'" :record="record??{}" :create="create" :initial-value="deviationInitial(route.query)" @saved="r=>create?router.replace({path:'/deviations/'+r.id,query:{scope:'PRODUCTION'}}):load()"/><ProductionSampleControls v-if="production&&resource==='samples'&&record" :record="record" @saved="load"/>
- <a-card v-if="!production&&(create||selected)" :title="create?`新增${title}`:actionLabels[selected!.action]" class="form-section"><p v-if="create&&resource==='inspection-reports'">根据请验单的全部必检项目自动汇总已复核结果，并保留原始结果和调查依据。</p><form @submit.prevent="prepare"><IncomingFormFields v-model="form" :schema="schema" :disabled="busy" :context="fieldContext" :locked-fields="lockedFields"/><a-space><a-button :disabled="busy" @click="cancelForm">取消</a-button><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">{{signed?'核对并签名':'提交'}}</a-button></a-space></form></a-card>
+ <a-card v-if="!production&&(create||selected)" :title="create?`新增${title}`:actionLabels[selected!.action]" class="form-section"><p v-if="create&&resource==='inspection-reports'">根据请验单的全部必检项目自动汇总已复核结果，并保留原始结果和调查依据。</p><form @submit.prevent="prepare"><IncomingFormFields v-model="form" :schema="schema" :disabled="busy" :context="fieldContext" :locked-fields="lockedFields"/><a-space><a-button type="primary" html-type="submit" :loading="busy" :disabled="conflict">{{signed?'核对并签名':'提交'}}</a-button><a-button :disabled="busy" @click="cancelForm">取消</a-button></a-space></form></a-card>
 <a-modal v-model:open="signatureOpen" title="电子签名确认" :confirm-loading="busy" ok-text="签名并提交" cancel-text="取消" @ok="save" @cancel="password=''">
  <p>签名含义：{{display(target()?.meaning)}}；绑定记录 {{target()?.recordId}}，版本 {{target()?.recordVersion}}。</p>
  <p>请核对当前操作及原因。提交后签名与业务证据一同保存。</p>

@@ -35,7 +35,7 @@ function key(n:Node){return String(n.type)+':'+String(n.id)}
 function actualFinishedLot(id:string){return edges.value.some(e=>e.sourceType==='MAIN_BATCH'&&e.targetType==='MATERIAL_LOT'&&e.targetId===id)}
 function isFinishedDecision(id:string){return edges.value.some(e=>e.sourceType==='MATERIAL_LOT'&&e.targetType==='RELEASE_DECISION'&&e.targetId===id&&actualFinishedLot(e.sourceId))}
 const stages=[
- {key:'incoming',title:'来料与供应商',hint:'供应商、收货、来料检验与物料放行',types:['SUPPLIER','RECEIPT','RECEIPT_ITEM','INSPECTION_REQUEST','SAMPLING_TASK','SAMPLING_DETAIL','INSPECTION_TASK','INSPECTION_ITEM','TEST_EXECUTION','REPORT','QC_SPECIFICATION_VERSION']},
+ {key:'incoming',title:'来料与供应商',hint:'供应商、收货、来料检验与物料放行',types:['SUPPLIER','RECEIPT','RECEIPT_ITEM','INSPECTION_REQUEST','SAMPLING_TASK','SAMPLING_DETAIL','INSPECTION_TASK','INSPECTION_ITEM','TEST_EXECUTION','REPORT','QC_SPECIFICATION']},
  {key:'material',title:'领料与投料',hint:'出库、称量、实际投料与生产准备',types:['MATERIAL_REQUEST','MATERIAL_ISSUE','MATERIAL_ISSUE_ITEM','ISSUE_RETURN','WEIGHING','CHARGE']},
  {key:'production',title:'生产执行',hint:'正式批次、执行单元与实际工序',types:['MAIN_BATCH','EXECUTION_UNIT','OPERATION']},
  {key:'finished',title:'成品检验',hint:'成品批、入库接收、取样、检验与报告',types:['FINISHED_INBOUND_REQUEST','FINISHED_INSPECTION_REQUEST','FINISHED_SAMPLING_RECORD','SAMPLE','PRODUCTION_TEST','RESULT_REVISION','RESULT_REVIEW','FINISHED_REPORT','FINISHED_REPORT_REVIEW']},

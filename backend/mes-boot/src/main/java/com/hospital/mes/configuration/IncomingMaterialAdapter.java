@@ -5,6 +5,7 @@ import com.hospital.mes.wms.infrastructure.*;
 import com.hospital.mes.masterdata.application.ApprovedSupplierQueryService;
 import com.hospital.mes.masterdata.domain.MasterGateException;
 import java.time.Instant;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @Component @ConditionalOnProperty(prefix="spring.datasource",name="url")
@@ -13,6 +14,22 @@ public class IncomingMaterialAdapter implements IncomingMaterialPort {
  public IncomingMaterialAdapter(WmsStore store,WmsQualityService quality,ApprovedSupplierQueryService suppliers){this.store=store;this.quality=quality;this.suppliers=suppliers;}
  public LotFacts lock(long org,long id){return facts(org,store.materialLot().lock(org,id));}
  public LotFacts read(long org,long id){return facts(org,store.materialLot().get(org,id));}
+ public ReceiptInspectionSource lockReceiptItem(long org,long receiptId,long itemId){
+  var receipt=store.receiptMapper().selectOne(new QueryWrapper<ReceiptEntity>().eq("org_id",org).eq("id",receiptId).last("FOR UPDATE"));
+  var item=store.receiptItemMapper().selectOne(new QueryWrapper<ReceiptItemEntity>().eq("org_id",org).eq("id",itemId).eq("receipt_id",receiptId).last("FOR UPDATE"));
+  if(receipt==null||item==null)throw new java.util.NoSuchElementException("Receipt item not found");
+  var lot=store.materialLotMapper().selectOne(new QueryWrapper<MaterialLotEntity>().eq("org_id",org).eq("receipt_item_id",itemId).last("FOR UPDATE"));
+  if(lot==null)throw new java.util.NoSuchElementException("Material lot not found");
+  return source(receipt,item,lot);
+ }
+ public ReceiptInspectionSource readReceiptItem(long org,long receiptId,long itemId){
+  var receipt=store.receiptMapper().selectOne(new QueryWrapper<ReceiptEntity>().eq("org_id",org).eq("id",receiptId));
+  var item=store.receiptItemMapper().selectOne(new QueryWrapper<ReceiptItemEntity>().eq("org_id",org).eq("id",itemId).eq("receipt_id",receiptId));
+  if(receipt==null||item==null)throw new java.util.NoSuchElementException("Receipt item not found");
+  var lot=store.materialLotMapper().selectOne(new QueryWrapper<MaterialLotEntity>().eq("org_id",org).eq("receipt_item_id",itemId));
+  if(lot==null)throw new java.util.NoSuchElementException("Material lot not found");
+  return source(receipt,item,lot);
+ }
  public void applyTransition(long org,long id,long version,IncomingLotTransition transition,long actor){quality.apply(org,id,version,WmsQualityService.Action.valueOf(transition.name()),actor);}
  private LotFacts facts(long org,MaterialLotEntity lot){
   if(lot.getReceiptItemId()==null)throw new IllegalStateException("Material lot lacks receiving lineage");
@@ -25,5 +42,12 @@ public class IncomingMaterialAdapter implements IncomingMaterialPort {
   return new LotFacts(lot.getId(),lot.getMaterialId(),receipt.getId(),item.getId(),receipt.getSupplierId(),relationship,
    item.getReceivedQty(),item.getUnitId(),item.getPackageCount(),Boolean.TRUE.equals(lot.getRequiresIncomingInspectionSnapshot()),checks,
    approved,approved,lot.getQualityStatus(),lot.getInventoryStatus(),lot.getExpiryDate(),lot.getRetestDate(),lot.getVersionNo());
+ }
+ private ReceiptInspectionSource source(ReceiptEntity receipt,ReceiptItemEntity item,MaterialLotEntity lot){
+  boolean checks="APPROVED".equals(receipt.getRecordStatus())&&receipt.getConfirmedAt()!=null&&Boolean.TRUE.equals(receipt.getTransportCheckPassed())
+   &&Boolean.TRUE.equals(item.getPackageCheckPassed())&&Boolean.TRUE.equals(item.getSealCheckPassed())
+   &&Boolean.TRUE.equals(item.getLabelCheckPassed())&&Boolean.TRUE.equals(item.getDamageCheckPassed())&&Boolean.TRUE.equals(item.getContaminationCheckPassed());
+  return new ReceiptInspectionSource(receipt.getId(),item.getId(),lot.getId(),item.getMaterialId(),item.getReceivedQty(),item.getUnitId(),
+   item.getPackageCount(),Boolean.TRUE.equals(item.getRequiresIncomingInspectionSnapshot()),checks,receipt.getConfirmedAt());
  }
 }

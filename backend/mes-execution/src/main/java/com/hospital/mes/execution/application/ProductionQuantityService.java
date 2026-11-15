@@ -30,7 +30,16 @@ public class ProductionQuantityService {
    var row=new QuantityEventEntity();row.setMainBatchId(batch);row.setEventType(fact.type());row.setSourceType(source);row.setSourceRef(Long.toString(fact.id()));row.setMaterialLotId(fact.materialLotId());row.setAmount(fact.amount());row.setUnitId(fact.unitId());row.setOccurredAt(fact.occurredAt());store.quantityEvents.insert(row,org,actor);mutations.auditSnapshot(context,"QUANTITY_SOURCE_SYNCHRONIZED","QuantityEvent",row.getId(),null,view(row),"Projected actual confirmed "+source,"quantity-sync:"+source+":"+fact.id());
   }
  }
- private List<QuantityEventEntity> rows(long org,long batch){return store.quantityEventMapper.selectList(new QueryWrapper<QuantityEventEntity>().eq("org_id",org).eq("main_batch_id",batch).orderByAsc("id"));}
+ @Transactional(propagation=Propagation.MANDATORY,readOnly=true) public boolean requireLogisticsSynchronized(long org,long batch){
+  var root=batches.batch(org,batch);boolean complete=true;
+  for(var fact:inventory.getObject().confirmedLogistics(org,batch)){
+   String source=fact.type().equals("ISSUE")?"MaterialIssueItem":"IssueReturnItem";
+   var existing=store.quantityEventMapper.selectOne(new QueryWrapper<QuantityEventEntity>().eq("org_id",org).eq("event_type",fact.type()).eq("source_type",source).eq("source_ref",Long.toString(fact.id())));
+   if(existing!=null){gate(existing.getMainBatchId()==batch&&existing.getMaterialLotId()==fact.materialLotId()&&existing.getUnitId()==fact.unitId()&&existing.getAmount().compareTo(fact.amount())==0,"QUANTITY_SOURCE_CHANGED","Confirmed source evidence changed");continue;}
+   gate(!Set.of("QA_RELEASED","REJECTED").contains(root.status()),"QUANTITY_BATCH_NOT_MUTABLE","Final QA history cannot receive late source facts");complete=false;
+  }
+  return complete;
+ }private List<QuantityEventEntity> rows(long org,long batch){return store.quantityEventMapper.selectList(new QueryWrapper<QuantityEventEntity>().eq("org_id",org).eq("main_batch_id",batch).orderByAsc("id"));}
  @Transactional(readOnly=true) public ScopedStore.PageData<JsonNode> list(String batch,int page,int size){var c=mutations.context("balance:view");if(page<0||page>1000000||size<1||size>100)throw new IllegalArgumentException("Invalid pagination");var all=facts(c.organizationId(),MasterMutation.id(batch));return new ScopedStore.PageData<>(all.stream().skip((long)page*size).limit(size).toList(),all.size(),page,size);}
  @Transactional public JsonNode record(String target,JsonNode body,String header,String key){
   fields(body,"versionNo","eventType","operationExecutionId","materialLotId","amount","unitId","sourceRef","reason","signature","lotNo","locationId","productionDate","expiryDate");

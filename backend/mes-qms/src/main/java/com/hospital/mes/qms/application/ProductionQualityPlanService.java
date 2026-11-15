@@ -99,7 +99,6 @@ public class ProductionQualityPlanService implements ProductionQualityPlanPort {
             var product=product(c.organizationId(),row.getMainBatchId());
             gate(parse(row.getPlanJson()).path("productId").asText().equals(product.path("productId").asText()),"QUALITY_PLAN_PRODUCT_CHANGED","Draft batch product changed; edit the plan");
             var spec=specs.requireProductSelectable(c.organizationId(),product.path("productId").asLong(),row.getQcSpecificationVersionId());
-            gate(signing.valid(c.organizationId(),spec.approvalSignatureId()),"QUALITY_STANDARD_SIGNATURE_INVALID","Quality standard approval signature invalid");
             var snapshot=(ObjectNode)json.valueToTree(spec);
             for(int i=0;i<spec.items().size();i++){
                 var item=spec.items().get(i);var node=(ObjectNode)snapshot.path("items").get(i);

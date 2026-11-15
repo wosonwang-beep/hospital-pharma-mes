@@ -36,7 +36,7 @@ const cases=[
  {path:'/deviations/71',record:investigation,text:'原始异常事实'},
  {path:'/qa/material-lots/61/review',record:release,text:'放行条件与阻断检查'},
 ]
-const permissions=['qms:inspection-request:view','qms:sampling:view','qms:test:view','qms:report:view','qms:deviation:view','qa:material-release:view','wms:inventory:view','wms:receipt:view','qms:specification:view','iam:user:view','master:uom:view','master:equipment:view','audit:view','trace:view']
+const permissions=['qms:inspection-request:view','qms:sampling:view','qms:test:view','qms:report:view','qms:deviation:view','qa:material-release:view','wms:inventory:view','wms:receipt:view','qms:specification:view','iam:user:view','master:uom:view','master:equipment:view','trace:view']
 for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,async({page})=>{
  if(test.info().project.name==='chromium-desktop')await page.setViewportSize({width:1280,height:853})
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())})
@@ -63,9 +63,8 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
  })
  await page.goto(scenario.path);await expect(page.getByText(scenario.text,{exact:true})).toBeVisible()
  await expect(page.getByText('详情响应不完整或状态不符合当前契约，请重新加载并核对数据来源。',{exact:true})).toHaveCount(0)
- await expect(page.getByRole('button',{name:'审计追踪',exact:true})).toBeVisible()
  if(scenario.record.inspectionRequestId&&!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports')&&!scenario.path.startsWith('/qa/'))await expect(page.getByText('IR-20261005-001',{exact:true}).first()).toBeVisible()
- if(!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports')&&!scenario.path.startsWith('/qa/')){await expect(page.getByText('记录元数据',{exact:true})).toBeHidden();await expect(page.getByText('电子签名记录',{exact:true})).toBeHidden();if(scenario.path.startsWith('/deviations/')){await page.getByRole('button',{name:/更多记录与审计证据/}).click();await expect(page.getByText('原始结果与最终选定结果证据',{exact:true})).toBeVisible();await page.getByRole('button',{name:/更多记录与审计证据/}).click()}}
+ if(!scenario.path.includes('inspection-tasks')&&!scenario.path.includes('inspection-reports')&&!scenario.path.startsWith('/qa/')){await expect(page.getByText('记录元数据',{exact:true})).toBeHidden();await expect(page.getByText('电子签名记录',{exact:true})).toBeHidden();if(scenario.path.startsWith('/deviations/')){await page.getByRole('button',{name:/更多记录与签名信息/}).click();await expect(page.getByText('原始结果与最终选定结果证据',{exact:true})).toBeVisible();await page.getByRole('button',{name:/更多记录与签名信息/}).click()}}
  if(scenario.path.includes('inspection-tasks')){
   await expect(page.getByRole('button',{name:'IR-20261005-001',exact:true})).toBeVisible()
   await expect(page.getByText('95.000000 – 105.000000',{exact:true})).toBeVisible()
@@ -79,7 +78,7 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
  await page.screenshot({path:resolve(output,`${name}-${test.info().project.name}.png`),fullPage:true})
  if(scenario.path.includes('inspection-reports')){
   await page.screenshot({path:resolve(output,`report-preview-${test.info().project.name}.png`),fullPage:false})
-  await page.getByRole('button',{name:/更多记录与审计证据/}).click()
+  await page.getByRole('button',{name:/更多记录与签名信息/}).click()
   await expect(page.getByText('90.000000',{exact:true})).toBeVisible()
   await expect(page.getByText('项目汇总：原始结果与报告选定结果',{exact:true})).toBeVisible()
   await page.screenshot({path:resolve(output,`report-evidence-${test.info().project.name}.png`),fullPage:true})
@@ -92,7 +91,7 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
   await expect(page.getByText('高效液相色谱仪（ID 81）',{exact:true}).last()).toBeVisible()
   await page.screenshot({path:resolve(output,`inspection-item-${test.info().project.name}.png`),fullPage:false})
   await page.getByRole('button',{name:'Close',exact:true}).click()
-  await page.getByRole('button',{name:/更多记录与审计证据/}).click()
+  await page.getByRole('button',{name:/更多记录与签名信息/}).click()
   await expect(page.getByText('检验项目、标准快照与执行结果',{exact:true})).toBeVisible()
   await page.screenshot({path:resolve(output,`inspection-evidence-${test.info().project.name}.png`),fullPage:true})
   await page.getByRole('button',{name:'查看签名证据',exact:true}).first().click()
@@ -102,11 +101,7 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
   await page.screenshot({path:resolve(output,`signature-${test.info().project.name}.png`),fullPage:true})
   await page.getByRole('button',{name:'Close',exact:true}).click()
  }
- await page.getByRole('button',{name:'审计追踪',exact:true}).click()
- await expect(page).toHaveURL(/\/audit\?/)
  const audit=new URL(page.url()),types:Record<string,string>={'inspection-requests':'qms_inspection_request','sampling-tasks':'qms_sampling_task',samples:'qms_sample','inspection-tasks':'qms_inspection_task','inspection-reports':'qms_inspection_report',investigations:'qms_deviation','material-lots':'MaterialLot'}
- expect(audit.searchParams.get('objectType')).toBe(types[name])
- expect(audit.searchParams.get('objectId')).toBe(String(scenario.record.id??scenario.record.materialLotId))
  expect(errors).toEqual([])
 })
 
@@ -126,7 +121,7 @@ test('read-only role keeps original IDs without requesting forbidden master or s
  })
  await page.goto('/quality/inspection-tasks/201')
  await expect(page.getByText('检验结论与复核',{exact:true})).toBeVisible()
- await page.getByRole('button',{name:/更多记录与审计证据/}).click()
+ await page.getByRole('button',{name:/更多记录与签名信息/}).click()
  await page.getByText('关联信息读取说明',{exact:true}).click()
  await expect(page.getByText('指派人员：无关联读取权限，保留原始ID。',{exact:true})).toBeVisible()
  await expect(page.getByRole('button',{name:'查看签名证据',exact:true})).toHaveCount(0)

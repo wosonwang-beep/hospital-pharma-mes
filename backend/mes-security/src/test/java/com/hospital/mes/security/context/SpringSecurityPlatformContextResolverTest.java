@@ -14,8 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 class SpringSecurityPlatformContextResolverTest {
     @AfterEach void clear(){SecurityContextHolder.clearContext();}
     @Test void resolvesOrganizationOnlyFromAuthenticatedSessionPrincipal(){
-        var identity=new LoginSnapshot(7,11,"staff","Staff",Set.of("QA"),Set.of("audit:view"),false);
-        var auth=UsernamePasswordAuthenticationToken.authenticated(identity,null,ListAuthorities.of("audit:view"));auth.setDetails("session-1");SecurityContextHolder.getContext().setAuthentication(auth);
+        var identity=new LoginSnapshot(7,11,"staff","Staff",Set.of("QA"),Set.of("trace:view"),false);
+        var auth=UsernamePasswordAuthenticationToken.authenticated(identity,null,ListAuthorities.of("trace:view"));auth.setDetails("session-1");SecurityContextHolder.getContext().setAuthentication(auth);
         var context=new SpringSecurityPlatformContextResolver(() -> "request-1").current();
         assertThat(context.organizationId()).isEqualTo(11);assertThat(context.actorId()).isEqualTo(7);assertThat(context.sessionId()).isEqualTo("session-1");
     }

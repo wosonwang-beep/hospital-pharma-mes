@@ -46,7 +46,7 @@ export function signatureEntries(value:unknown,path='本记录'):Array<{context:
  const current=rows(row.signatureEvidence).map(metadata=>({context:path,metadata}))
  return [...current,...Object.entries(row).filter(([k])=>!['signatureEvidence','signingTargets'].includes(k)).flatMap(([k,v])=>signatureEntries(v,`${path} / ${detailLabel(k)}`))]
 }
-export const slotNames:Record<string,string>={SAMPLING_PLAN:'取样方案批准',SAMPLING_TASK:'取样完成',SAMPLE_DISPOSAL:'样品处置',TEST_RESULT_REVISION:'检验结果签名',INSPECTION_TASK:'检验复核',DEVIATION_DECISION:'调查决定',DEVIATION_CLOSE:'调查关闭',INSPECTION_REPORT:'报告批准',MATERIAL_RELEASE_DECISION:'物料质量决定'}
+export const slotNames:Record<string,string>={SAMPLING_PLAN:'取样方案批准',SAMPLING_TASK:'取样记录提交',SAMPLING_WAREHOUSE_OUTBOUND:'取样实物出库确认',SAMPLE_DISPOSAL:'样品处置',TEST_RESULT_REVISION:'检验结果签名',INSPECTION_TASK:'检验复核',DEVIATION_DECISION:'调查决定',DEVIATION_CLOSE:'调查关闭',INSPECTION_REPORT:'报告批准',MATERIAL_RELEASE_DECISION:'物料质量决定'}
 export function detailDisplay(key:string,value:unknown){
  const enums:Record<string,string>={NUMERIC:'数值',TEXT:'文本',USER_QA:'QA人员决定',SYSTEM_RULE:'系统规则',VERIFY:'核验',APPROVE:'批准',RELEASE:'放行',REJECT:'拒绝',OOS:'超标结果',DEVIATION:'偏差'}
  const slots:Record<string,string>={plan:'方案批准',completion:'取样完成',disposal:'样品处置',review:'检验复核',decision:'质量决定',close:'调查关闭',approval:'报告批准'}

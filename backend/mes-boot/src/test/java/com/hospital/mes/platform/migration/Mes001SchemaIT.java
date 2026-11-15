@@ -16,33 +16,31 @@ class Mes001SchemaIT {
     private JdbcTemplate jdbc;
 
     @Test
-    void createsExactlyTheFiveMes001PlatformTables() {
+    void createsTheSignatureAndIntegrationTablesWithoutGxpAuditStorage() {
         List<String> tables = jdbc.queryForList("""
             SELECT table_name FROM information_schema.tables
              WHERE table_schema = DATABASE()
-               AND table_name IN ('gxp_audit_event','gxp_signature','integration_inbox',
+               AND table_name IN ('gxp_signature','integration_inbox',
                                   'integration_outbox','platform_idempotency_record')
              ORDER BY table_name
             """, String.class);
-        assertThat(tables).containsExactly("gxp_audit_event", "gxp_signature", "integration_inbox",
+        assertThat(tables).containsExactly("gxp_signature", "integration_inbox",
             "integration_outbox", "platform_idempotency_record");
     }
 
     @Test
-    void installsAuditMutationGuardsAndFrozenPermissions() {
+    void installsNoTriggersAndNoAuditPermission() {
         Integer triggerCount = jdbc.queryForObject("""
             SELECT COUNT(*) FROM information_schema.triggers
              WHERE trigger_schema = DATABASE()
-               AND event_object_table = 'gxp_audit_event'
-               AND event_manipulation IN ('UPDATE','DELETE')
             """, Integer.class);
-        assertThat(triggerCount).isEqualTo(2);
+        assertThat(triggerCount).isZero();
 
         List<String> permissions = jdbc.queryForList("""
             SELECT permission_code FROM sys_permission
              WHERE permission_code IN ('audit:view','ebr:sign','integration:view','integration:retry')
              ORDER BY permission_code
             """, String.class);
-        assertThat(permissions).containsExactly("audit:view", "ebr:sign", "integration:retry", "integration:view");
+        assertThat(permissions).containsExactly("ebr:sign", "integration:retry", "integration:view");
     }
 }

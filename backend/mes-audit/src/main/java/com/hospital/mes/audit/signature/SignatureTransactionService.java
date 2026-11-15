@@ -2,10 +2,7 @@ package com.hospital.mes.audit.signature;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hospital.mes.audit.application.AuditApplicationService;
 import com.hospital.mes.audit.application.CurrentPlatformContext;
-import com.hospital.mes.audit.domain.AuditCommand;
-import com.hospital.mes.audit.domain.AuditSource;
 import com.hospital.mes.audit.idempotency.IdempotencyCommand;
 import com.hospital.mes.audit.idempotency.IdempotencyDecisionType;
 import com.hospital.mes.audit.idempotency.PlatformIdempotencyService;
@@ -25,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignatureTransactionService {
     private final SignableObjectProviderRegistry providers; private final SignatureCanonicalizer canonicalizer;
     private final SignatureRepository signatures; private final PlatformIdempotencyService idempotency;
-    private final AuditApplicationService audit; private final ObjectMapper json; private final Clock clock;
+    private final ObjectMapper json; private final Clock clock;
     private final org.springframework.context.ApplicationEventPublisher events;
     public SignatureTransactionService(SignableObjectProviderRegistry providers,SignatureCanonicalizer canonicalizer,
-        SignatureRepository signatures,PlatformIdempotencyService idempotency,AuditApplicationService audit,
+        SignatureRepository signatures,PlatformIdempotencyService idempotency,
         ObjectMapper json,Clock clock,org.springframework.context.ApplicationEventPublisher events){this.providers=providers;this.canonicalizer=canonicalizer;this.signatures=signatures;
-        this.idempotency=idempotency;this.audit=audit;this.json=json;this.clock=clock;this.events=events;}
+        this.idempotency=idempotency;this.json=json;this.clock=clock;this.events=events;}
 
     @Transactional
     public SignatureResponseData signInTransaction(SignCommand c,ConsumedReauthentication reauth){
@@ -42,16 +39,13 @@ public class SignatureTransactionService {
         SignableObjectProvider provider=providers.require(c.objectType(),c.meaning());
         SignableObject object=provider.loadForSignature(c.context().organizationId(),c.objectId());
         if(object.recordVersion()!=c.recordVersion()) throw new ResourceConflictException("RECORD_CHANGED","Signable record changed");
-        provider.validateSignable(new SignatureValidationContext(c.context(),c.meaning()),object);
+        var validation=new SignatureValidationContext(c.context(),c.meaning());
+        provider.validateSignable(validation,object);
         String digest=canonicalizer.digest(object); Instant now=clock.instant();
         Long supersededSignatureId = resolveSupersededSignature(c);
         SignatureRecord record=signatures.insert(new NewSignature(c.context().organizationId(),c.context().actorId(),
-            c.meaning(),c.objectType(),c.objectId(),digest,now,authContext(c,reauth),supersededSignatureId));
+            c.meaning(),c.objectType(),c.objectId(),digest,now,authContext(c,reauth,provider.signatureContext(validation,object)),supersededSignatureId));
         events.publishEvent(new SignatureAppliedEvent(c.context(),record));
-        String transactionId=c.context().requestId()==null?java.util.UUID.randomUUID().toString():c.context().requestId();
-        audit.append(new AuditCommand(c.context().organizationId(),c.context().actorId(),c.context().roleSnapshot(),
-            "SIGNATURE_APPLIED",c.objectType(),c.objectId(),null,digest,null,null,now,transactionId,
-            c.context().requestId(),AuditSource.API,c.idempotencyKey()));
         SignatureResponseData response=SignatureResponseData.from(record); String body=encode(response);
         idempotency.complete(decision.handle(),200,body,"SIGNATURE",response.id());
         return response;
@@ -97,26 +91,6 @@ public class SignatureTransactionService {
             throw new ResourceConflictException(
                 "SIGNATURE_CHANGED", "Signature is not valid at the expected version");
         }
-
-        String transactionId = context.requestId() == null
-            ? java.util.UUID.randomUUID().toString()
-            : context.requestId();
-        audit.append(new AuditCommand(
-            context.organizationId(),
-            context.actorId(),
-            context.roleSnapshot(),
-            "SIGNATURE_INVALIDATED",
-            existing.objectType(),
-            existing.objectId(),
-            signatureStateDigest(existing.status(), existing.versionNo(), null, null),
-            signatureStateDigest(SignatureStatus.INVALIDATED, existing.versionNo() + 1, invalidatedAt, reason),
-            reason,
-            null,
-            invalidatedAt,
-            transactionId,
-            context.requestId(),
-            AuditSource.API,
-            null));
     }
 
     private static void validateInvalidationReason(String reason) {
@@ -125,10 +99,13 @@ public class SignatureTransactionService {
         }
     }
 
-    private String authContext(SignCommand c,ConsumedReauthentication r){
+    private String authContext(SignCommand c,ConsumedReauthentication r,java.util.Map<String,Object> providerContext){
         var n=json.createObjectNode();n.put("schemaVersion","1.0");n.put("method",r.method());
         n.put("reauthenticatedAt",r.reauthenticatedAt().toString());n.put("sessionIdHash",sha(c.context().sessionId()));
         if(c.context().requestId()!=null)n.put("requestId",c.context().requestId());
+        var codes=n.putArray("roleCodes");c.context().roleCodes().stream().sorted().forEach(codes::add);
+        var roleIds=n.putArray("roleIds");c.context().roleIds().stream().sorted().forEach(roleIds::add);
+        n.set("providerContext",json.valueToTree(providerContext==null?java.util.Map.of():providerContext));
         try{return json.writeValueAsString(n);}catch(JsonProcessingException e){throw new IllegalStateException(e);}
     }
     private Long resolveSupersededSignature(SignCommand command) {

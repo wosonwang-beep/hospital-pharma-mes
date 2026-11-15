@@ -54,6 +54,15 @@ class Mes001MigrationContractTest {
         assertFalse(sql.toUpperCase().contains("ALTER TABLE"));
     }
 
+    @Test
+    void v077RemovesAllLegacyTriggersAndGxpAuditStorage() throws Exception {
+        String sql = Files.readString(migrationDirectory().resolve("V077__disable_gxp_audit_and_drop_all_triggers.sql"));
+        assertEquals(125, count(sql, "DROP TRIGGER IF EXISTS "));
+        assertTrue(sql.contains("DROP TABLE IF EXISTS gxp_audit_event"));
+        assertTrue(sql.contains("DELETE FROM sys_permission WHERE permission_code='audit:view'"));
+        assertFalse(sql.toUpperCase().contains("CREATE TRIGGER"));
+        assertFalse(sql.toUpperCase().contains("CREATE TABLE"));
+    }
     private static Path migrationDirectory() {
         return Path.of(System.getProperty("user.dir"), "src", "main", "resources", "db", "migration");
     }

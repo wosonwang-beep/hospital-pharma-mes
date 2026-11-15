@@ -34,20 +34,6 @@ class Mes001AuthorizationIT {
         sessionIds.forEach(sessions::revoke);
     }
 
-    @Test
-    void auditAndIntegrationQueriesUseTheirDistinctPermissions() throws Exception {
-        String auditToken = issue(Set.of("audit:view"));
-        String integrationToken = issue(Set.of("integration:view"));
-
-        mvc.perform(get("/api/v1/audit-events").header("Authorization", "Bearer " + auditToken))
-            .andExpect(status().isOk());
-        mvc.perform(get("/api/v1/integration/messages").header("Authorization", "Bearer " + auditToken))
-            .andExpect(status().isForbidden());
-        mvc.perform(get("/api/v1/integration/messages").header("Authorization", "Bearer " + integrationToken))
-            .andExpect(status().isOk());
-        mvc.perform(get("/api/v1/audit-events").header("Authorization", "Bearer " + integrationToken))
-            .andExpect(status().isForbidden());
-    }
 
     @Test
     void manualRetryRequiresBothFrozenAuthorities() throws Exception {

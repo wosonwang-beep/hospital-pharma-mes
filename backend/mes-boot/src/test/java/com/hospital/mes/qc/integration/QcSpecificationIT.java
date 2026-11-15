@@ -1,13 +1,12 @@
 package com.hospital.mes.qc.integration;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hospital.mes.audit.application.*;
-import com.hospital.mes.audit.signature.*;
 import com.hospital.mes.masterdata.application.*;
 import com.hospital.mes.qc.application.*;
 import com.hospital.mes.qc.domain.*;
-import java.time.Instant;
 import java.util.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -24,49 +22,84 @@ import org.springframework.transaction.support.TransactionTemplate;
 class QcSpecificationIT {
  @Autowired QcSpecificationService service; @Autowired QcSpecificationQueryService query;
  @Autowired UnitService units; @Autowired MaterialService materials; @Autowired JdbcTemplate jdbc; @Autowired ObjectMapper json;
- @Autowired AuditEventRepository auditRepository; @Autowired SignatureTransactionService verification; @Autowired PlatformTransactionManager transactions;
- @MockitoBean CurrentPlatformContextResolver contexts; @MockitoBean ReauthenticationPort reauth;
- @MockitoSpyBean AuditApplicationService audit;
- long creator,approver; String suffix,unit,material; Set<String> permissions;
- @BeforeEach void setup(){suffix=UUID.randomUUID().toString().replace("-","").substring(0,12);creator=actor("qc_c"+suffix);approver=actor("qc_a"+suffix);permissions=new HashSet<>(Set.of("qms:specification:view","qms:specification:create","qms:specification:edit","qms:specification:approve","qms:specification:retire","ebr:sign","master:uom:create","master:material:create"));as(1,creator);when(reauth.consume(anyString(),any())).thenReturn(new ConsumedReauthentication(Instant.now(),"PASSWORD"));unit=units.create(new UnitCommands.Create("QU"+suffix,"QC unit","MASS",3),key()).path("id").asText();material=materials.create(json.convertValue(Map.of("materialCode","QM"+suffix,"materialName","QC material","materialType","RAW","baseUnitId",unit,"lotControlled",true),MaterialCommands.Create.class),key()).path("id").asText();}
+ @Autowired PlatformTransactionManager transactions;
+ @MockitoBean CurrentPlatformContextResolver contexts;
+
+ long creator,editor; String suffix,unit,material,otherMaterial; Set<String> permissions;
+ @BeforeEach void setup(){suffix=UUID.randomUUID().toString().replace("-","").substring(0,12);creator=actor("qc_c"+suffix);editor=actor("qc_e"+suffix);permissions=new HashSet<>(Set.of("qms:specification:view","qms:specification:create","qms:specification:edit","qms:specification:delete","master:uom:create","master:material:create"));as(1,creator);
+  unit=units.create(new UnitCommands.Create("QU"+suffix,"QC unit","MASS",3),key()).path("id").asText();
+  material=material("QM"+suffix,"QC material");otherMaterial=material("QN"+suffix,"QC second material");}
+ String material(String code,String name){return materials.create(json.convertValue(Map.of("materialCode",code,"materialName",name,"materialType","RAW","baseUnitId",unit,"lotControlled",true),MaterialCommands.Create.class),key()).path("id").asText();}
  long actor(String n){jdbc.update("INSERT INTO sys_user(login_name,login_name_normalized,display_name,password_hash,enabled,must_change_password) VALUES(?,?,?,?,TRUE,FALSE)",n,n,"QC rollback actor","test-only");return jdbc.queryForObject("SELECT id FROM sys_user WHERE login_name_normalized=?",Long.class,n);}
  void as(long org,long user){when(contexts.current()).thenReturn(new CurrentPlatformContext(org,user,Set.of("QC_TEST"),permissions,"qc-session","qc-"+suffix));}
  String key(){return UUID.randomUUID().toString();}
- List<QcCommands.Item> items(){return List.of(new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"M1","1"),new QcCommands.Item("COLOR","Color",true,"TEXT",null,null,null,"white","M2","1"));}
- QcViews.SpecificationVersionDetail draft(){var root=service.create(new QcCommands.CreateSpecification(material,"QS"+suffix,"QC standard","Create"),key());return service.createVersion(root.id(),new QcCommands.CreateVersion(1,items(),"Define"),key());}
- QcViews.SpecificationVersionDetail approve(QcViews.SpecificationVersionDetail v){as(1,approver);return service.approveVersion(v.id(),new QcCommands.SignVersion(v.versionNo(),"Approve","token"),"\""+v.versionNo()+"\"",key());}
- @Test void approvalPermissionVersionBindingSignerFailureAndChangedReplayPreserveDraft(){
-  var v=draft();as(1,approver);var command=new QcCommands.SignVersion(0L,"Approve","token");String commandKey=key();
-  var tx=new TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_NESTED);
-  permissions.remove("qms:specification:approve");as(1,approver);
-  assertThatThrownBy(()->tx.execute(s->service.approveVersion(v.id(),command,"\"0\"",commandKey))).isInstanceOf(com.hospital.mes.common.exception.PermissionException.class);
-  permissions.add("qms:specification:approve");as(1,approver);
-  assertThatThrownBy(()->tx.execute(s->service.approveVersion(v.id(),command,"\"1\"",commandKey)))
-      .isInstanceOf(com.hospital.mes.common.exception.ValidationException.class).hasMessage("Body version must match If-Match");
-  when(reauth.consume(anyString(),any())).thenThrow(new IllegalStateException("Injected QC signer failure"));
-  assertThatThrownBy(()->tx.execute(s->service.approveVersion(v.id(),command,"\"0\"",commandKey))).hasMessage("Injected QC signer failure");
-  assertThat(jdbc.queryForObject("SELECT status FROM qc_specification_version WHERE id=?",String.class,v.id())).isEqualTo("DRAFT");
-  assertThat(jdbc.queryForObject("SELECT version_no FROM qc_specification_version WHERE id=?",Long.class,v.id())).isZero();
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_signature WHERE object_type='QcSpecificationVersion' AND object_id=?",Long.class,v.id())).isZero();
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM platform_idempotency_record WHERE idempotency_key=?",Long.class,commandKey)).isZero();
-  doReturn(new ConsumedReauthentication(Instant.now(),"PASSWORD")).when(reauth).consume(anyString(),any());
-  var approved=service.approveVersion(v.id(),command,"\"0\"",commandKey);
-  assertThat(service.approveVersion(v.id(),command,"\"0\"",commandKey)).isEqualTo(approved);
-  assertThatThrownBy(()->tx.execute(s->service.approveVersion(v.id(),new QcCommands.SignVersion(0L,"Changed approval reason","token"),"\"0\"",commandKey)))
-      .isInstanceOf(com.hospital.mes.common.exception.ResourceConflictException.class);
-  assertThat(verification.verify(1,Long.parseLong(approved.approvalSignatureId()))).isTrue();
+ List<QcCommands.Item> items(){return List.of(new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"M1","1"),new QcCommands.Item("COLOR","Color",true,"TEXT",null,null,null,"白色粉末","M2","1"));}
+ QcCommands.Create create(String code,String basisType,String reference,List<String> materials_,List<String> products,List<QcCommands.Item> items_){return new QcCommands.Create(code,"氯化钾入厂检验标准",basisType,reference,null,"依据药典方法制定",materials_,products,items_,"建立标准");}
+ JsonNode standard(){return service.create(create("QS"+suffix,"CHINESE_PHARMACOPOEIA","《中国药典》2025年版四部 0301",List.of(material),List.of(),items()),key());}
+ String id(JsonNode n){return n.path("id").asText();}
+ String match(JsonNode n){return match(n.path("versionNo").asLong());}
+ String match(long version){return "\""+version+"\"";}
+ @Test void standardIsEditableInPlaceWithoutAnyConclusionEvidence(){
+  var created=standard();
+  assertThat(created.path("status").asText()).isEqualTo("ACTIVE");
+  assertThat(created.path("basisType").asText()).isEqualTo("CHINESE_PHARMACOPOEIA");
+  assertThat(created.path("basisReference").asText()).isEqualTo("《中国药典》2025年版四部 0301");
+  assertThat(created.path("items")).hasSize(2);assertThat(created.path("scopes")).hasSize(1);
+  assertThat(created.path("items").get(0).path("unitId").asText()).isEqualTo(unit);
+  assertThat(created.path("revisions")).hasSize(1);
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_signature WHERE object_type LIKE 'QcSpecification%' AND object_id=?",Long.class,id(created))).isZero();
+  as(1,editor);var edited=service.edit(id(created),new QcCommands.Edit(created.path("versionNo").asLong(),"QS"+suffix,"氯化钾入厂检验标准","ENTERPRISE_INTERNAL","企业内控标准 Q/QC 001-2026",null,"收严含量下限","ACTIVE","修订依据"),match(created),key());
+  assertThat(edited.path("basisType").asText()).isEqualTo("ENTERPRISE_INTERNAL");
+  assertThat(edited.path("revisions")).hasSize(2);
+  as(1,creator);var reread=service.get(id(created));
+  assertThat(reread.path("basisReference").asText()).isEqualTo("企业内控标准 Q/QC 001-2026");
+  assertThat(reread.path("items")).hasSize(2);
  }
- @Test void approvingNextVersionDoesNotRetireOrChangeExistingApprovedStandard(){
-  var first=approve(draft());var frozen=query.requireSelectable(1,Long.parseLong(material),Long.parseLong(first.id()));as(1,creator);
-  var second=service.createVersion(first.specificationId(),new QcCommands.CreateVersion(2,items(),"Separate next version"),key());
-  var approved=approve(second);assertThat(approved.status()).isEqualTo("APPROVED");
-  assertThat(jdbc.queryForObject("SELECT status FROM qc_specification_version WHERE id=?",String.class,first.id())).isEqualTo("APPROVED");
-  assertThat(query.requireSelectable(1,Long.parseLong(material),Long.parseLong(first.id()))).isEqualTo(frozen);
-  assertThat(verification.verify(1,Long.parseLong(first.approvalSignatureId()))).isTrue();
-  assertThat(query.requireSelectable(1,Long.parseLong(material),Long.parseLong(approved.id())).specificationVersionId()).isEqualTo(Long.parseLong(approved.id()));
+ @Test void oneStandardCoversManyMaterialsAndManyProducts(){
+  var created=service.create(create("QM"+suffix,"DRUG_REGISTRATION_STANDARD","药品注册标准 YBH00012025",List.of(material,otherMaterial),List.of(),items()),key());
+  var scopes=created.path("scopes");
+  assertThat(scopes).hasSize(2);
+  assertThat(scopes.get(0).path("subjectType").asText()).isEqualTo("MATERIAL");
+  assertThat(scopes.get(0).path("subjectCode").asText()).isEqualTo("QM"+suffix);
+  assertThat(query.requireSelectable(1,Long.parseLong(material),Long.parseLong(id(created))).materials()).containsExactlyInAnyOrder(material,otherMaterial);
+  var snapshot=query.requireSelectable(1,Long.parseLong(otherMaterial),Long.parseLong(id(created)));
+  assertThat(snapshot.schemaVersion()).isEqualTo(QcSpecificationQueryService.SNAPSHOT_SCHEMA_VERSION);
+  assertThat(snapshot.materials()).containsExactlyInAnyOrder(material,otherMaterial);
+  assertThat(snapshot.products()).isEmpty();
+  assertThat(snapshot.items()).hasSize(2);
+  as(1,editor);var narrowed=service.replaceScope(id(created),new QcCommands.ReplaceScope(created.path("versionNo").asLong(),List.of(material),List.of(),"只保留一个物料"),match(created),key());
+  assertThat(narrowed.path("scopes")).hasSize(1);
+  assertThatThrownBy(()->query.requireSelectable(1,Long.parseLong(otherMaterial),Long.parseLong(id(created)))).hasMessageContaining("does not apply");
  }
- @Test void signedLifecycleSnapshotsRetirementAndReplay(){var v=draft();as(1,approver);var command=new QcCommands.SignVersion(0L,"Approve","token");String key=key();var approved=service.approveVersion(v.id(),command,"\"0\"",key);assertThat(service.approveVersion(v.id(),command,"\"0\"",key)).isEqualTo(approved);verify(reauth,times(1)).consume(eq("token"),argThat(b->b.objectType().equals("QcSpecificationVersion")&&b.recordVersion()==1));var frozen=query.requireSelectable(1,Long.parseLong(material),Long.parseLong(v.id()));assertThat(frozen.items()).hasSize(2);assertThat(verification.verify(1,Long.parseLong(approved.approvalSignatureId()))).isTrue();var retired=service.retireVersion(v.id(),new QcCommands.SignVersion(1L,"Retire","token"),"\"1\"",key());assertThat(retired.status()).isEqualTo("RETIRED");assertThat(verification.verify(1,Long.parseLong(approved.approvalSignatureId()))).isTrue();assertThat(verification.verify(1,Long.parseLong(retired.retirementSignatureId()))).isTrue();assertThat(query.getHistorical(1,Long.parseLong(v.id()))).isEqualTo(frozen);assertThatThrownBy(()->query.requireSelectable(1,Long.parseLong(material),Long.parseLong(v.id()))).hasMessageContaining("selectable");}
- @Test void draftTombstonesAndAllAuthorsAreRetained(){var v=draft();long editor=actor("qc_e"+suffix);as(1,editor);var edited=service.editVersion(v.id(),new QcCommands.EditVersion(0L,List.of(items().getFirst()),"Remove color"),"\"0\"",key());assertThat(edited.items()).hasSize(1);assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qc_specification_item WHERE specification_version_id=? AND active=0",Long.class,v.id())).isEqualTo(1);as(1,creator);service.editVersion(v.id(),new QcCommands.EditVersion(1L,items(),"Restore"),"\"1\"",key());var auditPage=auditRepository.query(1,new AuditEventQuery(editor,"QC_SPEC_VERSION_EDITED","QcSpecificationVersion",v.id(),null,null,null,null,null,0,1));assertThat(auditPage.total()).isGreaterThanOrEqualTo(1);assertThat(auditPage.items()).hasSize(1);assertThat(auditRepository.query(1,new AuditEventQuery(editor,"QC_SPEC_VERSION_EDITED","QcSpecificationVersion",v.id(),null,null,null,null,null,1,1)).items()).isEmpty();as(1,editor);assertThatThrownBy(()->service.approveVersion(v.id(),new QcCommands.SignVersion(2L,"Approval","token"),"\"2\"",key())).hasMessageContaining("author");verifyNoInteractions(reauth);}
- @Test void scopeLocksAndSignedDefinitionsFailClosed(){var v=draft();assertThatThrownBy(()->service.editVersion(v.id(),new QcCommands.EditVersion(1L,items(),"Stale"),"\"1\"",key())).hasMessageContaining("changed");as(2,creator);assertThatThrownBy(()->service.getVersion(v.id())).hasMessageContaining("not found");as(1,creator);var approved=approve(v);assertThatThrownBy(()->service.editVersion(v.id(),new QcCommands.EditVersion(1L,items(),"Change"),"\"1\"",key())).hasMessageContaining("DRAFT");assertThatThrownBy(()->jdbc.update("UPDATE qc_specification_item SET method_version='2' WHERE specification_version_id=?",v.id())).isInstanceOf(org.springframework.dao.DataAccessException.class);assertThatThrownBy(()->jdbc.update("DELETE FROM qc_specification_version WHERE id=?",v.id())).isInstanceOf(org.springframework.dao.DataAccessException.class);assertThat(query.getHistorical(1,Long.parseLong(v.id())).contentHash()).isEqualTo(approved.contentHash());}
- @Test void approvalAuditFailureRollsBackAllEvidence(){var v=draft();as(1,approver);String k=key();doAnswer(i->{var c=(com.hospital.mes.audit.domain.AuditCommand)i.getArgument(0);if(c.action().equals("QC_SPEC_VERSION_APPROVED"))throw new IllegalStateException("injected audit failure");return i.callRealMethod();}).when(audit).append(any());var tx=new TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_NESTED);assertThatThrownBy(()->tx.execute(t->service.approveVersion(v.id(),new QcCommands.SignVersion(0L,"Approval","token"),"\"0\"",k))).hasMessageContaining("injected audit failure");assertThat(jdbc.queryForObject("SELECT status FROM qc_specification_version WHERE id=?",String.class,v.id())).isEqualTo("DRAFT");assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM gxp_signature WHERE object_type='QcSpecificationVersion' AND object_id=?",Long.class,v.id())).isZero();assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM platform_idempotency_record WHERE idempotency_key=?",Long.class,k)).isZero();}
+ @Test void staleLockScopesRejectedAndUnknownFieldsFailClosed(){
+  var created=standard();
+  long stale=created.path("versionNo").asLong()+7;
+  assertThatThrownBy(()->service.edit(id(created),new QcCommands.Edit(stale,"QS"+suffix,"氯化钾入厂检验标准","CHINESE_PHARMACOPOEIA","《中国药典》2025年版四部 0301",null,null,"ACTIVE","并发"),match(stale),key())).hasMessageContaining("changed");
+  assertThatThrownBy(()->service.replaceScope(id(created),new QcCommands.ReplaceScope(created.path("versionNo").asLong(),List.of("999999999"),List.of(),"不存在物料"),match(created),key())).hasMessageContaining("not found");
+  assertThatThrownBy(()->service.replaceItems(id(created),new QcCommands.ReplaceItems(created.path("versionNo").asLong(),List.of(new QcCommands.Item("ASSAY","含量",true,"NUMERIC","3","1",unit,null,"M1","1")),"倒置限值"),match(created),key())).hasMessageContaining("exceeds upper limit");
+  as(2,creator);assertThatThrownBy(()->service.get(id(created))).hasMessageContaining("not found");
+ }
+ @Test void replacingItemsReusesCodesCaseInsensitivelyAndDropsRemovedOnes(){
+  var created=standard();
+  as(1,editor);var replaced=service.replaceItems(id(created),new QcCommands.ReplaceItems(created.path("versionNo").asLong(),List.of(new QcCommands.Item("assay","含量",true,"NUMERIC","0.99","1.01",unit,null,"M1","2")),"修订项目"),match(created),key());
+  assertThat(replaced.path("items")).hasSize(1);
+  assertThat(replaced.path("items").get(0).path("methodVersion").asText()).isEqualTo("2");
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qc_specification_item WHERE specification_id=?",Long.class,id(created))).isEqualTo(1);
+ }
+ @Test void deletionRemovesLibraryEntryAndKeepsRevisionTrail(){
+  var created=standard();
+  var deleted=service.delete(id(created),new QcCommands.Remove(created.path("versionNo").asLong(),"重复建立"),match(created),key());
+  assertThat(deleted.path("deleted").asBoolean()).isTrue();
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qc_specification WHERE id=?",Long.class,id(created))).isZero();
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qc_specification_item WHERE specification_id=?",Long.class,id(created))).isZero();
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qc_specification_revision WHERE specification_id=?",Long.class,id(created))).isEqualTo(2);
+  as(1,editor);assertThatThrownBy(()->service.get(id(created))).hasMessageContaining("not found");
+ }
+ @Test void inactiveStandardStaysReadableButIsNoLongerSelectable(){
+  var created=standard();
+  as(1,editor);var inactive=service.edit(id(created),new QcCommands.Edit(created.path("versionNo").asLong(),"QS"+suffix,"氯化钾入厂检验标准","CHINESE_PHARMACOPOEIA","《中国药典》2025年版四部 0301",null,"标准暂停执行","INACTIVE","停用"),match(created),key());
+  assertThat(inactive.path("status").asText()).isEqualTo("INACTIVE");
+  assertThatThrownBy(()->query.requireSelectable(1,Long.parseLong(material),Long.parseLong(id(created)))).hasMessageContaining("inactive");
+  assertThat(query.read(1,Long.parseLong(id(created))).specificationId()).isEqualTo(Long.parseLong(id(created)));
+ }
 }

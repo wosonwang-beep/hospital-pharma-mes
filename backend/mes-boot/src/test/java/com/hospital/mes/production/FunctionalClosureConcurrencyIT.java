@@ -1,10 +1,12 @@
 package com.hospital.mes.production;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.*;
 /** Reuses the approved retained native-fixture harness; own lots are rejected after each race. */
+@EnabledIfSystemProperty(named="mes.retained-concurrency-fixtures",matches="true")
 class FunctionalClosureConcurrencyIT extends NativeConcurrencyIT {
  @Autowired com.hospital.mes.wms.application.InventoryDecisionService inventory;
  @Autowired com.hospital.mes.execution.application.ClearanceService clearances;

@@ -19,14 +19,13 @@ class ProductionQualityPlanIT extends IncomingProductionIT {
     JsonNode planBody(JsonNode batch) {
         as(author);
         String batchProductId=batch.path("productId").asText();
-        var spec=qc.create(new QcCommands.CreateSpecification("PRODUCT",null,batchProductId,"FQC"+suffix,"Finished quality","Frozen product test standard"),key());
-        var draft=qc.createVersion(spec.id(),new QcCommands.CreateVersion(1,List.of(new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"METHOD","1")),"Define finished standard"),key());
-        as(approver);var approved=qc.approveVersion(draft.id(),new QcCommands.SignVersion(0L,"Approve standard","token"),"\"0\"",key());as(author);
-        return body("mainBatchId",id(batch),"qcSpecificationVersionId",approved.id(),
+        var spec=qc.create(new QcCommands.Create("FQC"+suffix,"Finished quality standard","DRUG_REGISTRATION_STANDARD","药品注册标准 YBH00012025",null,"成品放行检验标准",List.of(),List.of(batchProductId),List.of(new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"METHOD","1")),"Define finished standard"),key());
+        String approvedId=spec.path("id").asText();as(author);
+        return body("mainBatchId",id(batch),"qcSpecificationVersionId",approvedId,
                 "balanceRules",List.of(Map.of("balanceCode","TOTAL","basis","BATCH","unitId",unit,"formulaExpr",Map.of("dslVersion",1,"expected",Map.of("sum",List.of("CHARGE")),"actual",Map.of("sum",List.of("OUTPUT","LOSS")),"metric","DIFFERENCE_PCT"),"toleranceLow","-1","toleranceHigh","1","checkPoint","BATCH_COMPLETE")),"reason","Define controlled plan");
     }
     @Test void signedIndependentApprovalFreezesActualPlanInDispatchSnapshot() {
-        var batch=preparedBatch(false);var command=planBody(batch);String createKey=key();var plan=plans.create(command,createKey);
+        var batch=preparedCurrentBatch();var command=planBody(batch);String createKey=key();var plan=plans.create(command,createKey);
         assertThat(plans.create(command,createKey)).isEqualTo(plan);
         var approval=body("versionNo",0,"reason","Independent QA approval","signature",Map.of("reauthToken","token"));
         blockedCode("INDEPENDENT_REVIEW_REQUIRED",()->plans.approve(id(plan),approval,token(plan),key()));
@@ -40,7 +39,7 @@ class ProductionQualityPlanIT extends IncomingProductionIT {
         blockedCode("QUALITY_PLAN_FROZEN",()->plans.update(id(plan),edit,token(approved),key()));
     }
     @Test void draftPlanDoesNotPermitDispatchOrClientPassEvidence() {
-        var batch=preparedBatch(false);var command=planBody(batch);plans.create(command,key());
+        var batch=preparedCurrentBatch();var command=planBody(batch);plans.create(command,key());
         blockedCode("QUALITY_PLAN_NOT_APPROVED",()->production.releaseBatch(id(batch),body("processPackageId",packageVersionId,"ebrTemplateVersionId",templateVersionId,"reason","Draft cannot freeze"),token(batch),key()));
         assertThat(production.batch(id(batch)).path("status").asText()).isEqualTo("DRAFT");
         ((com.fasterxml.jackson.databind.node.ObjectNode)command).put("status","APPROVED");

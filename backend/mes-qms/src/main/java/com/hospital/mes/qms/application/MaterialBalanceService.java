@@ -1,4 +1,5 @@
 package com.hospital.mes.qms.application;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
@@ -72,11 +73,11 @@ public class MaterialBalanceService {
   var found=(BalanceInvestigationRow)store.get(INV,org,MasterMutation.id(target));var result=(BalanceResultRow)store.get(RESULT,org,found.getBalanceResultId());mutable(batches.lockBatch(org,result.getMainBatchId()).status());return (BalanceInvestigationRow)store.lock(INV,org,found.getId());
  }
  @Transactional(propagation=Propagation.MANDATORY) public void requireCheckpoint(long org,long batch,String checkpoint,Long operation){
-  if(!Set.of("OPERATION_COMPLETE","BATCH_COMPLETE","QA_RELEASE").contains(checkpoint))throw new IllegalArgumentException("Invalid checkpoint");var root=batches.lockBatch(org,batch);requirePlan(root.snapshot());
-  var c=contexts.current();gate(c.organizationId()==org,"BALANCE_ORGANIZATION_MISMATCH","Cross-organization gate is forbidden");quantities.synchronizeLogistics(c,batch);
+  if(!Set.of("OPERATION_COMPLETE","BATCH_COMPLETE","QA_RELEASE").contains(checkpoint))throw new IllegalArgumentException("Invalid checkpoint");boolean readOnly=TransactionSynchronizationManager.isCurrentTransactionReadOnly();var root=readOnly?batches.batch(org,batch):batches.lockBatch(org,batch);requirePlan(root.snapshot());
+  var c=contexts.current();gate(c.organizationId()==org,"BALANCE_ORGANIZATION_MISMATCH","Cross-organization gate is forbidden");boolean logisticsSynchronized=true;if(readOnly)logisticsSynchronized=quantities.requireLogisticsSynchronized(org,batch);else quantities.synchronizeLogistics(c,batch);
   var all=rules(org,batch);gate(!all.isEmpty(),"BALANCE_RULE_MISSING","Actual frozen balance rules required");
   for(var rule:all){boolean due=checkpoint.equals("QA_RELEASE")||checkpoint.equals("BATCH_COMPLETE")&&!rule.getCheckPoint().equals("QA_RELEASE")||checkpoint.equals("OPERATION_COMPLETE")&&rule.getCheckPoint().equals(checkpoint)&&Objects.equals(rule.getOperationExecutionId(),operation);if(!due)continue;
-   var history=results(rule);gate(!history.isEmpty(),"BALANCE_RESULT_MISSING","Required calculation missing");var latest=history.getLast();currentResult(latest);
+   var history=results(rule);gate(!history.isEmpty(),"BALANCE_RESULT_MISSING","Required calculation missing");if(readOnly)gate(logisticsSynchronized,"BALANCE_RESULT_STALE","Confirmed logistics sources are not included in the current calculation");var latest=history.getLast();currentResult(latest);
    if(latest.getStatus().equals("FAIL")){var investigation=investigation(latest);gate(investigation!=null&&investigation.getStatus().equals("APPROVED_EXCEPTION")&&investigation.getInputDigest().equals(latest.getInputDigest())&&signing.valid(org,investigation.getSignatureId()),"BALANCE_FAILED","Failed balance requires exact independent signed exception");}
   }
  }

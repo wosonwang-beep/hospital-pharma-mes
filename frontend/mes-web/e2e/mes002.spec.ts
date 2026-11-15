@@ -4,7 +4,7 @@ const envelope = (data: unknown) => ({ code: 'OK', message: 'success', data, tra
 
 const fullPermissions = [
   'iam:user:view','iam:user:create','iam:user:update','iam:role:view','iam:role:create','iam:role:update','iam:permission:view',
-  'audit:view','integration:view','integration:retry'
+  'integration:view','integration:retry'
 ]
 
 async function mockApi(page: Page, permissions = fullPermissions) {
@@ -30,7 +30,6 @@ async function mockApi(page: Page, permissions = fullPermissions) {
       { id: '1', roleCode: 'SYSTEM_ADMIN', roleName: '系统管理员', status: 'ACTIVE', version: 1, permissionCodes: [], menuCodes: [] }
     ], total: 1, page: 0, size: 20 }) })
     if (path === '/api/v1/permissions') return route.fulfill({ json: envelope({ items: [], total: 0, page: 0, size: 100 }) })
-    if (path === '/api/v1/audit-events') return route.fulfill({ json: envelope({ items: [], total: 0, page: 0, size: 50 }) })
     if (path === '/api/v1/integration/messages') return route.fulfill({ json: envelope({ items: [], total: 0, page: 0, size: 50 }) })
     return route.fulfill({ status: 404, json: { code: 'NOT_FOUND' } })
   })
@@ -48,8 +47,6 @@ test('login exposes frozen IAM navigation and independent user routes', async ({
   await page.getByLabel('密码').fill('Valid passphrase 12345')
   await page.getByRole('button', { name: /登\s*录/ }).click()
   await expect(page).toHaveURL(/\/$/)
-  await page.goto('/audit')
-  await expect(page.getByRole('heading', { name: 'GMP Audit Trail' })).toBeVisible()
   await page.goto('/integration/operations')
   await expect(page.getByRole('heading', { name: 'Integration Inbox / Outbox Operations' })).toBeVisible()
   await page.goto('/')

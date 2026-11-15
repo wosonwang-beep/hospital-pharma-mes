@@ -49,17 +49,16 @@ class SignatureTransactionServiceTest {
             .thenReturn(Optional.of(fixture.invalidated(89)));
 
         assertThat(fixture.sign(89L).revokedSignatureId()).isEqualTo("89");
-        verify(fixture.audit).append(any());
+        verifyNoInteractions(fixture.audit);
     }
 
     @Test void notifiesExactStoredIdentitySynchronouslyBeforeCompletion() throws Exception {
         var f = new ResignFixture();
         f.sign(null);
         var event = ArgumentCaptor.forClass(Object.class);
-        var order = org.mockito.Mockito.inOrder(f.signatures, f.events, f.audit, f.idempotency);
+        var order = org.mockito.Mockito.inOrder(f.signatures, f.events, f.idempotency);
         order.verify(f.signatures).insert(any());
         order.verify(f.events).publishEvent(event.capture());
-        order.verify(f.audit).append(any());
         order.verify(f.idempotency).complete(any(), org.mockito.ArgumentMatchers.eq(200), any(), any(), any());
         var applied = (SignatureAppliedEvent) event.getValue();
         assertThat(applied.signature().id()).isEqualTo(99);
@@ -93,7 +92,7 @@ class SignatureTransactionServiceTest {
             when(signatures.insert(any())).thenAnswer(i -> ((NewSignature)i.getArgument(0)).toRecord(99));
             when(idempotency.begin(any())).thenReturn(IdempotencyDecision.owner(new IdempotencyHandle(1, 0)));
             service = new SignatureTransactionService(new SignableObjectProviderRegistry(List.of(provider)),
-                new Rfc8785SignatureCanonicalizer(json), signatures, idempotency, audit, json,
+                new Rfc8785SignatureCanonicalizer(json), signatures, idempotency, json,
                 Clock.fixed(now, ZoneOffset.UTC), events);
         }
 
@@ -112,7 +111,7 @@ class SignatureTransactionServiceTest {
     }
 
     @Test
-    void createsServerDigestSignatureAuditAndIdempotencyCompletion() throws Exception {
+    void createsServerDigestSignatureAndIdempotencyCompletion() throws Exception {
         ObjectMapper json = new ObjectMapper();
         SignableObject object = new SignableObject("TEST_RECORD", "42", 3, json.readTree("{\"value\":\"1.20\"}"), List.of());
         SignableObjectProvider provider = mock(SignableObjectProvider.class);
@@ -126,14 +125,14 @@ class SignatureTransactionServiceTest {
         AuditApplicationService audit = mock(AuditApplicationService.class);
         SignatureTransactionService service = new SignatureTransactionService(
             new SignableObjectProviderRegistry(List.of(provider)), new Rfc8785SignatureCanonicalizer(json),
-            signatures, idempotency, audit, json, Clock.fixed(Instant.parse("2026-09-29T00:00:00Z"), ZoneOffset.UTC), event -> {});
+            signatures, idempotency, json, Clock.fixed(Instant.parse("2026-09-29T00:00:00Z"), ZoneOffset.UTC), event -> {});
         CurrentPlatformContext context = new CurrentPlatformContext(11, 7, Set.of("QA"), Set.of("ebr:sign"), "s1", "r1");
         SignatureResponseData result = service.signInTransaction(new SignCommand(context, "TEST_RECORD", "42",
             SignatureMeaning.VERIFY, 3, "unused-after-consume", "idem-1", null),
             new ConsumedReauthentication(Instant.parse("2026-09-29T00:00:00Z"), "PASSWORD"));
         assertThat(result.id()).isEqualTo("99");
         assertThat(result.recordDigest()).matches("[0-9a-f]{64}");
-        verify(audit).append(any());
+        verifyNoInteractions(audit);
         verify(idempotency).complete(any(), org.mockito.ArgumentMatchers.eq(200), any(),
             org.mockito.ArgumentMatchers.eq("SIGNATURE"), org.mockito.ArgumentMatchers.eq("99"));
     }
@@ -158,7 +157,7 @@ class SignatureTransactionServiceTest {
         when(idempotency.begin(any())).thenReturn(IdempotencyDecision.owner(new IdempotencyHandle(1, 0)));
         SignatureTransactionService service = new SignatureTransactionService(
             new SignableObjectProviderRegistry(List.of(provider)), new Rfc8785SignatureCanonicalizer(json),
-            signatures, idempotency, mock(AuditApplicationService.class), json,
+            signatures, idempotency, json,
             Clock.fixed(Instant.parse("2026-09-29T00:00:00Z"), ZoneOffset.UTC), event -> {});
         CurrentPlatformContext context = new CurrentPlatformContext(
             11, 7, Set.of("QA"), Set.of("ebr:sign"), "s1", "r1");
@@ -171,7 +170,7 @@ class SignatureTransactionServiceTest {
     }
 
     @Test
-    void invalidatesSignatureAndAppendsAuditInTheSameServiceTransaction() {
+    void invalidatesSignatureWithoutAuditEvents() {
         ObjectMapper json = new ObjectMapper();
         SignatureRepository signatures = mock(SignatureRepository.class);
         SignatureRecord existing = new SignatureRecord(99, 11, 5, SignatureMeaning.VERIFY,
@@ -183,27 +182,18 @@ class SignatureTransactionServiceTest {
         AuditApplicationService audit = mock(AuditApplicationService.class);
         SignatureTransactionService service = new SignatureTransactionService(
             new SignableObjectProviderRegistry(List.of()), mock(SignatureCanonicalizer.class),
-            signatures, mock(PlatformIdempotencyService.class), audit, json,
+            signatures, mock(PlatformIdempotencyService.class), json,
             Clock.fixed(Instant.parse("2026-09-29T00:00:00Z"), ZoneOffset.UTC), event -> {});
         CurrentPlatformContext context = new CurrentPlatformContext(
             11, 7, Set.of("QA"), Set.of("ebr:sign"), "session-1", "request-1");
 
         service.invalidate(context, 99, 3, "corrected evidence");
 
-        ArgumentCaptor<com.hospital.mes.audit.domain.AuditCommand> event =
-            ArgumentCaptor.forClass(com.hospital.mes.audit.domain.AuditCommand.class);
-        verify(audit).append(event.capture());
-        assertThat(event.getValue().action()).isEqualTo("SIGNATURE_INVALIDATED");
-        assertThat(event.getValue().objectType()).isEqualTo("TEST_RECORD");
-        assertThat(event.getValue().objectId()).isEqualTo("42");
-        assertThat(event.getValue().reason()).isEqualTo("corrected evidence");
-        assertThat(event.getValue().actorRole()).isEqualTo("QA");
-        assertThat(event.getValue().requestId()).isEqualTo("request-1");
-        assertThat(event.getValue().oldValueDigest()).isNotEqualTo(event.getValue().newValueDigest());
+        verifyNoInteractions(audit);
     }
 
     @Test
-    void invalidatesEveryCurrentSignatureForAnAffectedObject() {
+    void invalidatesEveryCurrentSignatureWithoutAuditEvents() {
         ObjectMapper json = new ObjectMapper();
         SignatureRepository signatures = mock(SignatureRepository.class);
         SignatureRecord first = new SignatureRecord(99, 11, 5, SignatureMeaning.VERIFY,
@@ -218,7 +208,7 @@ class SignatureTransactionServiceTest {
         AuditApplicationService audit = mock(AuditApplicationService.class);
         SignatureTransactionService service = new SignatureTransactionService(
             new SignableObjectProviderRegistry(List.of()), mock(SignatureCanonicalizer.class),
-            signatures, mock(PlatformIdempotencyService.class), audit, json,
+            signatures, mock(PlatformIdempotencyService.class), json,
             Clock.fixed(Instant.parse("2026-09-29T00:00:00Z"), ZoneOffset.UTC), event -> {});
         CurrentPlatformContext context = new CurrentPlatformContext(
             11, 7, Set.of("QA"), Set.of("ebr:sign"), "session-1", "request-1");
@@ -228,6 +218,6 @@ class SignatureTransactionServiceTest {
         assertThat(count).isEqualTo(2);
         verify(signatures, times(2)).invalidate(any(Long.class), any(Long.class), any(Long.class),
             any(Long.class), any(Instant.class), any(String.class));
-        verify(audit, times(2)).append(any());
+        verifyNoInteractions(audit);
     }
 }

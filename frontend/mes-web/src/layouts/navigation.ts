@@ -56,7 +56,6 @@ export const navigationConfiguration: NavigationGroup[] = [
     { key: 'roles', title: '角色与权限', path: '/admin/roles', permission: 'iam:role:view' },
     { key: 'menus', title: '菜单管理', path: '/admin/menus', permission: 'iam:menu:view' },
     { key: 'trace', title: '完整追溯', path: '/trace', permission: 'trace:view' },
-    { key: 'audit', title: 'GMP Audit Trail', path: '/audit', permission: 'audit:view' },
     { key: 'integration-operations', title: 'Integration Operations', path: '/integration/operations', permission: 'integration:view' }
   ] }
 ]

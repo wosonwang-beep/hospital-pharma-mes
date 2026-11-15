@@ -7,9 +7,9 @@ vi.mock('../../api/http',()=>({api,errorMessage:String}))
 vi.mock('../../stores/auth',()=>({useAuthStore:()=>({can:()=>true})}))
 vi.mock('vue-router',()=>({useRoute:()=>({query:{}}),useRouter:()=>({push:vi.fn()})}))
 afterEach(()=>{cleanup();vi.clearAllMocks()})
-function mount(schema:number){
+function mount(schema:number,status='DRAFT'){
  api.mockImplementation(async({url}:any)=>url.startsWith('/products/')?{productName:'氯化钾溶液',productCode:'KCL30'}:url.startsWith('/units/')?{unitName:'毫升'}:{orderNo:'INTERNAL:compat',status:'DRAFT'})
- return render(BatchOverview,{props:{record:{id:'230',productionSchemaVersion:schema,productionOrderId:'80',productId:'1',unitId:'3',batchNo:'KCL20261011001',status:'DRAFT',plannedQty:'1000',createdAt:'2026-10-11T08:00:00Z'},executions:[],reservations:[]},global:{plugins:[Antd]}})
+ return render(BatchOverview,{props:{record:{id:'230',productionSchemaVersion:schema,productionOrderId:'80',productId:'1',unitId:'3',batchNo:'KCL20261011001',status,plannedQty:'1000',createdAt:'2026-10-11T08:00:00Z'},executions:[],reservations:[]},global:{plugins:[Antd]}})
 }
 it('shows the direct instruction identity without exposing or fetching its compatibility order',async()=>{
  mount(2)
@@ -26,6 +26,13 @@ it('retains compatibility order reading and presentation for historical schema o
  expect(await screen.findAllByText('INTERNAL:compat')).toHaveLength(2)
  expect(screen.getAllByText('生产工单')).toHaveLength(2)
  expect(screen.getAllByText('生产订单')).toHaveLength(1)
+})
+it('distinguishes dispatched production batch from QA finished release',async()=>{
+ mount(2,'RELEASED')
+ await screen.findAllByText('氯化钾溶液')
+ expect(screen.getAllByText('已下达').length).toBeGreaterThan(0)
+ expect(screen.queryByText('已放行')).toBeNull()
+ expect(screen.getAllByText('未放行').length).toBeGreaterThan(0)
 })
 it('uses one top-level batch record entry when the whole-book route is available',async()=>{
  mount(2)

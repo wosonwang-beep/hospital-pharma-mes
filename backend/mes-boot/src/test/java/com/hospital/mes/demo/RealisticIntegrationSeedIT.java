@@ -232,20 +232,18 @@ class RealisticIntegrationSeedIT {
         String existing = approvedSpecVersions.get(c.materialId());
         if (existing != null) return existing;
         as(analystActor, "QC_ANALYST");
-        var root = qc.create(new QcCommands.CreateSpecification(
-            c.materialId(), "RM-"+c.materialCode()+"-"+runTag,
-            c.materialName()+"入厂质量标准", "建立入厂检验质量标准"), key());
-        var draft = qc.createVersion(root.id(), new QcCommands.CreateVersion(
-            1, List.of(new QcCommands.Item(
+        var root = qc.create(new QcCommands.Create(
+            "RM-"+c.materialCode()+"-"+runTag,
+            c.materialName()+"入厂质量标准", "ENTERPRISE_INTERNAL", "企业内控标准（入厂检验）",
+            null, "依据现行药典方法建立入厂检验项目",
+            List.of(c.materialId()), List.of(),
+            List.of(new QcCommands.Item(
                 "ASSAY", "含量", true, "NUMERIC",
                 c.lower(), c.upper(), "7", null, "PHARMACOPOEIA", "2025")),
             "依据现行质量标准建立入厂检验项目"), key());
-        as(reviewerActor, "QC_REVIEWER");
-        String versionId = qc.approveVersion(draft.id(),
-            new QcCommands.SignVersion(draft.versionNo(), "独立复核并批准质量标准", "demo-reauth"),
-            quote(draft.versionNo()), key()).id();
-        approvedSpecVersions.put(c.materialId(), versionId);
-        return versionId;
+        String specificationId = root.path("id").asText();
+        approvedSpecVersions.put(c.materialId(), specificationId);
+        return specificationId;
     }
 
     private JsonNode acceptedRequest(LotChain chain, String reason) {

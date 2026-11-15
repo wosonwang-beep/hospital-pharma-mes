@@ -13,7 +13,7 @@ test('PC Production Batch T4 reference keeps factual progress and source navigat
  await page.route('**/api/v1/**',r=>{
   const path=new URL(r.request().url()).pathname.replace('/api/v1','');requests.push(path)
   const send=(data:unknown)=>r.fulfill({json:{code:'OK',data,message:'success',traceId:'batch-reference'}})
-  if(path==='/auth/me')return send({userId:'5',organizationId:'1',displayName:'生产管理员',permissionCodes:['production:batch:view','production:order:view','master:product:view','master:uom:view','mes:execution:view','mes:operation:view',...(privileged?['wms:reservation:view','qa:batch-review','ebr:form:view','balance:view','production:batch:complete','qms:plan:view','qms:deviation:view','trace:view','audit:view']:[])],mustChangePassword:false})
+  if(path==='/auth/me')return send({userId:'5',organizationId:'1',displayName:'生产管理员',permissionCodes:['production:batch:view','production:order:view','master:product:view','master:uom:view','mes:execution:view','mes:operation:view',...(privileged?['wms:reservation:view','qa:batch-review','ebr:form:view','balance:view','production:batch:complete','qms:plan:view','qms:deviation:view','trace:view',]:[])],mustChangePassword:false})
   if(path==='/main-batches/100')return send(batch)
   if(path==='/main-batches/100/execution-units')return send(units)
   if(path==='/main-batches/100/reservations')return send([{id:'501',materialLotId:'30',reservedQty:'10.000',unitId:'11',status:'ACTIVE'}])

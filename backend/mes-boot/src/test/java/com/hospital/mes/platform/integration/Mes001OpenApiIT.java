@@ -21,8 +21,6 @@ class Mes001OpenApiIT {
     void generatedContractContainsTheFrozenMes001Operations() throws Exception {
         mvc.perform(get("/v3/api-docs"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.paths['/api/v1/audit-events'].get.operationId")
-                .value("queryAuditEvents"))
             .andExpect(jsonPath("$.paths['/api/v1/auth/reauth'].post.operationId")
                 .value("reauthenticateForSignature"))
             .andExpect(jsonPath("$.paths['/api/v1/records/{type}/{id}/sign'].post.operationId")

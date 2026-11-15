@@ -1,35 +1,43 @@
 package com.hospital.mes.ebr.application;
 
-import com.hospital.mes.audit.application.*;
-import com.hospital.mes.audit.domain.*;
-import com.hospital.mes.audit.signature.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hospital.mes.audit.application.CurrentPlatformContext;
+import com.hospital.mes.audit.signature.SignatureRecord;
+import com.hospital.mes.audit.signature.SignatureStatus;
 import com.hospital.mes.ebr.domain.EbrCommands.SignatureRule;
-import java.util.UUID;
+import org.springframework.stereotype.Service;
 
-/** Immutable role-at-signing evidence is bound to the exact inserted signature, never request identity. */
-@org.springframework.stereotype.Service
-@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(prefix="spring.datasource", name="url")
+/** Frozen EBR role policy is carried by the signature itself, not by an audit trail. */
+@Service
 public class EbrRoleEvidence {
- private final AuditApplicationService audit;
- private final AuditQueryService query;
- public EbrRoleEvidence(AuditApplicationService audit, AuditQueryService query) {this.audit=audit;this.query=query;}
- public void retain(CurrentPlatformContext context, SignatureRecord signature, SignatureRule rule) {
-  if(signature.organizationId()!=context.organizationId()||signature.signerId()!=context.actorId())throw new IllegalArgumentException("Signature actor binding mismatch");
-  audit.append(new AuditCommand(context.organizationId(),context.actorId(),roleCode(rule),
-   "EBR_FORM_SIGNATURE_ROLE","EBR_SIGNATURE_POLICY",Long.toString(signature.id()),null,
-   signature.recordDigest(),policy(rule),null,signature.signedAt(),UUID.randomUUID().toString(),
-   context.requestId(),AuditSource.API,null));
- }
- static String policy(SignatureRule rule) {String key=rule.meaning()+"|"+rule.objectScope()+"|"+rule.objectCode()+"|"+rule.sequenceNo();if(rule.requiredRoleId()==null)return key;return "2.0|"+rule.requiredRoleId()+"|"+key+"|"+com.hospital.mes.audit.idempotency.PlatformIdempotencyService.digest(rule.requiredRoleId()+"|"+key+"|"+rule.roleCodeSnapshot()+"|"+rule.roleNameSnapshot()+"|"+rule.reauthRequired()+"|"+rule.invalidateOnChange());}
- private static String roleCode(SignatureRule rule){return rule.requiredRoleId()==null?rule.requiredRole():rule.roleCodeSnapshot();}
- public boolean matches(SignatureRecord signature, SignatureRule rule) {
-  for(int page=0;;page++) {
-   var result=query.query(signature.organizationId(),new AuditEventQuery(signature.signerId(),
-    "EBR_FORM_SIGNATURE_ROLE","EBR_SIGNATURE_POLICY",Long.toString(signature.id()),AuditSource.API,null,null,null,null,page,200));
-   if(result.items().stream().anyMatch(event->event.objectType().equals("EBR_SIGNATURE_POLICY")
-    &&event.objectId().equals(Long.toString(signature.id()))&&java.util.Objects.equals(roleCode(rule),event.actorRole())
-    &&policy(rule).equals(event.reason())&&signature.recordDigest().equals(event.newValueDigest())))return true;
-   if((page+1L)*200>=result.total())return false;
-  }
- }
+    private final ObjectMapper json;
+    public EbrRoleEvidence(ObjectMapper json) { this.json = json; }
+
+    public static String policy(SignatureRule rule) {
+        String key = rule.meaning()+"|"+rule.objectScope()+"|"+rule.objectCode()+"|"+rule.sequenceNo();
+        if (rule.requiredRoleId() == null) return key;
+        return "2.0|"+rule.requiredRoleId()+"|"+key+"|"
+            +com.hospital.mes.audit.idempotency.PlatformIdempotencyService.digest(
+                rule.requiredRoleId()+"|"+key+"|"+rule.roleCodeSnapshot()+"|"+rule.roleNameSnapshot()
+                +"|"+rule.reauthRequired()+"|"+rule.invalidateOnChange());
+    }
+
+    public void retain(CurrentPlatformContext context, SignatureRecord signature, SignatureRule rule) {
+        if (signature.organizationId()!=context.organizationId() || signature.signerId()!=context.actorId()
+            || !matches(signature,rule)) {
+            throw new IllegalArgumentException("Signature role policy binding mismatch");
+        }
+    }
+
+    public boolean matches(SignatureRecord signature, SignatureRule rule) {
+        if (signature.status()!=SignatureStatus.VALID || !signature.meaning().name().equals(rule.meaning())) return false;
+        if (signature.authContextJson()==null || signature.authContextJson().isBlank()) return false;
+        try {
+            var auth=json.readTree(signature.authContextJson());
+            var policies=auth.path("providerContext").path("rolePolicies");
+            if (!policies.isArray()) return false;
+            for (var item:policies) if (policy(rule).equals(item.asText())) return true;
+            return false;
+        } catch (Exception ex) { return false; }
+    }
 }

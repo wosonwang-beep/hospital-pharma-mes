@@ -1,0 +1,15 @@
+﻿REQ,最新需求（覆盖旧RTM）,页面/入口,岗位,验收规则
+NQ-01,已确认收货页每批物料一键生成并提交首次请验，仓管无需重新填写，无弹窗；生成后可查看，允许状态下可修改,/wms/receipts/:id (每条收货物料批次) → /quality/inspection-requests/:id,仓管,服务端据已保存批次与收货事实自动生成并提交，请验生成后QC待确认；仓管无需QC标准，幂等不重复
+NQ-02,检验部门请验单菜单列表和编辑沿用现有,quality/inspection-requests,QC,不重做已确认列表/编辑布局，QC标准/取样计划必填
+NQ-03,QC确认请验同事务生成取样单和待样品检验任务,quality/inspection-requests/:id,QC,两单一次生成、同请验关联、失败整体回滚，未收样时禁止检验
+NQ-04,取样记录为列表并支持日期、人员、状态查询,quality/sampling-tasks,QC/取样员,查未取样/已取样/待仓库确认，不合状态不可编辑
+NQ-05,取样单查看、编辑和统一模板打印,quality/sampling-tasks/:id/execute,取样员,记录取样人/日期/实取量/检验样与留样及复封，保存不扣库存
+NQ-06,仓管独立确认样品出库和实际库存扣减,来源取样任务+WMS详情,仓管,仅有权仓管核对原批、库位/容器及实取量，负库存/重复/签名失败回滚
+NQ-07,检验任务列表和受控详情逐项填写,quality/inspection-tasks/:id/execute,检验员,展示批量/取样量/请验日期/取样日期/检验日期/样品状态，原始结果和项目判定独立
+NQ-08,检验任务综合判定、提交审核、独立签名,quality/inspection-tasks/:id,检验员/复核员,缺必检项不得合格；FAIL不可覆盖；审核人电子签名后完成检验
+NQ-09,审核完成后检验报告列表可查询及打印,quality/inspection-reports,QC/报告人员,复用有效结果，不重抄；报告受控审批且打印不早于允许状态；不自动QA放行
+NQ-10,T1检验任务与T3详情同时显示检验单类型和综合检验判定；任务判定仅待判定/合格/不合格，后续报告另显示受控质量处置,/quality/inspection-tasks; /quality/inspection-tasks/:id/execute; /quality/inspection-reports,检验员/QC审核/QA质量决定,类型来自父请验requestType；让步接收属于受控调查及QA决定，不是检验任务原始判定，不覆盖原始FAIL或自动放行
+NQ-11,T1前两列固定为样品名称、物料批号且第三列为样品编号，并可按样品身份或批号定位本人任务,/quality/inspection-tasks,检验员/复核员,样品名称使用qms_sample检验对象/来源业务投影或OTHER_APPROVED受控名称；不得将materialName换标签冒充；样品编号来自sample_no；批号来自material_lot关联
+NQ-12,检验任务列表按任务状态、检验人和检验单类型收窄并显示请验/取样日期与综合判定,/quality/inspection-tasks,检验员/复核员,查询置顶紧凑且标签控件同行；重置查询同行；正式API缺少跨表只读投影时标DESIGN_CHANGE_REQUIRED而非前端假筛选
+NQ-13,业务检验单号等同检验报告号且与检验任务号严格区分,/quality/inspection-reports; /quality/inspection-tasks,检验员/QC报告人员,report_no显示为检验单号（报告号）；inspection_task_no仅为检验任务号；未生成报告不得伪造报告号
+NQ-14,检验记录T1显示真实关联检验单号即报告号且默认查询与全体记录一致,/quality/inspection-tasks,检验员/复核员,report_no沿报告项目追溯任务及同一样品；未生成显示未生成；任务号只留详情；关键字为空和全部人员对应全体列表

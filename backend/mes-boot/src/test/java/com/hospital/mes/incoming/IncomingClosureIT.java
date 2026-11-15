@@ -37,11 +37,10 @@ class IncomingClosureIT extends IncomingQualityFixture {
             "requestedDate", LocalDate.now(ZoneOffset.UTC).toString(), "priority", "NORMAL");
     }
     @Test void numericAndTextRequiredItemsRequireExactReviewAndAggregateOriginalSnapshots() {
-        as(analyst);var spec=qc.create(new QcCommands.CreateSpecification(material,"MULTI"+suffix,"Two required incoming items","Closure"),key());
-        var draft=qc.createVersion(spec.id(),new QcCommands.CreateVersion(1,List.of(
+        as(analyst);var spec=qc.create(new QcCommands.Create("MULTI"+suffix,"Two required incoming items","ENTERPRISE_INTERNAL","企业内控标准（入厂检验）",null,"双项目必检内控标准",List.of(material),List.of(),List.of(
             new QcCommands.Item("ASSAY","Assay",true,"NUMERIC","1","3",unit,null,"ASSAY_METHOD","2"),
             new QcCommands.Item("APPEARANCE","Appearance",true,"TEXT",null,null,null,"CLEAR","VISUAL","1")),"Required numeric and text items"),key());
-        as(approver);version=qc.approveVersion(draft.id(),new QcCommands.SignVersion(0L,"Approve multi-item standard","token"),"\"0\"",key()).id();as(analyst);
+        version=spec.path("id").asText();as(analyst);
         var request=request();var sample=sample(request);var task=task(request,sample);assertThat(task.path("items")).hasSize(2);
         var numericItem=task.path("items").get(0);var textItem=task.path("items").get(1);
         // Locate by frozen type; aggregation order is not an authored business fact.
@@ -128,42 +127,41 @@ class IncomingClosureIT extends IncomingQualityFixture {
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qms_release_decision WHERE material_lot_id=?",Long.class,lot)).isZero();
     }
 
-    @Test void requestRejectsDraftRetiredAndForeignMaterialWithoutWritingFacts() {
-        String root = jdbc.queryForObject("SELECT specification_id FROM qc_specification_version WHERE id=?", String.class, version);
+    @Test void requestRejectsForeignMaterialAndInactiveStandardWithoutWritingFacts() {
         var items = List.of(new QcCommands.Item("ASSAY", "Assay", true, "NUMERIC", "1", "3", unit, null, "METHOD", "1"));
-        as(author);
-        var draft = qc.createVersion(root, new QcCommands.CreateVersion(2, items, "Next standard"), key());
-        rejected("QC_SPEC_NOT_SELECTABLE", () -> service.createRequest(requestBody(draft.id(), "10", unit, 2), key()));
         var otherMaterial = materials.create(json.convertValue(java.util.Map.of("materialCode", "FOREIGN" + suffix,
             "materialName", "Other test material", "materialType", "RAW", "baseUnitId", unit, "lotControlled", true),
             com.hospital.mes.masterdata.application.MaterialCommands.Create.class), key());
-        var otherRoot = qc.create(new QcCommands.CreateSpecification(id(otherMaterial), "FOREIGNS" + suffix, "Other standard", "Scope"), key());
-        var otherDraft = qc.createVersion(otherRoot.id(), new QcCommands.CreateVersion(1, items, "Definition"), key());
-        as(approver);
-        var foreign = qc.approveVersion(otherDraft.id(), new QcCommands.SignVersion(0L, "Independent approval", "token"), "\"0\"", key());
+        var foreign = qc.create(new QcCommands.Create("FOREIGNS" + suffix, "Other standard", "ENTERPRISE_INTERNAL",
+            "企业内控标准（其他物料）", null, "其他物料内控标准", List.of(id(otherMaterial)), List.of(), items, "Scope"), key());
         as(analyst);
-        rejected("QC_SPEC_MATERIAL_MISMATCH", () -> service.createRequest(requestBody(foreign.id(), "10", unit, 2), key()));
-        as(approver);
-        qc.retireVersion(version, new QcCommands.SignVersion(1L, "Retire old standard", "token"), "\"1\"", key());
+        rejected("QC_SPEC_MATERIAL_MISMATCH", () -> service.createRequest(requestBody(foreign.path("id").asText(), "10", unit, 2), key()));
+        as(author);
+        String root = version;
+        qc.edit(root, new QcCommands.Edit(qc.get(root).path("versionNo").asLong(), "MULTI" + suffix,
+            "Two required incoming items", "ENTERPRISE_INTERNAL", "企业内控标准（入厂检验）", null, "标准停用", "INACTIVE", "停用标准"),
+            "\"" + qc.get(root).path("versionNo").asLong() + "\"", key());
         as(analyst);
         rejected("QC_SPEC_NOT_SELECTABLE", () -> service.createRequest(requestBody(version, "10", unit, 2), key()));
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qms_inspection_request WHERE material_lot_id=?", Long.class, lot)).isZero();
         assertThat(jdbc.queryForObject("SELECT quality_status FROM md_material_lot WHERE id=?", String.class, lot)).isEqualTo("QUARANTINE");
     }
 
-    @Test void convertedQuantityAndPackageBoundsPreserveFrozenRequestWhenNextStandardIsApproved() {
+    @Test void convertedQuantityAndPackageBoundsPreserveFrozenRequestWhenStandardIsLaterRevised() {
         as(author);
         String smaller = id(units.create(new UnitCommands.Create("SMALL" + suffix, "Smaller mass unit", "MASS", 3), key()));
         conversions.create(new UnitConversionCommands.Create(smaller, unit, "0.5", material), key());
         rejected("REQUEST_QUANTITY_EXCEEDED", () -> service.createRequest(requestBody(version, "20.002", smaller, 2), key()));
         rejected("REQUEST_QUANTITY_EXCEEDED", () -> service.createRequest(requestBody(version, "20", smaller, 3), key()));
         var request = service.createRequest(requestBody(version, "20", smaller, 2), key());
-        String root = jdbc.queryForObject("SELECT specification_id FROM qc_specification_version WHERE id=?", String.class, version);
-        var next = qc.createVersion(root, new QcCommands.CreateVersion(2,
-            List.of(new QcCommands.Item("ASSAY", "Changed limits", true, "NUMERIC", "0", "9", unit, null, "METHOD", "2")), "Next limits"), key());
-        as(approver);
-        qc.approveVersion(next.id(), new QcCommands.SignVersion(0L, "Approve next", "token"), "\"0\"", key());
+        String frozenDigest = jdbc.queryForObject("SELECT specification_content_hash FROM qms_inspection_request WHERE id=?", String.class, id(request));
+        String root = version;
+        as(author);
+        qc.replaceItems(root, new QcCommands.ReplaceItems(qc.get(root).path("versionNo").asLong(),
+            List.of(new QcCommands.Item("ASSAY", "Changed limits", true, "NUMERIC", "0", "9", unit, null, "METHOD", "2")), "Next limits"),
+            "\"" + qc.get(root).path("versionNo").asLong() + "\"", key());
         assertThat(jdbc.queryForObject("SELECT qc_specification_version_id FROM qms_inspection_request WHERE id=?", String.class, id(request))).isEqualTo(version);
+        assertThat(jdbc.queryForObject("SELECT specification_content_hash FROM qms_inspection_request WHERE id=?", String.class, id(request))).isEqualTo(frozenDigest);
         assertThat(jdbc.queryForObject("SELECT requested_quantity FROM qms_inspection_request WHERE id=?", java.math.BigDecimal.class, id(request))).isEqualByComparingTo("20");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qms_inspection_request WHERE material_lot_id=?", Long.class, lot)).isEqualTo(1);
     }

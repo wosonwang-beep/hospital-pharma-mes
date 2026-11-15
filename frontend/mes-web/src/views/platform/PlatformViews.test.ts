@@ -1,96 +1,19 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
 import { createPinia, setActivePinia, type Pinia } from 'pinia'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import AuditTrailView from '../audit/AuditTrailView.vue'
 import IntegrationOperationsView from '../integration/IntegrationOperationsView.vue'
 import { usePlatformAuthContext } from '../../auth/PlatformAuthContext'
-import * as auditApi from '../../api/audit'
 import * as integrationApi from '../../api/integration'
-import type { AuditEvent, Page } from '../../types/audit'
 
-vi.mock('../../api/audit')
 vi.mock('../../api/integration')
-const auditRoute = vi.hoisted(() => ({ query: {} as Record<string, string> }))
-vi.mock('vue-router', () => ({ useRoute: () => auditRoute }))
-
 const page = <T,>(items: T[], total = items.length) => ({ items, page: 0, size: 50, total })
 
 let pinia: Pinia
-
 beforeEach(() => {
   pinia = createPinia()
   setActivePinia(pinia)
   vi.resetAllMocks()
-  auditRoute.query = {}
 })
-
-describe('GMP Audit Trail', () => {
-  test('master detail audit link scopes queries by object type and ID', async () => {
-    usePlatformAuthContext().setPermissions(['audit:view'])
-    auditRoute.query = { objectType: 'Equipment', objectId: '21' }
-    vi.mocked(auditApi.queryAuditEvents).mockResolvedValue(page([]))
-    render(AuditTrailView, { global: { plugins: [pinia] } })
-    await screen.findByText('暂无审计事件')
-    expect(auditApi.queryAuditEvents).toHaveBeenCalledWith({ objectType: 'Equipment', objectId: '21', page: 0, size: 50 })
-  })
-  test('audit filters and selected digest detail use the existing read contract',async()=>{
-    usePlatformAuthContext().setPermissions(['audit:view'])
-    const event={id:'9',orgId:'1',actorId:'23',actorRole:'QA',action:'SIGN',objectType:'EBR',objectId:'88',oldValueDigest:'old-digest',newValueDigest:'new-digest',reason:'QA审核',clientInfo:null,occurredAt:'2026-10-05T01:00:00Z',transactionId:'tx',requestId:null,source:'API' as const}
-    vi.mocked(auditApi.queryAuditEvents).mockResolvedValue(page([event]))
-    render(AuditTrailView,{global:{plugins:[pinia]}})
-    await fireEvent.click(await screen.findByRole('button',{name:'查看详情'}))
-    expect(screen.getByText('old-digest')).toBeTruthy()
-    await fireEvent.click(await screen.findByRole('button',{name:'关闭'}))
-    await fireEvent.update(screen.getByLabelText('业务动作'),'SIGN')
-    await fireEvent.click(screen.getByRole('button',{name:'查询'}))
-    await waitFor(()=>expect(auditApi.queryAuditEvents).toHaveBeenCalledWith(expect.objectContaining({action:'SIGN',page:0,size:50})))
-  })
-  test('shows 403 without audit:view and never queries the API', async () => {
-    render(AuditTrailView, { global: { plugins: [pinia] } })
-
-    expect(await screen.findByText('无权查看 GMP Audit Trail')).toBeTruthy()
-    expect(auditApi.queryAuditEvents).not.toHaveBeenCalled()
-  })
-
-  test('renders API-backed total and the frozen audit columns', async () => {
-    usePlatformAuthContext().setPermissions(['audit:view'])
-    vi.mocked(auditApi.queryAuditEvents)
-      .mockResolvedValueOnce(page([], 12))
-      .mockResolvedValueOnce(page([{
-        id: '9', orgId: '1', actorId: '23', actorRole: 'QA', action: 'SIGN', objectType: 'EBR',
-        objectId: '88', oldValueDigest: null, newValueDigest: null, reason: null, clientInfo: null,
-        occurredAt: '2026-09-29T01:02:03Z', transactionId: 'tx-1', requestId: 'req-1', source: 'API'
-      }]))
-
-    render(AuditTrailView, { global: { plugins: [pinia] } })
-
-    expect(await screen.findByText('12')).toBeTruthy()
-    expect(await screen.findByText('23 / QA')).toBeTruthy()
-    expect(screen.getByText('Transaction / Request')).toBeTruthy()
-    expect(screen.getByText('tx-1 / req-1')).toBeTruthy()
-  })
-
-  test('supports empty and error states', async () => {
-    usePlatformAuthContext().setPermissions(['audit:view'])
-    vi.mocked(auditApi.queryAuditEvents).mockRejectedValue(new Error('offline'))
-
-    render(AuditTrailView, { global: { plugins: [pinia] } })
-    expect(await screen.findByText('审计事件加载失败')).toBeTruthy()
-  })
-
-  test('shows loading followed by the empty state', async () => {
-    usePlatformAuthContext().setPermissions(['audit:view'])
-    let resolvePage!: (value: Page<AuditEvent>) => void
-    const pending = new Promise<Page<AuditEvent>>(resolve => { resolvePage = resolve })
-    vi.mocked(auditApi.queryAuditEvents).mockReturnValue(pending)
-
-    render(AuditTrailView, { global: { plugins: [pinia] } })
-    expect(await screen.findByText('正在加载审计事件…')).toBeTruthy()
-    resolvePage(page([]))
-    expect(await screen.findByText('暂无审计事件')).toBeTruthy()
-  })
-})
-
 describe('Integration Inbox / Outbox Operations', () => {
   test('requires integration:view', async () => {
     render(IntegrationOperationsView, { global: { plugins: [pinia] } })

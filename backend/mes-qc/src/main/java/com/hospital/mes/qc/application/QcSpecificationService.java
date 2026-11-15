@@ -2,8 +2,6 @@ package com.hospital.mes.qc.application;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hospital.mes.audit.application.CurrentPlatformContext;
-import com.hospital.mes.audit.signature.*;
-import com.hospital.mes.audit.idempotency.PlatformIdempotencyService;
 import com.hospital.mes.masterdata.application.*;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
 import com.hospital.mes.qc.domain.*;
@@ -15,51 +13,114 @@ import org.springframework.dao.DuplicateKeyException;
 import java.util.*;
 import java.time.*;
 import static com.hospital.mes.qc.domain.QcSpecificationRules.*;
+/**
+ * Maintains the QC quality standard basic library: create, read, update and delete only.
+ * There is no approval, no electronic signature and no regulated version; every save appends a plain
+ * maintenance revision so the change, its author and its reason stay traceable.
+ */
 @Service @ConditionalOnProperty(prefix="spring.datasource",name="url")
 public class QcSpecificationService {
  @org.springframework.beans.factory.annotation.Autowired private org.springframework.beans.factory.ObjectProvider<QcProductReferencePort> products;
- private final QcStore db; private final QcDefinitions definitions; private final MasterMutation mutation; private final MaterialQueryService materials; private final ObjectMapper json; private final SignatureApplicationService signing; private final QcSigningIntent intent;
- public QcSpecificationService(QcStore db,QcDefinitions definitions,MasterMutation mutation,MaterialQueryService materials,ObjectMapper json,SignatureApplicationService signing,QcSigningIntent intent){this.db=db;this.definitions=definitions;this.mutation=mutation;this.materials=materials;this.json=json;this.signing=signing;this.intent=intent;}
+ private final QcStore db; private final MasterMutation mutation; private final MaterialQueryService materials; private final ObjectMapper json;
+ public QcSpecificationService(QcStore db,MasterMutation mutation,MaterialQueryService materials,ObjectMapper json){this.db=db;this.mutation=mutation;this.materials=materials;this.json=json;}
  @Transactional(readOnly=true)
- public QcViews.Page<QcViews.SpecificationSummary> list(int page,int size,String keyword,String materialId,String status){var c=mutation.context("qms:specification:view");var result=db.list(c.organizationId(),page,size,keyword,materialId==null?null:id(materialId),status);return new QcViews.Page<>(result.items().stream().map(r->decode(rootNode(r,false),QcViews.SpecificationSummary.class)).toList(),result.total(),page,size);}
- @Transactional(readOnly=true)
- public QcViews.Page<QcViews.SpecificationSummary> list(int page,int size,String keyword,String materialId,String productId,String subjectType,String status){
-  if(materialId!=null&&productId!=null||subjectType!=null&&!Set.of("MATERIAL","PRODUCT").contains(subjectType)||"PRODUCT".equals(subjectType)&&materialId!=null||"MATERIAL".equals(subjectType)&&productId!=null)throw invalid("Conflicting subject filters");
-  var c=mutation.context("qms:specification:view");var result=db.listSubjects(c.organizationId(),page,size,keyword,materialId==null?null:id(materialId),productId==null?null:id(productId),subjectType,status);return new QcViews.Page<>(result.items().stream().map(r->decode(rootNode(r,false),QcViews.SpecificationSummary.class)).toList(),result.total(),page,size);
+ public QcViews.Page<QcViews.SpecificationSummary> list(int page,int size,String keyword,String basisType,String materialId,String productId,String status){
+  var c=mutation.context("qms:specification:view");
+  var result=db.list(c.organizationId(),page,size,keyword,basisType,materialId==null?null:id(materialId),productId==null?null:id(productId),status);
+  return new QcViews.Page<>(result.items().stream().map(this::snapshotView).toList(),result.total(),page,size);
  }
  @Transactional(readOnly=true)
- public QcViews.SpecificationDetail get(String id){var c=mutation.context("qms:specification:view");return decode(rootNode(db.root(c.organizationId(),id(id)),true),QcViews.SpecificationDetail.class);}
- @Transactional(readOnly=true)
- public QcViews.SpecificationVersionDetail getVersion(String id){var c=mutation.context("qms:specification:view");return decode(versionNode(db.version(c.organizationId(),id(id),false),true),QcViews.SpecificationVersionDetail.class);}
+ public JsonNode get(String value){var c=mutation.context("qms:specification:view");return view(() -> detailView(db.root(c.organizationId(),id(value))));}
  @Transactional
- public QcViews.SpecificationDetail create(QcCommands.CreateSpecification request,String key){
+ public JsonNode create(QcCommands.Create request,String key){
   var c=mutation.context("qms:specification:create");if(request==null)throw invalid("Request required");
-  String subject=request.subjectType()==null?"MATERIAL":request.subjectType();
-  if(!Set.of("MATERIAL","PRODUCT").contains(subject)||("MATERIAL".equals(subject)?request.materialId()==null||request.productId()!=null:request.productId()==null||request.materialId()!=null))throw invalid("Exactly one matching subject identity required");
-  Long material="MATERIAL".equals(subject)?id(request.materialId()):null,product="PRODUCT".equals(subject)?id(request.productId()):null;
-  String code=text(request.specificationCode(),100),name=text(request.specificationName(),200),reason=text(request.reason(),1000);
-  Object body=material!=null?Map.of("materialId",material.toString(),"specificationCode",code,"specificationName",name,"reason",reason):new QcCommands.CreateSpecification(subject,null,product.toString(),code,name,reason);
-  try{return decode(mutation.execute(c,"QC_SPEC_CREATE",key,body,()->{
-   try{if(material!=null)materials.requireUsable(c.organizationId(),material,Instant.now());else products.getObject().product(c.organizationId(),product,true);}catch(NoSuchElementException e){throw new QcNotFoundException();}
-   var r=new SpecificationEntity();r.setSubjectType(subject);r.setMaterialId(material);r.setProductId(product);r.setSpecificationCode(code);r.setSpecificationName(name);db.insertRoot(r,c.organizationId(),c.actorId());mutation.auditSnapshot(c,"QC_SPEC_CREATED","QcSpecification",r.getId(),null,rootNode(r,true),reason,key);return r;
-  },r->rootNode((SpecificationEntity)r,true),201),QcViews.SpecificationDetail.class);}catch(DuplicateKeyException e){throw conflict("QC_SPEC_CODE_EXISTS","QC specification code already exists");}
+  String code=text(request.specificationCode(),100),name=text(request.specificationName(),200);
+  String basisType=basisType(request.basisType()),basisReference=text(request.basisReference(),300);
+  String remark=optionalText(request.remark(),1000),reason=text(request.reason(),500);
+  LocalDate effectiveDate=request.effectiveDate();
+  var wantedScopes=scopes(request.materialIds(),request.productIds());
+  if(wantedScopes.isEmpty())throw invalid("At least one applicable material or product required");
+  if(request.items()==null||request.items().isEmpty())throw invalid("At least one item required");
+  validateItems(request.items());
+  verifyScopes(c.organizationId(),wantedScopes);
+  try{return mutation.execute(c,"QC_SPEC_CREATE",key,canonicalise(code,name,basisType,basisReference,request,reason),()->{
+   var r=new SpecificationEntity();r.setMaterialId(firstMaterial(wantedScopes));r.setSpecificationCode(code);r.setSpecificationName(name);r.setBasisType(basisType);r.setBasisReference(basisReference);r.setEffectiveDate(effectiveDate);r.setRemark(remark);r.setStatus(ACTIVE);db.insertRoot(r,c.organizationId(),c.actorId());
+   replaceScopes(r,wantedScopes,c.actorId());replaceItems(r,request.items(),c.actorId());
+   db.insertRevision(revision(r,c.actorId(),"CREATE",reason,null,view(() -> detailView(r))),c.organizationId(),c.actorId());
+   mutation.auditSnapshot(c,"QC_SPEC_CREATED","QcSpecification",r.getId(),null,view(() -> detailView(r)),reason,key);return r;
+  },row->view(() -> detailView((SpecificationEntity)row)),201);}catch(DuplicateKeyException e){throw conflict("QC_SPEC_CODE_EXISTS","QC specification code already exists");}
  }
  @Transactional
- public QcViews.SpecificationVersionDetail createVersion(String rootId,QcCommands.CreateVersion request,String key){var c=mutation.context("qms:specification:create");long root=id(rootId);db.root(c.organizationId(),root);if(request==null||request.versionNoBusiness()==null||request.versionNoBusiness()<1)throw invalid("Positive business version required");String reason=text(request.reason(),1000);definitions.validate(c.organizationId(),request.items());try{return decode(mutation.execute(c,"QC_SPEC_VERSION_CREATE:"+root,key,request,()->{var v=new SpecificationVersionEntity();v.setSpecificationId(root);v.setDefinitionSchemaVersion("PRODUCT".equals(db.root(c.organizationId(),root).getSubjectType())?2:1);v.setVersionNoBusiness(request.versionNoBusiness());v.setStatus("DRAFT");db.insertVersion(v,c.organizationId(),c.actorId());replaceItems(v,request.items(),c.actorId());mutation.auditSnapshot(c,"QC_SPEC_VERSION_CREATED","QcSpecificationVersion",v.getId(),null,versionNode(v,true),reason,key);return v;},v->versionNode((SpecificationVersionEntity)v,true),201),QcViews.SpecificationVersionDetail.class);}catch(DuplicateKeyException e){throw conflict("QC_SPEC_VERSION_EXISTS","QC business version or item code already exists");}}
+ public JsonNode edit(String specificationId,QcCommands.Edit request,String header,String key){
+  var c=mutation.context("qms:specification:edit");long spec=id(specificationId);if(request==null)throw invalid("Request required");long expectedToken=expected(header,request.recordVersion());
+  String code=text(request.specificationCode(),100),name=text(request.specificationName(),200);
+  String basisType=basisType(request.basisType()),basisReference=text(request.basisReference(),300);
+  String remark=optionalText(request.remark(),1000),status=request.status()==null?ACTIVE:status(request.status()),reason=text(request.reason(),500);
+  LocalDate effectiveDate=request.effectiveDate();
+  return mutation.execute(c,"QC_SPEC_EDIT:"+spec,key,Map.of("id",specificationId,"recordVersion",expectedToken,"specificationCode",code,"specificationName",name,"basisType",basisType,"basisReference",basisReference,"status",status,"reason",reason),()->{
+   var r=locked(c,spec,expectedToken);var before=view(() -> detailView(r));
+   r.setSpecificationCode(code);r.setSpecificationName(name);r.setBasisType(basisType);r.setBasisReference(basisReference);r.setEffectiveDate(effectiveDate);r.setRemark(remark);r.setStatus(status);
+   db.updateRoot(r,expectedToken,c.actorId());
+   var after=view(() -> detailView(r));db.insertRevision(revision(r,c.actorId(),"UPDATE",reason,before,after),c.organizationId(),c.actorId());
+   mutation.auditSnapshot(c,"QC_SPEC_UPDATED","QcSpecification",r.getId(),before,after,reason,key);return r;
+  },row->view(() -> detailView((SpecificationEntity)row)),200);
+ }
  @Transactional
- public QcViews.SpecificationVersionDetail editVersion(String versionId,QcCommands.EditVersion request,String header,String key){var c=mutation.context("qms:specification:edit");long version=id(versionId);db.version(c.organizationId(),version,false);if(request==null)throw invalid("Request required");long expected=expected(header,request.versionNo());String reason=text(request.reason(),1000);definitions.validate(c.organizationId(),request.items());return decode(mutation.execute(c,"QC_SPEC_VERSION_EDIT:"+version,key,Map.of("id",versionId,"version",expected,"items",request.items(),"reason",reason),()->{var v=locked(c,version,expected);requireDraft(v.getStatus());var before=versionNode(v,true);replaceItems(v,request.items(),c.actorId());db.updateVersion(v,expected,"DRAFT",c.actorId());mutation.auditSnapshot(c,"QC_SPEC_VERSION_EDITED","QcSpecificationVersion",v.getId(),before,versionNode(v,true),reason,key);return v;},v->versionNode((SpecificationVersionEntity)v,true),200),QcViews.SpecificationVersionDetail.class);}
+ public JsonNode replaceScope(String specificationId,QcCommands.ReplaceScope request,String header,String key){
+  var c=mutation.context("qms:specification:edit");long spec=id(specificationId);if(request==null)throw invalid("Request required");long expectedToken=expected(header,request.recordVersion());
+  String reason=text(request.reason(),500);var wanted=scopes(request.materialIds(),request.productIds());
+  if(wanted.isEmpty())throw invalid("At least one applicable material or product required");
+  verifyScopes(c.organizationId(),wanted);
+  return mutation.execute(c,"QC_SPEC_SCOPE:"+spec,key,Map.of("id",specificationId,"recordVersion",expectedToken,"materialIds",request.materialIds()==null?List.of():request.materialIds(),"productIds",request.productIds()==null?List.of():request.productIds(),"reason",reason),()->{
+   var r=locked(c,spec,expectedToken);var before=view(() -> detailView(r));
+   replaceScopes(r,wanted,c.actorId());r.setMaterialId(firstMaterial(wanted));db.touchRoot(r,expectedToken,c.actorId());
+   var after=view(() -> detailView(r));db.insertRevision(revision(r,c.actorId(),"UPDATE",reason,before,after),c.organizationId(),c.actorId());
+   mutation.auditSnapshot(c,"QC_SPEC_SCOPE_CHANGED","QcSpecification",r.getId(),before,after,reason,key);return r;
+  },row->view(() -> detailView((SpecificationEntity)row)),200);
+ }
  @Transactional
- public QcViews.SpecificationVersionDetail approveVersion(String id,QcCommands.SignVersion request,String header,String key){return sign(id,request,header,key,"APPROVE");}
+ public JsonNode replaceItems(String specificationId,QcCommands.ReplaceItems request,String header,String key){
+  var c=mutation.context("qms:specification:edit");long spec=id(specificationId);if(request==null)throw invalid("Request required");long expectedToken=expected(header,request.recordVersion());
+  String reason=text(request.reason(),500);if(request.items()==null||request.items().isEmpty())throw invalid("At least one item required");validateItems(request.items());
+  return mutation.execute(c,"QC_SPEC_ITEMS:"+spec,key,Map.of("id",specificationId,"recordVersion",expectedToken,"items",request.items(),"reason",reason),()->{
+   var r=locked(c,spec,expectedToken);var before=view(() -> detailView(r));
+   replaceItems(r,request.items(),c.actorId());db.touchRoot(r,expectedToken,c.actorId());
+   var after=view(() -> detailView(r));db.insertRevision(revision(r,c.actorId(),"UPDATE",reason,before,after),c.organizationId(),c.actorId());
+   mutation.auditSnapshot(c,"QC_SPEC_ITEMS_CHANGED","QcSpecification",r.getId(),before,after,reason,key);return r;
+  },row->view(() -> detailView((SpecificationEntity)row)),200);
+ }
  @Transactional
- public QcViews.SpecificationVersionDetail retireVersion(String id,QcCommands.SignVersion request,String header,String key){return sign(id,request,header,key,"RETIRE");}
- private QcViews.SpecificationVersionDetail sign(String versionId,QcCommands.SignVersion request,String header,String key,String action){String permission=action.equals("APPROVE")?"approve":"retire";var c=mutation.context("qms:specification:"+permission);mutation.context("ebr:sign");long version=id(versionId);db.version(c.organizationId(),version,false);if(request==null)throw invalid("Request required");long expected=expected(header,request.versionNo());String reason=text(request.reason(),1000);return decode(mutation.execute(c,"QC_SPEC_VERSION_"+action+":"+version,key,Map.of("id",versionId,"version",expected,"reason",reason),()->{var v=locked(c,version,expected);String previous=v.getStatus();String next=transition(previous,action);definitions.validateVersion(v);if(action.equals("APPROVE"))definitions.independent(v,c.actorId());else definitions.requireValid(v);var before=versionNode(v,true);var signature=intent.execute(c,version,action,reason,()->signing.sign(new SignCommand(c,QcDefinitions.type(action),versionId,SignatureMeaning.APPROVE,v.getVersionNoBusiness(),request.reauthToken(),PlatformIdempotencyService.digest(key+":"+action+":sign"),null)));if(action.equals("APPROVE")){v.setContentHash(definitions.contentHash(v));v.setApprovedBy(c.actorId());v.setApprovedAt(LocalDateTime.ofInstant(signature.signedAt(),ZoneOffset.UTC));v.setApprovalSignatureId(id(signature.id()));v.setApprovalReason(reason);}else{v.setRetiredBy(c.actorId());v.setRetiredAt(LocalDateTime.ofInstant(signature.signedAt(),ZoneOffset.UTC));v.setRetirementSignatureId(id(signature.id()));v.setRetirementReason(reason);}v.setStatus(next);db.updateVersion(v,expected,previous,c.actorId());mutation.auditSnapshot(c,"QC_SPEC_VERSION_"+(action.equals("APPROVE")?"APPROVED":"RETIRED"),"QcSpecificationVersion",v.getId(),before,versionNode(v,true),reason,key);return v;},v->versionNode((SpecificationVersionEntity)v,true),200),QcViews.SpecificationVersionDetail.class);}
- private SpecificationVersionEntity locked(CurrentPlatformContext c,long id,long expected){var v=db.version(c.organizationId(),id,true);if(v.getVersionNo()!=expected)throw conflict("RECORD_CHANGED","QC record changed; reload before retrying");return v;}
- private void replaceItems(SpecificationVersionEntity v,List<QcCommands.Item> wanted,long actor){var old=db.items(v.getOrgId(),v.getId(),false);Map<String,SpecificationItemEntity> existing=new HashMap<>();for(var e:old)existing.put(e.getItemCode().toUpperCase(Locale.ROOT),e);Set<Long> retained=new HashSet<>();for(var line:wanted){String code=text(line.itemCode(),100);var e=existing.get(code.toUpperCase(Locale.ROOT));boolean fresh=e==null;if(fresh){e=new SpecificationItemEntity();e.setSpecificationVersionId(v.getId());e.setItemCode(code);}e.setItemName(text(line.itemName(),200));e.setRequired(line.required());e.setResultType(line.resultType());e.setLowerLimit(decimal(line.lowerLimit()));e.setUpperLimit(decimal(line.upperLimit()));e.setUnitId(line.unitId()==null?null:id(line.unitId()));e.setTextAcceptanceCriteria(line.textAcceptanceCriteria()==null?null:text(line.textAcceptanceCriteria(),1000));e.setMethodCode(text(line.methodCode(),100));e.setMethodVersion(text(line.methodVersion(),50));e.setActive(true);if(fresh)db.insertItem(e,v.getOrgId(),actor);else db.updateItem(e,actor);retained.add(e.getId());}for(var e:old)if(!retained.contains(e.getId())&&Boolean.TRUE.equals(e.getActive())){e.setActive(false);db.updateItem(e,actor);}}
- private ObjectNode base(ScopedEntity e){var n=json.createObjectNode();n.put("id",e.getId().toString());n.put("orgId",e.getOrgId().toString());n.put("createdBy",e.getCreatedBy().toString());n.put("createdAt",time(e.getCreatedAt()));n.put("updatedBy",e.getUpdatedBy().toString());n.put("updatedAt",time(e.getUpdatedAt()));n.put("versionNo",e.getVersionNo());return n;}
- private ObjectNode rootNode(SpecificationEntity r,boolean versions){var n=base(r);subjectDisplay(n,r);n.put("specificationCode",r.getSpecificationCode());n.put("specificationName",r.getSpecificationName());if(versions){var a=n.putArray("versions");db.versions(r.getOrgId(),r.getId()).forEach(v->a.add(versionNode(v,false)));}return n;}
- private ObjectNode versionNode(SpecificationVersionEntity v,boolean detail){var n=base(v);n.put("specificationId",v.getSpecificationId().toString());if(v.getDefinitionSchemaVersion()==2)n.put("definitionSchemaVersion",2);n.put("versionNoBusiness",v.getVersionNoBusiness());n.put("status",v.getStatus());n.put("contentHash",v.getContentHash());n.put("approvedBy",QcDefinitions.id(v.getApprovedBy()));n.put("approvedAt",time(v.getApprovedAt()));n.put("approvalSignatureId",QcDefinitions.id(v.getApprovalSignatureId()));n.put("approvalReason",v.getApprovalReason());n.put("retiredBy",QcDefinitions.id(v.getRetiredBy()));n.put("retiredAt",time(v.getRetiredAt()));n.put("retirementSignatureId",QcDefinitions.id(v.getRetirementSignatureId()));n.put("retirementReason",v.getRetirementReason());if(detail){var r=db.root(v.getOrgId(),v.getSpecificationId());n.put("specificationCode",r.getSpecificationCode());n.put("specificationName",r.getSpecificationName());subjectDisplay(n,r);var a=n.putArray("items");db.items(v.getOrgId(),v.getId(),true).forEach(i->a.add(definitions.itemNode(i)));}return n;}
- private void subjectDisplay(ObjectNode n,SpecificationEntity r){if("PRODUCT".equals(r.getSubjectType())){var p=products.getObject().product(r.getOrgId(),r.getProductId(),false);n.put("subjectType","PRODUCT");n.put("productId",r.getProductId().toString());n.put("productCode",p.path("productCode").asText());n.put("productName",p.path("productName").asText());}else{n.put("materialId",r.getMaterialId().toString());materialDisplay(n,r.getOrgId(),r.getMaterialId());}}
- private void materialDisplay(ObjectNode n,long org,long material){try{var m=materials.snapshot(org,material);n.put("materialCode",m.path("materialCode").asText());n.put("materialName",m.path("materialName").asText());}catch(NoSuchElementException e){throw new QcNotFoundException();}}
+ public JsonNode delete(String specificationId,QcCommands.Remove request,String header,String key){
+  var c=mutation.context("qms:specification:delete");long spec=id(specificationId);if(request==null)throw invalid("Request required");long expectedToken=expected(header,request.recordVersion());
+  String reason=text(request.reason(),500);
+  return mutation.execute(c,"QC_SPEC_DELETE:"+spec,key,Map.of("id",specificationId,"recordVersion",expectedToken,"reason",reason),()->{
+   var r=locked(c,spec,expectedToken);var before=view(() -> detailView(r));
+   var after=json.createObjectNode().put("id",r.getId().toString()).put("deleted",true);
+   db.insertRevision(revision(r,c.actorId(),"DELETE",reason,before,null),c.organizationId(),c.actorId());
+   for(var scope:db.scopes(r.getOrgId(),r.getId()))db.deleteScope(r.getOrgId(),scope.getId());
+   for(var item:db.items(r.getOrgId(),r.getId()))db.deleteItem(r.getOrgId(),item.getId());
+   db.deleteRoot(r.getOrgId(),r.getId());
+   mutation.auditSnapshot(c,"QC_SPEC_DELETED","QcSpecification",r.getId(),before,after,reason,key);
+    return r;
+  },node->project(json.createObjectNode().put("id",specificationId).put("deleted",true)),200);
+ }
+ /** Locks the aggregate row, enforcing the optimistic token before any evidence is written. */
+ private SpecificationEntity locked(CurrentPlatformContext c,long spec,long expectedToken){var r=db.lockRoot(c.organizationId(),spec);if(!java.util.Objects.equals(r.getVersionNo(),expectedToken))throw conflict("STALE_RECORD","Record was changed by another user");return r;}
+ private static Map<String,Object> canonicalise(String code,String name,String basisType,String basisReference,QcCommands.Create request,String reason){var m=new LinkedHashMap<String,Object>();m.put("specificationCode",code);m.put("specificationName",name);m.put("basisType",basisType);m.put("basisReference",basisReference);m.put("effectiveDate",request.effectiveDate()==null?null:request.effectiveDate().toString());m.put("remark",request.remark());m.put("materialIds",request.materialIds()==null?List.of():request.materialIds());m.put("productIds",request.productIds()==null?List.of():request.productIds());m.put("items",request.items()==null?List.of():request.items());m.put("reason",reason);return m;}
+ /** Applicability rows in canonical subject order, rejecting a duplicated or malformed subject. */
+ private static List<String[]> scopes(List<String> materialIds,List<String> productIds){var out=new ArrayList<String[]>();for(Long m:ids(materialIds,"Materials",500))out.add(new String[]{"MATERIAL",m.toString()});for(Long p:ids(productIds,"Products",500))out.add(new String[]{"PRODUCT",p.toString()});return List.copyOf(out);}
+ private static Long firstMaterial(List<String[]> wanted){for(var s:wanted)if("MATERIAL".equals(s[0]))return Long.valueOf(s[1]);return null;}
+ private void verifyScopes(long org,List<String[]> wanted){for(var s:wanted){if("MATERIAL".equals(s[0])){try{materials.snapshot(org,Long.parseLong(s[1]));}catch(NoSuchElementException e){throw new QcNotFoundException();}}else{try{products.getObject().product(org,Long.parseLong(s[1]),false);}catch(NoSuchElementException e){throw new QcNotFoundException();}}}}
+ private void replaceScopes(SpecificationEntity r,List<String[]> wanted,long actor){Map<String,SpecificationScopeEntity> existing=new HashMap<>();for(var e:db.scopes(r.getOrgId(),r.getId()))existing.put(e.getSubjectType()+":"+e.getSubjectId(),e);Set<String> retained=new HashSet<>();for(var s:wanted){String token=s[0]+":"+s[1];retained.add(token);if(existing.containsKey(token))continue;var e=new SpecificationScopeEntity();e.setSpecificationId(r.getId());e.setSubjectType(s[0]);e.setSubjectId(Long.valueOf(s[1]));db.insertScope(e,r.getOrgId(),actor);}for(var e:existing.values())if(!retained.contains(e.getSubjectType()+":"+e.getSubjectId()))db.deleteScope(r.getOrgId(),e.getId());}
+ private void replaceItems(SpecificationEntity r,List<QcCommands.Item> wanted,long actor){var old=db.items(r.getOrgId(),r.getId());Map<String,SpecificationItemEntity> existing=new HashMap<>();for(var e:old)existing.put(e.getItemCode().toUpperCase(Locale.ROOT),e);Set<Long> retained=new HashSet<>();for(var line:wanted){String code=text(line.itemCode(),100);var e=existing.get(code.toUpperCase(Locale.ROOT));boolean fresh=e==null;if(fresh){e=new SpecificationItemEntity();e.setSpecificationId(r.getId());e.setItemCode(code);}e.setItemName(text(line.itemName(),200));e.setRequired(line.required());e.setResultType(line.resultType());e.setLowerLimit(decimal(line.lowerLimit()));e.setUpperLimit(decimal(line.upperLimit()));e.setUnitId(line.unitId()==null?null:id(line.unitId()));e.setTextAcceptanceCriteria(optionalText(line.textAcceptanceCriteria(),1000));e.setMethodCode(text(line.methodCode(),100));e.setMethodVersion(text(line.methodVersion(),50));if(fresh)db.insertItem(e,r.getOrgId(),actor);else db.updateItem(e,actor);retained.add(e.getId());}for(var e:old)if(!retained.contains(e.getId()))db.deleteItem(r.getOrgId(),e.getId());}
+ private SpecificationRevisionEntity revision(SpecificationEntity r,long actor,String type,String reason,JsonNode before,JsonNode after){var e=new SpecificationRevisionEntity();e.setSpecificationId(r.getId());e.setRevisionNo(db.nextRevisionNo(r.getOrgId(),r.getId()));e.setRevisionType(type);e.setRevisionReason(reason);e.setBeforeJson(before==null?null:before.toString());e.setAfterJson(after==null?null:after.toString());return e;}
+ private JsonNode project(JsonNode tree){var n=(ObjectNode)tree;for(String f:List.of("id","orgId","createdBy","updatedBy","specificationItemId","unitId","scopeId","subjectId"))if(n.hasNonNull(f))n.put(f,n.get(f).asText());return n;}
+ private JsonNode view(java.util.function.Supplier<?> value){return project(json.valueToTree(value.get()));}
+ private QcViews.SpecificationSummary snapshotView(SpecificationEntity r){return new QcViews.SpecificationSummary(r.getId().toString(),r.getOrgId().toString(),String.valueOf(r.getCreatedBy()),time(r.getCreatedAt()),String.valueOf(r.getUpdatedBy()),time(r.getUpdatedAt()),r.getVersionNo(),r.getSpecificationCode(),r.getSpecificationName(),r.getBasisType(),r.getBasisReference(),date(r.getEffectiveDate()),r.getRemark(),r.getStatus(),scopeViews(r));}
+ private QcViews.SpecificationDetail detailView(SpecificationEntity r){var items=new ArrayList<QcViews.Item>();for(var i:db.items(r.getOrgId(),r.getId()))items.add(itemNode(i));var history=new ArrayList<QcViews.Revision>();for(var v:db.revisions(r.getOrgId(),r.getId(),20))history.add(new QcViews.Revision(String.valueOf(v.getRevisionNo()),v.getRevisionType(),v.getRevisionReason(),String.valueOf(v.getCreatedBy()),time(v.getCreatedAt())));return new QcViews.SpecificationDetail(r.getId().toString(),r.getOrgId().toString(),String.valueOf(r.getCreatedBy()),time(r.getCreatedAt()),String.valueOf(r.getUpdatedBy()),time(r.getUpdatedAt()),r.getVersionNo(),r.getSpecificationCode(),r.getSpecificationName(),r.getBasisType(),r.getBasisReference(),date(r.getEffectiveDate()),r.getRemark(),r.getStatus(),scopeViews(r),items,history);}
+ private QcViews.Item itemNode(SpecificationItemEntity i){return new QcViews.Item(i.getId().toString(),i.getItemCode(),i.getItemName(),Boolean.TRUE.equals(i.getRequired()),i.getResultType(),plain(i.getLowerLimit()),plain(i.getUpperLimit()),i.getUnitId()==null?null:i.getUnitId().toString(),i.getTextAcceptanceCriteria(),i.getMethodCode(),i.getMethodVersion());}
+ private List<QcViews.Scope> scopeViews(SpecificationEntity r){var out=new ArrayList<QcViews.Scope>();for(var s:db.scopes(r.getOrgId(),r.getId())){String code=null,name=null;if("MATERIAL".equals(s.getSubjectType())){try{var m=materials.snapshot(r.getOrgId(),s.getSubjectId());code=m.path("materialCode").asText();name=m.path("materialName").asText();}catch(NoSuchElementException e){throw new QcNotFoundException();}}else{var p=products.getObject().product(r.getOrgId(),s.getSubjectId(),false);code=p.path("productCode").asText();name=p.path("productName").asText();}out.add(new QcViews.Scope(s.getId().toString(),s.getSubjectType(),s.getSubjectId().toString(),code,name));}return List.copyOf(out);}
+ private static String plain(java.math.BigDecimal v){return v==null?null:v.toPlainString();}
+ private static String date(LocalDate d){return d==null?null:d.toString();}
  private static String time(LocalDateTime t){return t==null?null:t.toInstant(ZoneOffset.UTC).toString();}
- private <T>T decode(JsonNode n,Class<T> type){return json.convertValue(n,type);}
 }

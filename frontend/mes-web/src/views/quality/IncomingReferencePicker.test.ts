@@ -12,10 +12,10 @@ it('keeps product-plan choices on direct-product draft instructions',async()=>{
  mount({field:'mainBatchId',modelValue:'',context:{},queryFilters:{status:'DRAFT',productionSchemaVersion:2}})
  await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/main-batches',params:expect.objectContaining({status:'DRAFT',productionSchemaVersion:2})})))
 })
-it('uses the selected instruction product for approved standards without a material query',async()=>{
- api.mockImplementation(async(config:any)=>config.url==='/quality/specifications'?{items:[{id:'71',specificationCode:'PRODUCT-STD'}],total:1}:{id:'71',specificationCode:'PRODUCT-STD',versions:[{id:'72',status:'APPROVED',versionNoBusiness:1}]})
+it('uses the selected instruction product for active standards without a material query',async()=>{
+ api.mockImplementation(async(config:any)=>config.url==='/quality/specifications'?{items:[{id:'71',specificationCode:'PRODUCT-STD',specificationName:'成品质量标准',status:'ACTIVE'}],total:1}:{id:'71',specificationCode:'PRODUCT-STD',specificationName:'成品质量标准',items:[]})
  mount({field:'qcSpecificationVersionId',modelValue:'',context:{mainBatchId:'41',productId:'51'}})
- await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/quality/specifications',params:expect.objectContaining({subjectType:'PRODUCT',productId:'51'})})))
+ await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/quality/specifications',params:expect.objectContaining({productId:'51',status:'ACTIVE'})})))
  expect(api.mock.calls.every(([config])=>!config.url.includes('material-lots')&&!config.params?.materialId)).toBe(true)
 })
 it('clears the legacy lot when switching the real quantity form to product OUTPUT',async()=>{

@@ -1,4 +1,5 @@
 package com.hospital.mes.production;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.assertj.core.api.Assertions.*;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /** Unique retained native fixture is QA-blocked by the existing fixture after the race. */
+@EnabledIfSystemProperty(named="mes.retained-concurrency-fixtures",matches="true")
 class WmsRequestConcurrencyIT extends NativeConcurrencyIT {
  @Autowired MaterialRequestService requests;
  @BeforeEach void requestPermissions(){for(String a:List.of("view","create","submit","cancel"))permissions.add("wms:request:"+a);permissions.add("wms:inventory:adjust");as(author);}

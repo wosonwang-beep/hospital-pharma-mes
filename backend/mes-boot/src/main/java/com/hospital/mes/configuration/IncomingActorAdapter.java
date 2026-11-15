@@ -26,7 +26,7 @@ public class IncomingActorAdapter implements IncomingActorPort {
  }
  @Override public void requireQualified(long orgId,long userId,String operation){
   requireUser(orgId,userId);
-  if(!Set.of("sample-execute","test-execute","test-review","qa-release").contains(operation))throw new IllegalArgumentException("Unknown qualification operation");
+  if(!Set.of("sample-execute","test-execute","test-review","qa-release","warehouse-sample-out").contains(operation))throw new IllegalArgumentException("Unknown qualification operation");
   String mapping=environment.getProperty("mes.qualification.required-codes."+operation,"");
   if(mapping.isBlank())throw new ComplianceException("QUALIFICATION_MAPPING_REQUIRED","Controlled qualification mapping is required");
   for(String code:mapping.split(",",-1)){

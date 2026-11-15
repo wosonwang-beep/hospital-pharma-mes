@@ -79,4 +79,31 @@ class DemoRoleQualificationSeedIT {
         }
         System.out.println("DEMO_ROLE_QUALIFICATION_CHECK="+grants.size()+",CREATED="+created);
     }
+
+    @Test
+    void installLocalWarehouseSampleOutboundQualification() {
+        BusinessSeedPayloadGuard.check(java.util.Map.of("qualificationCode","WAREHOUSE_SAMPLE_OUT"));
+        long administrator=jdbc.queryForObject(
+            "SELECT id FROM sys_user WHERE login_name_normalized='admin'",Long.class);
+        when(contexts.current()).thenReturn(new CurrentPlatformContext(
+            1,administrator,Set.of("SYSTEM_ADMIN"),
+            Set.of("master:qualification:create","master:qualification:view"),
+            "local-warehouse-sample-out","local-warehouse-sample-out"));
+        long warehouse=jdbc.queryForObject(
+            "SELECT id FROM sys_user WHERE login_name_normalized='demo.warehouse' AND enabled=TRUE",Long.class);
+        LocalDate today=LocalDate.now(ZoneOffset.UTC);
+        var existing=jdbc.queryForList(
+            "SELECT id FROM md_qualification WHERE org_id=1 AND user_id=? AND qualification_code='WAREHOUSE_SAMPLE_OUT'",
+            Long.class,warehouse);
+        if(existing.isEmpty()){
+            qualifications.create(new QualificationCommands.Create(
+                Long.toString(warehouse),"WAREHOUSE_SAMPLE_OUT",today.minusDays(1),today.plusYears(1)),
+                UUID.randomUUID().toString());
+        }
+        Integer valid=jdbc.queryForObject(
+            "SELECT COUNT(*) FROM md_qualification WHERE org_id=1 AND user_id=? AND qualification_code='WAREHOUSE_SAMPLE_OUT' AND status='ACTIVE' AND valid_from<=? AND valid_to>=?",
+            Integer.class,warehouse,today,today);
+        assertThat(valid).as("Local DEV warehouse sample-out qualification must be active").isEqualTo(1);
+        System.out.println("WAREHOUSE_SAMPLE_OUT_DEV_QUALIFICATION=PASS,USER="+warehouse);
+    }
 }

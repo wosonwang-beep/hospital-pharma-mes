@@ -1,17 +1,8 @@
 import { beforeEach, expect, test, vi } from 'vitest'
 import { http } from './http'
-import { queryAuditEvents } from './audit'
 import { queryIntegrationMessages, retryIntegrationMessage } from './integration'
 
 beforeEach(() => vi.restoreAllMocks())
-
-test('maps the frozen audit query response envelope', async () => {
-  const data = { items: [], page: 0, size: 50, total: 3 }
-  const get = vi.spyOn(http, 'get').mockResolvedValue({ data: { code: 'OK', message: 'OK', data, traceId: 't' } })
-
-  await expect(queryAuditEvents({ actorId: '7', page: 0, size: 50 })).resolves.toEqual(data)
-  expect(get).toHaveBeenCalledWith('/audit-events', { params: { actorId: '7', page: 0, size: 50 } })
-})
 
 test('serializes repeated integration statuses according to OpenAPI form/explode', async () => {
   const data = { items: [], page: 0, size: 1, total: 0 }

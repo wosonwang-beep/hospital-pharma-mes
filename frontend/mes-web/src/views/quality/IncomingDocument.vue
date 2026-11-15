@@ -49,7 +49,7 @@ const mappings:Record<string,{url:string;permission:string;route?:string}>={
  samplingTaskId:{url:'/quality/sampling-tasks',permission:'qms:sampling:view',route:'/quality/sampling-tasks'},
  materialLotId:{url:'/wms/material-lots',permission:'wms:inventory:view',route:'/wms/material-lots'},
  receiptId:{url:'/wms/receipts',permission:'wms:receipt:view',route:'/wms/receipts'},
- qcSpecificationVersionId:{url:'/quality/specification-versions',permission:'qms:specification:view'},
+ qcSpecificationVersionId:{url:'/quality/specifications',permission:'qms:specification:view',route:'/quality/specifications'},
  inspectionReportId:{url:'/quality/inspection-reports',permission:'qms:report:view',route:'/quality/inspection-reports'},
  supersedesReportId:{url:'/quality/inspection-reports',permission:'qms:report:view',route:'/quality/inspection-reports'},
  approvedInvestigationId:{url:'/deviations',permission:'qms:deviation:view',route:'/deviations'},
@@ -61,7 +61,7 @@ for(const key of ['unitId','requestedUnitId','resultUnitId'])mappings[key]={url:
 mappings.instrumentId={url:'/equipment',permission:'master:equipment:view'}
 function referenceName(row:IncomingRow){
  const snap=row.materialSnapshot as IncomingRow|undefined
- return String(row.requestNo??row.samplingTaskNo??row.sampleNo??row.reportNo??row.deviationNo??row.receiptNo??row.lotNo??row.displayName??row.unitName??row.unitCode??row.equipmentName??row.equipmentCode??(row.versionNoBusiness!==undefined?`质量标准 V${row.versionNoBusiness}`:snap?.materialName)??row.id)
+ return String(row.requestNo??row.samplingTaskNo??row.sampleNo??row.reportNo??row.deviationNo??row.receiptNo??row.lotNo??row.displayName??row.unitName??row.unitCode??row.equipmentName??row.equipmentCode??(row.specificationName??snap?.materialName)??row.id)
 }
 let generation=0
 watch(()=>props.record,async record=>{
@@ -112,7 +112,7 @@ watch(()=>props.record,async record=>{
  if(current===generation){references.value=found;lookupNotices.value=[...notices]}
 },{immediate:true})
 async function openEvidence(metadata:IncomingRow){
- if(!auth.can('audit:view'))return
+ if(!false)return
  evidenceOpen.value=true;evidenceBusy.value=true;evidenceError.value='';evidence.value=null
  try{evidence.value=await api<IncomingRow>({url:`/quality/signature-evidence/${metadata.signatureId}`})}catch(e){evidenceError.value=errorMessage(e)}finally{evidenceBusy.value=false}
 }
@@ -129,12 +129,12 @@ function gateText(row:IncomingRow){const code=String(row.code??'');const family=
  <a-card v-if="ordinary" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="inspectionObjectDetailLabel" :value-formatter="valueLabel"/><div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span></div></a-card>
  <IncomingBusinessOverview v-if="ordinary" :record="record" :resource="resource" :value-label="valueLabel"/>
  <MaterialReleaseOverview v-if="qa" :record="record" :lot="lot" :gate-text="gateText"><template #actions><slot name="decision-actions"/></template></MaterialReleaseOverview>
- <button v-if="compact||ordinary" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与审计证据</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息、电子签名、Audit Trail等</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
- <a-card v-if="ordinary||qa" title="关联记录与追溯" class="form-section"><a-space wrap><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space></a-card>
+ <button v-if="compact||ordinary" class="evidence-toggle" :aria-expanded="moreOpen" @click="moreOpen=!moreOpen"><span><strong>更多记录与签名信息</strong><small>包含结果修订历史、原始数据、检验方法、仪器信息和电子签名</small></span><span>{{moreOpen?'收起':'展开'}}</span></button>
+ <a-card v-if="ordinary||qa" title="关联记录与追溯" class="form-section"><a-space wrap><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button></a-space></a-card>
  <div v-show="moreOpen">
  <a-card v-if="!compact&&!ordinary&&!qa" title="关键事实" class="form-section"><IncomingFacts :value="summary" :label-formatter="inspectionObjectDetailLabel" :value-formatter="valueLabel"/>
   <div v-if="lot" class="related-context"><span>内部批号：{{lot.lotNo}}</span><span>供应商批号：{{lot.supplierLotNo??'—'}}</span><span>质量状态：{{detailDisplay('qualityStatus',lot.qualityStatus)}}</span><span>库存状态：{{detailDisplay('inventoryStatus',lot.inventoryStatus)}}</span></div>
-  <a-space v-if="!ordinary" wrap class="related-context"><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button><a-button v-if="auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:auditTypes[resource],objectId:String(record.id??record.materialLotId)}})">审计追踪</a-button></a-space>
+  <a-space v-if="!ordinary" wrap class="related-context"><a-button v-for="r in linked" :key="r.route" type="link" @click="router.push(r.route!)">{{r.name}}</a-button><a-button v-if="lotId&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(lotId)}})">完整来料追溯</a-button></a-space>
   <details v-if="lookupNotices.length"><summary>关联信息读取说明</summary><p v-for="notice in lookupNotices" :key="notice">{{notice}}</p></details>
  </a-card>
  <a-card v-for="section in sections[resource]??[]" :key="section.title" :title="ordinary?section.title+'（完整证据）':section.title" class="form-section"><IncomingFacts :value="facts(record,section.keys)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
@@ -162,13 +162,13 @@ function gateText(row:IncomingRow){const code=String(row.code??'');const family=
  </a-card>
  <a-card v-if="resource==='deviations'" title="原始结果与最终选定结果证据" class="form-section"><div class="result-comparison"><section v-for="key in ['originalResultRevisionId','selectedResultRevisionId']" :key="key"><h3>{{detailLabel(key)}}</h3><IncomingFacts v-if="references[`${key}:${record[key]}`]" :value="references[`${key}:${record[key]}`]!.row" :label-formatter="detailLabel" :value-formatter="valueLabel"/><p v-else>{{record[key]?`关联结果 ${record[key]} 暂不可读取，请从关联检验记录查看。`:'暂无记录'}}</p></section></div></a-card>
  <template v-if="qa">
- <a-card v-for="[key,title] in [['reports','检验报告证据'],['investigations','来料调查证据'],['decisions','物料质量决定历史']]" :key="key" :title="title" class="form-section"><p v-if="!rows(record[key!]).length">暂无记录</p><section v-for="row in rows(record[key!])" :key="String(row.id)" class="document-section"><h3>{{documentNumber(row)}}</h3><a-button v-if="key==='reports'&&auth.can('qms:report:view')" type="link" @click="router.push(`/quality/inspection-reports/${row.id}`)">查看检验报告</a-button><a-button v-if="key==='investigations'&&auth.can('qms:deviation:view')" type="link" @click="router.push(`/deviations/${row.id}`)">查看来料调查</a-button><a-button v-if="key==='decisions'&&auth.can('audit:view')" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_release_decision',objectId:String(row.id)}})">查看质量决定审计</a-button><IncomingFacts :value="row" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section></a-card>
+ <a-card v-for="[key,title] in [['reports','检验报告证据'],['investigations','来料调查证据'],['decisions','物料质量决定历史']]" :key="key" :title="title" class="form-section"><p v-if="!rows(record[key!]).length">暂无记录</p><section v-for="row in rows(record[key!])" :key="String(row.id)" class="document-section"><h3>{{documentNumber(row)}}</h3><a-button v-if="key==='reports'&&auth.can('qms:report:view')" type="link" @click="router.push(`/quality/inspection-reports/${row.id}`)">查看检验报告</a-button><a-button v-if="key==='investigations'&&auth.can('qms:deviation:view')" type="link" @click="router.push(`/deviations/${row.id}`)">查看来料调查</a-button><a-button v-if="key==='decisions'&&false" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_release_decision',objectId:String(row.id)}})">查看质量决定审计</a-button><IncomingFacts :value="row" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section></a-card>
  </template>
- <a-card title="电子签名记录" class="form-section"><p v-if="!signatures.length">暂无电子签名记录</p><section v-for="(entry,index) in signatures" :key="`${entry.metadata.signatureId}:${index}`" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><p class="muted">{{entry.context}}</p><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="auth.can('audit:view')" @click="openEvidence(entry.metadata)">查看签名证据</a-button><p v-else>签名快照需要审计查看权限。</p></section></a-card>
+ <a-card title="电子签名记录" class="form-section"><p v-if="!signatures.length">暂无电子签名记录</p><section v-for="(entry,index) in signatures" :key="`${entry.metadata.signatureId}:${index}`" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><p class="muted">{{entry.context}}</p><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="false" @click="openEvidence(entry.metadata)">查看签名证据</a-button><p v-else>签名快照需要审计查看权限。</p></section></a-card>
  <a-card title="记录元数据" class="form-section"><IncomingFacts :value="facts(record,readFields)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
  <details v-if="compact&&lookupNotices.length"><summary>关联信息读取说明</summary><p v-for="notice in lookupNotices" :key="notice">{{notice}}</p></details>
  </div>
- <a-drawer :open="!!selectedItem" :title="`${selectedItem?.itemName??'检验项目'} · 完整检验详情`" width="min(900px, 100vw)" @close="selectedItem=null"><IncomingFacts v-if="selectedItem" :value="selectedItem" :label-formatter="detailLabel" :value-formatter="valueLabel"/><section v-for="(entry,index) in signatureEntries(selectedItem)" :key="index" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="auth.can('audit:view')" @click="openEvidence(entry.metadata)">查看签名证据</a-button></section></a-drawer>
+ <a-drawer :open="!!selectedItem" :title="`${selectedItem?.itemName??'检验项目'} · 完整检验详情`" width="min(900px, 100vw)" @close="selectedItem=null"><IncomingFacts v-if="selectedItem" :value="selectedItem" :label-formatter="detailLabel" :value-formatter="valueLabel"/><section v-for="(entry,index) in signatureEntries(selectedItem)" :key="index" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="false" @click="openEvidence(entry.metadata)">查看签名证据</a-button></section></a-drawer>
  <a-drawer v-model:open="evidenceOpen" title="电子签名证据（只读）" width="min(720px, 100vw)"><a-spin v-if="evidenceBusy"/><a-alert v-if="evidenceError" type="error" :message="evidenceError"/><IncomingFacts v-if="evidence" :value="evidence" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-drawer>
 </div></template>
 <style scoped>

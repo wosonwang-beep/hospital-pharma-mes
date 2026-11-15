@@ -34,6 +34,11 @@ describe('Incoming controlled command forms',()=>{
   expect(option.value).toBe('41');expect(option.label).toBe('PO-2026-041 · 草稿');expect(option.record).toBe(order)
   expect(referenceRows('mainBatchId',[{id:'42',batchNo:'MB-2026-042'}])[0]!.label).toBe('MB-2026-042')
  })
+ it('displays existing warehouse location name and localized active status without changing the value',()=>{
+  const option=referenceRows('locationId',[{id:'7',locationName:'成品待检区',status:'ACTIVE'}])[0]!
+  expect(option.value).toBe('7')
+  expect(option.label).toBe('成品待检区 · 在用')
+ })
  it('builds references from controlled facts rather than free-form IDs',()=>{
   expect(referenceRows('resultRevisionIds',[{items:[{executions:[{revisions:[{id:'10',resultConclusion:'FAIL'},{id:'11',resultConclusion:'FAIL'}]}]}]}]).map(x=>x.value)).toEqual(['11'])
  })

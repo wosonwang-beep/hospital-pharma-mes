@@ -7,4 +7,5 @@ public interface SignableObjectProvider {
     Set<SignatureMeaning> allowedMeanings();
     SignableObject loadForSignature(long organizationId, String objectId);
     void validateSignable(SignatureValidationContext context, SignableObject object);
+    default java.util.Map<String,Object> signatureContext(SignatureValidationContext context, SignableObject object) { return java.util.Map.of(); }
 }

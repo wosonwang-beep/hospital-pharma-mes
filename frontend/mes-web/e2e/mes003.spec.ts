@@ -1,7 +1,7 @@
 import { expect,test,type Page } from '@playwright/test'
 
 const envelope=(data:unknown)=>({code:'OK',message:'success',data,traceId:'mes003-browser'})
-const permissions=['master:equipment:view','master:equipment:create','master:equipment:update','master:org:view','master:uom:view','master:qualification:view','audit:view']
+const permissions=['master:equipment:view','master:equipment:create','master:equipment:update','master:org:view','master:uom:view','master:qualification:view',]
 async function setup(page:Page,perms=permissions,conflict=false){
  const record={id:'21',orgId:'1',equipmentCode:'EQP-MIX-014',equipmentName:'真空均质乳化机',equipmentType:'生产设备',status:'ACTIVE',calibrationDueDate:'2026-11-18',location:'制剂车间',versionNo:2,updatedAt:'2026-10-03T00:00:00Z',allowedActions:['UPDATE','DISABLE','BEGIN_MAINTENANCE']}
  await page.route('**/api/v1/**',async route=>{

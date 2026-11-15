@@ -15,9 +15,10 @@ public final class EbrDefinitionRules {
     public static void gate(boolean value,String message){if(!value)throw new ComplianceException("LINT_FAILED",message);}
     public static void draft(String state){gate("DRAFT".equals(state),"Only draft definitions are editable");}
     public static String transition(String state,String action){
+        if((state.equals("DRAFT")||state.equals("SUBMITTED")||state.equals("APPROVED"))&&action.equals("PUBLISH"))return "EFFECTIVE";
         if(state.equals("DRAFT")&&action.equals("SUBMIT"))return "SUBMITTED";
         if(state.equals("SUBMITTED")&&action.equals("APPROVE"))return "APPROVED";
-        if(state.equals("APPROVED")&&action.equals("PUBLISH"))return "EFFECTIVE";
+        // Legacy SUBMIT and APPROVE are retained only for historical API compatibility.
         throw new ComplianceException("STATE_TRANSITION_NOT_ALLOWED","Definition transition not allowed");
     }
     public static List<Issue> lint(Definition definition,boolean publication){

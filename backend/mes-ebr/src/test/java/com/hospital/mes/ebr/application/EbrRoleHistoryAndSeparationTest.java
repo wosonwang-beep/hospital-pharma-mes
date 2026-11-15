@@ -1,7 +1,6 @@
 package com.hospital.mes.ebr.application;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hospital.mes.audit.application.*;
-import com.hospital.mes.audit.domain.*;
+import com.hospital.mes.audit.application.CurrentPlatformContext;
 import com.hospital.mes.audit.signature.*;
 import com.hospital.mes.ebr.domain.*;
 import com.hospital.mes.ebr.infrastructure.*;
@@ -13,16 +12,18 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 class EbrRoleHistoryAndSeparationTest {
-    @Test void frozenHistoricalEvidenceRemainsValidAfterCurrentAuthorityChanges(){
-        var query=mock(AuditQueryService.class);var evidence=new EbrRoleEvidence(mock(AuditApplicationService.class),query);
+    @Test void frozenHistoricalEvidenceLivesOnTheSignatureWithoutAuditEvents() throws Exception {
+        var json=new ObjectMapper();
+        var evidence=new EbrRoleEvidence(json);
         var rule=new EbrCommands.SignatureRule("FORM","F","VERIFY",null,true,1,true,"290","OLD","Frozen reviewer");
-        var signature=new SignatureRecord(1,1,11,SignatureMeaning.VERIFY,"EBR_FORM_INSTANCE","3","abc",Instant.now(),SignatureStatus.VALID,null,null,"{}",null,0);
-        var event=new AuditEvent(1,1,11,"OLD","EBR_FORM_SIGNATURE_ROLE","EBR_SIGNATURE_POLICY","1",null,"abc",EbrRoleEvidence.policy(rule),null,Instant.now(),"tx","req",AuditSource.API);
-        when(query.query(eq(1L),any())).thenReturn(new AuditEventPage(List.of(event),0,200,1));
-        assertTrue(evidence.matches(signature,rule));
-        // No current role, code, permission, or membership service participates in this check.
+        var context=json.createObjectNode();
+        var provider=context.putObject("providerContext");
+        provider.putArray("rolePolicies").add(EbrRoleEvidence.policy(rule));
+        var signature=new SignatureRecord(1,1,11,SignatureMeaning.VERIFY,"EBR_FORM_INSTANCE","3","abc",
+            Instant.now(),SignatureStatus.VALID,null,null,json.writeValueAsString(context),null,0);
         assertTrue(evidence.matches(signature,rule));
         assertFalse(evidence.matches(signature,new EbrCommands.SignatureRule("FORM","F","VERIFY",null,true,1,true,"291","OLD","Frozen reviewer")));
+        assertFalse(evidence.matches(signature,new EbrCommands.SignatureRule("FORM","F","VERIFY",null,true,2,true,"290","OLD","Frozen reviewer")));
     }
     @Test void multipleRolesCannotBypassSameSubmitterRestriction(){separation(true);}
     @Test void multipleRolesCannotBypassAnyFieldAuthorRestriction(){separation(false);}

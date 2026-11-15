@@ -1,5 +1,14 @@
 # Approved incoming QC specification contract
 
+> **SUPERSEDED IN PART — 2026-11-02.** The QC standard lifecycle, version, approval, signature and
+> single-subject rules of this document are superseded by
+> [DCP-QC-SPEC-BASIC-LIBRARY-001](DCP-QC-SPEC-BASIC-LIBRARY-001-APPROVED.md) and its
+> [contract](qc-standard-basic-library-contract.md): a QC standard is now a basic information library
+> (增删改查, no approval, no version, mandatory 标准的依据, many-to-many material/product applicability).
+> This file is kept as the historical record of the 2026-10-03 approval; do not implement from it.
+> The incoming-side numeric/quantity, sampling and evidence rules that are not QC-standard lifecycle
+> rules remain in force.
+
 Approval: user approved `DCP-INCOMING-QUALITY-GAPS-001-PROPOSED.md`, including contract completion, on 2026-10-03. This document expands DG-01 and the QC portion of DG-08 only. It is an integration input for the next cumulative release; v1.0.10 remains authoritative until the release consistency review switches its pointer. No migration has been executed by this document. Legacy `md_material_version` / `md_material_quality_spec` remain historical evidence and are not the QC source of truth.
 
 ## Ownership and dependencies

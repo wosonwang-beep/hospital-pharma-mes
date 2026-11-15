@@ -75,7 +75,7 @@ const router = createRouter({
       {path:'quality/sampling-tasks/:id/execute',name:'incoming-sampling-tasks-execute',component:()=>import('../views/quality/IncomingDetailView.vue'),meta:{title:'取样记录',permission:'qms:sampling:view',resource:'sampling-tasks',mode:'execute'}},
       {path:'quality/samples',name:'incoming-samples-list',component:()=>import('../views/quality/IncomingListView.vue'),meta:{title:'样品',permission:'qms:test:view',resource:'samples',mode:'list'}},
       {path:'quality/samples/:id',name:'incoming-samples-view',component:()=>import('../views/quality/IncomingDetailView.vue'),meta:{title:'样品',permission:'qms:test:view',resource:'samples',mode:'view'}},
-      {path:'quality/inspection-tasks',name:'incoming-inspection-tasks-list',component:()=>import('../views/quality/IncomingListView.vue'),meta:{title:'检验记录',permission:'qms:test:view',resource:'inspection-tasks',mode:'list'}},
+      {path:'quality/inspection-tasks',name:'incoming-inspection-tasks-list',component:()=>import('../views/quality/InspectionTaskListView.vue'),meta:{title:'检验记录',permission:'qms:test:view',resource:'inspection-tasks',mode:'list'}},
       {path:'quality/inspection-tasks/create',name:'incoming-inspection-tasks-create',component:()=>import('../views/quality/IncomingDetailView.vue'),meta:{title:'检验记录',permission:'qms:test:execute',resource:'inspection-tasks',mode:'create'}},
       {path:'quality/inspection-tasks/:id',name:'incoming-inspection-tasks-view',component:()=>import('../views/quality/IncomingDetailView.vue'),meta:{title:'检验记录',permission:'qms:test:view',resource:'inspection-tasks',mode:'view'}},
       {path:'quality/inspection-tasks/:id/execute',name:'incoming-inspection-tasks-execute',component:()=>import('../views/quality/IncomingDetailView.vue'),meta:{title:'检验记录',permission:'qms:test:view',resource:'inspection-tasks',mode:'execute'}},
@@ -106,8 +106,7 @@ const router = createRouter({
       {path:'trace',name:'trace',component:()=>import('../views/production/TraceView.vue'),meta:{title:'完整追溯',permission:'trace:view'}},
       {path:'quality/specifications',name:'qc-specifications',component:()=>import('../views/quality/QcSpecificationListView.vue'),meta:{title:'QC质量标准',permission:'qms:specification:view'}},
       {path:'quality/specifications/create',name:'qc-specification-create',component:()=>import('../views/quality/QcSpecificationDetailView.vue'),meta:{title:'新增QC质量标准',permission:'qms:specification:create',mode:'create'}},
-      {path:'quality/specifications/:id',name:'qc-specification-view',component:()=>import('../views/quality/QcSpecificationDetailView.vue'),meta:{title:'QC质量标准详情',permission:'qms:specification:view'}},
-      {path:'quality/specification-versions/:id/edit',name:'qc-specification-version',component:()=>import('../views/quality/QcSpecificationVersionView.vue'),meta:{title:'QC质量标准版本',permission:'qms:specification:view'}},
+      {path:'quality/specifications/:id',name:'qc-specification-view',component:()=>import('../views/quality/QcSpecificationDetailView.vue'),meta:{title:'QC质量标准',permission:'qms:specification:view'}},
       {path:'production/batches/:id/book',name:'production-batch-book',component:()=>import('../views/ebr/BatchBookView.vue'),meta:{title:'电子批记录',permission:'ebr:form:view',requiredPermissions:['production:batch:view','master:product:view']}},
       {path:'ebr/book-templates',name:'ebr-book-templates',component:()=>import('../views/ebr/BookTemplateListView.vue'),meta:{title:'批记录目录模板',permission:'ebr:template:view',requiredPermissions:['process:package:view']}},
       {path:'ebr/book-templates/create',name:'ebr-book-template-create',component:()=>import('../views/ebr/BookTemplateEditorView.vue'),meta:{title:'新建批记录目录模板',permission:'ebr:template:create',requiredPermissions:['process:package:view'],mode:'create'}},
@@ -162,7 +161,6 @@ const router = createRouter({
       {path:'finished/shipments',name:'finished-shipments',component:()=>import('../views/finished/FinishedListView.vue'),meta:{title:'成品发货出库',permission:'wms:finished-shipment:view',resource:'shipments',mode:'list'}},
       {path:'finished/shipments/create',name:'finished-shipments-create',component:()=>import('../views/finished/FinishedDetailView.vue'),meta:{title:'新增成品发货出库',permission:'wms:finished-shipment:create',resource:'shipments',mode:'create'}},
       {path:'finished/shipments/:id',name:'finished-shipments-view',component:()=>import('../views/finished/FinishedDetailView.vue'),meta:{title:'成品发货出库',permission:'wms:finished-shipment:view',resource:'shipments',mode:'view'}},
-      { path: 'audit', name: 'audit', component: () => import('../views/audit/AuditTrailView.vue'), meta: { title: 'GMP Audit Trail', permission: 'audit:view' } },
       { path: 'integration/operations', name: 'integration-operations', component: () => import('../views/integration/IntegrationOperationsView.vue'), meta: { title: 'Integration Inbox / Outbox Operations', permission: 'integration:view' } }
     ]
   },

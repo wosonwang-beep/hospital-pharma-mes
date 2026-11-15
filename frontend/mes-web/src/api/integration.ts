@@ -1,5 +1,4 @@
-import { http, type ApiResponse } from './http'
-import type { Page } from '../types/audit'
+import { http, type ApiResponse, type Page } from './http'
 import type { IntegrationMessage, IntegrationMessageQuery, RetryIntegrationMessageCommand } from '../types/integration'
 
 export async function queryIntegrationMessages(query: IntegrationMessageQuery = {}): Promise<Page<IntegrationMessage>> {

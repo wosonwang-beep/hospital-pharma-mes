@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 class FinishedArchiveSchemaIT {
  @Autowired JdbcTemplate jdbc;
  @Test void finishedScopeIsCompatibleWithTheApprovedTargetConstraint(){
-  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qms_release_decision WHERE release_scope='FINISHED_PRODUCT' AND (finished_lot_id IS NULL OR inspection_report_id IS NOT NULL OR decision_source<>'USER_QA' OR decision NOT IN ('RELEASED','REJECTED') OR release_basis<>'FULL_INSPECTION')",Long.class)).isZero();
+  assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM qms_release_decision WHERE release_scope='FINISHED_PRODUCT' AND ((finished_schema_version=1 AND (finished_lot_id IS NULL OR product_id IS NOT NULL)) OR (finished_schema_version=2 AND (finished_lot_id IS NOT NULL OR product_id IS NULL)) OR finished_schema_version NOT IN (1,2) OR inspection_report_id IS NOT NULL OR finished_inspection_report_id IS NULL OR decision_source<>'USER_QA' OR decision NOT IN ('RELEASED','REJECTED') OR release_basis<>'FULL_INSPECTION')",Long.class)).isZero();
  }
  @Test void manifestHasScopedImmutableFileAndDecisionReferences(){
   assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='ebr_pdf_manifest'",Long.class)).isEqualTo(1);

@@ -1,4 +1,5 @@
 package com.hospital.mes.wms.application;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import com.hospital.mes.audit.application.CurrentPlatformContext;
 import com.hospital.mes.masterdata.application.MasterMutation;
 import com.hospital.mes.wms.infrastructure.*;
@@ -12,7 +13,7 @@ import java.util.*;
 public class FinishedQualityDecisionService {
  private final WmsStore db;private final MasterMutation mutations;private final WmsViews views;
  public FinishedQualityDecisionService(WmsStore db,MasterMutation mutations,WmsViews views){this.db=db;this.mutations=mutations;this.views=views;}
- @Transactional(propagation=Propagation.MANDATORY) public void lockEvidence(long org,long lot){db.materialLot().lock(org,lot);db.ledgerMapper().selectList(new QueryWrapper<LedgerEntity>().eq("org_id",org).eq("material_lot_id",lot).orderByAsc("id").last("FOR UPDATE"));}
+ @Transactional(propagation=Propagation.MANDATORY) public void lockEvidence(long org,long lot){if(!TransactionSynchronizationManager.isCurrentTransactionReadOnly()){db.materialLot().lock(org,lot);db.ledgerMapper().selectList(new QueryWrapper<LedgerEntity>().eq("org_id",org).eq("material_lot_id",lot).orderByAsc("id").last("FOR UPDATE"));}}
  @Transactional(propagation=Propagation.MANDATORY) public void decide(CurrentPlatformContext c,long lotId,long materialId,String decision,boolean superseding,String reason,String key){
   mutations.context("qa:release");var lot=db.materialLot().lock(c.organizationId(),lotId);
   gate(lot.getMaterialId()==materialId&&lot.getReceiptItemId()==null,"FINISHED_LOT_BATCH_MISMATCH","Actual finished output lot required");

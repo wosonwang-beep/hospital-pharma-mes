@@ -20,4 +20,10 @@ public class SamplingDetailRow extends IncomingRow {
  public Long getSampledBy(){return sampledBy;} public void setSampledBy(Long value){sampledBy=value;}
  private Boolean packageResealed;
  public Boolean getPackageResealed(){return packageResealed;} public void setPackageResealed(Boolean value){packageResealed=value;}
+ private Long sourceLocationId;
+ public Long getSourceLocationId(){return sourceLocationId;} public void setSourceLocationId(Long value){sourceLocationId=value;}
+ private Long sourceContainerId;
+ public Long getSourceContainerId(){return sourceContainerId;} public void setSourceContainerId(Long value){sourceContainerId=value;}
+ private Long sampleOutboundLedgerId;
+ public Long getSampleOutboundLedgerId(){return sampleOutboundLedgerId;} public void setSampleOutboundLedgerId(Long value){sampleOutboundLedgerId=value;}
 }

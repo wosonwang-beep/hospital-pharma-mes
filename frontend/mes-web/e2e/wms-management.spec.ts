@@ -12,7 +12,7 @@ async function fixture(page:Page,multiple=false){
  const errors:string[]=[],commands:Array<{path:string;body:any;headers:Record<string,string>}>=[]
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())})
  const router=readFileSync(new URL('../src/router/index.ts',import.meta.url),'utf8')
- const permissions=[...router.matchAll(/permission:\s*'([^']+)'/g)].map(m=>m[1]!).concat(['wms:request:submit','wms:request:cancel','wms:issue:confirm','wms:issue:return','master:material:view','master:uom:view','master:product:view','audit:view'])
+ const permissions=[...router.matchAll(/permission:\s*'([^']+)'/g)].map(m=>m[1]!).concat(['wms:request:submit','wms:request:cancel','wms:issue:confirm','wms:issue:return','master:material:view','master:uom:view','master:product:view',])
  let request:any={id:'200',requestNo:'RQ-20261006-001',mainBatchId:'100',batchNo:batch.batchNo,productId:'20',productName:product.productName,processSnapshotId:'300',formulaVersionId:'30',status:'DRAFT',versionNo:0,createdAt:'2026-10-06T01:00:00Z',allowedActions:['UPDATE','SUBMIT','CANCEL'],items:[{...item}],linkedIssues:[]}
  if(multiple)request.items.push({...item,id:'202',formulaItemId:'32',materialName:'原料B'})
  let issue:any={id:'400',issueNo:'OUT-20261006-001',mainBatchId:'100',batchNo:batch.batchNo,productId:'20',productName:product.productName,materialRequestId:'200',materialRequestNo:request.requestNo,status:'CONFIRMED',versionNo:1,issuedAt:'2026-10-06T02:00:00Z',allowedActions:['RETURN'],items:[{id:'401',materialLotId:'61',materialRequestItemId:'201',formulaItemId:'31',issuedQty:'3.000000',unitId:'10'}],returns:[]}

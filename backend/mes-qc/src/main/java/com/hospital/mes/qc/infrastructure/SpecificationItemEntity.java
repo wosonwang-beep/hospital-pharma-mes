@@ -1,10 +1,11 @@
 package com.hospital.mes.qc.infrastructure;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hospital.mes.masterdata.infrastructure.ScopedEntity;
+/** Inspection item of a QC quality standard root (no version, no tombstone). */
 @TableName("qc_specification_item")
 public class SpecificationItemEntity extends ScopedEntity {
- private Long specificationVersionId;
- public Long getSpecificationVersionId(){return specificationVersionId;} public void setSpecificationVersionId(Long value){specificationVersionId=value;}
+ private Long specificationId;
+ public Long getSpecificationId(){return specificationId;} public void setSpecificationId(Long value){specificationId=value;}
  private String itemCode;
  public String getItemCode(){return itemCode;} public void setItemCode(String value){itemCode=value;}
  private String itemName;
@@ -25,6 +26,4 @@ public class SpecificationItemEntity extends ScopedEntity {
  public String getMethodCode(){return methodCode;} public void setMethodCode(String value){methodCode=value;}
  private String methodVersion;
  public String getMethodVersion(){return methodVersion;} public void setMethodVersion(String value){methodVersion=value;}
- private Boolean active;
- public Boolean getActive(){return active;} public void setActive(Boolean value){active=value;}
 }

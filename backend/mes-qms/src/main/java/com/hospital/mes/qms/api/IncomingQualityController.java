@@ -43,6 +43,15 @@ public class IncomingQualityController {
  public ApiResponse<?> submitInspectionRequest(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.requestAction(target,"submit",body,version,key),traces.currentTraceId());}
  @PostMapping("/quality/inspection-requests/{id}/accept")
  public ApiResponse<?> acceptInspectionRequest(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.requestAction(target,"accept",body,version,key),traces.currentTraceId());}
+ @PostMapping("/quality/inspection-requests/{id}/confirm-and-generate")
+ public ApiResponse<?> confirmAndGenerateInspectionRequest(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.confirmAndGenerate(target,body,version,key),traces.currentTraceId());}
+ @GetMapping("/wms/receipts/{receiptId}/items/{itemId}/inspection-request")
+ public ApiResponse<?> receiptInspectionStatus(@PathVariable("receiptId") String receiptId,@PathVariable("itemId") String itemId){return ApiResponse.success(service.receiptInspectionStatus(receiptId,itemId),traces.currentTraceId());}
+ @PostMapping("/wms/receipts/{receiptId}/items/{itemId}/inspection-request")
+ @ResponseStatus(HttpStatus.CREATED)
+ public ApiResponse<?> createReceiptInspectionRequest(@PathVariable("receiptId") String receiptId,@PathVariable("itemId") String itemId,@RequestHeader("Idempotency-Key") String key){return ApiResponse.success(service.createInitialRequestFromReceipt(receiptId,itemId,key),traces.currentTraceId());}
+ @PostMapping("/quality/sampling-tasks/{id}/plan")
+ public ApiResponse<?> updateSamplingPlan(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String version){return ApiResponse.success(service.updateSamplingPlan(target,body,version,key),traces.currentTraceId());}
  @PostMapping("/quality/sampling-tasks/{id}/approve-plan")
  public ApiResponse<?> approve_planSamplingTask(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success(service.samplingAction(target,"approve-plan",body,version,key),traces.currentTraceId());}
  @PostMapping("/quality/sampling-tasks/{id}/assign")
@@ -112,4 +121,10 @@ public class IncomingQualityController {
  public ApiResponse<?> closeDeviation(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader(value="If-Match",required=false) String version){return ApiResponse.success((production.productionDeviation(target,"qms:deviation:close")?production.deviationAction(target,"close",body,version,key):service.deviationAction(target,"close",body,version,key)),traces.currentTraceId());}
  @GetMapping("/quality/signature-evidence/{signatureId}")
  public ApiResponse<?> getIncomingSignatureEvidence(@PathVariable("signatureId") String target){return ApiResponse.success(service.signatureEvidence(target),traces.currentTraceId());}
+ @PostMapping("/quality/sampling-tasks/{id}/submit-to-warehouse")
+ public ApiResponse<?> submitSamplingToWarehouse(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String version){return ApiResponse.success(service.samplingAction(target,"submit-to-warehouse",body,version,key),traces.currentTraceId());}
+ @PostMapping("/quality/sampling-tasks/{id}/confirm-sample-outbound")
+ public ApiResponse<?> confirmSamplingOutbound(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String version){return ApiResponse.success(service.samplingAction(target,"confirm-sample-outbound",body,version,key),traces.currentTraceId());}
+ @PostMapping("/quality/inspection-tasks/{id}/bind-sample")
+ public ApiResponse<?> bindInspectionSample(@PathVariable("id") String target,@RequestBody JsonNode body,@RequestHeader("Idempotency-Key") String key,@RequestHeader("If-Match") String version){return ApiResponse.success(service.bindSample(target,body,version,key),traces.currentTraceId());}
 }

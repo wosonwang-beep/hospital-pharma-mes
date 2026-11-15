@@ -64,6 +64,33 @@ class EbrIT {
     JsonNode command(JsonNode row,String action){return service.command(row.path("id").asText(),action,new Command(row.path("versionNo").asLong(),"Controlled "+action),null,key());}
     @Autowired EbrDefinitions templateDefinitions;
     @Autowired MasterMutation templateMutations;
+    @Test void administratorCanPublishDraftWithoutIndependentTemplateApprovalAndRetainRuntimeReviewRules(){
+        var row=draft();String id=row.path("id").asText();assertThat(row.path("status").asText()).isEqualTo("DRAFT");
+        assertThat(row.path("allowedActions")).anySatisfy(a->assertThat(a.asText()).isEqualTo("PUBLISH"));
+        var effective=command(row,"PUBLISH");
+        assertThat(effective.path("status").asText()).isEqualTo("EFFECTIVE");
+        assertThat(effective.path("approvedBy").isNull()).isTrue();
+        assertThat(effective.path("approvedAt").isNull()).isTrue();
+        assertThat(effective.path("contentHash").asText()).hasSize(64);
+        var canonical=query.requirePublished(1,Long.parseLong(id));
+        assertThat(canonical.path("definitionHash").asText()).isEqualTo(effective.path("contentHash").asText());
+        assertThat(canonical.path("definition").path("reviewRules")).hasSize(1);
+        assertThat(canonical.path("definition").path("signatureRules")).hasSize(1);
+        assertThatThrownBy(()->command(row,"PUBLISH")).isInstanceOf(ResourceConflictException.class);
+        assertThatThrownBy(()->command(effective,"PUBLISH")).isInstanceOf(ComplianceException.class);
+        var next=service.version(id,new VersionCreate(effective.path("versionNo").asLong(),"New direct-publish revision",true),null,key());
+        assertThat(next.path("status").asText()).isEqualTo("DRAFT");
+        var legacySubmitted=command(next,"SUBMIT");
+        assertThat(command(legacySubmitted,"PUBLISH").path("status").asText()).isEqualTo("EFFECTIVE");
+    }
+    @Test void directPublishRequiresExistingPermissionAndValidTemplate(){
+        var row=draft();permissions.remove("ebr:template:publish");as(1,creator);
+        assertThatThrownBy(()->command(row,"PUBLISH")).isInstanceOf(PermissionException.class);
+        permissions.add("ebr:template:publish");as(1,creator);
+        var empty=service.create(new Create(processId,"EMPTY"+suffix,"Empty eBR template"),key());
+        assertThatThrownBy(()->command(empty,"PUBLISH")).isInstanceOf(ComplianceException.class);
+        assertThat(service.get(empty.path("id").asText()).path("status").asText()).isEqualTo("DRAFT");
+    }
     @Test void requiredNameIsValidatedTrimmedAndSearchable(){
         for(String invalid:Arrays.asList(null,"","   ","x".repeat(101)))assertThatThrownBy(()->service.create(new Create(processId,"NAME"+suffix,invalid),key())).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("templateName");
         var created=service.create(new Create(processId,"NAME"+suffix,"  Named "+suffix+"  "),key());
