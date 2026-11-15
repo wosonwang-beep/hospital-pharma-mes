@@ -55,3 +55,12 @@
 11. `backend/mes-execution/src/test/java/com/hospital/mes/execution/application/ProductionQuantityServiceReadOnlyTest.java` — 无数据库的纯Mockito断言缺投影、来源变更与完全匹配等分支，不能写数量事件。
 
 12. `backend/mes-ebr/src/main/java/com/hospital/mes/ebr/application/EbrRuntimeModel.java` — 规则`inputs()`对同一冻结表单的字段元数据每个取值重复读取，改为每个表单只读一次并复用字段查找；原字段类型、单位换算、CPP判定及签名规则保持完全一致。
+
+## 2026-11-15 QA 无锁只读 GREEN、DEV 服务恢复与 CUAWright G5 专项复验
+- 唯一 main 已同步到 GitHub，进入本轮时 SHA `4bf835ff524ffe87375e3160f730dcd261020361`；本机原 `application-local.yml` 改动仍未纳入提交。重新打包 `mes-boot` 成功，Spring Boot 8080 / Vite 5173 均 HTTP200；MariaDB 3306、Redis 6379 正常，Flyway 77/77 VALID，schema V077；未进行新的迁移或数据修复。
+- 正式 QA 决定无需重复：喉咽茶生产批655已 QA_RELEASED，QA用户11569、决定690、签名5348、八项门禁PASS，原 FINAL93/file133、REVIEW_COPY94/file134 均保留。
+- 真实 MariaDB 的 `QaReadOnlyReviewLockIT` GREEN（进程 exit0）；持有订单、主批、工序、库存、收货及QC锁时，readOnly review 耗时1537ms（测试门槛1800ms），8 gates、blockingCodes、allowedActions、reviewDigest 与权威锁定路径一致，mes_quantity_event计数未增加。另记录首次无竞争读取2438ms；不能把单次结果宣称为P95已达标。
+- CUAWright/真实Chromium只读G5：用户已存在的管理员登录成功；等待QA区域后八项gate均可见且无warning，浏览器资源单次QA请求1564ms；1440/1280/900/375四视口各有2条归档、无横向溢出，0 JavaScript pageerror、0业务写。FINAL下载501399字节/SHA `62902008f3278ebb80abf1b3654d446213830153fc819752aa4cf30c678e68a0`，REVIEW_COPY下载1161328字节/SHA `41e734d45cdf7f71901c5b9b5c133400e00460085282970b85388f7642d4b099`；键盘展开证据通过。初次打开1440时QA区域后于归档加载，但再次显式等待八项门禁完成正常；3次HTTP401属于首次会话auth/me、auth/refresh流程。
+- 相关源码的纯单元回归：ProductionQuantityServiceReadOnlyTest 4/4、EbrRuntimeBoundaryTest 4/4、EbrPdfBusinessLayoutTest 1/1、BookPdfComposerTest 5/6 PASS且1 SKIP，累计14PASS/1SKIP/0FAIL；QA前端模型Vitest 8/8 PASS；QA归档并发/失败恢复 mock Playwright 6/6 PASS（复用本机现有Chromium1248，未更改正式断言）；Vue生产构建 PASS，有旧版大chunk提示。
+- 本轮试图启动20次真实HTTP P95批量采样的工具操作被平台安全检查拒绝，未产生20次样本，不改用其他通道规避。故**QA无锁GREEN=已验证；归档/QA门禁真实页面专项=通过；正式P95≤2s=NOT VERIFIED；完整G5截图人工视觉/WCAG矩阵=未完全验收；正式上线=NOT ACCEPTED**。不需重建QA角色/账号、不需重新签署批655；后续只补性能和最终正式验收。
+- 只读脚本和G5证据保存在本机 `private-data-audit/hytea-qa-readonly-g5-20261114/`，不把DEV签名/附件或截图加入GitHub。
