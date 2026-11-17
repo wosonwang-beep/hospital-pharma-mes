@@ -66,3 +66,12 @@ it('identifies effective eBR choices by name, code and revision while retaining 
  await fireEvent.click(await screen.findByText('配液记录 · MIX · V2 · 生效'))
  expect(view.emitted()['update:modelValue']).toEqual([['31']])
 })
+
+it('does not send an empty production batch ID when looking up production samples',async()=>{
+ api.mockResolvedValue({items:[],total:0})
+ const view=mount({field:'sampleId',modelValue:'',context:{mainBatchId:'',investigationScope:'PRODUCTION'},disabled:true})
+ await waitFor(()=>expect(api).not.toHaveBeenCalled())
+ await view.rerender({field:'sampleId',modelValue:'',context:{mainBatchId:'655',investigationScope:'PRODUCTION'},disabled:false})
+ await waitFor(()=>expect(api).toHaveBeenCalledWith(expect.objectContaining({url:'/samples',params:expect.objectContaining({mainBatchId:'655',investigationScope:'PRODUCTION'})})))
+ expect(api.mock.calls.every(([config])=>config.params.mainBatchId!=='')).toBe(true)
+})

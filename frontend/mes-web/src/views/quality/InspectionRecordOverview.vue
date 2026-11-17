@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed} from 'vue'
 import {useRouter} from 'vue-router'
+import {businessQuantity} from '../../utils/businessNumber'
 import {ExclamationCircleOutlined,CheckCircleOutlined} from '@ant-design/icons-vue'
 import {useAuthStore} from '../../stores/auth'
 import {type IncomingRow} from './incomingModel'
@@ -15,8 +16,8 @@ const executions=computed(()=>rows(props.record.items).flatMap(i=>rows(i.executi
 const analysts=computed(()=>[...new Set(executions.value.map(e=>String(e.performedBy)).filter(x=>x!=='undefined'&&x!=='null'))])
 const investigations=computed(()=>Object.entries(props.references).filter(([key,value])=>['approvedInvestigationId','dispositionInvestigationId'].includes(key.split(':')[0]!)&&value.route).map(([,v])=>v).filter((v,i,all)=>all.findIndex(x=>x.route===v.route)===i))
 function name(key:string,id:unknown){return id==null?'—':props.references[`${key}:${id}`]?.name??String(id)}
-function number(value:unknown){return value==null||value===''?'—':String(value)}
-function time(value:unknown){return value?String(value).replace('T',' ').replace(/\.\d+Z$|Z$/,''):'—'}
+function number(value:unknown){return businessQuantity(value)}
+function time(value:unknown){if(!value)return '—';const d=new Date(String(value));return Number.isNaN(d.getTime())?String(value):new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d)}
 function open(key:string,id:unknown){const route=props.references[`${key}:${id}`]?.route;if(route)void router.push(route)}
 const conclusion=computed(()=>props.record.status==='QC_FAILED'?'不合格':props.record.status==='QC_PASSED'?'合格':'尚未完成复核')
 const reviewStatus=computed(()=>props.record.reviewedAt?'已复核':props.record.status==='PENDING_REVIEW'?'待复核':'未复核')
@@ -30,7 +31,7 @@ const columns=[{title:'序号',key:'index',width:64},{title:'检验项目',key:'
   <section><h3>物料</h3><strong>{{(lot?.materialSnapshot as IncomingRow|undefined)?.materialName??'—'}}</strong><p>批号：{{lot?.lotNo??request?.materialLotId??'—'}}</p></section>
   <section><h3>检验标准</h3><strong>{{name('qcSpecificationVersionId',request?.qcSpecificationVersionId)}}</strong><p>请验时冻结版本</p></section>
   <section><h3>检验人</h3><strong>{{analysts.length?analysts.map(id=>name('performedBy',id)).join('、'):'—'}}</strong><p v-if="record.assignedTo">指派：{{name('assignedTo',record.assignedTo)}}</p></section>
-  <section><h3>检验时间（UTC）</h3><template v-if="executions.length"><p v-for="e in executions" :key="String(e.id)" class="execution-time">{{time(e.startedAt)}} — {{time(e.completedAt)}}</p></template><strong v-else>—</strong></section>
+  <section><h3>检验时间（北京时间）</h3><template v-if="executions.length"><p v-for="e in executions" :key="String(e.id)" class="execution-time">{{time(e.startedAt)}} — {{time(e.completedAt)}}</p></template><strong v-else>—</strong></section>
  </div><div class="identity-facts"><section v-for="fact in identityFacts" :key="fact.label"><h3>{{fact.label}}</h3><strong>{{fact.value}}</strong></section></div></a-card>
  <a-card class="form-section inspection-results"><template #title><span>检验项目与结果 <small>共 {{items.length}} 项</small></span></template>
   <a-table :columns="columns" :data-source="items" :row-key="(row:ReturnType<typeof inspectionSummaryRows>[number])=>String(row.item.id)" :pagination="false" :scroll="{x:850}" :row-class-name="(row:ReturnType<typeof inspectionSummaryRows>[number])=>row.results.some(r=>r.revision.resultConclusion==='FAIL')?'inspection-failed-row':''">
@@ -49,7 +50,7 @@ const columns=[{title:'序号',key:'index',width:64},{title:'检验项目',key:'
   <section><h3>关联调查</h3><a-button v-for="i in investigations" :key="i.route" type="link" @click="router.push(i.route!)">{{i.name}}</a-button><span v-if="!investigations.length">—</span></section>
   <section><h3>复核状态</h3><a-tag :color="record.reviewedAt?'green':'blue'">{{reviewStatus}}</a-tag></section>
   <section><h3>复核人</h3><strong>{{name('reviewedBy',record.reviewedBy)}}</strong></section>
-  <section><h3>复核时间（UTC）</h3><span>{{time(record.reviewedAt)}}</span></section>
+  <section><h3>复核时间（北京时间）</h3><span>{{time(record.reviewedAt)}}</span></section>
  </div><p v-if="record.status==='QC_PASSED'" class="review-note">QC合格不代表物料已获QA放行。</p></a-card>
  <div v-if="auth.can('trace:view')" class="compact-evidence-links"><a-button v-if="(record.materialLotId??request?.materialLotId)&&auth.can('trace:view')" type="link" @click="router.push({path:'/trace',query:{materialLotId:String(record.materialLotId??request?.materialLotId)}})">完整来料追溯</a-button></div>
 </template>

@@ -14,7 +14,7 @@ const rows=ref<Record<string,unknown>[]>([]),total=ref(0),page=ref(1)
 const query=reactive({keyword:'',status:'',productId:'',productionOrderId:'',plannedDateFrom:'',plannedDateTo:''})
 const ebrInstances=computed(()=>route.meta.resource==='ebrInstances')
 const batch=computed(()=>route.meta.resource==='batches'||ebrInstances.value)
-const title=computed(()=>ebrInstances.value?'批记录实例':batch.value?'生产指令 / 生产批':'历史生产订单')
+const title=computed(()=>ebrInstances.value?'批记录实例':batch.value?'生产批':'生产订单（历史查询）')
 const base=computed(()=>batch.value?'/main-batches':'/production-orders'),ui=computed(()=>batch.value?'/production/batches':'/production/orders'),permission=computed(()=>batch.value?'production:batch':'production:order')
 const states=computed(()=>schemas[batch.value?'MainBatch':'Order']?.properties?.status?.enum??[])
 function stateLabel(value:unknown){return ({PENDING_QA:'待 QA 审核',QA_RELEASED:'已 QA 放行'} as Record<string,string>)[String(value)]??display(value)}

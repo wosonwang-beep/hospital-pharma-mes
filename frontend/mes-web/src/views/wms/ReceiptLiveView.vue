@@ -199,7 +199,7 @@ function pageChanged(value:number){page.value=value;void router.replace({query:{
 
 function materialSummary(r: Receipt) { return r.items.map(i => i.materialName||i.materialCode).join('、') }
 function lotSummary(r: Receipt) { return r.items.map(i => i.lotNo).join('、') }
-function totalQty(r: Receipt) { return r.items.map(i => `${i.receivedQty} ${unitLabel(i.unit)}`).join(' / ') }
+function totalQty(r: Receipt) { return r.items.map(i => `${receiptDisplayQuantity(i.receivedQty)} ${unitLabel(i.unit)}`).join(' / ') }
 function openDetail(id: string) { go(id) }
 function openEdit(id: string) { go(id + '/edit') }
 
@@ -346,7 +346,7 @@ function inventoryTag(status?: InventoryStatus) {
       <a-alert v-if="!canView" type="error" message="当前身份没有收货记录查看权限"/>
       <template v-else-if="isList">
         <div class="receipt-titlebar receipt-page-head">
-          <div><div class="receipt-title"><h1>收货管理</h1></div><span class="receipt-muted">原辅料收货记录 · 收货单与物料批质量状态分离</span></div>
+          <div><div class="receipt-title"><h1>原辅料收货记录</h1></div></div>
           <a-button v-if="can('wms:receipt:create')" type="primary" @click="go('create')"><PlusOutlined /> 新增收货单</a-button>
         </div>
         <section class="receipt-card">
@@ -361,6 +361,7 @@ function inventoryTag(status?: InventoryStatus) {
         </section>
         <section class="receipt-card">
           <div class="receipt-card-head"><h2>收货记录</h2><span class="receipt-muted">共 {{ total }} 条</span></div>
+          <p class="receipt-scroll-guide">请先核对收货单、供应商和物料批；其余列可在表格内横向滚动，操作列固定显示。</p>
           <div class="receipt-table-overflow" tabindex="0" aria-label="明细表格，可横向滚动">
             <table class="receipt-table receipt-list-table">
               <thead><tr><th>收货单号</th><th>供应商</th><th>物料 / 批次</th><th>收货数量</th><th>收货仓库</th><th>记录状态</th><th>收货日期</th><th>操作</th></tr></thead>
@@ -522,18 +523,23 @@ function inventoryTag(status?: InventoryStatus) {
     <div class="receipt-modal-actions"><a-button type="primary" @click="confirmReceipt">确认收货</a-button><a-button @click="confirmOpen = false">取消</a-button></div>
   </a-modal>
 
-  <!-- quality drawer -->
-  <a-drawer v-model:open="qualityOpen" title="批次质量情况" :width="440" root-class-name="bpm-quality-drawer" @after-open-change="onQualityVisibility">
-    <p class="receipt-drawer-tip">各批次独立请验和质量管理，不以收货单状态统一判定放行；QA 放行在物料批次 360/物料放行页面完成。</p>
-    <div v-for="it in current?.items || []" :key="it.id" class="receipt-drawer-row">
+  <!-- quality details dialog -->
+  <a-modal :footer="null" v-model:open="qualityOpen" title="批次质量情况" :width="440" root-class-name="bpm-quality-modal" @after-open-change="onQualityVisibility">
+    <p class="receipt-modal-tip">各批次独立请验和质量管理，不以收货单状态统一判定放行；QA 放行在物料批次 360/物料放行页面完成。</p>
+    <div v-for="it in current?.items || []" :key="it.id" class="receipt-modal-row">
       <div><b>{{ it.materialName }}</b><a-tag v-if="it.qualityStatus" :color="qualityTag(it.qualityStatus)">{{ qualityLabels[it.qualityStatus] }}</a-tag></div>
       <small>{{ it.lotNo }} · {{ it.requestNo || '尚未请验' }} · {{ it.inventoryStatus ? inventoryLabels[it.inventoryStatus] : '未生成物料批' }}</small>
     </div>
-  </a-drawer>
+  </a-modal>
 </div>
 </template>
 
 <style scoped>
+.receipt-list-table{min-width:1250px;table-layout:auto}
+.receipt-scroll-guide{margin:2px 10px 8px;color:var(--mes-ui-secondary);font-size:12px}
+.receipt-list-table th:nth-child(5),.receipt-list-table td:nth-child(5){min-width:115px;white-space:nowrap}
+.receipt-list-table th:nth-child(6),.receipt-list-table td:nth-child(6){min-width:100px;white-space:nowrap}
+.receipt-list-table th:nth-child(7),.receipt-list-table td:nth-child(7){min-width:125px;white-space:nowrap}
 .receipt-list-table th:nth-child(1),.receipt-list-table td:nth-child(1){min-width:170px;white-space:nowrap}
 .receipt-list-table th:nth-child(2),.receipt-list-table td:nth-child(2){min-width:190px}
 .receipt-list-table th:nth-child(3),.receipt-list-table td:nth-child(3){min-width:250px}
@@ -551,10 +557,10 @@ function inventoryTag(status?: InventoryStatus) {
 .receipt-modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
 .receipt-modal-full{grid-column:1/-1}
 .receipt-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.receipt-drawer-tip{font-size:12px;color:#7c8b9d;line-height:1.6}
-.receipt-drawer-row{padding:10px 0;border-bottom:1px solid #edf2f7}
-.receipt-drawer-row>div{display:flex;gap:8px;align-items:center}
-.receipt-drawer-row small{display:block;color:#8a99aa;margin-top:3px}
+.receipt-modal-tip{font-size:12px;color:#7c8b9d;line-height:1.6}
+.receipt-modal-row{padding:10px 0;border-bottom:1px solid #edf2f7}
+.receipt-modal-row>div{display:flex;gap:8px;align-items:center}
+.receipt-modal-row small{display:block;color:#8a99aa;margin-top:3px}
 
 .receipt-live .bpm-quantity{white-space:nowrap;word-break:normal;font-variant-numeric:tabular-nums}
 

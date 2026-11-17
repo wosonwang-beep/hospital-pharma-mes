@@ -10,9 +10,10 @@ state.applied={...state.draft};state.page=(props.initialQuery?.page??0)+1;state.
 const controller=createListController(state,props.loadPage)
 const statuses=[{value:'',label:'全部状态'},{value:'CREATED',label:'待分派'},{value:'ASSIGNED',label:'待检验'},{value:'IN_PROGRESS',label:'检验中'},{value:'PENDING_REVIEW',label:'待复核'},{value:'QC_PASSED',label:'复核通过'},{value:'QC_FAILED',label:'复核不通过'}]
 const types=[{value:'',label:'全部类型'},{value:'INITIAL',label:'首次检验'},{value:'RETEST',label:'复检'},{value:'SUPPLEMENTARY',label:'补充检验'},{value:'INVESTIGATION',label:'调查检验'}]
-const columns=[{title:'样品名称',key:'sampleName',dataIndex:'sampleName',width:150},{title:'物料批号',key:'lotNo',dataIndex:'lotNo',width:104},{title:'样品编号',key:'sampleNo',dataIndex:'sampleNo',width:142},{title:'检验单类型',key:'requestType',width:82},{title:'任务状态',key:'status',width:88},{title:'检验人',key:'assignedName',dataIndex:'assignedName',width:62},{title:'请验 / 取样日期',key:'dates',width:112},{title:'综合判定',key:'overallResult',width:80},{title:'检验单号（报告号）',key:'reportNo',width:146},{title:'操作',key:'actions',width:100,fixed:'right' as const}]
+const columns=[{title:'样品名称',key:'sampleName',dataIndex:'sampleName',width:165},{title:'物料批号',key:'lotNo',dataIndex:'lotNo',width:145},{title:'样品编号',key:'sampleNo',dataIndex:'sampleNo',width:125},{title:'任务状态',key:'status',width:100},{title:'检验人',key:'assignedName',dataIndex:'assignedName',width:90},{title:'请验 / 取样日期',key:'dates',width:120},{title:'综合判定',key:'overallResult',width:80},{title:'操作',key:'actions',width:100,fixed:'right' as const}]
 const display=(options:Option[],value:string)=>options.find(x=>x.value===value)?.label??'未知'
 const date=(value:string|null)=>value?value.slice(0,10):'—'
+const shortNo=(value:string|null)=>value&&value.length>24?value.slice(0,13)+'…'+value.slice(-5):value||'—'
 const result=(row:InspectionRow)=>row.overallResult==='PASS'?'合格':row.overallResult==='FAIL'?'不合格':'待判定'
 onMounted(()=>controller.reload())
 defineExpose({state,controller})
@@ -33,7 +34,7 @@ defineExpose({state,controller})
   <template #extra><span role="status" aria-live="polite" aria-atomic="true">{{state.busy?'正在查询':state.error?'查询未完成':'共 '+state.total+' 条'}}</span></template>
   <a-alert v-if="state.error" type="error" role="alert" :message="state.error" description="查询条件已保留。请重试；若仍失败，请联系管理员。" show-icon><template #action><a-button @click="controller.reload">重试</a-button></template></a-alert>
   <p class="inspection-scroll-guide">样品名称、批号优先核对；窄屏可左右滚动查看其余信息。</p>
-  <a-table :columns="columns" :data-source="state.rows" row-key="id" :loading="state.busy" :pagination="false" :scroll="{x:1066}">
+  <a-table :columns="columns" :data-source="state.rows" row-key="id" :loading="state.busy" :pagination="false" :scroll="{x:950}">
    <template #emptyText><div class="inspection-empty">{{state.error?'未取得查询结果':'暂无符合条件的检验记录'}}<p v-if="!state.error">请调整样品名称、批号或任务状态，或重置条件。</p><a-button v-if="!state.error" @click="controller.reset">重置条件</a-button></div></template>
    <template #bodyCell="{column,record}">
     <strong v-if="column.key==='sampleName'||column.key==='lotNo'" :title="record[column.key]??''">{{record[column.key]||(column.key==='sampleName'?'来源未提供':'—')}}</strong>
@@ -41,7 +42,7 @@ defineExpose({state,controller})
     <span v-else-if="column.key==='status'">{{display(statuses,record.status)}}</span>
     <span v-else-if="column.key==='dates'" class="inspection-dates"><span :title="'请验日期 '+date(record.requestedDate)">{{date(record.requestedDate)}} /</span><span :title="'取样日期 '+date(record.sampledAt)">{{date(record.sampledAt)}}</span></span>
     <span v-else-if="column.key==='overallResult'" :class="{'inspection-fail':record.overallResult==='FAIL'}">{{result(record)}}</span>
-    <span v-else-if="column.key==='reportNo'" :title="record.reportNo??''">{{record.reportNo||'未生成'}}</span>
+    <span v-else-if="column.key==='sampleNo'||column.key==='reportNo'" class="inspection-business-no" :title="record[column.key]??''">{{record[column.key]?shortNo(record[column.key]):column.key==='reportNo'?'未生成':'—'}}</span>
     <div v-else-if="column.key==='actions'" class="inspection-row-actions">
      <a-button v-if="permits(record,'view')" type="link" :aria-label="'查看 '+(record.sampleName??'样品')+' '+record.lotNo" @click="emit('open',record,'view')">查看</a-button>
      <a-button v-if="permits(record,'execute')" type="link" :aria-label="'填写 '+record.sampleName+' '+record.lotNo" @click="emit('open',record,'execute')">填写</a-button>
@@ -63,6 +64,7 @@ defineExpose({state,controller})
 .inspection-list-page :deep(.ant-btn){font-size:13px;border-radius:4px}.inspection-list-page :deep(.ant-btn-primary){background:#2c5cdc}
 .inspection-result-card :deep(.ant-card-body){padding:0 20px 20px}.inspection-scroll-guide{font-size:12px;color:#606b7a;margin:0;padding:8px 0}
 .inspection-list-page :deep(.ant-table-cell){padding:10px 8px!important;font-size:13px;line-height:18px;white-space:normal;overflow-wrap:anywhere}.inspection-list-page :deep(th.ant-table-cell){background:#f5f7fa;color:#606266;font-weight:600}.inspection-list-page :deep(.ant-table-thead>tr>th:before){display:none!important}
+.inspection-business-no{display:inline-block;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
 .inspection-dates{display:flex;flex-direction:column;font-variant-numeric:tabular-nums}.inspection-row-actions{display:flex;gap:4px;white-space:nowrap}.inspection-row-actions :deep(.ant-btn){height:30px;padding:0;color:#2c5cdc}.inspection-fail{color:#a61d24}
 .inspection-pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:16px;border-top:1px solid #ebeef5;font-size:12px;color:#606b7a}.inspection-empty{padding:24px;color:#606266}.inspection-empty p{font-size:13px}
 .inspection-list-page :deep(button:focus-visible),.inspection-list-page :deep(input:focus-visible){outline:2px solid #2c5cdc;outline-offset:2px}

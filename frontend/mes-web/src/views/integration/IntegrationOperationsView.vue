@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Drawer} from 'ant-design-vue'
+import {Modal} from 'ant-design-vue'
 import { computed, onMounted, ref } from 'vue'
 import { queryIntegrationMessages, retryIntegrationMessage } from '../../api/integration'
 import { usePlatformAuthContext } from '../../auth/PlatformAuthContext'
@@ -100,7 +100,7 @@ onMounted(load)
         </div>
       </section>
       <footer class="table-footer"><span>共 {{total}} 条</span><div class="action-group"><button class="secondary-button" :disabled="loading||pageNumber===0" @click="pageNumber--;load()">上一页</button><span>第 {{pageNumber+1}} 页</span><button class="secondary-button" :disabled="loading||(pageNumber+1)*50>=total" @click="pageNumber++;load()">下一页</button></div></footer>
-      <Drawer :open="!!detail" title="集成消息详情" :width="560" @close="detail=null"><section v-if="detail" class="evidence-facts" role="dialog" aria-modal="true" aria-label="集成消息详情"><header><h2>集成消息详情</h2><button class="secondary-button" @click="detail=null">关闭</button></header><dl><template v-for="[key,title] in [['messageRef','消息引用'],['messageId','消息编号'],['direction','方向'],['sourceSystem','来源系统'],['targetSystem','目标系统'],['eventType','事件类型'],['aggregateType','业务对象类型'],['aggregateId','业务对象编号'],['status','状态'],['retryCount','尝试次数'],['nextRetryAt','下次重试时间'],['lastErrorCode','错误码'],['lastErrorMessage','错误详情'],['occurredAt','发生时间'],['completedAt','完成时间'],['versionNo','并发版本']]" :key="key"><dt>{{title}}</dt><dd>{{key==='status'?statusNames[detail.status]:detail[key as keyof IntegrationMessage]??'—'}}</dd></template></dl><p class="muted">当前接口提供错误与重试事实，未提供消息载荷。</p></section></Drawer>
+      <Modal :open="!!detail" title="集成消息详情" :width="560" :footer="null" @cancel="detail=null"><section v-if="detail" class="evidence-facts" aria-label="集成消息详情"><header><h2>集成消息详情</h2><button class="secondary-button" @click="detail=null">关闭</button></header><dl><template v-for="[key,title] in [['messageRef','消息引用'],['messageId','消息编号'],['direction','方向'],['sourceSystem','来源系统'],['targetSystem','目标系统'],['eventType','事件类型'],['aggregateType','业务对象类型'],['aggregateId','业务对象编号'],['status','状态'],['retryCount','尝试次数'],['nextRetryAt','下次重试时间'],['lastErrorCode','错误码'],['lastErrorMessage','错误详情'],['occurredAt','发生时间'],['completedAt','完成时间'],['versionNo','并发版本']]" :key="key"><dt>{{title}}</dt><dd>{{key==='status'?statusNames[detail.status]:detail[key as keyof IntegrationMessage]??'—'}}</dd></template></dl><p class="muted">当前接口提供错误与重试事实，未提供消息载荷。</p></section></Modal>
       <div v-if="selected" class="dialog-backdrop" role="presentation">
         <section class="retry-dialog" role="dialog" aria-modal="true" aria-labelledby="retry-title">
           <h2 id="retry-title">人工重试 {{ selected.messageRef }}</h2>

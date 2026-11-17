@@ -1752,3 +1752,16 @@ Desktop Commander单一main：真实Chrome5173/后端8080对HYTEA100及成品链
 - 相关源码的纯单元回归：ProductionQuantityServiceReadOnlyTest 4/4、EbrRuntimeBoundaryTest 4/4、EbrPdfBusinessLayoutTest 1/1、BookPdfComposerTest 5/6 PASS且1 SKIP，累计14PASS/1SKIP/0FAIL；QA前端模型Vitest 8/8 PASS；QA归档并发/失败恢复 mock Playwright 6/6 PASS（复用本机现有Chromium1248，未更改正式断言）；Vue生产构建 PASS，有旧版大chunk提示。
 - 本轮试图启动20次真实HTTP P95批量采样的工具操作被平台安全检查拒绝，未产生20次样本，不改用其他通道规避。故**QA无锁GREEN=已验证；归档/QA门禁真实页面专项=通过；正式P95≤2s=NOT VERIFIED；完整G5截图人工视觉/WCAG矩阵=未完全验收；正式上线=NOT ACCEPTED**。不需重建QA角色/账号、不需重新签署批655；后续只补性能和最终正式验收。
 - 只读脚本和G5证据保存在本机 `private-data-audit/hytea-qa-readonly-g5-20261114/`，不把DEV签名/附件或截图加入GitHub。
+## 2026-11-15 QA 性能 P95 / 完整回归 / 禁用抽屉操作交付检查
+- 直接执行同一admin登录会话真实 QA GET 22次，其中2次预热、20次计量：P50=914.205ms、P95=1030.66ms、max=1129.94ms、20/20成功、0 MariaDB1205/HTTP错误、8门禁及digest一致，**P95≤2s PASS**；原持锁只读GREEN已独立证实。详见 `private-data-audit/hytea-qa-readonly-g5-20261114/qa_real_http_p95_20261115.json`。
+- 完整后端Surefire：100套件/392例/386PASS/6SKIP/0FAIL/0ERROR，Maven exit0。已修正旧V031计数断言为连续V077、V2成品追溯Mock、两个无DB Spring测试缺失的JdbcTemplate测试替身。未改业务API/DB/签名/归档。详见 `docs/development/decisions/MES_BACKEND_REGRESSION_TEST_ALIGNMENT_20261115.md`。
+- 完整前端Vitest：61文件/239PASS/0FAIL；Vue-tsc与Vite生产build PASS；前端QA两套模拟浏览器e2e共16/16 PASS。已将已退役审计路由的测试断言改为不存在，不增路由。
+- 用户批准正式页面**禁止抽屉式操作**。扫描到9处Drawer、8个Vue组件，现全部用居中Modal复用原业务内容替换；静态规则测试 `noDrawerUiContract.test.ts` 通过、活动Drawer=0。已纳入AGENTS/MES_DEV_RULES，详见 `docs/development/decisions/MES_NO_DRAWER_INTERACTION_20261115_APPROVED.md`。
+- CUAWright真实1440/1280/900/375：QA 8/8 gates，居中证据模态框操作/ESC及焦点返还PASS，历史2份，FINAL133与REVIEW_COPY134两份PDF原SHA验证PASS，0浏览器pageerror、0业务写。QA归档和模态框专项PASS；**其他7个受影响页面的完整视觉状态矩阵和WCAG19项全量审查未完成，整体G5 IN PROGRESS/NOT ACCEPTED**。完整事实与整改清单见 `docs/acceptance/ebr-book/HYTEA_QA_PERF_G5_NODRAWER_20261115.md`。
+- 全程未重走批655生产、未新增QA审批/签名、未覆盖历史PDF，保持`hospital_pharma_mes_dev`原始业务记录不变。本机数据库连接配置继续不提交；正式生产部署与人工最终签发未执行。
+
+## 2026-11-16 02:00 产品经理全系统页面整改（报告PM001–PM014）
+- 用户明确“按报告整改”，以 `docs/review/MES_SYSTEM_PRODUCT_MANAGER_AUDIT_20261116.md` 为范围，按 v1.0.23、Global UI V2/T1–T6 修复。未改变业务状态机、数据库、QA签名/历史归档。
+- 已修：PM001生产批关联异步未返回的假0/0/数字ID；PM002生产检验样品空批次HTTP400；PM006 QA已放行重复“审核”动作；PM007首页假待办；PM008质量调查/生产订单/生产批/收货页面命名；PM005检验表格和收货列表密度；PM004长技术编号只读摘要；PM009检验详情编号/时区；PM010设备标题及字典标签回显；PM012只读数量格式化。
+- 当前证据：定向13/13 PASS、前端完整242/242 PASS、前端生产构建PASS；CUAWright真实10页面10/10 PASS（批655最终8/8、生产检验无400、QA已放行正确文案），0 JS错误、0业务写入。详见 `docs/review/MES_PRODUCT_REMEDIATION_RESULT_20261116.md` 及本机私有 `private-data-audit/product-manager-mes-20261116/business_browser_recheck_20261116.json`。
+- 仍需实际来源/原型验收：PM003生产工艺历史和G2/G5保真；PM004正式短业务单号合同；PM009检验缺失单位/取样源事实；PM010字典原始项中文维护；PM011隐藏权限释义；PM013工艺内表单入口全路径；PM014仓管/QC/QA等多角色真实岗位完整G5。现阶段没有证据不得宣称整站G5/正式上线ACCEPTED。

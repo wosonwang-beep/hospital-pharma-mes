@@ -24,10 +24,10 @@
 .receipt-modal>div:not(.receipt-modal-grid):not(.receipt-modal-actions){display:flex;gap:8px;padding:5px 0;font-size:12px;color:#6b7d91}
 .receipt-modal>div:not(.receipt-modal-grid):not(.receipt-modal-actions)>label{flex:0 0 82px;color:#8a99aa}
 .receipt-modal-grid>label{flex:none;width:auto}
-.receipt-drawer-tip{font-size:12px;color:#7c8b9d;line-height:1.6}
-.receipt-drawer-row{padding:10px 0;border-bottom:1px solid #edf2f7}
-.receipt-drawer-row>div{display:flex;gap:8px;align-items:center}
-.receipt-drawer-row small{display:block;color:#8a99aa;margin-top:3px}
+.receipt-modal-tip{font-size:12px;color:#7c8b9d;line-height:1.6}
+.receipt-modal-row{padding:10px 0;border-bottom:1px solid #edf2f7}
+.receipt-modal-row>div{display:flex;gap:8px;align-items:center}
+.receipt-modal-row small{display:block;color:#8a99aa;margin-top:3px}
 
 /* RECEIPT-CLOSEOUT-001: faithful compact region structure with approved business field corrections. */
 .receipt-bpm{font:14px/1.5 "Microsoft YaHei", "Segoe UI", sans-serif;color:#263b56;background:#f3f8fe}
@@ -142,9 +142,9 @@
 
 /* Continuation 04: existing reference structure; no global tokens or other prototypes affected. */
 .receipt-prototype.receipt-bpm .receipt-empty,.receipt-prototype.receipt-bpm .ant-empty-description,.receipt-prototype.receipt-bpm .receipt-flow-table td:first-child{color:#465c75!important}
-.bpm-quality-drawer .receipt-drawer-tip,.bpm-quality-drawer .receipt-drawer-row small{color:#465c75!important;font-size:13px!important;line-height:1.6}
-.bpm-quality-drawer .ant-tag-orange{color:#784800!important}.bpm-quality-drawer .ant-tag-green{color:#216e39!important}.bpm-quality-drawer .ant-tag-blue{color:#1758a8!important}.bpm-quality-drawer .ant-tag-red{color:#a82f36!important}
-.bpm-quality-drawer .ant-drawer-body{overflow:auto}.bpm-quality-drawer .ant-drawer-content-wrapper{max-width:100vw}
+.bpm-quality-modal .receipt-modal-tip,.bpm-quality-modal .receipt-modal-row small{color:#465c75!important;font-size:13px!important;line-height:1.6}
+.bpm-quality-modal .ant-tag-orange{color:#784800!important}.bpm-quality-modal .ant-tag-green{color:#216e39!important}.bpm-quality-modal .ant-tag-blue{color:#1758a8!important}.bpm-quality-modal .ant-tag-red{color:#a82f36!important}
+.bpm-quality-modal .ant-modal-body{overflow:auto}.bpm-quality-modal .ant-modal{max-width:100vw}
 .bpm-dialog .receipt-modal .receipt-modal-grid{align-items:stretch}
 .bpm-dialog .receipt-modal .receipt-modal-grid>.receipt-modal-field{display:flex!important;align-items:center;width:100%!important;min-width:0;box-sizing:border-box}
 .bpm-dialog .receipt-modal .receipt-modal-field>span{flex:0 0 106px!important;white-space:nowrap}

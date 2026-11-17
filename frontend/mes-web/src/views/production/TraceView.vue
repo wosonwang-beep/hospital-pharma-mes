@@ -144,15 +144,15 @@ onMounted(()=>{if(mainBatchId.value||materialLotId.value)void search()})
    </details>
    <p v-if="!nodes.length" class="muted">当前范围暂无实际关联记录。</p>
   </a-card>
-  <a-drawer :open="!!selected" title="来源记录详情" :width="480" @close="selected=null">
+  <a-modal :footer="null" :open="!!selected" title="来源记录详情" :width="480" @cancel="selected=null">
    <template v-if="selected">
     <h3><ReadReference v-if="referenceField(selected)" :field="referenceField(selected)??''" :value="selected.id" :fallback="nodeTitle(selected)"/><span v-else>{{nodeTitle(selected)}}</span></h3>
     <dl><dt>记录类型</dt><dd>{{typeNames[String(selected.type)]??selected.type}}</dd><dt>业务状态</dt><dd>{{display(selected.status)}}</dd></dl>
     <a-button v-if="destination(selected)" type="primary" @click="gotoSource">查看来源记录</a-button><p v-else class="muted">当前无可访问的来源详情入口。</p>
-    <section class="trace-drawer-relations"><h3>关联关系</h3><p v-for="(edge,i) in selectedEdges" :key="i">{{typeNames[edge.sourceType]??edge.sourceType}} → {{typeNames[edge.targetType]??edge.targetType}}：{{traceRelationLabel(edge.relation)}}</p><p v-if="!selectedEdges.length" class="muted">没有直接关联的上下游记录。</p></section>
+    <section class="trace-modal-relations"><h3>关联关系</h3><p v-for="(edge,i) in selectedEdges" :key="i">{{typeNames[edge.sourceType]??edge.sourceType}} → {{typeNames[edge.targetType]??edge.targetType}}：{{traceRelationLabel(edge.relation)}}</p><p v-if="!selectedEdges.length" class="muted">没有直接关联的上下游记录。</p></section>
     <details class="trace-evidence-codes"><summary>原始来源引用与版本证据</summary><IncomingFacts :value="selected"/></details>
    </template>
-  </a-drawer>
+  </a-modal>
  </main>
 </template>
 
@@ -180,7 +180,7 @@ onMounted(()=>{if(mainBatchId.value||materialLotId.value)void search()})
 .trace-node:hover,.trace-node:focus-visible{border-color:var(--mes-ui-primary);outline:2px solid #dbeafe}
 .trace-node strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;margin:8px 0}
 .trace-node small,.trace-node span{color:var(--mes-ui-secondary);font-size:12px}
-.trace-drawer-relations{margin:20px 0 12px;padding-top:14px;border-top:1px solid var(--mes-ui-border)}.trace-drawer-relations h3{font-size:14px;margin-bottom:10px}.trace-drawer-relations p{font-size:13px;line-height:1.7;margin:0 0 9px;color:var(--mes-ui-secondary)}.trace-evidence-codes{margin-top:12px;font-size:12px;color:var(--mes-ui-secondary)}
+.trace-modal-relations{margin:20px 0 12px;padding-top:14px;border-top:1px solid var(--mes-ui-border)}.trace-modal-relations h3{font-size:14px;margin-bottom:10px}.trace-modal-relations p{font-size:13px;line-height:1.7;margin:0 0 9px;color:var(--mes-ui-secondary)}.trace-evidence-codes{margin-top:12px;font-size:12px;color:var(--mes-ui-secondary)}
 .trace-evidence-codes summary{cursor:pointer}
 .muted{color:var(--mes-ui-secondary);font-size:12px}
 dd{margin:4px 0 16px;overflow-wrap:anywhere}

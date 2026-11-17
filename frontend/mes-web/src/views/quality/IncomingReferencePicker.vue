@@ -11,7 +11,8 @@ async function list(url:string,params:Record<string,unknown>={}){const result=aw
 async function load(append=false){const current=++sequence;loading.value=true;error.value='';if(!append)page.value=0;hasMore.value=false
  try{
   if(props.disabled&&props.modelValue){options.value=[{value:String(props.modelValue),label:`已绑定记录 ${props.modelValue}`,record:{id:props.modelValue}}];return}
-  const f=props.field,c=props.context;let rows:IncomingRow[]=[];let request:IncomingRow|undefined
+  const f=props.field,c=props.context;let rows:IncomingRow[]=[]
+  if(f==='sampleId'&&c.investigationScope==='PRODUCTION'&&!String(c.mainBatchId??'').trim()){options.value=[];return};let request:IncomingRow|undefined
   if(c.inspectionRequestId)request=await api<IncomingRow>({url:`/quality/inspection-requests/${c.inspectionRequestId}`})
   const lotId=c.materialLotId??request?.materialLotId
   if(f==='mainBatchId')rows=await list('/main-batches',{productId:props.queryFilters?.productId||undefined,status:props.queryFilters?.status||undefined,productionSchemaVersion:props.queryFilters?.productionSchemaVersion})

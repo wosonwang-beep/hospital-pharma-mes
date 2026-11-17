@@ -65,6 +65,10 @@ Do not scan the whole repository or read all `docs/`/baseline artifacts by defau
 
 - **Global UX interaction contract — explicit user approval 2026-11-02:** All ordinary T1/T2 design, mes-demo prototypes, Codex implementation and G1–G5 checks MUST follow [MES Global UX Interaction](docs/development/decisions/MES_GLOBAL_UX_INTERACTION_20261102_APPROVED.md): query before reset; main actions before auxiliary, dangerous actions last; ordinary T2 title only (no subtitle, explanation, or header back-link); nested list create/edit in centered modal only, never inline or below-table; maintain horizontal label/control alignment and protect unsaved parent edits. This supersedes contradictory older general UI navigation/order clauses only within the approved ordinary page scope. Global UI V2/T1–T6, prototype source-hash approval, business/GMP/API/permission/lock contracts remain mandatory.
 
+## Approved no-side-drawer interaction — 2026-11-15
+
+**User-approved rule:** MES business pages must not use side-sliding Drawer / a-drawer interactions for create, edit, view, or evidence. Use existing T1-T6 independent routes for full-page work and centered Ant Design Vue modal dialogs for contextual view/evidence, preserving roles, APIs, signatures, and drafts. See [MES_NO_DRAWER_INTERACTION_20261115_APPROVED](docs/development/decisions/MES_NO_DRAWER_INTERACTION_20261115_APPROVED.md) and the frontend noDrawerUiContract.test.ts gate. Never reintroduce a drawer in new screens.
+
 ## Context and token control
 
 - Start from the task index, not repository history. Completed-task acceptance records are read only for an affected regression or consumed contract.

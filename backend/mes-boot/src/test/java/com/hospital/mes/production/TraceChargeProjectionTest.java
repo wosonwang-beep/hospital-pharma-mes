@@ -25,13 +25,13 @@ class TraceChargeProjectionTest {
   when(execution.genealogyForBatch(1,100)).thenReturn(List.of(json.readTree("{\"chargeId\":\"1\",\"inputMaterialLotId\":\"50\"}"),json.readTree("{\"chargeId\":\"2\",\"inputMaterialLotId\":\"50\"}")));
   when(execution.genealogyForBatch(1,101)).thenReturn(List.of(json.readTree("{\"chargeId\":\"3\",\"inputMaterialLotId\":\"50\"}")));
   when(execution.operationFact(eq(1L),anyLong())).thenReturn(json.readTree("{\"status\":\"COMPLETED\"}"));
-  when(fp.lotForBatch(1,100)).thenReturn(60L);when(fp.lotForBatch(1,101)).thenReturn(61L);
-  when(fp.forLot(1,60)).thenReturn(json.readTree("{\"mainBatchId\":\"100\",\"lot\":{\"id\":\"60\"},\"shipments\":[{\"id\":\"90\"}]}"));
-  when(fp.forLot(1,61)).thenReturn(json.readTree("{\"mainBatchId\":\"101\",\"lot\":{\"id\":\"61\"},\"shipments\":[{\"id\":\"91\"}]}"));
+
+  when(fp.forBatch(1,100)).thenReturn(json.readTree("{\"mainBatchId\":\"100\",\"finishedSchemaVersion\":2,\"shipments\":[{\"id\":\"90\"}]}"));
+  when(fp.forBatch(1,101)).thenReturn(json.readTree("{\"mainBatchId\":\"101\",\"finishedSchemaVersion\":2,\"shipments\":[{\"id\":\"91\"}]}"));
   var service=new TraceService(mutations,production,execution,incoming,json,finished,wms);var graph=service.trace(null,"50");
   assertThat(graph.path("nodes")).filteredOn(n->n.path("type").asText().equals("CHARGE")).hasSize(3);
   assertThat(graph.path("nodes")).filteredOn(n->n.path("type").asText().equals("FINISHED_SHIPMENT")).hasSize(2);
   assertThat(graph.path("nodes")).noneSatisfy(n->assertThat(n.path("type").asText()).isEqualTo("WEIGHING"));
-  verify(fp,times(1)).lotForBatch(1,100);verify(fp,times(1)).lotForBatch(1,101);verify(execution,never()).weighing(anyLong(),anyLong());
+  verify(fp,times(1)).forBatch(1,100);verify(fp,times(1)).forBatch(1,101);verify(execution,never()).weighing(anyLong(),anyLong());
  }
 }

@@ -3,7 +3,7 @@ import {computed,ref,watch,onMounted,onBeforeUnmount} from 'vue'
 import {useRouter} from 'vue-router'
 import {useAuthStore} from '../../stores/auth'
 import {api,type Page} from '../../api/http'
-import {FileTextOutlined,ExperimentOutlined,WarningOutlined,CodeSandboxOutlined,RightOutlined,FileAddOutlined,ShoppingCartOutlined,HomeOutlined,CarOutlined,CalendarOutlined,NotificationOutlined,MedicineBoxOutlined} from '@ant-design/icons-vue'
+import {ExperimentOutlined,WarningOutlined,CodeSandboxOutlined,RightOutlined,FileAddOutlined,ShoppingCartOutlined,HomeOutlined,CarOutlined,CalendarOutlined,NotificationOutlined,MedicineBoxOutlined} from '@ant-design/icons-vue'
 import * as echarts from 'echarts/core'
 import {LineChart,BarChart,PieChart} from 'echarts/charts'
 import {GridComponent,TooltipComponent,GraphicComponent} from 'echarts/components'
@@ -30,7 +30,6 @@ const actions=computed(()=>[
 ].map(item=>({...item,enabled:canOpen(item.path)})))
 const metricValue=(permission:string,value:number|null)=>!auth.can(permission)?'无权限':value===null?'未统计':value
 const metrics=computed(()=>[
- {label:'待处理任务',value:'未提供',icon:FileTextOutlined,tone:'blue',path:null,help:'当前版本尚未提供统一的个人待办投影，不显示模拟数字'},
  {label:'在生产批次',value:metricValue('production:batch:view',inProductionCount(batches.value)),icon:MedicineBoxOutlined,tone:'blue',path:'/production/batches',help:'当前账号可见且状态为生产中的生产批次'},
  {label:'待检样品',value:metricValue('qms:test:view',pendingTestSampleCount(samples.value)),icon:ExperimentOutlined,tone:'blue',path:'/quality/samples',help:'当前可见检验样和复检样中已创建、已取样或已接收且尚未开始检验的样品；不含留样'},
  {label:'异常库存',value:metricValue('wms:inventory:view',abnormalInventoryCount(inventory.value)),icon:CodeSandboxOutlined,tone:'orange',path:'/wms/inventory',help:'当前可见库存中状态为冻结、阻断或未知状态的物料批次数量'},
@@ -66,7 +65,6 @@ onBeforeUnmount(()=>{active=false;clearInterval(clock);sizeObserver?.disconnect(
   <section class="dashboard-metrics" aria-label="业务概况"><button v-for="m in metrics" :key="m.label" :disabled="!canOpen(m.path)" :title="m.help" @click="m.path&&router.push(m.path)"><span class="dashboard-metric-icon" :class="m.tone"><component :is="m.icon"/></span><span class="dashboard-metric-copy"><span>{{m.label}}</span><strong :class="{'metric-text-value':typeof m.value==='string'}">{{loading?'—':m.value??'—'}}</strong></span><RightOutlined/></button></section>
   <div class="dashboard-columns"><section class="dashboard-left">
    <section class="dashboard-panel dashboard-shortcuts"><h2>快捷操作</h2><div class="dashboard-shortcut-grid"><button v-for="item in actions" :key="item.path" :disabled="!item.enabled" @click="router.push(item.path)"><component :is="item.icon"/><span>{{item.title}}</span></button></div></section>
-   <section class="dashboard-panel dashboard-todos"><header><h2><MedicineBoxOutlined/>我的待办</h2></header><div class="dashboard-table-wrap"><table><thead><tr><th>任务类型</th><th>单据编号</th><th>标题</th><th>当前节点</th><th>到期时间</th><th>操作</th></tr></thead><tbody><tr><td colspan="6" class="dashboard-empty">暂无可用的个人待办数据</td></tr></tbody></table></div></section>
    <section class="dashboard-panel dashboard-notices"><header><h2><NotificationOutlined/>系统公告</h2></header><div class="dashboard-empty">暂无公告</div></section>
   </section><aside class="dashboard-right">
    <section class="dashboard-panel dashboard-trend"><header><h2>生产批次趋势</h2><span class="dashboard-period"><CalendarOutlined/>近7天</span></header><div ref="trendNode" class="dashboard-chart" role="img" aria-label="近七天创建的生产批次趋势"/></section>

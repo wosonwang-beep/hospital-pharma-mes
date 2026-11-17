@@ -2,6 +2,8 @@ package com.hospital.mes.foundation.api;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class FoundationControllerTest {
  @Autowired MockMvc mvc;
+ @MockitoBean JdbcTemplate jdbc;
  @Test void foundationStatusIsPublicAndTraced() throws Exception { mvc.perform(get("/api/v1/foundation/status").header("X-Trace-Id","test-trace")).andExpect(status().isOk()).andExpect(header().string("X-Trace-Id","test-trace")).andExpect(jsonPath("$.code").value("OK")).andExpect(jsonPath("$.traceId").value("test-trace")); }
  @Test void unknownApiIsProtected() throws Exception { mvc.perform(get("/api/v1/private")).andExpect(status().isUnauthorized()); }
  @Test void openApiDescribesFoundationEndpoint() throws Exception { mvc.perform(get("/v3/api-docs")).andExpect(status().isOk()).andExpect(jsonPath("$.info.title").value("Hospital Pharmaceutical MES API")).andExpect(jsonPath("$.paths['/api/v1/foundation/status']").exists()); }

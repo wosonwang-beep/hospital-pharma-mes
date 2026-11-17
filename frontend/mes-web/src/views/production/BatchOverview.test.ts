@@ -39,3 +39,15 @@ it('uses one top-level batch record entry when the whole-book route is available
  expect(screen.getAllByRole('button',{name:/^电子批记录$/})).toHaveLength(1)
  expect(screen.queryAllByRole('button',{name:/^批记录$/})).toHaveLength(0)
 })
+
+it('does not show unverified operation totals or raw product IDs during loading',async()=>{
+ let completeProduct:(result:any)=>void=()=>{}
+ api.mockImplementation(({url}:any)=>url.startsWith('/products/')?new Promise(resolve=>{completeProduct=resolve}):url.startsWith('/units/')?Promise.resolve({unitName:'毫升'}):Promise.resolve({status:'QA_RELEASED',gates:[]}))
+ render(BatchOverview,{props:{record:{id:'655',productionSchemaVersion:2,productId:'2',unitId:'3',batchNo:'HYTEA-20261109-002',status:'QA_RELEASED',plannedQty:'400000',createdAt:'2026-11-09T12:00:00Z',processSnapshotId:'1'},executions:[{id:'10',status:'COMPLETED',executionNo:'001'}],reservations:[]},global:{plugins:[Antd]}})
+ expect(screen.getAllByText('正在读取产品信息').length).toBeGreaterThan(0)
+ expect(screen.queryByText('0 / 0')).toBeNull()
+ expect(screen.getAllByText('正在读取').length).toBeGreaterThan(0)
+ completeProduct({productName:'喉咽茶合剂',productCode:'HYTEA100',dosageForm:'合剂',specification:'100ml/瓶'})
+ await screen.findAllByText('喉咽茶合剂')
+ await waitFor(()=>expect(screen.queryByText('正在读取产品信息')).toBeNull())
+})

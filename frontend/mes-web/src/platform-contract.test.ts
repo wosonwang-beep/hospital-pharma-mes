@@ -10,9 +10,9 @@ function sourceFiles(directory: string): string[] {
   })
 }
 
-test('preserves MES-001 routes and adds only frozen MES-002 administration routes', () => {
+test('preserves approved system routes with retired GxP audit entry excluded', () => {
   const paths = router.getRoutes().map(route => route.path)
-  expect(paths).toContain('/audit')
+  expect(paths).not.toContain('/audit')
   expect(paths).toContain('/integration/operations')
   expect(paths).toEqual(expect.arrayContaining([
     '/admin/users', '/admin/users/create', '/admin/users/:id', '/admin/users/:id/edit',
