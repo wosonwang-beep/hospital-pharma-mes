@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import {computed,ref,watch} from 'vue'
 import {useRouter} from 'vue-router'
 import {api,errorMessage,type Page} from '../../api/http'
@@ -112,7 +112,7 @@ watch(()=>props.record,async record=>{
  if(current===generation){references.value=found;lookupNotices.value=[...notices]}
 },{immediate:true})
 async function openEvidence(metadata:IncomingRow){
- if(!false)return
+ if(!auth.can('trace:view'))return
  evidenceOpen.value=true;evidenceBusy.value=true;evidenceError.value='';evidence.value=null
  try{evidence.value=await api<IncomingRow>({url:`/quality/signature-evidence/${metadata.signatureId}`})}catch(e){evidenceError.value=errorMessage(e)}finally{evidenceBusy.value=false}
 }
@@ -164,11 +164,11 @@ function gateText(row:IncomingRow){const code=String(row.code??'');const family=
  <template v-if="qa">
  <a-card v-for="[key,title] in [['reports','检验报告证据'],['investigations','来料调查证据'],['decisions','物料质量决定历史']]" :key="key" :title="title" class="form-section"><p v-if="!rows(record[key!]).length">暂无记录</p><section v-for="row in rows(record[key!])" :key="String(row.id)" class="document-section"><h3>{{documentNumber(row)}}</h3><a-button v-if="key==='reports'&&auth.can('qms:report:view')" type="link" @click="router.push(`/quality/inspection-reports/${row.id}`)">查看检验报告</a-button><a-button v-if="key==='investigations'&&auth.can('qms:deviation:view')" type="link" @click="router.push(`/deviations/${row.id}`)">查看来料调查</a-button><a-button v-if="key==='decisions'&&false" type="link" @click="router.push({path:'/audit',query:{objectType:'qms_release_decision',objectId:String(row.id)}})">查看质量决定审计</a-button><IncomingFacts :value="row" :label-formatter="detailLabel" :value-formatter="valueLabel"/></section></a-card>
  </template>
- <a-card title="电子签名记录" class="form-section"><p v-if="!signatures.length">暂无电子签名记录</p><section v-for="(entry,index) in signatures" :key="`${entry.metadata.signatureId}:${index}`" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><p class="muted">{{entry.context}}</p><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="false" @click="openEvidence(entry.metadata)">查看签名证据</a-button><p v-else>签名快照需要审计查看权限。</p></section></a-card>
+ <a-card title="电子签名记录" class="form-section"><p v-if="!signatures.length">暂无电子签名记录</p><section v-for="(entry,index) in signatures" :key="`${entry.metadata.signatureId}:${index}`" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><p class="muted">{{entry.context}}</p><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="auth.can('trace:view')" @click="openEvidence(entry.metadata)">查看签名证据</a-button><p v-else>签名快照需要审计查看权限。</p></section></a-card>
  <a-card title="记录元数据" class="form-section"><IncomingFacts :value="facts(record,readFields)" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-card>
  <details v-if="compact&&lookupNotices.length"><summary>关联信息读取说明</summary><p v-for="notice in lookupNotices" :key="notice">{{notice}}</p></details>
  </div>
- <a-modal :footer="null" :open="!!selectedItem" :title="`${selectedItem?.itemName??'检验项目'} · 完整检验详情`" width="min(900px, 100vw)" @cancel="selectedItem=null"><IncomingFacts v-if="selectedItem" :value="selectedItem" :label-formatter="detailLabel" :value-formatter="valueLabel"/><section v-for="(entry,index) in signatureEntries(selectedItem)" :key="index" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="false" @click="openEvidence(entry.metadata)">查看签名证据</a-button></section></a-modal>
+ <a-modal :footer="null" :open="!!selectedItem" :title="`${selectedItem?.itemName??'检验项目'} · 完整检验详情`" width="min(900px, 100vw)" @cancel="selectedItem=null"><IncomingFacts v-if="selectedItem" :value="selectedItem" :label-formatter="detailLabel" :value-formatter="valueLabel"/><section v-for="(entry,index) in signatureEntries(selectedItem)" :key="index" class="document-section"><h3>{{slotNames[String(entry.metadata.objectType)]??'电子签名'}}</h3><IncomingFacts :value="entry.metadata" :label-formatter="detailLabel" :value-formatter="valueLabel"/><a-button v-if="auth.can('trace:view')" @click="openEvidence(entry.metadata)">查看签名证据</a-button></section></a-modal>
  <a-modal :footer="null" v-model:open="evidenceOpen" title="电子签名证据（只读）" width="min(720px, 100vw)"><a-spin v-if="evidenceBusy"/><a-alert v-if="evidenceError" type="error" :message="evidenceError"/><IncomingFacts v-if="evidence" :value="evidence" :label-formatter="detailLabel" :value-formatter="valueLabel"/></a-modal>
 </div></template>
 <style scoped>
@@ -176,3 +176,5 @@ function gateText(row:IncomingRow){const code=String(row.code??'');const family=
 .incoming-document{min-width:0}.document-section{border-top:1px solid var(--mes-border,#e8edf3);padding-top:16px;margin-top:16px;min-width:0}.document-section:first-child{border-top:0;margin-top:0;padding-top:0}h3,h4{font-size:15px;font-weight:600;margin:0 0 12px}.result-version{margin-top:16px;padding:16px;border:1px solid var(--mes-border,#e8edf3);border-radius:8px;min-width:0}.result-comparison,.decision-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.result-comparison>section{min-width:0}.related-context{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.muted,details{color:#596778;font-size:12px}p{overflow-wrap:anywhere}details{margin-top:12px}details summary{cursor:pointer}@media(max-width:767px){.result-comparison,.decision-grid{grid-template-columns:minmax(0,1fr)}.result-version{padding:12px}}
 .evidence-toggle>span:last-child{flex-shrink:0;white-space:nowrap}
 </style>
+
+\n

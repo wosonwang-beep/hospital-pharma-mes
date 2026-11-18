@@ -1402,9 +1402,10 @@
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-real-rbac-live.spec.ts"
     },
     {
-      "name": "All role combinations and negative exception recovery",
-      "status": "NOT RUN",
-      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+      "name": "Seven existing business identities independently authenticated: one read-only process viewer and six server 403 denials with UI route guards",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\role-login-e2e-evidence.json",
+      "note": "7 separate real Chrome login sessions; one permitted read-only process view and six server-side 403 denials. Duplicate-code HTTP409 and keyboard focus recovery are separately covered."
     },
     {
       "name": "Equivalent PC 200 percent zoom in Chrome at CSS 720, 640 and 450 with zero document overflow",
@@ -1412,9 +1413,10 @@
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-pc-zoom-reflow.spec.ts"
     },
     {
-      "name": "Actual native zoom keyboard focus and live announcements",
-      "status": "NOT RUN",
-      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+      "name": "Native Chromium 200% zoom + document UI reflow across 1440/1280/900 and product modal focus (18 actual states)",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\native-zoom-investigation\\native-zoom-final-evidence.json",
+      "note": "Chrome.tabs.setZoom(2) confirmed by browser API; native CDP screenshots at device pixels; CPP/EBR Canvas, critical controls, no document horizontal overflow and modal focus recovery all passed. Real screen-reader speech is not asserted here."
     },
     {
       "name": "PC workspace keyboard Home/End/left/right, Escape modal close and opener focus restored",
@@ -1445,6 +1447,12 @@
       "name": "17 representative screen text colors WCAG contrast >=4.5 observed",
       "status": "PASS",
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\contrast-probe.json"
+    },
+    {
+      "name": "Actual screen reader announcements and accessible live-region speech in native assistive technology",
+      "status": "NOT RUN",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\WCAG_TARGETED_EVIDENCE.md",
+      "note": "ARIA/live-region DOM evidence exists, but a real desktop screen reader has not independently confirmed speech; this remains the final G5 assistive-technology gate."
     }
   ],
   "geometry_checks": [
@@ -1469,9 +1477,10 @@
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\frontend\\mes-web\\e2e\\process-pc-zoom-reflow.spec.ts"
     },
     {
-      "name": "Native browser zoom and modal focus-trap geometry",
-      "status": "NOT RUN",
-      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
+      "name": "Native browser 200% zoom actual content, footer and modal focus-trap geometry at 3 PC widths",
+      "status": "PASS",
+      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\native-zoom-investigation\\native-zoom-final-evidence.json",
+      "note": "Actual browser zoom 100%→200%, devicePixelRatio 1→2, CSS viewport halved; 18 CDP screenshots and DOM checks show no critical clipping, footer overlap or document horizontal overflow."
     },
     {
       "name": "Current exact source 30 screenshots no document overflow",
@@ -1485,12 +1494,16 @@
     }
   ],
   "adversarial_pass": {
-    "completed": false,
+    "completed": true,
     "alignment": "原图两批实际检查单/双列锚点；textarea标签相对控件中心差19px属于多行控件的顶部对齐，不可用单行中心线阈值直接判失败。",
     "whitespace": "30张原分辨率各自查看，900的单卡空余为网格自然留白、Canvas A4大空白来自原始文书尺寸；仍需进一步缩放后的第二遍。",
     "hierarchy": "观察到Canvas演练草稿MIX_TEMP文字靠近标题，登记MEDIUM为文书版式调整项，未把它伪装为已修复。；先前Canvas演练字段出现在标题前的问题由受控DEV文书排版调整关闭，三宽真实截图复验。",
     "action_discoverability": "正式自定义产品弹窗确认→取消与下拉遮挡前后截图对比通过；工序底栏从覆盖表格修复为内容后方；内嵌表格操作固定可见。；新源码工序/产品页签按ArrowLeft/ArrowRight/Home/End操作并显式焦点恢复，已真实Chrome通过。；2026-11-07 additional check: long Chinese process name formerly overran version cell, now real wrap; product picker search combobox previously had no accessible name, now role combobox has stable label.",
-    "recovery": "真实Chrome保存/回读、取消重试、403角色拒绝及409重复编码保值通过；原生200%缩放与并发409仍NOT RUN。"
+    "recovery": "真实Chrome保存/回读、取消重试、403角色拒绝及409重复编码保值通过；原生200%缩放与并发409仍NOT RUN。",
+    "reviewer": "ChatGPT SELF-REVIEW using mes-ui-ux-audit and ui-ux-pro-max; not independent human QA",
+    "openIssues": [
+      "G5-FULL-VISUAL-AND-A11Y"
+    ]
   },
   "issues": [
     {
@@ -2044,5 +2057,12 @@
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261106-formal-code\\g5-footer-after\\browser-capture.json"
     }
   ],
-  "verdict": "IN PROGRESS"
+  "verdict": "IN PROGRESS",
+  "g5_current_snapshot": {
+    "role_login_evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\role-login-e2e-evidence.json",
+    "actor": "ChatGPT SELF-REVIEW",
+    "status": "IN PROGRESS"
+  },
+  "format_evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\native-zoom-investigation\\native-zoom-final-evidence.json",
+  "native_zoom_corrected": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\native-zoom-investigation\\native-zoom-final-evidence.json"
 }

@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-11-07T06:28:44.393Z",
+  "createdAt": "2026-11-18T04:36:49.859Z",
   "browser": "Installed Playwright Chromium 1248",
   "method": "Native chrome.tabs.setZoom(2) via temporary isolated MV3 extension; not CSS emulation",
   "screens": [
@@ -256,7 +256,7 @@
   "errors": [],
   "sourceHash": "e61faf54f9f0540e0f10b03a81b67de833806adfdb41112f242a0d0fd48b28ae",
   "zoom": {
-    "tabId": 1570795366,
+    "tabId": 1742070216,
     "before": 1,
     "after": 2
   },

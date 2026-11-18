@@ -9,6 +9,8 @@ export interface Operation {operationCode:string;operationName:string;operationT
 export interface RouteDefinition {routeCode:string;operations:Operation[]}
 export interface ApplicableProduct {id:string;productId:string;productCode:string;productName:string;dosageForm:string|null;specification:string|null;status:string}
 export interface Package extends Base {packageName?:string|null;description?:string|null;processVersion?:string|null;effectiveApprovedDate?:string|null;packageCode:string;productId?:string|null;productIds?:string[];applicableProducts?:ApplicableProduct[];productName:string;currentDefinition:{id:string;status:string;formula:Formula|null;route:RouteDefinition|null}}
+export const processNameLabel=(value?:string|null):string=>value?.trim()||'工艺名称未维护'
+export const processMetadataLabel=(value:unknown):string=>value==null||String(value).trim()===''?'未设置':String(value)
 export const states:Record<string,string>={ACTIVE:'启用',INACTIVE:'停用',DRAFT:'草稿',SUBMITTED:'已提交',APPROVED:'已批准',EFFECTIVE:'已生效'}
 export const blankFormula=():Formula=>({formulaCode:'',batchBasisQty:'',unitId:'',items:[]})
 export const blankRoute=():RouteDefinition=>({routeCode:'',operations:[]})

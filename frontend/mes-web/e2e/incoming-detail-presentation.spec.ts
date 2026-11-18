@@ -43,6 +43,7 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
  await page.route('**/api/v1/**',route=>{
   const url=new URL(route.request().url()),path=url.pathname.replace('/api/v1','');let data:unknown
   if(path==='/auth/me')data={userId:'8',organizationId:'1',displayName:'来料质量审核员',permissionCodes:permissions,mustChangePassword:false}
+  else if(path==='/auth/navigation')data=[]
   else if(path==='/quality/inspection-tasks')data={items:[task,retest],total:2,page:0,size:50}
   else if(path.startsWith('/quality/signature-evidence/')){const m=signature(path.split('/').pop()!,'INSPECTION_TASK');data={objectType:m.objectType,objectId:m.objectId,recordVersion:m.recordVersion,canonicalRecord:{reviewedResultIds:['301'],reviewedBy:'9',meaning:m.meaning},evidenceIds:['301']}}
   else if(path.startsWith('/users/'))data={id:path.split('/').pop(),displayName:path.endsWith('/8')?'检验员李工':path.endsWith('/10')?'审批人赵主任':'复核员王工'}
@@ -106,7 +107,7 @@ for(const scenario of cases)test(`complete read-model detail ${scenario.path}`,a
 })
 
 test('incomplete inspection response is visibly identified and does not masquerade as a valid draft',async({page})=>{
- await page.route('**/api/v1/**',r=>r.fulfill({json:{code:'OK',data:r.request().url().endsWith('/auth/me')?{userId:'8',organizationId:'1',displayName:'只读检验员',permissionCodes:['qms:test:view'],mustChangePassword:false}:{id:'201',status:'DRAFT',versionNo:0,allowedActions:[]},message:'success',traceId:'incomplete'}}))
+ await page.route('**/api/v1/**',r=>r.fulfill({json:{code:'OK',data:r.request().url().endsWith('/auth/me')?{userId:'8',organizationId:'1',displayName:'只读检验员',permissionCodes:['qms:test:view'],mustChangePassword:false}:r.request().url().endsWith('/auth/navigation')?[]:{id:'201',status:'DRAFT',versionNo:0,allowedActions:[]},message:'success',traceId:'incomplete'}}))
  await page.goto('/quality/inspection-tasks/201')
  await expect(page.getByText('详情响应不完整或状态不符合当前契约，请重新加载并核对数据来源。',{exact:true})).toBeVisible()
  await expect(page.getByText('未识别状态（DRAFT）',{exact:true}).first()).toBeVisible()
@@ -117,7 +118,7 @@ test('read-only role keeps original IDs without requesting forbidden master or s
  const requests:string[]=[]
  await page.route('**/api/v1/**',r=>{
   const path=new URL(r.request().url()).pathname.replace('/api/v1','');requests.push(path)
-  return r.fulfill({json:{code:'OK',data:path==='/auth/me'?{userId:'8',organizationId:'1',displayName:'只读检验员',permissionCodes:['qms:test:view'],mustChangePassword:false}:path==='/quality/samples/41'?sample:task,message:'success',traceId:'read-only'}})
+  return r.fulfill({json:{code:'OK',data:path==='/auth/me'?{userId:'8',organizationId:'1',displayName:'只读检验员',permissionCodes:['qms:test:view'],mustChangePassword:false}:path==='/auth/navigation'?[]:path==='/quality/samples/41'?sample:task,message:'success',traceId:'read-only'}})
  })
  await page.goto('/quality/inspection-tasks/201')
  await expect(page.getByText('检验结论与复核',{exact:true})).toBeVisible()
@@ -126,5 +127,5 @@ test('read-only role keeps original IDs without requesting forbidden master or s
  await expect(page.getByText('指派人员：无关联读取权限，保留原始ID。',{exact:true})).toBeVisible()
  await expect(page.getByRole('button',{name:'查看签名证据',exact:true})).toHaveCount(0)
  // Sample reads share qms:test:view and remain permitted; IAM/WMS/signature reads do not.
- expect(requests.every(p=>['/auth/me','/quality/inspection-tasks/201','/quality/samples/41'].includes(p))).toBe(true)
+ expect(requests.every(p=>['/auth/me','/auth/navigation','/quality/inspection-tasks/201','/quality/samples/41'].includes(p))).toBe(true)
 })

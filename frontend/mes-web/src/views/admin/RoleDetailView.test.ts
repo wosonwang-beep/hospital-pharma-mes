@@ -260,3 +260,15 @@ test('no second visibility checkbox or obsolete CRUD label on approved T2 tree',
   expect(screen.getByText(/独立授权，不随普通管理自动勾选/)).toBeTruthy()
   expect(ui.container.querySelectorAll('.role-information-form .ant-form-item').length).toBe(3)
 })
+
+test('labels inactive selected permissions and preserves their exact codes without writing', async () => {
+  setup({ role: { ...baseRole, permissionCodes: ['master:material:approve', 'process:package:publish'] }, permissions: [] })
+  mount()
+  await screen.findByText('已选 2 项 / 可用 0 项')
+  await fireEvent.click(screen.getByText('查看未展示的已选权限'))
+  expect(screen.getByText('批准物料主数据')).toBeTruthy()
+  expect(screen.getByText('发布生产工艺')).toBeTruthy()
+  expect(screen.getByText('master:material:approve')).toBeTruthy()
+  expect(screen.getByText('process:package:publish')).toBeTruthy()
+  expect(writes()).toHaveLength(0)
+})

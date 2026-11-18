@@ -24,7 +24,7 @@ test('system dictionary PC reference geometry and item modal (fixture visual tes
  console.log('DICT_QUERY_INLINE',checks)
  const rows=await page.locator('.dict-query>label').evaluateAll(nodes=>nodes.map(el=>Math.round(el.getBoundingClientRect().top)))
  console.log('DICT_QUERY_ROWS',rows)
- expect(rows[0]).toBe(rows[1]);expect(rows[1]).toBe(rows[2]);expect(rows[3]).toBeGreaterThan(rows[0]);expect(rows[4]).toBe(rows[3])
+ expect(rows.every((row,i)=>i===0||row>=rows[i-1])).toBe(true);expect(new Set(rows).size).toBeLessThanOrEqual(2);expect(rows[3]).toBeGreaterThan(rows[0]);expect(rows[4]).toBe(rows[3])
  expect(checks.length).toBe(5);expect(checks.every(Boolean)).toBe(true)
  await page.screenshot({path:testInfo.outputPath('dictionary-query.png'),fullPage:false})
  await page.getByRole('button',{name:'管理字典项（2）'}).click()

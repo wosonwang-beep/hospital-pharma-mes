@@ -22,13 +22,17 @@ const names: Record<string, string> = { iam: '身份与权限', master: '基础�
 const resources: Record<string, string> = { home: '首页', users: '用户', user: '用户', roles: '角色', role: '角色', permission: '权限目录', menu: '菜单', sign: '电子签名', template: '模板', designer: '模板设计器', pdf: 'PDF归档', form: '批记录表单', record: '批记录', review: '批记录复核', org: '组织', uom: '单位与换算', equipment: '设备', qualification: '人员资格', material: '物料主数据', supplier: '供应商', product: '产品', package: '生产工艺', inventory: '库存', receipt: '收货记录', issue: '出库单', reservation: '库存预留', request: '领料申请', 'finished-inbound': '成品入库', 'finished-shipment': '成品发货', specification: '质量标准', deviation: '质量调查', 'inspection-request': '请验单', report: '检验报告', sampling: '取样', test: '检验记录', ipc: '过程检验', plan: '生产质量计划', sample: '样品', capa: '纠正预防措施', 'finished-request': '成品请验', 'finished-sampling': '成品取样', 'finished-report': '成品检验报告', 'material-release': '物料放行', 'material-inventory': '物料库存', 'batch-review': 'QA批审核', release: '成品放行', clearance: '清场', quantity: '生产数量', weigh: '称量', charge: '投料', execution: '生产执行', operation: '工序', param: '工序参数', batch: '生产批', order: '生产订单', subbatch: '子批' }
 const actions: Record<string, string> = { view: '查看', create: '新增', update: '编辑', edit: '编辑', disable: '停用', submit: '提交', export: '导出', print: '打印', approve: '批准', publish: '发布', generate: '生成', correct: '更正', verify: '复核', adjust: '调整', move: '移库', confirm: '确认', return: '退回', reverse: '冲销', cancel: '取消', close: '关闭', decide: '决定', investigate: '调查', accept: '受理', assign: '分配', complete: '完成', execute: '执行', record: '记录', receive: '接收', retest: '复检', freeze: '冻结', unfreeze: '解除冻结', start: '开始', pause: '暂停', bind: '绑定', retire: '停用', retry: '重试', 'approve-plan': '批准计划' }
 const legacyLabels: Record<string, string> = { 'menu:home': '首页', 'menu:iam:users': '用户管理', 'menu:iam:roles': '角色管理', 'action:iam:user.manage': '维护用户账号', 'action:iam:role.manage': '维护角色与权限', 'ebr:sign': '电子签名', 'integration:view': '查看集成运维', 'integration:retry': '重试集成消息', 'trace:view': '查看完整追溯', 'balance:view': '查看物料平衡', 'balance:investigate': '调查物料平衡', 'balance:approve': '批准物料平衡', 'qa:batch-review': 'QA批审核', 'qa:release': '成品放行' }
-function permissionLabel(permission: Permission) {
-  const code = permission.permissionCode
+function permissionLabelByCode(code: string, fallback: string) {
   if (legacyLabels[code]) return legacyLabels[code]
   const parts = code.split(':')
-  if (parts.length === 3 && resources[parts[1]!] && actions[parts[2]!]) { const resource = parts[1] === 'template' ? `${parts[0] === 'print' ? '打印' : parts[0] === 'ebr' ? 'eBR' : ''}模板` : resources[parts[1]!] ; return `${actions[parts[2]!] }${resource}` }
-  return permission.permissionName
+  if (parts.length === 3 && resources[parts[1]!] && actions[parts[2]!]) {
+    const prefix = parts[0] === 'print' ? '打印' : parts[0] === 'ebr' ? 'eBR' : ''
+    const resource = parts[1] === 'template' ? prefix + '模板' : resources[parts[1]!]!
+    return actions[parts[2]!]! + resource
+  }
+  return fallback
 }
+function permissionLabel(permission: Permission) { return permissionLabelByCode(permission.permissionCode, permission.permissionName) }
 function menuPermissions(menu: MenuEntry) {
   const codes = new Set([menu.permissionCode, ...(menu.permissionCodes ?? [])])
   return permissions.value.filter(p => codes.has(p.permissionCode))
@@ -145,7 +149,7 @@ function supportedActions(items: Permission[]) { return [...new Set(items.map(p 
 const accessNames: Record<string, string> = { none: '未授权', view: '只查看', crud: '管理', custom: '已有自定义授权' }
 const added = computed(() => selected.value.filter(code => !(role.value?.permissionCodes ?? []).includes(code)))
 const removed = computed(() => (role.value?.permissionCodes ?? []).filter(code => !selected.value.includes(code)))
-function labelFor(code: string) { const item = permissions.value.find(p => p.permissionCode === code); return item ? permissionLabel(item) : code }
+function labelFor(code: string) { const item = permissions.value.find(p => p.permissionCode === code); return item ? permissionLabel(item) : permissionLabelByCode(code, code) }
 const menuDescriptions: Record<string, string> = {
   '首页': '系统首页', '基础管理': '物料、产品与基础资料', 'WMS管理': '收货、库存、领料与出库',
   '质量管理': '请验、取样、检验与报告', '生产管理': '生产计划与执行',
@@ -254,7 +258,7 @@ watch(() => [route.params.id, route.meta.mode], load, { immediate: true })
           </div>
           <span class="role-sr-only permission-summary">已选 {{ selected.length }} 项 / 可用 {{ permissions.length }} 项</span>
           <a-alert v-if="unavailable.length" type="warning" :message="`已选权限中有 ${unavailable.length} 项未在可用目录展示，保存时会保留。`" show-icon />
-          <details v-if="unavailable.length" class="unavailable-permissions"><summary>查看未展示的已选权限</summary><ul><li v-for="code in unavailable" :key="code">{{ code }}</li></ul></details>
+          <details v-if="unavailable.length" class="unavailable-permissions"><summary>查看未展示的已选权限</summary><ul><li v-for="code in unavailable" :key="code"><strong>{{labelFor(code)}}</strong> <code>{{code}}</code></li></ul></details>
           <a-empty v-if="!loading && !permissionGroups.length" :description="search ? '没有匹配的权限，请调整搜索条件' : selectedOnly ? '没有已选的可用权限' : '暂无可用权限'" />
           <a-alert v-if="!auth.can('iam:menu:view')" type="warning" message="当前账号没有查看菜单目录的权限，已有菜单授权会保持。" show-icon />
           <a-checkbox-group v-model:value="visibleSelection" :disabled="readonly || !canAssign || busy" class="grant-tree-group">

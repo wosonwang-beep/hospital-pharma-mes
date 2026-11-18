@@ -78,7 +78,7 @@ watch(()=>route.fullPath,load,{immediate:true})
  </a-card>
  <a-alert v-if="!readonly" type="info" message="字典和选项编码被业务引用后不可随意变更；停用不会删除历史业务数据。" show-icon/>
  <a-card v-if="readonly" title="字典项" class="result-card">
-  <a-table :data-source="items" row-key="id" size="small" :pagination="false">
+  <a-table :data-source="items" row-key="id" size="small" :pagination="false" :scroll="{x:720}">
    <a-table-column title="选项编码" data-index="code"/><a-table-column title="名称" data-index="label"/>
    <a-table-column title="描述" data-index="description"/>
    <a-table-column title="状态"><template #default="{record:item}">{{statusLabel[item.status as keyof typeof statusLabel]}}</template></a-table-column>
