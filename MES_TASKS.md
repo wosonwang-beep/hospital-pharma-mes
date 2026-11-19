@@ -1765,3 +1765,8 @@ Desktop Commander单一main：真实Chrome5173/后端8080对HYTEA100及成品链
 - 已修：PM001生产批关联异步未返回的假0/0/数字ID；PM002生产检验样品空批次HTTP400；PM006 QA已放行重复“审核”动作；PM007首页假待办；PM008质量调查/生产订单/生产批/收货页面命名；PM005检验表格和收货列表密度；PM004长技术编号只读摘要；PM009检验详情编号/时区；PM010设备标题及字典标签回显；PM012只读数量格式化。
 - 当前证据：定向13/13 PASS、前端完整242/242 PASS、前端生产构建PASS；CUAWright真实10页面10/10 PASS（批655最终8/8、生产检验无400、QA已放行正确文案），0 JS错误、0业务写入。详见 `docs/review/MES_PRODUCT_REMEDIATION_RESULT_20261116.md` 及本机私有 `private-data-audit/product-manager-mes-20261116/business_browser_recheck_20261116.json`。
 - 仍需实际来源/原型验收：PM003生产工艺历史和G2/G5保真；PM004正式短业务单号合同；PM009检验缺失单位/取样源事实；PM010字典原始项中文维护；PM011隐藏权限释义；PM013工艺内表单入口全路径；PM014仓管/QC/QA等多角色真实岗位完整G5。现阶段没有证据不得宣称整站G5/正式上线ACCEPTED。
+## 2026-11-19 MES G5 正常业务使用验收范围收敛
+- 用户明确取消真实屏幕阅读器语音验证及相关工具/环境工作；不再将 Narrator、语音采集或完整 WCAG 专项作为本次 MES 核心业务交付阻断项。批准范围见 `docs/development/decisions/MES_NORMAL_USE_G5_SCOPE_20261119_APPROVED.md`。
+- 正式工艺 G5 必需交互项从12项调整为11项（删除用户已取消的额外语音检查），其余11项原 PASS 保留，未修改验证器和任何现有测试断言。清单验证器结果 `PASS: PROCESS-FORMAL-G5-20261107 — IN PROGRESS; screenshots=30 coverage=30`。
+- 正常业务专项已有浏览器、回归、PC页面及角色验证记录；严格全维度 G5 清单另外有54项九维汇总和19项 WCAG 专项 NOT RUN、1条历史HIGH OPEN，不能将完整G5标为READY。后续只核实真正影响正常使用的业务缺口，不增新功能。
+- 本轮不改数据库、Flyway、已签记录、批655生产/QC/QA放行/归档。保留 `application-local.yml` 本地改动。

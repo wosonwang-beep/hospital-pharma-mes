@@ -47,4 +47,11 @@
 - 本机 Windows 10 Pro 22H2 / Build 19045；Narrator 10.0.19041.4522 可启动、UI Automation 可读取。新版 Speech Recap/live transcription 是 2025 Windows 11 Narrator 能力，本机无该功能。
 - 当前 14 个 Windows 音频端点状态全部 Unknown，FFmpeg 构建不支持 WASAPI 输入，未取得 Narrator 实际音频回环证据。Chrome DOM/UIA 名称与 aria-live 只能证明可访问结构，不证明语音播报。
 - 最终 manifest interaction_checks[11] 保持 NOT RUN，verdict IN PROGRESS；没有伪造 PASS。详见 docs/development/process-form-cpp-ebr/20261107-formal-g5/NARRATOR_VALIDATION_ENVIRONMENT_LIMIT_20261119.md。
-- DEV 8080/5173 已恢复，8080健康UP、5173 HTTP200；批655只读，不重跑生产/QC/QA/归档。
+- DEV 8080/5173 已恢复，8080健康UP、5173 HTTP200；批655只读，不重跑生产/QC/QA/归档。## 2026-11-19 用户收窄 MES G5 为正常业务使用验收（覆盖此前“唯一阻断项”说法）
+
+用户明确：“不需要这个功能”，“不要发散功能，正常使用就可以”。已正式将 Narrator/NVDA/JAWS 实际语音、Speech Recap/语音回环和读屏专用适配从本次 MES 必需交付范围**排除为 OUT OF SCOPE/N/A**，不是执行 PASS，也不是新增功能。完整决策：`docs/development/decisions/MES_NORMAL_USE_G5_SCOPE_20261119_APPROVED.md`。
+
+- 已从 `docs/development/process-form-cpp-ebr/20261107-formal-g5/final/audit-manifest.json` 必需 `interaction_checks` 中移除这一被取消的专项条目；保留其余 11 项均为 PASS 的常规交互检查和既有历史读屏环境报告。
+- 原始验证器未修改，重新运行显示：`PASS: PROCESS-FORMAL-G5-20261107 — IN PROGRESS; screenshots=30 coverage=30`。这一 PASS 只表示清单结构完整，**不是** G5 最终 ACCEPTED。
+- 同时核实旧严格完整审查清单中另有 `54/54` 九维汇总项与 `19/19` WCAG 专项项为 `NOT RUN`，有 `G5-FULL-VISUAL-AND-A11Y` HIGH 项 OPEN；此前写“唯一未完成阻断项是读屏语音”不准确。历史严格清单保留 `IN PROGRESS`，不通过篡改校验器/断言或伪造 PASS 达到 READY。
+- **本次交付只以正常业务场景**的页面/列表/查询/录入/错误提示、权限、普通键盘/焦点、PC 布局及既有业务结果为准；不再新增专项读屏任务，也不让“建立读屏环境”阻碍业务功能开发。已完成的正常业务浏览器/G5 专项结论仍沿用经过验证的真实证据，不再重新跑批次 655 生产/QC/QA 放行。

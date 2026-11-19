@@ -1447,12 +1447,6 @@
       "name": "17 representative screen text colors WCAG contrast >=4.5 observed",
       "status": "PASS",
       "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\contrast-probe.json"
-    },
-    {
-      "name": "Actual screen reader announcements and accessible live-region speech in native assistive technology",
-      "status": "NOT RUN",
-      "evidence": "D:\\codex\\_project\\gmp\\hospital-pharma-mes\\docs\\development\\process-form-cpp-ebr\\20261107-formal-g5\\NARRATOR_VALIDATION_ENVIRONMENT_LIMIT_20261119.md",
-      "note": "Windows 10 22H2 Narrator process/UIA available, but Windows 11 2025 Speech Recap is unavailable on this host and audio endpoints are Unknown; no actual spoken output captured. See NARRATOR_VALIDATION_ENVIRONMENT_LIMIT_20261119.md. Keep G5 IN PROGRESS."
     }
   ],
   "geometry_checks": [
