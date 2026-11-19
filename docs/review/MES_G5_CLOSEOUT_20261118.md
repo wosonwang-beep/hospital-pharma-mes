@@ -42,3 +42,9 @@
 1. 完成一次真实桌面屏幕阅读器复核。
 2. 复核完成后重新运行 G5 manifest validator。
 3. 若通过，再执行最终代码检查、提交和推送。
+
+## 2026-11-19 Narrator 实际语音门禁复核
+- 本机 Windows 10 Pro 22H2 / Build 19045；Narrator 10.0.19041.4522 可启动、UI Automation 可读取。新版 Speech Recap/live transcription 是 2025 Windows 11 Narrator 能力，本机无该功能。
+- 当前 14 个 Windows 音频端点状态全部 Unknown，FFmpeg 构建不支持 WASAPI 输入，未取得 Narrator 实际音频回环证据。Chrome DOM/UIA 名称与 aria-live 只能证明可访问结构，不证明语音播报。
+- 最终 manifest interaction_checks[11] 保持 NOT RUN，verdict IN PROGRESS；没有伪造 PASS。详见 docs/development/process-form-cpp-ebr/20261107-formal-g5/NARRATOR_VALIDATION_ENVIRONMENT_LIMIT_20261119.md。
+- DEV 8080/5173 已恢复，8080健康UP、5173 HTTP200；批655只读，不重跑生产/QC/QA/归档。
